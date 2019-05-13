@@ -1,0 +1,18 @@
+---
+stonegenerator:
+  commands:
+    alllevels:
+      description: Šī metode atgriež visus maģisko akmens ģeneratoru līmeņus pašreizējai
+        pasaulei.
+    level:
+      description: Šī metode atgriež tavas salas pašreizējo maģisko akmens ģeneratora
+        līmeni.
+    main:
+      description: Galvenā maģiskā akmens ģenerātora metode. Rāda palīdzību.
+  errors:
+    cannot-find-any-generators: "&amp;cDiemžēl neizdevās atrast nevienu derīgu maģiskā
+      ģenerātora līmeni šai pasaulei."
+  messages:
+    generator-tier: "&2[name] &r&2(no [value] salas līmeņa)."
+    island-level: "&2Tavas salas līmenis ir &6[level]&2!"
+    material-chance: "&2    [name] - [value]%"
