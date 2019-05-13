@@ -191,12 +191,11 @@ public class MainGeneratorListener implements Listener
 	 *
 	 * Water is generating cobblestone in situations when it is directly adjacent to lava
 	 * block, and this block is not a source block.
-	 * For source blocks
 	 *
 	 * Node: by default Minecraft logic, lava is replaced with cobblestone/obsidian only
 	 * if the water is trying to flow on lava. It allows creating situations where lava
 	 * and water hit each other at max flow distance without creating cobblestone.
-	 * This overwrite it as it checks next blocks to air block. It is done on porpoise!
+	 * This overwrite it as it checks next blocks to air block. It is done on intentional!
 	 *
 	 * @param airBlock Air Block that will be replaced with water
 	 * @param flowDirection Water flow direction.
