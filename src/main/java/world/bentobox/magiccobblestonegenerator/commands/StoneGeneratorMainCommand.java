@@ -8,6 +8,9 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
+/**
+ * This class manage main Magic Cobblestone generator command, that just shows help message.
+ */
 public class StoneGeneratorMainCommand extends CompositeCommand
 {
 	/**

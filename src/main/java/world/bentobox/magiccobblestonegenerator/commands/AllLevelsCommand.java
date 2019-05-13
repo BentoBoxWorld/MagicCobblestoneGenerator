@@ -14,6 +14,10 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 
 
+/**
+ * This class allows to run /[toplabel] generator levelsall command, that prints all
+ * Magic Generator Tier for target world.
+ */
 public class AllLevelsCommand extends CompositeCommand
 {
 	/**
@@ -43,13 +47,9 @@ public class AllLevelsCommand extends CompositeCommand
 
 
 	/**
-	 * Defines what will be executed when this command is run.
-	 *
-	 * @param user the {@link User} who is executing this command.
-	 * @param label the label which has been used to execute this command. It can be {@link
-	 * CompositeCommand#getLabel()} or an alias.
-	 * @param args the command arguments.
-	 * @return {@code true} if the command executed successfully, {@code false} otherwise.
+	 * This method executes /[toplabel] generator levelsall command. This command simply finds
+	 * all Magic Generator Tiers for input world and prints them in chat/console.
+	 * If magic generator is not working in current world, then message will be shown about it.
 	 */
 	@Override
 	public boolean execute(User user, String label, List<String> args)

@@ -17,7 +17,7 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 public class Settings
 {
 	/**
-	 * Settings file parser.
+	 * Inits Settings file. Use custom YAML parsing in init.
 	 * @param addon StoneGeneratorAddon
 	 */
 	public Settings(StoneGeneratorAddon addon)
@@ -28,6 +28,7 @@ public class Settings
 		this.disabledGameModes = new HashSet<>(addon.getConfig().getStringList("disabled-gamemodes"));
 		this.offlineGeneration = addon.getConfig().getBoolean("offline-generation");
 
+		// Reads Generator Tiers
 		if (addon.getConfig().isSet("tiers"))
 		{
 			ConfigurationSection section = addon.getConfig().getConfigurationSection("tiers");
@@ -65,6 +66,7 @@ public class Settings
 			}
 		}
 
+		// Reads GameMode specific generator tiers.
 		if (addon.getConfig().isSet("gamemodes"))
 		{
 			ConfigurationSection section = addon.getConfig().getConfigurationSection("gamemodes");
@@ -246,13 +248,25 @@ public class Settings
 		// Section: Variables
 		// ---------------------------------------------------------------------
 
-
+		/**
+		 * Tier ID
+		 */
 		private final String id;
 
+		/**
+		 * Tier display name
+		 */
 		private String name = "";
 
+		/**
+		 * Min Island Level to work.
+		 * -1 means that tier will be always active and is not skipable.
+		 */
 		private int minLevel = -1;
 
+		/**
+		 * Map that contains chances for each material to be generated.
+		 */
 		private Map<Material, Integer> blockChanceMap = Collections.emptyMap();
 	}
 

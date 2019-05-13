@@ -10,8 +10,15 @@ import java.util.function.ToIntFunction;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
+/**
+ * This class process given block transforming to random object from input configuration.
+ */
 public class MagicGenerator
 {
+	/**
+	 * Default constructor. Inits Generator once.
+	 * @param addon Magic Cobblestone Generator addon.
+	 */
 	public MagicGenerator(StoneGeneratorAddon addon)
 	{
 		this.addon = addon;
