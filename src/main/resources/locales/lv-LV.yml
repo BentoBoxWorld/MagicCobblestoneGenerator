@@ -13,6 +13,6 @@ stonegenerator:
     cannot-find-any-generators: "&amp;cDiemžēl neizdevās atrast nevienu derīgu maģiskā
       ģenerātora līmeni šai pasaulei."
   messages:
-    generator-tier: "&amp;2[name] &amp;r&amp;2(no [value] salas līmeņa)."
-    island-level: "&amp;2Tavas salas līmenis ir &amp;6[level]&amp;2!"
-    material-chance: "&amp;2    [name] - [value]%"
+    generator-tier: "&2[name] &r&2(no [value] salas līmeņa)."
+    island-level: "&2Tavas salas līmenis ir &6[level]&2!"
+    material-chance: "&2    [name] - [value]%"
