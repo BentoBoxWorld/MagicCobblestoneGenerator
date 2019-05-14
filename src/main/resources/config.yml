@@ -1,0 +1,137 @@
+# Config file for MagicCobblestoneGenerator add-on Version ${version}
+
+# Disabled Game Mode Addons
+# MagicCobblestoneGenerator will not work in these game modes
+disabled-gamemodes: []
+#- SkyGrid
+
+# Disables custom generation if all island members are offline
+offline-generation: false
+
+# Default Tiers
+# Each tier must contain:
+#      min-level: island level (integer from -1 till Integer.MAX_VALUE) | -1 will mean that this level will be the only level that will be applied. | First level will be always selected
+#      name: String that will be displayed in commands
+#      blocks: List of Minecraft Materials and chance of getting it.
+tiers:
+  default:
+    min-level: 0
+    name: "Stone Level"
+    blocks:
+      STONE: 10
+      COBBLESTONE: 89
+      GRAVEL: 1
+  tier1:
+    min-level: 10
+    name: "Coal Level"
+    blocks:
+      STONE: 15
+      DIORITE: 4
+      GRANITE: 4
+      ANDESITE: 4
+      COBBLESTONE: 69
+      GRAVEL: 3
+      COAL_ORE: 1
+  tier2:
+    min-level: 100
+    name: "Iron Level"
+    blocks:
+      STONE: 20
+      DIORITE: 6
+      GRANITE: 6
+      ANDESITE: 6
+      COBBLESTONE: 48
+      GRAVEL: 4
+      COAL_ORE: 5
+      IRON_ORE: 5
+  tier3:
+    min-level: 500
+    name: "Redstone Level"
+    blocks:
+      STONE: 25
+      DIORITE: 8
+      GRANITE: 8
+      ANDESITE: 8
+      COBBLESTONE: 25
+      GRAVEL: 5
+      COAL_ORE: 10
+      IRON_ORE: 10
+      REDSTONE_ORE: 1
+  tier4:
+    min-level: 1000
+    name: "Gold Level"
+    blocks:
+      STONE: 20
+      DIORITE: 6
+      GRANITE: 6
+      ANDESITE: 6
+      COBBLESTONE: 11
+      GRAVEL: 5
+      COAL_ORE: 10
+      IRON_ORE: 15
+      GOLD_ORE: 5
+      LAPIS_ORE: 5
+      REDSTONE_ORE: 10
+      DIRT: 1
+  tier5:
+    min-level: 5000
+    name: "Diamond Level"
+    blocks:
+      STONE: 15
+      DIORITE: 5
+      GRANITE: 5
+      ANDESITE: 5
+      COBBLESTONE: 5
+      GRAVEL: 5
+      COAL_ORE: 10
+      IRON_ORE: 10
+      GOLD_ORE: 10
+      LAPIS_ORE: 5
+      REDSTONE_ORE: 15
+      DIRT: 5
+      DIAMOND_ORE: 5
+  tier6:
+    min-level: 10000
+    name: "Emerald Level"
+    blocks:
+      STONE: 10
+      DIORITE: 1
+      GRANITE: 1
+      ANDESITE: 1
+      COBBLESTONE: 1
+      GRAVEL: 5
+      DIRT: 5
+      GRASS: 1
+      COAL_ORE: 10
+      IRON_ORE: 10
+      GOLD_ORE: 10
+      LAPIS_ORE: 5
+      REDSTONE_ORE: 20
+      DIAMOND_ORE: 15
+      EMERALD_ORE: 5
+
+# GameMode differences
+# List any blocks that have a different value in a specific GameModes
+# If a tiers is not listed, the default value will be used
+# There can be added more tiers specified only for this game mode.
+# Tiers cannot be removed but can overwrite their values.
+gamemodes:
+  SkyGrid:
+    default:
+      min-level: -1
+      name: "Diamond Level"
+      blocks:
+        STONE: 10
+        DIORITE: 1
+        GRANITE: 1
+        ANDESITE: 1
+        COBBLESTONE: 89
+        GRAVEL: 1
+        COAL_ORE: 1
+        IRON_ORE: 1
+        GOLD_ORE: 1
+        LAPIS_ORE: 1
+        REDSTONE_ORE: 1
+        DIRT: 1
+        DIAMOND_ORE: 1
+        EMERALD_ORE: 1
