@@ -3,6 +3,7 @@ main: world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon
 version: ${version}${build.number}
 repository: 'BentoBoxWorld/MagicCobblestoneGenerator'
 metrics: true
+icon: COBBLESTONE
 
 authors:
   - ShakeforProtein
