@@ -135,7 +135,7 @@ public class StoneGeneratorManager
 		else
 		{
 			// Collect all unique IDs
-			Set<String> uniqueIDSet = customAddonTiers.keySet();
+			Set<String> uniqueIDSet = new HashSet<>(customAddonTiers.keySet());
 			uniqueIDSet.addAll(defaultTiers.keySet());
 			tierList = new ArrayList<>(uniqueIDSet.size());
 
