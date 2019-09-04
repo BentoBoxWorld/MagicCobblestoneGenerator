@@ -1,0 +1,17 @@
+---
+stonegenerator:
+  commands:
+    level:
+      description: Šī komanda parādīs tavas salas maģiskā ģenerātora līmeni.
+    main:
+      description: Sākuma komanda priekš Maģiskā Klintsakmens Ģenerātora. Rāda palīdzību.
+    alllevels:
+      description: Šī komanda parādīs visus Maģiskā Klinstakmens ģenerātora līmeņus
+        šajā pasaulē.
+  messages:
+    generator-tier: "&2[name] &r&2(no [value] salas līmeņa)."
+    material-chance: "&2    [name] - [value]%"
+    island-level: "&2Tavas salas līmenis ir &6[level]&2!"
+  errors:
+    cannot-find-any-generators: "&cDiemžēl neizdevās atrast nevienu Maģiskā Klintsakmeņa
+      līmeni šajā pasaulē."
