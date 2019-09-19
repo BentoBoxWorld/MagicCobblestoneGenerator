@@ -37,7 +37,7 @@ public class MainGeneratorListener implements Listener
 	 * It cancels this event only if a custom generator manages to change material.
 	 * @param event BlockFromToEvent which result will be overwritten.
 	 */
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockFromToEvent(BlockFromToEvent event)
 	{
 		Block eventSourceBlock = event.getBlock();
