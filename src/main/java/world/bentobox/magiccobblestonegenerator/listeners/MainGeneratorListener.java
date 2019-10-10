@@ -112,7 +112,11 @@ public class MainGeneratorListener implements Listener
 
 			if (replacedBlock != null)
 			{
-				event.setCancelled(this.addon.getGenerator().isReplacementGenerated(replacedBlock));
+				// Water flow should not be cancelled even if replacement is generated, as replacement block will
+				// never be in the flow block, as it will always be next block.
+
+				this.addon.getGenerator().isReplacementGenerated(replacedBlock);
+				event.setCancelled(false);
 			}
 		}
 
