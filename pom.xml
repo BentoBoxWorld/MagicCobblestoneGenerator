@@ -35,14 +35,14 @@
         <java.version>1.8</java.version>
         <powermock.version>1.7.4</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.13.2-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.5.0-SNAPSHOT</bentobox.version>
-        <level.version>1.4.0</level.version>
+        <spigot.version>1.14.4-R0.1-SNAPSHOT</spigot.version>
+        <bentobox.version>1.7.0</bentobox.version>
+        <level.version>1.6.0</level.version>
         <vault.version>68f14ec</vault.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- This allows to change between versions and snapshots. -->
-        <build.version>1.5.0.1</build.version>
+        <build.version>1.7.0.2</build.version>
         <build.number>-LOCAL</build.number>
     </properties>
 
