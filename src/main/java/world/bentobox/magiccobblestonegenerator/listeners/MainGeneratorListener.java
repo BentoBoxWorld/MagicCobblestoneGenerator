@@ -1,7 +1,11 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
@@ -9,6 +13,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
+
+import java.util.Random;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
@@ -89,7 +95,14 @@ public class MainGeneratorListener implements Listener
 		if (this.canGenerateStone(liquid, eventToBlock))
 		{
 			// Return from here at any case. Even if could not manage to replace stone.
-			event.setCancelled(this.addon.getGenerator().isReplacementGenerated(eventToBlock, true));
+
+			if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true))
+			{
+				// sound when lava transforms to cobble
+				this.playEffects(eventToBlock);
+				event.setCancelled(true);
+			}
+
 			return;
 		}
 
@@ -102,7 +115,12 @@ public class MainGeneratorListener implements Listener
 		if (liquid.equals(Material.LAVA) && this.canLavaGenerateCobblestone(eventToBlock, event.getFace()))
 		{
 			// Lava is generating cobblestone into eventToBlock place
-			event.setCancelled(this.addon.getGenerator().isReplacementGenerated(eventToBlock));
+			if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true))
+			{
+				// sound when lava transforms to cobble
+				this.playEffects(eventToBlock);
+				event.setCancelled(true);
+			}
 		}
 		else if (liquid.equals(Material.WATER))
 		{
@@ -115,12 +133,51 @@ public class MainGeneratorListener implements Listener
 				// Water flow should not be cancelled even if replacement is generated, as replacement block will
 				// never be in the flow block, as it will always be next block.
 
-				this.addon.getGenerator().isReplacementGenerated(replacedBlock);
-				event.setCancelled(false);
+				if (this.addon.getGenerator().isReplacementGenerated(replacedBlock, true))
+				{
+					// sound when lava transforms to cobble
+					this.playEffects(replacedBlock);
+				}
 			}
 		}
 
 		// End of process... no generation for you!!
+	}
+
+
+	/**
+	 * This method plays sound effect and adds particles to new block.
+	 * @param block block placement where particle must be generated.
+	 */
+	private void playEffects(Block block)
+	{
+		final double blockX = block.getX();
+		final double blockY = block.getY();
+		final double blockZ = block.getZ();
+
+		// Run everything in new task
+		Bukkit.getServer().getScheduler().runTask(this.addon.getPlugin(), () -> {
+			// Play sound for spawning block
+			block.getWorld().playSound(block.getLocation(),
+				Sound.BLOCK_FIRE_EXTINGUISH,
+				SoundCategory.BLOCKS,
+				0.5F,
+				2.6F + (this.random.nextFloat() - this.random.nextFloat()) * 0.8F);
+
+			// This spawns 8 large smoke particles.
+			for (int counter = 0; counter < 8; ++counter)
+			{
+				block.getWorld().spawnParticle(Particle.SMOKE_LARGE,
+					blockX + Math.random(),
+					blockY + 1 + Math.random(),
+					blockZ + Math.random(),
+					1,
+					0,
+					0,
+					0,
+					0);
+			}
+		});
 	}
 
 
@@ -376,4 +433,9 @@ public class MainGeneratorListener implements Listener
 	 * Main addon class.
 	 */
 	private StoneGeneratorAddon addon;
+
+	/**
+	 * A bit of randomness
+	 */
+	public final Random random = new Random();
 }
