@@ -1,0 +1,10 @@
+---
+stonegenerator:
+  commands:
+    level:
+      description: Este método muestra el nivel del generador mágico de tu isla.
+    main:
+      description: Método principal para Magic Cobblestone Generator. Muestra ayuda.
+    alllevels:
+      description: Este método devuelve todos los niveles del generador de adoquines
+        mágicos para el mundo actual.
