@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.bentobox</groupId>
@@ -71,9 +71,33 @@
             <properties>
                 <!-- Override only if necessary -->
                 <revision>${build.version}</revision>
-                <!-- Empties build number variable.-->
+                <!-- Empties build number variable. -->
                 <build.number></build.number>
             </properties>
+        </profile>
+        <profile>
+            <id>sonar</id>
+            <properties>
+                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+                <sonar.organization>bentobox-world</sonar.organization>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>3.6.0.1398</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sonar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -97,11 +121,11 @@
             <id>codemc-repo</id>
             <url>https://repo.codemc.org/repository/maven-public/</url>
         </repository>
-        <!--Vault Repo is down.-->
-        <!--<repository>-->
-        <!--<id>vault-repo</id>-->
-        <!--<url>http://nexus.hc.to/content/repositories/pub_releases</url>-->
-        <!--</repository>-->
+        <!--Vault Repo is down. -->
+        <!--<repository> -->
+        <!--<id>vault-repo</id> -->
+        <!--<url>http://nexus.hc.to/content/repositories/pub_releases</url> -->
+        <!--</repository> -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -268,9 +292,14 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.8.3</version>
                 <configuration>
                     <append>true</append>
+                    <excludes>
+                        <!-- This is required to prevent Jacoco from adding 
+                            synthetic fields to a JavaBean class (causes errors in testing) -->
+                        <exclude>**/*Names*</exclude>
+                    </excludes>
                 </configuration>
                 <executions>
                     <execution>
