@@ -128,17 +128,16 @@ public class MainGeneratorListener implements Listener
 
             Block replacedBlock = this.getWaterGeneratedCobblestone(eventToBlock, event.getFace());
 
-            if (replacedBlock != null)
-            {
-                // Water flow should not be cancelled even if replacement is generated, as replacement block will
-                // never be in the flow block, as it will always be next block.
 
-                if (this.addon.getGenerator().isReplacementGenerated(replacedBlock, true))
-                {
-                    // sound when lava transforms to cobble
-                    this.playEffects(replacedBlock);
-                }
+            // Water flow should not be cancelled even if replacement is generated, as replacement block will
+            // never be in the flow block, as it will always be next block.
+
+            if (replacedBlock != null && this.addon.getGenerator().isReplacementGenerated(replacedBlock, true))
+            {
+                // sound when lava transforms to cobble
+                this.playEffects(replacedBlock);
             }
+
         }
 
         // End of process... no generation for you!!
