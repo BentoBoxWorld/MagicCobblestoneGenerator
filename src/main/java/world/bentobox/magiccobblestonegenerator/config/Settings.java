@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.bukkit.Material;
@@ -21,12 +22,15 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  */
 public class Settings
 {
+    
+
     /**
      * Inits Settings file. Use custom YAML parsing in init.
      * @param addon StoneGeneratorAddon
      */
     public Settings(StoneGeneratorAddon addon)
     {
+        this.addon = addon;
         addon.saveDefaultConfig();
 
         // Get disabled GameModes
@@ -38,38 +42,7 @@ public class Settings
         {
             ConfigurationSection section = addon.getConfig().getConfigurationSection("tiers");
 
-            for (String key : section.getKeys(false))
-            {
-                ConfigurationSection tierSection = section.getConfigurationSection(key);
-
-                if (tierSection != null)
-                {
-                    GeneratorTier generatorTier = new GeneratorTier(key);
-                    generatorTier.setName(tierSection.getString("name"));
-                    generatorTier.setMinLevel(tierSection.getInt("min-level"));
-
-                    TreeMap<Double, Material> blockChances = new TreeMap<>();
-
-                    for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
-                    {
-                        try
-                        {
-                            Material material = Material.valueOf(materialKey);
-                            double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-                            blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
-                        }
-                        catch (Exception e)
-                        {
-                            addon.getLogger().warning(() -> "Unknown material (" + materialKey +
-                                    ") in config.yml blocks section for tier " + key + ". Skipping...");
-                        }
-                    }
-
-                    generatorTier.setBlockChanceMap(blockChances);
-
-                    this.generatorTierMap.put(key, generatorTier);
-                }
-            }
+            addSection(section);
         }
 
         // Reads GameMode specific generator tiers.
@@ -81,38 +54,46 @@ public class Settings
             {
                 ConfigurationSection gameModeSection = section.getConfigurationSection(gameMode);
 
-                for (String key : gameModeSection.getKeys(false))
-                {
-                    ConfigurationSection tierSection = gameModeSection.getConfigurationSection(key);
-
-                    GeneratorTier generatorTier = new GeneratorTier(key);
-                    generatorTier.setName(tierSection.getString("name"));
-                    generatorTier.setMinLevel(tierSection.getInt("min-level"));
-
-                    TreeMap<Double, Material> blockChances = new TreeMap<>();
-
-                    for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
-                    {
-                        try
-                        {
-                            Material material = Material.valueOf(materialKey);
-                            double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-                            blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
-                        }
-                        catch (Exception e)
-                        {
-                            addon.getLogger().warning(() -> "Unknown material (" + materialKey +
-                                    ") in config.yml blocks section for tier " + key +
-                                    " in gamemode section for " + gameMode + ". Skipping...");
-                        }
-                    }
-
-                    generatorTier.setBlockChanceMap(blockChances);
-
-                    this.customGeneratorTierMap.computeIfAbsent(gameMode, k -> new HashMap<>()).put(key, generatorTier);
-                }
+                addSection(gameModeSection);
             }
         }
+    }
+
+
+    private void addSection(ConfigurationSection section) {
+        for (String key : section.getKeys(false))
+        {
+            ConfigurationSection tierSection = section.getConfigurationSection(key);
+
+            if (tierSection != null)
+            {
+                GeneratorTier generatorTier = new GeneratorTier(key);
+                generatorTier.setName(tierSection.getString("name"));
+                generatorTier.setMinLevel(tierSection.getInt("min-level"));
+
+                TreeMap<Double, Material> blockChances = new TreeMap<>();
+
+                for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
+                {
+                    try
+                    {
+                        Material material = Material.valueOf(materialKey);
+                        double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                        blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
+                    }
+                    catch (Exception e)
+                    {
+                        addon.logWarning("Unknown material (" + materialKey +
+                                ") in config.yml blocks section for tier " + key + ". Skipping...");
+                    }
+                }
+
+                generatorTier.setBlockChanceMap(blockChances);
+
+                this.generatorTierMap.put(key, generatorTier);
+            }
+        }
+        
     }
 
 
@@ -245,7 +226,7 @@ public class Settings
          * @param blockChances the blockChanceMap object new value.
          *
          */
-        public void setBlockChanceMap(TreeMap<Double, Material> blockChances)
+        public void setBlockChanceMap(SortedMap<Double, Material> blockChances)
         {
             this.blockChanceMap = blockChances;
         }
@@ -282,6 +263,10 @@ public class Settings
     // Section: Variables
     // ---------------------------------------------------------------------
 
+    /**
+     * Addon
+     */
+    private StoneGeneratorAddon addon;
 
     /**
      * Map that links Generator tier ID with object.

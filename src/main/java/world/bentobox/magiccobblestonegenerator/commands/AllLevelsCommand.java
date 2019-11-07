@@ -2,7 +2,7 @@ package world.bentobox.magiccobblestonegenerator.commands;
 
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -86,7 +86,7 @@ public class AllLevelsCommand extends CompositeCommand
     static void displayTier(User user, GeneratorTier generatorTier) {
         // Create a sorted list of material and chance
         TreeMap<Double, Material> chances = (TreeMap<Double, Material>) generatorTier.getBlockChanceMap();
-        Map<Material, Double> percentages = new HashMap<>();
+        Map<Material, Double> percentages = new EnumMap<>(Material.class);
         double last = 0D;
         for (Entry<Double, Material> en : chances.entrySet()) {
             double percent = (en.getKey() - last) / chances.lastKey() * 100;
