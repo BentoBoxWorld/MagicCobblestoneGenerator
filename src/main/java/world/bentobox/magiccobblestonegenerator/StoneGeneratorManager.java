@@ -1,10 +1,19 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import java.util.*;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
@@ -197,7 +206,7 @@ public class StoneGeneratorManager
      * @param world World where generation happens.
      * @return Map that contains materials and its chance to be generated.
      */
-    public Map<Material, Integer> getMaterialChanceMap(long islandLevel, World world)
+    public Map<Double, Material> getMaterialChanceMap(long islandLevel, World world)
     {
         Settings.GeneratorTier generatorTier = this.getGeneratorTier(islandLevel, world);
 

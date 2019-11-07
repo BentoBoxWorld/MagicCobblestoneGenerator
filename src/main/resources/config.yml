@@ -10,10 +10,10 @@ offline-generation: false
 
 # Default Tiers
 # Each tier must contain:
-#      min-level: island level (integer from -1 till Integer.MAX_VALUE) | -1 will mean that this level will be the only level that will be applied. | First level will be always selected
+#      min-level: island level (integer) | -1 will mean that this level will be the only level that will be applied. | First level will be always selected
 #      name: String that will be displayed in commands
 #      blocks: List of Minecraft Materials and chance of getting it.
-# Note: You can not use decimals for chances and the total chances for your tier do not have to add to 100, because of this you can do the same thing as decimals but with larger numbers.
+# Note: You can use decimals for chances and the total chances for your tier do not have to add to 100. The percentages will be calculated from the total for the tier.
 tiers:
   default:
     min-level: 0

@@ -1,7 +1,12 @@
 package world.bentobox.magiccobblestonegenerator.config;
 
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -43,14 +48,15 @@ public class Settings
                     generatorTier.setName(tierSection.getString("name"));
                     generatorTier.setMinLevel(tierSection.getInt("min-level"));
 
-                    Map<Material, Integer> blockChances = new EnumMap<>(Material.class);
+                    TreeMap<Double, Material> blockChances = new TreeMap<>();
 
                     for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
                     {
                         try
                         {
                             Material material = Material.valueOf(materialKey);
-                            blockChances.put(material, tierSection.getInt("blocks." + materialKey, 0));
+                            double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                            blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
                         }
                         catch (Exception e)
                         {
@@ -83,14 +89,15 @@ public class Settings
                     generatorTier.setName(tierSection.getString("name"));
                     generatorTier.setMinLevel(tierSection.getInt("min-level"));
 
-                    Map<Material, Integer> blockChances = new EnumMap<>(Material.class);
+                    TreeMap<Double, Material> blockChances = new TreeMap<>();
 
                     for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
                     {
                         try
                         {
                             Material material = Material.valueOf(materialKey);
-                            blockChances.put(material, tierSection.getInt("blocks." + materialKey, 0));
+                            double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                            blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
                         }
                         catch (Exception e)
                         {
@@ -227,7 +234,7 @@ public class Settings
          * This method returns the blockChanceMap object.
          * @return the blockChanceMap object.
          */
-        public Map<Material, Integer> getBlockChanceMap()
+        public Map<Double, Material> getBlockChanceMap()
         {
             return blockChanceMap;
         }
@@ -235,12 +242,12 @@ public class Settings
 
         /**
          * This method sets the blockChanceMap object value.
-         * @param blockChanceMap the blockChanceMap object new value.
+         * @param blockChances the blockChanceMap object new value.
          *
          */
-        public void setBlockChanceMap(Map<Material, Integer> blockChanceMap)
+        public void setBlockChanceMap(TreeMap<Double, Material> blockChances)
         {
-            this.blockChanceMap = blockChanceMap;
+            this.blockChanceMap = blockChances;
         }
 
 
@@ -267,7 +274,7 @@ public class Settings
         /**
          * Map that contains chances for each material to be generated.
          */
-        private Map<Material, Integer> blockChanceMap = Collections.emptyMap();
+        private Map<Double, Material> blockChanceMap = Collections.emptyMap();
     }
 
 

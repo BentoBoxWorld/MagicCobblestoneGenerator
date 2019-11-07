@@ -1,17 +1,22 @@
 package world.bentobox.magiccobblestonegenerator.commands;
 
 
-import org.bukkit.Material;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.ToIntFunction;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
+import org.bukkit.Material;
 
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.config.Settings.GeneratorTier;
 
 
 /**
@@ -20,6 +25,12 @@ import world.bentobox.magiccobblestonegenerator.config.Settings;
  */
 public class AllLevelsCommand extends CompositeCommand
 {
+    /**
+     * Formatter for 2 decimal places
+     */
+    private static final DecimalFormat DF2 = new DecimalFormat("#.##");
+
+
     /**
      * Sub-command constructor
      */
@@ -62,27 +73,39 @@ public class AllLevelsCommand extends CompositeCommand
             user.sendMessage("stonegenerator.errors.cannot-find-any-generators");
             return false;
         }
+        generatorTierList.forEach(t -> displayTier(user, t));
+        return true;
+    }
 
-        for (Settings.GeneratorTier generatorTier : generatorTierList)
-        {
-            int sumChances = generatorTier.getBlockChanceMap().values().stream().mapToInt(Integer::intValue).sum();
-            List<Material> materialList = new ArrayList<>(generatorTier.getBlockChanceMap().keySet());
-            materialList.sort(Comparator.comparingInt((ToIntFunction<Material>) generatorTier.getBlockChanceMap()::get).
-                    thenComparing(material -> material));
 
-            user.sendMessage("stonegenerator.messages.generator-tier",
-                    "[name]", generatorTier.getName(),
-                    "[value]", Integer.toString(generatorTier.getMinLevel()));
-
-            for (Material material : materialList)
-            {
-                user.sendMessage("stonegenerator.messages.material-chance",
-                        "[name]", material.toString(),
-                        "[value]", 	Integer.toString((int) Math.floor(generatorTier.getBlockChanceMap().get(material) * 100.0 / sumChances)));
-            }
+    /**
+     * Display the tier stats to the user
+     * @param user - user
+     * @param generatorTier - tier to show
+     */
+    static void displayTier(User user, GeneratorTier generatorTier) {
+        // Create a sorted list of material and chance
+        TreeMap<Double, Material> chances = (TreeMap<Double, Material>) generatorTier.getBlockChanceMap();
+        Map<Material, Double> percentages = new HashMap<>();
+        double last = 0D;
+        for (Entry<Double, Material> en : chances.entrySet()) {
+            double percent = (en.getKey() - last) / chances.lastKey() * 100;
+            percentages.put(en.getValue(), percent);
+            last = en.getKey();
         }
 
-        return true;
+        user.sendMessage("stonegenerator.messages.generator-tier",
+                "[name]", generatorTier.getName(),
+                "[value]", Integer.toString(generatorTier.getMinLevel()));
+
+        for (Entry<Material, Double> en : percentages.entrySet())
+        {
+            user.sendMessage("stonegenerator.messages.material-chance",
+                "[name]", Util.prettifyText(en.getKey().toString()),
+                "[value]",  DF2.format(en.getValue()));
+        }
+
+        
     }
 }
 

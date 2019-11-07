@@ -1,12 +1,9 @@
 package world.bentobox.magiccobblestonegenerator.commands;
 
 
-import org.bukkit.Material;
-import org.bukkit.World;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.ToIntFunction;
+
+import org.bukkit.World;
 
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
@@ -20,6 +17,8 @@ import world.bentobox.magiccobblestonegenerator.config.Settings;
  * Magic Generator Tier for caller in target world.
  */
 public class CurrentLevelCommand extends CompositeCommand
+
+
 {
 	/**
 	 * Sub-command constructor
@@ -68,26 +67,12 @@ public class CurrentLevelCommand extends CompositeCommand
 			user.sendMessage("stonegenerator.errors.cannot-find-any-generators");
 			return false;
 		}
-
-		int sumChances = generatorTier.getBlockChanceMap().values().stream().mapToInt(Integer::intValue).sum();
-		List<Material> materialList = new ArrayList<>(generatorTier.getBlockChanceMap().keySet());
-		materialList.sort(Comparator.comparingInt((ToIntFunction<Material>) generatorTier.getBlockChanceMap()::get).thenComparing(material -> material));
-
-		user.sendMessage("stonegenerator.messages.generator-tier",
-			"[name]", generatorTier.getName(),
-			"[value]", Integer.toString(generatorTier.getMinLevel()));
-
-		for (Material material : materialList)
-		{
-
-			user.sendMessage("stonegenerator.messages.material-chance",
-				"[name]", material.toString(),
-				"[value]", 	Integer.toString((int) Math.floor(generatorTier.getBlockChanceMap().get(material) * 100.0 / sumChances)));
-		}
+		
+		AllLevelsCommand.displayTier(user, generatorTier);
 
 		user.sendMessage("stonegenerator.messages.island-level",
 			"[level]", Long.toString(islandLevel));
 
-		return false;
+		return true;
 	}
 }
