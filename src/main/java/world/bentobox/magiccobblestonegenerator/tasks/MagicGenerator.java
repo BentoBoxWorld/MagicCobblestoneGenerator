@@ -65,8 +65,8 @@ public class MagicGenerator
             double rand = new Random(System.currentTimeMillis()).nextDouble() * chanceMap.lastKey();
             newMaterial = chanceMap.ceilingEntry(rand).getValue();
         }
-
-        block.setType(newMaterial);
+        // Don't use physics
+        block.setType(newMaterial, false);
         return true;
     }
 
