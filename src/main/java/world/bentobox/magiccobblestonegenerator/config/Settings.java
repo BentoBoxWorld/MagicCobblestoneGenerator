@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.eclipse.jdt.annotation.NonNull;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
@@ -22,7 +24,7 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  */
 public class Settings
 {
-    
+
 
     /**
      * Inits Settings file. Use custom YAML parsing in init.
@@ -41,8 +43,10 @@ public class Settings
         if (addon.getConfig().isSet("tiers"))
         {
             ConfigurationSection section = addon.getConfig().getConfigurationSection("tiers");
-
-            addSection(section);
+            for (String key : Objects.requireNonNull(section).getKeys(false))
+            {
+                this.generatorTierMap.put(key, addSection(section, key));
+            }
         }
 
         // Reads GameMode specific generator tiers.
@@ -50,51 +54,47 @@ public class Settings
         {
             ConfigurationSection section = addon.getConfig().getConfigurationSection("gamemodes");
 
-            for (String gameMode : section.getKeys(false))
+            for (String gameMode : Objects.requireNonNull(section).getKeys(false))
             {
                 ConfigurationSection gameModeSection = section.getConfigurationSection(gameMode);
-
-                addSection(gameModeSection);
-            }
-        }
-    }
-
-
-    private void addSection(ConfigurationSection section) {
-        for (String key : section.getKeys(false))
-        {
-            ConfigurationSection tierSection = section.getConfigurationSection(key);
-
-            if (tierSection != null)
-            {
-                GeneratorTier generatorTier = new GeneratorTier(key);
-                generatorTier.setName(tierSection.getString("name"));
-                generatorTier.setMinLevel(tierSection.getInt("min-level"));
-
-                TreeMap<Double, Material> blockChances = new TreeMap<>();
-
-                for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
+                for (String key : Objects.requireNonNull(gameModeSection).getKeys(false))
                 {
-                    try
-                    {
-                        Material material = Material.valueOf(materialKey);
-                        double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-                        blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
-                    }
-                    catch (Exception e)
-                    {
-                        addon.logWarning("Unknown material (" + materialKey +
-                                ") in config.yml blocks section for tier " + key + ". Skipping...");
-                    }
+                    this.customGeneratorTierMap.computeIfAbsent(gameMode, k -> new HashMap<>()).put(key, addSection(gameModeSection, key));
                 }
 
-                generatorTier.setBlockChanceMap(blockChances);
-
-                this.generatorTierMap.put(key, generatorTier);
             }
         }
-        
     }
+
+    @NonNull
+    private GeneratorTier addSection(ConfigurationSection section, String key) {
+        ConfigurationSection tierSection = section.getConfigurationSection(key);
+        GeneratorTier generatorTier = new GeneratorTier(key);
+        generatorTier.setName(tierSection.getString("name"));
+        generatorTier.setMinLevel(tierSection.getInt("min-level"));
+
+        TreeMap<Double, Material> blockChances = new TreeMap<>();
+        if (tierSection.isConfigurationSection("blocks")) {
+            for (String materialKey : Objects.requireNonNull(tierSection).getConfigurationSection("blocks").getKeys(false))
+            {
+                try
+                {
+                    Material material = Material.valueOf(materialKey);
+                    double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                    blockChances.put(lastEntry + tierSection.getDouble("blocks." + materialKey, 0), material);
+                }
+                catch (Exception e)
+                {
+                    addon.logWarning("Unknown material (" + materialKey +
+                            ") in config.yml blocks section for tier " + key + ". Skipping...");
+                }
+            }
+
+            generatorTier.setBlockChanceMap(blockChances);
+        }
+        return generatorTier;
+    }
+
 
 
     // ---------------------------------------------------------------------
