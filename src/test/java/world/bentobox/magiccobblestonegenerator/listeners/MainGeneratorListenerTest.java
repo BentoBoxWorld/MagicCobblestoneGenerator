@@ -1,7 +1,6 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 

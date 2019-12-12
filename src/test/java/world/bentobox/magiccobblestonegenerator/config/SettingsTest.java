@@ -32,8 +32,6 @@ public class SettingsTest {
     private Settings s;
     private YamlConfiguration config;
 
-    private String skygrid = "SkyGrid";
-
     /**
      * @throws java.lang.Exception
      */
@@ -92,7 +90,7 @@ public class SettingsTest {
         assertEquals(7, s.getDefaultGeneratorTierMap().size());
         assertTrue(s.getDefaultGeneratorTierMap().containsKey("default"));
         for (int i = 1; i < 7; i++) {
-            assertTrue(s.getDefaultGeneratorTierMap().containsKey("tier" + String.valueOf(i)));
+            assertTrue(s.getDefaultGeneratorTierMap().containsKey("tier" + i));
         }
         assertEquals("Stone Level", s.getDefaultGeneratorTierMap().get("default").getName());
     }
@@ -102,6 +100,7 @@ public class SettingsTest {
      */
     @Test
     public void testGetAddonGeneratorTierMap() {
+        String skygrid = "SkyGrid";
         assertEquals(1, s.getAddonGeneratorTierMap(skygrid).size());
         assertEquals("Diamond Level", s.getAddonGeneratorTierMap(skygrid).get("default").getName());
     }

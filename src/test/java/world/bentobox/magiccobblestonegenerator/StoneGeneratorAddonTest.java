@@ -1,8 +1,6 @@
 package world.bentobox.magiccobblestonegenerator;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -94,7 +92,7 @@ public class StoneGeneratorAddonTest {
             try (FileInputStream fis = new FileInputStream(path.toFile())) {
 
                 byte[] buffer = new byte[1024];
-                int bytesRead = 0;
+                int bytesRead;
                 JarEntry entry = new JarEntry(path.toString());
                 tempJarOutputStream.putNextEntry(entry);
                 while((bytesRead = fis.read(buffer)) != -1) {
@@ -151,7 +149,7 @@ public class StoneGeneratorAddonTest {
         when(plugin.isEnabled()).thenReturn(false);
         addon.onEnable();
         verify(logger).severe(eq("BentoBox is not available or disabled!"));
-        assertTrue(addon.getState().equals(State.DISABLED));
+        assertEquals(addon.getState(), State.DISABLED);
     }
     
     /**
