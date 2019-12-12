@@ -15,6 +15,8 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  */
 public class MagicGenerator
 {
+    private Random random = new Random(System.currentTimeMillis());
+
     /**
      * Default constructor. Inits Generator once.
      * @param addon Magic Cobblestone Generator addon.
@@ -62,7 +64,7 @@ public class MagicGenerator
         }
         else
         {
-            double rand = new Random(System.currentTimeMillis()).nextDouble() * chanceMap.lastKey();
+            double rand = random.nextDouble() * chanceMap.lastKey();
             newMaterial = chanceMap.ceilingEntry(rand).getValue();
         }
         // Don't use physics
