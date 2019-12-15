@@ -1,6 +1,5 @@
 package world.bentobox.magiccobblestonegenerator;
 
-
 import org.bukkit.Bukkit;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,12 +93,33 @@ public class StoneGeneratorAddon extends Addon {
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
+
+            // Register placeholders
+            registerPlaceholders();
         } else {
             this.logError("Magic Cobblestone Generator could not hook into any GameMode so will not do anything!");
             this.setState(State.DISABLED);
         }
     }
 
+    /**
+     * Registers the placeholders
+     * @since 1.9.0
+     */
+    private void registerPlaceholders() {
+        getPlugin().getAddonsManager().getGameModeAddons().stream()
+                .filter(g -> !settings.getDisabledGameModes().contains(g.getDescription().getName()))
+                .forEach(g -> {
+                    // Register placeholders
+                    getPlugin().getPlaceholdersManager()
+                            .registerPlaceholder(this, g.getDescription().getName().toLowerCase() + "_island_generator_tier",
+                                    user -> {
+                                        long level = isLevelProvided() ? 0L : getLevelAddon().getIslandLevel(g.getOverWorld(), user.getUniqueId());
+                                        Settings.GeneratorTier tier = getManager().getGeneratorTier(level, user.getWorld());
+                                        return tier != null ? tier.getName() : "";
+                                    });
+                });
+    }
 
     /**
      * Executes code when disabling the addon.
@@ -108,7 +128,6 @@ public class StoneGeneratorAddon extends Addon {
     public void onDisable() {
         // Do some stuff...
     }
-
 
     /**
      * Executes code when reloading the addon.
@@ -127,7 +146,6 @@ public class StoneGeneratorAddon extends Addon {
     // Section: Getters
     // ---------------------------------------------------------------------
 
-
     /**
      * This method returns the settings object.
      * @return the settings object.
@@ -135,7 +153,6 @@ public class StoneGeneratorAddon extends Addon {
     public Settings getSettings() {
         return this.settings;
     }
-
 
     /**
      * This method returns Magic Generator.
@@ -145,7 +162,6 @@ public class StoneGeneratorAddon extends Addon {
         return this.generator;
     }
 
-
     /**
      * This method returns stone manager.
      * @return Stone Generator Manager
@@ -154,7 +170,6 @@ public class StoneGeneratorAddon extends Addon {
         return this.stoneGeneratorManager;
     }
 
-
     /**
      * This method returns the levelAddon object.
      * @return the levelAddon object.
@@ -162,7 +177,6 @@ public class StoneGeneratorAddon extends Addon {
     public Level getLevelAddon() {
         return this.levelAddon;
     }
-
 
     /**
      * This method returns the levelProvided object.
