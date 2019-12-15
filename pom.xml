@@ -56,7 +56,7 @@
             </activation>
             <properties>
                 <!-- Override only if necessary -->
-                <build.number>-#${env.BUILD_NUMBER}</build.number>
+                <build.number>-b${env.BUILD_NUMBER}</build.number>
                 <!-- GIT_BRANCH -->
             </properties>
         </profile>
