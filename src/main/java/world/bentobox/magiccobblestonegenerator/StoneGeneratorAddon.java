@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.bukkit.Material;
 import world.bentobox.bentobox.api.addons.Addon;
+import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
@@ -84,12 +86,16 @@ public class StoneGeneratorAddon extends Addon {
                 this.vaultHook = vault.get();
             }
 
-
             // Register the listener.
             this.registerListener(new MainGeneratorListener(this));
 
             // Register Flags
-//			this.getPlugin().getFlagsManager().registerFlag(FLAG_NAME);
+            flag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE)
+                    .type(Flag.Type.SETTING)
+                    .defaultSetting(true)
+                    .addon(this)
+                    .build();
+			getPlugin().getFlagsManager().registerFlag(flag);
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
@@ -186,6 +192,15 @@ public class StoneGeneratorAddon extends Addon {
         return levelAddon != null;
     }
 
+    /**
+     * Returns the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
+     * @return the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
+     * @since 1.9.0
+     */
+    public Flag getFlag() {
+        return flag;
+    }
+
 
     // ---------------------------------------------------------------------
     // Section: Variables
@@ -220,4 +235,10 @@ public class StoneGeneratorAddon extends Addon {
      * Level addon.
      */
     private Level levelAddon;
+
+    /**
+     * Flag that toggles on/off the Magic Cobblestone Generator.
+     * @since 1.9.0
+     */
+    private Flag flag;
 }

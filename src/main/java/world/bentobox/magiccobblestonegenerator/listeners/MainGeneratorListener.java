@@ -91,6 +91,12 @@ public class MainGeneratorListener implements Listener
             return;
         }
 
+        // if flag is toggled off, return
+        if(addon.getIslands().getIslandAt(eventToBlock.getLocation())
+                .map(island -> !island.isAllowed(addon.getFlag())).orElse(!addon.getFlag().isSetForWorld(eventToBlock.getWorld()))) {
+            return;
+        }
+
         // Stone generator could be used to get much better elements than cobble generator
         if (this.canGenerateStone(liquid, eventToBlock))
         {

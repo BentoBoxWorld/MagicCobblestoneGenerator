@@ -12,3 +12,9 @@ stonegenerator:
     island-level: "&2Your island level is &6[level]&2!"
   errors:
     cannot-find-any-generators: "&cCannot find any Magic Cobblestone Generator tier for the current world."
+
+protection:
+  flags:
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Magic Cobblestone Generator"
+      description: "Toggle the Magic Cobblestone Generator"
