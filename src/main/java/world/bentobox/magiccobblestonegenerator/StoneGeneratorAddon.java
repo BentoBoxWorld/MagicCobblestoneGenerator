@@ -111,13 +111,13 @@ public class StoneGeneratorAddon extends Addon {
                 .filter(g -> !settings.getDisabledGameModes().contains(g.getDescription().getName()))
                 .forEach(g -> {
                     // Register placeholders
-                    getPlugin().getPlaceholdersManager()
-                            .registerPlaceholder(this, g.getDescription().getName().toLowerCase() + "_island_generator_tier",
-                                    user -> {
-                                        long level = isLevelProvided() ? 0L : getLevelAddon().getIslandLevel(g.getOverWorld(), user.getUniqueId());
-                                        Settings.GeneratorTier tier = getManager().getGeneratorTier(level, user.getWorld());
-                                        return tier != null ? tier.getName() : "";
-                                    });
+                    getPlugin().getPlaceholdersManager().registerPlaceholder(this,
+                            g.getDescription().getName().toLowerCase() + "_island_generator_tier",
+                            user -> {
+                                long level = isLevelProvided() ? 0L : getLevelAddon().getIslandLevel(g.getOverWorld(), user.getUniqueId());
+                                Settings.GeneratorTier tier = getManager().getGeneratorTier(level, user.getWorld());
+                                return tier != null ? tier.getName() : "";
+                            });
                 });
     }
 

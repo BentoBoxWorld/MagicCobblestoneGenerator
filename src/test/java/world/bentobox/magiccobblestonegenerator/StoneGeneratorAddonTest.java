@@ -43,6 +43,7 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.managers.AddonsManager;
+import world.bentobox.bentobox.managers.PlaceholdersManager;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 
@@ -68,6 +69,9 @@ public class StoneGeneratorAddonTest {
     @Mock
     private GameModeAddon gameMode;
 
+    @Mock
+    private PlaceholdersManager placeholdersManager;
+
     /**
      * @throws java.lang.Exception
      */
@@ -77,6 +81,7 @@ public class StoneGeneratorAddonTest {
         Whitebox.setInternalState(BentoBox.class, "instance", plugin);
         when(plugin.isEnabled()).thenReturn(true);
         when(plugin.getLogger()).thenReturn(logger);
+        when(plugin.getPlaceholdersManager()).thenReturn(placeholdersManager);
         // Bukkit
         PowerMockito.mockStatic(Bukkit.class);
         when(Bukkit.getLogger()).thenReturn(logger);
@@ -115,8 +120,6 @@ public class StoneGeneratorAddonTest {
         @NonNull
         Optional<CompositeCommand> opCmd = Optional.of(cmd );
         when(gameMode.getPlayerCommand()).thenReturn(opCmd);
-
-        
     }
 
     /**
@@ -139,27 +142,6 @@ public class StoneGeneratorAddonTest {
             .forEach(File::delete);
         }
 
-    }
-
-    /**
-     * Test method for {@link world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon#onEnable()}.
-     */
-    @Test
-    public void testOnEnableDisabledPlugin() {
-        when(plugin.isEnabled()).thenReturn(false);
-        addon.onEnable();
-        verify(logger).severe(eq("BentoBox is not available or disabled!"));
-        assertEquals(addon.getState(), State.DISABLED);
-    }
-    
-    /**
-     * Test method for {@link world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon#onEnable()}.
-     */
-    @Test
-    public void testOnEnableDisabled() {
-        addon.setState(State.DISABLED);
-        addon.onEnable();
-        verify(logger).severe(eq("Magic Cobblestone Generator Addon is not available or disabled!"));
     }
     
     /**
@@ -225,7 +207,7 @@ public class StoneGeneratorAddonTest {
     public void testGetSettings() {
         assertNull(addon.getSettings());
         addon.onLoad();
-        assertTrue(addon.getSettings() instanceof Settings);
+        assertNotNull(addon.getSettings());
         
     }
 
@@ -236,7 +218,7 @@ public class StoneGeneratorAddonTest {
     public void testGetGenerator() {
         assertNull(addon.getGenerator());
         testOnEnable();
-        assertTrue(addon.getGenerator() instanceof MagicGenerator);
+        assertNotNull(addon.getGenerator());
     }
 
     /**
@@ -246,7 +228,7 @@ public class StoneGeneratorAddonTest {
     public void testGetManager() {
         assertNull(addon.getManager());
         testOnEnable();
-        assertTrue(addon.getManager() instanceof StoneGeneratorManager);
+        assertNotNull(addon.getManager());
     }
 
     /**
