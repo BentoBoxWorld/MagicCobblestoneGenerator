@@ -1,14 +1,14 @@
 stonegenerator:
   commands:
     level:
-      description: "This method shows your island Magic Generator Tier."
+      description: "display your island Magic Generator tier"
     main:
-      description: "Main method for Magic Cobblestone Generator. Shows help."
+      description: "display the Magic Generator help"
     alllevels:
-      description: "This method returns all magic cobblestone generator tiers for current world."
+      description: "display all Magic Generator tiers for the current world"
   messages:
     generator-tier: "&2[name] &r&2(from [value] island level)."
     material-chance: "&2    [name] - [value]%"
     island-level: "&2Your island level is &6[level]&2!"
   errors:
-    cannot-find-any-generators: "&cCannot find any magic cobblestone generator tier for current world."
+    cannot-find-any-generators: "&cCannot find any Magic Cobblestone Generator tier for the current world."
