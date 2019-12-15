@@ -65,7 +65,7 @@ public class AllLevelsCommand extends CompositeCommand
     @Override
     public boolean execute(User user, String label, List<String> args)
     {
-        StoneGeneratorAddon addon = (StoneGeneratorAddon) this.getAddon();
+        StoneGeneratorAddon addon = getAddon();
         List<Settings.GeneratorTier> generatorTierList = addon.getManager().getAllGeneratorTiers(this.getWorld());
 
         if (generatorTierList.isEmpty())
