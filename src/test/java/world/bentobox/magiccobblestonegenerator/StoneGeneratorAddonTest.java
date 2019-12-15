@@ -43,6 +43,7 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.managers.AddonsManager;
+import world.bentobox.bentobox.managers.FlagsManager;
 import world.bentobox.bentobox.managers.PlaceholdersManager;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
@@ -72,6 +73,9 @@ public class StoneGeneratorAddonTest {
     @Mock
     private PlaceholdersManager placeholdersManager;
 
+    @Mock
+    private FlagsManager flagsManager;
+
     /**
      * @throws java.lang.Exception
      */
@@ -82,6 +86,7 @@ public class StoneGeneratorAddonTest {
         when(plugin.isEnabled()).thenReturn(true);
         when(plugin.getLogger()).thenReturn(logger);
         when(plugin.getPlaceholdersManager()).thenReturn(placeholdersManager);
+        when(plugin.getFlagsManager()).thenReturn(flagsManager);
         // Bukkit
         PowerMockito.mockStatic(Bukkit.class);
         when(Bukkit.getLogger()).thenReturn(logger);

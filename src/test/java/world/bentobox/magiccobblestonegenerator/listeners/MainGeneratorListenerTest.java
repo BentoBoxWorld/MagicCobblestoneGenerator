@@ -22,9 +22,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.flags.Flag;
+import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.managers.IslandsManager;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
+
+import java.util.Optional;
 
 /**
  * @author tastybento
@@ -59,6 +64,13 @@ public class MainGeneratorListenerTest {
     @Mock
     private Block block3;
 
+    @Mock
+    private IslandsManager im;
+    @Mock
+    private Island island;
+    @Mock
+    private Flag flag;
+
     /**
      * @throws java.lang.Exception
      */
@@ -67,6 +79,11 @@ public class MainGeneratorListenerTest {
         // Set up plugin
         Whitebox.setInternalState(BentoBox.class, "instance", plugin);
         when(addon.getPlugin()).thenReturn(plugin);
+        when(addon.getFlag()).thenReturn(flag);
+        when(flag.isSetForWorld(any())).thenReturn(true);
+        when(addon.getIslands()).thenReturn(im);
+        when(im.getIslandAt(any())).thenReturn(Optional.of(island));
+        when(island.isAllowed(any())).thenReturn(true);
 
         // Bukkit
         PowerMockito.mockStatic(Bukkit.class);
