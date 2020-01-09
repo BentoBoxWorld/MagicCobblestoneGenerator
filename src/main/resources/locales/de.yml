@@ -1,0 +1,17 @@
+---
+stonegenerator:
+  commands:
+    level:
+      description: Diese Funktion zeigt den Magic Generator Level deiner Insel.
+    main:
+      description: HauptFunktion für Magic Bruchstein Generator. Zeigt Hilfe.
+    alllevels:
+      description: Diese Funktion gibt alle Ebenen des Magic Bruchstein-Generators
+        für die aktuelle Welt zurück.
+  messages:
+    generator-tier: "&2[name] &r&2(from [value] island level)."
+    material-chance: "&2    [name] - [value]%"
+    island-level: "&2Dein Insellevel ist &6[level]&2!"
+  errors:
+    cannot-find-any-generators: "&cKann keinen magischen Bruchstein-Generator Level
+      für die aktuelle Welt finden."
