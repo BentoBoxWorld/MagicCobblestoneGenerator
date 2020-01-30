@@ -1,0 +1,16 @@
+# Translation by: CZghost
+
+stonegenerator:
+  commands:
+    level:
+      description: "Tato metoda ukazuje úroveň magického generátoru tvého ostrova."
+    main:
+      description: "Hlavní metoda pro doplňek Magic Cobblestone Generator. Ukáže nápovědu."
+    alllevels:
+      description: "Tato metoda vrátí všechny úrovně magického generátoru kamení pro tento svět."
+  messages:
+    generator-tier: "&2[name] &r&2(z úrovně [value] ostrova)."
+    material-chance: "&2    [name] - [value]%"
+    island-level: "&2Úroveň tvého ostrova je &6[level]&2!"
+  errors:
+    cannot-find-any-generators: "&cNelze najít žádnou úroveň magického generátoru kamení pro tento svět."
