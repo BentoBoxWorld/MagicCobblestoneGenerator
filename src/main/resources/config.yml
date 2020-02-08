@@ -8,6 +8,11 @@ disabled-gamemodes: []
 # Disables custom generation if all island members are offline
 offline-generation: false
 
+# If physics should be used when placing a block. 
+# using physics allow certain redstone machanics to work, 
+# but might have unwanted side effects
+use-physics: false
+
 # Default Tiers
 # Each tier must contain:
 #      min-level: island level (integer) | -1 will mean that this level will be the only level that will be applied. | First level will be always selected

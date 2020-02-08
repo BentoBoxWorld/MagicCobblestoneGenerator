@@ -39,6 +39,9 @@ public class Settings
         this.disabledGameModes = new HashSet<>(addon.getConfig().getStringList("disabled-gamemodes"));
         this.offlineGeneration = addon.getConfig().getBoolean("offline-generation");
 
+        // if physics should be used
+        this.physics = addon.getConfig().getBoolean("use-physics", false);
+
         // Reads Generator Tiers
         if (addon.getConfig().isSet("tiers"))
         {
@@ -142,6 +145,15 @@ public class Settings
         return this.customGeneratorTierMap.getOrDefault(addon, Collections.emptyMap());
     }
 
+    /**
+     * This method returns if physics should be used when placing a block
+     * .
+     * @return usePhysics
+     */
+    public boolean usePhysics()
+    {
+        return physics;
+    }
 
     // ---------------------------------------------------------------------
     // Section: Private object
@@ -287,4 +299,9 @@ public class Settings
      * Set that contains all disabled game modes.
      */
     private Set<String> disabledGameModes;
+
+    /**
+     * Boolean to indicate if physics should be used when placing a block
+     */
+    private boolean physics;
 }

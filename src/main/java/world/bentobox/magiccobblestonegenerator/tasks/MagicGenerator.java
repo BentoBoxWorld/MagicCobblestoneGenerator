@@ -67,8 +67,8 @@ public class MagicGenerator
             double rand = random.nextDouble() * chanceMap.lastKey();
             newMaterial = chanceMap.ceilingEntry(rand).getValue();
         }
-        // Don't use physics
-        block.setType(newMaterial, false);
+        // ask config if physics should be used
+        block.setType(newMaterial, addon.getSettings().usePhysics());
         return true;
     }
 
