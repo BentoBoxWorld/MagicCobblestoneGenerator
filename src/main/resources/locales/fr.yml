@@ -1,0 +1,14 @@
+---
+stonegenerator:
+  commands:
+    level:
+      description: Afficher les drops de votre générateur de Cobble actuel.
+    main:
+      description: liste des commandes de Magic Cobblestone Generator.
+    alllevels:
+      description: Afficher les drops du générateur de Cobble pour tous les paliers.
+  messages:
+    generator-tier: "&2[name] &r&2(depuis [value] niveau de l'île)."
+  errors:
+    cannot-find-any-generators: "&cImpossible de trouver un niveau de Magic Cobblestone
+      Generator pour le monde actuel."
