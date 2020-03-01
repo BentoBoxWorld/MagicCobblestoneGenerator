@@ -13,6 +13,8 @@ offline-generation: false
 # but might have unwanted side effects
 use-physics: false
 
+working-range: 8
+
 # Default Tiers
 # Each tier must contain:
 #      min-level: island level (integer) | -1 will mean that this level will be the only level that will be applied. | First level will be always selected

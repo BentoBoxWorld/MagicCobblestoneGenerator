@@ -42,6 +42,8 @@ public class Settings
         // if physics should be used
         this.physics = addon.getConfig().getBoolean("use-physics", false);
 
+        this.workingRange = addon.getConfig().getInt("working-range", 0);
+
         // Reads Generator Tiers
         if (addon.getConfig().isSet("tiers"))
         {
@@ -153,6 +155,15 @@ public class Settings
     public boolean usePhysics()
     {
         return physics;
+    }
+
+    /**
+     * returns the range the player has to be in to make it work.
+     *
+     * @return workingRange
+     */
+    public int getWorkingRange() {
+        return workingRange;
     }
 
     // ---------------------------------------------------------------------
@@ -304,4 +315,6 @@ public class Settings
      * Boolean to indicate if physics should be used when placing a block
      */
     private boolean physics;
+
+    private int workingRange;
 }

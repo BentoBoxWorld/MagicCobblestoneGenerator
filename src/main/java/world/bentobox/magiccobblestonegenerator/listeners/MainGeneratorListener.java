@@ -8,14 +8,18 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
 
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
@@ -94,6 +98,10 @@ public class MainGeneratorListener implements Listener
         // if flag is toggled off, return
         if(addon.getIslands().getIslandAt(eventToBlock.getLocation())
                 .map(island -> !island.isAllowed(addon.getFlag())).orElse(!addon.getFlag().isSetForWorld(eventToBlock.getWorld()))) {
+            return;
+        }
+
+        if (!isInRangeToGenerate(eventSourceBlock)) {
             return;
         }
 
@@ -426,6 +434,32 @@ public class MainGeneratorListener implements Listener
         // a source block.
         return block.getType().equals(Material.LAVA) &&
                 !block.getBlockData().getAsString().contains("level=0");
+    }
+
+    /**
+     * This method returns there is an island member in range to active of "custom" block generation
+     * @param block Block that must be checked.
+     * @return true if there is a player in the set range
+     */
+    private boolean isInRangeToGenerate(Block block) {
+        int workingRange = addon.getSettings().getWorkingRange();
+        if (workingRange > 0) {
+            boolean result = false;
+            Optional<Island> opIsland = addon.getIslands().getIslandAt(block.getLocation());
+            if (opIsland.isPresent()) {
+                Island island = opIsland.get();
+                List<Player> onlineMembers = addon.getServer().getOnlinePlayers().stream().filter(player -> island.getMemberSet().contains(player.getUniqueId())).collect(Collectors.toList());
+                Collection<Entity> entities = block.getWorld().getNearbyEntities(block.getLocation(), workingRange, workingRange, workingRange);
+                List<Player> membersInRange = onlineMembers.stream().filter(entities::contains).collect(Collectors.toList());
+                for (Player player : membersInRange) {
+                    if (block.getLocation().distance(player.getLocation()) <= workingRange) {
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
+        return true;
     }
 
 
