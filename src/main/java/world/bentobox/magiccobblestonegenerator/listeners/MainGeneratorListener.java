@@ -1,8 +1,6 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
-import java.util.Collection;
-import java.util.Optional;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -12,14 +10,12 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 
-import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
@@ -221,27 +217,27 @@ public class MainGeneratorListener implements Listener {
      */
     private boolean canLavaGenerateCobblestone(Block airBlock, BlockFace flowDirection) {
         switch (flowDirection) {
-            case NORTH:
-            case EAST:
-            case SOUTH:
-            case WEST:
-                // Check if block in flow direction is water
-                // Check if block on the left side is water
-                // Check if block on the right side is water
+        case NORTH:
+        case EAST:
+        case SOUTH:
+        case WEST:
+            // Check if block in flow direction is water
+            // Check if block on the left side is water
+            // Check if block on the right side is water
 
-                return this.containsWater(airBlock.getRelative(flowDirection)) ||
-                        this.containsWater(airBlock.getRelative(this.getClockwiseDirection(flowDirection))) ||
-                        this.containsWater(airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection)));
+            return this.containsWater(airBlock.getRelative(flowDirection)) ||
+                    this.containsWater(airBlock.getRelative(this.getClockwiseDirection(flowDirection))) ||
+                    this.containsWater(airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection)));
 
-            case DOWN:
-                // If lava flows down then we should search for water in horizontally adjacent blocks.
+        case DOWN:
+            // If lava flows down then we should search for water in horizontally adjacent blocks.
 
-                return this.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
-                        this.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
-                        this.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
-                        this.containsWater(airBlock.getRelative(BlockFace.WEST));
-            default:
-                return false;
+            return this.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
+                    this.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
+                    this.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
+                    this.containsWater(airBlock.getRelative(BlockFace.WEST));
+        default:
+            return false;
         }
     }
 
@@ -264,71 +260,71 @@ public class MainGeneratorListener implements Listener {
         Block checkBlock;
 
         switch (flowDirection) {
-            case NORTH:
-            case EAST:
-            case SOUTH:
-            case WEST:
-                // Check if block in flow direction after airBlock is lava
-                // Check if block on the left side of airBlock is lava
-                // Check if block on the right side of airBlock is lava
-                // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
+        case NORTH:
+        case EAST:
+        case SOUTH:
+        case WEST:
+            // Check if block in flow direction after airBlock is lava
+            // Check if block on the left side of airBlock is lava
+            // Check if block on the right side of airBlock is lava
+            // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
 
-                checkBlock = airBlock.getRelative(flowDirection);
+            checkBlock = airBlock.getRelative(flowDirection);
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                checkBlock = airBlock.getRelative(this.getClockwiseDirection(flowDirection));
+            checkBlock = airBlock.getRelative(this.getClockwiseDirection(flowDirection));
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                checkBlock = airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection));
+            checkBlock = airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection));
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                return null;
-            case DOWN:
-                // If lava water flows down then we should search for lava under it and in horizontally adjacent blocks.
-                // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
+            return null;
+        case DOWN:
+            // If lava water flows down then we should search for lava under it and in horizontally adjacent blocks.
+            // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
 
-                checkBlock = airBlock.getRelative(flowDirection);
+            checkBlock = airBlock.getRelative(flowDirection);
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                checkBlock = airBlock.getRelative(BlockFace.NORTH);
+            checkBlock = airBlock.getRelative(BlockFace.NORTH);
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                checkBlock = airBlock.getRelative(BlockFace.EAST);
+            checkBlock = airBlock.getRelative(BlockFace.EAST);
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                checkBlock = airBlock.getRelative(BlockFace.SOUTH);
+            checkBlock = airBlock.getRelative(BlockFace.SOUTH);
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                checkBlock = airBlock.getRelative(BlockFace.WEST);
+            checkBlock = airBlock.getRelative(BlockFace.WEST);
 
-                if (this.isFlowingLavaBlock(checkBlock)) {
-                    return checkBlock;
-                }
+            if (this.isFlowingLavaBlock(checkBlock)) {
+                return checkBlock;
+            }
 
-                return null;
-            default:
-                return null;
+            return null;
+        default:
+            return null;
         }
     }
 
@@ -341,17 +337,17 @@ public class MainGeneratorListener implements Listener {
      */
     private BlockFace getClockwiseDirection(BlockFace face) {
         switch (face) {
-            case NORTH:
-                return BlockFace.EAST;
-            case EAST:
-                return BlockFace.SOUTH;
-            case SOUTH:
-                return BlockFace.WEST;
-            case WEST:
-                return BlockFace.NORTH;
-            default:
-                // Not interested in other directions
-                return face;
+        case NORTH:
+            return BlockFace.EAST;
+        case EAST:
+            return BlockFace.SOUTH;
+        case SOUTH:
+            return BlockFace.WEST;
+        case WEST:
+            return BlockFace.NORTH;
+        default:
+            // Not interested in other directions
+            return face;
         }
     }
 
@@ -364,17 +360,17 @@ public class MainGeneratorListener implements Listener {
      */
     private BlockFace getCounterClockwiseDirection(BlockFace face) {
         switch (face) {
-            case NORTH:
-                return BlockFace.WEST;
-            case EAST:
-                return BlockFace.NORTH;
-            case SOUTH:
-                return BlockFace.EAST;
-            case WEST:
-                return BlockFace.SOUTH;
-            default:
-                // Not interested in other directions
-                return face;
+        case NORTH:
+            return BlockFace.WEST;
+        case EAST:
+            return BlockFace.NORTH;
+        case SOUTH:
+            return BlockFace.EAST;
+        case WEST:
+            return BlockFace.SOUTH;
+        default:
+            // Not interested in other directions
+            return face;
         }
     }
 
@@ -417,25 +413,16 @@ public class MainGeneratorListener implements Listener {
      * @return true if there is a player in the set range
      */
     protected boolean isInRangeToGenerate(Block block) {
-        int workingRange = this.addon.getSettings().getWorkingRange();
+        int workingRange = this.addon.getSettings().getWorkingRange() * this.addon.getSettings().getWorkingRange();
         if (workingRange > 0) {
-            boolean result = false;
-            Optional<Island> opIsland = this.addon.getIslands().getIslandAt(block.getLocation());
-            if (opIsland.isPresent()) {
-                Island island = opIsland.get();
-                Collection<Entity> entities = block.getWorld().getNearbyEntities(block.getLocation(), workingRange, workingRange, workingRange);
-                for (Entity entity : entities) {
-                    if (entity instanceof Player) {
-                        Player player = (Player) entity;
-                        if (island.getMemberSet().contains(player.getUniqueId()) && block.getLocation().distance(player.getLocation()) <= workingRange) {
-                            result = true;
-                            break; // Don't look any further when result is set to true.
-                        }
-                    }
-                }
-            }
-            return result;
+            return addon.getIslands().getIslandAt(block.getLocation()).map(i -> block.getWorld().getNearbyEntities(block.getLocation(), workingRange, workingRange, workingRange)
+                    .stream()
+                    .filter(Player.class::isInstance)
+                    .filter(e -> i.getMemberSet().contains(e.getUniqueId()))
+                    .anyMatch(e -> block.getLocation().distanceSquared(e.getLocation()) <= workingRange)
+                    ).orElse(false);
         }
         return true;
+
     }
 }

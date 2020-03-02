@@ -388,7 +388,7 @@ public class MainGeneratorListenerTest {
         when(island.getMemberSet()).thenReturn(imSet);
         when(world.getNearbyEntities(any(Location.class), anyDouble(), anyDouble(), anyDouble())).thenReturn(Collections.singletonList(entity));
         // Distance
-        when(location.distance(any())).thenReturn(range + 1D);
+        when(location.distanceSquared(any())).thenReturn(range * range + 1D);
         assertFalse(mgl.isInRangeToGenerate(block));
     }
 
