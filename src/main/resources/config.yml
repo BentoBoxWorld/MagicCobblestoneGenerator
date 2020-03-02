@@ -13,7 +13,9 @@ offline-generation: false
 # but might have unwanted side effects
 use-physics: false
 
-working-range: 8
+# The range in blocks that an island member has to be in
+# to make the generator generate "custom" blocks
+working-range: 0
 
 # Default Tiers
 # Each tier must contain:

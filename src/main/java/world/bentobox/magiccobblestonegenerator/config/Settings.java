@@ -316,5 +316,8 @@ public class Settings
      */
     private boolean physics;
 
+    /**
+     * Integer to determine the working range of a generator
+     */
     private int workingRange;
 }
