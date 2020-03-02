@@ -1,7 +1,15 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
-import org.bukkit.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Random;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -10,12 +18,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
+
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
-
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Random;
 
 
 /**
@@ -411,7 +416,7 @@ public class MainGeneratorListener implements Listener {
      * @param block Block that must be checked.
      * @return true if there is a player in the set range
      */
-    private boolean isInRangeToGenerate(Block block) {
+    protected boolean isInRangeToGenerate(Block block) {
         int workingRange = this.addon.getSettings().getWorkingRange();
         if (workingRange > 0) {
             boolean result = false;

@@ -1,14 +1,26 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.After;
@@ -16,10 +28,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
+
+import com.google.common.collect.ImmutableSet;
 
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.flags.Flag;
@@ -27,9 +42,8 @@ import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.managers.IslandsManager;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorManager;
+import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
-
-import java.util.Optional;
 
 /**
  * @author tastybento
@@ -70,6 +84,8 @@ public class MainGeneratorListenerTest {
     private Island island;
     @Mock
     private Flag flag;
+    @Mock
+    private Settings settings;
 
     /**
      * @throws java.lang.Exception
@@ -78,12 +94,18 @@ public class MainGeneratorListenerTest {
     public void setUp() throws Exception {
         // Set up plugin
         Whitebox.setInternalState(BentoBox.class, "instance", plugin);
+        
+        // Addon
         when(addon.getPlugin()).thenReturn(plugin);
         when(addon.getFlag()).thenReturn(flag);
         when(flag.isSetForWorld(any())).thenReturn(true);
         when(addon.getIslands()).thenReturn(im);
         when(im.getIslandAt(any())).thenReturn(Optional.of(island));
         when(island.isAllowed(any())).thenReturn(true);
+        
+        // Settings
+        when(settings.getWorkingRange()).thenReturn(0); // Default to 0
+        when(addon.getSettings()).thenReturn(settings);
 
         // Bukkit
         PowerMockito.mockStatic(Bukkit.class);
@@ -279,5 +301,95 @@ public class MainGeneratorListenerTest {
         verify(scheduler, never()).runTask(eq(plugin), any(Runnable.class));
     }
 
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRange() {
+        when(settings.getWorkingRange()).thenReturn(0);
+        assertTrue(mgl.isInRangeToGenerate(block));
+    }
+  
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRangeWithValueNoIsland() {
+        when(settings.getWorkingRange()).thenReturn(10);
+        when(im.getIslandAt(any())).thenReturn(Optional.empty());
+        assertFalse(mgl.isInRangeToGenerate(block));
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRangeWithValueIslandNoEntities() {
+        when(settings.getWorkingRange()).thenReturn(10);
+        when(world.getNearbyEntities(any(Location.class), anyDouble(), anyDouble(), anyDouble())).thenReturn(Collections.emptyList());
+        assertFalse(mgl.isInRangeToGenerate(block));
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRangeWithValueIslanEntitiesMobsOnly() {
+        when(settings.getWorkingRange()).thenReturn(10);
+        Entity entity = Mockito.mock(Entity.class);
+        when(world.getNearbyEntities(any(Location.class), anyDouble(), anyDouble(), anyDouble())).thenReturn(Collections.singletonList(entity));
+        assertFalse(mgl.isInRangeToGenerate(block));
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRangeWithValueIslanEntitiesPlayerInTeamInRange() {
+        when(settings.getWorkingRange()).thenReturn(10);
+        Player entity = Mockito.mock(Player.class);
+        UUID uuid = UUID.randomUUID();
+        when(entity.getUniqueId()).thenReturn(uuid);
+        when(entity.getLocation()).thenReturn(location);
+        ImmutableSet<UUID> imSet = ImmutableSet.of(uuid);
+        when(island.getMemberSet()).thenReturn(imSet);
+        when(world.getNearbyEntities(any(Location.class), anyDouble(), anyDouble(), anyDouble())).thenReturn(Collections.singletonList(entity));
+        assertTrue(mgl.isInRangeToGenerate(block));
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRangeWithValueIslanEntitiesPlayerNotInTeamInRange() {
+        when(settings.getWorkingRange()).thenReturn(10);
+        Player entity = Mockito.mock(Player.class);
+        UUID uuid = UUID.randomUUID();
+        when(entity.getUniqueId()).thenReturn(uuid);
+        when(entity.getLocation()).thenReturn(location);
+        ImmutableSet<UUID> imSet = ImmutableSet.of(UUID.randomUUID()); // Not UUID
+        when(island.getMemberSet()).thenReturn(imSet);
+        when(world.getNearbyEntities(any(Location.class), anyDouble(), anyDouble(), anyDouble())).thenReturn(Collections.singletonList(entity));
+        assertFalse(mgl.isInRangeToGenerate(block));
+    }
+    
+    /**
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener#isInRangeToGenerate(Block)}.
+     */
+    @Test
+    public void testInRangeWithValueIslanEntitiesPlayerInTeamNotInRange() {
+        int range = 10;
+        when(settings.getWorkingRange()).thenReturn(range);
+        Player entity = Mockito.mock(Player.class);
+        UUID uuid = UUID.randomUUID();
+        when(entity.getUniqueId()).thenReturn(uuid);
+        when(entity.getLocation()).thenReturn(location);
+        ImmutableSet<UUID> imSet = ImmutableSet.of(uuid);
+        when(island.getMemberSet()).thenReturn(imSet);
+        when(world.getNearbyEntities(any(Location.class), anyDouble(), anyDouble(), anyDouble())).thenReturn(Collections.singletonList(entity));
+        // Distance
+        when(location.distance(any())).thenReturn(range + 1D);
+        assertFalse(mgl.isInRangeToGenerate(block));
+    }
 
 }
