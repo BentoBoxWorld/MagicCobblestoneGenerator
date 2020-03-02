@@ -1,22 +1,21 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
-
-
-import java.util.Random;
-
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Random;
 
 
 /**
@@ -24,60 +23,67 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  * This class contains listener and all methods that detect if custom generation can be
  * processed.
  */
-public class MainGeneratorListener implements Listener
-{
+public class MainGeneratorListener implements Listener {
+    /**
+     * A bit of randomness
+     */
+    public final Random random = new Random();
+    /**
+     * Main addon class.
+     */
+    private StoneGeneratorAddon addon;
+
+
     /**
      * Constructor MainGeneratorListener creates a new MainGeneratorListener instance.
      *
      * @param addon of type StoneGeneratorAddon
      */
-    public MainGeneratorListener(StoneGeneratorAddon addon)
-    {
+    public MainGeneratorListener(StoneGeneratorAddon addon) {
         this.addon = addon;
     }
 
+
+    // ---------------------------------------------------------------------
+    // Section: Private Methods
+    // ---------------------------------------------------------------------
 
     /**
      * This method detects if BlockFromToEvent can be used by Magic Cobblestone Generator
      * by checking all requirements and calls custom generator if all requirements are met.
      * It cancels this event only if a custom generator manages to change material.
+     *
      * @param event BlockFromToEvent which result will be overwritten.
      */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onBlockFromToEvent(BlockFromToEvent event)
-    {
+    public void onBlockFromToEvent(BlockFromToEvent event) {
         Block eventSourceBlock = event.getBlock();
 
-        if (!this.addon.getManager().canOperateInWorld(eventSourceBlock.getWorld()))
-        {
+        if (!this.addon.getManager().canOperateInWorld(eventSourceBlock.getWorld())) {
             // If not operating in world, then return as fast as possible
             return;
         }
 
-        if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
-        {
+        if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation())) {
             // If island members are not online then do not continue
             return;
         }
 
-        if (eventSourceBlock == event.getToBlock())
-        {
+        if (eventSourceBlock == event.getToBlock()) {
             // We are not interested in self-flow events.
             return;
         }
 
         Material liquid = eventSourceBlock.getType();
 
-        if (!liquid.equals(Material.WATER) && !liquid.equals(Material.LAVA))
-        {
+        if (!liquid.equals(Material.WATER) && !liquid.equals(Material.LAVA)) {
             // We are interested only in Water and Lava flow.
             return;
         }
 
         Block eventToBlock = event.getToBlock();
 
-        if (eventToBlock.getType().equals(liquid))
-        {
+        if (eventToBlock.getType().equals(liquid)) {
             // Not interested into flowing into the same type of liquid.
             return;
         }
@@ -85,25 +91,26 @@ public class MainGeneratorListener implements Listener
         if (!eventToBlock.getType().equals(Material.AIR) &&
                 !eventToBlock.getType().equals(Material.CAVE_AIR) &&
                 !eventToBlock.getType().equals(Material.VOID_AIR) &&
-                !eventToBlock.getType().equals(Material.WATER))
-        {
+                !eventToBlock.getType().equals(Material.WATER)) {
             // We are not interested in situations when liquid flows on other blocks
             return;
         }
 
         // if flag is toggled off, return
-        if(addon.getIslands().getIslandAt(eventToBlock.getLocation())
+        if (addon.getIslands().getIslandAt(eventToBlock.getLocation())
                 .map(island -> !island.isAllowed(addon.getFlag())).orElse(!addon.getFlag().isSetForWorld(eventToBlock.getWorld()))) {
             return;
         }
 
+        if (!this.isInRangeToGenerate(eventSourceBlock)) {
+            return;
+        }
+
         // Stone generator could be used to get much better elements than cobble generator
-        if (this.canGenerateStone(liquid, eventToBlock))
-        {
+        if (this.canGenerateStone(liquid, eventToBlock)) {
             // Return from here at any case. Even if could not manage to replace stone.
 
-            if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true))
-            {
+            if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true)) {
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
                 event.setCancelled(true);
@@ -112,24 +119,19 @@ public class MainGeneratorListener implements Listener
             return;
         }
 
-        if (eventToBlock.getType().equals(Material.WATER))
-        {
+        if (eventToBlock.getType().equals(Material.WATER)) {
             // We needed to check for water only in stone generator as in other cases it will be replaced with cobble or obsidian
             return;
         }
 
-        if (liquid.equals(Material.LAVA) && this.canLavaGenerateCobblestone(eventToBlock, event.getFace()))
-        {
+        if (liquid.equals(Material.LAVA) && this.canLavaGenerateCobblestone(eventToBlock, event.getFace())) {
             // Lava is generating cobblestone into eventToBlock place
-            if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true))
-            {
+            if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true)) {
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
                 event.setCancelled(true);
             }
-        }
-        else if (liquid.equals(Material.WATER))
-        {
+        } else if (liquid.equals(Material.WATER)) {
             // Check if water finds any lava block that could be replaced with cobblestone
 
             Block replacedBlock = this.getWaterGeneratedCobblestone(eventToBlock, event.getFace());
@@ -138,8 +140,7 @@ public class MainGeneratorListener implements Listener
             // Water flow should not be cancelled even if replacement is generated, as replacement block will
             // never be in the flow block, as it will always be next block.
 
-            if (replacedBlock != null && this.addon.getGenerator().isReplacementGenerated(replacedBlock, true))
-            {
+            if (replacedBlock != null && this.addon.getGenerator().isReplacementGenerated(replacedBlock, true)) {
                 // sound when lava transforms to cobble
                 this.playEffects(replacedBlock);
             }
@@ -149,13 +150,12 @@ public class MainGeneratorListener implements Listener
         // End of process... no generation for you!!
     }
 
-
     /**
      * This method plays sound effect and adds particles to new block.
+     *
      * @param block block placement where particle must be generated.
      */
-    private void playEffects(Block block)
-    {
+    private void playEffects(Block block) {
         final double blockX = block.getX();
         final double blockY = block.getY();
         final double blockZ = block.getZ();
@@ -170,8 +170,7 @@ public class MainGeneratorListener implements Listener
                     2.6F + (this.random.nextFloat() * 2 - 1) * 0.8F);
 
             // This spawns 8 large smoke particles.
-            for (int counter = 0; counter < 8; ++counter)
-            {
+            for (int counter = 0; counter < 8; ++counter) {
                 block.getWorld().spawnParticle(Particle.SMOKE_LARGE,
                         blockX + Math.random(),
                         blockY + 1 + Math.random(),
@@ -185,24 +184,17 @@ public class MainGeneratorListener implements Listener
         });
     }
 
-
-    // ---------------------------------------------------------------------
-    // Section: Private Methods
-    // ---------------------------------------------------------------------
-
-
     /**
      * This method returns if current targetBlock could generate Stone Block. (Stone Generators).
-     *
+     * <p>
      * Stone can be generated only when lava flows over water. Stone will be always
      * generated in a block where water is located.
      *
-     * @param liquid Liquid that flows.
+     * @param liquid      Liquid that flows.
      * @param targetBlock Block in which liquid will flow
      * @return true, if below targetBlock is water and liquid is lava or up is lava and liquid is water.
      */
-    private boolean canGenerateStone(Material liquid, Block targetBlock)
-    {
+    private boolean canGenerateStone(Material liquid, Block targetBlock) {
         // Adding check if water flows under lava increases generation speed, as in next
         // ticks it will detect lava flow anyway.
         // Also it improves performance a bit, as it will run 1 event less.
@@ -211,202 +203,183 @@ public class MainGeneratorListener implements Listener
 
     }
 
-
     /**
      * This method returns if lava can generate cobblestone.
-     *
+     * <p>
      * Lava is generating cobblestone in situations if next block where it flows (air block)
      * is adjacent to block that contains water.
      * If that is true than airBlock will be replaced with cobblestone.
      *
-     * @param airBlock Air Block that will be replaced with cobblestone
+     * @param airBlock      Air Block that will be replaced with cobblestone
      * @param flowDirection Lava flow direction.
      * @return true, if lava will generate cobblestone
      */
-    private boolean canLavaGenerateCobblestone(Block airBlock, BlockFace flowDirection)
-    {
-        switch (flowDirection)
-        {
-        case NORTH:
-        case EAST:
-        case SOUTH:
-        case WEST:
-            // Check if block in flow direction is water
-            // Check if block on the left side is water
-            // Check if block on the right side is water
+    private boolean canLavaGenerateCobblestone(Block airBlock, BlockFace flowDirection) {
+        switch (flowDirection) {
+            case NORTH:
+            case EAST:
+            case SOUTH:
+            case WEST:
+                // Check if block in flow direction is water
+                // Check if block on the left side is water
+                // Check if block on the right side is water
 
-            return this.containsWater(airBlock.getRelative(flowDirection)) ||
-                    this.containsWater(airBlock.getRelative(this.getClockwiseDirection(flowDirection))) ||
-                    this.containsWater(airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection)));
+                return this.containsWater(airBlock.getRelative(flowDirection)) ||
+                        this.containsWater(airBlock.getRelative(this.getClockwiseDirection(flowDirection))) ||
+                        this.containsWater(airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection)));
 
-        case DOWN:
-            // If lava flows down then we should search for water in horizontally adjacent blocks.
+            case DOWN:
+                // If lava flows down then we should search for water in horizontally adjacent blocks.
 
-            return this.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
-                    this.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
-                    this.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
-                    this.containsWater(airBlock.getRelative(BlockFace.WEST));
-        default:
-            return false;
+                return this.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
+                        this.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
+                        this.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
+                        this.containsWater(airBlock.getRelative(BlockFace.WEST));
+            default:
+                return false;
         }
     }
 
-
     /**
      * This method checks if water can generate cobblestone.
-     *
+     * <p>
      * Water is generating cobblestone in situations when it is directly adjacent to lava
      * block, and this block is not a source block.
-     *
+     * <p>
      * Node: by default Minecraft logic, lava is replaced with cobblestone/obsidian only
      * if the water is trying to flow on lava. It allows creating situations where lava
      * and water hit each other at max flow distance without creating cobblestone.
      * This overwrite it as it checks next blocks to air block. It is done on intentional!
      *
-     * @param airBlock Air Block that will be replaced with water
+     * @param airBlock      Air Block that will be replaced with water
      * @param flowDirection Water flow direction.
      * @return Lava block that will be replaced with water or null, if there is no lava near air block.
      */
-    private Block getWaterGeneratedCobblestone(Block airBlock, BlockFace flowDirection)
-    {
+    private Block getWaterGeneratedCobblestone(Block airBlock, BlockFace flowDirection) {
         Block checkBlock;
 
-        switch (flowDirection)
-        {
-        case NORTH:
-        case EAST:
-        case SOUTH:
-        case WEST:
-            // Check if block in flow direction after airBlock is lava
-            // Check if block on the left side of airBlock is lava
-            // Check if block on the right side of airBlock is lava
-            // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
+        switch (flowDirection) {
+            case NORTH:
+            case EAST:
+            case SOUTH:
+            case WEST:
+                // Check if block in flow direction after airBlock is lava
+                // Check if block on the left side of airBlock is lava
+                // Check if block on the right side of airBlock is lava
+                // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
 
-            checkBlock = airBlock.getRelative(flowDirection);
+                checkBlock = airBlock.getRelative(flowDirection);
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            checkBlock = airBlock.getRelative(this.getClockwiseDirection(flowDirection));
+                checkBlock = airBlock.getRelative(this.getClockwiseDirection(flowDirection));
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            checkBlock = airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection));
+                checkBlock = airBlock.getRelative(this.getCounterClockwiseDirection(flowDirection));
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            return null;
-        case DOWN:
-            // If lava water flows down then we should search for lava under it and in horizontally adjacent blocks.
-            // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
+                return null;
+            case DOWN:
+                // If lava water flows down then we should search for lava under it and in horizontally adjacent blocks.
+                // If lava level is 0, then it will be transformed to obsidian. Not processed by current listener.
 
-            checkBlock = airBlock.getRelative(flowDirection);
+                checkBlock = airBlock.getRelative(flowDirection);
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            checkBlock = airBlock.getRelative(BlockFace.NORTH);
+                checkBlock = airBlock.getRelative(BlockFace.NORTH);
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            checkBlock = airBlock.getRelative(BlockFace.EAST);
+                checkBlock = airBlock.getRelative(BlockFace.EAST);
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            checkBlock = airBlock.getRelative(BlockFace.SOUTH);
+                checkBlock = airBlock.getRelative(BlockFace.SOUTH);
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            checkBlock = airBlock.getRelative(BlockFace.WEST);
+                checkBlock = airBlock.getRelative(BlockFace.WEST);
 
-            if (this.isFlowingLavaBlock(checkBlock))
-            {
-                return checkBlock;
-            }
+                if (this.isFlowingLavaBlock(checkBlock)) {
+                    return checkBlock;
+                }
 
-            return null;
-        default:
-            return null;
+                return null;
+            default:
+                return null;
         }
     }
-
 
     /**
      * This method transforms input block face to next BlockFace by 90 degree in clockwise direction. Only on
      * horizontal pane for NORTH,EAST,SOUTH,WEST directions.
+     *
      * @param face input BlockFace
      * @return Output BlockFace that is 90 degree from input BlockFace in clockwise direction
      */
-    private BlockFace getClockwiseDirection(BlockFace face)
-    {
-        switch (face)
-        {
-        case NORTH:
-            return BlockFace.EAST;
-        case EAST:
-            return BlockFace.SOUTH;
-        case SOUTH:
-            return BlockFace.WEST;
-        case WEST:
-            return BlockFace.NORTH;
-        default:
-            // Not interested in other directions
-            return face;
+    private BlockFace getClockwiseDirection(BlockFace face) {
+        switch (face) {
+            case NORTH:
+                return BlockFace.EAST;
+            case EAST:
+                return BlockFace.SOUTH;
+            case SOUTH:
+                return BlockFace.WEST;
+            case WEST:
+                return BlockFace.NORTH;
+            default:
+                // Not interested in other directions
+                return face;
         }
     }
-
 
     /**
      * This method transforms input block face to next BlockFace by 90 degree in counter clockwise direction.
      * Only on horizontal pane for NORTH,EAST,SOUTH,WEST directions.
+     *
      * @param face input BlockFace
      * @return Output BlockFace that is 90 degree from input BlockFace in counter clockwise direction
      */
-    private BlockFace getCounterClockwiseDirection(BlockFace face)
-    {
-        switch (face)
-        {
-        case NORTH:
-            return BlockFace.WEST;
-        case EAST:
-            return BlockFace.NORTH;
-        case SOUTH:
-            return BlockFace.EAST;
-        case WEST:
-            return BlockFace.SOUTH;
-        default:
-            // Not interested in other directions
-            return face;
+    private BlockFace getCounterClockwiseDirection(BlockFace face) {
+        switch (face) {
+            case NORTH:
+                return BlockFace.WEST;
+            case EAST:
+                return BlockFace.NORTH;
+            case SOUTH:
+                return BlockFace.EAST;
+            case WEST:
+                return BlockFace.SOUTH;
+            default:
+                // Not interested in other directions
+                return face;
         }
     }
 
-
     /**
      * This method returns if target block is water block or contains water.
+     *
      * @param block Block that must be checked.
      * @return true if block type is water or it is waterlogged.
      */
-    private boolean containsWater(Block block)
-    {
+    private boolean containsWater(Block block) {
         // Block Data contains information about the water logged status.
         // If block type is not water, we need to check if it is waterlogged.
         return block.getType().equals(Material.WATER) ||
@@ -414,13 +387,17 @@ public class MainGeneratorListener implements Listener
     }
 
 
+    // ---------------------------------------------------------------------
+    // Section: Variables
+    // ---------------------------------------------------------------------
+
     /**
      * This method returns if given block contains lava and is not a source block.
+     *
      * @param block Block that must be checked.
      * @return true if block contains lava and is not source block.
      */
-    private boolean isFlowingLavaBlock(Block block)
-    {
+    private boolean isFlowingLavaBlock(Block block) {
         // Block Data contains information about the liquid level.
         // In our situation, we need to check if the level is not 0 when it is counted as
         // a source block.
@@ -428,19 +405,32 @@ public class MainGeneratorListener implements Listener
                 !block.getBlockData().getAsString().contains("level=0");
     }
 
-
-    // ---------------------------------------------------------------------
-    // Section: Variables
-    // ---------------------------------------------------------------------
-
-
     /**
-     * Main addon class.
+     * This method returns there is an island member in range to active of "custom" block generation
+     *
+     * @param block Block that must be checked.
+     * @return true if there is a player in the set range
      */
-    private StoneGeneratorAddon addon;
-
-    /**
-     * A bit of randomness
-     */
-    public final Random random = new Random();
+    private boolean isInRangeToGenerate(Block block) {
+        int workingRange = this.addon.getSettings().getWorkingRange();
+        if (workingRange > 0) {
+            boolean result = false;
+            Optional<Island> opIsland = this.addon.getIslands().getIslandAt(block.getLocation());
+            if (opIsland.isPresent()) {
+                Island island = opIsland.get();
+                Collection<Entity> entities = block.getWorld().getNearbyEntities(block.getLocation(), workingRange, workingRange, workingRange);
+                for (Entity entity : entities) {
+                    if (entity instanceof Player) {
+                        Player player = (Player) entity;
+                        if (island.getMemberSet().contains(player.getUniqueId()) && block.getLocation().distance(player.getLocation()) <= workingRange) {
+                            result = true;
+                            break; // Don't look any further when result is set to true.
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        return true;
+    }
 }
