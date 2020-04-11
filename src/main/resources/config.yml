@@ -111,7 +111,7 @@ tiers:
       COBBLESTONE: 1
       GRAVEL: 5
       DIRT: 5
-      GRASS: 1
+      GRASS_BLOCK: 1
       COAL_ORE: 10
       IRON_ORE: 10
       GOLD_ORE: 10
