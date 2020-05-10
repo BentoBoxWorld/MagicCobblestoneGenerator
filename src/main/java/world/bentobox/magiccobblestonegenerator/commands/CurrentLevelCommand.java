@@ -11,7 +11,6 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 
-
 /**
  * This class allows to run /[toplabel] generator level command, that prints current active
  * Magic Generator Tier for caller in target world.
@@ -56,8 +55,13 @@ public class CurrentLevelCommand extends CompositeCommand
 		World world = this.getWorld();
 
 		StoneGeneratorAddon addon = (StoneGeneratorAddon) this.getAddon();
-		long islandLevel = addon.getLevelAddon() == null ? 0L : addon.getLevelAddon().getIslandLevel(world, user.getUniqueId());
-
+		long islandLevel;
+		
+		if (StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL.isSetForWorld(world))
+			islandLevel = addon.getLevelsData(user.getUniqueId()).getGeneratorLevel();
+		else
+			islandLevel = addon.getLevelAddon() == null ? 0L : addon.getLevelAddon().getIslandLevel(world, user.getUniqueId());
+		
 		Settings.GeneratorTier generatorTier = addon.getManager().getGeneratorTier(
 			islandLevel,
 			world);

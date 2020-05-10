@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -102,16 +103,21 @@ public class StoneGeneratorManager
      */
     public long getIslandLevel(Location location)
     {
-        if (!this.addon.isLevelProvided())
-        {
-            // No level addon. Return 0.
-            return 0L;
-        }
+    	Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
+    	
+    	if (StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL.isSetForWorld(location.getWorld())) {
+    		return optionalIsland.map(island -> 
+    			this.addon.getLevelsData(island.getOwner()).getGeneratorLevel()).orElse(0L);
+    	} else {
+    		if (!this.addon.isLevelProvided())
+            {
+                // No level addon. Return 0.
+                return 0L;
+            }
 
-        Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
-
-        return optionalIsland.map(island ->
-        this.addon.getLevelAddon().getIslandLevel(location.getWorld(), island.getOwner())).orElse(0L);
+            return optionalIsland.map(island ->
+            this.addon.getLevelAddon().getIslandLevel(location.getWorld(), island.getOwner())).orElse(0L);
+    	}
     }
 
 

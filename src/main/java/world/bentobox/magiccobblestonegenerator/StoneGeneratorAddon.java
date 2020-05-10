@@ -2,13 +2,21 @@ package world.bentobox.magiccobblestonegenerator;
 
 import org.bukkit.Bukkit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.bukkit.Material;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
+import world.bentobox.bentobox.database.Database;
 import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
@@ -21,6 +29,24 @@ import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
  * @author BONNe
  */
 public class StoneGeneratorAddon extends Addon {
+	
+	public StoneGeneratorData getLevelsData(@NonNull UUID targetPlayer) {
+    	StoneGeneratorData stoneGeneratorData = stoneGeneratorCache.get(targetPlayer);
+    	if (stoneGeneratorData != null) {
+    		return stoneGeneratorData;
+    	}
+		String uniqueId = targetPlayer.toString();
+		StoneGeneratorData data = handler.objectExists(uniqueId) ? Optional.ofNullable(handler.loadObject(uniqueId)).orElse(new StoneGeneratorData(uniqueId)): new StoneGeneratorData(uniqueId);
+		stoneGeneratorCache.put(targetPlayer, data);
+		return (data);
+	}
+    
+    public void uncacheIsland(@Nullable UUID targetPlayer) {
+    	StoneGeneratorData data = stoneGeneratorCache.remove(targetPlayer);
+    	if (data == null)
+    			return;
+    	handler.saveObject(data);
+    }
 
     /**
      * {@inheritDoc}
@@ -39,6 +65,9 @@ public class StoneGeneratorAddon extends Addon {
      */
     @Override
     public void onEnable() {
+    	handler = new Database<>(this, StoneGeneratorData.class);
+    	stoneGeneratorCache = new HashMap<>();
+    	
         // Check if addon is not disabled before.
         if (this.getState().equals(State.DISABLED)) {
             Bukkit.getLogger().severe("Magic Cobblestone Generator Addon is not available or disabled!");
@@ -53,6 +82,7 @@ public class StoneGeneratorAddon extends Addon {
                     if (g.getPlayerCommand().isPresent())
                     {
                         new StoneGeneratorMainCommand(this, g.getPlayerCommand().get());
+                        StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL.addGameModeAddon(g);
                         this.hooked = true;
 
                         hookedGameModes.add(g.getDescription().getName());
@@ -96,6 +126,7 @@ public class StoneGeneratorAddon extends Addon {
                     .addon(this)
                     .build();
 			getPlugin().getFlagsManager().registerFlag(flag);
+			getPlugin().getFlagsManager().registerFlag(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL);
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
@@ -132,7 +163,8 @@ public class StoneGeneratorAddon extends Addon {
      */
     @Override
     public void onDisable() {
-        // Do some stuff...
+        if (stoneGeneratorCache != null)
+        	stoneGeneratorCache.values().forEach(handler::saveObject);
     }
 
     /**
@@ -200,6 +232,11 @@ public class StoneGeneratorAddon extends Addon {
     public Flag getFlag() {
         return flag;
     }
+    
+    @Nullable
+    public Database<StoneGeneratorData> getHandler() {
+    	return handler;
+    }
 
 
     // ---------------------------------------------------------------------
@@ -241,4 +278,14 @@ public class StoneGeneratorAddon extends Addon {
      * @since 1.9.0
      */
     private Flag flag;
+    
+    private Database<StoneGeneratorData> handler;
+    private Map<UUID, StoneGeneratorData> stoneGeneratorCache;
+    
+    public final static Flag MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL =
+    		new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL", Material.EXPERIENCE_BOTTLE)
+	            .type(Flag.Type.WORLD_SETTING)
+	            .defaultSetting(false)
+	            .build();
+    
 }
