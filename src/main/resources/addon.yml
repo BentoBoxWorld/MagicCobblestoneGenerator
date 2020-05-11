@@ -24,3 +24,15 @@ permissions:
   skygrid.stonegenerator:
     description: Let the player use the '/skygrid generator' command
     default: true
+  bskyblock.admin.stonegenerator:
+    description: Let the player use the '/bsb generator' command
+    default: false
+  acidisland.admin.stonegenerator:
+    description: Let the player use the '/acide generator' command
+    default: false
+  caveblock.admin.stonegenerator:
+    description: Let the player use the '/cave generator' command
+    default: false
+  skygrid.admin.stonegenerator:
+    description: Let the player use the '/skygrid generator' command
+    default: false

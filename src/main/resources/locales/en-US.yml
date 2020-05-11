@@ -6,10 +6,16 @@ stonegenerator:
       description: "display the Magic Generator help"
     alllevels:
       description: "display all Magic Generator tiers for the current world"
+    add:
+      description: "Add Island level"
+    set:
+      description: "Set Island level"
   messages:
     generator-tier: "&2[name] &r&2(from [value] island level)."
     material-chance: "&2    [name] - [value]%"
     island-level: "&2Your island level is &6[level]&2!"
+    level-add: "&6[player]&2's island level is now &6[level]&2!"
+    level-set: "&6[player]&2's island level is now &6[level]&2!"
   errors:
     cannot-find-any-generators: "&cCannot find any Magic Cobblestone Generator tier for the current world."
 
@@ -18,3 +24,6 @@ protection:
     MAGIC_COBBLESTONE_GENERATOR:
       name: "Magic Cobblestone Generator"
       description: "Toggle the Magic Cobblestone Generator"
+    MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL:
+      name: "Magic Cobblestone Generator Level"
+      description: "Toggle the use of own DataBase for level"

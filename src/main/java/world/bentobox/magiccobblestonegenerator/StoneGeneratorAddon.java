@@ -18,6 +18,7 @@ import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.level.Level;
+import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorAdminCommand;
 import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener;
@@ -81,6 +82,7 @@ public class StoneGeneratorAddon extends Addon {
                 .forEach(g -> {
                     if (g.getPlayerCommand().isPresent())
                     {
+                    	new StoneGeneratorAdminCommand(this, g.getAdminCommand().get());
                         new StoneGeneratorMainCommand(this, g.getPlayerCommand().get());
                         StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL.addGameModeAddon(g);
                         this.hooked = true;
