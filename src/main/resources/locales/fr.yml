@@ -1,0 +1,20 @@
+stonegenerator:
+  commands:
+    level:
+      description: "affiche le niveau de votre générateur"
+    main:
+      description: "affiche la page d'aide de Magic Generator"
+    alllevels:
+      description: "affiche tous les niveaux du générateur disponibles pour ce monde"
+  messages:
+    generator-tier: "&2[name] &r&2(à partir du niveau de l'île [value])."
+    material-chance: "&2    [name] - [value]%"
+    island-level: "&2Le niveau de votre île est &6[level]&2!"
+  errors:
+    cannot-find-any-generators: "&cAucun niveau de générateur trouvé pour ce monde."
+
+protection:
+  flags:
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Magic Cobblestone Generator"
+      description: "Activer Magic Cobblestone Generator"
