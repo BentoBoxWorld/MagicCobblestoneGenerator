@@ -57,6 +57,7 @@ public class CurrentLevelCommand extends CompositeCommand
 		StoneGeneratorAddon addon = (StoneGeneratorAddon) this.getAddon();
 		long islandLevel;
 		
+		// If flag set then get level from dataBase, Else, get from Level Addon
 		if (StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL.isSetForWorld(world))
 			islandLevel = addon.getLevelsData(user.getUniqueId()).getGeneratorLevel();
 		else

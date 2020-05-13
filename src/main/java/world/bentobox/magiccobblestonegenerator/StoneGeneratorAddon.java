@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import org.bukkit.Material;
 import org.eclipse.jdt.annotation.NonNull;
@@ -30,24 +29,6 @@ import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
  * @author BONNe
  */
 public class StoneGeneratorAddon extends Addon {
-	
-	public StoneGeneratorData getLevelsData(@NonNull UUID targetPlayer) {
-    	StoneGeneratorData stoneGeneratorData = stoneGeneratorCache.get(targetPlayer);
-    	if (stoneGeneratorData != null) {
-    		return stoneGeneratorData;
-    	}
-		String uniqueId = targetPlayer.toString();
-		StoneGeneratorData data = handler.objectExists(uniqueId) ? Optional.ofNullable(handler.loadObject(uniqueId)).orElse(new StoneGeneratorData(uniqueId)): new StoneGeneratorData(uniqueId);
-		stoneGeneratorCache.put(targetPlayer, data);
-		return (data);
-	}
-    
-    public void uncacheIsland(@Nullable UUID targetPlayer) {
-    	StoneGeneratorData data = stoneGeneratorCache.remove(targetPlayer);
-    	if (data == null)
-    			return;
-    	handler.saveObject(data);
-    }
 
     /**
      * {@inheritDoc}
@@ -66,6 +47,7 @@ public class StoneGeneratorAddon extends Addon {
      */
     @Override
     public void onEnable() {
+    	// Load DataBase
     	handler = new Database<>(this, StoneGeneratorData.class);
     	stoneGeneratorCache = new HashMap<>();
     	
@@ -82,11 +64,15 @@ public class StoneGeneratorAddon extends Addon {
                 .forEach(g -> {
                     if (g.getPlayerCommand().isPresent())
                     {
+                    	// Admin command
                     	new StoneGeneratorAdminCommand(this, g.getAdminCommand().get());
+                    	// Player command
                         new StoneGeneratorMainCommand(this, g.getPlayerCommand().get());
+                        
+                        // Flag setup
                         StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL.addGameModeAddon(g);
+                        
                         this.hooked = true;
-
                         hookedGameModes.add(g.getDescription().getName());
                     }
                 });
@@ -166,7 +152,8 @@ public class StoneGeneratorAddon extends Addon {
     @Override
     public void onDisable() {
         if (stoneGeneratorCache != null)
-        	stoneGeneratorCache.values().forEach(handler::saveObject);
+        	//Save database on disable
+        	stoneGeneratorCache.values().forEach(handler::saveObjectAsync);
     }
 
     /**
@@ -240,6 +227,22 @@ public class StoneGeneratorAddon extends Addon {
     	return handler;
     }
 
+    /**
+     * Return the cached data or load in cache or create new entrie with player UUID
+     * @param targetPlayer
+     * @return StoneGeneratorData
+     */
+    public StoneGeneratorData getLevelsData(@NonNull UUID targetPlayer) {
+    	StoneGeneratorData stoneGeneratorData = stoneGeneratorCache.get(targetPlayer);
+    	if (stoneGeneratorData != null) {
+    		return stoneGeneratorData;
+    	}
+		String uniqueId = targetPlayer.toString();
+		StoneGeneratorData data = handler.objectExists(uniqueId) ? Optional.ofNullable(handler.loadObject(uniqueId)).orElse(new StoneGeneratorData(uniqueId)): new StoneGeneratorData(uniqueId);
+		stoneGeneratorCache.put(targetPlayer, data);
+		return (data);
+	}
+
 
     // ---------------------------------------------------------------------
     // Section: Variables
@@ -281,9 +284,19 @@ public class StoneGeneratorAddon extends Addon {
      */
     private Flag flag;
     
+    /**
+     * DataBase Handler
+     */
     private Database<StoneGeneratorData> handler;
+    
+    /**
+     * Cached data
+     */
     private Map<UUID, StoneGeneratorData> stoneGeneratorCache;
     
+    /**
+     * MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL Flag
+     */
     public final static Flag MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL =
     		new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR_OWN_LEVEL", Material.EXPERIENCE_BOTTLE)
 	            .type(Flag.Type.WORLD_SETTING)
