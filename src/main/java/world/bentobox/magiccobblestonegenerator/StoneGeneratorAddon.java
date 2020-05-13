@@ -20,6 +20,7 @@ import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorAdminCommand;
 import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.listeners.IslandChangeListener;
 import world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 
@@ -106,6 +107,7 @@ public class StoneGeneratorAddon extends Addon {
 
             // Register the listener.
             this.registerListener(new MainGeneratorListener(this));
+            this.registerListener(new IslandChangeListener(this));
 
             // Register Flags
             flag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE)
@@ -167,6 +169,19 @@ public class StoneGeneratorAddon extends Addon {
             this.settings = new Settings(this);
             this.getLogger().info("Magic Cobblestone Generator addon reloaded.");
         }
+    }
+    
+    /**
+     * Remove target from  cache
+     * @param UUID targetPlayer
+     * @param boolean save
+     */
+    public void uncacheIsland(@Nullable UUID targetPlayer, boolean save) {
+    	StoneGeneratorData data = stoneGeneratorCache.remove(targetPlayer);
+    	if (data == null)
+    			return;
+    	if (save)
+    		handler.saveObjectAsync(data);
     }
 
     // ---------------------------------------------------------------------
