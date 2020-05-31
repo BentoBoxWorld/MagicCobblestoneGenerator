@@ -124,9 +124,12 @@ public class MainGeneratorListenerTest {
         when(location.getWorld()).thenReturn(world);
         when(location2.getWorld()).thenReturn(world);
         when(block.getType()).thenReturn(Material.LAVA);
+        when(block.isLiquid()).thenReturn(true);
         when(block2.getType()).thenReturn(Material.WATER);
+        when(block2.isLiquid()).thenReturn(true);
         when(block2.getRelative(any())).thenReturn(block3);
         when(block3.getType()).thenReturn(Material.LAVA);
+        when(block3.isLiquid()).thenReturn(true);
 
         // Generator
         when(addon.getGenerator()).thenReturn(mg);
@@ -160,6 +163,7 @@ public class MainGeneratorListenerTest {
     @Test
     public void testOnBlockFromToEventSuccessAir() {
         when(block2.getType()).thenReturn(Material.AIR);
+        when(block2.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertFalse(event.isCancelled());
@@ -172,6 +176,7 @@ public class MainGeneratorListenerTest {
     @Test
     public void testOnBlockFromToEventSuccessVoidAir() {
         when(block2.getType()).thenReturn(Material.VOID_AIR);
+        when(block2.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertFalse(event.isCancelled());
@@ -184,6 +189,7 @@ public class MainGeneratorListenerTest {
     @Test
     public void testOnBlockFromToEventSuccessCaveAir() {
         when(block2.getType()).thenReturn(Material.CAVE_AIR);
+        when(block2.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertFalse(event.isCancelled());
@@ -197,6 +203,7 @@ public class MainGeneratorListenerTest {
     public void testOnBlockFromToEventSuccessWaterAirLava() {
         when(block.getType()).thenReturn(Material.WATER);
         when(block2.getType()).thenReturn(Material.AIR);
+        when(block2.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertTrue(event.isCancelled());
@@ -210,6 +217,7 @@ public class MainGeneratorListenerTest {
     public void testOnBlockFromToEventSuccessWaterVoidAirLava() {
         when(block.getType()).thenReturn(Material.WATER);
         when(block2.getType()).thenReturn(Material.VOID_AIR);
+        when(block2.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertTrue(event.isCancelled());
@@ -223,6 +231,7 @@ public class MainGeneratorListenerTest {
     public void testOnBlockFromToEventSuccessWaterCaveAirLava() {
         when(block.getType()).thenReturn(Material.WATER);
         when(block2.getType()).thenReturn(Material.CAVE_AIR);
+        when(block2.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertTrue(event.isCancelled());
@@ -270,6 +279,7 @@ public class MainGeneratorListenerTest {
     @Test
     public void testOnBlockFromToEventWrongType() {
         when(block.getType()).thenReturn(Material.AIR);
+        when(block.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertFalse(event.isCancelled());
@@ -294,7 +304,9 @@ public class MainGeneratorListenerTest {
     @Test
     public void testOnBlockFromToEventLava2AirAboveAir() {
         when(block2.getType()).thenReturn(Material.AIR);
+        when(block2.isLiquid()).thenReturn(false);
         when(block3.getType()).thenReturn(Material.AIR);
+        when(block3.isLiquid()).thenReturn(false);
         BlockFromToEvent event = new BlockFromToEvent(block, block2);
         mgl.onBlockFromToEvent(event);
         assertFalse(event.isCancelled());
