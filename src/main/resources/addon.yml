@@ -1,6 +1,7 @@
 name: MagicCobblestoneGenerator
 main: world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon
 version: ${version}${build.number}
+api-version: ${bentobox.version}
 repository: 'BentoBoxWorld/MagicCobblestoneGenerator'
 metrics: true
 icon: COBBLESTONE
@@ -12,15 +13,6 @@ authors:
 softdepend: AcidIsland, BSkyBlock, CaveBlock, SkyGrid, Level
 
 permissions:
-  bskyblock.stonegenerator:
+  '[gamemode].stonegenerator':
     description: Let the player use the '/island generator' command
-    default: true
-  acidisland.stonegenerator:
-    description: Let the player use the '/ai generator' command
-    default: true
-  caveblock.stonegenerator:
-    description: Let the player use the '/cave generator' command
-    default: true
-  skygrid.stonegenerator:
-    description: Let the player use the '/skygrid generator' command
     default: true
