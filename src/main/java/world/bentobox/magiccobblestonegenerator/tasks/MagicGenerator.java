@@ -15,8 +15,6 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  */
 public class MagicGenerator
 {
-    private Random random = new Random(System.currentTimeMillis());
-
     /**
      * Default constructor. Inits Generator once.
      * @param addon Magic Cobblestone Generator addon.
@@ -46,9 +44,9 @@ public class MagicGenerator
      */
     public boolean isReplacementGenerated(Block block, boolean improved)
     {
-        TreeMap<Double, Material> chanceMap = (TreeMap<Double, Material>) this.addon.getManager().getMaterialChanceMap(
-                this.addon.getManager().getIslandLevel(block.getLocation()),
-                block.getWorld());
+        TreeMap<Double, Material> chanceMap =
+            (TreeMap<Double, Material>) this.addon.getManager().getMaterialChanceMap(
+                this.addon.getManager().getIslandLevel(block.getLocation()), block.getWorld());
 
         if (chanceMap.isEmpty())
         {
@@ -64,11 +62,13 @@ public class MagicGenerator
         }
         else
         {
-            double rand = random.nextDouble() * chanceMap.lastKey();
+            double rand = this.random.nextDouble() * chanceMap.lastKey();
             newMaterial = chanceMap.ceilingEntry(rand).getValue();
         }
+
         // ask config if physics should be used
         block.setType(newMaterial, addon.getSettings().usePhysics());
+
         return true;
     }
 
@@ -81,4 +81,10 @@ public class MagicGenerator
      * This variable holds stone generator addon object.
      */
     private StoneGeneratorAddon addon;
+
+
+    /**
+     * Random for generator
+     */
+    private final Random random = new Random(System.currentTimeMillis());
 }
