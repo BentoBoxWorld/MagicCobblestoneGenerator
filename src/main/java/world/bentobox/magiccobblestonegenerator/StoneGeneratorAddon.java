@@ -1,12 +1,11 @@
 package world.bentobox.magiccobblestonegenerator;
 
 import org.bukkit.Bukkit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.bukkit.Material;
 import world.bentobox.bentobox.api.addons.Addon;
+import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
@@ -20,13 +19,15 @@ import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
  * Main addon Class. It starts all processes so addon could properly work.
  * @author BONNe
  */
-public class StoneGeneratorAddon extends Addon {
+public class StoneGeneratorAddon extends Addon
+{
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onLoad() {
+    public void onLoad()
+    {
         super.onLoad();
 //		// Save default config.yml
         this.saveDefaultConfig();
@@ -34,55 +35,70 @@ public class StoneGeneratorAddon extends Addon {
         this.settings = new Settings(this);
     }
 
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         // Check if addon is not disabled before.
-        if (this.getState().equals(State.DISABLED)) {
+        if (this.getState().equals(State.DISABLED))
+        {
             Bukkit.getLogger().severe("Magic Cobblestone Generator Addon is not available or disabled!");
             return;
         }
 
-        List<String> hookedGameModes = new ArrayList<>();
+        // Init new Generator Manager
+        this.stoneGeneratorManager = new StoneGeneratorManager(this);
 
-        getPlugin().getAddonsManager().getGameModeAddons().stream()
-                .filter(g -> !settings.getDisabledGameModes().contains(g.getDescription().getName()))
-                .forEach(g -> {
-                    if (g.getPlayerCommand().isPresent())
-                    {
-                        new StoneGeneratorMainCommand(this, g.getPlayerCommand().get());
-                        this.hooked = true;
+        this.getPlugin().getAddonsManager().getGameModeAddons().stream().
+            filter(gameMode -> !settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
+            forEach(gameMode -> {
+                if (gameMode.getPlayerCommand().isPresent())
+                {
+                    // Add commands
+                    new StoneGeneratorMainCommand(this, gameMode.getPlayerCommand().get());
 
-                        hookedGameModes.add(g.getDescription().getName());
-                    }
-                });
+                    // Add Placeholders
+                    this.registerPlaceholders(gameMode);
 
-        if (this.hooked) {
-            this.stoneGeneratorManager = new StoneGeneratorManager(this);
-            this.stoneGeneratorManager.addGameModes(hookedGameModes);
+                    // Add GameMode worlds to Generator.
+                    this.stoneGeneratorManager.addWorld(gameMode.getOverWorld());
+                    this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
+                    this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
+
+                    this.hooked = true;
+                }
+            });
+
+        if (this.hooked)
+        {
             this.generator = new MagicGenerator(this);
 
             // Try to find Level addon and if it does not exist, display a warning
 
             Optional<Addon> level = this.getAddonByName("Level");
 
-            if (!level.isPresent()) {
+            if (!level.isPresent())
+            {
                 this.logWarning("Level add-on not found so Magic Cobblestone Generator will not work correctly!");
                 this.levelAddon = null;
             }
-            else {
+            else
+            {
                 this.levelAddon = (Level) level.get();
             }
 
             Optional<VaultHook> vault = this.getPlugin().getVault();
 
-            if (!vault.isPresent() || !vault.get().hook()) {
+            if (!vault.isPresent() || !vault.get().hook())
+            {
                 this.vaultHook = null;
                 this.logWarning("Economy plugin not found so money options will not work!");
             }
-            else {
+            else
+            {
                 this.vaultHook = vault.get();
             }
 
@@ -90,115 +106,165 @@ public class StoneGeneratorAddon extends Addon {
             this.registerListener(new MainGeneratorListener(this));
 
             // Register Flags
-            flag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE)
-                    .type(Flag.Type.SETTING)
-                    .defaultSetting(true)
-                    .addon(this)
-                    .build();
-			getPlugin().getFlagsManager().registerFlag(flag);
+            this.magicFlag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE).
+                type(Flag.Type.SETTING).
+                defaultSetting(true).
+                addon(this).
+                build();
+            this.getPlugin().getFlagsManager().registerFlag(magicFlag);
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
 
             // Register placeholders
-            registerPlaceholders();
-        } else {
+            this.registerPlaceholders();
+        }
+        else
+        {
             this.logError("Magic Cobblestone Generator could not hook into any GameMode so will not do anything!");
             this.setState(State.DISABLED);
         }
     }
 
+
     /**
      * Registers the placeholders
-     * @since 1.9.0
+     * @param addon GameMode addon where placeholders are added.
+     * @since 2.0.0
      */
-    private void registerPlaceholders() {
-        getPlugin().getAddonsManager().getGameModeAddons().stream()
-                .filter(g -> !settings.getDisabledGameModes().contains(g.getDescription().getName()))
-                .forEach(g -> {
-                    // Register placeholders
-                    getPlugin().getPlaceholdersManager().registerPlaceholder(this,
-                            g.getDescription().getName().toLowerCase() + "_island_generator_tier",
-                            user -> {
-                                long level = isLevelProvided() ? 0L : getLevelAddon().getIslandLevel(g.getOverWorld(), user.getUniqueId());
-                                Settings.GeneratorTier tier = getManager().getGeneratorTier(level, user.getWorld());
-                                return tier != null ? tier.getName() : "";
-                            });
-                });
+    private void registerPlaceholders(GameModeAddon addon)
+    {
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            this.getDescription().getName().toLowerCase() + "_island_generator_tier",
+            user ->
+            {
+                long level = isLevelProvided() ? 0L :
+                    this.getLevelAddon().getIslandLevel(addon.getOverWorld(), user.getUniqueId());
+                Settings.GeneratorTier tier = this.getManager().getGeneratorTier(level, user.getWorld());
+                return tier != null ? tier.getName() : "";
+            });
     }
+
+
+    /**
+     * Registers the placeholders
+     *
+     * @since 1.9.0
+     * @deprecated replaced with proper palceholder.
+     */
+    private void registerPlaceholders()
+    {
+        this.getPlugin().getAddonsManager().getGameModeAddons().stream().
+            filter(gameMode -> !settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
+            forEach(gameMode -> {
+                // Register placeholders
+                this.getPlugin().getPlaceholdersManager().registerPlaceholder(this,
+                    gameMode.getDescription().getName().toLowerCase() + "_island_generator_tier",
+                    user -> {
+                        long level = isLevelProvided() ? 0L :
+                            this.getLevelAddon().getIslandLevel(gameMode.getOverWorld(), user.getUniqueId());
+                        Settings.GeneratorTier tier = this.getManager().getGeneratorTier(level, user.getWorld());
+                        return tier != null ? tier.getName() : "";
+                    });
+            });
+    }
+
 
     /**
      * Executes code when disabling the addon.
      */
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         // Do some stuff...
     }
+
 
     /**
      * Executes code when reloading the addon.
      */
     @Override
-    public void onReload() {
+    public void onReload()
+    {
         super.onReload();
 
-        if (this.hooked) {
+        if (this.hooked)
+        {
             this.settings = new Settings(this);
             this.getLogger().info("Magic Cobblestone Generator addon reloaded.");
         }
     }
 
+
     // ---------------------------------------------------------------------
     // Section: Getters
     // ---------------------------------------------------------------------
 
+
     /**
      * This method returns the settings object.
+     *
      * @return the settings object.
      */
-    public Settings getSettings() {
+    public Settings getSettings()
+    {
         return this.settings;
     }
 
+
     /**
      * This method returns Magic Generator.
+     *
      * @return Magic Generator object.
      */
-    public MagicGenerator getGenerator() {
+    public MagicGenerator getGenerator()
+    {
         return this.generator;
     }
 
+
     /**
      * This method returns stone manager.
+     *
      * @return Stone Generator Manager
      */
-    public StoneGeneratorManager getManager() {
+    public StoneGeneratorManager getManager()
+    {
         return this.stoneGeneratorManager;
     }
 
+
     /**
      * This method returns the levelAddon object.
+     *
      * @return the levelAddon object.
      */
-    public Level getLevelAddon() {
+    public Level getLevelAddon()
+    {
         return this.levelAddon;
     }
 
+
     /**
      * This method returns the levelProvided object.
+     *
      * @return the levelProvided object.
      */
-    public boolean isLevelProvided() {
+    public boolean isLevelProvided()
+    {
         return levelAddon != null;
     }
 
+
     /**
      * Returns the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
+     *
      * @return the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
      * @since 1.9.0
      */
-    public Flag getFlag() {
-        return flag;
+    public Flag getMagicFlag()
+    {
+        return magicFlag;
     }
 
 
@@ -240,5 +306,5 @@ public class StoneGeneratorAddon extends Addon {
      * Flag that toggles on/off the Magic Cobblestone Generator.
      * @since 1.9.0
      */
-    private Flag flag;
+    private Flag magicFlag;
 }

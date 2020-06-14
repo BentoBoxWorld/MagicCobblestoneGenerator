@@ -71,8 +71,8 @@ public class MainGeneratorListener implements Listener
 
         // if flag is toggled off, return
         if (this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation()).
-            map(island -> !island.isAllowed(this.addon.getFlag())).
-            orElse(!this.addon.getFlag().isSetForWorld(eventSourceBlock.getWorld())))
+            map(island -> !island.isAllowed(this.addon.getMagicFlag())).
+            orElse(!this.addon.getMagicFlag().isSetForWorld(eventSourceBlock.getWorld())))
         {
             return;
         }
@@ -152,8 +152,8 @@ public class MainGeneratorListener implements Listener
 
         // if flag is toggled off, return
         if (this.addon.getIslands().getIslandAt(eventToBlock.getLocation()).
-            map(island -> !island.isAllowed(this.addon.getFlag())).
-            orElse(!this.addon.getFlag().isSetForWorld(eventToBlock.getWorld())))
+            map(island -> !island.isAllowed(this.addon.getMagicFlag())).
+            orElse(!this.addon.getMagicFlag().isSetForWorld(eventToBlock.getWorld())))
         {
             return;
         }

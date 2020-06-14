@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.eclipse.jdt.annotation.Nullable;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
@@ -34,17 +35,20 @@ public class StoneGeneratorManager
     public StoneGeneratorManager(StoneGeneratorAddon addon)
     {
         this.addon = addon;
-        this.hookedGameModes = new HashSet<>();
+        this.operationWorlds = new HashSet<>();
     }
 
 
     /**
-     * Adds given gameModes to current GameMode processing.
-     * @param gameModes List of game mode names where this addon should work.
+     * Adds given world to operation worlds where generator will work.
+     * @param world List of game mode names where this addon should work.
      */
-    protected void addGameModes(List<String> gameModes)
+    public void addWorld(@Nullable World world)
     {
-        this.hookedGameModes.addAll(gameModes);
+        if (world != null)
+        {
+            this.operationWorlds.add(world);
+        }
     }
 
 
@@ -60,9 +64,7 @@ public class StoneGeneratorManager
      */
     public boolean canOperateInWorld(World world)
     {
-        Optional<GameModeAddon> addon = this.addon.getPlugin().getIWM().getAddon(world);
-
-        return addon.isPresent() && this.hookedGameModes.contains(addon.get().getDescription().getName());
+        return this.operationWorlds.contains(world);
     }
 
 
@@ -111,7 +113,7 @@ public class StoneGeneratorManager
         Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
 
         return optionalIsland.map(island ->
-        this.addon.getLevelAddon().getIslandLevel(location.getWorld(), island.getOwner())).orElse(0L);
+            this.addon.getLevelAddon().getIslandLevel(location.getWorld(), island.getOwner())).orElse(0L);
     }
 
 
@@ -225,7 +227,7 @@ public class StoneGeneratorManager
     private StoneGeneratorAddon addon;
 
     /**
-     * This variable holds addon names where stone generator should work.
+     * This variable holds worlds where stone generator should work.
      */
-    private Set<String> hookedGameModes;
+    private Set<World> operationWorlds;
 }
