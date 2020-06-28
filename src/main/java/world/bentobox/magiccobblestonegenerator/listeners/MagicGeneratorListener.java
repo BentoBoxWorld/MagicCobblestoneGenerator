@@ -1,20 +1,11 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
-import java.util.Random;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
@@ -25,74 +16,22 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  * This class contains listener and all methods that detect if custom generation can be
  * processed.
  */
-public class MainGeneratorListener implements Listener
+public class MagicGeneratorListener extends GeneratorListener
 {
     /**
      * Constructor MainGeneratorListener creates a new MainGeneratorListener instance.
      *
      * @param addon of type StoneGeneratorAddon
      */
-    public MainGeneratorListener(StoneGeneratorAddon addon)
+    public MagicGeneratorListener(StoneGeneratorAddon addon)
     {
-        this.addon = addon;
-        this.random = new Random(System.currentTimeMillis());
+        super(addon);
     }
 
 
     // ---------------------------------------------------------------------
     // Section: Private Methods
     // ---------------------------------------------------------------------
-
-    /**
-     * Handles magic generation when a block is formed
-     * @param e - event
-     */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onBlockFormEvent(BlockFormEvent e)
-    {
-        Block eventSourceBlock = e.getBlock();
-
-        if (!this.addon.getManager().canOperateInWorld(eventSourceBlock.getWorld()))
-        {
-            // If not operating in world, then return as fast as possible
-            return;
-        }
-
-        if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
-        {
-            // If island members are not online then do not continue
-            return;
-        }
-
-        if (!eventSourceBlock.isLiquid())
-        {
-            return;
-        }
-
-        // if flag is toggled off, return
-        if (this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation()).
-            map(island -> !island.isAllowed(this.addon.getMagicFlag())).
-            orElse(!this.addon.getMagicFlag().isSetForWorld(eventSourceBlock.getWorld())))
-        {
-            return;
-        }
-
-        if (!this.isInRangeToGenerate(eventSourceBlock))
-        {
-            return;
-        }
-
-        // Run 1-tick later to catch the type made and only take action on cobblestone, not obsidian
-        Bukkit.getScheduler().runTask(this.addon.getPlugin(), () -> {
-            // Lava is generating cobblestone into eventToBlock place
-            if (eventSourceBlock.getType().equals(Material.COBBLESTONE) &&
-                this.addon.getGenerator().isReplacementGenerated(eventSourceBlock, true))
-            {
-                // sound when lava transforms to cobble
-                this.playEffects(eventSourceBlock);
-            }
-        });
-    }
 
 
     /**
@@ -110,12 +49,6 @@ public class MainGeneratorListener implements Listener
         if (!this.addon.getManager().canOperateInWorld(eventSourceBlock.getWorld()))
         {
             // If not operating in world, then return as fast as possible
-            return;
-        }
-
-        if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
-        {
-            // If island members are not online then do not continue
             return;
         }
 
@@ -150,16 +83,23 @@ public class MainGeneratorListener implements Listener
             return;
         }
 
-        // if flag is toggled off, return
         if (this.addon.getIslands().getIslandAt(eventToBlock.getLocation()).
             map(island -> !island.isAllowed(this.addon.getMagicFlag())).
             orElse(!this.addon.getMagicFlag().isSetForWorld(eventToBlock.getWorld())))
         {
+            // if flag is toggled off, return
+            return;
+        }
+
+        if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
+        {
+            // If island members are not online then do not continue
             return;
         }
 
         if (!this.isInRangeToGenerate(eventSourceBlock))
         {
+            // Check if any island member is at generator range.
             return;
         }
 
@@ -168,7 +108,7 @@ public class MainGeneratorListener implements Listener
         {
             // Return from here at any case. Even if could not manage to replace stone.
 
-            if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true))
+            if (this.isStoneReplacementGenerated(eventToBlock))
             {
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
@@ -180,14 +120,16 @@ public class MainGeneratorListener implements Listener
 
         if (eventToBlock.getType().equals(Material.WATER))
         {
-            // We needed to check for water only in stone generator as in other cases it will be replaced with cobble or obsidian
+            // We needed to check for water only in stone generator as in other cases it will be
+            // replaced with cobble or obsidian
+
             return;
         }
 
         if (liquid.equals(Material.LAVA) && this.canLavaGenerateCobblestone(eventToBlock, event.getFace()))
         {
             // Lava is generating cobblestone into eventToBlock place
-            if (this.addon.getGenerator().isReplacementGenerated(eventToBlock, true))
+            if (this.isCobblestoneReplacementGenerated(eventToBlock))
             {
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
@@ -200,53 +142,15 @@ public class MainGeneratorListener implements Listener
 
             Block replacedBlock = this.getWaterGeneratedCobblestone(eventToBlock, event.getFace());
 
-
             // Water flow should not be cancelled even if replacement is generated, as replacement block will
             // never be in the flow block, as it will always be next block.
 
-            if (replacedBlock != null && this.addon.getGenerator().isReplacementGenerated(replacedBlock, true))
+            if (replacedBlock != null && this.isStoneReplacementGenerated(replacedBlock))
             {
                 // sound when lava transforms to cobble
                 this.playEffects(replacedBlock);
             }
         }
-    }
-
-
-    /**
-     * This method plays sound effect and adds particles to new block.
-     *
-     * @param block block placement where particle must be generated.
-     */
-    private void playEffects(Block block)
-    {
-        final double blockX = block.getX();
-        final double blockY = block.getY();
-        final double blockZ = block.getZ();
-
-        // Run everything in new task
-        Bukkit.getScheduler().runTask(this.addon.getPlugin(), () -> {
-            // Play sound for spawning block
-            block.getWorld().playSound(block.getLocation(),
-                Sound.BLOCK_FIRE_EXTINGUISH,
-                SoundCategory.BLOCKS,
-                0.5F,
-                2.6F + (this.random.nextFloat() * 2 - 1) * 0.8F);
-
-            // This spawns 8 large smoke particles.
-            for (int counter = 0; counter < 8; ++counter)
-            {
-                block.getWorld().spawnParticle(Particle.SMOKE_LARGE,
-                    blockX + Math.random(),
-                    blockY + 1 + Math.random(),
-                    blockZ + Math.random(),
-                    1,
-                    0,
-                    0,
-                    0,
-                    0);
-            }
-        });
     }
 
 
@@ -289,21 +193,23 @@ public class MainGeneratorListener implements Listener
             case EAST:
             case SOUTH:
             case WEST:
+                // Since waterlogged blocks, it is also necessary to check block above.
                 // Check if block in flow direction is water
                 // Check if block on the left side is water
                 // Check if block on the right side is water
 
-                return MainGeneratorListener.containsWater(airBlock.getRelative(flowDirection)) ||
-                    MainGeneratorListener.containsWater(airBlock.getRelative(MainGeneratorListener.getClockwiseDirection(flowDirection))) ||
-                    MainGeneratorListener.containsWater(airBlock.getRelative(MainGeneratorListener.getCounterClockwiseDirection(flowDirection)));
+                return MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.UP)) ||
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(flowDirection)) ||
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(MagicGeneratorListener.getClockwiseDirection(flowDirection))) ||
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(MagicGeneratorListener.getCounterClockwiseDirection(flowDirection)));
 
             case DOWN:
                 // If lava flows down then we should search for water in horizontally adjacent blocks.
 
-                return MainGeneratorListener.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
-                    MainGeneratorListener.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
-                    MainGeneratorListener.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
-                    MainGeneratorListener.containsWater(airBlock.getRelative(BlockFace.WEST));
+                return MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.WEST));
             default:
                 return false;
         }
@@ -342,21 +248,21 @@ public class MainGeneratorListener implements Listener
 
                 checkBlock = airBlock.getRelative(flowDirection);
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
 
-                checkBlock = airBlock.getRelative(MainGeneratorListener.getClockwiseDirection(flowDirection));
+                checkBlock = airBlock.getRelative(MagicGeneratorListener.getClockwiseDirection(flowDirection));
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
 
-                checkBlock = airBlock.getRelative(MainGeneratorListener.getCounterClockwiseDirection(flowDirection));
+                checkBlock = airBlock.getRelative(MagicGeneratorListener.getCounterClockwiseDirection(flowDirection));
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
@@ -368,35 +274,35 @@ public class MainGeneratorListener implements Listener
 
                 checkBlock = airBlock.getRelative(flowDirection);
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
 
                 checkBlock = airBlock.getRelative(BlockFace.NORTH);
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
 
                 checkBlock = airBlock.getRelative(BlockFace.EAST);
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
 
                 checkBlock = airBlock.getRelative(BlockFace.SOUTH);
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
 
                 checkBlock = airBlock.getRelative(BlockFace.WEST);
 
-                if (MainGeneratorListener.isFlowingLavaBlock(checkBlock))
+                if (MagicGeneratorListener.isFlowingLavaBlock(checkBlock))
                 {
                     return checkBlock;
                 }
@@ -404,33 +310,6 @@ public class MainGeneratorListener implements Listener
                 return null;
             default:
                 return null;
-        }
-    }
-
-
-    /**
-     * This method returns there is an island member in range to active of "custom" block generation
-     *
-     * @param block Block that must be checked.
-     * @return true if there is a player in the set range
-     */
-    protected boolean isInRangeToGenerate(Block block)
-    {
-        int workingRange = this.addon.getSettings().getWorkingRange() ^ 2;
-
-        if (workingRange > 0)
-        {
-            // Check if any island member is near block.
-            return this.addon.getIslands().getIslandAt(block.getLocation()).
-                map(i -> block.getWorld().getNearbyEntities(block.getLocation(), workingRange, workingRange, workingRange).
-                    stream().
-                    filter(Player.class::isInstance).
-                    anyMatch(e -> i.getMemberSet().contains(e.getUniqueId()))).
-                orElse(false);
-        }
-        else
-        {
-            return true;
         }
     }
 
@@ -521,20 +400,4 @@ public class MainGeneratorListener implements Listener
                 return face;
         }
     }
-
-
-// ---------------------------------------------------------------------
-// Section: Variables
-// ---------------------------------------------------------------------
-
-
-    /**
-     * Main addon class.
-     */
-    private final StoneGeneratorAddon addon;
-
-    /**
-     * Instance of Random.
-     */
-    private final Random random;
 }

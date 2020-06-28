@@ -11,7 +11,7 @@ import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
-import world.bentobox.magiccobblestonegenerator.listeners.MainGeneratorListener;
+import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 
 
@@ -103,7 +103,9 @@ public class StoneGeneratorAddon extends Addon
             }
 
             // Register the listener.
-            this.registerListener(new MainGeneratorListener(this));
+            this.registerListener(new VanillaGeneratorListener(this));
+            // TODO: fix and implement
+            //this.registerListener(new MagicGeneratorListener(this));
 
             // Register Flags
             this.magicFlag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE).
