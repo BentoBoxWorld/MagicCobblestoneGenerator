@@ -1,15 +1,7 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,8 +10,10 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
 /**
@@ -36,6 +30,11 @@ public class StoneGeneratorManager
     {
         this.addon = addon;
         this.operationWorlds = new HashSet<>();
+
+        this.generatorTierDatabase = new Database<>(addon, GeneratorTierObject.class);
+        this.generatorTierCache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+
+        this.load();
     }
 
 
@@ -49,6 +48,103 @@ public class StoneGeneratorManager
         {
             this.operationWorlds.add(world);
         }
+    }
+
+
+    // ---------------------------------------------------------------------
+    // Section: Database related methods
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * Creates generators cache.
+     */
+    private void load()
+    {
+        this.generatorTierCache.clear();
+
+        this.addon.getLogger().info("Loading generator tiers...");
+
+        this.generatorTierDatabase.loadObjects().forEach(this::loadGeneratorTier);
+    }
+
+
+    /**
+     * Loads generator tiers in cache silently. Used when loading.
+     * @param generatorTier that must be stored.
+     * @return true if successful
+     */
+    private boolean loadGeneratorTier(GeneratorTierObject generatorTier)
+    {
+        return this.loadGeneratorTier(generatorTier, true, null, true);
+    }
+
+
+    /**
+     * Load generatorTier in the cache.
+     * @param generatorTier - generatorTier that must be stored.
+     * @param overwrite - true if previous biomes should be overwritten
+     * @param user - user making the request
+     * @param silent - if true, no messages are sent to user
+     * @return - true if imported
+     */
+    public boolean loadGeneratorTier(GeneratorTierObject generatorTier, boolean overwrite, User user, boolean silent)
+    {
+        if (this.generatorTierCache.containsKey(generatorTier.getUniqueId()))
+        {
+            if (!overwrite)
+            {
+                if (!silent)
+                {
+                    user.sendMessage("stonegenerator.messages.skipping",
+                        "[generator]",
+                        generatorTier.getFriendlyName());
+                }
+
+                return false;
+            }
+            else
+            {
+                if (!silent)
+                {
+                    user.sendMessage("stonegenerator.messages.overwriting",
+                        "[generator]",
+                        generatorTier.getFriendlyName());
+                }
+
+                this.generatorTierCache.replace(generatorTier.getUniqueId(), generatorTier);
+                return true;
+            }
+        }
+
+        if (!silent)
+        {
+            user.sendMessage("stonegenerator.messages.imported",
+                "[generator]",
+                generatorTier.getFriendlyName());
+        }
+
+        this.generatorTierCache.put(generatorTier.getUniqueId(), generatorTier);
+        return true;
+    }
+
+
+    /**
+     * This method allows to store single generatorTier object.
+     * @param generatorTier object that must be saved in database.
+     */
+    public void saveGeneratorTier(GeneratorTierObject generatorTier)
+    {
+        this.generatorTierDatabase.saveObjectAsync(generatorTier);
+    }
+
+
+    /**
+     * Save generator tiers from cache into database
+     */
+    public void save()
+    {
+        this.generatorTierCache.values().forEach(this.generatorTierDatabase::saveObjectAsync);
     }
 
 
@@ -230,4 +326,14 @@ public class StoneGeneratorManager
      * This variable holds worlds where stone generator should work.
      */
     private Set<World> operationWorlds;
+
+    /**
+     * Variable stores map that links String to loaded generator tier object.
+     */
+    private Map<String, GeneratorTierObject> generatorTierCache;
+
+    /**
+     * Variable stores database of generator tiers objects.
+     */
+    private Database<GeneratorTierObject> generatorTierDatabase;
 }
