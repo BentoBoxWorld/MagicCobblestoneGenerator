@@ -8,7 +8,6 @@ package world.bentobox.magiccobblestonegenerator.database.objects;
 
 
 import com.google.gson.annotations.Expose;
-import com.sun.istack.internal.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -81,68 +80,24 @@ public class GeneratorDataObject implements DataObject
 
 
 	/**
-	 * Method GeneratorDataObject#getActiveCobblestoneGenerator returns the activeCobblestoneGenerator of this object.
+	 * Method GeneratorDataObject#getActiveGeneratorList returns the activeGeneratorList of this object.
 	 *
-	 * @return the activeCobblestoneGenerator (type String) of this object.
+	 * @return the activeGeneratorList (type Set<String>) of this object.
 	 */
-	public String getActiveCobblestoneGenerator()
+	public Set<String> getActiveGeneratorList()
 	{
-		return activeCobblestoneGenerator;
+		return activeGeneratorList;
 	}
 
 
 	/**
-	 * Method GeneratorDataObject#setActiveCobblestoneGenerator sets new value for the activeCobblestoneGenerator of this object.
-	 * @param activeCobblestoneGenerator new value for this object.
+	 * Method GeneratorDataObject#setActiveGeneratorList sets new value for the activeGeneratorList of this object.
+	 * @param activeGeneratorList new value for this object.
 	 *
 	 */
-	public void setActiveCobblestoneGenerator(String activeCobblestoneGenerator)
+	public void setActiveGeneratorList(Set<String> activeGeneratorList)
 	{
-		this.activeCobblestoneGenerator = activeCobblestoneGenerator;
-	}
-
-
-	/**
-	 * Method GeneratorDataObject#getActiveStoneGenerator returns the activeStoneGenerator of this object.
-	 *
-	 * @return the activeStoneGenerator (type String) of this object.
-	 */
-	public String getActiveStoneGenerator()
-	{
-		return activeStoneGenerator;
-	}
-
-
-	/**
-	 * Method GeneratorDataObject#setActiveStoneGenerator sets new value for the activeStoneGenerator of this object.
-	 * @param activeStoneGenerator new value for this object.
-	 *
-	 */
-	public void setActiveStoneGenerator(String activeStoneGenerator)
-	{
-		this.activeStoneGenerator = activeStoneGenerator;
-	}
-
-
-	/**
-	 * Method GeneratorDataObject#getActiveBasaltGenerator returns the activeBasaltGenerator of this object.
-	 *
-	 * @return the activeBasaltGenerator (type String) of this object.
-	 */
-	public String getActiveBasaltGenerator()
-	{
-		return activeBasaltGenerator;
-	}
-
-
-	/**
-	 * Method GeneratorDataObject#setActiveBasaltGenerator sets new value for the activeBasaltGenerator of this object.
-	 * @param activeBasaltGenerator new value for this object.
-	 *
-	 */
-	public void setActiveBasaltGenerator(String activeBasaltGenerator)
-	{
-		this.activeBasaltGenerator = activeBasaltGenerator;
+		this.activeGeneratorList = activeGeneratorList;
 	}
 
 
@@ -165,20 +120,8 @@ public class GeneratorDataObject implements DataObject
 	private Set<String> unlockedTiers = Collections.emptySet();
 
 	/**
-	 * Stores currently active cobblestone generator name.
+	 * Stores currently active generator names.
 	 */
 	@Expose
-	private @Nullable String activeCobblestoneGenerator = null;
-
-	/**
-	 * Stores currently active cobblestone generator name.
-	 */
-	@Expose
-	private @Nullable String activeStoneGenerator = null;
-
-	/**
-	 * Stores currently active cobblestone generator name.
-	 */
-	@Expose
-	private @Nullable String activeBasaltGenerator = null;
+	private Set<String> activeGeneratorList = Collections.emptySet();
 }
