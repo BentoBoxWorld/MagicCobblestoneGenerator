@@ -79,7 +79,7 @@ public class StoneGeneratorManager
     /**
      * Creates generators cache.
      */
-    private void load()
+    public void load()
     {
         this.generatorTierCache.clear();
 
