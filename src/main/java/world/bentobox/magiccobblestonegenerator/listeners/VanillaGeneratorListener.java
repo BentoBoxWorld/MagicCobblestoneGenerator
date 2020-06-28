@@ -37,7 +37,7 @@ public class VanillaGeneratorListener extends GeneratorListener
 	 * Handles magic generation when a block is formed
 	 * @param event - event
 	 */
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockFormEvent(BlockFormEvent event)
 	{
 		Block eventSourceBlock = event.getBlock();
