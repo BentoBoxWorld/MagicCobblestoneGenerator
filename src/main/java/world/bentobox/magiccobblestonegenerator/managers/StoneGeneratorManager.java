@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
+import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
@@ -232,6 +233,34 @@ public class StoneGeneratorManager
             // Add to cache
             this.generatorDataCache.put(uniqueID, pd);
         }
+    }
+
+
+    /**
+     * This method removes from cache and database every generator that is related to
+     * given gamemode.
+     * @param optional GameMode addon which generators must be removed.
+     */
+    public void wipeGameModeGenerators(Optional<GameModeAddon> optional)
+    {
+        if (!optional.isPresent())
+        {
+            // Done.
+            return;
+        }
+
+        final String objectKey = optional.get().getDescription().getName().toLowerCase();
+
+        List<String> keySet = new ArrayList<>(this.generatorTierCache.keySet());
+
+        // Remove everything that starts with gamemode name.
+        keySet.forEach(uniqueId -> {
+            if (uniqueId.startsWith(objectKey))
+            {
+                this.generatorTierCache.remove(objectKey);
+                this.generatorTierDatabase.deleteID(objectKey);
+            }
+        });
     }
 
 
