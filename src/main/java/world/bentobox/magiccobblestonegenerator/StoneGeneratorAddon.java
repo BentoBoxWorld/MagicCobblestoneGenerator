@@ -65,8 +65,16 @@ public class StoneGeneratorAddon extends Addon
 
                     // Add GameMode worlds to Generator.
                     this.stoneGeneratorManager.addWorld(gameMode.getOverWorld());
-                    this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
-                    this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
+
+                    if (gameMode.getWorldSettings().isNetherIslands())
+                    {
+                        this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
+                    }
+
+                    if (gameMode.getWorldSettings().isEndIslands())
+                    {
+                        this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
+                    }
 
                     this.hooked = true;
                 }
