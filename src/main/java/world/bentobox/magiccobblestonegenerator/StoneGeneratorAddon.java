@@ -9,7 +9,6 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
-import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
@@ -57,9 +56,6 @@ public class StoneGeneratorAddon extends Addon
             forEach(gameMode -> {
                 if (gameMode.getPlayerCommand().isPresent())
                 {
-                    // Add commands
-                    new StoneGeneratorMainCommand(this, gameMode.getPlayerCommand().get());
-
                     // Add Placeholders
                     this.registerPlaceholders(gameMode);
 
@@ -144,39 +140,7 @@ public class StoneGeneratorAddon extends Addon
      */
     private void registerPlaceholders(GameModeAddon addon)
     {
-        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
-            this.getDescription().getName().toLowerCase() + "_island_generator_tier",
-            user ->
-            {
-                long level = isLevelProvided() ? 0L :
-                    this.getLevelAddon().getIslandLevel(addon.getOverWorld(), user.getUniqueId());
-                Settings.GeneratorTier tier = this.getManager().getGeneratorTier(level, user.getWorld());
-                return tier != null ? tier.getName() : "";
-            });
-    }
-
-
-    /**
-     * Registers the placeholders
-     *
-     * @since 1.9.0
-     * @deprecated replaced with proper palceholder.
-     */
-    private void registerPlaceholders()
-    {
-        this.getPlugin().getAddonsManager().getGameModeAddons().stream().
-            filter(gameMode -> !settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
-            forEach(gameMode -> {
-                // Register placeholders
-                this.getPlugin().getPlaceholdersManager().registerPlaceholder(this,
-                    gameMode.getDescription().getName().toLowerCase() + "_island_generator_tier",
-                    user -> {
-                        long level = isLevelProvided() ? 0L :
-                            this.getLevelAddon().getIslandLevel(gameMode.getOverWorld(), user.getUniqueId());
-                        Settings.GeneratorTier tier = this.getManager().getGeneratorTier(level, user.getWorld());
-                        return tier != null ? tier.getName() : "";
-                    });
-            });
+        // TODO.
     }
 
 
