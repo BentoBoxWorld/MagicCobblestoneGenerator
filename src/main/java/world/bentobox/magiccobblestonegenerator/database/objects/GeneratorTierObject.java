@@ -345,6 +345,28 @@ public class GeneratorTierObject implements DataObject
 	}
 
 
+	/**
+	 * Method GeneratorTierObject#isDefaultGenerator returns the defaultGenerator of this object.
+	 *
+	 * @return the defaultGenerator (type boolean) of this object.
+	 */
+	public boolean isDefaultGenerator()
+	{
+		return defaultGenerator;
+	}
+
+
+	/**
+	 * Method GeneratorTierObject#setDefaultGenerator sets new value for the defaultGenerator of this object.
+	 * @param defaultGenerator new value for this object.
+	 *
+	 */
+	public void setDefaultGenerator(boolean defaultGenerator)
+	{
+		this.defaultGenerator = defaultGenerator;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Enums
 // ---------------------------------------------------------------------
@@ -398,6 +420,14 @@ public class GeneratorTierObject implements DataObject
 	 */
 	@Expose
 	private GeneratorType generatorType = GeneratorType.COBBLESTONE;
+
+	/**
+	 * Indicates if current generator is default.
+	 * Only one generator per type can be default.
+	 */
+	@Expose
+	private boolean defaultGenerator = false;
+
 
 	// Requirements for unlocking.
 
