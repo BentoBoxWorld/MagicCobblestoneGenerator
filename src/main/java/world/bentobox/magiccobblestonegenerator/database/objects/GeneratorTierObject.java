@@ -297,7 +297,7 @@ public class GeneratorTierObject implements DataObject
 	 */
 	public void setTreasureChance(double treasureChance)
 	{
-		this.treasureChance = treasureChance;
+		this.treasureChance = Math.max(0, treasureChance);
 	}
 
 
@@ -341,7 +341,8 @@ public class GeneratorTierObject implements DataObject
 	 */
 	public void setMaxTreasureAmount(int maxTreasureAmount)
 	{
-		this.maxTreasureAmount = maxTreasureAmount;
+		// Non-negative values only.
+		this.maxTreasureAmount = Math.max(0, maxTreasureAmount);
 	}
 
 
