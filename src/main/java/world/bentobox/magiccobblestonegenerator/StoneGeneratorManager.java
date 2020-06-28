@@ -1,18 +1,17 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import java.util.*;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.eclipse.jdt.annotation.Nullable;
+import org.bukkit.block.Biome;
 
-import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
@@ -177,6 +176,141 @@ public class StoneGeneratorManager
     }
 
 
+    /**
+     * Load island from database into the cache or create new island data
+     *
+     * @param uniqueID - uniqueID to add
+     */
+    private void addIslandData(@NotNull String uniqueID)
+    {
+        if (this.generatorDataCache.containsKey(uniqueID))
+        {
+            return;
+        }
+
+        // The island is not in the cache
+        // Check if the island exists in the database
+
+        if (this.generatorDataDatabase.objectExists(uniqueID))
+        {
+            // Load player from database
+            GeneratorDataObject data = this.generatorDataDatabase.loadObject(uniqueID);
+            // Store in cache
+
+            if (data != null)
+            {
+                this.generatorDataCache.put(uniqueID, data);
+            }
+            else
+            {
+                this.addon.logError("Could not load NULL generator data object.");
+            }
+        }
+        else
+        {
+            // Create the island data
+            GeneratorDataObject pd = new GeneratorDataObject();
+            pd.setUniqueId(uniqueID);
+
+            this.saveGeneratorData(pd);
+            // Add to cache
+            this.generatorDataCache.put(uniqueID, pd);
+        }
+    }
+
+
+    // ---------------------------------------------------------------------
+    // Section: Generator related methods
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * This method returns active generator tier object for island at given location.
+     * @param location Location of the block.
+     * @param generatorType Generator type.
+     * @return GeneratorTierObject that operates in given island or null.
+     */
+    public @Nullable GeneratorTierObject getGeneratorTier(Location location,
+        GeneratorTierObject.GeneratorType generatorType)
+    {
+        Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
+
+        if (!optionalIsland.isPresent())
+        {
+            // No islands at given location. Do not generate
+            return null;
+        }
+
+        this.addIslandData(optionalIsland.get().getUniqueId());
+        GeneratorDataObject data = this.generatorDataCache.get(optionalIsland.get().getUniqueId());
+
+        GeneratorTierObject generatorTier;
+
+        if (data.getActiveGeneratorList().isEmpty())
+        {
+            generatorTier = this.findDefaultGeneratorTier(location.getWorld(), generatorType);
+        }
+        else
+        {
+            // Gets biome from location.
+            final Biome biome = location.getWorld().getBiome(location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ());
+
+            Optional<GeneratorTierObject> optionalGenerator =
+                data.getActiveGeneratorList().stream().
+                    // Map active generator id to actual object.
+                    map(name -> this.generatorTierCache.getOrDefault(name, null)).
+                    // Filter out null objects. Just in case.
+                    filter(Objects::nonNull).
+                    // Filter objects with the same generator type.
+                    filter(generator -> generator.getGeneratorType().equals(generatorType)).
+                    // Filter objects with required biome.
+                    filter(generator -> generator.getRequiredBiomes().contains(biome)).
+                    // Get last value from list. Most important goes.
+                    max(Comparator.comparing(GeneratorTierObject::getPriority));
+
+            generatorTier = optionalGenerator.orElseGet(() ->
+                this.findDefaultGeneratorTier(location.getWorld(), generatorType));
+        }
+
+        return generatorTier;
+    }
+
+
+    /**
+     * This method iterates through all world generators from given type and tries to find if someone
+     * is set to be default.
+     * It finds first one.
+     * @param world of type World
+     * @param generatorType of type GeneratorType
+     * @return GeneratorTierObject
+     */
+    private @Nullable GeneratorTierObject findDefaultGeneratorTier(World world,
+        GeneratorTierObject.GeneratorType generatorType)
+    {
+        String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
+            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+
+        if (gameMode.isEmpty())
+        {
+            // If not a gamemode world then return.
+            return null;
+        }
+
+        // Find default generator from cache.
+        return this.generatorTierCache.values().stream().
+            // Filter all default generators
+            filter(GeneratorTierObject::isDefaultGenerator).
+            // Filter generators with necessary type.
+            filter(generator -> generator.getGeneratorType().equals(generatorType)).
+            // Filter generators that starts with name.
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            // Return first or null.
+            findFirst().orElse(null);
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Methods
     // ---------------------------------------------------------------------
@@ -242,105 +376,6 @@ public class StoneGeneratorManager
     }
 
 
-    /**
-     * This method finds and sorts all Generator Tiers for given world.
-     * @param world World where tiers must be found.
-     * @return List with generator tiers.
-     */
-    public List<Settings.GeneratorTier> getAllGeneratorTiers(World world)
-    {
-        String name = this.addon.getPlugin().getIWM().getAddon(world).map(a -> a.getDescription().getName()).orElse(null);
-        if (name == null) return Collections.emptyList();
-
-        Map<String, Settings.GeneratorTier> defaultTiers = this.addon.getSettings().getDefaultGeneratorTierMap();
-        Map<String, Settings.GeneratorTier> customAddonTiers = this.addon.getSettings().getAddonGeneratorTierMap(name);
-
-        List<Settings.GeneratorTier> tierList;
-
-        if (customAddonTiers.isEmpty())
-        {
-            tierList = new ArrayList<>(defaultTiers.values());
-        }
-        else
-        {
-            // Collect all unique IDs
-            Set<String> uniqueIDSet = new HashSet<>(customAddonTiers.keySet());
-            uniqueIDSet.addAll(defaultTiers.keySet());
-            tierList = new ArrayList<>(uniqueIDSet.size());
-
-            // Populate list with correct generator tiers.
-            uniqueIDSet.forEach(id -> tierList.add(customAddonTiers.getOrDefault(id, defaultTiers.get(id))));
-        }
-
-        if (tierList.isEmpty())
-        {
-            // Something goes wrong!
-            return Collections.emptyList();
-        }
-
-        // List will be sorted from smallest to largest.
-        tierList.sort(Comparator.comparingInt(Settings.GeneratorTier::getMinLevel));
-
-        return tierList;
-    }
-
-
-    /**
-     * This method returns Generator Tier for generating ores.
-     * @param islandLevel Level of island.
-     * @param world World where generation happens.
-     * @return Generator Tier that will be applied or null, if tier not found.
-     */
-    public Settings.GeneratorTier getGeneratorTier(long islandLevel, World world)
-    {
-        List<Settings.GeneratorTier> tierList = this.getAllGeneratorTiers(world);
-
-        if (tierList.isEmpty())
-        {
-            // There does not exist any tiers. Return null.
-            return null;
-        }
-
-        Settings.GeneratorTier generatorTier = tierList.get(0);
-
-        if (generatorTier.getMinLevel() < 0)
-        {
-            // Negative min level mean that it will be always set as chance.
-            return generatorTier;
-        }
-
-        // Optimized for cycle
-        for (int i = 1; i < tierList.size(); i++)
-        {
-            if (islandLevel >= tierList.get(i).getMinLevel())
-            {
-                generatorTier = tierList.get(i);
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        // Something goes wrong. Returning empty map.
-        return generatorTier;
-    }
-
-
-    /**
-     * This method returns chance map for generating ores.
-     * @param islandLevel Level of island.
-     * @param world World where generation happens.
-     * @return Map that contains materials and its chance to be generated.
-     */
-    public Map<Double, Material> getMaterialChanceMap(long islandLevel, World world)
-    {
-        Settings.GeneratorTier generatorTier = this.getGeneratorTier(islandLevel, world);
-
-        return generatorTier == null ? Collections.emptyMap() : generatorTier.getBlockChanceMap();
-    }
-
-
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
@@ -349,30 +384,30 @@ public class StoneGeneratorManager
     /**
      * This variable holds Generator addon.
      */
-    private StoneGeneratorAddon addon;
+    private final StoneGeneratorAddon addon;
 
     /**
      * This variable holds worlds where stone generator should work.
      */
-    private Set<World> operationWorlds;
+    private final Set<World> operationWorlds;
 
     /**
      * Variable stores map that links String to loaded generator tier object.
      */
-    private Map<String, GeneratorTierObject> generatorTierCache;
+    private final Map<String, GeneratorTierObject> generatorTierCache;
 
     /**
      * Variable stores database of generator tiers objects.
      */
-    private Database<GeneratorTierObject> generatorTierDatabase;
+    private final Database<GeneratorTierObject> generatorTierDatabase;
 
     /**
      * Variable stores map that links String to loaded generator data object.
      */
-    private Map<String, GeneratorDataObject> generatorDataCache;
+    private final Map<String, GeneratorDataObject> generatorDataCache;
 
     /**
      * Variable stores database of generator data objects.
      */
-    private Database<GeneratorDataObject> generatorDataDatabase;
+    private final Database<GeneratorDataObject> generatorDataDatabase;
 }
