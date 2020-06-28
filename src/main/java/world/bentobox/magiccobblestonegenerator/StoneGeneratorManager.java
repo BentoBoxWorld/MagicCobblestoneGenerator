@@ -43,6 +43,7 @@ public class StoneGeneratorManager
 
     /**
      * Adds given world to operation worlds where generator will work.
+     *
      * @param world List of game mode names where this addon should work.
      */
     public void addWorld(@Nullable World world)
@@ -57,6 +58,20 @@ public class StoneGeneratorManager
     // ---------------------------------------------------------------------
     // Section: Database related methods
     // ---------------------------------------------------------------------
+
+
+    /**
+     * This method clears cache and reloads all generators.
+     * Unsaved changes will be lost.
+     * Includes island data.
+     */
+    public void reload()
+    {
+        // on reload clear cache and load generators.
+
+        this.generatorDataCache.clear();
+        this.load();
+    }
 
 
     /**
