@@ -59,7 +59,7 @@ tiers:
       # List of required permissions for users to select this generator.
       required-permissions: []
       # List of required biomes for generator to work.
-      required-biome: []
+      required-biomes: []
       # Cost for activating current generator.
       upgrade-cost: 5.0
     # Materials and their chances. Use actual blocks please.
