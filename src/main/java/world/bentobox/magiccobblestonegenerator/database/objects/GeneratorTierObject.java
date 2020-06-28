@@ -323,6 +323,28 @@ public class GeneratorTierObject implements DataObject
 	}
 
 
+	/**
+	 * Method GeneratorTierObject#getMaxTreasureAmount returns the maxTreasureAmount of this object.
+	 *
+	 * @return the maxTreasureAmount (type int) of this object.
+	 */
+	public int getMaxTreasureAmount()
+	{
+		return maxTreasureAmount;
+	}
+
+
+	/**
+	 * Method GeneratorTierObject#setMaxTreasureAmount sets new value for the maxTreasureAmount of this object.
+	 * @param maxTreasureAmount new value for this object.
+	 *
+	 */
+	public void setMaxTreasureAmount(int maxTreasureAmount)
+	{
+		this.maxTreasureAmount = maxTreasureAmount;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Enums
 // ---------------------------------------------------------------------
@@ -428,5 +450,11 @@ public class GeneratorTierObject implements DataObject
 	 */
 	@Expose
 	private double treasureChance = 0.0;
+
+	/**
+	 * This variable stores max amount of treasure item to be dropped. From 1... till it.
+	 */
+	@Expose
+	private int maxTreasureAmount = 1;
 }
 
