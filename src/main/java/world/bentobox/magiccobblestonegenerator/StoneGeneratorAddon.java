@@ -12,6 +12,7 @@ import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
+import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 
 

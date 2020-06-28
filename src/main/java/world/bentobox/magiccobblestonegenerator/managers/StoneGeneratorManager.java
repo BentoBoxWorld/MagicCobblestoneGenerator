@@ -1,4 +1,4 @@
-package world.bentobox.magiccobblestonegenerator;
+package world.bentobox.magiccobblestonegenerator.managers;
 
 
 import com.sun.istack.internal.NotNull;
@@ -12,6 +12,7 @@ import org.bukkit.block.Biome;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
