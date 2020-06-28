@@ -301,6 +301,28 @@ public class GeneratorTierObject implements DataObject
 	}
 
 
+	/**
+	 * Method GeneratorTierObject#getDescription returns the description of this object.
+	 *
+	 * @return the description (type List<String>) of this object.
+	 */
+	public List<String> getDescription()
+	{
+		return description;
+	}
+
+
+	/**
+	 * Method GeneratorTierObject#setDescription sets new value for the description of this object.
+	 * @param description new value for this object.
+	 *
+	 */
+	public void setDescription(List<String> description)
+	{
+		this.description = description;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Enums
 // ---------------------------------------------------------------------
@@ -336,6 +358,12 @@ public class GeneratorTierObject implements DataObject
 	 */
 	@Expose
 	private String friendlyName;
+
+	/**
+	 * Stores description for generator.
+	 */
+	@Expose
+	private List<String> description = Collections.emptyList();
 
 	/**
 	 * Stores display icon for current generator tier.
