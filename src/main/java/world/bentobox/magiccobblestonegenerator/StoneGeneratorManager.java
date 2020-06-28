@@ -13,6 +13,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
@@ -32,7 +33,10 @@ public class StoneGeneratorManager
         this.operationWorlds = new HashSet<>();
 
         this.generatorTierDatabase = new Database<>(addon, GeneratorTierObject.class);
-        this.generatorTierCache = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.generatorTierCache = new HashMap<>();
+
+        this.generatorDataDatabase = new Database<>(addon, GeneratorDataObject.class);
+        this.generatorDataCache = new HashMap<>();
 
         this.load();
     }
@@ -66,6 +70,8 @@ public class StoneGeneratorManager
         this.addon.getLogger().info("Loading generator tiers...");
 
         this.generatorTierDatabase.loadObjects().forEach(this::loadGeneratorTier);
+
+        this.addon.getLogger().info("Done");
     }
 
 
@@ -130,6 +136,18 @@ public class StoneGeneratorManager
 
 
     /**
+     * Loads generator data in cache silently. Used when loading.
+     * @param generatorData that must be stored.
+     * @return true if successful
+     */
+    private boolean loadGeneratorData(GeneratorDataObject generatorData)
+    {
+        this.generatorDataCache.put(generatorData.getUniqueId(), generatorData);
+        return true;
+    }
+
+
+    /**
      * This method allows to store single generatorTier object.
      * @param generatorTier object that must be saved in database.
      */
@@ -140,11 +158,22 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method allows to store single generatorData object.
+     * @param generatorData object that must be saved in database.
+     */
+    public void saveGeneratorData(GeneratorDataObject generatorData)
+    {
+        this.generatorDataDatabase.saveObjectAsync(generatorData);
+    }
+
+
+    /**
      * Save generator tiers from cache into database
      */
     public void save()
     {
-        this.generatorTierCache.values().forEach(this.generatorTierDatabase::saveObjectAsync);
+        this.generatorTierCache.values().forEach(this::saveGeneratorTier);
+        this.generatorDataCache.values().forEach(this::saveGeneratorData);
     }
 
 
@@ -336,4 +365,14 @@ public class StoneGeneratorManager
      * Variable stores database of generator tiers objects.
      */
     private Database<GeneratorTierObject> generatorTierDatabase;
+
+    /**
+     * Variable stores map that links String to loaded generator data object.
+     */
+    private Map<String, GeneratorDataObject> generatorDataCache;
+
+    /**
+     * Variable stores database of generator data objects.
+     */
+    private Database<GeneratorDataObject> generatorDataDatabase;
 }

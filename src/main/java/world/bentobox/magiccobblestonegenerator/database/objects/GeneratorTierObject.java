@@ -22,7 +22,7 @@ import world.bentobox.bentobox.database.objects.Table;
 /**
  * This class manages generator tier storing.
  */
-@Table(name = "Generator")
+@Table(name = "GeneratorTier")
 public class GeneratorTierObject implements DataObject
 {
 	/**
