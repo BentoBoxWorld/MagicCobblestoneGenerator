@@ -78,10 +78,10 @@ public class MainGeneratorListener implements Listener {
         if (!this.isInRangeToGenerate(eventSourceBlock)) {
             return;
         }
-        // Run 1-tick later to catch the type made and only take action on cobblestone, not obsidian
+        // Run 1-tick later to catch the type made and only take action on cobblestone or stone, not obsidian
         Bukkit.getScheduler().runTask(addon.getPlugin(), () -> {
-            // Lava is generating cobblestone into eventToBlock place
-            if (eventSourceBlock.getType().equals(Material.COBBLESTONE) && this.addon.getGenerator().isReplacementGenerated(eventSourceBlock, true)) {
+            // Lava is generating cobblestone or stone into eventToBlock place
+            if ((eventSourceBlock.getType().equals(Material.COBBLESTONE) || eventSourceBlock.getType().equals(Material.STONE)) && this.addon.getGenerator().isReplacementGenerated(eventSourceBlock, true)) {
                 // sound when lava transforms to cobble
                 this.playEffects(eventSourceBlock);
             }
