@@ -367,6 +367,27 @@ public class GeneratorTierObject implements DataObject
 	}
 
 
+	/**
+	 * Method GeneratorTierObject#getPriority returns the priority of this object.
+	 *
+	 * @return the priority (type int) of this object.
+	 */
+	public int getPriority()
+	{
+		return priority;
+	}
+
+
+	/**
+	 * Method GeneratorTierObject#setPriority sets new value for the priority of this object.
+	 * @param priority new value for this object.
+	 *
+	 */
+	public void setPriority(int priority)
+	{
+		this.priority = priority;
+	}
+
 // ---------------------------------------------------------------------
 // Section: Enums
 // ---------------------------------------------------------------------
@@ -428,6 +449,11 @@ public class GeneratorTierObject implements DataObject
 	@Expose
 	private boolean defaultGenerator = false;
 
+	/**
+	 * Stores generator priority. Larger priority means generator will be used over other generators.
+	 */
+	@Expose
+	private int priority = 0;
 
 	// Requirements for unlocking.
 
