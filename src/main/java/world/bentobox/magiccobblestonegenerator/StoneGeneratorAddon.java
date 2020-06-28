@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.bukkit.Material;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
+import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.flags.Flag;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.level.Level;
@@ -31,7 +32,7 @@ public class StoneGeneratorAddon extends Addon
 //		// Save default config.yml
         this.saveDefaultConfig();
         // Load Addon Settings
-        this.settings = new Settings(this);
+        this.settings = new Config<>(this, Settings.class).loadConfigObject();
     }
 
 
@@ -121,9 +122,6 @@ public class StoneGeneratorAddon extends Addon
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
-
-            // Register placeholders
-            this.registerPlaceholders();
         }
         else
         {
@@ -168,10 +166,23 @@ public class StoneGeneratorAddon extends Addon
     {
         super.onReload();
 
-        if (this.hooked)
+        this.settings = new Config<>(this, Settings.class).loadConfigObject();
+
+        if (this.settings == null)
         {
-            this.settings = new Settings(this);
-            this.getLogger().info("Magic Cobblestone Generator addon reloaded.");
+            // If we failed to load Settings then we should not enable addon.
+            // We can log error and set state to DISABLED.
+
+            this.logError("MagicCobblestoneGenerator settings could not load! Addon disabled.");
+            this.setState(State.DISABLED);
+        }
+        else
+        {
+            if (this.hooked)
+            {
+                this.stoneGeneratorManager.reload();
+                this.getLogger().info("Magic Cobblestone Generator addon reloaded.");
+            }
         }
     }
 
