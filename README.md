@@ -2,11 +2,10 @@
 [![Discord](https://img.shields.io/discord/272499714048524288.svg?logo=discord)](https://discord.bentobox.world)
 [![Build Status](https://ci.codemc.org/buildStatus/icon?job=BentoBoxWorld/MagicCobblestoneGenerator)](https://ci.codemc.org/job/BentoBoxWorld/job/MagicCobblestoneGenerator/)
 
-Add-on for BentoBox to provide ability to generate any blocks in cobblestone generators for any BentoBox GameMode. 
+Add-on for BentoBox to provide ability to generate additional block types in cobblestone generators for any BentoBox GameMode. For example, have diamond ore generated, or iron ore. It's magic!  
 
 ## Where to find
 
-Currently Magic Cobblestone Generator Addon is in **Alpha stage**, so it may or may not contain bugs... a lot of bugs. Also it means, that some features are not working or implemented. 
 You can download it from [Release tab](https://github.com/BentoBoxWorld/MagicCobblestoneGenerator/releases)
 
 Or you can try **nightly builds** where you can check and test new features that will be implemented in next release from [Jenkins Server](https://ci.codemc.org/job/BentoBoxWorld/job/MagicCobblestoneGenerator/lastStableBuild/).
