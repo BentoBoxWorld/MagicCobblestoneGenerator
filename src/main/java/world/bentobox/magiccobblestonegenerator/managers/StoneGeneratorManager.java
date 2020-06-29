@@ -4,6 +4,7 @@ package world.bentobox.magiccobblestonegenerator.managers;
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -353,6 +354,37 @@ public class StoneGeneratorManager
             filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Return first or null.
             findFirst().orElse(null);
+    }
+
+
+    /**
+     * This method returns all generator tiers for given world.
+     * @param world World which generators must be returned.
+     * @return List of generator tier objects for given world.
+     */
+    public List<GeneratorTierObject> getAllGeneratorTiers(World world)
+    {
+        String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
+            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+
+        if (gameMode.isEmpty())
+        {
+            // If not a gamemode world then return.
+            return Collections.emptyList();
+        }
+
+        // Find default generator from cache.
+        return this.generatorTierCache.values().stream().
+            // Filter generators that starts with name.
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            // Sort in order: default generators are first, followed by lowest priority,
+            // generator type and then by generator name.
+            sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
+                thenComparing(GeneratorTierObject::getPriority).
+                thenComparing(GeneratorTierObject::getGeneratorType).
+                thenComparing(GeneratorTierObject::getFriendlyName)).
+            // Return as list collection.
+            collect(Collectors.toList());
     }
 
 
