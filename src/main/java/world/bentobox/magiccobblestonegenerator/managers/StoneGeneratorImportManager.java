@@ -137,6 +137,8 @@ public class StoneGeneratorImportManager
 				generatorTier.setDefaultGenerator(details.getBoolean("default", false));
 				// Set priority
 				generatorTier.setPriority(details.getInt("priority", 1));
+				// Set activation cost
+				generatorTier.setActivationCost(details.getDouble("activation-cost", 0.0));
 
 				// Search and read requirements only if it is not default generator.
 				if (!generatorTier.isDefaultGenerator())
@@ -178,7 +180,7 @@ public class StoneGeneratorImportManager
 				collect(Collectors.toSet());
 
 			generatorTier.setRequiredBiomes(biomeSet);
-			generatorTier.setGeneratorTierCost(requirements.getDouble("upgrade-cost", 0.0));
+			generatorTier.setGeneratorTierCost(requirements.getDouble("purchase-cost", 0.0));
 		}
 	}
 

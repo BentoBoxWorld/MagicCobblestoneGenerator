@@ -16,6 +16,9 @@ tiers:
     # Indicates that generator is used as default.
     # Requirements will be ignored.
     default: true
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -54,14 +57,17 @@ tiers:
     priority: 1
     # There are several requirements that can be defined here.
     requirements:
-      # Can define minimal island level for generator to work.
+      # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 10
       # List of required permissions for users to select this generator.
       required-permissions: []
       # List of required biomes for generator to work.
       required-biomes: []
-      # Cost for activating current generator.
-      upgrade-cost: 5.0
+      # Cost for activating current generator. Requires Upgrades Addon.
+      purchase-cost: : 5.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -101,10 +107,13 @@ tiers:
     priority: 2
     # There are several requirements that can be defined here.
     requirements:
-      # Can define minimal island level for generator to work.
+      # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 100
-      # Cost for activating current generator.
-      upgrade-cost: 10.0
+      # Cost for activating current generator. Requires Upgrades Addon.
+      purchase-cost: : 10.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -147,10 +156,13 @@ tiers:
     priority: 2
     # There are several requirements that can be defined here.
     requirements:
-      # Can define minimal island level for generator to work.
+      # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 500
-      # Cost for activating current generator.
-      upgrade-cost: 50.0
+      # Cost for activating current generator. Requires Upgrades Addon.
+      purchase-cost: : 50.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -194,10 +206,13 @@ tiers:
     priority: 2
     # There are several requirements that can be defined here.
     requirements:
-      # Can define minimal island level for generator to work.
+      # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 1000
-      # Cost for activating current generator.
-      upgrade-cost: 100.0
+      # Cost for activating current generator. Requires Upgrades Addon.
+      purchase-cost: : 100.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -244,10 +259,13 @@ tiers:
     priority: 2
     # There are several requirements that can be defined here.
     requirements:
-      # Can define minimal island level for generator to work.
+      # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 5000
-      # Cost for activating current generator.
-      upgrade-cost: 500.0
+      # Cost for activating current generator. Requires Upgrades Addon.
+      purchase-cost: : 500.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -295,10 +313,13 @@ tiers:
     priority: 2
     # There are several requirements that can be defined here.
     requirements:
-      # Can define minimal island level for generator to work.
+      # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 10000
-      # Cost for activating current generator.
-      upgrade-cost: 1000.0
+      # Cost for activating current generator. Requires Upgrades Addon.
+      purchase-cost: : 1000.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -351,6 +372,9 @@ tiers:
     # Requirements will be ignored.
     # Each type allows exactly one default template.
     default: true
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
@@ -388,6 +412,9 @@ tiers:
     # Requirements will be ignored.
     # Each type allows exactly one default template.
     default: true
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.

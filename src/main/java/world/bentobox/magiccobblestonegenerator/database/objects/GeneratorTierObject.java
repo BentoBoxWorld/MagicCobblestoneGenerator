@@ -389,6 +389,27 @@ public class GeneratorTierObject implements DataObject
 		this.priority = priority;
 	}
 
+
+	/**
+	 * This method returns the activationCost value.
+	 * @return the value of activationCost.
+	 */
+	public double getActivationCost()
+	{
+		return activationCost;
+	}
+
+
+	/**
+	 * This method sets the activationCost value.
+	 * @param activationCost the activationCost new value.
+	 *
+	 */
+	public void setActivationCost(double activationCost)
+	{
+		this.activationCost = activationCost;
+	}
+
 // ---------------------------------------------------------------------
 // Section: Enums
 // ---------------------------------------------------------------------
@@ -481,6 +502,12 @@ public class GeneratorTierObject implements DataObject
 	 */
 	@Expose
 	private double generatorTierCost = 0.0;
+
+	/**
+	 * Cost to do activate current generator.
+	 */
+	@Expose
+	private double activationCost = 0.0;
 
 	/**
 	 * Ability to disable generator tier for everyone.
