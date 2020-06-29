@@ -90,11 +90,11 @@ public class StoneGeneratorImportManager
 			return false;
 		}
 
-		this.addon.getManager().wipeGameModeGenerators(optional);
+		this.addon.getAddonManager().wipeGameModeGenerators(optional);
 		this.createGenerators(config, user, optional.get());
 
 		// Load everything from database
-		this.addon.getManager().load();
+		this.addon.getAddonManager().load();
 
 		return true;
 	}
@@ -153,7 +153,7 @@ public class StoneGeneratorImportManager
 			}
 
 			// Save object in database.
-			this.addon.getManager().saveGeneratorTier(generatorTier);
+			this.addon.getAddonManager().saveGeneratorTier(generatorTier);
 		}
 
 		user.sendMessage("stonegenerator.messages.import-count",

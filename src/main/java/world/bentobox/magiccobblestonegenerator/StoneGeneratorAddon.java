@@ -154,7 +154,7 @@ public class StoneGeneratorAddon extends Addon
         if (this.hooked)
         {
             // Save database on disable.
-            this.getManager().save();
+            this.getAddonManager().save();
         }
     }
 
@@ -220,7 +220,7 @@ public class StoneGeneratorAddon extends Addon
      *
      * @return Stone Generator Manager
      */
-    public StoneGeneratorManager getManager()
+    public StoneGeneratorManager getAddonManager()
     {
         return this.stoneGeneratorManager;
     }

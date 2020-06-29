@@ -35,7 +35,7 @@ public class MagicGenerator
      */
     public boolean isCobblestoneReplacementGenerated(Block block)
     {
-        GeneratorTierObject generatorTier = this.addon.getManager().getGeneratorTier(
+        GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
             block.getLocation(),
             GeneratorTierObject.GeneratorType.COBBLESTONE);
 
@@ -50,7 +50,7 @@ public class MagicGenerator
      */
     public boolean isStoneReplacementGenerated(Block block)
     {
-        GeneratorTierObject generatorTier = this.addon.getManager().getGeneratorTier(
+        GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
             block.getLocation(),
             GeneratorTierObject.GeneratorType.STONE);
 
@@ -65,7 +65,7 @@ public class MagicGenerator
      */
     public boolean isBasaltReplacementGenerated(Block block)
     {
-        GeneratorTierObject generatorTier = this.addon.getManager().getGeneratorTier(
+        GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
             block.getLocation(),
             GeneratorTierObject.GeneratorType.BASALT);
 
