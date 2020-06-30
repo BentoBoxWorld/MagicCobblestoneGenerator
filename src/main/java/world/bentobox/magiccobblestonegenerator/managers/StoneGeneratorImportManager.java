@@ -13,6 +13,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,11 +61,15 @@ public class StoneGeneratorImportManager
 	 * @param world - world to import into
 	 * @return true if successful
 	 */
-	public boolean importFile(User user, World world)
+	public boolean importFile(@Nullable User user, World world)
 	{
 		if (!this.generatorFile.exists())
 		{
-			user.sendMessage("stonegenerator.errors.no-file");
+			if (user != null)
+			{
+				user.sendMessage("stonegenerator.errors.no-file");
+			}
+
 			return false;
 		}
 
@@ -76,9 +81,17 @@ public class StoneGeneratorImportManager
 		}
 		catch (IOException | InvalidConfigurationException e)
 		{
-			user.sendMessage("stonegenerator.errors.no-load",
-				"[message]",
-				e.getMessage());
+			if (user != null)
+			{
+				user.sendMessage("stonegenerator.errors.no-load",
+					"[message]",
+					e.getMessage());
+			}
+			else
+			{
+				this.addon.logError("Exception when loading file. " + e.getMessage());
+			}
+
 			return false;
 		}
 
@@ -86,7 +99,15 @@ public class StoneGeneratorImportManager
 
 		if (!optional.isPresent())
 		{
-			user.sendMessage("stonegenerator.errors.not-a-gamemode-world");
+			if (user != null)
+			{
+				user.sendMessage("stonegenerator.errors.not-a-gamemode-world");
+			}
+			else
+			{
+				this.addon.logWarning("Given world is not a gamemode world.");
+			}
+
 			return false;
 		}
 
@@ -106,7 +127,7 @@ public class StoneGeneratorImportManager
 	 * @param user User who calls reading.
 	 * @param gameMode GameMode in which generator tiers must be imported
 	 */
-	private void createGenerators(YamlConfiguration config, User user, GameModeAddon gameMode)
+	private void createGenerators(YamlConfiguration config, @Nullable User user, GameModeAddon gameMode)
 	{
 		final String name = gameMode.getDescription().getName().toLowerCase();
 
@@ -156,9 +177,16 @@ public class StoneGeneratorImportManager
 			this.addon.getAddonManager().saveGeneratorTier(generatorTier);
 		}
 
-		user.sendMessage("stonegenerator.messages.import-count",
-			TextVariables.NUMBER,
-			String.valueOf(size));
+		if (user != null)
+		{
+			user.sendMessage("stonegenerator.messages.import-count",
+				TextVariables.NUMBER,
+				String.valueOf(size));
+		}
+		else
+		{
+			this.addon.log("Imported " + size + " generator tiers into database.");
+		}
 	}
 
 

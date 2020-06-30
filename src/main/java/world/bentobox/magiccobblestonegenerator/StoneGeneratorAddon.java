@@ -12,8 +12,11 @@ import world.bentobox.bentobox.api.flags.clicklisteners.CycleClick;
 import world.bentobox.bentobox.hooks.VaultHook;
 import world.bentobox.bentobox.managers.RanksManager;
 import world.bentobox.level.Level;
+import world.bentobox.magiccobblestonegenerator.commands.admin.GeneratorAdminCommand;
+import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
+import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 import world.bentobox.upgrades.UpgradesAddon;
@@ -53,6 +56,9 @@ public class StoneGeneratorAddon extends Addon
             return;
         }
 
+        // Init new import manager.
+        this.stoneGeneratorImportManager = new StoneGeneratorImportManager(this);
+
         // Init new Generator Manager
         this.stoneGeneratorManager = new StoneGeneratorManager(this);
 
@@ -79,6 +85,18 @@ public class StoneGeneratorAddon extends Addon
 
                     MAGIC_COBBLESTONE_GENERATOR.addGameModeAddon(gameMode);
                     MAGIC_COBBLESTONE_GENERATOR_PERMISSION.addGameModeAddon(gameMode);
+
+                    // Hook commands
+                    gameMode.getPlayerCommand().ifPresent(playerCommand ->
+                        new GeneratorPlayerCommand(this, playerCommand));
+                    gameMode.getAdminCommand().ifPresent(adminCommand ->
+                        new GeneratorAdminCommand(this, adminCommand));
+
+                    // if gamemode does not have any data, load them from template.
+                    if (this.stoneGeneratorManager.getAllGeneratorTiers(gameMode.getOverWorld()).isEmpty())
+                    {
+                        this.stoneGeneratorImportManager.importFile(null, gameMode.getOverWorld());
+                    }
 
                     this.hooked = true;
                 }
@@ -245,6 +263,17 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
+     * This method returns stone import manager.
+     *
+     * @return Stone Generator Import Manager
+     */
+    public StoneGeneratorImportManager getImportManager()
+    {
+        return this.stoneGeneratorImportManager;
+    }
+
+
+    /**
      * This method returns the levelAddon object.
      *
      * @return the levelAddon object.
@@ -327,6 +356,11 @@ public class StoneGeneratorAddon extends Addon
      * Variable holds Stone Generator Manager object.
      */
     private StoneGeneratorManager stoneGeneratorManager;
+
+    /**
+     * Variable holds Stone Generator Manager object.
+     */
+    private StoneGeneratorImportManager stoneGeneratorImportManager;
 
     /**
      * Variable holds MagicGenerator object.
