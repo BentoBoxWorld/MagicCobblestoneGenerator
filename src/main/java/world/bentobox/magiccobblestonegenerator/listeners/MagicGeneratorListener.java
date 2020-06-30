@@ -84,8 +84,8 @@ public class MagicGeneratorListener extends GeneratorListener
         }
 
         if (this.addon.getIslands().getIslandAt(eventToBlock.getLocation()).
-            map(island -> !island.isAllowed(this.addon.getMagicFlag())).
-            orElse(!this.addon.getMagicFlag().isSetForWorld(eventToBlock.getWorld())))
+            map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
+            orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventToBlock.getWorld())))
         {
             // if flag is toggled off, return
             return;
