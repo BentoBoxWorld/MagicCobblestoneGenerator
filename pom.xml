@@ -38,6 +38,7 @@
         <spigot.version>1.16.1-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.14.0-SNAPSHOT</bentobox.version>
         <level.version>1.6.0</level.version>
+        <upgrades.version>0.2.0-SNAPSHOT</upgrades.version>
         <vault.version>68f14ec</vault.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
@@ -172,6 +173,12 @@
             <groupId>world.bentobox</groupId>
             <artifactId>level</artifactId>
             <version>${level.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>world.bentobox</groupId>
+            <artifactId>upgrades</artifactId>
+            <version>${upgrades.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

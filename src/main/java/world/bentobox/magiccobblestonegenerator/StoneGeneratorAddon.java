@@ -16,6 +16,7 @@ import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
+import world.bentobox.upgrades.UpgradesAddon;
 
 
 /**
@@ -93,13 +94,29 @@ public class StoneGeneratorAddon extends Addon
 
             if (!level.isPresent())
             {
-                this.logWarning("Level add-on not found so Magic Cobblestone Generator will not work correctly!");
+                this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
                 this.levelAddon = null;
             }
             else
             {
                 this.levelAddon = (Level) level.get();
             }
+
+            // Find upgrades addon
+
+            Optional<Addon> upgrades = this.getAddonByName("Upgrades");
+
+            if (!upgrades.isPresent())
+            {
+                this.logWarning("Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
+                this.upgradesAddon = null;
+            }
+            else
+            {
+                this.upgradesAddon = (UpgradesAddon) upgrades.get();
+            }
+
+            // Find vault plugin
 
             Optional<VaultHook> vault = this.getPlugin().getVault();
 
@@ -249,6 +266,49 @@ public class StoneGeneratorAddon extends Addon
     }
 
 
+    /**
+     * This method returns the vaultHook is provided.
+     *
+     * @return the vaultHook object exists.
+     */
+    public boolean isVaultProvided()
+    {
+        return vaultHook != null && vaultHook.hook();
+    }
+
+
+    /**
+     * This method adds access to vaulthook.
+     * @return VaultHook.
+     */
+    public VaultHook getVaultHook()
+    {
+        return vaultHook;
+    }
+
+
+    /**
+     * This method returns the upgradesAddon object.
+     *
+     * @return the upgradesAddon object.
+     */
+    public UpgradesAddon getUpgradesAddon()
+    {
+        return this.upgradesAddon;
+    }
+
+
+    /**
+     * This method returns the upgradesAddon object.
+     *
+     * @return the upgradesAddon object exists.
+     */
+    public boolean isUpgradesProvided()
+    {
+        return upgradesAddon != null;
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
@@ -283,6 +343,10 @@ public class StoneGeneratorAddon extends Addon
      */
     private Level levelAddon;
 
+    /**
+     * Upgrades addon.
+     */
+    private UpgradesAddon upgradesAddon;
 
     // ---------------------------------------------------------------------
     // Section: Flags
