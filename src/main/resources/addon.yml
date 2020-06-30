@@ -7,10 +7,9 @@ metrics: true
 icon: COBBLESTONE
 
 authors:
-  - ShakeforProtein
   - BONNe
 
-softdepend: AcidIsland, BSkyBlock, CaveBlock, SkyGrid, Level
+softdepend: AcidIsland, AOneBlock, BSkyBlock, CaveBlock, SkyGrid, Level, Upgrades
 
 permissions:
   '[gamemode].stonegenerator':
