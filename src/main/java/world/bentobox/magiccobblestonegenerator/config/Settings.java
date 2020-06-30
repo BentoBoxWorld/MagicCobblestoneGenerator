@@ -170,14 +170,14 @@ public class Settings implements ConfigObject
     @ConfigComment("")
     @ConfigComment("The range in blocks that an island member has to be in to make the generator generate `magic` blocks.")
     @ConfigComment("0 or less will mean that no range is checked.")
-    @ConfigComment("Can be changed with a permission `[gamemode].stonegenerator.max-range.[number]`.")
+    @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.max-range.[number]`.")
     @ConfigEntry(path = "working-range")
     private int workingRange = 0;
 
     @ConfigComment("")
     @ConfigComment("This allows to define how many generators can be activated at once per each island.")
     @ConfigComment("0 or less will mean that only default generator can be used for island.")
-    @ConfigComment("Can be changed with a permission `[gamemode].stonegenerator.active-generators.[number]`.")
+    @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.")
     @ConfigEntry(path = "default-active-generators")
     private int defaultActiveGeneratorCount = 3;
 

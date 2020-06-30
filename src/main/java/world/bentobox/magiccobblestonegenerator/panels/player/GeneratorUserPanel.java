@@ -4,12 +4,14 @@ package world.bentobox.magiccobblestonegenerator.panels.player;
 import org.bukkit.Material;
 import org.bukkit.World;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
@@ -38,6 +40,10 @@ public class GeneratorUserPanel
 		this.manager = this.addon.getAddonManager();
 		this.world = world;
 		this.user = user;
+
+		// Get valid user island data
+		this.generatorData = this.manager.validateIslandData(
+			this.addon.getIslands().getIsland(world, user));
 
 		// Store generators in local list to avoid building it every time.
 		this.generatorList = this.manager.getAllGeneratorTiers(world);
@@ -76,6 +82,12 @@ public class GeneratorUserPanel
 		if (this.generatorList.isEmpty())
 		{
 			this.user.sendMessage("stonegenerator.error.no-generators-found");
+			return;
+		}
+
+		if (this.generatorData == null)
+		{
+			this.user.sendMessage("general.errors.no-island");
 			return;
 		}
 
@@ -163,6 +175,28 @@ public class GeneratorUserPanel
 				material = Material.GREEN_STAINED_GLASS_PANE;
 				break;
 			}
+			case PREVIOUS:
+			{
+				clickHandler = (panel, user, clickType, i) -> {
+					this.pageIndex--;
+					this.build();
+					return true;
+				};
+
+				material = Material.ARROW;
+				break;
+			}
+			case NEXT:
+			{
+				clickHandler = (panel, user, clickType, i) -> {
+					this.pageIndex++;
+					this.build();
+					return true;
+				};
+
+				material = Material.ARROW;
+				break;
+			}
 		}
 
 		return new PanelItemBuilder().
@@ -186,13 +220,49 @@ public class GeneratorUserPanel
 
 		final int correctPage;
 
-		// TODO: implement filters.
+		List<GeneratorTierObject> filteredList;
+
+		switch (this.activeFilterButton)
+		{
+			case SHOW_COBBLESTONE:
+				filteredList = this.generatorList.stream().
+					filter(generatorTier ->
+						generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.COBBLESTONE)).
+					collect(Collectors.toList());
+				break;
+			case SHOW_STONE:
+				filteredList = this.generatorList.stream().
+					filter(generatorTier ->
+						generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.STONE)).
+					collect(Collectors.toList());
+				break;
+			case SHOW_BASALT:
+				filteredList = this.generatorList.stream().
+					filter(generatorTier ->
+						generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT)).
+					collect(Collectors.toList());
+				break;
+			case TOGGLE_VISIBILITY:
+				filteredList = this.generatorList.stream().
+					filter(generatorTier ->
+						this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
+					collect(Collectors.toList());
+				break;
+			case SHOW_ACTIVE:
+				filteredList = this.generatorList.stream().
+					filter(generatorTier ->
+						this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
+					collect(Collectors.toList());
+				break;
+			default:
+				filteredList = this.generatorList;
+		}
 
 		if (this.pageIndex < 0)
 		{
-			correctPage = this.generatorList.size() / MAX_ELEMENTS;
+			correctPage = filteredList.size() / MAX_ELEMENTS;
 		}
-		else if (this.pageIndex > (this.generatorList.size() / MAX_ELEMENTS))
+		else if (this.pageIndex > (filteredList.size() / MAX_ELEMENTS))
 		{
 			correctPage = 0;
 		}
@@ -201,7 +271,7 @@ public class GeneratorUserPanel
 			correctPage = this.pageIndex;
 		}
 
-		if (this.generatorList.size() > MAX_ELEMENTS)
+		if (filteredList.size() > MAX_ELEMENTS)
 		{
 			// Navigation buttons if necessary
 
@@ -215,13 +285,13 @@ public class GeneratorUserPanel
 		int index = 10;
 
 		while (generatorIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
-			generatorIndex < this.generatorList.size() &&
+			generatorIndex < filteredList.size() &&
 			index < 36)
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
 				panelBuilder.item(index,
-					this.createGeneratorButton(this.generatorList.get(generatorIndex++)));
+					this.createGeneratorButton(filteredList.get(generatorIndex++)));
 			}
 
 			index++;
@@ -302,6 +372,11 @@ public class GeneratorUserPanel
 	 * This variable holds user who opens panel. Without it panel cannot be opened.
 	 */
 	private final User user;
+
+	/**
+	 * This variable holds user's island generator data.
+	 */
+	private final GeneratorDataObject generatorData;
 
 	/**
 	 * This variable stores all generator tiers in the given world.

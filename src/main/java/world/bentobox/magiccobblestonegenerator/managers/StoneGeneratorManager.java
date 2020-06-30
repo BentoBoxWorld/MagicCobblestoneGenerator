@@ -17,6 +17,7 @@ import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -195,49 +196,6 @@ public class StoneGeneratorManager
 
 
     /**
-     * Load island from database into the cache or create new island data
-     *
-     * @param uniqueID - uniqueID to add
-     */
-    private void addIslandData(@NotNull String uniqueID)
-    {
-        if (this.generatorDataCache.containsKey(uniqueID))
-        {
-            return;
-        }
-
-        // The island is not in the cache
-        // Check if the island exists in the database
-
-        if (this.generatorDataDatabase.objectExists(uniqueID))
-        {
-            // Load player from database
-            GeneratorDataObject data = this.generatorDataDatabase.loadObject(uniqueID);
-            // Store in cache
-
-            if (data != null)
-            {
-                this.generatorDataCache.put(uniqueID, data);
-            }
-            else
-            {
-                this.addon.logError("Could not load NULL generator data object.");
-            }
-        }
-        else
-        {
-            // Create the island data
-            GeneratorDataObject pd = new GeneratorDataObject();
-            pd.setUniqueId(uniqueID);
-
-            this.saveGeneratorData(pd);
-            // Add to cache
-            this.generatorDataCache.put(uniqueID, pd);
-        }
-    }
-
-
-    /**
      * This method removes from cache and database every generator that is related to
      * given gamemode.
      * @param optional GameMode addon which generators must be removed.
@@ -290,37 +248,39 @@ public class StoneGeneratorManager
         this.addIslandData(optionalIsland.get().getUniqueId());
         GeneratorDataObject data = this.generatorDataCache.get(optionalIsland.get().getUniqueId());
 
-        GeneratorTierObject generatorTier;
+        // Gets biome from location.
+        final Biome biome = location.getWorld().getBiome(location.getBlockX(),
+            location.getBlockY(),
+            location.getBlockZ());
 
-        if (data.getActiveGeneratorList().isEmpty())
-        {
-            generatorTier = this.findDefaultGeneratorTier(location.getWorld(), generatorType);
-        }
-        else
-        {
-            // Gets biome from location.
-            final Biome biome = location.getWorld().getBiome(location.getBlockX(),
-                location.getBlockY(),
-                location.getBlockZ());
+        // Find generator from active generator list.
+        Optional<GeneratorTierObject> optionalGenerator =
+            data.getActiveGeneratorList().stream().
+                // Map active generator id to actual object.
+                map(name -> this.generatorTierCache.getOrDefault(name, null)).
+                // Filter out null objects. Just in case.
+                filter(Objects::nonNull).
+                // Filter objects with the same generator type.
+                filter(generator -> generator.getGeneratorType().equals(generatorType)).
+                // Filter out objects with incorrect biomes.
+                filter(generator -> generator.getRequiredBiomes().isEmpty() ||
+                    generator.getRequiredBiomes().contains(biome)).
+                // Get a generator that has largest priority and has required biome
+                max((o1, o2) -> {
+                    boolean o1HasBiome = o1.getRequiredBiomes().contains(biome);
+                    boolean o2HasBiome = o2.getRequiredBiomes().contains(biome);
 
-            Optional<GeneratorTierObject> optionalGenerator =
-                data.getActiveGeneratorList().stream().
-                    // Map active generator id to actual object.
-                    map(name -> this.generatorTierCache.getOrDefault(name, null)).
-                    // Filter out null objects. Just in case.
-                    filter(Objects::nonNull).
-                    // Filter objects with the same generator type.
-                    filter(generator -> generator.getGeneratorType().equals(generatorType)).
-                    // Filter objects with required biome.
-                    filter(generator -> generator.getRequiredBiomes().contains(biome)).
-                    // Get last value from list. Most important goes.
-                    max(Comparator.comparing(GeneratorTierObject::getPriority));
+                    if (o1HasBiome != o2HasBiome)
+                    {
+                        return Boolean.compare(o1HasBiome, o2HasBiome);
+                    }
+                    else
+                    {
+                        return Integer.compare(o1.getPriority(), o2.getPriority());
+                    }
+                });
 
-            generatorTier = optionalGenerator.orElseGet(() ->
-                this.findDefaultGeneratorTier(location.getWorld(), generatorType));
-        }
-
-        return generatorTier;
+        return optionalGenerator.orElse(null);
     }
 
 
@@ -389,6 +349,149 @@ public class StoneGeneratorManager
 
 
     // ---------------------------------------------------------------------
+    // Section: Generator Island Data
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * Load island from database into the cache or create new island data
+     *
+     * @param uniqueID - uniqueID to add
+     */
+    private void addIslandData(@NotNull String uniqueID)
+    {
+        if (this.generatorDataCache.containsKey(uniqueID))
+        {
+            return;
+        }
+
+        // The island is not in the cache
+        // Check if the island exists in the database
+
+        if (this.generatorDataDatabase.objectExists(uniqueID))
+        {
+            // Load player from database
+            GeneratorDataObject data = this.generatorDataDatabase.loadObject(uniqueID);
+            // Store in cache
+
+            if (data != null)
+            {
+                this.generatorDataCache.put(uniqueID, data);
+            }
+            else
+            {
+                this.addon.logError("Could not load NULL generator data object.");
+            }
+        }
+        else
+        {
+            // Create the island data
+            GeneratorDataObject pd = new GeneratorDataObject();
+            pd.setUniqueId(uniqueID);
+
+            this.saveGeneratorData(pd);
+            // Add to cache
+            this.generatorDataCache.put(uniqueID, pd);
+        }
+    }
+
+
+    /**
+     * This method adds, validates and returns island generator data for given island.
+     * @param island Island which data must be returned.
+     * @return GeneratorDataObject or null if failed to create.
+     */
+    public @Nullable GeneratorDataObject validateIslandData(@Nullable Island island)
+    {
+        if (island == null || island.getOwner() == null)
+        {
+            return null;
+        }
+
+        this.addIslandData(island.getUniqueId());
+        GeneratorDataObject dataObject = this.generatorDataCache.get(island.getUniqueId());
+
+        if (dataObject == null)
+        {
+            return null;
+        }
+
+        // Validate data in generator object.
+
+        // Remove generators which island does not qualifies anymore.
+        dataObject.getUnlockedTiers().clear();
+
+        this.getAllGeneratorTiers(island.getWorld()).forEach(generatorTier -> {
+            if (generatorTier.isDefaultGenerator() ||
+                dataObject.getPurchasedTiers().contains(generatorTier.getUniqueId()))
+            {
+                // All purchased and default tiers are available.
+                dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
+            }
+            else if (generatorTier.getRequiredMinIslandLevel() <= this.getIslandLevel(island))
+            {
+                // Add only if user has all required permissions.
+                if (generatorTier.getRequiredPermissions().isEmpty() ||
+                    generatorTier.getRequiredPermissions().stream().allMatch(permission ->
+                        User.getInstance(island.getOwner()).hasPermission(permission)))
+                {
+                    dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
+                }
+            }
+        });
+
+        // Remove locked generators from active list.
+        dataObject.getActiveGeneratorList().removeIf(generator ->
+            !dataObject.getUnlockedTiers().contains(generator));
+
+        // Update max active generator count.
+        int permissionSize = Utils.getPermissionValue(User.getInstance(island.getOwner()),
+            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.active-generators"),
+            this.addon.getSettings().getDefaultActiveGeneratorCount());
+
+        dataObject.setMaxGeneratorCount(Math.max(permissionSize,
+            dataObject.getPurchasedActiveGeneratorCount()));
+
+        if (dataObject.getMaxGeneratorCount() < dataObject.getActiveGeneratorList().size())
+        {
+            // There are more active generators then allowed.
+            // Start to remove from first element.
+
+            while (dataObject.getActiveGeneratorList().size() != dataObject.getMaxGeneratorCount())
+            {
+                dataObject.getActiveGeneratorList().iterator().remove();
+            }
+        }
+
+        // Update max island generation range.
+        int permissionRange = Utils.getPermissionValue(User.getInstance(island.getOwner()),
+            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.max-range"),
+            this.addon.getSettings().getWorkingRange());
+
+        dataObject.setWorkingRange(permissionRange);
+
+        return dataObject;
+    }
+
+
+    /**
+     * This method allows to get generator data for given island.
+     * @param island Island which data must be returned.
+     * @return instance of GeneratorDataObject.
+     */
+    public @Nullable GeneratorDataObject getGeneratorData(@Nullable Island island)
+    {
+        if (island == null)
+        {
+            return null;
+        }
+
+        this.addIslandData(island.getUniqueId());
+        return this.generatorDataCache.get(island.getUniqueId());
+    }
+
+
+    // ---------------------------------------------------------------------
     // Section: Methods
     // ---------------------------------------------------------------------
 
@@ -434,22 +537,20 @@ public class StoneGeneratorManager
 
 
     /**
-     * This method returns long that represents island level in given location.
-     * @param location Location of the island.
+     * This method returns long that represents given island level.
+     * @param island the island.
      * @return Island level
      */
-    public long getIslandLevel(Location location)
+    public long getIslandLevel(Island island)
     {
         if (!this.addon.isLevelProvided())
         {
-            // No level addon. Return 0.
-            return 0L;
+            // No level addon. Return max value.
+            return Long.MAX_VALUE;
         }
 
-        Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
-
-        return optionalIsland.map(island ->
-            this.addon.getLevelAddon().getIslandLevel(location.getWorld(), island.getOwner())).orElse(0L);
+        return this.addon.getLevelAddon().getIslandLevel(island.getWorld(),
+            island.getOwner());
     }
 
 
