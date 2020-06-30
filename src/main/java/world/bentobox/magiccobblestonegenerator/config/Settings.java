@@ -164,7 +164,7 @@ public class Settings implements ConfigObject
     @ConfigComment("If physics should be used when placing a block.")
     @ConfigComment("Using physics allow certain redstone machines to work,")
     @ConfigComment("but might have unwanted side effectsAllows to block addon to generate blocks if all island members are offline.")
-    @ConfigEntry(path = "use-physic")
+    @ConfigEntry(path = "use-physic", needsRestart = true)
     private boolean usePhysics = true;
 
     @ConfigComment("")
@@ -186,6 +186,6 @@ public class Settings implements ConfigObject
     @ConfigComment("To disable addon it is necessary to write its name in new line that starts with -. Example:")
     @ConfigComment("disabled-gamemodes:")
     @ConfigComment(" - BSkyBlock")
-    @ConfigEntry(path = "disabled-gamemodes")
+    @ConfigEntry(path = "disabled-gamemodes", needsRestart = true)
     private Set<String> disabledGameModes = new HashSet<>();
 }
