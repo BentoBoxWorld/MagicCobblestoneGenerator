@@ -101,6 +101,89 @@ public class GeneratorDataObject implements DataObject
 	}
 
 
+	/**
+	 * This method returns the maxGeneratorCount value.
+	 * @return the value of maxGeneratorCount.
+	 */
+	public int getMaxGeneratorCount()
+	{
+		return maxGeneratorCount;
+	}
+
+
+	/**
+	 * This method sets the maxGeneratorCount value.
+	 * @param maxGeneratorCount the maxGeneratorCount new value.
+	 *
+	 */
+	public void setMaxGeneratorCount(int maxGeneratorCount)
+	{
+		this.maxGeneratorCount = maxGeneratorCount;
+	}
+
+
+	/**
+	 * This method returns the purchasedTiers value.
+	 * @return the value of purchasedTiers.
+	 */
+	public Set<String> getPurchasedTiers()
+	{
+		return purchasedTiers;
+	}
+
+
+	/**
+	 * This method sets the purchasedTiers value.
+	 * @param purchasedTiers the purchasedTiers new value.
+	 *
+	 */
+	public void setPurchasedTiers(Set<String> purchasedTiers)
+	{
+		this.purchasedTiers = purchasedTiers;
+	}
+
+
+	/**
+	 * This method returns the purchasedActiveGeneratorCount value.
+	 * @return the value of purchasedActiveGeneratorCount.
+	 */
+	public int getPurchasedActiveGeneratorCount()
+	{
+		return purchasedActiveGeneratorCount;
+	}
+
+
+	/**
+	 * This method sets the purchasedGeneratorCount value.
+	 * @param purchasedActiveGeneratorCount the purchasedGeneratorCount new value.
+	 *
+	 */
+	public void setPurchasedActiveGeneratorCount(int purchasedActiveGeneratorCount)
+	{
+		this.purchasedActiveGeneratorCount = purchasedActiveGeneratorCount;
+	}
+
+	/**
+	 * This method sets the workingRange value.
+	 * @param workingRange the workingRange new value.
+	 *
+	 */
+	public void setWorkingRange(int workingRange)
+	{
+		this.workingRange = workingRange;
+	}
+
+
+	/**
+	 * This method returns the workingRange value.
+	 * @return the value of workingRange.
+	 */
+	public int getWorkingRange()
+	{
+		return workingRange;
+	}
+
+	
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -114,14 +197,37 @@ public class GeneratorDataObject implements DataObject
 
 	/**
 	 * Stores a names of unlocked generator tiers.
-	 * Mostly stores generators that are purchased via Upgrades API.
 	 */
 	@Expose
 	private Set<String> unlockedTiers = Collections.emptySet();
+
+	/**
+	 * Stores a names of unlocked purchased tiers.
+	 */
+	@Expose
+	private Set<String> purchasedTiers = Collections.emptySet();
 
 	/**
 	 * Stores currently active generator names.
 	 */
 	@Expose
 	private Set<String> activeGeneratorList = Collections.emptySet();
+
+	/**
+	 * Stores amount of maximal active generators at the same time.
+	 */
+	@Expose
+	private int maxGeneratorCount = 1;
+
+	/**
+	 * Stores amount of bought generators.
+	 */
+	@Expose
+	private int purchasedActiveGeneratorCount = 0;
+
+	/**
+	 * Stores working range for current data object.
+	 */
+	@Expose
+	private int workingRange;
 }
