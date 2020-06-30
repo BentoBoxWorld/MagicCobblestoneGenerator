@@ -62,8 +62,8 @@ public class VanillaGeneratorListener extends GeneratorListener
 
 		// if flag is toggled off, return
 		if (this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation()).
-			map(island -> !island.isAllowed(this.addon.getMagicFlag())).
-			orElse(!this.addon.getMagicFlag().isSetForWorld(eventSourceBlock.getWorld())))
+			map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
+			orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventSourceBlock.getWorld())))
 		{
 			return;
 		}

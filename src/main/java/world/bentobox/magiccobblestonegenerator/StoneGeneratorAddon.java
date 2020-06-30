@@ -8,7 +8,9 @@ import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.flags.Flag;
+import world.bentobox.bentobox.api.flags.clicklisteners.CycleClick;
 import world.bentobox.bentobox.hooks.VaultHook;
+import world.bentobox.bentobox.managers.RanksManager;
 import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
@@ -74,6 +76,9 @@ public class StoneGeneratorAddon extends Addon
                         this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
                     }
 
+                    MAGIC_COBBLESTONE_GENERATOR.addGameModeAddon(gameMode);
+                    MAGIC_COBBLESTONE_GENERATOR_PERMISSION.addGameModeAddon(gameMode);
+
                     this.hooked = true;
                 }
             });
@@ -114,12 +119,8 @@ public class StoneGeneratorAddon extends Addon
             //this.registerListener(new MagicGeneratorListener(this));
 
             // Register Flags
-            this.magicFlag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE).
-                type(Flag.Type.SETTING).
-                defaultSetting(true).
-                addon(this).
-                build();
-            this.getPlugin().getFlagsManager().registerFlag(magicFlag);
+            this.registerFlag(MAGIC_COBBLESTONE_GENERATOR);
+            this.registerFlag(MAGIC_COBBLESTONE_GENERATOR_PERMISSION);
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
@@ -248,18 +249,6 @@ public class StoneGeneratorAddon extends Addon
     }
 
 
-    /**
-     * Returns the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
-     *
-     * @return the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
-     * @since 1.9.0
-     */
-    public Flag getMagicFlag()
-    {
-        return magicFlag;
-    }
-
-
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
@@ -294,9 +283,38 @@ public class StoneGeneratorAddon extends Addon
      */
     private Level levelAddon;
 
+
+    // ---------------------------------------------------------------------
+    // Section: Flags
+    // ---------------------------------------------------------------------
+
+
     /**
-     * Flag that toggles on/off the Magic Cobblestone Generator.
-     * @since 1.9.0
+     * Settings flags allows to modifying parameters of the island.
+     *
+     * It can be modified by the players (island owner).
+     * This is usually an on/off setting.
+     *
+     * MAGIC_COBBLESTONE_GENERATOR should also be defined in language file under
+     * protection.flags section.
+     *
+     * By default setting is set to false.
      */
-    private Flag magicFlag;
+    public final static Flag MAGIC_COBBLESTONE_GENERATOR =
+        new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE).
+            type(Flag.Type.SETTING).
+            defaultSetting(true).
+            build();
+
+    /**
+     * This flag allows to change who have access to modify island generator tiers option.
+     * Owner can change it from member rank till owner rank.
+     * Default value is set to subowner.
+     */
+    public final static Flag MAGIC_COBBLESTONE_GENERATOR_PERMISSION =
+        new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR_PERMISSION", Material.DIAMOND_PICKAXE).
+            type(Flag.Type.PROTECTION).
+            defaultRank(RanksManager.SUB_OWNER_RANK).
+            clickHandler(new CycleClick("MCG_PERMISSIONS", RanksManager.MEMBER_RANK, RanksManager.OWNER_RANK)).
+            build();
 }
