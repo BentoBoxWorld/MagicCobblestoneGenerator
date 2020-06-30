@@ -10,6 +10,7 @@ import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -38,12 +39,12 @@ public class GeneratorUserPanel
 	{
 		this.addon = addon;
 		this.manager = this.addon.getAddonManager();
-		this.world = world;
+
 		this.user = user;
+		this.island = this.addon.getIslands().getIsland(world, user);
 
 		// Get valid user island data
-		this.generatorData = this.manager.validateIslandData(
-			this.addon.getIslands().getIsland(world, user));
+		this.generatorData = this.manager.validateIslandData(this.island);
 
 		// Store generators in local list to avoid building it every time.
 		this.generatorList = this.manager.getAllGeneratorTiers(world);
@@ -85,7 +86,7 @@ public class GeneratorUserPanel
 			return;
 		}
 
-		if (this.generatorData == null)
+		if (this.island == null || this.generatorData == null)
 		{
 			this.user.sendMessage("general.errors.no-island");
 			return;
@@ -299,10 +300,99 @@ public class GeneratorUserPanel
 	}
 
 
+	/**
+	 * This method creates button for generator tier.
+	 * @param generatorTier GeneratorTier which button must be created.
+	 * @return PanelItem for generator tier.
+	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		return null;
+		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+
+		List<String> description = generatorTier.getDescription();
+
+		if (glow)
+		{
+			// Add message about activation
+			description.add(this.user.getTranslation("stonegenerator.descriptions.generator-active"));
+		}
+		else if (this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
+		{
+			// Add message about activation cost
+
+			if (generatorTier.getActivationCost() > 0 && this.addon.isVaultProvided())
+			{
+				description.add(this.user.getTranslation("stonegenerator.descriptions.activation-cost",
+					"[cost]", String.valueOf(generatorTier.getActivationCost())));
+			}
+		}
+		else
+		{
+			description.add(this.user.getTranslation("stonegenerator.descriptions.locked"));
+
+			// Add missing permissions
+			if (!generatorTier.getRequiredPermissions().isEmpty())
+			{
+				description.add(this.user.getTranslation("stonegenerator.descriptions.required-permission"));
+
+				generatorTier.getRequiredPermissions().forEach(permission -> {
+					if (!this.user.hasPermission(permission))
+					{
+						description.add(this.user.getTranslation("stonegenerator.descriptions.has-not-permission",
+							"[permission]", permission));
+					}
+				});
+			}
+
+			// Add missing level
+			if (generatorTier.getRequiredMinIslandLevel() > this.manager.getIslandLevel(this.island))
+			{
+				description.add(this.user.getTranslation("stonegenerator.descriptions.required-level",
+					"[level]", String.valueOf(generatorTier.getRequiredMinIslandLevel())));
+			}
+
+			if (generatorTier.getGeneratorTierCost() > 0 &&
+				this.addon.isVaultProvided() &&
+				this.addon.isUpgradesProvided())
+			{
+				description.add(this.user.getTranslation("stonegenerator.descriptions.use-upgrades",
+					"[generator]", generatorTier.getFriendlyName(),
+					"[cost]", String.valueOf(generatorTier.getGeneratorTierCost())));
+			}
+		}
+
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
+			// Click handler should work only if user has a permission to change anything.
+			// Otherwise just to view.
+			if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+			{
+				if (glow)
+				{
+					this.manager.deactivateGenerator(user, this.generatorData, generatorTier);
+					// Rebuild whole gui.
+					this.build();
+				}
+				else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
+				{
+					this.manager.activateGenerator(user, this.generatorData, generatorTier);
+					// Build whole gui.
+					this.build();
+				}
+			}
+
+			// Always return true.
+			return true;
+		};
+
+		return new PanelItemBuilder().
+			name(generatorTier.getFriendlyName()).
+			description(description).
+			icon(generatorTier.getGeneratorIcon()).
+			clickHandler(clickHandler).
+			glow(glow).
+			build();
 	}
+
 
 	// ---------------------------------------------------------------------
 	// Section: Enums
@@ -364,14 +454,14 @@ public class GeneratorUserPanel
 	private final StoneGeneratorManager manager;
 
 	/**
-	 * This variable stores main world where GUI is targeted.
-	 */
-	private final World world;
-
-	/**
 	 * This variable holds user who opens panel. Without it panel cannot be opened.
 	 */
 	private final User user;
+
+	/**
+	 * This variable holds targeted island.
+	 */
+	private final Island island;
 
 	/**
 	 * This variable holds user's island generator data.

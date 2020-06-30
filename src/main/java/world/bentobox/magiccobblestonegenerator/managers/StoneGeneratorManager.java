@@ -491,6 +491,91 @@ public class StoneGeneratorManager
     }
 
 
+    /**
+     * This is just a wrapper method that allows to deactivate generator.
+     * @param user User who deactivates generator.
+     * @param generatorData Data which will be populated.
+     * @param generatorTier Generator that will be removed.
+     */
+    public void deactivateGenerator(@NotNull User user,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
+    {
+        user.sendMessage("stonegenerator.successful.generator-deactivated",
+            "[generator]", generatorTier.getFriendlyName());
+        generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
+    }
+
+
+    /**
+     * This method checks if given user can activate given generator tier.
+     * This method includes money withdraw, so it is assumed, that it is used as check
+     * before activating the generator tier.
+     * @param user User who will pay for activating.
+     * @param generatorData Data that stores island generators.
+     * @param generatorTier Generator tier that need to be activated.
+     * @return {@code true} if can activate, {@false} if cannot activate.
+     */
+    public boolean canActivateGenerator(@NotNull User user,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
+    {
+        if (generatorData.getActiveGeneratorList().size() >= generatorData.getMaxGeneratorCount())
+        {
+            // Too many generators.
+            user.sendMessage("stonegenerator.error.active-generators-reached");
+            return false;
+        }
+
+        if (!generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
+        {
+            // Generator is not unlocked. Return false.
+            user.sendMessage("stonegenerator.error.generator-not-unlocked");
+            return false;
+        }
+        else
+        {
+            if (this.addon.isVaultProvided() && generatorTier.getActivationCost() > 0)
+            {
+                // Return true only if user has enough money and its removal was successful.
+                if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()) &&
+                    this.addon.getVaultHook().withdraw(user,
+                        generatorTier.getActivationCost()).transactionSuccess())
+                {
+                    return true;
+                }
+                else
+                {
+                    user.sendMessage("stonegenerator.error.no-credits",
+                        "[value]", String.valueOf(generatorTier.getActivationCost()));
+                    return false;
+                }
+            }
+            else
+            {
+                // Vault is not enabled or cost is not set. Allow change.
+                return true;
+            }
+        }
+    }
+
+
+    /**
+     * This is just a wrapper method that allows to activate generator.
+     * @param user User who activates generator.
+     * @param generatorData Data which will be populated.
+     * @param generatorTier Generator that will be added.
+     */
+    public void activateGenerator(@NotNull User user,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
+    {
+        user.sendMessage("stonegenerator.successful.generator-activated",
+            "[generator]", generatorTier.getFriendlyName());
+        generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Methods
     // ---------------------------------------------------------------------
