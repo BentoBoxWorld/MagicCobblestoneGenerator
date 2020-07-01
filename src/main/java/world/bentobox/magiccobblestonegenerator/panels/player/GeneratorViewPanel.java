@@ -6,6 +6,8 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -238,7 +240,52 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private void populateBlocks(PanelBuilder panelBuilder)
 	{
-		// TODO: populate with blocks from generator tier.
+		final int MAX_ELEMENTS = 21;
+		final int correctPage;
+
+		List<Map.Entry<Double, Material>> materialChanceList =
+			this.generatorTier.getBlockChanceMap().entrySet().stream().
+				sorted().
+				collect(Collectors.toList());
+
+		if (this.pageIndex < 0)
+		{
+			correctPage = materialChanceList.size() / MAX_ELEMENTS;
+		}
+		else if (this.pageIndex > (materialChanceList.size() / MAX_ELEMENTS))
+		{
+			correctPage = 0;
+		}
+		else
+		{
+			correctPage = this.pageIndex;
+		}
+
+		if (materialChanceList.size() > MAX_ELEMENTS)
+		{
+			// Navigation buttons if necessary
+
+			panelBuilder.item(18, this.createButton(Action.PREVIOUS));
+			panelBuilder.item(26, this.createButton(Action.NEXT));
+		}
+
+		int materialIndex = MAX_ELEMENTS * correctPage;
+
+		// I want first row to be only for navigation and return button.
+		int index = 10;
+
+		while (materialIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
+			materialIndex < materialChanceList.size() &&
+			index < 36)
+		{
+			if (!panelBuilder.slotOccupied(index))
+			{
+				panelBuilder.item(index,
+					this.createMaterialButton(materialChanceList.get(materialIndex++)));
+			}
+
+			index++;
+		}
 	}
 
 
@@ -248,7 +295,52 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private void populateTreasures(PanelBuilder panelBuilder)
 	{
-		// TODO: populate with treasures from generator tier.
+		final int MAX_ELEMENTS = 21;
+		final int correctPage;
+
+		List<Map.Entry<Double, Material>> treasureChanceList =
+			this.generatorTier.getTreasureChanceMap().entrySet().stream().
+				sorted().
+				collect(Collectors.toList());
+
+		if (this.pageIndex < 0)
+		{
+			correctPage = treasureChanceList.size() / MAX_ELEMENTS;
+		}
+		else if (this.pageIndex > (treasureChanceList.size() / MAX_ELEMENTS))
+		{
+			correctPage = 0;
+		}
+		else
+		{
+			correctPage = this.pageIndex;
+		}
+
+		if (treasureChanceList.size() > MAX_ELEMENTS)
+		{
+			// Navigation buttons if necessary
+
+			panelBuilder.item(18, this.createButton(Action.PREVIOUS));
+			panelBuilder.item(26, this.createButton(Action.NEXT));
+		}
+
+		int materialIndex = MAX_ELEMENTS * correctPage;
+
+		// I want first row to be only for navigation and return button.
+		int index = 10;
+
+		while (materialIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
+			materialIndex < treasureChanceList.size() &&
+			index < 36)
+		{
+			if (!panelBuilder.slotOccupied(index))
+			{
+				panelBuilder.item(index,
+					this.createTreasureButton(treasureChanceList.get(materialIndex++)));
+			}
+
+			index++;
+		}
 	}
 
 
@@ -419,6 +511,7 @@ public class GeneratorViewPanel extends CommonPanel
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			this.activeTab = button;
+			this.pageIndex = 0;
 			this.build();
 			return true;
 		};
@@ -556,6 +649,40 @@ public class GeneratorViewPanel extends CommonPanel
 			icon(generatorTier.getGeneratorIcon()).
 			clickHandler(clickHandler).
 			glow(glow).
+			build();
+	}
+
+
+	/**
+	 * This method creates button for material.
+	 * @param blockChanceEntry blockChanceEntry which button must be created.
+	 * @return PanelItem for generator tier.
+	 */
+	private PanelItem createMaterialButton(Map.Entry<Double, Material> blockChanceEntry)
+	{
+		return new PanelItemBuilder().
+			name(blockChanceEntry.getValue().name()).
+			description(this.user.getTranslation("stonegenerator.gui.description.block-chance",
+				"[chance]", String.valueOf(blockChanceEntry.getKey()))).
+			icon(blockChanceEntry.getValue()).
+			clickHandler((panel, user1, clickType, i) -> true).
+			build();
+	}
+
+
+	/**
+	 * This method creates button for treasure.
+	 * @param treasureChanceEntry treasureChanceEntry which button must be created.
+	 * @return PanelItem for generator tier.
+	 */
+	private PanelItem createTreasureButton(Map.Entry<Double, Material> treasureChanceEntry)
+	{
+		return new PanelItemBuilder().
+			name(treasureChanceEntry.getValue().name()).
+			description(this.user.getTranslation("stonegenerator.gui.description.treasure-chance",
+				"[chance]", String.valueOf(treasureChanceEntry.getKey()))).
+			icon(treasureChanceEntry.getValue()).
+			clickHandler((panel, user1, clickType, i) -> true).
 			build();
 	}
 
