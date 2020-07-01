@@ -229,6 +229,17 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method returns generator tier object from given generator Id.
+     * @param generatorId Generator Id that must be returned.
+     * @return GeneratorTierObject with given Id, or null.
+     */
+    public GeneratorTierObject getGeneratorByID(String generatorId)
+    {
+        return this.generatorTierCache.get(generatorId);
+    }
+
+
+    /**
      * This method returns active generator tier object for island at given location.
      * @param location Location of the block.
      * @param generatorType Generator type.
