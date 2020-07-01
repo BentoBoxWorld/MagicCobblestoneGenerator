@@ -77,7 +77,7 @@ public class GeneratorUserPanel extends CommonPanel
 	 * This method builds this GUI.
 	 */
 	@Override
-	protected void build()
+	public void build()
 	{
 		if (this.generatorList.isEmpty())
 		{

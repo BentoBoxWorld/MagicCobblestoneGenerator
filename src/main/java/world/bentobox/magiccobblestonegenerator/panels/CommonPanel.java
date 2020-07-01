@@ -52,7 +52,7 @@ public abstract class CommonPanel
 	/**
 	 * This method allows to build panel.
 	 */
-	protected abstract void build();
+	public abstract void build();
 
 
 // ---------------------------------------------------------------------
