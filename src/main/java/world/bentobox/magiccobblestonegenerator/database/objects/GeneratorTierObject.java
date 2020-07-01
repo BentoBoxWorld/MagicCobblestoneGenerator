@@ -88,7 +88,7 @@ public class GeneratorTierObject implements DataObject
 	 */
 	public ItemStack getGeneratorIcon()
 	{
-		return generatorIcon;
+		return generatorIcon.clone();
 	}
 
 
