@@ -98,17 +98,17 @@ public class GeneratorUserPanel extends CommonPanel
 
 		GuiUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
 
-		panelBuilder.item(2, this.createButton(Button.SHOW_ACTIVE));
+		panelBuilder.item(2, this.createButton(Action.SHOW_ACTIVE));
 
-		panelBuilder.item(4, this.createButton(Button.SHOW_COBBLESTONE));
-		panelBuilder.item(5, this.createButton(Button.SHOW_STONE));
-		panelBuilder.item(6, this.createButton(Button.SHOW_BASALT));
+		panelBuilder.item(4, this.createButton(Action.SHOW_COBBLESTONE));
+		panelBuilder.item(5, this.createButton(Action.SHOW_STONE));
+		panelBuilder.item(6, this.createButton(Action.SHOW_BASALT));
 
-		panelBuilder.item(8, this.createButton(Button.TOGGLE_VISIBILITY));
+		panelBuilder.item(8, this.createButton(Action.TOGGLE_VISIBILITY));
 
 		this.fillGeneratorTiers(panelBuilder);
 
-		panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Button.RETURN));
+		panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
 
 		// Build panel.
 		panelBuilder.build();
@@ -120,7 +120,7 @@ public class GeneratorUserPanel extends CommonPanel
 	 * @param button Button type.
 	 * @return Clickable PanelItem button.
 	 */
-	private PanelItem createButton(Button button)
+	private PanelItem createButton(Action button)
 	{
 		String name = this.user.getTranslation("stonegenerator.gui.player.button." + button.name().toLowerCase());
 		String description = this.user.getTranslationOrNothing("stonegenerator.gui.player.description." + button.name().toLowerCase());
@@ -275,8 +275,8 @@ public class GeneratorUserPanel extends CommonPanel
 		{
 			// Navigation buttons if necessary
 
-			panelBuilder.item(9, this.createButton(Button.PREVIOUS));
-			panelBuilder.item(17, this.createButton(Button.NEXT));
+			panelBuilder.item(9, this.createButton(Action.PREVIOUS));
+			panelBuilder.item(17, this.createButton(Action.NEXT));
 		}
 
 		int generatorIndex = MAX_ELEMENTS * correctPage;
@@ -354,7 +354,7 @@ public class GeneratorUserPanel extends CommonPanel
 	/**
 	 * This enum holds variable that allows to switch between button creation.
 	 */
-	private enum Button
+	private enum Action
 	{
 		/**
 		 * Button that on click shows only cobblestone generators.
@@ -413,7 +413,7 @@ public class GeneratorUserPanel extends CommonPanel
 	/**
 	 * Stores currently active filter button.
 	 */
-	private Button activeFilterButton;
+	private Action activeFilterButton;
 
 	/**
 	 * This variable holds current pageIndex for multi-page generator choosing.
