@@ -3,6 +3,8 @@ package world.bentobox.magiccobblestonegenerator.panels.player;
 
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
+import java.util.ArrayList;
 import java.util.List;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
@@ -259,71 +261,139 @@ public class GeneratorViewPanel extends CommonPanel
 	{
 		String name = this.user.getTranslation(
 			"stonegenerator.gui.player.button." + button.name().toLowerCase());
-		String description = this.user.getTranslationOrNothing(
-			"stonegenerator.gui.player.description." + button.name().toLowerCase());
+		List<String> description = new ArrayList<>();
+		description.add(this.user.getTranslationOrNothing(
+			"stonegenerator.gui.player.description." + button.name().toLowerCase()));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			return true;
 		};
 
-		Material material = Material.PAPER;
+		ItemStack itemStack = new ItemStack(Material.AIR);
 
 		switch (button)
 		{
 			case NAME:
 			{
+				// Not implemented in current GUI.
 				break;
 			}
 			case ICON:
 			{
-				break;
+				// Return created button.
+				return this.createGeneratorButton(this.generatorTier);
 			}
 			case DESCRIPTION:
 			{
+				// Not implemented in current GUI.
 				break;
 			}
 			case DEFAULT:
 			{
+				itemStack = this.generatorTier.isDefaultGenerator() ?
+					new ItemStack(Material.GREEN_BANNER) :
+					new ItemStack(Material.RED_BANNER);
 				break;
 			}
 			case PRIORITY:
 			{
+				itemStack = new ItemStack(Material.PAPER);
+				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
+					"[value]", String.valueOf(this.generatorTier.getPriority())));
 				break;
 			}
 			case TYPE:
 			{
+				switch (this.generatorTier.getGeneratorType())
+				{
+					case COBBLESTONE:
+						itemStack = new ItemStack(Material.COBBLESTONE);
+						break;
+					case STONE:
+						itemStack = new ItemStack(Material.STONE);
+						break;
+					case BASALT:
+						itemStack = new ItemStack(Material.BASALT);
+						break;
+				}
 				break;
 			}
 			case REQUIRED_MIN_LEVEL:
 			{
+				itemStack = new ItemStack(Material.DIAMOND);
+				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
+					"[value]", String.valueOf(this.generatorTier.getPriority())));
 				break;
 			}
 			case REQUIRED_PERMISSIONS:
 			{
+				itemStack = new ItemStack(Material.BOOK);
+
+				if (this.generatorTier.getRequiredPermissions().size() == 1)
+				{
+					description.add(this.user.getTranslation("stonegenerator.gui.player.description.single-item",
+						"[value]", this.generatorTier.getRequiredPermissions().iterator().next()));
+				}
+				else
+				{
+					this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission -> {
+						description.add(this.user.getTranslation("stonegenerator.gui.player.description.list-item",
+							"[value]", permission));
+					});
+				}
+
 				break;
 			}
 			case PURCHASE_COST:
 			{
+				itemStack = new ItemStack(Material.GOLD_BLOCK);
+				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
+					"[value]", String.valueOf(this.generatorTier.getGeneratorTierCost())));
 				break;
 			}
 			case ACTIVATION_COST:
 			{
+				itemStack = new ItemStack(Material.GOLD_INGOT);
+				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
+					"[value]", String.valueOf(this.generatorTier.getActivationCost())));
 				break;
 			}
 			case BIOMES:
 			{
+				itemStack = new ItemStack(Material.FILLED_MAP);
+
+				if (this.generatorTier.getRequiredBiomes().size() == 1)
+				{
+					description.add(this.user.getTranslation("stonegenerator.gui.player.description.single-item",
+						"[value]", this.generatorTier.getRequiredBiomes().iterator().next().name()));
+				}
+				else
+				{
+					this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome -> {
+						description.add(this.user.getTranslation("stonegenerator.gui.player.description.list-item",
+							"[value]", biome.name()));
+					});
+				}
+
 				break;
 			}
 			case DEPLOYED:
 			{
+				// Not implemented in current GUI.
 				break;
 			}
 			case TREASURE_AMOUNT:
 			{
+				itemStack = new ItemStack(Material.EMERALD, this.generatorTier.getMaxTreasureAmount());
+				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
+					"[value]", String.valueOf(this.generatorTier.getMaxTreasureAmount())));
 				break;
 			}
 			case TREASURE_CHANCE:
 			{
+				itemStack = new ItemStack(Material.PAPER);
+				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
+					"[value]", String.valueOf(this.generatorTier.getTreasureChance())));
 				break;
 			}
 		}
@@ -331,7 +401,7 @@ public class GeneratorViewPanel extends CommonPanel
 		return new PanelItemBuilder().
 			name(name).
 			description(description).
-			icon(material).
+			icon(itemStack).
 			clickHandler(clickHandler).
 			build();
 	}
