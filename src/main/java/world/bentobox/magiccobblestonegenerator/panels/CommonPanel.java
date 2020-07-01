@@ -4,6 +4,7 @@ package world.bentobox.magiccobblestonegenerator.panels;
 
 import com.sun.istack.internal.Nullable;
 
+import org.bukkit.World;
 import java.util.List;
 
 import world.bentobox.bentobox.api.user.User;
@@ -22,9 +23,10 @@ public abstract class CommonPanel
 	 * @param addon StoneGeneratorAddon instance.
 	 * @param user User who opens panel.
 	 */
-	protected CommonPanel(StoneGeneratorAddon addon, User user)
+	protected CommonPanel(StoneGeneratorAddon addon, User user, World world)
 	{
 		this.addon = addon;
+		this.world = world;
 		this.manager = addon.getAddonManager();
 		this.user = user;
 
@@ -41,6 +43,7 @@ public abstract class CommonPanel
 		this.addon = parentPanel.addon;
 		this.manager = parentPanel.manager;
 		this.user = parentPanel.user;
+		this.world = parentPanel.world;
 
 		this.parentPanel = parentPanel;
 	}
@@ -145,6 +148,11 @@ public abstract class CommonPanel
 	 * This variable holds user who opens panel. Without it panel cannot be opened.
 	 */
 	protected final User user;
+
+	/**
+	 * This variable holds world where panel is operating.
+	 */
+	protected final World world;
 
 	/**
 	 * This variable allows to create nested panel structure.

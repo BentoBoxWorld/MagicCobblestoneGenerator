@@ -38,7 +38,7 @@ public class GeneratorUserPanel extends CommonPanel
 		World world,
 		User user)
 	{
-		super(addon, user);
+		super(addon, user, world);
 		this.island = this.addon.getIslands().getIsland(world, user);
 
 		// Get valid user island data
