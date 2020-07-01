@@ -365,6 +365,29 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method checks every island in stored worlds for user and loads them in cache.
+     * @param uniqueId User unique id.
+     */
+    public void loadUserIslands(UUID uniqueId)
+    {
+        this.operationWorlds.stream().
+            map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
+            forEach(island -> {
+                if (island.getOwner() == uniqueId)
+                {
+                    // Owner island must be validated.
+                    this.validateIslandData(island);
+                }
+                else
+                {
+                    // Members does not influence island data.
+                    this.addIslandData(island.getUniqueId());
+                }
+            });
+    }
+
+
+    /**
      * Load island from database into the cache or create new island data
      *
      * @param uniqueID - uniqueID to add
