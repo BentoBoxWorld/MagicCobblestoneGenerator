@@ -316,7 +316,14 @@ public class GeneratorUserPanel extends CommonPanel
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			// Click handler should work only if user has a permission to change anything.
 			// Otherwise just to view.
-			if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+
+			if (clickType.isRightClick())
+			{
+				// Open view panel.
+				GeneratorViewPanel.openPanel(this, generatorTier);
+			}
+			else if (this.island.isAllowed(user,
+				StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
 			{
 				if (glow)
 				{
