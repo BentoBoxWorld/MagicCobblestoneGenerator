@@ -1,6 +1,7 @@
 package world.bentobox.magiccobblestonegenerator.panels.player;
 
 
+import com.sun.istack.internal.Nullable;
 import org.bukkit.Material;
 import org.bukkit.World;
 import java.util.List;
@@ -14,14 +15,14 @@ import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
-import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
+import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 
 
 /**
  * This class opens GUI that shows generators for user.
  */
-public class GeneratorUserPanel
+public class GeneratorUserPanel extends CommonPanel
 {
 	// ---------------------------------------------------------------------
 	// Section: Internal Constructor
@@ -37,10 +38,7 @@ public class GeneratorUserPanel
 		World world,
 		User user)
 	{
-		this.addon = addon;
-		this.manager = this.addon.getAddonManager();
-
-		this.user = user;
+		super(addon, user);
 		this.island = this.addon.getIslands().getIsland(world, user);
 
 		// Get valid user island data
@@ -78,7 +76,8 @@ public class GeneratorUserPanel
 	/**
 	 * This method builds this GUI.
 	 */
-	private void build()
+	@Override
+	protected void build()
 	{
 		if (this.generatorList.isEmpty())
 		{
@@ -309,57 +308,10 @@ public class GeneratorUserPanel
 	{
 		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
 
-		List<String> description = generatorTier.getDescription();
-
-		if (glow)
-		{
-			// Add message about activation
-			description.add(this.user.getTranslation("stonegenerator.descriptions.generator-active"));
-		}
-		else if (this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
-		{
-			// Add message about activation cost
-
-			if (generatorTier.getActivationCost() > 0 && this.addon.isVaultProvided())
-			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.activation-cost",
-					"[cost]", String.valueOf(generatorTier.getActivationCost())));
-			}
-		}
-		else
-		{
-			description.add(this.user.getTranslation("stonegenerator.descriptions.locked"));
-
-			// Add missing permissions
-			if (!generatorTier.getRequiredPermissions().isEmpty())
-			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.required-permission"));
-
-				generatorTier.getRequiredPermissions().forEach(permission -> {
-					if (!this.user.hasPermission(permission))
-					{
-						description.add(this.user.getTranslation("stonegenerator.descriptions.has-not-permission",
-							"[permission]", permission));
-					}
-				});
-			}
-
-			// Add missing level
-			if (generatorTier.getRequiredMinIslandLevel() > this.manager.getIslandLevel(this.island))
-			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.required-level",
-					"[level]", String.valueOf(generatorTier.getRequiredMinIslandLevel())));
-			}
-
-			if (generatorTier.getGeneratorTierCost() > 0 &&
-				this.addon.isVaultProvided() &&
-				this.addon.isUpgradesProvided())
-			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.use-upgrades",
-					"[generator]", generatorTier.getFriendlyName(),
-					"[cost]", String.valueOf(generatorTier.getGeneratorTierCost())));
-			}
-		}
+		List<String> description = this.generateGeneratorDescription(generatorTier,
+			glow,
+			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
+			this.manager.getIslandLevel(this.island));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			// Click handler should work only if user has a permission to change anything.
@@ -444,29 +396,14 @@ public class GeneratorUserPanel
 	// ---------------------------------------------------------------------
 
 	/**
-	 * This variable allows to access addon object.
-	 */
-	private final StoneGeneratorAddon addon;
-
-	/**
-	 * This variable allows to access addon manager object.
-	 */
-	private final StoneGeneratorManager manager;
-
-	/**
-	 * This variable holds user who opens panel. Without it panel cannot be opened.
-	 */
-	private final User user;
-
-	/**
 	 * This variable holds targeted island.
 	 */
-	private final Island island;
+	private @Nullable final Island island;
 
 	/**
 	 * This variable holds user's island generator data.
 	 */
-	private final GeneratorDataObject generatorData;
+	private @Nullable final GeneratorDataObject generatorData;
 
 	/**
 	 * This variable stores all generator tiers in the given world.
