@@ -64,7 +64,7 @@ tiers:
       # List of required biomes for generator to work.
       required-biomes: []
       # Cost for activating current generator.
-      purchase-cost: : 5.0
+      purchase-cost: 5.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -110,7 +110,7 @@ tiers:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 100
       # Cost for activating current generator.
-      purchase-cost: : 10.0
+      purchase-cost: 10.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -159,7 +159,7 @@ tiers:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 500
       # Cost for activating current generator.
-      purchase-cost: : 50.0
+      purchase-cost: 50.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -186,7 +186,7 @@ tiers:
         COAL: 16
         IRON_NUGGET: 2
         GOLD_NUGGET: 2
-        REDSTONE_DUST: 7
+        REDSTONE: 7
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
       amount: 2
@@ -209,7 +209,7 @@ tiers:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 1000
       # Cost for activating current generator.
-      purchase-cost: : 100.0
+      purchase-cost: 100.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -239,7 +239,7 @@ tiers:
         COAL: 5
         IRON_NUGGET: 21
         GOLD_NUGGET: 33
-        REDSTONE_DUST: 1
+        REDSTONE: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
       amount: 2
@@ -262,7 +262,7 @@ tiers:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 5000
       # Cost for activating current generator.
-      purchase-cost: : 500.0
+      purchase-cost: 500.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -292,7 +292,7 @@ tiers:
       material:
         IRON_NUGGET: 32
         GOLD_NUGGET: 13
-        REDSTONE_DUST: 11
+        REDSTONE: 11
         DIAMOND: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
@@ -316,7 +316,7 @@ tiers:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 10000
       # Cost for activating current generator.
-      purchase-cost: : 1000.0
+      purchase-cost: 1000.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -348,7 +348,7 @@ tiers:
       material:
         IRON_NUGGET: 22
         GOLD_NUGGET: 67
-        REDSTONE_DUST: 21
+        REDSTONE: 21
         DIAMOND: 1
         EMERALD: 1
       # Maximal amount of items dropped.
