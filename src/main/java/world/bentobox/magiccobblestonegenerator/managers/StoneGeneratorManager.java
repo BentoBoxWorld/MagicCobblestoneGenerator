@@ -11,12 +11,14 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
@@ -85,11 +87,11 @@ public class StoneGeneratorManager
     {
         this.generatorTierCache.clear();
 
-        this.addon.getLogger().info("Loading generator tiers...");
+        this.addon.log("Loading generator tiers from database...");
 
         this.generatorTierDatabase.loadObjects().forEach(this::loadGeneratorTier);
 
-        this.addon.getLogger().info("Done");
+        this.addon.log("Done");
     }
 
 
@@ -120,8 +122,8 @@ public class StoneGeneratorManager
             {
                 if (!silent)
                 {
-                    user.sendMessage("stonegenerator.messages.skipping",
-                        "[generator]",
+                    user.sendMessage(Constants.MESSAGE + "skipping",
+                        Constants.GENERATOR,
                         generatorTier.getFriendlyName());
                 }
 
@@ -131,8 +133,8 @@ public class StoneGeneratorManager
             {
                 if (!silent)
                 {
-                    user.sendMessage("stonegenerator.messages.overwriting",
-                        "[generator]",
+                    user.sendMessage(Constants.MESSAGE + "overwriting",
+                        Constants.GENERATOR,
                         generatorTier.getFriendlyName());
                 }
 
@@ -143,8 +145,8 @@ public class StoneGeneratorManager
 
         if (!silent)
         {
-            user.sendMessage("stonegenerator.messages.imported",
-                "[generator]",
+            user.sendMessage(Constants.MESSAGE + "loaded",
+                Constants.GENERATOR,
                 generatorTier.getFriendlyName());
         }
 
@@ -271,6 +273,8 @@ public class StoneGeneratorManager
                 map(name -> this.generatorTierCache.getOrDefault(name, null)).
                 // Filter out null objects. Just in case.
                 filter(Objects::nonNull).
+                // Filter out generators that are not deployed.
+                filter(GeneratorTierObject::isDeployed).
                 // Filter objects with the same generator type.
                 filter(generator -> generator.getGeneratorType().equals(generatorType)).
                 // Filter out objects with incorrect biomes.
@@ -535,8 +539,8 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        user.sendMessage("stonegenerator.successful.generator-deactivated",
-            "[generator]", generatorTier.getFriendlyName());
+        user.sendMessage(Constants.MESSAGE + "generator-deactivated",
+            Constants.GENERATOR, generatorTier.getFriendlyName());
         generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
     }
 
@@ -557,14 +561,15 @@ public class StoneGeneratorManager
         if (generatorData.getActiveGeneratorList().size() >= generatorData.getMaxGeneratorCount())
         {
             // Too many generators.
-            user.sendMessage("stonegenerator.error.active-generators-reached");
+            user.sendMessage(Constants.ERRORS + "active-generators-reached");
             return false;
         }
 
         if (!generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
-            user.sendMessage("stonegenerator.error.generator-not-unlocked");
+            user.sendMessage(Constants.ERRORS + "generator-not-unlocked",
+                Constants.GENERATOR, generatorTier.getFriendlyName());
             return false;
         }
         else
@@ -580,8 +585,8 @@ public class StoneGeneratorManager
                 }
                 else
                 {
-                    user.sendMessage("stonegenerator.error.no-credits",
-                        "[value]", String.valueOf(generatorTier.getActivationCost()));
+                    user.sendMessage(Constants.ERRORS + "no-credits",
+                        TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost()));
                     return false;
                 }
             }
@@ -604,8 +609,8 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        user.sendMessage("stonegenerator.successful.generator-activated",
-            "[generator]", generatorTier.getFriendlyName());
+        user.sendMessage(Constants.MESSAGE + "generator-activated",
+            Constants.GENERATOR, generatorTier.getFriendlyName());
         generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
     }
 

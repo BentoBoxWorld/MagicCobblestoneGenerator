@@ -12,6 +12,7 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorUserPanel;
 import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorViewPanel;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
@@ -46,31 +47,12 @@ public class GeneratorPlayerCommand extends CompositeCommand
 	public void setup()
 	{
 		this.setPermission("stone-generator");
-		this.setParametersHelp("stone-generator.commands.player.main.parameters");
-		this.setDescription("stone-generator.commands.player.main.description");
+		this.setParametersHelp(Constants.PLAYER_COMMANDS + "main.parameters");
+		this.setDescription(Constants.PLAYER_COMMANDS + "main.description");
 
 		new GeneratorViewPlayerCommand(this);
 
 		this.setOnlyPlayer(true);
-	}
-
-
-	/**
-	 * Returns whether the command can be executed by this user or not. It is recommended
-	 * to send messages to let this user know why they could not execute the command. Note
-	 * that this is run previous to {@link #execute(User, String, List)}.
-	 *
-	 * @param user the {@link User} who is executing this command.
-	 * @param label the label which has been used to execute this command. It can be
-	 * {@link CompositeCommand#getLabel()} or an alias.
-	 * @param args the command arguments.
-	 * @return {@code true} if this command can be executed, {@code false} otherwise.
-	 * @since 1.3.0
-	 */
-	@Override
-	public boolean canExecute(User user, String label, List<String> args)
-	{
-		return true;
 	}
 
 
@@ -133,9 +115,9 @@ public class GeneratorPlayerCommand extends CompositeCommand
 		@Override
 		public void setup()
 		{
-			this.setPermission("view");
-			this.setParametersHelp("stone-generator.commands.player.view.parameters");
-			this.setDescription("stone-generator.commands.player.view.description");
+			this.inheritPermission();
+			this.setParametersHelp(Constants.PLAYER_COMMANDS + "view.parameters");
+			this.setDescription(Constants.PLAYER_COMMANDS + "view.description");
 
 			this.setOnlyPlayer(true);
 		}
@@ -164,7 +146,9 @@ public class GeneratorPlayerCommand extends CompositeCommand
 				}
 				else
 				{
-					user.sendMessage("stonegenerator.error.not-found", "[value]", args.get(0));
+					user.sendMessage(Constants.ERRORS + "generator-tier-not-found",
+						Constants.GENERATOR, args.get(0),
+						Constants.GAMEMODE, Utils.getGameMode(this.getWorld()));
 				}
 			}
 			else

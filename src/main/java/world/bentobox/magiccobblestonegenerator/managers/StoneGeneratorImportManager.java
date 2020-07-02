@@ -26,6 +26,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.ItemParser;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
 
 /**
@@ -67,7 +68,7 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage("stonegenerator.errors.no-file");
+				user.sendMessage(Constants.ERRORS + "no-file");
 			}
 
 			return false;
@@ -83,8 +84,8 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage("stonegenerator.errors.no-load",
-					"[message]",
+				user.sendMessage(Constants.ERRORS + "no-load",
+					TextVariables.DESCRIPTION,
 					e.getMessage());
 			}
 			else
@@ -101,7 +102,8 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage("stonegenerator.errors.not-a-gamemode-world");
+				user.sendMessage(Constants.ERRORS + "not-a-gamemode-world",
+					Constants.WORLD, world.getName());
 			}
 			else
 			{
@@ -175,11 +177,12 @@ public class StoneGeneratorImportManager
 
 			// Save object in database.
 			this.addon.getAddonManager().saveGeneratorTier(generatorTier);
+			size++;
 		}
 
 		if (user != null)
 		{
-			user.sendMessage("stonegenerator.messages.import-count",
+			user.sendMessage(Constants.MESSAGE + "import-count",
 				TextVariables.NUMBER,
 				String.valueOf(size));
 		}
@@ -301,5 +304,5 @@ public class StoneGeneratorImportManager
 	/**
 	 * Variable stores generatorTemplate.yml location
 	 */
-	private File generatorFile;
+	private final File generatorFile;
 }

@@ -5,12 +5,15 @@ package world.bentobox.magiccobblestonegenerator.panels;
 import com.sun.istack.internal.Nullable;
 
 import org.bukkit.World;
+import java.util.ArrayList;
 import java.util.List;
 
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
 
 /**
@@ -78,7 +81,7 @@ public abstract class CommonPanel
 		if (isActive)
 		{
 			// Add message about activation
-			description.add(this.user.getTranslation("stonegenerator.descriptions.generator-active"));
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "generator-active"));
 		}
 		else if (isUnlocked)
 		{
@@ -86,42 +89,47 @@ public abstract class CommonPanel
 
 			if (generator.getActivationCost() > 0 && this.addon.isVaultProvided())
 			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.activation-cost",
-					"[cost]", String.valueOf(generator.getActivationCost())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "activation-cost",
+					TextVariables.NUMBER, String.valueOf(generator.getActivationCost())));
 			}
 		}
 		else
 		{
-			description.add(this.user.getTranslation("stonegenerator.descriptions.locked"));
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "locked"));
 
 			// Add missing permissions
 			if (!generator.getRequiredPermissions().isEmpty())
 			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.required-permission"));
+				List<String> missingPermissions = new ArrayList<>();
 
 				generator.getRequiredPermissions().forEach(permission -> {
 					if (!this.user.hasPermission(permission))
 					{
-						description.add(this.user.getTranslation("stonegenerator.descriptions.has-not-permission",
-							"[permission]", permission));
+						missingPermissions.add(this.user.getTranslation(Constants.DESCRIPTION + "missing-permission",
+							TextVariables.PERMISSION, permission));
 					}
 				});
+
+				if (!missingPermissions.isEmpty())
+				{
+					description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-permissions"));
+					description.addAll(missingPermissions);
+				}
 			}
 
 			// Add missing level
 			if (generator.getRequiredMinIslandLevel() > islandLevel)
 			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.required-level",
-					"[level]", String.valueOf(generator.getRequiredMinIslandLevel())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-level",
+					TextVariables.NUMBER, String.valueOf(generator.getRequiredMinIslandLevel())));
 			}
 
 			if (generator.getGeneratorTierCost() > 0 &&
-				this.addon.isVaultProvided() &&
-				this.addon.isUpgradesProvided())
+				this.addon.isVaultProvided())
 			{
-				description.add(this.user.getTranslation("stonegenerator.descriptions.use-upgrades",
-					"[generator]", generator.getFriendlyName(),
-					"[cost]", String.valueOf(generator.getGeneratorTierCost())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "purchase-cost",
+					Constants.GENERATOR, generator.getFriendlyName(),
+					TextVariables.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
 			}
 		}
 

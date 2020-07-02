@@ -9,16 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
 
 /**
@@ -120,14 +123,15 @@ public class GeneratorViewPanel extends CommonPanel
 	{
 		if (this.generatorTier == null)
 		{
-			this.user.sendMessage("stonegenerator.error.no-generator-data");
+			this.user.sendMessage(Constants.ERRORS + "no-generator-data");
 			return;
 		}
 
 		// PanelBuilder is a BentoBox API that provides ability to easy create Panels.
 		PanelBuilder panelBuilder = new PanelBuilder().
 			user(this.user).
-			name(this.user.getTranslation("stonegenerator.gui.player.title.generator-view"));
+			name(this.user.getTranslation(Constants.TITLE + "generator-view",
+				Constants.GENERATOR, this.generatorTier.getFriendlyName()));
 
 		GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
@@ -352,10 +356,10 @@ public class GeneratorViewPanel extends CommonPanel
 	private PanelItem createButton(Button button)
 	{
 		String name = this.user.getTranslation(
-			"stonegenerator.gui.player.button." + button.name().toLowerCase());
+			Constants.BUTTON + button.name().toLowerCase() + ".name");
 		List<String> description = new ArrayList<>();
 		description.add(this.user.getTranslationOrNothing(
-			"stonegenerator.gui.player.description." + button.name().toLowerCase()));
+			Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			return true;
@@ -389,9 +393,9 @@ public class GeneratorViewPanel extends CommonPanel
 			}
 			case PRIORITY:
 			{
-				itemStack = new ItemStack(Material.PAPER);
-				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
-					"[value]", String.valueOf(this.generatorTier.getPriority())));
+				itemStack = new ItemStack(Material.HOPPER);
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+					Constants.VALUE, String.valueOf(this.generatorTier.getPriority())));
 				break;
 			}
 			case TYPE:
@@ -413,8 +417,8 @@ public class GeneratorViewPanel extends CommonPanel
 			case REQUIRED_MIN_LEVEL:
 			{
 				itemStack = new ItemStack(Material.DIAMOND);
-				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
-					"[value]", String.valueOf(this.generatorTier.getPriority())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+					Constants.VALUE, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
 				break;
 			}
 			case REQUIRED_PERMISSIONS:
@@ -423,15 +427,14 @@ public class GeneratorViewPanel extends CommonPanel
 
 				if (this.generatorTier.getRequiredPermissions().size() == 1)
 				{
-					description.add(this.user.getTranslation("stonegenerator.gui.player.description.single-item",
-						"[value]", this.generatorTier.getRequiredPermissions().iterator().next()));
+					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+						Constants.VALUE, this.generatorTier.getRequiredPermissions().iterator().next()));
 				}
 				else
 				{
-					this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission -> {
-						description.add(this.user.getTranslation("stonegenerator.gui.player.description.list-item",
-							"[value]", permission));
-					});
+					this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
+						description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
+							Constants.VALUE, permission)));
 				}
 
 				break;
@@ -439,15 +442,15 @@ public class GeneratorViewPanel extends CommonPanel
 			case PURCHASE_COST:
 			{
 				itemStack = new ItemStack(Material.GOLD_BLOCK);
-				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
-					"[value]", String.valueOf(this.generatorTier.getGeneratorTierCost())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+					Constants.VALUE, String.valueOf(this.generatorTier.getGeneratorTierCost())));
 				break;
 			}
 			case ACTIVATION_COST:
 			{
 				itemStack = new ItemStack(Material.GOLD_INGOT);
-				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
-					"[value]", String.valueOf(this.generatorTier.getActivationCost())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+					Constants.VALUE, String.valueOf(this.generatorTier.getActivationCost())));
 				break;
 			}
 			case BIOMES:
@@ -456,15 +459,14 @@ public class GeneratorViewPanel extends CommonPanel
 
 				if (this.generatorTier.getRequiredBiomes().size() == 1)
 				{
-					description.add(this.user.getTranslation("stonegenerator.gui.player.description.single-item",
-						"[value]", this.generatorTier.getRequiredBiomes().iterator().next().name()));
+					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+						Constants.VALUE, this.generatorTier.getRequiredBiomes().iterator().next().name()));
 				}
 				else
 				{
-					this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome -> {
-						description.add(this.user.getTranslation("stonegenerator.gui.player.description.list-item",
-							"[value]", biome.name()));
-					});
+					this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome ->
+						description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
+							Constants.VALUE, biome.name())));
 				}
 
 				break;
@@ -477,15 +479,15 @@ public class GeneratorViewPanel extends CommonPanel
 			case TREASURE_AMOUNT:
 			{
 				itemStack = new ItemStack(Material.EMERALD, this.generatorTier.getMaxTreasureAmount());
-				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
-					"[value]", String.valueOf(this.generatorTier.getMaxTreasureAmount())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+					Constants.VALUE, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
 				break;
 			}
 			case TREASURE_CHANCE:
 			{
 				itemStack = new ItemStack(Material.PAPER);
-				description.add(this.user.getTranslation("stonegenerator.gui.player.description.current-value",
-					"[value]", String.valueOf(this.generatorTier.getTreasureChance())));
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
+					Constants.VALUE, String.valueOf(this.generatorTier.getTreasureChance())));
 				break;
 			}
 		}
@@ -506,8 +508,8 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Tab button)
 	{
-		String name = this.user.getTranslation("stonegenerator.gui.player.button." + button.name().toLowerCase());
-		String description = this.user.getTranslationOrNothing("stonegenerator.gui.player.description." + button.name().toLowerCase());
+		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
+		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			this.activeTab = button;
@@ -548,8 +550,8 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation("stonegenerator.gui.player.button." + button.name().toLowerCase());
-		String description = this.user.getTranslationOrNothing("stonegenerator.gui.player.description." + button.name().toLowerCase());
+		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
+		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			// Always return true.
@@ -660,10 +662,18 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createMaterialButton(Map.Entry<Double, Material> blockChanceEntry)
 	{
+		String materialName = this.user.getTranslationOrNothing(Constants.MATERIAL + blockChanceEntry.getValue().name());
+
+		if (materialName.isEmpty())
+		{
+			materialName = Util.prettifyText(blockChanceEntry.getValue().name());
+		}
+
 		return new PanelItemBuilder().
-			name(blockChanceEntry.getValue().name()).
-			description(this.user.getTranslation("stonegenerator.gui.description.block-chance",
-				"[chance]", String.valueOf(blockChanceEntry.getKey()))).
+			name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
+				Constants.BLOCK, materialName)).
+			description(this.user.getTranslation(Constants.BUTTON + "block-icon.description",
+				TextVariables.NUMBER, String.valueOf(blockChanceEntry.getKey()))).
 			icon(blockChanceEntry.getValue()).
 			clickHandler((panel, user1, clickType, i) -> true).
 			build();
@@ -677,10 +687,18 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createTreasureButton(Map.Entry<Double, Material> treasureChanceEntry)
 	{
+		String materialName = this.user.getTranslationOrNothing(Constants.MATERIAL + treasureChanceEntry.getValue().name());
+
+		if (materialName.isEmpty())
+		{
+			materialName = Util.prettifyText(treasureChanceEntry.getValue().name());
+		}
+
 		return new PanelItemBuilder().
-			name(treasureChanceEntry.getValue().name()).
-			description(this.user.getTranslation("stonegenerator.gui.description.treasure-chance",
-				"[chance]", String.valueOf(treasureChanceEntry.getKey()))).
+			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
+				Constants.BLOCK, materialName)).
+			description(this.user.getTranslation(Constants.BUTTON + "treasure-icon.description",
+				TextVariables.NUMBER, String.valueOf(treasureChanceEntry.getKey() * this.generatorTier.getTreasureChance()))).
 			icon(treasureChanceEntry.getValue()).
 			clickHandler((panel, user1, clickType, i) -> true).
 			build();

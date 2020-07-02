@@ -163,7 +163,7 @@ public class MagicGenerator
     /**
      * This variable holds stone generator addon object.
      */
-    private StoneGeneratorAddon addon;
+    private final StoneGeneratorAddon addon;
 
 
     /**

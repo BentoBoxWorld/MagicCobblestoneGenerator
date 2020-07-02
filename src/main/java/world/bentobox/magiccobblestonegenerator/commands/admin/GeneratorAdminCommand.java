@@ -7,6 +7,8 @@ import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.ConfirmableCommand;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -40,8 +42,8 @@ public class GeneratorAdminCommand extends CompositeCommand
 	public void setup()
 	{
 		this.setPermission("admin.stone-generator");
-		this.setParametersHelp("stone-generator.commands.admin.main.parameters");
-		this.setDescription("stone-generator.commands.admin.main.description");
+		this.setParametersHelp(Constants.ADMIN_COMMANDS + "main.parameters");
+		this.setDescription(Constants.ADMIN_COMMANDS + "main.description");
 
 		this.setOnlyPlayer(false);
 
@@ -114,8 +116,8 @@ public class GeneratorAdminCommand extends CompositeCommand
 		public void setup()
 		{
 			this.inheritPermission();
-			this.setParametersHelp("stone-generator.commands.admin.import.parameters");
-			this.setDescription("stone-generator.commands.admin.import.description");
+			this.setParametersHelp(Constants.ADMIN_COMMANDS + "import.parameters");
+			this.setDescription(Constants.ADMIN_COMMANDS + "import.description");
 
 			this.setOnlyPlayer(false);
 		}
@@ -133,7 +135,9 @@ public class GeneratorAdminCommand extends CompositeCommand
 		@Override
 		public boolean execute(User user, String label, List<String> args)
 		{
-			this.askConfirmation(user, user.getTranslation("stone-generator.commands.admin.import.confirmation"),
+			this.askConfirmation(user,
+				user.getTranslation(Constants.ADMIN_COMMANDS + "import.confirmation",
+					Constants.GAMEMODE, Utils.getGameMode(this.getWorld())),
 				() -> this.<StoneGeneratorAddon>getAddon().getImportManager().importFile(user, this.getWorld()));
 
 			return true;

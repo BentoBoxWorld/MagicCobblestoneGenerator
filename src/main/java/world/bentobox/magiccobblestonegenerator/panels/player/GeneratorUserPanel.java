@@ -17,6 +17,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataOb
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
+import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
 
 /**
@@ -81,7 +82,8 @@ public class GeneratorUserPanel extends CommonPanel
 	{
 		if (this.generatorList.isEmpty())
 		{
-			this.user.sendMessage("stonegenerator.error.no-generators-found");
+			this.user.sendMessage(Constants.ERRORS + "no-generators-in-world",
+				Constants.WORLD, this.world.getName());
 			return;
 		}
 
@@ -94,7 +96,7 @@ public class GeneratorUserPanel extends CommonPanel
 		// PanelBuilder is a BentoBox API that provides ability to easy create Panels.
 		PanelBuilder panelBuilder = new PanelBuilder().
 			user(this.user).
-			name(this.user.getTranslation("stonegenerator.gui.player.title.generator-list"));
+			name(this.user.getTranslation(Constants.TITLE + "generator-list"));
 
 		GuiUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
 
@@ -122,8 +124,8 @@ public class GeneratorUserPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation("stonegenerator.gui.player.button." + button.name().toLowerCase());
-		String description = this.user.getTranslationOrNothing("stonegenerator.gui.player.description." + button.name().toLowerCase());
+		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
+		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			this.activeFilterButton = this.activeFilterButton == button ? null : button;
@@ -380,13 +382,13 @@ public class GeneratorUserPanel extends CommonPanel
 		 */
 		TOGGLE_VISIBILITY,
 		/**
-		 * Return button that exists GUI.
-		 */
-		RETURN,
-		/**
 		 * Button that on click shows only active generators.
 		 */
 		SHOW_ACTIVE,
+		/**
+		 * Return button that exists GUI.
+		 */
+		RETURN,
 		/**
 		 * Allows to select previous generators in multi-page situation.
 		 */
