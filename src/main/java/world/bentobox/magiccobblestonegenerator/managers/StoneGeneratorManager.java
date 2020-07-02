@@ -610,6 +610,27 @@ public class StoneGeneratorManager
     }
 
 
+    /**
+     * This method removes given data object from cache and database.
+     * @param uniqueId Object that must be removed.
+     */
+    public void wipeGeneratorData(String uniqueId)
+    {
+        this.generatorDataCache.remove(uniqueId);
+        this.generatorDataDatabase.deleteID(uniqueId);
+    }
+
+
+    /**
+     * This method removes given data object from cache and database.
+     * @param dataObject Object that must be removed.
+     */
+    public void wipeGeneratorData(GeneratorDataObject dataObject)
+    {
+        this.wipeGeneratorData(dataObject.getUniqueId());
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Methods
     // ---------------------------------------------------------------------
