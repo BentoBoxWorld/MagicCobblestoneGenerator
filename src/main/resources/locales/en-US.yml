@@ -6,6 +6,9 @@ stone-generator:
       import:
         description: "Command that allows to import magic generators into Game Mode Addon"
         confirmation: "Please confirm that you want to remove existing generators from [gamemode] and import generators from template"
+      why:
+        parameters: "<player>"
+        description: "toggle debug messages about Magic Cobblestone Generator."
     player:
       main:
         description: "Main player command that opens GUI with generator selection"
