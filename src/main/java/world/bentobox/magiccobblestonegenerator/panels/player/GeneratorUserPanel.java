@@ -51,7 +51,7 @@ public class GeneratorUserPanel extends CommonPanel
 		this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
 
 		// By default no-filters are active.
-		this.activeFilterButton = null;
+		this.activeFilterButton = Action.RETURN;
 	}
 
 
@@ -128,7 +128,7 @@ public class GeneratorUserPanel extends CommonPanel
 		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-			this.activeFilterButton = this.activeFilterButton == button ? null : button;
+			this.activeFilterButton = this.activeFilterButton == button ? Action.RETURN : button;
 			// Rebuild everything.
 			this.build();
 
@@ -206,7 +206,7 @@ public class GeneratorUserPanel extends CommonPanel
 			description(description).
 			icon(material).
 			clickHandler(clickHandler).
-			glow(this.activeFilterButton == button).
+			glow(this.activeFilterButton == button && button != Action.RETURN).
 			build();
 	}
 
