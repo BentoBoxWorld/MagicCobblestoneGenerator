@@ -12,6 +12,18 @@ authors:
 softdepend: AcidIsland, AOneBlock, BSkyBlock, CaveBlock, SkyGrid, Level, Upgrades
 
 permissions:
-  '[gamemode].stonegenerator':
-    description: Let the player use the '/island generator' command
+  '[gamemode].admin.stone-generator':
+    description: Let the player use the '/[admin_command] generator' command
+    default: op
+
+  '[gamemode].stone-generator':
+    description: Let the player use the '/[player_command] generator' command
     default: true
+
+  '[gamemode].stone-generator.active-generators.3':
+    description: Allows to change maximal active generators for island owner. 3 can be replaced with any positive integer.
+    default: false
+
+  '[gamemode].stone-generator.max-range.30':
+    description: Allows to change maximal distance from generator so it continues to work. 30 can be replaced with any positive integer.
+    default: false
