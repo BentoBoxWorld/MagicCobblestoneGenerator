@@ -63,7 +63,7 @@ tiers:
       required-permissions: []
       # List of required biomes for generator to work.
       required-biomes: []
-      # Cost for activating current generator. Requires Upgrades Addon.
+      # Cost for activating current generator.
       purchase-cost: : 5.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -109,7 +109,7 @@ tiers:
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 100
-      # Cost for activating current generator. Requires Upgrades Addon.
+      # Cost for activating current generator.
       purchase-cost: : 10.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -158,7 +158,7 @@ tiers:
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 500
-      # Cost for activating current generator. Requires Upgrades Addon.
+      # Cost for activating current generator.
       purchase-cost: : 50.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -208,7 +208,7 @@ tiers:
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 1000
-      # Cost for activating current generator. Requires Upgrades Addon.
+      # Cost for activating current generator.
       purchase-cost: : 100.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -261,7 +261,7 @@ tiers:
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 5000
-      # Cost for activating current generator. Requires Upgrades Addon.
+      # Cost for activating current generator.
       purchase-cost: : 500.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -315,7 +315,7 @@ tiers:
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 10000
-      # Cost for activating current generator. Requires Upgrades Addon.
+      # Cost for activating current generator.
       purchase-cost: : 1000.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -351,6 +351,61 @@ tiers:
         REDSTONE_DUST: 21
         DIAMOND: 1
         EMERALD: 1
+      # Maximal amount of items dropped.
+      # it will be from 1 till defined amount.
+      amount: 2
+  nether_generator:
+    # Display name for users
+    name: "Nether Generator"
+    # Description in lore message
+    description:
+      - "Generates nether materials"
+    # Icon used in GUI's
+    icon: "BASALT:2"
+    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
+    type: BASALT
+    # Indicates that generator is used as default.
+    # Requirements will be ignored.
+    # Each type allows exactly one default template.
+    default: false
+    # There are several requirements that can be defined here.
+    requirements:
+      # Can define minimal island level for generator to work. Required Level Addon.
+      island-level: 10
+      # List of required biomes for generator to work.
+      required-biomes:
+        - NETHER_WASTES
+        - SOUL_SAND_VALLEY
+        - CRIMSON_FOREST
+        - WARPED_FOREST
+        - BASALT_DELTAS
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
+    # Materials and their chances. Use actual blocks please.
+    # Chance supports any positive number.
+    # Everything in the end will be normalized.
+    blocks:
+      BASALT: 20
+      NETHERRACK: 50
+      BLACKSTONE: 20
+      SOUL_SAND: 4
+      SOUL_SOIL: 5
+      MAGMA_BLOCK: 2
+      GLOWSTONE: 5
+      NETHER_QUARTZ_ORE: 1
+      ANCIENT_DEBRIS: 0.1
+      NETHER_GOLD_ORE: 2
+      WARPED_NYLIUM: 15
+      CRIMSON_NYLIUM: 15
+    # Treasure that has a chance to be dropped when block is generated.
+    # ONLY on generation, not on block break.
+    treasure:
+      # Chance from 0 till 1.
+      chance: 0.001
+      # Materials that can be dropped.
+      material:
+        GOLD_NUGGET: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
       amount: 2
