@@ -221,7 +221,7 @@ public class StoneGeneratorAddon extends Addon
             if (this.hooked)
             {
                 this.stoneGeneratorManager.reload();
-                this.getLogger().info("Magic Cobblestone Generator addon reloaded.");
+                this.log("Magic Cobblestone Generator addon reloaded.");
             }
         }
     }
