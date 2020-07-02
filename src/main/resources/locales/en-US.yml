@@ -24,9 +24,9 @@ stone-generator:
 
       return:
         name: "Return"
-        description:
-          - "Returns to previous"
-          - "menu or exits GUI"
+        description: |-
+          Returns to previous
+          menu or exits GUI
       previous:
         name: "Previous Page"
         description: "Switch to previous page"
@@ -36,23 +36,23 @@ stone-generator:
 
       info:
         name: "General Information"
-        description:
-          - "Shows general information"
-          - "about generator"
+        description: |-
+          Shows general information
+          about generator
       blocks:
         name: "Block List"
-        description:
-          - "Shows list of blocks"
-          - "and their chances to"
-          - "generate"
+        description: |-
+          Shows list of blocks
+          and their chances to
+          generate
       treasures:
         name: "Treasure List"
-        description:
-          - "Shows list of treasures"
-          - "and their chances to"
-          - "be dropped."
-          - "Treasures are dropped"
-          - "on block generating"
+        description: |-
+          Shows list of treasures
+          and their chances to
+          be dropped.
+          Treasures are dropped
+          on block generating
 
       name:
         name: "Generator name"
@@ -64,12 +64,12 @@ stone-generator:
         name: "Default Generator"
       priority:
         name: "Generator Priority"
-        description:
-          - "Generators with larger"
-          - "priority number will"
-          - "be preferred if multiple"
-          - "can be applied to the"
-          - "same location"
+        description: |-
+          Generators with larger
+          priority number will
+          be preferred if multiple
+          can be applied to the
+          same location
       type:
         name: "Generator Type"
       required_min_level:
@@ -79,61 +79,61 @@ stone-generator:
         name: "Required Permissions"
       purchase_cost:
         name: "Purchase Cost"
-        description:
-          - "Amount of credits that"
-          - "need to be paid once for"
-          - "unlocking this generator"
+        description: |-
+          Amount of credits that
+          need to be paid once for
+          unlocking this generator
       activation_cost:
         name: "Activation Cost"
-        description:
-          - "Amount of credits that"
-          - "need to be paid each time"
-          - "for activating this"
-          - "generator"
+        description: |-
+          Amount of credits that
+          need to be paid each time
+          for activating this
+          generator
       biomes:
         name: "Operational Biomes"
-        description:
-          - "List of biomes where"
-          - "this generator will"
-          - "work"
+        description: |-
+          List of biomes where
+          this generator will
+          work
       deployed:
         name: "Deployed"
       treasure_amount:
         name: "Treasure Amount"
-        description:
-          - "Amount of treasures"
-          - "that will be dropped."
+        description: |-
+          Amount of treasures
+          that will be dropped.
       treasure_chance:
         name: "Treasure Chance"
-        description:
-          - "Chance of getting treasure"
-          - "to be dropped."
+        description: |-
+          Chance of getting treasure
+          to be dropped.
 
       show_cobblestone:
         name: "Cobblestone Generators"
-        description:
-          - "Shows only cobblestone"
-          - "generators"
+        description: |-
+          Shows only cobblestone
+          generators
       show_stone:
         name: "Stone Generators"
-        description:
-          - "Shows only stone"
-          - "generators"
+        description: |-
+          Shows only stone
+          generators
       show_basalt:
         name: "Basalt Generators"
-        description:
-          - "Shows only basalt"
-          - "generators"
+        description: |-
+          Shows only basalt
+          generators
       toggle_visibility:
         name: "Only Unlocked"
-        description:
-          - "Shows only unlocked"
-          - "generators"
+        description: |-
+          Shows only unlocked
+          generators
       show_active:
         name: "Only Active"
-        description:
-          - "Shows only active"
-          - "generators"
+        description: |-
+          Shows only active
+          generators
 
     descriptions:
       generator-active: "&2 Active"
