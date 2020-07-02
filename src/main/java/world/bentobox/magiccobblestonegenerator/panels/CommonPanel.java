@@ -76,7 +76,7 @@ public abstract class CommonPanel
 		boolean isUnlocked,
 		long islandLevel)
 	{
-		List<String> description = generator.getDescription();
+		List<String> description = new ArrayList<>(generator.getDescription());
 
 		if (isActive)
 		{

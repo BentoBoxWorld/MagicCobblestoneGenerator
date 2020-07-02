@@ -9,7 +9,7 @@ package world.bentobox.magiccobblestonegenerator.database.objects;
 
 import com.google.gson.annotations.Expose;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import world.bentobox.bentobox.database.objects.DataObject;
@@ -199,19 +199,19 @@ public class GeneratorDataObject implements DataObject
 	 * Stores a names of unlocked generator tiers.
 	 */
 	@Expose
-	private Set<String> unlockedTiers = Collections.emptySet();
+	private Set<String> unlockedTiers = new HashSet<>();
 
 	/**
 	 * Stores a names of unlocked purchased tiers.
 	 */
 	@Expose
-	private Set<String> purchasedTiers = Collections.emptySet();
+	private Set<String> purchasedTiers = new HashSet<>();
 
 	/**
 	 * Stores currently active generator names.
 	 */
 	@Expose
-	private Set<String> activeGeneratorList = Collections.emptySet();
+	private Set<String> activeGeneratorList = new HashSet<>();
 
 	/**
 	 * Stores amount of maximal active generators at the same time.

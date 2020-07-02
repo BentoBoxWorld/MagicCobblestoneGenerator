@@ -87,7 +87,7 @@ public class MagicGenerator
             return false;
         }
 
-        TreeMap<Double, Material> chanceMap = (TreeMap<Double, Material>) generatorTier.getBlockChanceMap();
+        TreeMap<Double, Material> chanceMap = generatorTier.getBlockChanceMap();
 
         if (chanceMap.isEmpty())
         {
@@ -112,7 +112,7 @@ public class MagicGenerator
             if (this.random.nextDouble() <= generatorTier.getTreasureChance())
             {
                 // Use the same variables for treasures.
-                chanceMap = (TreeMap<Double, Material>) generatorTier.getTreasureChanceMap();
+                chanceMap = generatorTier.getTreasureChanceMap();
                 newMaterial = this.getMaterialFromMap(chanceMap);
 
                 // Double check, in general it should always be a material.

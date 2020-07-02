@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -249,7 +250,7 @@ public class GeneratorViewPanel extends CommonPanel
 
 		List<Map.Entry<Double, Material>> materialChanceList =
 			this.generatorTier.getBlockChanceMap().entrySet().stream().
-				sorted().
+				sorted(Map.Entry.comparingByKey()).
 				collect(Collectors.toList());
 
 		if (this.pageIndex < 0)
@@ -304,7 +305,7 @@ public class GeneratorViewPanel extends CommonPanel
 
 		List<Map.Entry<Double, Material>> treasureChanceList =
 			this.generatorTier.getTreasureChanceMap().entrySet().stream().
-				sorted().
+				sorted(Map.Entry.comparingByKey()).
 				collect(Collectors.toList());
 
 		if (this.pageIndex < 0)

@@ -376,6 +376,7 @@ public class StoneGeneratorManager
     {
         this.operationWorlds.stream().
             map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
+            filter(Objects::nonNull).
             forEach(island -> {
                 if (island.getOwner() == uniqueId)
                 {

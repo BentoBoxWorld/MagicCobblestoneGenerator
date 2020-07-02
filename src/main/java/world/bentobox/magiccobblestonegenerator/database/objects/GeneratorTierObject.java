@@ -240,7 +240,7 @@ public class GeneratorTierObject implements DataObject
 	 *
 	 * @return the blockChanceMap (type Map<Double, Material>) of this object.
 	 */
-	public Map<Double, Material> getBlockChanceMap()
+	public TreeMap<Double, Material> getBlockChanceMap()
 	{
 		return blockChanceMap;
 	}
@@ -251,7 +251,7 @@ public class GeneratorTierObject implements DataObject
 	 * @param blockChanceMap new value for this object.
 	 *
 	 */
-	public void setBlockChanceMap(Map<Double, Material> blockChanceMap)
+	public void setBlockChanceMap(TreeMap<Double, Material> blockChanceMap)
 	{
 		this.blockChanceMap = blockChanceMap;
 	}
@@ -262,7 +262,7 @@ public class GeneratorTierObject implements DataObject
 	 *
 	 * @return the treasureChanceMap (type Map<Double, Material>) of this object.
 	 */
-	public Map<Double, Material> getTreasureChanceMap()
+	public TreeMap<Double, Material> getTreasureChanceMap()
 	{
 		return treasureChanceMap;
 	}
@@ -273,7 +273,7 @@ public class GeneratorTierObject implements DataObject
 	 * @param treasureChanceMap new value for this object.
 	 *
 	 */
-	public void setTreasureChanceMap(Map<Double, Material> treasureChanceMap)
+	public void setTreasureChanceMap(TreeMap<Double, Material> treasureChanceMap)
 	{
 		this.treasureChanceMap = treasureChanceMap;
 	}
@@ -521,13 +521,13 @@ public class GeneratorTierObject implements DataObject
 	 * Map that stores different blocks and their chance for generating.
 	 */
 	@Expose
-	private Map<Double, Material> blockChanceMap = Collections.emptyMap();
+	private TreeMap<Double, Material> blockChanceMap = new TreeMap<>();
 
 	/**
 	 * Map that stores different extra treasures and their change for being dropped.
 	 */
 	@Expose
-	private Map<Double, Material> treasureChanceMap = Collections.emptyMap();
+	private TreeMap<Double, Material> treasureChanceMap = new TreeMap<>();
 
 	/**
 	 * This stores a value of dropping treasure from treasure chance map.
