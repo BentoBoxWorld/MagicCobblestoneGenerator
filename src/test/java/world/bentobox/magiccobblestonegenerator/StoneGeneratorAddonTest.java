@@ -45,8 +45,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.managers.AddonsManager;
 import world.bentobox.bentobox.managers.FlagsManager;
 import world.bentobox.bentobox.managers.PlaceholdersManager;
-import world.bentobox.magiccobblestonegenerator.config.Settings;
-import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
+
 
 /**
  * @author tastybento
@@ -227,13 +226,13 @@ public class StoneGeneratorAddonTest {
     }
 
     /**
-     * Test method for {@link world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon#getManager()}.
+     * Test method for {@link world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon#getAddonManager()}.
      */
     @Test
     public void testGetManager() {
-        assertNull(addon.getManager());
+        assertNull(addon.getAddonManager());
         testOnEnable();
-        assertNotNull(addon.getManager());
+        assertNotNull(addon.getAddonManager());
     }
 
     /**

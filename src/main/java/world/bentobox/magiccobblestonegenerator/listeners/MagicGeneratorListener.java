@@ -46,7 +46,7 @@ public class MagicGeneratorListener extends GeneratorListener
     {
         Block eventSourceBlock = event.getBlock();
 
-        if (!this.addon.getManager().canOperateInWorld(eventSourceBlock.getWorld()))
+        if (!this.addon.getAddonManager().canOperateInWorld(eventSourceBlock.getWorld()))
         {
             // If not operating in world, then return as fast as possible
             return;
@@ -84,14 +84,14 @@ public class MagicGeneratorListener extends GeneratorListener
         }
 
         if (this.addon.getIslands().getIslandAt(eventToBlock.getLocation()).
-            map(island -> !island.isAllowed(this.addon.getMagicFlag())).
-            orElse(!this.addon.getMagicFlag().isSetForWorld(eventToBlock.getWorld())))
+            map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
+            orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventToBlock.getWorld())))
         {
             // if flag is toggled off, return
             return;
         }
 
-        if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
+        if (!this.addon.getAddonManager().isMembersOnline(eventSourceBlock.getLocation()))
         {
             // If island members are not online then do not continue
             return;

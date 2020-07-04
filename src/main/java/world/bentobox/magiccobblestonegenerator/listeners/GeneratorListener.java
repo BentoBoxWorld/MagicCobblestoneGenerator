@@ -49,17 +49,26 @@ public abstract class GeneratorListener implements Listener
 	 */
 	protected boolean isInRangeToGenerate(Block block)
 	{
+		// If settings value is 0, then assume that it is not set at all.
 		int workingRange = this.addon.getSettings().getWorkingRange();
 
 		if (workingRange > 0)
 		{
 			// Check if any island member is near block.
 			return this.addon.getIslands().getIslandAt(block.getLocation()).
-				map(island -> block.getWorld().getNearbyEntities(block.getLocation(), workingRange, workingRange, workingRange).
-					stream().
-					filter(Player.class::isInstance).
-					anyMatch(e -> island.getMemberSet().contains(e.getUniqueId()))).
-				orElse(false);
+				map(island ->
+				{
+					// Use range from island object.
+					int range = this.addon.getAddonManager().getGeneratorData(island).getWorkingRange();
+
+					return block.getWorld().getNearbyEntities(block.getLocation(),
+						range,
+						range,
+						range).
+						stream().
+						filter(Player.class::isInstance).
+						anyMatch(e -> island.getMemberSet().contains(e.getUniqueId()));
+				}).orElse(false);
 		}
 		else
 		{

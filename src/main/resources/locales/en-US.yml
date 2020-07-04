@@ -1,20 +1,187 @@
-stonegenerator:
+stone-generator:
   commands:
-    level:
-      description: "display your island Magic Generator tier"
-    main:
-      description: "display the Magic Generator help"
-    alllevels:
-      description: "display all Magic Generator tiers for the current world"
+    admin:
+      main:
+        description: "Main admin command for the Magic Cobblestone Generator Addon"
+      import:
+        description: "Command that allows to import magic generators into Game Mode Addon"
+        confirmation: "Please confirm that you want to remove existing generators from [gamemode] and import generators from template"
+      why:
+        parameters: "<player>"
+        description: "toggle debug messages about Magic Cobblestone Generator."
+    player:
+      main:
+        description: "Main player command that opens GUI with generator selection"
+      view:
+        description: "Player command that opens GUI with detailed information about requested generator"
+        parameters: "<generator_id> - id for generator"
+
+  gui:
+    buttons:
+      block-icon:
+        name: "[material]"
+        description: "Chance to generate: [number]"
+      treasure-icon:
+        name: "[material]"
+        description: "Chance to drop: [number]"
+
+      return:
+        name: "Return"
+        description: |-
+          Returns to previous
+          menu or exits GUI
+      previous:
+        name: "Previous Page"
+        description: "Switch to previous page"
+      next:
+        name: "Next Page"
+        description: "Switch to next page"
+
+      info:
+        name: "General Information"
+        description: |-
+          Shows general information
+          about generator
+      blocks:
+        name: "Block List"
+        description: |-
+          Shows list of blocks
+          and their chances to
+          generate
+      treasures:
+        name: "Treasure List"
+        description: |-
+          Shows list of treasures
+          and their chances to
+          be dropped.
+          Treasures are dropped
+          on block generating
+
+      name:
+        name: "Generator name"
+      icon:
+        name: "Generator icon"
+      description:
+        name: "Generator description"
+      default:
+        name: "Default Generator"
+      priority:
+        name: "Generator Priority"
+        description: |-
+          Generators with larger
+          priority number will
+          be preferred if multiple
+          can be applied to the
+          same location
+      type:
+        name: "Generator Type"
+      required_min_level:
+        name: "Required Island Level"
+        description: "Minimal island level"
+      required_permissions:
+        name: "Required Permissions"
+      purchase_cost:
+        name: "Purchase Cost"
+        description: |-
+          Amount of credits that
+          need to be paid once for
+          unlocking this generator
+      activation_cost:
+        name: "Activation Cost"
+        description: |-
+          Amount of credits that
+          need to be paid each time
+          for activating this
+          generator
+      biomes:
+        name: "Operational Biomes"
+        description: |-
+          List of biomes where
+          this generator will
+          work
+      deployed:
+        name: "Deployed"
+      treasure_amount:
+        name: "Treasure Amount"
+        description: |-
+          Amount of treasures
+          that will be dropped.
+      treasure_chance:
+        name: "Treasure Chance"
+        description: |-
+          Chance of getting treasure
+          to be dropped.
+
+      show_cobblestone:
+        name: "Cobblestone Generators"
+        description: |-
+          Shows only cobblestone
+          generators
+      show_stone:
+        name: "Stone Generators"
+        description: |-
+          Shows only stone
+          generators
+      show_basalt:
+        name: "Basalt Generators"
+        description: |-
+          Shows only basalt
+          generators
+      toggle_visibility:
+        name: "Only Unlocked"
+        description: |-
+          Shows only unlocked
+          generators
+      show_active:
+        name: "Only Active"
+        description: |-
+          Shows only active
+          generators
+
+    descriptions:
+      generator-active: "&2 Active"
+      activation-cost: "Activation Cost: [number]"
+      locked: "&c Locked!"
+      required-permissions: "&c Required Permissions:"
+      missing-permission: "&c - [permission]"
+      required-level: "&c Required [number] island level"
+      purchase-cost: "&c Purchase Cost: [number]."
+      current-value: "&2 Current Value: [value]"
+      current-value-list: "&2 - [value]"
+
+    titles:
+      generator-view: "Generator: [generator]"
+      generator-list: "Generators"
+
   messages:
-    generator-tier: "&2[name] &r&2(from [value] island level)."
-    material-chance: "&2    [name] - [value]%"
-    island-level: "&2Your island level is &6[level]&2!"
+    import-count: "&6 Imported [number] new generator tiers."
+    skipping: "&6 Generator '[generator]' &r&6 is already in local cache. Skipping."
+    overwriting: "&6 Overwriting generator '[generator]' &r&6 in local cache."
+    loaded: "&6 Generator '[generator]' &r&6  is loaded into local cache."
+    generator-deactivated: "&6 Generator '[generator]' &r&6 is deactivated."
+    generator-activated: "&6 Generator '[generator]' &r&6 is activated."
+    generator-purchased: "&6 Generator '[generator]' &r&6 is purchased."
+
   errors:
-    cannot-find-any-generators: "&cCannot find any Magic Cobblestone Generator tier for the current world."
+    generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
+    no-file: "&c generatorTemplate.yml file not found. Cannot perform importing."
+    no-load: "&c Could not load generatorTemplate.yml file. Error while reading: [description]."
+    not-a-gamemode-world: "&c World '[world]' is not a Game Mode Addon world."
+    active-generators-reached: "&c Too many generators are activated. Try to deactivate some before activating a new one."
+    generator-not-unlocked: "&c Generator '[generator]' &r&c is not unlocked."
+    generator-already-purchased: "&c Generator '[generator]' &r&c is already purchased."
+    island-level-not-reached: "&c Generator '[generator]' &r&c requires [number] island level."
+    missing-permission: "&c Generator '[generator]' &r&c requires permission `[permission]`."
+    no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
+    no-generator-data: "&c Could not find a valid generator data"
+    no-generators-in-world: "&c Could not find any generator in [world]"
+
 
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:
       name: "Magic Cobblestone Generator"
       description: "Toggle the Magic Cobblestone Generator"
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Magic Cobblestone Generator Permissions"
+      description: "Switch who can activate and deactivate generators"

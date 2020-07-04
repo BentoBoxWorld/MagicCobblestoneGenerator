@@ -8,6 +8,7 @@ package world.bentobox.magiccobblestonegenerator.listeners;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,13 +43,13 @@ public class VanillaGeneratorListener extends GeneratorListener
 	{
 		Block eventSourceBlock = event.getBlock();
 
-		if (!this.addon.getManager().canOperateInWorld(eventSourceBlock.getWorld()))
+		if (!this.addon.getAddonManager().canOperateInWorld(eventSourceBlock.getWorld()))
 		{
 			// If not operating in world, then return as fast as possible
 			return;
 		}
 
-		if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
+		if (!this.addon.getAddonManager().isMembersOnline(eventSourceBlock.getLocation()))
 		{
 			// If island members are not online then do not continue
 			return;
@@ -62,13 +63,13 @@ public class VanillaGeneratorListener extends GeneratorListener
 
 		// if flag is toggled off, return
 		if (this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation()).
-			map(island -> !island.isAllowed(this.addon.getMagicFlag())).
-			orElse(!this.addon.getMagicFlag().isSetForWorld(eventSourceBlock.getWorld())))
+			map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
+			orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventSourceBlock.getWorld())))
 		{
 			return;
 		}
 
-		if (!this.addon.getManager().isMembersOnline(eventSourceBlock.getLocation()))
+		if (!this.addon.getAddonManager().isMembersOnline(eventSourceBlock.getLocation()))
 		{
 			// If island members are not online then do not continue
 			return;
@@ -86,19 +87,21 @@ public class VanillaGeneratorListener extends GeneratorListener
 
 			final boolean playEffect;
 
-			switch (eventSourceBlock.getType())
+			if (eventSourceBlock.getType() == Material.COBBLESTONE)
 			{
-				case COBBLESTONE:
-					playEffect = this.isCobblestoneReplacementGenerated(eventSourceBlock);
-					break;
-				case STONE:
-					playEffect = this.isStoneReplacementGenerated(eventSourceBlock);
-					break;
-				case BASALT:
-					playEffect = this.isBasaltReplacementGenerated(eventSourceBlock);
-					break;
-				default:
-					playEffect = false;
+				playEffect = this.isCobblestoneReplacementGenerated(eventSourceBlock);
+			}
+			else if (eventSourceBlock.getType() == Material.STONE)
+			{
+				playEffect = this.isStoneReplacementGenerated(eventSourceBlock);
+			}
+			else if (eventSourceBlock.getType().name().equals("BASALT"))
+			{
+				playEffect = this.isBasaltReplacementGenerated(eventSourceBlock);
+			}
+			else
+			{
+				playEffect = false;
 			}
 
 			if (playEffect)

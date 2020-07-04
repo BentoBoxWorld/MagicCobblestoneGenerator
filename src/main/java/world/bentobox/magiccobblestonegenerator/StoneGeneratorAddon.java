@@ -6,13 +6,21 @@ import java.util.Optional;
 import org.bukkit.Material;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
+import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.flags.Flag;
+import world.bentobox.bentobox.api.flags.clicklisteners.CycleClick;
 import world.bentobox.bentobox.hooks.VaultHook;
+import world.bentobox.bentobox.managers.RanksManager;
 import world.bentobox.level.Level;
-import world.bentobox.magiccobblestonegenerator.commands.StoneGeneratorMainCommand;
+import world.bentobox.magiccobblestonegenerator.commands.admin.GeneratorAdminCommand;
+import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
+import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
+import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
+import world.bentobox.upgrades.UpgradesAddon;
 
 
 /**
@@ -32,7 +40,9 @@ public class StoneGeneratorAddon extends Addon
 //		// Save default config.yml
         this.saveDefaultConfig();
         // Load Addon Settings
-        this.settings = new Settings(this);
+        this.settings = new Config<>(this, Settings.class).loadConfigObject();
+
+        StoneGeneratorAddon.instance = this;
     }
 
 
@@ -49,6 +59,9 @@ public class StoneGeneratorAddon extends Addon
             return;
         }
 
+        // Init new import manager.
+        this.stoneGeneratorImportManager = new StoneGeneratorImportManager(this);
+
         // Init new Generator Manager
         this.stoneGeneratorManager = new StoneGeneratorManager(this);
 
@@ -57,16 +70,36 @@ public class StoneGeneratorAddon extends Addon
             forEach(gameMode -> {
                 if (gameMode.getPlayerCommand().isPresent())
                 {
-                    // Add commands
-                    new StoneGeneratorMainCommand(this, gameMode.getPlayerCommand().get());
-
                     // Add Placeholders
                     this.registerPlaceholders(gameMode);
 
                     // Add GameMode worlds to Generator.
                     this.stoneGeneratorManager.addWorld(gameMode.getOverWorld());
-                    this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
-                    this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
+
+                    if (gameMode.getWorldSettings().isNetherIslands())
+                    {
+                        this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
+                    }
+
+                    if (gameMode.getWorldSettings().isEndIslands())
+                    {
+                        this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
+                    }
+
+                    MAGIC_COBBLESTONE_GENERATOR.addGameModeAddon(gameMode);
+                    MAGIC_COBBLESTONE_GENERATOR_PERMISSION.addGameModeAddon(gameMode);
+
+                    // Hook commands
+                    gameMode.getPlayerCommand().ifPresent(playerCommand ->
+                        new GeneratorPlayerCommand(this, playerCommand));
+                    gameMode.getAdminCommand().ifPresent(adminCommand ->
+                        new GeneratorAdminCommand(this, adminCommand));
+
+                    // if gamemode does not have any data, load them from template.
+                    if (this.stoneGeneratorManager.getAllGeneratorTiers(gameMode.getOverWorld()).isEmpty())
+                    {
+                        this.stoneGeneratorImportManager.importFile(null, gameMode.getOverWorld());
+                    }
 
                     this.hooked = true;
                 }
@@ -82,13 +115,29 @@ public class StoneGeneratorAddon extends Addon
 
             if (!level.isPresent())
             {
-                this.logWarning("Level add-on not found so Magic Cobblestone Generator will not work correctly!");
+                this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
                 this.levelAddon = null;
             }
             else
             {
                 this.levelAddon = (Level) level.get();
             }
+
+            // Find upgrades addon
+
+            Optional<Addon> upgrades = this.getAddonByName("Upgrades");
+
+            if (!upgrades.isPresent())
+            {
+                this.logWarning("Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
+                this.upgradesAddon = null;
+            }
+            else
+            {
+                this.upgradesAddon = (UpgradesAddon) upgrades.get();
+            }
+
+            // Find vault plugin
 
             Optional<VaultHook> vault = this.getPlugin().getVault();
 
@@ -107,19 +156,14 @@ public class StoneGeneratorAddon extends Addon
             // TODO: fix and implement
             //this.registerListener(new MagicGeneratorListener(this));
 
+            this.registerListener(new JoinLeaveListener(this));
+
             // Register Flags
-            this.magicFlag = new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE).
-                type(Flag.Type.SETTING).
-                defaultSetting(true).
-                addon(this).
-                build();
-            this.getPlugin().getFlagsManager().registerFlag(magicFlag);
+            this.registerFlag(MAGIC_COBBLESTONE_GENERATOR);
+            this.registerFlag(MAGIC_COBBLESTONE_GENERATOR_PERMISSION);
 
             // Register Request Handlers
 //			this.registerRequestHandler(REQUEST_HANDLER);
-
-            // Register placeholders
-            this.registerPlaceholders();
         }
         else
         {
@@ -136,39 +180,7 @@ public class StoneGeneratorAddon extends Addon
      */
     private void registerPlaceholders(GameModeAddon addon)
     {
-        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
-            this.getDescription().getName().toLowerCase() + "_island_generator_tier",
-            user ->
-            {
-                long level = isLevelProvided() ? 0L :
-                    this.getLevelAddon().getIslandLevel(addon.getOverWorld(), user.getUniqueId());
-                Settings.GeneratorTier tier = this.getManager().getGeneratorTier(level, user.getWorld());
-                return tier != null ? tier.getName() : "";
-            });
-    }
-
-
-    /**
-     * Registers the placeholders
-     *
-     * @since 1.9.0
-     * @deprecated replaced with proper palceholder.
-     */
-    private void registerPlaceholders()
-    {
-        this.getPlugin().getAddonsManager().getGameModeAddons().stream().
-            filter(gameMode -> !settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
-            forEach(gameMode -> {
-                // Register placeholders
-                this.getPlugin().getPlaceholdersManager().registerPlaceholder(this,
-                    gameMode.getDescription().getName().toLowerCase() + "_island_generator_tier",
-                    user -> {
-                        long level = isLevelProvided() ? 0L :
-                            this.getLevelAddon().getIslandLevel(gameMode.getOverWorld(), user.getUniqueId());
-                        Settings.GeneratorTier tier = this.getManager().getGeneratorTier(level, user.getWorld());
-                        return tier != null ? tier.getName() : "";
-                    });
-            });
+        // TODO.
     }
 
 
@@ -179,6 +191,12 @@ public class StoneGeneratorAddon extends Addon
     public void onDisable()
     {
         // Do some stuff...
+
+        if (this.hooked)
+        {
+            // Save database on disable.
+            this.getAddonManager().save();
+        }
     }
 
 
@@ -190,10 +208,23 @@ public class StoneGeneratorAddon extends Addon
     {
         super.onReload();
 
-        if (this.hooked)
+        this.settings = new Config<>(this, Settings.class).loadConfigObject();
+
+        if (this.settings == null)
         {
-            this.settings = new Settings(this);
-            this.getLogger().info("Magic Cobblestone Generator addon reloaded.");
+            // If we failed to load Settings then we should not enable addon.
+            // We can log error and set state to DISABLED.
+
+            this.logError("MagicCobblestoneGenerator settings could not load! Addon disabled.");
+            this.setState(State.DISABLED);
+        }
+        else
+        {
+            if (this.hooked)
+            {
+                this.stoneGeneratorManager.reload();
+                this.log("Magic Cobblestone Generator addon reloaded.");
+            }
         }
     }
 
@@ -230,9 +261,20 @@ public class StoneGeneratorAddon extends Addon
      *
      * @return Stone Generator Manager
      */
-    public StoneGeneratorManager getManager()
+    public StoneGeneratorManager getAddonManager()
     {
         return this.stoneGeneratorManager;
+    }
+
+
+    /**
+     * This method returns stone import manager.
+     *
+     * @return Stone Generator Import Manager
+     */
+    public StoneGeneratorImportManager getImportManager()
+    {
+        return this.stoneGeneratorImportManager;
     }
 
 
@@ -259,14 +301,55 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
-     * Returns the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
+     * This method returns the vaultHook is provided.
      *
-     * @return the Flag that allows players to toggle on/off the Magic Cobblestone Generator on their islands.
-     * @since 1.9.0
+     * @return the vaultHook object exists.
      */
-    public Flag getMagicFlag()
+    public boolean isVaultProvided()
     {
-        return magicFlag;
+        return vaultHook != null && vaultHook.hook();
+    }
+
+
+    /**
+     * This method adds access to vaulthook.
+     * @return VaultHook.
+     */
+    public VaultHook getVaultHook()
+    {
+        return vaultHook;
+    }
+
+
+    /**
+     * This method returns the upgradesAddon object.
+     *
+     * @return the upgradesAddon object.
+     */
+    public UpgradesAddon getUpgradesAddon()
+    {
+        return this.upgradesAddon;
+    }
+
+
+    /**
+     * This method returns the upgradesAddon object.
+     *
+     * @return the upgradesAddon object exists.
+     */
+    public boolean isUpgradesProvided()
+    {
+        return upgradesAddon != null;
+    }
+
+
+    /**
+     * This method allows to access static addon instance.
+     * @return Addon instance.
+     */
+    public static StoneGeneratorAddon getInstance()
+    {
+        return instance;
     }
 
 
@@ -290,6 +373,11 @@ public class StoneGeneratorAddon extends Addon
     private StoneGeneratorManager stoneGeneratorManager;
 
     /**
+     * Variable holds Stone Generator Manager object.
+     */
+    private StoneGeneratorImportManager stoneGeneratorImportManager;
+
+    /**
      * Variable holds MagicGenerator object.
      */
     private MagicGenerator generator;
@@ -305,8 +393,48 @@ public class StoneGeneratorAddon extends Addon
     private Level levelAddon;
 
     /**
-     * Flag that toggles on/off the Magic Cobblestone Generator.
-     * @since 1.9.0
+     * Upgrades addon.
      */
-    private Flag magicFlag;
+    private UpgradesAddon upgradesAddon;
+
+
+    /**
+     * Static addon isntance.
+     */
+    private static StoneGeneratorAddon instance;
+
+
+    // ---------------------------------------------------------------------
+    // Section: Flags
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * Settings flags allows to modifying parameters of the island.
+     *
+     * It can be modified by the players (island owner).
+     * This is usually an on/off setting.
+     *
+     * MAGIC_COBBLESTONE_GENERATOR should also be defined in language file under
+     * protection.flags section.
+     *
+     * By default setting is set to false.
+     */
+    public final static Flag MAGIC_COBBLESTONE_GENERATOR =
+        new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR", Material.DIAMOND_PICKAXE).
+            type(Flag.Type.SETTING).
+            defaultSetting(true).
+            build();
+
+    /**
+     * This flag allows to change who have access to modify island generator tiers option.
+     * Owner can change it from member rank till owner rank.
+     * Default value is set to subowner.
+     */
+    public final static Flag MAGIC_COBBLESTONE_GENERATOR_PERMISSION =
+        new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR_PERMISSION", Material.DIAMOND_PICKAXE).
+            type(Flag.Type.PROTECTION).
+            defaultRank(RanksManager.SUB_OWNER_RANK).
+            clickHandler(new CycleClick("MCG_PERMISSIONS", RanksManager.MEMBER_RANK, RanksManager.OWNER_RANK)).
+            build();
 }
