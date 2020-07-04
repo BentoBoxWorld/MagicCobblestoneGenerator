@@ -160,6 +160,7 @@ stone-generator:
     loaded: "&6 Generator '[generator]' &r&6  is loaded into local cache."
     generator-deactivated: "&6 Generator '[generator]' &r&6 is deactivated."
     generator-activated: "&6 Generator '[generator]' &r&6 is activated."
+    generator-purchased: "&6 Generator '[generator]' &r&6 is purchased."
 
   errors:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
@@ -168,6 +169,9 @@ stone-generator:
     not-a-gamemode-world: "&c World '[world]' is not a Game Mode Addon world."
     active-generators-reached: "&c Too many generators are activated. Try to deactivate some before activating a new one."
     generator-not-unlocked: "&c Generator '[generator]' &r&c is not unlocked."
+    generator-already-purchased: "&c Generator '[generator]' &r&c is already purchased."
+    island-level-not-reached: "&c Generator '[generator]' &r&c requires [number] island level."
+    missing-permission: "&c Generator '[generator]' &r&c requires permission `[permission]`."
     no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
     no-generator-data: "&c Could not find a valid generator data"
     no-generators-in-world: "&c Could not find any generator in [world]"

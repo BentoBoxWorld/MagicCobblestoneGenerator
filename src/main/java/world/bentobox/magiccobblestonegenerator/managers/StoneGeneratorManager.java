@@ -341,9 +341,9 @@ public class StoneGeneratorManager
             // Filter generators with necessary type.
             filter(generator -> generator.getGeneratorType().equals(generatorType)).
             // Filter generators that starts with name.
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Return first or null.
-                findFirst().orElse(null);
+            findFirst().orElse(null);
     }
 
 
@@ -368,6 +368,8 @@ public class StoneGeneratorManager
         return this.generatorTierCache.values().stream().
             // Filter generators that starts with name.
             filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            // Filter out undeployed generators.
+            filter(GeneratorTierObject::isDeployed).
             // Sort in order: default generators are first, followed by lowest priority,
             // generator type and then by generator name.
             sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
@@ -519,10 +521,14 @@ public class StoneGeneratorManager
             }
             else if (generatorTier.getRequiredMinIslandLevel() <= this.getIslandLevel(island))
             {
-                // Add only if user has all required permissions.
-                if (generatorTier.getRequiredPermissions().isEmpty() ||
+                // Add only if user has all required permissions and generator cost is 0 or vault
+                // is not provided.
+
+                if ((generatorTier.getRequiredPermissions().isEmpty() ||
                     generatorTier.getRequiredPermissions().stream().allMatch(permission ->
-                        User.getInstance(island.getOwner()).hasPermission(permission)))
+                        User.getInstance(island.getOwner()).hasPermission(permission))) &&
+                    (generatorTier.getGeneratorTierCost() <= 0 ||
+                        !this.addon.isVaultProvided()))
                 {
                     dataObject.getUnlockedTiers().add(generatorTier);
                 }
@@ -615,6 +621,9 @@ public class StoneGeneratorManager
         user.sendMessage(Constants.MESSAGE + "generator-deactivated",
             Constants.GENERATOR, generatorTier.getFriendlyName());
         generatorData.getActiveGeneratorList().remove(generatorTier);
+
+        // Save object.
+        this.saveGeneratorData(generatorData);
     }
 
 
@@ -685,6 +694,101 @@ public class StoneGeneratorManager
         user.sendMessage(Constants.MESSAGE + "generator-activated",
             Constants.GENERATOR, generatorTier.getFriendlyName());
         generatorData.getActiveGeneratorList().add(generatorTier);
+
+        // Save object.
+        this.saveGeneratorData(generatorData);
+    }
+
+
+    /**
+     * This method checks if given user can purchase given generator tier.
+     * This method includes money withdraw, so it is assumed, that it is used as check
+     * before purchasing the generator tier.
+     * @param user User who will pay for purchase.
+     * @param island GeneratorData linked island.
+     * @param generatorData Data that stores island generators.
+     * @param generatorTier Generator tier that need to be purchased.
+     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     */
+    public boolean canPurchaseGenerator(@NotNull User user,
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
+    {
+        if (generatorData.getPurchasedTiers().contains(generatorTier))
+        {
+            // Generator is not unlocked. Return false.
+            user.sendMessage(Constants.ERRORS + "generator-already-purchased",
+                Constants.GENERATOR, generatorTier.getFriendlyName());
+            return false;
+        }
+        else if (generatorTier.getRequiredMinIslandLevel() > this.getIslandLevel(island))
+        {
+            // Generator is not unlocked. Return false.
+            user.sendMessage(Constants.ERRORS + "island-level-not-reached",
+                Constants.GENERATOR, generatorTier.getFriendlyName(),
+                TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel()));
+            return false;
+        }
+        else if (!generatorTier.getRequiredPermissions().isEmpty() &&
+            !generatorTier.getRequiredPermissions().stream().allMatch(permission ->
+                User.getInstance(island.getOwner()).hasPermission(permission)))
+        {
+            Optional<String> missingPermission =
+                generatorTier.getRequiredPermissions().stream().
+                    filter(permission -> !User.getInstance(island.getOwner()).hasPermission(permission)).
+                    findAny();
+
+            // Generator is not unlocked. Return false.
+            user.sendMessage(Constants.ERRORS + "missing-permission",
+                Constants.GENERATOR, generatorTier.getFriendlyName(),
+                TextVariables.PERMISSION, missingPermission.get());
+            return false;
+        }
+        else
+        {
+            if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0)
+            {
+                // Return true only if user has enough money and its removal was successful.
+                if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()) &&
+                    this.addon.getVaultHook().withdraw(user,
+                        generatorTier.getGeneratorTierCost()).transactionSuccess())
+                {
+                    return true;
+                }
+                else
+                {
+                    user.sendMessage(Constants.ERRORS + "no-credits",
+                        TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost()));
+                    return false;
+                }
+            }
+            else
+            {
+                // Vault is not enabled or cost is not set. Allow change.
+                return true;
+            }
+        }
+    }
+
+
+    /**
+     * This method adds generator tier to purchased generators.
+     * @param user User who will pays.
+     * @param generatorData Data that stores island generators.
+     * @param generatorTier Generator tier that need to be purchased.
+     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     */
+    public void purchaseGenerator(@NotNull User user,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
+    {
+        user.sendMessage(Constants.MESSAGE + "generator-purchased",
+            Constants.GENERATOR, generatorTier.getFriendlyName());
+        generatorData.getPurchasedTiers().add(generatorTier);
+
+        // Save object.
+        this.saveGeneratorData(generatorData);
     }
 
 
@@ -769,6 +873,24 @@ public class StoneGeneratorManager
 
         return this.addon.getLevelAddon().getIslandLevel(island.getWorld(),
             island.getOwner());
+    }
+
+
+    /**
+     * This method returns long that represents given user level.
+     * @param user the user.
+     * @return Island level
+     */
+    public long getIslandLevel(User user)
+    {
+        if (!this.addon.isLevelProvided())
+        {
+            // No level addon. Return max value.
+            return Long.MAX_VALUE;
+        }
+
+        return this.addon.getLevelAddon().getIslandLevel(user.getWorld(),
+            user.getUniqueId());
     }
 
 

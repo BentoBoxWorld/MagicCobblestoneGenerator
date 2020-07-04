@@ -445,6 +445,20 @@ public class GeneratorViewPanel extends CommonPanel
 				itemStack = new ItemStack(Material.GOLD_BLOCK);
 				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
 					Constants.VALUE, String.valueOf(this.generatorTier.getGeneratorTierCost())));
+
+				clickHandler = (panel, user, clickType, i) ->
+				{
+					if (this.manager.canPurchaseGenerator(user,
+						this.island,
+						this.generatorData,
+						this.generatorTier))
+					{
+						this.manager.purchaseGenerator(user, this.generatorData, this.generatorTier);
+					}
+
+					return true;
+				};
+
 				break;
 			}
 			case ACTIVATION_COST:
