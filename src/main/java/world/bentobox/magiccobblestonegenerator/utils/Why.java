@@ -7,8 +7,8 @@
 package world.bentobox.magiccobblestonegenerator.utils;
 
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.bukkit.Location;
 import org.bukkit.metadata.MetadataValue;
 import java.util.UUID;

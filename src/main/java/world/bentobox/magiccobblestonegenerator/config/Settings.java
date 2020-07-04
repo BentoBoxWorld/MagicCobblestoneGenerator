@@ -176,7 +176,7 @@ public class Settings implements ConfigObject
 
     @ConfigComment("")
     @ConfigComment("This allows to define how many generators can be activated at once per each island.")
-    @ConfigComment("0 or less will mean that only default generator can be used for island.")
+    @ConfigComment("0 or less will mean that there is no limitation.")
     @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.")
     @ConfigEntry(path = "default-active-generators")
     private int defaultActiveGeneratorCount = 3;

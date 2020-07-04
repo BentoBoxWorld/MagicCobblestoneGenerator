@@ -1,7 +1,7 @@
 package world.bentobox.magiccobblestonegenerator.panels.player;
 
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.bukkit.Material;
 import org.bukkit.World;
 import java.util.List;

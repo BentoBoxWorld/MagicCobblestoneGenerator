@@ -17,7 +17,7 @@ use-physic: true
 working-range: 0
 #
 # This allows to define how many generators can be activated at once per each island.
-# 0 or less will mean that only default generator can be used for island.
+# 0 or less will mean that there is no limitation.
 # Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.
 default-active-generators: 3
 #
