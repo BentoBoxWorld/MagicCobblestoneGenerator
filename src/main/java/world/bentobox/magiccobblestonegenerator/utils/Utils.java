@@ -8,8 +8,11 @@ package world.bentobox.magiccobblestonegenerator.utils;
 
 
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.BentoBox;
@@ -176,5 +179,24 @@ public class Utils
 		}
 
 		return currentValue;
+	}
+
+
+	/**
+	 * This method returns map that contains biomes name as key and biome as value.
+	 * @return Map that contains relation from biome name to biome.
+	 */
+	public static Map<String, Biome> getBiomeNameMap()
+	{
+		Biome[] biomes = Biome.values();
+
+		Map<String, Biome> returnMap = new HashMap<>(biomes.length);
+
+		for (Biome biome : biomes)
+		{
+			returnMap.put(biome.name(), biome);
+		}
+
+		return returnMap;
 	}
 }

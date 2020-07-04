@@ -8,6 +8,7 @@ package world.bentobox.magiccobblestonegenerator.listeners;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -86,19 +87,21 @@ public class VanillaGeneratorListener extends GeneratorListener
 
 			final boolean playEffect;
 
-			switch (eventSourceBlock.getType())
+			if (eventSourceBlock.getType() == Material.COBBLESTONE)
 			{
-				case COBBLESTONE:
-					playEffect = this.isCobblestoneReplacementGenerated(eventSourceBlock);
-					break;
-				case STONE:
-					playEffect = this.isStoneReplacementGenerated(eventSourceBlock);
-					break;
-				case BASALT:
-					playEffect = this.isBasaltReplacementGenerated(eventSourceBlock);
-					break;
-				default:
-					playEffect = false;
+				playEffect = this.isCobblestoneReplacementGenerated(eventSourceBlock);
+			}
+			else if (eventSourceBlock.getType() == Material.STONE)
+			{
+				playEffect = this.isStoneReplacementGenerated(eventSourceBlock);
+			}
+			else if (eventSourceBlock.getType().name().equals("BASALT"))
+			{
+				playEffect = this.isBasaltReplacementGenerated(eventSourceBlock);
+			}
+			else
+			{
+				playEffect = false;
 			}
 
 			if (playEffect)

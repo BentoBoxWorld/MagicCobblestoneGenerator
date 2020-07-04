@@ -13,6 +13,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.eclipse.jdt.annotation.Nullable;
 
 import java.io.File;
@@ -27,6 +28,7 @@ import world.bentobox.bentobox.util.ItemParser;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -134,6 +136,10 @@ public class StoneGeneratorImportManager
 
 		ConfigurationSection reader = config.getConfigurationSection("tiers");
 
+		// TODO: 1.15.2 compatibility.
+		boolean canAddBasaltGenerator = Material.getMaterial("BASALT") != null;
+		Map<String, Biome> biomeMap = Utils.getBiomeNameMap();
+
 		for (String generatorId : reader.getKeys(false))
 		{
 			GeneratorTierObject generatorTier = new GeneratorTierObject();
@@ -149,10 +155,21 @@ public class StoneGeneratorImportManager
 				// Read description
 				generatorTier.setDescription(details.getStringList("description"));
 				// Read icon
-				generatorTier.setGeneratorIcon(ItemParser.parse(details.getString("icon")));
+
+				// TODO: 1.15.2 compatibility
+				ItemStack icon = ItemParser.parse(details.getString("icon"));
+				generatorTier.setGeneratorIcon(icon == null ? new ItemStack(Material.PAPER) : icon);
+
 				// Read type
 				generatorTier.setGeneratorType(GeneratorTierObject.GeneratorType.valueOf(
 					details.getString("type", "COBBLESTONE").toUpperCase()));
+
+				if (generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT))
+				{
+					// Basalt generators cannot be added yet in 1.15.2
+					continue;
+				}
+
 				// Get default generator option
 				generatorTier.setDefaultGenerator(details.getBoolean("default", false));
 				// Set priority
@@ -163,7 +180,9 @@ public class StoneGeneratorImportManager
 				// Search and read requirements only if it is not default generator.
 				if (!generatorTier.isDefaultGenerator())
 				{
-					this.populateRequirements(generatorTier, details.getConfigurationSection("requirements"));
+					this.populateRequirements(generatorTier,
+						details.getConfigurationSection("requirements"),
+						biomeMap);
 				}
 
 				// Read blocks
@@ -197,15 +216,18 @@ public class StoneGeneratorImportManager
 	 * @param requirements Config that contains data.
 	 */
 	private void populateRequirements(GeneratorTierObject generatorTier,
-		ConfigurationSection requirements)
+		ConfigurationSection requirements,
+		Map<String, Biome> biomeMap)
 	{
 		if (requirements != null)
 		{
 			generatorTier.setRequiredMinIslandLevel(requirements.getLong("island-level", 0));
 			generatorTier.setRequiredPermissions(new HashSet<>(requirements.getStringList("required-permissions")));
 
+			// TODO: 1.15.2 compatibility. Non-existing biomes will be removed.
 			Set<Biome> biomeSet = requirements.getStringList("required-biomes").stream().
-				map(name -> Biome.valueOf(name.toUpperCase())).
+				map(name -> biomeMap.get(name.toUpperCase())).
+				filter(Objects::nonNull).
 				collect(Collectors.toSet());
 
 			generatorTier.setRequiredBiomes(biomeSet);

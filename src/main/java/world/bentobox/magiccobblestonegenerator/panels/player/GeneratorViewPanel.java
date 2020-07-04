@@ -401,17 +401,24 @@ public class GeneratorViewPanel extends CommonPanel
 			}
 			case TYPE:
 			{
-				switch (this.generatorTier.getGeneratorType())
+				if (this.generatorTier.getGeneratorType() == GeneratorTierObject.GeneratorType.COBBLESTONE)
 				{
-					case COBBLESTONE:
-						itemStack = new ItemStack(Material.COBBLESTONE);
-						break;
-					case STONE:
-						itemStack = new ItemStack(Material.STONE);
-						break;
-					case BASALT:
-						itemStack = new ItemStack(Material.BASALT);
-						break;
+					itemStack = new ItemStack(Material.COBBLESTONE);
+				}
+				else if (this.generatorTier.getGeneratorType() == GeneratorTierObject.GeneratorType.STONE)
+				{
+					itemStack = new ItemStack(Material.STONE);
+				}
+				else if (this.generatorTier.getGeneratorType() == GeneratorTierObject.GeneratorType.BASALT)
+				{
+					if (Material.getMaterial("BASALT") == null)
+					{
+						itemStack = new ItemStack(Material.BARRIER);
+					}
+					else
+					{
+						itemStack = new ItemStack(Material.getMaterial("BASALT"));
+					}
 				}
 				break;
 			}
