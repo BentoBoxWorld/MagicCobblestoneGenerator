@@ -247,13 +247,13 @@ public class GeneratorUserPanel extends CommonPanel
 			case TOGGLE_VISIBILITY:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
+						this.generatorData.getUnlockedTiers().contains(generatorTier)).
 					collect(Collectors.toList());
 				break;
 			case SHOW_ACTIVE:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
+						this.generatorData.getActiveGeneratorList().contains(generatorTier)).
 					collect(Collectors.toList());
 				break;
 			default:
@@ -308,11 +308,11 @@ public class GeneratorUserPanel extends CommonPanel
 	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier);
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
 			glow,
-			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
+			this.generatorData.getUnlockedTiers().contains(generatorTier),
 			this.manager.getIslandLevel(this.island));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {

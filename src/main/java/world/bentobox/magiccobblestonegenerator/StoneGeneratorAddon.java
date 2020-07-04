@@ -41,6 +41,8 @@ public class StoneGeneratorAddon extends Addon
         this.saveDefaultConfig();
         // Load Addon Settings
         this.settings = new Config<>(this, Settings.class).loadConfigObject();
+
+        StoneGeneratorAddon.instance = this;
     }
 
 
@@ -341,6 +343,16 @@ public class StoneGeneratorAddon extends Addon
     }
 
 
+    /**
+     * This method allows to access static addon instance.
+     * @return Addon instance.
+     */
+    public static StoneGeneratorAddon getInstance()
+    {
+        return instance;
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
@@ -384,6 +396,13 @@ public class StoneGeneratorAddon extends Addon
      * Upgrades addon.
      */
     private UpgradesAddon upgradesAddon;
+
+
+    /**
+     * Static addon isntance.
+     */
+    private static StoneGeneratorAddon instance;
+
 
     // ---------------------------------------------------------------------
     // Section: Flags

@@ -116,9 +116,6 @@ public class StoneGeneratorImportManager
 		this.addon.getAddonManager().wipeGameModeGenerators(optional);
 		this.createGenerators(config, user, optional.get());
 
-		// Load everything from database
-		this.addon.getAddonManager().load();
-
 		return true;
 	}
 
@@ -177,6 +174,7 @@ public class StoneGeneratorImportManager
 
 			// Save object in database.
 			this.addon.getAddonManager().saveGeneratorTier(generatorTier);
+			this.addon.getAddonManager().loadGeneratorTier(generatorTier, false, null, true);
 			size++;
 		}
 

@@ -8,12 +8,14 @@ package world.bentobox.magiccobblestonegenerator.database.objects;
 
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import world.bentobox.bentobox.database.objects.DataObject;
 import world.bentobox.bentobox.database.objects.Table;
+import world.bentobox.magiccobblestonegenerator.database.adapters.GeneratorTierAdapter;
 
 
 /**
@@ -62,7 +64,7 @@ public class GeneratorDataObject implements DataObject
 	 *
 	 * @return the unlockedTiers (type Set<String>) of this object.
 	 */
-	public Set<String> getUnlockedTiers()
+	public Set<GeneratorTierObject> getUnlockedTiers()
 	{
 		return unlockedTiers;
 	}
@@ -73,7 +75,7 @@ public class GeneratorDataObject implements DataObject
 	 * @param unlockedTiers new value for this object.
 	 *
 	 */
-	public void setUnlockedTiers(Set<String> unlockedTiers)
+	public void setUnlockedTiers(Set<GeneratorTierObject> unlockedTiers)
 	{
 		this.unlockedTiers = unlockedTiers;
 	}
@@ -84,7 +86,7 @@ public class GeneratorDataObject implements DataObject
 	 *
 	 * @return the activeGeneratorList (type Set<String>) of this object.
 	 */
-	public Set<String> getActiveGeneratorList()
+	public Set<GeneratorTierObject> getActiveGeneratorList()
 	{
 		return activeGeneratorList;
 	}
@@ -95,7 +97,7 @@ public class GeneratorDataObject implements DataObject
 	 * @param activeGeneratorList new value for this object.
 	 *
 	 */
-	public void setActiveGeneratorList(Set<String> activeGeneratorList)
+	public void setActiveGeneratorList(Set<GeneratorTierObject> activeGeneratorList)
 	{
 		this.activeGeneratorList = activeGeneratorList;
 	}
@@ -126,7 +128,7 @@ public class GeneratorDataObject implements DataObject
 	 * This method returns the purchasedTiers value.
 	 * @return the value of purchasedTiers.
 	 */
-	public Set<String> getPurchasedTiers()
+	public Set<GeneratorTierObject> getPurchasedTiers()
 	{
 		return purchasedTiers;
 	}
@@ -137,7 +139,7 @@ public class GeneratorDataObject implements DataObject
 	 * @param purchasedTiers the purchasedTiers new value.
 	 *
 	 */
-	public void setPurchasedTiers(Set<String> purchasedTiers)
+	public void setPurchasedTiers(Set<GeneratorTierObject> purchasedTiers)
 	{
 		this.purchasedTiers = purchasedTiers;
 	}
@@ -183,7 +185,7 @@ public class GeneratorDataObject implements DataObject
 		return workingRange;
 	}
 
-	
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -199,19 +201,22 @@ public class GeneratorDataObject implements DataObject
 	 * Stores a names of unlocked generator tiers.
 	 */
 	@Expose
-	private Set<String> unlockedTiers = new HashSet<>();
+	@JsonAdapter(GeneratorTierAdapter.class)
+	private Set<GeneratorTierObject> unlockedTiers = new HashSet<>();
 
 	/**
 	 * Stores a names of unlocked purchased tiers.
 	 */
 	@Expose
-	private Set<String> purchasedTiers = new HashSet<>();
+	@JsonAdapter(GeneratorTierAdapter.class)
+	private Set<GeneratorTierObject> purchasedTiers = new HashSet<>();
 
 	/**
 	 * Stores currently active generator names.
 	 */
 	@Expose
-	private Set<String> activeGeneratorList = new HashSet<>();
+	@JsonAdapter(GeneratorTierAdapter.class)
+	private Set<GeneratorTierObject> activeGeneratorList = new HashSet<>();
 
 	/**
 	 * Stores amount of maximal active generators at the same time.

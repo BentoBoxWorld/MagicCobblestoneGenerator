@@ -622,7 +622,7 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier);
 
 		List<String> description;
 
@@ -630,7 +630,7 @@ public class GeneratorViewPanel extends CommonPanel
 		{
 			description = this.generateGeneratorDescription(generatorTier,
 				glow,
-				this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
+				this.generatorData.getUnlockedTiers().contains(generatorTier),
 				this.manager.getIslandLevel(this.island));
 		}
 		else
