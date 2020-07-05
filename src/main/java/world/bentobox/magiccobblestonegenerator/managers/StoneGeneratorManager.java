@@ -541,14 +541,19 @@ public class StoneGeneratorManager
 
         this.updateMaxGeneratorCount(island, dataObject);
 
-        if (dataObject.getMaxGeneratorCount() < dataObject.getActiveGeneratorList().size())
+        if (dataObject.getMaxGeneratorCount() > 0 &&
+            dataObject.getMaxGeneratorCount() < dataObject.getActiveGeneratorList().size())
         {
             // There are more active generators then allowed.
             // Start to remove from first element.
 
-            while (dataObject.getActiveGeneratorList().size() != dataObject.getMaxGeneratorCount())
+            Iterator<GeneratorTierObject> activeGenerators =
+                new ArrayList<>(dataObject.getActiveGeneratorList()).iterator();
+
+            while (dataObject.getActiveGeneratorList().size() > dataObject.getMaxGeneratorCount() &&
+                activeGenerators.hasNext())
             {
-                dataObject.getActiveGeneratorList().iterator().remove();
+                dataObject.getActiveGeneratorList().remove(activeGenerators.next());
             }
         }
 
