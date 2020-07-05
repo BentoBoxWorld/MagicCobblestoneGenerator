@@ -1,9 +1,12 @@
 package world.bentobox.magiccobblestonegenerator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -28,22 +31,30 @@ import org.bukkit.Bukkit;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.Settings;
 import world.bentobox.bentobox.api.addons.Addon.State;
 import world.bentobox.bentobox.api.addons.AddonDescription;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.commands.CompositeCommand;
+import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.AbstractDatabaseHandler;
+import world.bentobox.bentobox.database.DatabaseSetup;
+import world.bentobox.bentobox.database.DatabaseSetup.DatabaseType;
 import world.bentobox.bentobox.managers.AddonsManager;
 import world.bentobox.bentobox.managers.FlagsManager;
+import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.PlaceholdersManager;
 
 
@@ -52,9 +63,9 @@ import world.bentobox.bentobox.managers.PlaceholdersManager;
  *
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Bukkit.class, BentoBox.class, User.class})
+@PrepareForTest({Bukkit.class, BentoBox.class, User.class, DatabaseSetup.class})
 public class StoneGeneratorAddonTest {
-    
+
     private StoneGeneratorAddon addon;
 
     @Mock
@@ -75,6 +86,28 @@ public class StoneGeneratorAddonTest {
     @Mock
     private FlagsManager flagsManager;
 
+    @Mock
+    private Settings pluginSettings;
+
+    @Mock
+    private IslandWorldManager iwm;
+
+    @Mock
+    private static AbstractDatabaseHandler<Object> handler;
+
+    @SuppressWarnings("unchecked")
+    @BeforeClass
+    public static void beforeClass() {
+        // This has to be done beforeClass otherwise the tests will interfere with each other
+        handler = mock(AbstractDatabaseHandler.class);
+        // Database
+        PowerMockito.mockStatic(DatabaseSetup.class);
+        DatabaseSetup dbSetup = mock(DatabaseSetup.class);
+        when(DatabaseSetup.getDatabase()).thenReturn(dbSetup);
+        when(dbSetup.getHandler(any())).thenReturn(handler);
+    }
+
+
     /**
      * @throws java.lang.Exception
      */
@@ -86,28 +119,30 @@ public class StoneGeneratorAddonTest {
         when(plugin.getLogger()).thenReturn(logger);
         when(plugin.getPlaceholdersManager()).thenReturn(placeholdersManager);
         when(plugin.getFlagsManager()).thenReturn(flagsManager);
+        when(plugin.getIWM()).thenReturn(iwm);
         // Bukkit
-        PowerMockito.mockStatic(Bukkit.class);
+        PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
         when(Bukkit.getLogger()).thenReturn(logger);
-        
+
+        // The database type has to be created one line before the thenReturn() to work!
+        DatabaseType value = DatabaseType.JSON;
+        when(plugin.getSettings()).thenReturn(pluginSettings);
+        when(pluginSettings.getDatabaseType()).thenReturn(value);
+
+
         // Addon
         addon = new StoneGeneratorAddon();
         File jFile = new File("addon.jar");
         List<String> lines = Arrays.asList("# MagicCobblestoneGenerator Addon Configuration", "uniqueId: config");
         Path path = Paths.get("config.yml");
         Files.write(path, lines, Charset.forName("UTF-8"));
+        Path template = Paths.get("src/main/resources/generatorTemplate.yml");
+        Path copyTo = Paths.get("generatorTemplate.yml");
+        Files.copy(template, copyTo);
         try (JarOutputStream tempJarOutputStream = new JarOutputStream(new FileOutputStream(jFile))) {
             //Added the new files to the jar.
-            try (FileInputStream fis = new FileInputStream(path.toFile())) {
-
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                JarEntry entry = new JarEntry(path.toString());
-                tempJarOutputStream.putNextEntry(entry);
-                while((bytesRead = fis.read(buffer)) != -1) {
-                    tempJarOutputStream.write(buffer, 0, bytesRead);
-                }
-            }
+            addFileToJar(path, tempJarOutputStream);
+            addFileToJar(copyTo, tempJarOutputStream);
         }
         File dataFolder = new File("addons/MagicCobblestoneGenerator");
         addon.setDataFolder(dataFolder);
@@ -120,10 +155,28 @@ public class StoneGeneratorAddonTest {
         when(am.getGameModeAddons()).thenReturn(Collections.singletonList(gameMode));
         AddonDescription desc2 = new AddonDescription.Builder("bentobox", "BSkyBlock", "1.3").description("test").authors("tasty").build();
         when(gameMode.getDescription()).thenReturn(desc2);
+        when(gameMode.getWorldSettings()).thenReturn(mock(WorldSettings.class));
         CompositeCommand cmd = mock(CompositeCommand.class);
         @NonNull
         Optional<CompositeCommand> opCmd = Optional.of(cmd );
         when(gameMode.getPlayerCommand()).thenReturn(opCmd);
+        // IWM
+        when(iwm.getAddon(any())).thenReturn(Optional.of(gameMode));
+
+    }
+
+    private void addFileToJar(Path path, JarOutputStream tempJarOutputStream) throws IOException {
+        try (FileInputStream fis = new FileInputStream(path.toFile())) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            JarEntry entry = new JarEntry(path.toString());
+            tempJarOutputStream.putNextEntry(entry);
+            while((bytesRead = fis.read(buffer)) != -1) {
+                tempJarOutputStream.write(buffer, 0, bytesRead);
+            }
+        }
+
     }
 
     /**
@@ -133,9 +186,11 @@ public class StoneGeneratorAddonTest {
     public void tearDown() throws Exception {
         new File("addon.jar").delete();
         new File("config.yml").delete();
+        new File("generatorTemplate.yml").delete();
         deleteAll(new File("addons"));
         deleteAll(new File("database"));
-
+        User.clearUsers();
+        Mockito.framework().clearInlineMocks();
     }
 
     private void deleteAll(File file) throws IOException {
@@ -147,7 +202,7 @@ public class StoneGeneratorAddonTest {
         }
 
     }
-    
+
     /**
      * Test method for {@link world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon#onEnable()}.
      */
@@ -168,9 +223,14 @@ public class StoneGeneratorAddonTest {
         when(plugin.isEnabled()).thenReturn(true);
         addon.setState(State.LOADED);
         addon.onEnable();
-        verify(plugin).logWarning("[MagicCobblestoneGenerator] Level add-on not found so Magic Cobblestone Generator will not work correctly!");
+        verify(plugin).log("[MagicCobblestoneGenerator] Loading generator tiers from database...");
+        verify(plugin).log("[MagicCobblestoneGenerator] Done");
+        verify(plugin).log("[MagicCobblestoneGenerator] Imported 8 generator tiers into database.");
+
+        verify(plugin).logWarning("[MagicCobblestoneGenerator] Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
+        verify(plugin).logWarning("[MagicCobblestoneGenerator] Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
         verify(plugin).logWarning("[MagicCobblestoneGenerator] Economy plugin not found so money options will not work!");
-        verify(plugin, never()).logError("[MagicCobblestoneGenerator] Magic Cobblestone Generator could not hook into any GameMode so will not do anything!");
+        //verify(plugin, never()).logError("[MagicCobblestoneGenerator] Magic Cobblestone Generator could not hook into any GameMode so will not do anything!");
 
     }
 
@@ -192,16 +252,16 @@ public class StoneGeneratorAddonTest {
         addon.setState(State.LOADED);
         addon.onEnable();
         addon.onReload();
-        verify(logger).info(eq("Magic Cobblestone Generator addon reloaded."));
+        verify(plugin).log(eq("[MagicCobblestoneGenerator] Magic Cobblestone Generator addon reloaded."));
     }
-    
+
     /**
      * Test method for {@link world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon#onReload()}.
      */
     @Test
     public void testOnReloadDisabled() {
         addon.onReload();
-        verify(logger, never()).info(eq("Magic Cobblestone Generator addon reloaded."));
+        verify(plugin).log(eq("No config.yml found. Creating it..."));
     }
 
     /**
@@ -212,7 +272,7 @@ public class StoneGeneratorAddonTest {
         assertNull(addon.getSettings());
         addon.onLoad();
         assertNotNull(addon.getSettings());
-        
+
     }
 
     /**
