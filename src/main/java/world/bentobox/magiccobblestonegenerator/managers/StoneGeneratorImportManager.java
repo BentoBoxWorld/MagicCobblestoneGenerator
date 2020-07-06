@@ -164,7 +164,8 @@ public class StoneGeneratorImportManager
 				generatorTier.setGeneratorType(GeneratorTierObject.GeneratorType.valueOf(
 					details.getString("type", "COBBLESTONE").toUpperCase()));
 
-				if (generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT))
+				if (!canAddBasaltGenerator &&
+					generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT))
 				{
 					// Basalt generators cannot be added yet in 1.15.2
 					continue;
