@@ -221,8 +221,8 @@ public class StoneGeneratorManager
         keySet.forEach(uniqueId -> {
             if (uniqueId.startsWith(objectKey))
             {
-                this.generatorTierCache.remove(objectKey);
-                this.generatorTierDatabase.deleteID(objectKey);
+                this.generatorTierCache.remove(uniqueId);
+                this.generatorTierDatabase.deleteID(uniqueId);
             }
         });
     }
