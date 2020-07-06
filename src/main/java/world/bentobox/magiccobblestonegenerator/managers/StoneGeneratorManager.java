@@ -271,13 +271,15 @@ public class StoneGeneratorManager
                 location.getBlockY(),
                 location.getBlockZ());
 
+        // TODO: It is necessary to reset user cache when import new generators are don.
+        // I changed implementation for faster work, so it gets challenges on island data loading,
+        // but it cache it inside island data. So when someone overwrites generators in database,
+        // but player data are not resetted, then all their generators are locally different then
+        // used in database.
+
         // Find generator from active generator list.
         Optional<GeneratorTierObject> optionalGenerator =
                 data.getActiveGeneratorList().stream().
-                // Map active generator id to actual object.
-                map(name -> this.generatorTierCache.getOrDefault(name, null)).
-                // Filter out null objects. Just in case.
-                filter(Objects::nonNull).
                 // Filter out generators that are not deployed.
                 filter(GeneratorTierObject::isDeployed).
                 // Filter objects with the same generator type.
@@ -537,7 +539,7 @@ public class StoneGeneratorManager
 
         // Remove locked generators from active list.
         dataObject.getActiveGeneratorList().removeIf(generator ->
-        !dataObject.getUnlockedTiers().contains(generator));
+            !dataObject.getUnlockedTiers().contains(generator));
 
         this.updateMaxGeneratorCount(island, dataObject);
 
