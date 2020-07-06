@@ -150,9 +150,9 @@ public class Settings implements ConfigObject
     }
 
 
-// ---------------------------------------------------------------------
-// Section: Variables
-// ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // Section: Variables
+    // ---------------------------------------------------------------------
 
 
     @ConfigComment("")
@@ -182,7 +182,7 @@ public class Settings implements ConfigObject
     private int defaultActiveGeneratorCount = 3;
 
     @ConfigComment("")
-    @ConfigComment("This list stores GameModes in which Likes addon should not work.")
+    @ConfigComment("This list stores GameModes in which the addon should not work.")
     @ConfigComment("To disable addon it is necessary to write its name in new line that starts with -. Example:")
     @ConfigComment("disabled-gamemodes:")
     @ConfigComment(" - BSkyBlock")
