@@ -101,4 +101,29 @@ public class Constants
 	 * Reference string to block parameter in translations.
 	 */
 	public static final String BLOCK = "[material]";
+
+	/**
+	 * Reference to number formant in 0.X
+	 */
+	public static final String TENS = "[#.#]";
+
+	/**
+	 * Reference to number formant in 0.0X
+	 */
+	public static final String HUNDREDS = "[#.##]";
+
+	/**
+	 * Reference to number formant in 0.00X
+	 */
+	public static final String THOUSANDS = "[#.###]";
+
+	/**
+	 * Reference to number formant in 0.000X
+	 */
+	public static final String TEN_THOUSANDS = "[#.####]";
+
+	/**
+	 * Reference to number formant in 0.0000X
+	 */
+	public static final String HUNDRED_THOUSANDS = "[#.#####]";
 }

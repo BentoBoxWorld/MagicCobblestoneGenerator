@@ -20,10 +20,12 @@ stone-generator:
     buttons:
       block-icon:
         name: "[material]"
-        description: "Chance to generate: [number]"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "Chance to generate: [#.##]"
       treasure-icon:
         name: "[material]"
-        description: "Chance to drop: [number]"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "Chance to drop: [#.####]"
 
       return:
         name: "Return"

@@ -4,8 +4,9 @@ package world.bentobox.magiccobblestonegenerator.panels.player;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -57,6 +58,8 @@ public class GeneratorViewPanel extends CommonPanel
 
 		// By default no-filters are active.
 		this.activeTab = Tab.INFO;
+
+		this.applyFormatting();
 	}
 
 
@@ -78,6 +81,30 @@ public class GeneratorViewPanel extends CommonPanel
 
 		// By default no-filters are active.
 		this.activeTab = Tab.INFO;
+
+		this.applyFormatting();
+	}
+
+
+	/**
+	 * This method creates number formatting for user locale.
+	 */
+	private void applyFormatting()
+	{
+		this.tensFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
+		this.tensFormat.applyPattern("###.#");
+
+		this.hundredsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
+		this.hundredsFormat.applyPattern("###.##");
+
+		this.thousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
+		this.thousandsFormat.applyPattern("###.###");
+
+		this.tenThousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
+		this.tenThousandsFormat.applyPattern("###.####");
+
+		this.hundredThousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
+		this.hundredThousandsFormat.applyPattern("###.#####");
 	}
 
 
@@ -279,14 +306,23 @@ public class GeneratorViewPanel extends CommonPanel
 		// I want first row to be only for navigation and return button.
 		int index = 10;
 
+		// Store previous object value for displaying correct chance value.
+		Double previousValue = materialIndex > 0 ?
+			materialChanceList.get(materialIndex - 1).getKey() : 0.0;
+		Double maxValue = this.generatorTier.getBlockChanceMap().lastKey();
+
 		while (materialIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
 			materialIndex < materialChanceList.size() &&
 			index < 36)
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
-				panelBuilder.item(index,
-					this.createMaterialButton(materialChanceList.get(materialIndex++)));
+				// Get entry from list.
+				Map.Entry<Double, Material> materialEntry = materialChanceList.get(materialIndex++);
+				// Add to panel
+				panelBuilder.item(index, this.createMaterialButton(materialEntry, previousValue, maxValue));
+				// Assign previous value to current entry.
+				previousValue = materialEntry.getKey();
 			}
 
 			index++;
@@ -334,14 +370,23 @@ public class GeneratorViewPanel extends CommonPanel
 		// I want first row to be only for navigation and return button.
 		int index = 10;
 
+		// Store previous object value for displaying correct chance value.
+		Double previousValue = materialIndex > 0 ?
+			treasureChanceList.get(materialIndex - 1).getKey() : 0.0;
+		Double maxValue = this.generatorTier.getTreasureChanceMap().lastKey();
+
 		while (materialIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
 			materialIndex < treasureChanceList.size() &&
 			index < 36)
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
-				panelBuilder.item(index,
-					this.createTreasureButton(treasureChanceList.get(materialIndex++)));
+				// Get entry from list.
+				Map.Entry<Double, Material> materialEntry = treasureChanceList.get(materialIndex++);
+				// Add to panel
+				panelBuilder.item(index, this.createTreasureButton(materialEntry, previousValue, maxValue));
+				// Assign previous value to current entry.
+				previousValue = materialEntry.getKey();
 			}
 
 			index++;
@@ -680,9 +725,11 @@ public class GeneratorViewPanel extends CommonPanel
 	/**
 	 * This method creates button for material.
 	 * @param blockChanceEntry blockChanceEntry which button must be created.
+	 * @param previousValue Previous chance value for correct display.
+	 * @param maxValue Displays maximal value for map.
 	 * @return PanelItem for generator tier.
 	 */
-	private PanelItem createMaterialButton(Map.Entry<Double, Material> blockChanceEntry)
+	private PanelItem createMaterialButton(Map.Entry<Double, Material> blockChanceEntry, Double previousValue, Double maxValue)
 	{
 		String materialName = this.user.getTranslationOrNothing(Constants.MATERIAL + blockChanceEntry.getValue().name());
 
@@ -691,11 +738,19 @@ public class GeneratorViewPanel extends CommonPanel
 			materialName = Util.prettifyText(blockChanceEntry.getValue().name());
 		}
 
+		// Normalize value
+		Double value = (blockChanceEntry.getKey() - previousValue) / maxValue * 100.0;
+
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
 				Constants.BLOCK, materialName)).
 			description(this.user.getTranslation(Constants.BUTTON + "block-icon.description",
-				TextVariables.NUMBER, String.valueOf(blockChanceEntry.getKey()))).
+				TextVariables.NUMBER, String.valueOf(value),
+				Constants.TENS, this.tensFormat.format(value),
+				Constants.HUNDREDS, this.hundredsFormat.format(value),
+				Constants.THOUSANDS, this.thousandsFormat.format(value),
+				Constants.TEN_THOUSANDS, this.tenThousandsFormat.format(value),
+				Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value))).
 			icon(blockChanceEntry.getValue()).
 			clickHandler((panel, user1, clickType, i) -> true).
 			build();
@@ -705,9 +760,11 @@ public class GeneratorViewPanel extends CommonPanel
 	/**
 	 * This method creates button for treasure.
 	 * @param treasureChanceEntry treasureChanceEntry which button must be created.
+	 * @param previousValue Previous chance value for correct display.
+	 * @param maxValue Displays maximal value for map.
 	 * @return PanelItem for generator tier.
 	 */
-	private PanelItem createTreasureButton(Map.Entry<Double, Material> treasureChanceEntry)
+	private PanelItem createTreasureButton(Map.Entry<Double, Material> treasureChanceEntry, Double previousValue, Double maxValue)
 	{
 		String materialName = this.user.getTranslationOrNothing(Constants.MATERIAL + treasureChanceEntry.getValue().name());
 
@@ -716,11 +773,19 @@ public class GeneratorViewPanel extends CommonPanel
 			materialName = Util.prettifyText(treasureChanceEntry.getValue().name());
 		}
 
+		// Normalize value
+		Double value = (treasureChanceEntry.getKey() - previousValue) / maxValue * 100.0 * this.generatorTier.getTreasureChance();
+
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
 				Constants.BLOCK, materialName)).
 			description(this.user.getTranslation(Constants.BUTTON + "treasure-icon.description",
-				TextVariables.NUMBER, String.valueOf(treasureChanceEntry.getKey() * this.generatorTier.getTreasureChance()))).
+				TextVariables.NUMBER, String.valueOf(value),
+				Constants.TENS, this.tensFormat.format(value),
+				Constants.HUNDREDS, this.hundredsFormat.format(value),
+				Constants.THOUSANDS, this.thousandsFormat.format(value),
+				Constants.TEN_THOUSANDS, this.tenThousandsFormat.format(value),
+				Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value))).
 			icon(treasureChanceEntry.getValue()).
 			clickHandler((panel, user1, clickType, i) -> true).
 			build();
@@ -864,4 +929,35 @@ public class GeneratorViewPanel extends CommonPanel
 	 * This variable stores which tab currently is active.
 	 */
 	private Tab activeTab;
+
+
+// ---------------------------------------------------------------------
+// Section: Formatting
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * Stores decimal format object for one digit after separator.
+	 */
+	private DecimalFormat tensFormat;
+
+	/**
+	 * Stores decimal format object for two digit after separator.
+	 */
+	private DecimalFormat hundredsFormat;
+
+	/**
+	 * Stores decimal format object for three digit after separator.
+	 */
+	private DecimalFormat thousandsFormat;
+
+	/**
+	 * Stores decimal format object for four digit after separator.
+	 */
+	private DecimalFormat tenThousandsFormat;
+
+	/**
+	 * Stores decimal format object for five digit after separator.
+	 */
+	private DecimalFormat hundredThousandsFormat;
 }
