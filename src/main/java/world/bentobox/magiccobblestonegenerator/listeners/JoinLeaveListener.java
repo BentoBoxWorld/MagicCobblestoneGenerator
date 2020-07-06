@@ -65,7 +65,7 @@ public class JoinLeaveListener implements Listener
 	 * @param event IslandDeletedEvent instance.
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onIslandDelete(IslandEvent.IslandDeletedEvent event)
+	public void onIslandDelete(IslandEvent.IslandDeleteEvent event)
 	{
 		this.addon.getAddonManager().wipeGeneratorData(event.getIsland().getUniqueId());
 	}
