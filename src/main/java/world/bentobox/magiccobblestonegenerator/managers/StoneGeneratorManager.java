@@ -616,6 +616,31 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method allows to get generator data for given user.
+     * @param user User which data must be returned.
+     * @param world World where user island must be returned.
+     * @return instance of GeneratorDataObject.
+     */
+    public @Nullable GeneratorDataObject getGeneratorData(@Nullable User user, @NotNull World world)
+    {
+        if (user == null)
+        {
+            return null;
+        }
+
+        Island island = this.addon.getIslands().getIsland(world, user);
+
+        if (island == null)
+        {
+            return null;
+        }
+
+        this.addIslandData(island);
+        return this.generatorDataCache.get(island.getUniqueId());
+    }
+
+
+    /**
      * This is just a wrapper method that allows to deactivate generator.
      * @param user User who deactivates generator.
      * @param generatorData Data which will be populated.

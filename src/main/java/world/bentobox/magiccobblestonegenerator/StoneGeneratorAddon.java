@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import java.util.Optional;
 
 import org.bukkit.Material;
+import org.bukkit.World;
+
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
@@ -15,6 +17,7 @@ import world.bentobox.level.Level;
 import world.bentobox.magiccobblestonegenerator.commands.admin.GeneratorAdminCommand;
 import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
@@ -180,7 +183,104 @@ public class StoneGeneratorAddon extends Addon
      */
     private void registerPlaceholders(GameModeAddon addon)
     {
-        // TODO.
+        final String addonName = this.getDescription().getName().toLowerCase();
+        final World world = addon.getOverWorld();
+
+        // Placeholder returns currently active count.
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_active_generator_count",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+                return String.valueOf(object != null ?
+                    object.getActiveGeneratorList().size() : 0);
+            });
+
+        // Placeholder returns maximal active generator count, that user can activate.
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_max_active_generator_count",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+                return String.valueOf(object != null ?
+                    object.getMaxGeneratorCount() : 0);
+            });
+
+        // Placeholder returns active generator names separated with ','
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_active_generator_names",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object != null && !object.getActiveGeneratorList().isEmpty())
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    object.getActiveGeneratorList().forEach(generator ->
+                        stringBuilder.append(generator.getFriendlyName()).append(","));
+
+                    if (stringBuilder.length() > 0)
+                    {
+                        stringBuilder.deleteCharAt(stringBuilder.length());
+                    }
+
+                    return stringBuilder.toString();
+                }
+                else
+                {
+                    return "";
+                }
+            });
+
+        // Placeholder returns unlocked generator names separated with ','
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_unlocked_generator_names",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object != null && !object.getUnlockedTiers().isEmpty())
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    object.getUnlockedTiers().stream().sorted().forEach(generator ->
+                        stringBuilder.append(generator.getFriendlyName()).append(","));
+
+                    if (stringBuilder.length() > 0)
+                    {
+                        stringBuilder.deleteCharAt(stringBuilder.length());
+                    }
+
+                    return stringBuilder.toString();
+                }
+                else
+                {
+                    return "";
+                }
+            });
+
+        // Placeholder returns purchased generator names separated with ','
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_purchased_generator_names",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object != null && !object.getPurchasedTiers().isEmpty())
+                {
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    object.getPurchasedTiers().stream().sorted().forEach(generator ->
+                        stringBuilder.append(generator.getFriendlyName()).append(","));
+
+                    if (stringBuilder.length() > 0)
+                    {
+                        stringBuilder.deleteCharAt(stringBuilder.length());
+                    }
+
+                    return stringBuilder.toString();
+                }
+                else
+                {
+                    return "";
+                }
+            });
     }
 
 
