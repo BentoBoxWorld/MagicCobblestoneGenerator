@@ -1,13 +1,16 @@
 package world.bentobox.magiccobblestonegenerator.tasks;
 
 
+import java.util.Random;
+import java.util.TreeMap;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-
-import java.util.*;
-import java.util.function.ToIntFunction;
+import org.bukkit.inventory.ItemStack;
+import org.eclipse.jdt.annotation.Nullable;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
 /**
@@ -15,97 +18,156 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
  */
 public class MagicGenerator
 {
-	/**
-	 * Default constructor. Inits Generator once.
-	 * @param addon Magic Cobblestone Generator addon.
-	 */
-	public MagicGenerator(StoneGeneratorAddon addon)
-	{
-		this.addon = addon;
-	}
+    /**
+     * Default constructor. Inits Generator once.
+     * @param addon Magic Cobblestone Generator addon.
+     */
+    public MagicGenerator(StoneGeneratorAddon addon)
+    {
+        this.addon = addon;
+    }
 
 
-	/**
-	 * This method tries to replace given block with new object and returns true if it was successful.
-	 * @param block Block that should be replaced.
-	 * @return <code>true</code> if replacing block was successful.
-	 */
-	public boolean isReplacementGenerated(Block block)
-	{
-		return this.isReplacementGenerated(block, false);
-	}
+    /**
+     * This method tries to replace given block with new object and returns true if it was successful.
+     * @param block Block that should be replaced.
+     * @return <code>true</code> if replacing block was successful.
+     */
+    public boolean isCobblestoneReplacementGenerated(Block block)
+    {
+        GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
+            block.getLocation(),
+            GeneratorTierObject.GeneratorType.COBBLESTONE);
+
+        return this.processBlockReplacement(block, generatorTier);
+    }
 
 
-	/**
-	 * This method tries to replace given block with new object and returns true if it was successful.
-	 * @param block Block that should be replaced.
-	 * @param improved Boolean that indicate if current process used stone generation.
-	 * @return <code>true</code> if replacing block was successful.
-	 */
-	public boolean isReplacementGenerated(Block block, boolean improved)
-	{
-		Map<Material, Integer> chanceMap = this.addon.getManager().getMaterialChanceMap(
-			this.addon.getManager().getIslandLevel(block.getLocation()),
-			block.getWorld());
+    /**
+     * This method tries to replace given block with new object and returns true if it was successful.
+     * @param block Block that should be replaced.
+     * @return <code>true</code> if replacing block was successful.
+     */
+    public boolean isStoneReplacementGenerated(Block block)
+    {
+        GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
+            block.getLocation(),
+            GeneratorTierObject.GeneratorType.STONE);
 
-		if (chanceMap.isEmpty())
-		{
-			return false;
-		}
-
-		Material newMaterial;
-
-		if (chanceMap.size() == 1)
-		{
-			// no needs to calculate. It is our material.
-			newMaterial = chanceMap.keySet().iterator().next();
-		}
-		else
-		{
-			// Fun Begins. Calculate total sum of all chances.
-			int normalizedValue = chanceMap.values().stream().mapToInt(chance -> chance).sum();
-
-			// Put all materials in list and order it by element chance and name.
-			List<Material> materialList = new ArrayList<>(chanceMap.keySet());
-			materialList.sort(Comparator.comparingInt((ToIntFunction<Material>) chanceMap::get).thenComparing(material -> material));
-
-			// Get random index +1 to avoid issues with getting 0 index.
-			int index = new Random().nextInt(normalizedValue) + 1;
-			int sum = 0;
-			int i = 0;
-
-			// Find element from chance range.
-			while (sum < index)
-			{
-				sum += chanceMap.get(materialList.get(i++));
-			}
-
-			// Return Material that is in this value range.
-			newMaterial = materialList.get(i - 1);
-		}
-
-		try
-		{
-			// Now try to replace block with given material.
-
-			block.setType(newMaterial);
-			return true;
-		}
-		catch (Exception e)
-		{
-			this.addon.logError("Something went wrong when change block material in Magic Cobblestone Generator.");
-		}
-
-		return false;
-	}
+        return this.processBlockReplacement(block, generatorTier);
+    }
 
 
-	// ---------------------------------------------------------------------
-	// Section: Variables
-	// ---------------------------------------------------------------------
+    /**
+     * This method tries to replace given block with new object and returns true if it was successful.
+     * @param block Block that should be replaced.
+     * @return <code>true</code> if replacing block was successful.
+     */
+    public boolean isBasaltReplacementGenerated(Block block)
+    {
+        GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
+            block.getLocation(),
+            GeneratorTierObject.GeneratorType.BASALT);
 
-	/**
-	 * This variable holds stone generator addon object.
-	 */
-	private StoneGeneratorAddon addon;
+        return this.processBlockReplacement(block, generatorTier);
+    }
+
+
+    /**
+     * This method tries to replace block from chance map and returns if it was successful.
+     * @param block Block that need to be replaced.
+     * @param generatorTier Object that contains all possible chances.
+     * @return {@code true} if it was successful, {@code false} otherwise.
+     */
+    private boolean processBlockReplacement(Block block, @Nullable GeneratorTierObject generatorTier)
+    {
+        if (generatorTier == null)
+        {
+            // Check if generator exists.
+            return false;
+        }
+
+        TreeMap<Double, Material> chanceMap = generatorTier.getBlockChanceMap();
+
+        if (chanceMap.isEmpty())
+        {
+            // Check if any block has a chance to spawn
+            return false;
+        }
+
+        Material newMaterial = this.getMaterialFromMap(chanceMap);
+
+        if (newMaterial == null)
+        {
+            // Check if a material was found
+            return false;
+        }
+
+        // ask config if physics should be used
+        block.setType(newMaterial, this.addon.getSettings().isUsePhysics());
+
+        if (generatorTier.getTreasureChance() > 0 && !generatorTier.getTreasureChanceMap().isEmpty())
+        {
+            // Random check on getting treasure.
+            if (this.random.nextDouble() <= generatorTier.getTreasureChance())
+            {
+                // Use the same variables for treasures.
+                chanceMap = generatorTier.getTreasureChanceMap();
+                newMaterial = this.getMaterialFromMap(chanceMap);
+
+                // Double check, in general it should always be a material.
+                if (newMaterial != null)
+                {
+                    // drop item naturally in the location of the block
+                    block.getWorld().dropItemNaturally(block.getLocation(),
+                        new ItemStack(newMaterial, this.random.nextInt(generatorTier.getMaxTreasureAmount() - 1) + 1));
+
+                    // TODO: Add effects like sound and particle :)
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     * This method returns a random material from given tree map.
+     * @param chanceMap Map that contains all objects with their chance to drop.
+     * @return Material from map or null.
+     */
+    private @Nullable Material getMaterialFromMap(TreeMap<Double, Material> chanceMap)
+    {
+        if (chanceMap.isEmpty())
+        {
+            return null;
+        }
+
+        if (chanceMap.size() == 1)
+        {
+            // no needs to calculate. It is our material.
+            return chanceMap.get(chanceMap.firstKey());
+        }
+        else
+        {
+            double rand = this.random.nextDouble() * chanceMap.lastKey();
+            return chanceMap.ceilingEntry(rand).getValue();
+        }
+    }
+
+
+    // ---------------------------------------------------------------------
+    // Section: Variables
+    // ---------------------------------------------------------------------
+
+    /**
+     * This variable holds stone generator addon object.
+     */
+    private final StoneGeneratorAddon addon;
+
+
+    /**
+     * Random for generator
+     */
+    private final Random random = new Random(System.currentTimeMillis());
 }

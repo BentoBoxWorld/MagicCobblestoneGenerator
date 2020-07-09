@@ -1,298 +1,191 @@
 package world.bentobox.magiccobblestonegenerator.config;
 
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 
-import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.bentobox.api.configuration.ConfigComment;
+import world.bentobox.bentobox.api.configuration.ConfigEntry;
+import world.bentobox.bentobox.api.configuration.ConfigObject;
+import world.bentobox.bentobox.api.configuration.StoreAt;
 
 
 /**
- * This is StoneGeneratorAddon configuration loader.
- * It is not made by latest BentoBox standards and will be changed at some point. It uses the same tricks
- * as in Level addon for easier and faster code writing!
+ * Settings that implements ConfigObject is powerful and dynamic Config Objects that
+ * does not need custom parsing. If it is correctly loaded, all its values will be available.
+ *
+ * Without Getter and Setter this class will not work.
+ *
+ * To specify location for config object to be stored, you should use @StoreAt(filename="{config file name}", path="{Path to your addon}")
+ * To save comments in config file you should use @ConfigComment("{message}") that adds any message you want to be in file.
  */
-public class Settings
+@StoreAt(filename="config.yml", path="addons/MagicCobblestoneGenerator")
+@ConfigComment("MagicCobblestoneGenerator Configuration [version]")
+@ConfigComment("This config file is dynamic and saved when the server is shutdown.")
+@ConfigComment("")
+public class Settings implements ConfigObject
 {
-	/**
-	 * Inits Settings file. Use custom YAML parsing in init.
-	 * @param addon StoneGeneratorAddon
-	 */
-	public Settings(StoneGeneratorAddon addon)
-	{
-		addon.saveDefaultConfig();
-
-		// Get disabled GameModes
-		this.disabledGameModes = new HashSet<>(addon.getConfig().getStringList("disabled-gamemodes"));
-		this.offlineGeneration = addon.getConfig().getBoolean("offline-generation");
-
-		// Reads Generator Tiers
-		if (addon.getConfig().isSet("tiers"))
-		{
-			ConfigurationSection section = addon.getConfig().getConfigurationSection("tiers");
-
-			for (String key : section.getKeys(false))
-			{
-				ConfigurationSection tierSection = section.getConfigurationSection(key);
-
-				if (tierSection != null)
-				{
-					GeneratorTier generatorTier = new GeneratorTier(key);
-					generatorTier.setName(tierSection.getString("name"));
-					generatorTier.setMinLevel(tierSection.getInt("min-level"));
-
-					Map<Material, Integer> blockChances = new HashMap<>();
-
-					for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
-					{
-						try
-						{
-							Material material = Material.valueOf(materialKey);
-							blockChances.put(material, tierSection.getInt("blocks." + materialKey, 0));
-						}
-						catch (Exception e)
-						{
-							addon.getLogger().warning(() -> "Unknown material (" + materialKey +
-								") in config.yml blocks section for tier " + key + ". Skipping...");
-						}
-					}
-
-					generatorTier.setBlockChanceMap(blockChances);
-
-					this.generatorTierMap.put(key, generatorTier);
-				}
-			}
-		}
-
-		// Reads GameMode specific generator tiers.
-		if (addon.getConfig().isSet("gamemodes"))
-		{
-			ConfigurationSection section = addon.getConfig().getConfigurationSection("gamemodes");
-
-			for (String gameMode : section.getKeys(false))
-			{
-				ConfigurationSection gameModeSection = section.getConfigurationSection(gameMode);
-
-				for (String key : gameModeSection.getKeys(false))
-				{
-					ConfigurationSection tierSection = gameModeSection.getConfigurationSection(key);
-
-					GeneratorTier generatorTier = new GeneratorTier(key);
-					generatorTier.setName(tierSection.getString("name"));
-					generatorTier.setMinLevel(tierSection.getInt("min-level"));
-
-					Map<Material, Integer> blockChances = new HashMap<>();
-
-					for (String materialKey : tierSection.getConfigurationSection("blocks").getKeys(false))
-					{
-						try
-						{
-							Material material = Material.valueOf(materialKey);
-							blockChances.put(material, tierSection.getInt("blocks." + materialKey, 0));
-						}
-						catch (Exception e)
-						{
-							addon.getLogger().warning(() -> "Unknown material (" + materialKey +
-								") in config.yml blocks section for tier " + key +
-								" in gamemode section for " + gameMode + ". Skipping...");
-						}
-					}
-
-					generatorTier.setBlockChanceMap(blockChances);
-
-					this.customGeneratorTierMap.computeIfAbsent(gameMode, k -> new HashMap<>()).put(key, generatorTier);
-				}
-			}
-		}
-	}
+    /**
+     * Empty constructor.
+     */
+    public Settings()
+    {
+        // Default empty constructor.
+    }
 
 
-	// ---------------------------------------------------------------------
-	// Section: Getters
-	// ---------------------------------------------------------------------
+    // ---------------------------------------------------------------------
+    // Section: Getters and Setters
+    // ---------------------------------------------------------------------
 
 
-	/**
-	 * This method returns the offlineGeneration object.
-	 * @return the offlineGeneration object.
-	 */
-	public boolean isOfflineGeneration()
-	{
-		return offlineGeneration;
-	}
+    /**
+     * Method Settings#isOfflineGeneration returns the offlineGeneration of this object.
+     *
+     * @return the offlineGeneration (type boolean) of this object.
+     */
+    public boolean isOfflineGeneration()
+    {
+        return offlineGeneration;
+    }
 
 
-	/**
-	 * This method returns the disabledGameModes object.
-	 * @return the disabledGameModes object.
-	 */
-	public Set<String> getDisabledGameModes()
-	{
-		return disabledGameModes;
-	}
+    /**
+     * Method Settings#setOfflineGeneration sets new value for the offlineGeneration of this object.
+     * @param offlineGeneration new value for this object.
+     *
+     */
+    public void setOfflineGeneration(boolean offlineGeneration)
+    {
+        this.offlineGeneration = offlineGeneration;
+    }
 
 
-	/**
-	 * This method returns the defaultGeneratorTierMap object.
-	 * @return the defaultGeneratorTierMap object.
-	 */
-	public Map<String, GeneratorTier> getDefaultGeneratorTierMap()
-	{
-		return this.generatorTierMap;
-	}
+    /**
+     * Method Settings#isPhysics returns the physics of this object.
+     *
+     * @return the physics (type boolean) of this object.
+     */
+    public boolean isUsePhysics()
+    {
+        return usePhysics;
+    }
 
 
-	/**
-	 * This method returns the customGeneratorTierMap object for given addon.
-	 * @param addon Addon name which generators should be returned.
-	 * @return the customGeneratorTierMap object.
-	 */
-	public Map<String, GeneratorTier> getAddonGeneratorTierMap(String addon)
-	{
-		return this.customGeneratorTierMap.getOrDefault(addon, Collections.emptyMap());
-	}
+    /**
+     * Method Settings#setPhysics sets new value for the physics of this object.
+     * @param usePhysics new value for this object.
+     *
+     */
+    public void setUsePhysics(boolean usePhysics)
+    {
+        this.usePhysics = usePhysics;
+    }
 
 
-	// ---------------------------------------------------------------------
-	// Section: Private object
-	// ---------------------------------------------------------------------
+    /**
+     * Method Settings#getWorkingRange returns the workingRange of this object.
+     *
+     * @return the workingRange (type int) of this object.
+     */
+    public int getWorkingRange()
+    {
+        return workingRange;
+    }
 
 
-	/**
-	 * This class provides ability to easier process Ore Settings
-	 */
-	public class GeneratorTier
-	{
-		/**
-		 * Constructor GeneratorTier creates a new GeneratorTier instance.
-		 *
-		 * @param id of type String
-		 */
-		GeneratorTier(String id)
-		{
-			this.id = id;
-		}
+    /**
+     * Method Settings#setWorkingRange sets new value for the workingRange of this object.
+     * @param workingRange new value for this object.
+     *
+     */
+    public void setWorkingRange(int workingRange)
+    {
+        this.workingRange = workingRange;
+    }
 
 
-		// ---------------------------------------------------------------------
-		// Section: Methods
-		// ---------------------------------------------------------------------
+    /**
+     * Method Settings#getDefaultActiveGeneratorCount returns the defaultActiveGeneratorCount of this object.
+     *
+     * @return the defaultActiveGeneratorCount (type int) of this object.
+     */
+    public int getDefaultActiveGeneratorCount()
+    {
+        return defaultActiveGeneratorCount;
+    }
 
 
-		/**
-		 * This method returns the name object.
-		 * @return the name object.
-		 */
-		public String getName()
-		{
-			return name;
-		}
+    /**
+     * Method Settings#setDefaultActiveGeneratorCount sets new value for the defaultActiveGeneratorCount of this object.
+     * @param defaultActiveGeneratorCount new value for this object.
+     *
+     */
+    public void setDefaultActiveGeneratorCount(int defaultActiveGeneratorCount)
+    {
+        this.defaultActiveGeneratorCount = defaultActiveGeneratorCount;
+    }
 
 
-		/**
-		 * This method sets the name object value.
-		 * @param name the name object new value.
-		 *
-		 */
-		public void setName(String name)
-		{
-			this.name = name;
-		}
+    /**
+     * This method returns the disabledGameModes value.
+     *
+     * @return the value of disabledGameModes.
+     */
+    public Set<String> getDisabledGameModes()
+    {
+        return disabledGameModes;
+    }
 
 
-		/**
-		 * This method returns the minLevel object.
-		 * @return the minLevel object.
-		 */
-		public int getMinLevel()
-		{
-			return minLevel;
-		}
+    /**
+     * This method sets the disabledGameModes value.
+     *
+     * @param disabledGameModes the disabledGameModes new value.
+     */
+    public void setDisabledGameModes(Set<String> disabledGameModes)
+    {
+        this.disabledGameModes = disabledGameModes;
+    }
 
 
-		/**
-		 * This method sets the minLevel object value.
-		 * @param minLevel the minLevel object new value.
-		 *
-		 */
-		public void setMinLevel(int minLevel)
-		{
-			this.minLevel = minLevel;
-		}
+    // ---------------------------------------------------------------------
+    // Section: Variables
+    // ---------------------------------------------------------------------
 
 
-		/**
-		 * This method returns the blockChanceMap object.
-		 * @return the blockChanceMap object.
-		 */
-		public Map<Material, Integer> getBlockChanceMap()
-		{
-			return blockChanceMap;
-		}
+    @ConfigComment("")
+    @ConfigComment("Allows to block addon to generate blocks if all island members are offline.")
+    @ConfigEntry(path = "offline-generation")
+    private boolean offlineGeneration = false;
 
+    @ConfigComment("")
+    @ConfigComment("If physics should be used when placing a block.")
+    @ConfigComment("Using physics allow certain redstone machines to work,")
+    @ConfigComment("but might have unwanted side effectsAllows to block addon to generate blocks if all island members are offline.")
+    @ConfigEntry(path = "use-physic", needsRestart = true)
+    private boolean usePhysics = true;
 
-		/**
-		 * This method sets the blockChanceMap object value.
-		 * @param blockChanceMap the blockChanceMap object new value.
-		 *
-		 */
-		public void setBlockChanceMap(Map<Material, Integer> blockChanceMap)
-		{
-			this.blockChanceMap = blockChanceMap;
-		}
+    @ConfigComment("")
+    @ConfigComment("The range in blocks that an island member has to be in to make the generator generate `magic` blocks.")
+    @ConfigComment("0 or less will mean that no range is checked.")
+    @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.max-range.[number]`.")
+    @ConfigEntry(path = "working-range")
+    private int workingRange = 0;
 
+    @ConfigComment("")
+    @ConfigComment("This allows to define how many generators can be activated at once per each island.")
+    @ConfigComment("0 or less will mean that there is no limitation.")
+    @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.")
+    @ConfigEntry(path = "default-active-generators")
+    private int defaultActiveGeneratorCount = 3;
 
-		// ---------------------------------------------------------------------
-		// Section: Variables
-		// ---------------------------------------------------------------------
-
-		/**
-		 * Tier ID
-		 */
-		private final String id;
-
-		/**
-		 * Tier display name
-		 */
-		private String name = "";
-
-		/**
-		 * Min Island Level to work.
-		 * -1 means that tier will be always active and is not skipable.
-		 */
-		private int minLevel = -1;
-
-		/**
-		 * Map that contains chances for each material to be generated.
-		 */
-		private Map<Material, Integer> blockChanceMap = Collections.emptyMap();
-	}
-
-
-	// ---------------------------------------------------------------------
-	// Section: Variables
-	// ---------------------------------------------------------------------
-
-
-	/**
-	 * Map that links Generator tier ID with object.
-	 */
-	private Map<String, GeneratorTier> generatorTierMap = new HashMap<>();
-
-	/**
-	 * Map that links GameMode with its custom GameTiers
-	 */
-	private Map<String, Map<String, GeneratorTier>> customGeneratorTierMap = new HashMap<>();
-
-	/**
-	 * Boolean that indicate if generator should work on islands with offline members.
-	 */
-	private boolean offlineGeneration;
-
-	/**
-	 * Set that contains all disabled game modes.
-	 */
-	private Set<String> disabledGameModes;
+    @ConfigComment("")
+    @ConfigComment("This list stores GameModes in which the addon should not work.")
+    @ConfigComment("To disable addon it is necessary to write its name in new line that starts with -. Example:")
+    @ConfigComment("disabled-gamemodes:")
+    @ConfigComment(" - BSkyBlock")
+    @ConfigEntry(path = "disabled-gamemodes", needsRestart = true)
+    private Set<String> disabledGameModes = new HashSet<>();
 }

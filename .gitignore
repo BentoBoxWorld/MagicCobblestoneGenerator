@@ -25,3 +25,6 @@ hs_err_pid*
 /.settings/
 /.classpath
 /.project
+/dependency-reduced-pom.xml
+/.DS_Store
+/MagicCobblestoneGenerator.iml
