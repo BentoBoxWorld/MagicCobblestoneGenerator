@@ -36,7 +36,7 @@
         <powermock.version>2.0.2</powermock.version>
         <!-- More visible way how to change dependency versions -->
         <spigot.version>1.15.2-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.14.0-SNAPSHOT</bentobox.version>
+        <bentobox.version>1.14.0</bentobox.version>
         <level.version>2.3.0-SNAPSHOT</level.version>
         <upgrades.version>0.2.0-SNAPSHOT</upgrades.version>
         <vault.version>68f14ec</vault.version>
