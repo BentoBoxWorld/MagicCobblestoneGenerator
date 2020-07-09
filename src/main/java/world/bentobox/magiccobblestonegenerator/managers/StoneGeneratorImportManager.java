@@ -253,7 +253,7 @@ public class StoneGeneratorImportManager
 			{
 				try
 				{
-					Material material = Material.valueOf(materialKey);
+					Material material = Material.valueOf(materialKey.toUpperCase());
 					double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
 					blockChances.put(lastEntry + materials.getDouble(materialKey, 0), material);
 				}
@@ -294,7 +294,7 @@ public class StoneGeneratorImportManager
 				{
 					try
 					{
-						Material material = Material.valueOf(materialKey);
+						Material material = Material.valueOf(materialKey.toUpperCase());
 						double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
 						blockChances.put(lastEntry + materials.getDouble(materialKey, 0), material);
 					}
