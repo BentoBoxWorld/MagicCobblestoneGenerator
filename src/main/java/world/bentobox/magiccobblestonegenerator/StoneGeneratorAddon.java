@@ -535,6 +535,6 @@ public class StoneGeneratorAddon extends Addon
         new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR_PERMISSION", Material.DIAMOND_PICKAXE).
             type(Flag.Type.PROTECTION).
             defaultRank(RanksManager.SUB_OWNER_RANK).
-            clickHandler(new CycleClick("MCG_PERMISSIONS", RanksManager.MEMBER_RANK, RanksManager.OWNER_RANK)).
+            clickHandler(new CycleClick("MAGIC_COBBLESTONE_GENERATOR_PERMISSION", RanksManager.MEMBER_RANK, RanksManager.OWNER_RANK)).
             build();
 }
