@@ -103,9 +103,26 @@ public class GeneratorUserPanel extends CommonPanel
 
 		panelBuilder.item(2, this.createButton(Action.SHOW_ACTIVE));
 
-		panelBuilder.item(4, this.createButton(Action.SHOW_COBBLESTONE));
-		panelBuilder.item(5, this.createButton(Action.SHOW_STONE));
-		panelBuilder.item(6, this.createButton(Action.SHOW_BASALT));
+		// Do not show cobblestone button if there are no cobblestone generators.
+		if (this.generatorList.stream().anyMatch(generator ->
+			generator.getGeneratorType().equals(GeneratorTierObject.GeneratorType.COBBLESTONE)))
+		{
+			panelBuilder.item(4, this.createButton(Action.SHOW_COBBLESTONE));
+		}
+
+		// Do not show stone if there are no stone generators.
+		if (this.generatorList.stream().anyMatch(generator ->
+			generator.getGeneratorType().equals(GeneratorTierObject.GeneratorType.STONE)))
+		{
+			panelBuilder.item(5, this.createButton(Action.SHOW_STONE));
+		}
+
+		// Do not show basalt if there are no basalt generators.
+		if (this.generatorList.stream().anyMatch(generator ->
+			generator.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT)))
+		{
+			panelBuilder.item(6, this.createButton(Action.SHOW_BASALT));
+		}
 
 		panelBuilder.item(8, this.createButton(Action.TOGGLE_VISIBILITY));
 
