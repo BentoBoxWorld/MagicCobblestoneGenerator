@@ -2,6 +2,7 @@ package world.bentobox.magiccobblestonegenerator.panels;
 
 
 
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.World;
@@ -76,7 +77,10 @@ public abstract class CommonPanel
 		boolean isUnlocked,
 		long islandLevel)
 	{
-		List<String> description = new ArrayList<>(generator.getDescription());
+		List<String> description = new ArrayList<>(5);
+
+		generator.getDescription().forEach(line ->
+			description.add(ChatColor.translateAlternateColorCodes('&', line)));
 
 		if (isActive)
 		{
