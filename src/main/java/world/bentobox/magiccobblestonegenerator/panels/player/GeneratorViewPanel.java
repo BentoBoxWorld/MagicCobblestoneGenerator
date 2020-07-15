@@ -494,7 +494,8 @@ public class GeneratorViewPanel extends CommonPanel
 			}
 			case PURCHASE_COST:
 			{
-				itemStack = new ItemStack(Material.GOLD_BLOCK);
+				itemStack = this.generatorData.getPurchasedTiers().contains(this.generatorTier) ?
+					new ItemStack(Material.MAP) : new ItemStack(Material.GOLD_BLOCK);
 				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
 					Constants.VALUE, String.valueOf(this.generatorTier.getGeneratorTierCost())));
 
@@ -506,6 +507,7 @@ public class GeneratorViewPanel extends CommonPanel
 						this.generatorTier))
 					{
 						this.manager.purchaseGenerator(user, this.generatorData, this.generatorTier);
+						this.hasPurchased = true;
 					}
 
 					return true;
@@ -635,7 +637,16 @@ public class GeneratorViewPanel extends CommonPanel
 				clickHandler = (panel, user, clickType, i) -> {
 					if (this.parentPanel != null)
 					{
-						this.parentPanel.build();
+						if (this.hasPurchased && this.parentPanel instanceof GeneratorUserPanel)
+						{
+							// Regenerate GUI as new generators are purchased.
+							GeneratorUserPanel.openPanel(this.addon, this.world, this.user);
+						}
+						else
+						{
+							// Just open a parent gui.
+							this.parentPanel.build();
+						}
 					}
 					else
 					{
@@ -930,6 +941,11 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private Tab activeTab;
 
+	/**
+	 * This boolean indicates if a generator has been purchased or not.
+	 * If generator is purchased, it is necessary to recreate user gui.
+	 */
+	private boolean hasPurchased;
 
 // ---------------------------------------------------------------------
 // Section: Formatting
