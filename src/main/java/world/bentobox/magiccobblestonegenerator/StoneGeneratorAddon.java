@@ -132,7 +132,7 @@ public class StoneGeneratorAddon extends Addon
 
             if (!upgrades.isPresent())
             {
-                this.logWarning("Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
+//              this.logWarning("Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
                 this.upgradesAddon = null;
             }
             else
