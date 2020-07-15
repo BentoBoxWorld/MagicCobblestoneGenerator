@@ -411,6 +411,7 @@ public class GeneratorViewPanel extends CommonPanel
 			return true;
 		};
 
+		boolean glow = false;
 		ItemStack itemStack = new ItemStack(Material.AIR);
 
 		switch (button)
@@ -494,10 +495,19 @@ public class GeneratorViewPanel extends CommonPanel
 			}
 			case PURCHASE_COST:
 			{
-				itemStack = this.generatorData.getPurchasedTiers().contains(this.generatorTier) ?
-					new ItemStack(Material.MAP) : new ItemStack(Material.GOLD_BLOCK);
 				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
 					Constants.VALUE, String.valueOf(this.generatorTier.getGeneratorTierCost())));
+
+				if (this.generatorData.getPurchasedTiers().contains(this.generatorTier))
+				{
+					itemStack = new ItemStack(Material.MAP);
+				}
+				else
+				{
+					itemStack = new ItemStack(Material.GOLD_BLOCK);
+					description.add("");
+					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-purchase"));
+				}
 
 				clickHandler = (panel, user, clickType, i) ->
 				{
@@ -508,6 +518,9 @@ public class GeneratorViewPanel extends CommonPanel
 					{
 						this.manager.purchaseGenerator(user, this.generatorData, this.generatorTier);
 						this.hasPurchased = true;
+
+						// rebuild gui as several items relay on purchase setting.
+						this.build();
 					}
 
 					return true;
@@ -518,8 +531,62 @@ public class GeneratorViewPanel extends CommonPanel
 			case ACTIVATION_COST:
 			{
 				itemStack = new ItemStack(Material.GOLD_INGOT);
+				glow = this.generatorData.getActiveGeneratorList().contains(this.generatorTier);
+
 				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
 					Constants.VALUE, String.valueOf(this.generatorTier.getActivationCost())));
+
+				// boolean for click-handler.
+				final boolean deactivate;
+
+				if (glow)
+				{
+					if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+					{
+						description.add("");
+						description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-deactivate"));
+					}
+
+					deactivate = true;
+				}
+				else
+				{
+					if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+					{
+						description.add("");
+						description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-activate"));
+					}
+
+					deactivate = false;
+				}
+
+				clickHandler = (panel, user, clickType, i) ->
+				{
+					if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+					{
+						if (deactivate)
+						{
+							this.manager.deactivateGenerator(user, this.generatorData, generatorTier);
+							// rebuild gui as several items relay on purchase setting.
+							this.build();
+						}
+						else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
+						{
+							this.manager.activateGenerator(user, this.generatorData, generatorTier);
+							// rebuild gui as several items relay on purchase setting.
+							this.build();
+						}
+					}
+					else
+					{
+						user.sendMessage("general.errors.insufficient-rank",
+							TextVariables.RANK,
+							user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user))));
+					}
+
+					return true;
+				};
+
 				break;
 			}
 			case BIOMES:
@@ -566,6 +633,7 @@ public class GeneratorViewPanel extends CommonPanel
 			description(description).
 			icon(itemStack).
 			clickHandler(clickHandler).
+			glow(glow).
 			build();
 	}
 
@@ -718,8 +786,30 @@ public class GeneratorViewPanel extends CommonPanel
 				0L);
 		}
 
-		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-			// Always return true.
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) ->
+		{
+			if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+			{
+				if (glow)
+				{
+					this.manager.deactivateGenerator(user, this.generatorData, generatorTier);
+					// rebuild gui as several items relay on purchase setting.
+					this.build();
+				}
+				else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
+				{
+					this.manager.activateGenerator(user, this.generatorData, generatorTier);
+					// rebuild gui as several items relay on purchase setting.
+					this.build();
+				}
+			}
+			else
+			{
+				user.sendMessage("general.errors.insufficient-rank",
+					TextVariables.RANK,
+					user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user))));
+			}
+
 			return true;
 		};
 

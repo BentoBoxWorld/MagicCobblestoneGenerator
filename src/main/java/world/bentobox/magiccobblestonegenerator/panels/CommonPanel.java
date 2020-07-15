@@ -133,6 +133,18 @@ public abstract class CommonPanel
 			}
 		}
 
+		description.add("");
+		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-view"));
+
+		if (isActive)
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-deactivate"));
+		}
+		else if (isUnlocked)
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-activate"));
+		}
+
 		return description;
 	}
 

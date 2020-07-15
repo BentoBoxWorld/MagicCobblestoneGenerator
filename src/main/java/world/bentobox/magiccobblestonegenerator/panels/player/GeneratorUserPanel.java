@@ -7,6 +7,7 @@ import org.bukkit.World;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
@@ -326,8 +327,7 @@ public class GeneratorUserPanel extends CommonPanel
 				// Open view panel.
 				GeneratorViewPanel.openPanel(this, generatorTier);
 			}
-			else if (this.island.isAllowed(user,
-				StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+			else if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
 			{
 				if (glow)
 				{
@@ -341,6 +341,12 @@ public class GeneratorUserPanel extends CommonPanel
 					// Build whole gui.
 					this.build();
 				}
+			}
+			else
+			{
+				user.sendMessage("general.errors.insufficient-rank",
+					TextVariables.RANK,
+					user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user))));
 			}
 
 			// Always return true.

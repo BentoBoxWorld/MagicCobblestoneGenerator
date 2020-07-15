@@ -754,6 +754,13 @@ public class StoneGeneratorManager
                     Constants.GENERATOR, generatorTier.getFriendlyName());
             return false;
         }
+        else if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+        {
+            user.sendMessage("general.errors.insufficient-rank",
+                TextVariables.RANK,
+                user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user))));
+            return false;
+        }
         else if (generatorTier.getRequiredMinIslandLevel() > this.getIslandLevel(island))
         {
             // Generator is not unlocked. Return false.
