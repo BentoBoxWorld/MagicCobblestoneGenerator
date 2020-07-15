@@ -6,9 +6,9 @@ tiers:
     # Display name for users
     name: "Stone Age"
     # Description in lore message
-    description: -|
-      Generates cobblestone and
-      stone a bit
+    description:
+      - Generates cobblestone and
+      - stone a bit
     # Icon used in GUI's
     icon: "COBBLESTONE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -44,9 +44,9 @@ tiers:
     # Display name for users
     name: "Coal Age"
     # Description in lore message
-    description: -|
-      Generates coal and
-      stone a bit
+    description:
+      - Generates coal and
+      - stone a bit
     # Icon used in GUI's
     icon: "COAL_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -95,8 +95,8 @@ tiers:
     # Display name for users
     name: "Iron Age"
     # Description in lore message
-    description: -|
-      Generates some iron
+    description:
+      - Generates some iron
     # Icon used in GUI's
     icon: "IRON_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -144,8 +144,8 @@ tiers:
     # Display name for users
     name: "Redstone Age"
     # Description in lore message
-    description: -|
-      Generates some redstone
+    description:
+      - Generates some redstone
     # Icon used in GUI's
     icon: "REDSTONE_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -194,8 +194,8 @@ tiers:
     # Display name for users
     name: "Gold Age"
     # Description in lore message
-    description: -|
-      Generates some gold
+    description:
+      - Generates some gold
     # Icon used in GUI's
     icon: "GOLD_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -247,8 +247,8 @@ tiers:
     # Display name for users
     name: "Diamond Age"
     # Description in lore message
-    description: -|
-      Generates some diamond
+    description:
+      - Generates some diamond
     # Icon used in GUI's
     icon: "DIAMOND_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -301,8 +301,8 @@ tiers:
     # Display name for users
     name: "Emerald Age"
     # Description in lore message
-    description: -|
-      Generates some emeralds
+    description:
+      - Generates some emeralds
     # Icon used in GUI's
     icon: "EMERALD_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -358,8 +358,8 @@ tiers:
     # Display name for users
     name: "Nether Generator"
     # Description in lore message
-    description: -|
-      Generates nether materials
+    description:
+      - Generates nether materials
     # Icon used in GUI's
     icon: "BASALT:2"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -416,9 +416,9 @@ tiers:
     # Display name for users
     name: "Stone Age"
     # Description in lore message
-    description: -|
-      Generates stone and
-      cobblestone a bit
+    description:
+      - Generates stone and
+      - cobblestone a bit
     # Icon used in GUI's
     icon: "STONE:2"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
@@ -456,9 +456,9 @@ tiers:
     # Display name for users
     name: "Stone Age"
     # Description in lore message
-    description: -|
-      Generates Basalt and
-      netherrack
+    description:
+      - Generates Basalt and
+      - netherrack
     # Icon used in GUI's
     icon: "BASALT:2"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
