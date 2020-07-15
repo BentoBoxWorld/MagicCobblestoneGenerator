@@ -234,7 +234,7 @@ public class GeneratorViewPanel extends CommonPanel
 			}
 
 			if (this.addon.isVaultProvided() &&
-				this.addon.isUpgradesProvided() &&
+				//this.addon.isUpgradesProvided() &&
 				this.generatorTier.getGeneratorTierCost() > 0)
 			{
 				// Display cost only if there exist vault, upgrades and it is larger than 0.
