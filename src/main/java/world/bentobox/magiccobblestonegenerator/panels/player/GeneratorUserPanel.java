@@ -337,7 +337,7 @@ public class GeneratorUserPanel extends CommonPanel
 				}
 				else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
 				{
-					this.manager.activateGenerator(user, this.generatorData, generatorTier);
+					this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
 					// Build whole gui.
 					this.build();
 				}

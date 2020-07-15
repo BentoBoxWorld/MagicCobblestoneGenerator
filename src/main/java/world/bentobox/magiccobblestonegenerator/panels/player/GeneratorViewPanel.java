@@ -572,7 +572,7 @@ public class GeneratorViewPanel extends CommonPanel
 						}
 						else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
 						{
-							this.manager.activateGenerator(user, this.generatorData, generatorTier);
+							this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
 							// rebuild gui as several items relay on purchase setting.
 							this.build();
 						}
@@ -798,7 +798,7 @@ public class GeneratorViewPanel extends CommonPanel
 				}
 				else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
 				{
-					this.manager.activateGenerator(user, this.generatorData, generatorTier);
+					this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
 					// rebuild gui as several items relay on purchase setting.
 					this.build();
 				}
