@@ -228,7 +228,7 @@ public class StoneGeneratorAddonTest {
         verify(plugin).log("[MagicCobblestoneGenerator] Imported 8 generator tiers into database.");
 
         verify(plugin).logWarning("[MagicCobblestoneGenerator] Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
-        verify(plugin).logWarning("[MagicCobblestoneGenerator] Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
+//      verify(plugin).logWarning("[MagicCobblestoneGenerator] Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
         verify(plugin).logWarning("[MagicCobblestoneGenerator] Economy plugin not found so money options will not work!");
         //verify(plugin, never()).logError("[MagicCobblestoneGenerator] Magic Cobblestone Generator could not hook into any GameMode so will not do anything!");
 
