@@ -19,7 +19,7 @@ Magic Cobblestone Generator is changed a lot since it first creation, and since 
 - Stone generation
 - New basalt generation
 
-Addon also do not work in static progression based on island level. Now it allows users to toggle which generator they want to activate.
+Addon also does not work in static progression based on island level. Now it allows users to toggle which generator they want to activate.
 
 Server owner can specify different block generation for each generator, as well as set up small chance to generate treasure on block generation.
 
