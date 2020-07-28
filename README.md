@@ -32,7 +32,7 @@ Monetary system is implemented and now users can purchase generators. Server own
 1. Place the addon jar in the addons folder of the BentoBox plugin
 2. Restart the server
 3. The addon will create a data folder and inside the folder will be a config.yml and generatorTemplate.yml
-4. Edit the config.yml how you want.
+4. Edit the config.yml and generatorTemplate.yml how you want.
 5. Restart the server
 
 To change generators, you can simply edit generatorTemplate.yml at any point. However, to apply changes for GameMode addon, you need to write `/[gamemode_admin_command] generator import`.
