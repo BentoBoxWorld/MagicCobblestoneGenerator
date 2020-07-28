@@ -19,7 +19,7 @@ Magic Cobblestone Generator is changed a lot since it first creation, and since 
 - Stone generation
 - New basalt generation
 
-Addon also do not work in static progression based on island level. Now it allows users to toggle which generator they want to activate.
+Addon also does not work in static progression based on island level. Now it allows users to toggle which generator they want to activate.
 
 Server owner can specify different block generation for each generator, as well as set up small chance to generate treasure on block generation.
 
@@ -32,7 +32,7 @@ Monetary system is implemented and now users can purchase generators. Server own
 1. Place the addon jar in the addons folder of the BentoBox plugin
 2. Restart the server
 3. The addon will create a data folder and inside the folder will be a config.yml and generatorTemplate.yml
-4. Edit the config.yml how you want.
+4. Edit the config.yml and generatorTemplate.yml how you want.
 5. Restart the server
 
 To change generators, you can simply edit generatorTemplate.yml at any point. However, to apply changes for GameMode addon, you need to write `/[gamemode_admin_command] generator import`.
