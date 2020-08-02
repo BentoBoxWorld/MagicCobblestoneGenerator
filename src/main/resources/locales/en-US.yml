@@ -151,6 +151,11 @@ stone-generator:
       current-value: "&2 Current Value: [value]"
       current-value-list: "&2 - [value]"
 
+      click-to-view: "&e Right Click &7 to view details."
+      click-to-activate: "&e Left Click &7 to activate."
+      click-to-deactivate: "&e Left Click &7 to deactivate."
+      click-to-purchase: "&e Click &7 to purchase."
+
     titles:
       generator-view: "Generator: [generator]"
       generator-list: "Generators"
@@ -182,8 +187,13 @@ stone-generator:
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:
-      name: "Magic Cobblestone Generator"
-      description: "Toggle the Magic Cobblestone Generator"
+      name: "Magic Generator"
+      description: |-
+        &a Toggle all Magic Generators
+        &a on whole island
+      hint: "&e Magic Generators are disabled in island settings"
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
-      name: "Magic Cobblestone Generator Permissions"
-      description: "Switch who can activate and deactivate generators"
+      name: "Magic Generator Permissions"
+      description: |-
+        &a Switch who can activate
+        &a and deactivate generators

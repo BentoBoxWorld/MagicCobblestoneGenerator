@@ -720,12 +720,19 @@ public class StoneGeneratorManager
      * @param generatorTier Generator that will be added.
      */
     public void activateGenerator(@NotNull User user,
-            @NotNull GeneratorDataObject generatorData,
-            @NotNull GeneratorTierObject generatorTier)
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
     {
         user.sendMessage(Constants.MESSAGE + "generator-activated",
-                Constants.GENERATOR, generatorTier.getFriendlyName());
+            Constants.GENERATOR, generatorTier.getFriendlyName());
         generatorData.getActiveGeneratorList().add(generatorTier);
+
+        // check and send message that generator is disabled
+        if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
+        {
+            user.sendMessage(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference());
+        }
 
         // Save object.
         this.saveGeneratorData(generatorData);
@@ -743,38 +750,44 @@ public class StoneGeneratorManager
      * @return {@code true} if can purchase, {@false} if cannot purchase.
      */
     public boolean canPurchaseGenerator(@NotNull User user,
-            @NotNull Island island,
-            @NotNull GeneratorDataObject generatorData,
-            @NotNull GeneratorTierObject generatorTier)
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
     {
         if (generatorData.getPurchasedTiers().contains(generatorTier))
         {
             // Generator is not unlocked. Return false.
             user.sendMessage(Constants.ERRORS + "generator-already-purchased",
-                    Constants.GENERATOR, generatorTier.getFriendlyName());
+                Constants.GENERATOR, generatorTier.getFriendlyName());
+            return false;
+        }
+        else if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+        {
+            user.sendMessage("general.errors.insufficient-rank",
+                TextVariables.RANK,
+                user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user))));
             return false;
         }
         else if (generatorTier.getRequiredMinIslandLevel() > this.getIslandLevel(island))
         {
             // Generator is not unlocked. Return false.
             user.sendMessage(Constants.ERRORS + "island-level-not-reached",
-                    Constants.GENERATOR, generatorTier.getFriendlyName(),
-                    TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel()));
+                Constants.GENERATOR, generatorTier.getFriendlyName(),
+                TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel()));
             return false;
         }
         else if (!generatorTier.getRequiredPermissions().isEmpty() &&
-                !generatorTier.getRequiredPermissions().stream().allMatch(permission ->
+            !generatorTier.getRequiredPermissions().stream().allMatch(permission ->
                 User.getInstance(island.getOwner()).hasPermission(permission)))
         {
-            Optional<String> missingPermission =
-                    generatorTier.getRequiredPermissions().stream().
-                    filter(permission -> !User.getInstance(island.getOwner()).hasPermission(permission)).
-                    findAny();
+            Optional<String> missingPermission = generatorTier.getRequiredPermissions().stream().
+                filter(permission -> !User.getInstance(island.getOwner()).hasPermission(permission)).
+                findAny();
 
             // Generator is not unlocked. Return false.
             user.sendMessage(Constants.ERRORS + "missing-permission",
-                    Constants.GENERATOR, generatorTier.getFriendlyName(),
-                    TextVariables.PERMISSION, missingPermission.get());
+                Constants.GENERATOR, generatorTier.getFriendlyName(),
+                TextVariables.PERMISSION, missingPermission.get());
             return false;
         }
         else
@@ -783,15 +796,15 @@ public class StoneGeneratorManager
             {
                 // Return true only if user has enough money and its removal was successful.
                 if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()) &&
-                        this.addon.getVaultHook().withdraw(user,
-                                generatorTier.getGeneratorTierCost()).transactionSuccess())
+                    this.addon.getVaultHook().withdraw(user,
+                        generatorTier.getGeneratorTierCost()).transactionSuccess())
                 {
                     return true;
                 }
                 else
                 {
                     user.sendMessage(Constants.ERRORS + "no-credits",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost()));
+                        TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost()));
                     return false;
                 }
             }
