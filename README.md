@@ -136,4 +136,4 @@ Only generator ID must be specified. Other parts can be skipped.
 
 ## Information
 
-More information can be found in [Wiki Pages](https://docs.bentobox.world/addons/MagicCobblestoneGenerator/).
+More information can be found in [Wiki Pages](https://docs.bentobox.world/en/latest/addons/MagicCobblestoneGenerator/).
