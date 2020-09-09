@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
+import world.bentobox.bentobox.api.events.addon.AddonEvent;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
@@ -799,6 +800,14 @@ public class StoneGeneratorManager
                     this.addon.getVaultHook().withdraw(user,
                         generatorTier.getGeneratorTierCost()).transactionSuccess())
                 {
+                    Map<String, Object> keyValues = new HashMap<>();
+                    keyValues.put("eventName", "GeneratorBuyEvent");
+                    keyValues.put("targetPlayer", user.getUniqueId());
+                    keyValues.put("islandUUID", island.getUniqueId());
+                    keyValues.put("generator", generatorTier.getFriendlyName());
+                    
+                    new AddonEvent().builder().addon(addon).keyValues(keyValues).build();
+                    
                     return true;
                 }
                 else
