@@ -105,21 +105,21 @@ public class GeneratorUserPanel extends CommonPanel
 
 		// Do not show cobblestone button if there are no cobblestone generators.
 		if (this.generatorList.stream().anyMatch(generator ->
-			generator.getGeneratorType().equals(GeneratorTierObject.GeneratorType.COBBLESTONE)))
+			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)))
 		{
 			panelBuilder.item(4, this.createButton(Action.SHOW_COBBLESTONE));
 		}
 
 		// Do not show stone if there are no stone generators.
 		if (this.generatorList.stream().anyMatch(generator ->
-			generator.getGeneratorType().equals(GeneratorTierObject.GeneratorType.STONE)))
+			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)))
 		{
 			panelBuilder.item(5, this.createButton(Action.SHOW_STONE));
 		}
 
 		// Do not show basalt if there are no basalt generators.
 		if (this.generatorList.stream().anyMatch(generator ->
-			generator.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT)))
+			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)))
 		{
 			panelBuilder.item(6, this.createButton(Action.SHOW_BASALT));
 		}
@@ -249,19 +249,19 @@ public class GeneratorUserPanel extends CommonPanel
 			case SHOW_COBBLESTONE:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.COBBLESTONE)).
+						generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
 					collect(Collectors.toList());
 				break;
 			case SHOW_STONE:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.STONE)).
+						generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
 					collect(Collectors.toList());
 				break;
 			case SHOW_BASALT:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						generatorTier.getGeneratorType().equals(GeneratorTierObject.GeneratorType.BASALT)).
+						generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
 					collect(Collectors.toList());
 				break;
 			case TOGGLE_VISIBILITY:

@@ -284,7 +284,7 @@ public class StoneGeneratorManager
                 // Filter out generators that are not deployed.
                 filter(GeneratorTierObject::isDeployed).
                 // Filter objects with the same generator type.
-                filter(generator -> generator.getGeneratorType().equals(generatorType)).
+                filter(generator -> generator.getGeneratorType().includes(generatorType)).
                 // Filter out objects with incorrect biomes.
                 filter(generator -> generator.getRequiredBiomes().isEmpty() ||
                         generator.getRequiredBiomes().contains(biome)).
@@ -305,10 +305,20 @@ public class StoneGeneratorManager
                         // Larger priority must be in the end.
                         return Integer.compare(o1.getPriority(), o2.getPriority());
                     }
-                    else
+                    else if (o1.isDefaultGenerator() || o2.isDefaultGenerator())
                     {
                         // Default should be placed last one.
                         return Boolean.compare(o2.isDefaultGenerator(), o1.isDefaultGenerator());
+                    }
+                    else if (o1.getGeneratorType() != o2.getGeneratorType())
+                    {
+                        // Compare by type. Generators which are more specified should be first.
+                        return o1.getGeneratorType().compareTo(o2.getGeneratorType());
+                    }
+                    else
+                    {
+                        // Compare by unique id.
+                        return o1.getUniqueId().compareTo(o2.getUniqueId());
                     }
                 });
 
@@ -342,7 +352,7 @@ public class StoneGeneratorManager
                 // Filter all default generators
                 filter(GeneratorTierObject::isDefaultGenerator).
                 // Filter generators with necessary type.
-                filter(generator -> generator.getGeneratorType().equals(generatorType)).
+                filter(generator -> generator.getGeneratorType().includes(generatorType)).
                 // Filter generators that starts with name.
                 filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
                 // Return first or null.
@@ -392,7 +402,7 @@ public class StoneGeneratorManager
     public List<GeneratorTierObject> findDefaultGeneratorList(World world)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
-                gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
 
         if (gameMode.isEmpty())
         {
@@ -402,13 +412,13 @@ public class StoneGeneratorManager
 
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
-                // Filter generators that starts with name.
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-                // Filter deployed and default generators.
-                filter(GeneratorTierObject::isDefaultGenerator).
-                filter(GeneratorTierObject::isDeployed).
-                // Return as list collection.
-                collect(Collectors.toList());
+            // Filter generators that starts with name.
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            // Filter deployed and default generators.
+            filter(GeneratorTierObject::isDefaultGenerator).
+            filter(GeneratorTierObject::isDeployed).
+            // Return as list collection.
+            collect(Collectors.toList());
     }
 
 
@@ -425,20 +435,20 @@ public class StoneGeneratorManager
     public void loadUserIslands(UUID uniqueId)
     {
         this.operationWorlds.stream().
-        map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
-        filter(Objects::nonNull).
-        forEach(island -> {
-            if (island.getOwner() == uniqueId)
-            {
-                // Owner island must be validated.
-                this.validateIslandData(island);
-            }
-            else
-            {
-                // Members does not influence island data.
-                this.addIslandData(island);
-            }
-        });
+            map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
+            filter(Objects::nonNull).
+            forEach(island -> {
+                if (island.getOwner() == uniqueId)
+                {
+                    // Owner island must be validated.
+                    this.validateIslandData(island);
+                }
+                else
+                {
+                    // Members does not influence island data.
+                    this.addIslandData(island);
+                }
+            });
     }
 
 

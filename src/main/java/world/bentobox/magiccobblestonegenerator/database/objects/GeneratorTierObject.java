@@ -423,9 +423,37 @@ public class GeneratorTierObject implements DataObject
 	 */
 	public enum GeneratorType
 	{
-		COBBLESTONE,
-		STONE,
-		BASALT
+		COBBLESTONE(1),
+		STONE(2),
+		BASALT(4),
+		COBBLESTONE_OR_STONE(3),
+		BASALT_OR_COBBLESTONE(5),
+		BASALT_OR_STONE(6),
+		ANY(7);
+
+		GeneratorType(int id)
+		{
+			this.id = id;
+		}
+
+
+		/**
+		 * This method returns if given generator type is included by current generator.
+		 * @param type Generator type that must be checked. Most likely it is just basic
+		 *             basalt, cobblestone or stone.
+		 * @return {@code true} if current generator is compatible with given generator
+		 * type, {@code false} otherwise.
+		 */
+		public boolean includes(GeneratorType type)
+		{
+			return (this.id & type.id) != 0;
+		}
+
+
+		/**
+		 * ID of the generator.
+		 */
+		private final int id;
 	}
 
 

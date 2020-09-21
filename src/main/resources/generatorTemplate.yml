@@ -11,7 +11,14 @@ tiers:
       - stone a bit
     # Icon used in GUI's
     icon: "COBBLESTONE:1"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
+    # Valid Generator types:
+    #   - COBBLESTONE - classic block generator
+    #   - STONE - https://minecraft.gamepedia.com/File:Stone_generator.gif
+    #   - BASALT - https://minecraft.gamepedia.com/File:Basalt_generator.gif
+    #   - COBBLESTONE_OR_STONE - to specify that this tier works with cobblestone and stone generators
+    #   - BASALT_OR_COBBLESTONE - to specify that this tier works with basalt and cobblestone generators
+    #   - BASALT_OR_STONE - to specify that this tier works with basalt and stone generators
+    #   - ANY - to specify that this tier works with all generator types.
     type: COBBLESTONE
     # Indicates that generator is used as default.
     # Requirements will be ignored.

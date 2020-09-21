@@ -466,6 +466,11 @@ public class GeneratorViewPanel extends CommonPanel
 						itemStack = new ItemStack(Material.getMaterial("BASALT"));
 					}
 				}
+				else
+				{
+					// TODO: Icon for mixed generator types?
+					itemStack = new ItemStack(Material.ANDESITE);
+				}
 				break;
 			}
 			case REQUIRED_MIN_LEVEL:
