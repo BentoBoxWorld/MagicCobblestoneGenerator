@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.Why;
 
 
 /**
@@ -83,6 +84,7 @@ public class MagicGenerator
     {
         if (generatorTier == null)
         {
+            Why.report(block.getLocation(), "Missing Generator Tier");
             // Check if generator exists.
             return false;
         }
@@ -91,6 +93,8 @@ public class MagicGenerator
 
         if (chanceMap.isEmpty())
         {
+            Why.report(block.getLocation(), "Missing Block Chances in " + generatorTier.getUniqueId());
+
             // Check if any block has a chance to spawn
             return false;
         }
@@ -99,9 +103,14 @@ public class MagicGenerator
 
         if (newMaterial == null)
         {
+            Why.report(block.getLocation(), "Cannot parse material from ChanceMap in " + generatorTier.getUniqueId());
+
             // Check if a material was found
             return false;
         }
+
+        Why.report(block.getLocation(),
+            "Replace " + block.getType() + " with " + newMaterial + " by " + generatorTier.getUniqueId());
 
         // ask config if physics should be used
         block.setType(newMaterial, this.addon.getSettings().isUsePhysics());

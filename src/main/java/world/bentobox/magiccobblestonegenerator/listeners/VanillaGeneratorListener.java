@@ -15,6 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFormEvent;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.utils.Why;
 
 
 /**
@@ -66,17 +67,15 @@ public class VanillaGeneratorListener extends GeneratorListener
 			map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
 			orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventSourceBlock.getWorld())))
 		{
-			return;
-		}
+			Why.report(eventSourceBlock.getLocation(), "MCG is disabled by MAGIC_COBBLESTONE_GENERATOR flag!");
 
-		if (!this.addon.getAddonManager().isMembersOnline(eventSourceBlock.getLocation()))
-		{
-			// If island members are not online then do not continue
 			return;
 		}
 
 		if (!this.isInRangeToGenerate(eventSourceBlock))
 		{
+			Why.report(eventSourceBlock.getLocation(), "No players in range!");
+
 			// Check if any island member is at generator range.
 			return;
 		}

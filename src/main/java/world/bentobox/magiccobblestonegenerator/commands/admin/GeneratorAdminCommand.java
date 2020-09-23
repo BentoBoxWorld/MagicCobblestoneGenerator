@@ -12,6 +12,7 @@ import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.commands.ConfirmableCommand;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -220,7 +221,15 @@ public class GeneratorAdminCommand extends CompositeCommand
 			}
 
 			// Set meta data on player
-			User target = User.getInstance(targetUUID);
+			Island island = this.getAddon().getIslands().getIsland(this.getWorld(), targetUUID);
+
+			if (island == null || island.getOwner() == null)
+			{
+				user.sendMessage("general.errors.player-is-not-owner");
+				return false;
+			}
+
+			User target = User.getInstance(island.getOwner());
 
 			if (!target.isOnline())
 			{

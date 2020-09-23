@@ -13,9 +13,11 @@ import org.bukkit.Location;
 import org.bukkit.metadata.MetadataValue;
 import java.util.UUID;
 
+import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
+import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
 /**
@@ -23,6 +25,16 @@ import world.bentobox.bentobox.util.Util;
  */
 public class Why
 {
+	public static void report(@NotNull Location location, String why)
+	{
+		BentoBox.getInstance().getIslands().getIslandAt(location).ifPresent(island -> {
+			User owner = User.getInstance(island.getOwner());
+
+			Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
+		});
+	}
+
+
 	/**
 	 * This method prints debug messages about specific user.
 	 * @param addon Addon which are called
@@ -30,7 +42,7 @@ public class Why
 	 * @param location Location where something is happening.
 	 * @param why Reason and its value for why.
 	 */
-	public static void report(Addon addon, @Nullable User user, @NotNull Location location, Reason why)
+	public static void report(Addon addon, @Nullable User user, @NotNull Location location, String why)
 	{
 		// A quick way to debug flag listener unit tests is to add this line here: System.out.println(why.name()); NOSONAR
 		if (user != null &&
@@ -40,8 +52,8 @@ public class Why
 				findFirst().map(MetadataValue::asBoolean).
 				orElse(false))
 		{
-			String whyEvent = "Why: " + why.getKey() + " in world " + location.getWorld().getName() + " at " + Util.xyz(location.toVector());
-			String whyBypass = "Why: " + user.getName() + " - " + why.getValue();
+			String whyEvent = "Why: MagicCobblestoneGenerator in world " + location.getWorld().getName() + " at " + Util.xyz(location.toVector());
+			String whyBypass = "Why: " + user.getName() + " - " + why;
 
 			addon.log(whyEvent);
 			addon.log(whyBypass);
