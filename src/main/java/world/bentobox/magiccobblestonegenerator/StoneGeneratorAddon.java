@@ -144,10 +144,10 @@ public class StoneGeneratorAddon extends Addon
 
             Optional<VaultHook> vault = this.getPlugin().getVault();
 
-            if (!vault.isPresent() || !vault.get().hook())
+            if (!vault.isPresent())
             {
                 this.vaultHook = null;
-                this.logWarning("Economy plugin not found so money options will not work!");
+                this.logWarning("Vault plugin not found. Economy will not work!");
             }
             else
             {
