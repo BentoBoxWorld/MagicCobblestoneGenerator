@@ -219,7 +219,7 @@ public class StoneGeneratorAddon extends Addon
 
                     if (stringBuilder.length() > 0)
                     {
-                        stringBuilder.deleteCharAt(stringBuilder.length());
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     }
 
                     return stringBuilder.toString();
@@ -245,7 +245,7 @@ public class StoneGeneratorAddon extends Addon
 
                     if (stringBuilder.length() > 0)
                     {
-                        stringBuilder.deleteCharAt(stringBuilder.length());
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     }
 
                     return stringBuilder.toString();
@@ -271,7 +271,7 @@ public class StoneGeneratorAddon extends Addon
 
                     if (stringBuilder.length() > 0)
                     {
-                        stringBuilder.deleteCharAt(stringBuilder.length());
+                        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     }
 
                     return stringBuilder.toString();
