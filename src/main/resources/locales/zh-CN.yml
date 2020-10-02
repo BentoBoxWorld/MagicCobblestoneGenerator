@@ -1,0 +1,145 @@
+---
+stone-generator:
+  commands:
+    admin:
+      main:
+        description: 魔法刷石机插件的主要管理命令
+      import:
+        description: 将生成器导入某一游戏模式的命令
+        confirmation: 请确认您要从[gamemode]中删除现有生成器，并从模板中导入生成器
+      why:
+        parameters: "<player>"
+        description: 切换显示魔法刷石机的调试信息。
+    player:
+      main:
+        description: 玩家指令，选择生成器的GUI
+      view:
+        description: 玩家指令，打开某一生成器的GUI
+        parameters: "<generator_id>——生成器的ID"
+  gui:
+    buttons:
+      block-icon:
+        name: "[material]"
+        description: 产生概率：[#.##]
+      treasure-icon:
+        name: "[material]"
+        description: 掉落概率：[#.####]
+      return:
+        name: 返回
+        description: |-
+          返回上级
+          菜单或退出GUI
+      previous:
+        name: 上一页
+        description: 切换到上一页
+      next:
+        name: 下一页
+        description: 切换到下一页
+      info:
+        name: 一般信息
+        description: 查看关于生成器的一般信息
+      blocks:
+        name: 方块列表
+        description: 查看方块列表及生成概率
+      treasures:
+        name: 宝藏列表
+        description: |-
+          显示宝藏列表及掉落概率。
+          宝藏在方块生成时掉落。
+      name:
+        name: 生成器名称
+      icon:
+        name: 生成器图标
+      description:
+        name: 生成器概要
+      default:
+        name: 默认生成器
+      priority:
+        name: 生成器的优先级
+        description: 若多个生成器同时可用，则优先级数字更大者生效。
+      type:
+        name: 生成器类型
+      required_min_level:
+        name: 所需岛屿等级
+        description: 最低的岛屿等级
+      required_permissions:
+        name: 所需权限
+      purchase_cost:
+        name: 购买费用
+        description: 解锁此生成器所需的一次性费用
+      activation_cost:
+        name: 激活费用
+        description: 每次激活此生成器所需费用
+      biomes:
+        name: 运营生物群落
+        description: 生成器生效的生物群系列表
+      deployed:
+        name: 已部署
+      treasure_amount:
+        name: 宝藏数量
+        description: 宝藏的掉落数量
+      treasure_chance:
+        name: 宝藏概率
+        description: 宝藏的掉落概率
+      show_cobblestone:
+        name: 圆石生成器
+        description: 仅显示圆石生成器
+      show_stone:
+        name: 石头生成器
+        description: 仅显示石头生成器
+      show_basalt:
+        name: 玄武岩生成器
+        description: 仅显示玄武岩生成器
+      toggle_visibility:
+        name: 仅解锁
+        description: 仅显示已解锁的生成器
+      show_active:
+        name: 仅激活
+        description: 仅显示已激活的生成器
+    descriptions:
+      generator-active: "&2激活"
+      activation-cost: 激活费用：[number]
+      locked: "&c未解锁！"
+      required-permissions: "&c所需权限："
+      missing-permission: "&c - [permission]"
+      required-level: "&c所需岛屿等级：[number]级"
+      purchase-cost: "&c购买费用：[number]。"
+      current-value: "&2当前数值：[value]"
+      current-value-list: "&2——[value]"
+      click-to-view: "＆e右键单击＆7以查看详细信息。"
+      click-to-activate: "＆e左键单击＆7激活。"
+      click-to-deactivate: "＆e左键单击＆7禁用。"
+      click-to-purchase: "＆e单击＆7购买。"
+    titles:
+      generator-view: 生成器：[generator]
+      generator-list: 生成器列表
+  messages:
+    import-count: "&6导入了[number]个新的生成器层级。"
+    skipping: "&6生成器“[generator]”&r&6已在本地缓存，跳过……"
+    overwriting: "&6正在覆盖本地缓存中的“[generator]”生成器……"
+    loaded: "&6生成器“[generator]”&r&6已加载到本地缓存中。"
+    generator-deactivated: "&6生成器“[generator]”&r&6已禁用。"
+    generator-activated: "&6生成器“[generator]”&r&6已激活。"
+    generator-purchased: "&6生成器“[generator]”&r&6已经买过了。"
+  errors:
+    generator-tier-not-found: "&c无法在[gamemode]中找到生成器“[generator]”&r&c。"
+    no-file: "&c找不到generatorTemplate.yml文件，无法导入。"
+    no-load: "&c无法加载generatorTemplate.yms文件。读取错误：[description]"
+    not-a-gamemode-world: "&c“[world]”世界不是某一游戏模式的插件创建的世界。"
+    active-generators-reached: "&c您激活了太多生成器。请先关闭一些，再激活新的。"
+    generator-not-unlocked: "&c生成器“[generator]”&r&c未解锁。"
+    generator-already-purchased: "&c生成器“[generator]”&r&c已经购买过了。"
+    island-level-not-reached: "&c生成器“[generator]”&r&c需要[number]级岛屿等级。"
+    missing-permission: "&c生成器“[generator]”&r&c需要`[permission]`权限。"
+    no-credits: "&c余额太少，无法激活生成器。激活需要金额：[number]。"
+    no-generator-data: "&c找不到合法的生成器数据。"
+    no-generators-in-world: "&c找不到可以用于[world]的生成器。"
+protection:
+  flags:
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: 魔法圆石刷石机
+      description: 调整魔法圆石刷石机
+      hint: "＆e Magic Generators在岛屿设置中被禁用"
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: 魔法圆石刷石机权限列表
+      description: 设置激活与关闭生成器的玩家
