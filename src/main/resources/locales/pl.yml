@@ -1,0 +1,166 @@
+---
+stone-generator:
+  commands:
+    admin:
+      main:
+        description: Główna komenda administratora dla dodatku Magic Cobblestone Generator
+      import:
+        description: Komenda pozwalająca na import magicznych generatorów do dodatku
+          Trybu Gry
+        confirmation: Potwierdź, że chcesz usunąć istniejące generatory z [gamemode]
+          i importować generatory z szablonu
+      why:
+        parameters: "<player>"
+        description: Włącz/wyłącz wiadomości debugowania o Magic Cobblestone Generator
+    player:
+      main:
+        description: Główna komenda gracza, która otwiera GUI z wyborem generatora
+      view:
+        description: Komenda gracza otwierająca GUI ze szczegółowymi informacjami
+          o żądanym generatorze
+        parameters: "<generator_id> - id dla generatora"
+  gui:
+    buttons:
+      block-icon:
+        name: "[material]"
+        description: 'Szansa na wygenerowanie: [#.##]'
+      treasure-icon:
+        name: "[material]"
+        description: 'Szansa na drop: [#.####]'
+      return:
+        name: Powrót
+        description: |-
+          Powrót do poprzedniego
+          menu lub wyjście z GUI
+      previous:
+        name: Poprzednia strona
+        description: Przejdź do poprzedniej strony
+      next:
+        name: Następna strona
+        description: Przejdź do następnej strony
+      info:
+        name: Informacje ogólne
+        description: Wyświetla ogólne informacje o generatorze
+      blocks:
+        name: Lista zablokowanych
+        description: |-
+          Pokazuje listę bloków
+          i ich szanse na generowanie
+      treasures:
+        name: Lista skarbów
+        description: |-
+          Wyświetla listę skarbów
+          i ich szanse na drop.
+          Skarby są upuszczane
+          podczas generowania bloku
+      name:
+        name: Nazwa generatora
+      icon:
+        name: Ikona generatora
+      description:
+        name: Opis generatora
+      default:
+        name: Domyślny generator
+      priority:
+        name: Priorytet generatora
+        description: |-
+          Generatory z większym
+          numerem priorytetu będą preferowane jeśli jest wiele,
+          można zastosować w tej samej lokalizacji
+      type:
+        name: Typ generatora
+      required_min_level:
+        name: Wymagany poziom wyspy
+        description: Minimalny poziom wyspy
+      required_permissions:
+        name: Wymagane uprawnienia
+      purchase_cost:
+        name: Koszt zakupu
+        description: Kwota jaką trzeba zapłacić za odblokowanie tego generatora
+      activation_cost:
+        name: Koszt aktywacji
+        description: Kwota jaką trzeba zapłacić za każdym razem za aktywacje tego
+          generatora
+      biomes:
+        name: Biomy podlegające
+        description: Lista biomów w których generator będzie działał
+      deployed:
+        name: Rozmieszczony
+      treasure_amount:
+        name: Wartościowość skarbu
+        description: Wartościowość skarbu który dropnie
+      treasure_chance:
+        name: Szansa na skarb
+        description: Szansa na wydropienie skarbu
+      show_cobblestone:
+        name: Generatory Bruku
+        description: Pokazuje tylko generatory bruku
+      show_stone:
+        name: Generatory kamienia
+        description: Pokazuje tylko generatory kamienia
+      show_basalt:
+        name: Generatory bazaltu
+        description: Pokazuje tylko generatory bazaltu
+      toggle_visibility:
+        name: Tylko odblokowane
+        description: Pokazuje tylko odblokowane generatory
+      show_active:
+        name: Tylko aktywne
+        description: Pokazuje tylko aktywne generatory
+    descriptions:
+      generator-active: "&2 Aktywuj"
+      activation-cost: 'Koszt aktywacji: [number]'
+      locked: "&c Zablokowane!"
+      required-permissions: "&c Wymagane uprawnieia:"
+      missing-permission: "&c - [permission]"
+      required-level: "&c Wymagany [number] poziom wyspy"
+      purchase-cost: "&c Koszt zakupu: [number]."
+      current-value: "&2 Aktualna wartość: [value]"
+      current-value-list: "&2 - [value]"
+      click-to-view: "&e Prawy klik &7 żeby zobaczyć szczegóły."
+      click-to-activate: "&e Lewy klik &7 żeby aktywować."
+      click-to-deactivate: "&e Lewy klik &7 żebby dezaktywować."
+      click-to-purchase: "&e Kliknij &7 żeby kupić."
+    titles:
+      generator-view: 'Generator: [generator]'
+      generator-list: Generatory
+  messages:
+    import-count: "&6 Zaimportowany [number] nowych poziomów generatorów."
+    skipping: "&6 Generator '[generator]' &r&6 jest już w lokalnej pamięci podręcznej.
+      Pomijam."
+    overwriting: "&6 Nadpisywanie generatora '[generator]' &r&6 w lokalnej pamięci
+      podręcznej."
+    loaded: "&6 Generator  '[generator]' &r&6 załadowany do lokalnej pamięci podręcznej."
+    generator-deactivated: "&6 Generator '[generator]' &r&6 został wyłączony."
+    generator-activated: "&6 Generator '[generator]' &r&6 został włączony."
+    generator-purchased: "&6 Generator '[generator]' &r&6 został zakupiony."
+  errors:
+    generator-tier-not-found: "&c Generator o id '[generator]' &r&c nie został znaleziony
+      w [gamemode]."
+    no-file: "&c Brak pliku generatorTemplate.yml. Nie można zaimportować."
+    no-load: "&c Błąd ładowania pliku generatorTemplate.yml . Błąd odczytu: [description]."
+    not-a-gamemode-world: "&c Świat '[world]' nie jest światem dodatku Trybu Gry"
+    active-generators-reached: "&c Aktywowano zbyt wiele generatorów. Spróbuj dezaktywować
+      niektóre przed aktywacją nowego."
+    generator-not-unlocked: "&c Generator '[generator]' &r&c nie jest odblokowany."
+    generator-already-purchased: "&c Generator '[generator]' &r&c jest już zakupiony."
+    island-level-not-reached: "&c Generator '[generator]' &r&c wymaga [number] poziomu
+      wyspy."
+    missing-permission: "&c Generator '[generator]' &r&c wymaga zezwolenia `[permission]`."
+    no-credits: "&c Niewystarczająca kwota żeby aktywować generator. Aktywacja wymaga
+      [number] ."
+    no-generator-data: "&c Nie można znaleźć poprawnych danych generatora"
+    no-generators-in-world: "&c Nie można znaleźć żadnego generatora w świecie [world]"
+protection:
+  flags:
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: Magiczny Generator
+      description: |-
+        &a Przełącz wszystkie Magiczne Generatory
+        &a na całej wyspie
+      hint: "&e Magiczne Generatory są wyłączone w ustawieniach wyspy"
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: Uprawnienia Magicznego Generatora
+      description: |-
+        &a Przełącz kto może aktywować
+        &a i dezaktywować generator
