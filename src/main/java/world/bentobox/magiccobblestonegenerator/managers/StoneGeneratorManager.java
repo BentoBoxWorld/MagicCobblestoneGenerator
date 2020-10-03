@@ -229,6 +229,34 @@ public class StoneGeneratorManager
     }
 
 
+    /**
+     * This method removes from cache and database every island data that is related to given gamemode.
+     *
+     * @param optional GameMode addon which generators must be removed.
+     */
+    public void wipeIslandData(Optional<GameModeAddon> optional)
+    {
+        if (!optional.isPresent())
+        {
+            // Done.
+            return;
+        }
+
+        final String objectKey = optional.get().getDescription().getName();
+
+        List<String> keySet = new ArrayList<>(this.generatorDataCache.keySet());
+
+        // Remove everything that starts with gamemode name.
+        keySet.forEach(uniqueId -> {
+            if (uniqueId.startsWith(objectKey))
+            {
+                this.generatorDataCache.remove(uniqueId);
+                this.generatorDataDatabase.deleteID(uniqueId);
+            }
+        });
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Generator related methods
     // ---------------------------------------------------------------------
