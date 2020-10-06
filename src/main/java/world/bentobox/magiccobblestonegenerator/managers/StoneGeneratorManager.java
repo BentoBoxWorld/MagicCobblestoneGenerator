@@ -307,6 +307,8 @@ public class StoneGeneratorManager
             }
         });
 
+        this.addon.log("All generators for " + objectKey + " are removed!");
+
         // Collect all bundles
         keySet = new ArrayList<>(this.generatorBundleCache.keySet());
 
@@ -318,6 +320,8 @@ public class StoneGeneratorManager
                 this.generatorBundleDatabase.deleteID(uniqueId);
             }
         });
+
+        this.addon.log("All bundles for " + objectKey + " are removed!");
     }
 
 
@@ -346,6 +350,8 @@ public class StoneGeneratorManager
                 this.generatorDataDatabase.deleteID(uniqueId);
             }
         });
+
+        this.addon.log("All island data for " + objectKey + " are removed!");
     }
 
 
