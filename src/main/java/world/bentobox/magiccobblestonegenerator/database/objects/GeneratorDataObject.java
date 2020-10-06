@@ -9,6 +9,7 @@ package world.bentobox.magiccobblestonegenerator.database.objects;
 
 import com.google.gson.annotations.Expose;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -184,6 +185,50 @@ public class GeneratorDataObject implements DataObject
 	}
 
 
+	/**
+	 * Gets owner bundle.
+	 *
+	 * @return the owner bundle
+	 */
+	public @Nullable String getOwnerBundle()
+	{
+		return ownerBundle;
+	}
+
+
+	/**
+	 * Sets owner bundle.
+	 *
+	 * @param ownerBundle the owner bundle
+	 */
+	public void setOwnerBundle(String ownerBundle)
+	{
+		this.ownerBundle = ownerBundle;
+	}
+
+
+	/**
+	 * Gets island bundle.
+	 *
+	 * @return the island bundle
+	 */
+	public @Nullable String getIslandBundle()
+	{
+		return islandBundle;
+	}
+
+
+	/**
+	 * Sets island bundle.
+	 *
+	 * @param islandBundle the island bundle
+	 */
+	public void setIslandBundle(String islandBundle)
+	{
+		this.islandBundle = islandBundle;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -230,4 +275,16 @@ public class GeneratorDataObject implements DataObject
 	 */
 	@Expose
 	private int workingRange;
+
+	/**
+	 * Stores active bundle.
+	 */
+	@Expose
+	private @Nullable String ownerBundle;
+
+	/**
+	 * Stores active bundle.
+	 */
+	@Expose
+	private @Nullable String islandBundle;
 }

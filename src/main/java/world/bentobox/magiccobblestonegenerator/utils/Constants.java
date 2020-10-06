@@ -83,6 +83,11 @@ public class Constants
 	public static final String GENERATOR = "[generator]";
 
 	/**
+	 * Reference string to bundle parameter in translations.
+	 */
+	public static final String BUNDLE = "[bundle]";
+
+	/**
 	 * Reference string to gamemode parameter in translations.
 	 */
 	public static final String GAMEMODE = "[gamemode]";

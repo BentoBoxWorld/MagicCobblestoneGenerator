@@ -17,6 +17,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -43,6 +44,9 @@ public class StoneGeneratorManager
 
         this.generatorDataDatabase = new Database<>(addon, GeneratorDataObject.class);
         this.generatorDataCache = new HashMap<>();
+
+        this.generatorBundleDatabase = new Database<>(addon, GeneratorBundleObject.class);
+        this.generatorBundleCache = new HashMap<>();
     }
 
 
@@ -83,10 +87,12 @@ public class StoneGeneratorManager
     public void load()
     {
         this.generatorTierCache.clear();
+        this.generatorBundleCache.clear();
 
         this.addon.log("Loading generator tiers from database...");
 
         this.generatorTierDatabase.loadObjects().forEach(this::loadGeneratorTier);
+        this.generatorBundleDatabase.loadObjects().forEach(this::loadGeneratorBundle);
 
         this.addon.log("Done");
     }
@@ -155,6 +161,68 @@ public class StoneGeneratorManager
 
 
     /**
+     * Loads generator bundles in cache silently. Used when loading.
+     *
+     * @param generatorBundle that must be stored.
+     * @return true if successful
+     */
+    private boolean loadGeneratorBundle(GeneratorBundleObject generatorBundle)
+    {
+        return this.loadGeneratorBundle(generatorBundle, true, null, true);
+    }
+
+
+    /**
+     * Load generatorBundle in the cache.
+     *
+     * @param generatorBundle - generatorBundle that must be stored.
+     * @param overwrite - true if previous biomes should be overwritten
+     * @param user - user making the request
+     * @param silent - if true, no messages are sent to user
+     * @return - true if imported
+     */
+    public boolean loadGeneratorBundle(GeneratorBundleObject generatorBundle, boolean overwrite, User user, boolean silent)
+    {
+        if (this.generatorBundleCache.containsKey(generatorBundle.getUniqueId()))
+        {
+            if (!overwrite)
+            {
+                if (!silent)
+                {
+                    user.sendMessage(Constants.MESSAGE + "skipping-bundle",
+                            Constants.BUNDLE,
+                            generatorBundle.getFriendlyName());
+                }
+
+                return false;
+            }
+            else
+            {
+                if (!silent)
+                {
+                    user.sendMessage(Constants.MESSAGE + "overwriting-bundle",
+                            Constants.BUNDLE,
+                            generatorBundle.getFriendlyName());
+                }
+
+                this.generatorBundleCache.replace(generatorBundle.getUniqueId(), generatorBundle);
+                return true;
+            }
+        }
+
+        if (!silent)
+        {
+            user.sendMessage(Constants.MESSAGE + "loaded-bundle",
+                    Constants.BUNDLE,
+                    generatorBundle.getFriendlyName());
+        }
+
+        this.generatorBundleCache.put(generatorBundle.getUniqueId(), generatorBundle);
+        return true;
+    }
+
+
+    /**
      * Loads generator data in cache silently. Used when loading.
      *
      * @param generatorData that must be stored.
@@ -179,6 +247,17 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method allows to store single generatorBundle object.
+     *
+     * @param generatorBundle object that must be saved in database.
+     */
+    public void saveGeneratorBundle(GeneratorBundleObject generatorBundle)
+    {
+        this.generatorBundleDatabase.saveObjectAsync(generatorBundle);
+    }
+
+
+    /**
      * This method allows to store single generatorData object.
      *
      * @param generatorData object that must be saved in database.
@@ -195,6 +274,7 @@ public class StoneGeneratorManager
     public void save()
     {
         this.generatorTierCache.values().forEach(this::saveGeneratorTier);
+        this.generatorBundleCache.values().forEach(this::saveGeneratorBundle);
         this.generatorDataCache.values().forEach(this::saveGeneratorData);
     }
 
@@ -214,6 +294,7 @@ public class StoneGeneratorManager
 
         final String objectKey = optional.get().getDescription().getName().toLowerCase();
 
+        // Collect all generators
         List<String> keySet = new ArrayList<>(this.generatorTierCache.keySet());
 
         // Remove everything that starts with gamemode name.
@@ -222,6 +303,18 @@ public class StoneGeneratorManager
             {
                 this.generatorTierCache.remove(uniqueId);
                 this.generatorTierDatabase.deleteID(uniqueId);
+            }
+        });
+
+        // Collect all bundles
+        keySet = new ArrayList<>(this.generatorBundleCache.keySet());
+
+        // Remove everything that starts with gamemode name.
+        keySet.forEach(uniqueId -> {
+            if (uniqueId.startsWith(objectKey))
+            {
+                this.generatorBundleCache.remove(uniqueId);
+                this.generatorBundleDatabase.deleteID(uniqueId);
             }
         });
     }
@@ -425,6 +518,64 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method returns all generator tiers for given world accessible by user.
+     * @param world World which generators must be returned.
+     * @param user Targeted user.
+     * @return List of generator tier objects for given world.
+     */
+    public List<GeneratorTierObject> getIslandGeneratorTiers(World world, User user)
+    {
+        return this.getIslandGeneratorTiers(world, this.getGeneratorData(user, world));
+    }
+
+
+    /**
+     * This method returns all generator tiers for given world accessible by island.
+     *
+     * @param world World which generators must be returned.
+     * @param islandData IslandData which generators must be returned
+     * @return List of generator tier objects for given world.
+     */
+    public List<GeneratorTierObject> getIslandGeneratorTiers(World world, @Nullable GeneratorDataObject islandData)
+    {
+        // Optimization could be done by generating bundles for each situation, but currently I do not
+        // think it should be an actual problem here.
+        List<GeneratorTierObject> generatorTiers = this.getAllGeneratorTiers(world);
+
+        if (islandData != null)
+        {
+            // Owner bundle has larger priority then island bundle.
+            if (islandData.getOwnerBundle() != null &&
+                this.generatorBundleCache.containsKey(islandData.getOwnerBundle()))
+            {
+                GeneratorBundleObject bundle = this.generatorBundleCache.get(islandData.getOwnerBundle());
+
+                return generatorTiers.stream().
+                    filter(generatorTier -> bundle.getGeneratorTiers().contains(generatorTier.getUniqueId())).
+                    collect(Collectors.toList());
+            }
+            else if (islandData.getIslandBundle() != null &&
+                this.generatorBundleCache.containsKey(islandData.getIslandBundle()))
+            {
+                GeneratorBundleObject bundle = this.generatorBundleCache.get(islandData.getIslandBundle());
+
+                return generatorTiers.stream().
+                    filter(generatorTier -> bundle.getGeneratorTiers().contains(generatorTier.getUniqueId())).
+                    collect(Collectors.toList());
+            }
+            else
+            {
+                return generatorTiers;
+            }
+        }
+        else
+        {
+            return generatorTiers;
+        }
+    }
+
+
+    /**
      * Tis method finds all default generators in given world.
      * @param world World where generators must be searched
      * @return List with default generators.
@@ -447,6 +598,38 @@ public class StoneGeneratorManager
             // Filter deployed and default generators.
             filter(GeneratorTierObject::isDefaultGenerator).
             filter(GeneratorTierObject::isDeployed).
+            // Return as list collection.
+            collect(Collectors.toList());
+    }
+
+
+    // ---------------------------------------------------------------------
+    // Section: Generator Bundle Methods
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * This method returns all generator bundles for given world.
+     *
+     * @param world World which generators must be returned.
+     * @return List of generator bundle objects for given world.
+     */
+    public List<GeneratorBundleObject> getAllGeneratorBundles(World world)
+    {
+        String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
+            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+
+        if (gameMode.isEmpty())
+        {
+            // If not a gamemode world then return.
+            return Collections.emptyList();
+        }
+
+        // Find default generator from cache.
+        return this.generatorBundleCache.values().stream().
+            // Filter generators that starts with name.
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            // Sort in order: default generators are first, followed by lowest priority,
             // Return as list collection.
             collect(Collectors.toList());
     }
@@ -557,6 +740,11 @@ public class StoneGeneratorManager
 
         // Remove generators which island does not qualifies anymore.
         dataObject.getUnlockedTiers().clear();
+
+        // Check if owner have a permission flag. '[gamemode].stone-generator.bundle.[bundle_id]':
+        String bundleValue = Utils.getPermissionValue(User.getInstance(island.getOwner()),
+            island.getGameMode().toLowerCase() + ".stone-generator.bundle", null);
+        dataObject.setOwnerBundle(bundleValue);
 
         this.getAllGeneratorTiers(island.getWorld()).forEach(generatorTier -> {
             if (generatorTier.isDefaultGenerator() ||
@@ -1025,4 +1213,14 @@ public class StoneGeneratorManager
      * Variable stores database of generator data objects.
      */
     private final Database<GeneratorDataObject> generatorDataDatabase;
+
+    /**
+     * Variable stores map that links String to loaded generator bundle object.
+     */
+    private final Map<String, GeneratorBundleObject> generatorBundleCache;
+
+    /**
+     * Variable stores database of generator bundle objects.
+     */
+    private final Database<GeneratorBundleObject> generatorBundleDatabase;
 }

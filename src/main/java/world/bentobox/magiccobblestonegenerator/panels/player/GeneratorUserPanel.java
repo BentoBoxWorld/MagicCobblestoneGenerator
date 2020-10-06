@@ -47,7 +47,7 @@ public class GeneratorUserPanel extends CommonPanel
 		this.generatorData = this.manager.validateIslandData(this.island);
 
 		// Store generators in local list to avoid building it every time.
-		this.generatorList = this.manager.getAllGeneratorTiers(world);
+		this.generatorList = this.manager.getIslandGeneratorTiers(world, this.generatorData);
 		// Stores how many elements will be in display.
 		this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
 
@@ -267,13 +267,13 @@ public class GeneratorUserPanel extends CommonPanel
 			case TOGGLE_VISIBILITY:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						this.generatorData.getUnlockedTiers().contains(generatorTier)).
+						this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
 					collect(Collectors.toList());
 				break;
 			case SHOW_ACTIVE:
 				filteredList = this.generatorList.stream().
 					filter(generatorTier ->
-						this.generatorData.getActiveGeneratorList().contains(generatorTier)).
+						this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
 					collect(Collectors.toList());
 				break;
 			default:
@@ -328,11 +328,11 @@ public class GeneratorUserPanel extends CommonPanel
 	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier);
+		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
 			glow,
-			this.generatorData.getUnlockedTiers().contains(generatorTier),
+			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
 			this.manager.getIslandLevel(this.island));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {

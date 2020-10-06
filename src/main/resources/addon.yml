@@ -31,3 +31,7 @@ permissions:
   '[gamemode].stone-generator.max-range.30':
     description: Allows to change maximal distance from generator so it continues to work. 30 can be replaced with any positive integer.
     default: false
+
+  '[gamemode].stone-generator.bundle.[bundle_id]':
+    description: Allows to specify which bundle will be used for user owned island.
+    default: false

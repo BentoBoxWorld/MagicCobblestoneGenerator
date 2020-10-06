@@ -26,6 +26,7 @@ import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.ItemParser;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
@@ -53,7 +54,7 @@ public class StoneGeneratorImportManager
 	}
 
 	// ---------------------------------------------------------------------
-	// Section: Methods
+	// Section: Template Methods
 	// ---------------------------------------------------------------------
 
 
@@ -130,9 +131,9 @@ public class StoneGeneratorImportManager
 	 */
 	private void createGenerators(YamlConfiguration config, @Nullable User user, GameModeAddon gameMode)
 	{
-		final String name = gameMode.getDescription().getName().toLowerCase();
+		final String prefix = gameMode.getDescription().getName().toLowerCase() + "_";
 
-		int size = 0;
+		int generatorSize = 0;
 
 		ConfigurationSection reader = config.getConfigurationSection("tiers");
 
@@ -143,14 +144,14 @@ public class StoneGeneratorImportManager
 		for (String generatorId : reader.getKeys(false))
 		{
 			GeneratorTierObject generatorTier = new GeneratorTierObject();
-			generatorTier.setUniqueId(name + "-" + generatorId.toLowerCase());
+			generatorTier.setUniqueId(prefix + generatorId.toLowerCase());
 
 			ConfigurationSection details = reader.getConfigurationSection(generatorId);
 
 			if (details != null)
 			{
-				// Read name
-				generatorTier.setFriendlyName(details.getString("name",
+				// Read prefix
+				generatorTier.setFriendlyName(details.getString("prefix",
 					generatorId.replaceAll("_", " ")));
 				// Read description
 				generatorTier.setDescription(details.getStringList("description"));
@@ -195,19 +196,54 @@ public class StoneGeneratorImportManager
 			// Save object in database.
 			this.addon.getAddonManager().saveGeneratorTier(generatorTier);
 			this.addon.getAddonManager().loadGeneratorTier(generatorTier, false, null, true);
-			size++;
+			generatorSize++;
+		}
+
+		reader = config.getConfigurationSection("bundles");
+		int bundleSize = 0;
+
+		for (String bundleId : reader.getKeys(false))
+		{
+			GeneratorBundleObject generatorBundle = new GeneratorBundleObject();
+			generatorBundle.setUniqueId(prefix + bundleId.toLowerCase());
+
+			ConfigurationSection details = reader.getConfigurationSection(bundleId);
+
+			if (details != null)
+			{
+				// Read prefix
+				generatorBundle.setFriendlyName(details.getString("prefix",
+					bundleId.replaceAll("_", " ")));
+				// Read description
+				generatorBundle.setDescription(details.getStringList("description"));
+				// Read icon
+				ItemStack icon = ItemParser.parse(details.getString("icon"));
+				generatorBundle.setGeneratorIcon(icon == null ? new ItemStack(Material.PAPER) : icon);
+				// Read generators
+				generatorBundle.setGeneratorTiers(
+					details.getStringList("generators").stream().
+						map(id -> prefix + id).
+						collect(Collectors.toSet()));
+			}
+
+			// Save object in database.
+			this.addon.getAddonManager().saveGeneratorBundle(generatorBundle);
+			this.addon.getAddonManager().loadGeneratorBundle(generatorBundle, false, null, true);
+			bundleSize++;
 		}
 
 		if (user != null)
 		{
 			user.sendMessage(Constants.MESSAGE + "import-count",
 				TextVariables.NUMBER,
-				String.valueOf(size));
+				String.valueOf(generatorSize));
+			user.sendMessage(Constants.MESSAGE + "import-bundle-count",
+				TextVariables.NUMBER,
+				String.valueOf(bundleSize));
 		}
-		else
-		{
-			this.addon.log("Imported " + size + " generator tiers into database.");
-		}
+
+		this.addon.log("Imported " + generatorSize + " generator tiers and " +
+			bundleSize + " bundles into database.");
 	}
 
 

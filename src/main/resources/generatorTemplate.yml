@@ -495,3 +495,31 @@ tiers:
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
       amount: 2
+
+# Bundles is a new feature, which allows to create different group of generators
+# for each island. This is linked to island owner, and is checked only on login.
+# permission to add is `[gamemode].stone-generator.bundle.[bundle_id]`.
+# Be aware, that bundle_id always starts with gamemode name, f.e.
+#     bskyblock.stone-generator.bundle.bskyblock_simple_bundle
+bundles:
+  # bundle_id
+  simple_bundle:
+    # Display name for users
+    name: "Simple Bundle"
+    # Description in lore message
+    description:
+      - This bundle contains only cobblestone
+      - and stone generators.
+      - Users will not be able to access to
+      - generators which are not defined here.
+    # Icon used in GUI's
+    icon: "COBBLESTONE:1"
+    # List of generators that users have access.
+    generators:
+      - stone_age
+      - coal_age
+      - iron_age
+      - redstone_age
+      - diamond_age
+      - emerald_age
+      - stone_upgraded_age

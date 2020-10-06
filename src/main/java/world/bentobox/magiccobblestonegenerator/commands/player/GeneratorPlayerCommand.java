@@ -179,9 +179,9 @@ public class GeneratorPlayerCommand extends CompositeCommand
 
 			final List<String> returnList = new ArrayList<>();
 
-			// Create suggestions with all biomes that is available for users.
+			// Create suggestions with all generators that is available for users.
 
-			this.<StoneGeneratorAddon>getAddon().getAddonManager().getAllGeneratorTiers(this.getWorld()).
+			this.<StoneGeneratorAddon>getAddon().getAddonManager().getIslandGeneratorTiers(this.getWorld(), user).
 				forEach(generatorTier -> returnList.add(generatorTier.getUniqueId()));
 
 			return Optional.of(Util.tabLimit(returnList, args.get(args.size() - 1)));
