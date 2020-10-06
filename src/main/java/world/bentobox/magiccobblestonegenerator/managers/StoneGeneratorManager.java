@@ -43,8 +43,6 @@ public class StoneGeneratorManager
 
         this.generatorDataDatabase = new Database<>(addon, GeneratorDataObject.class);
         this.generatorDataCache = new HashMap<>();
-
-        this.load();
     }
 
 
@@ -282,7 +280,7 @@ public class StoneGeneratorManager
      * @return GeneratorTierObject that operates in given island or null.
      */
     public @Nullable GeneratorTierObject getGeneratorTier(Location location,
-            GeneratorTierObject.GeneratorType generatorType)
+        GeneratorTierObject.GeneratorType generatorType)
     {
         Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
 
@@ -297,8 +295,8 @@ public class StoneGeneratorManager
 
         // Gets biome from location.
         final Biome biome = location.getWorld().getBiome(location.getBlockX(),
-                location.getBlockY(),
-                location.getBlockZ());
+            location.getBlockY(),
+            location.getBlockZ());
 
         // TODO: It is necessary to reset user cache when import new generators are don.
         // I changed implementation for faster work, so it gets challenges on island data loading,
@@ -308,7 +306,11 @@ public class StoneGeneratorManager
 
         // Find generator from active generator list.
         Optional<GeneratorTierObject> optionalGenerator =
-                data.getActiveGeneratorList().stream().
+            data.getActiveGeneratorList().stream().
+                // Map generator id with proper generator object.
+                map(this.addon.getAddonManager()::getGeneratorByID).
+                // Remove generators that are apparently removed from database.
+                filter(Objects::nonNull).
                 // Filter out generators that are not deployed.
                 filter(GeneratorTierObject::isDeployed).
                 // Filter objects with the same generator type.
@@ -518,7 +520,10 @@ public class StoneGeneratorManager
             GeneratorDataObject pd = new GeneratorDataObject();
             pd.setUniqueId(uniqueID);
 
-            pd.getActiveGeneratorList().addAll(this.findDefaultGeneratorList(island.getWorld()));
+            pd.getActiveGeneratorList().addAll(
+                this.findDefaultGeneratorList(island.getWorld()).stream().
+                    map(GeneratorTierObject::getUniqueId).
+                    collect(Collectors.toList()));
             this.saveGeneratorData(pd);
 
             // Add to cache
@@ -555,10 +560,10 @@ public class StoneGeneratorManager
 
         this.getAllGeneratorTiers(island.getWorld()).forEach(generatorTier -> {
             if (generatorTier.isDefaultGenerator() ||
-                    dataObject.getPurchasedTiers().contains(generatorTier))
+                dataObject.getPurchasedTiers().contains(generatorTier.getUniqueId()))
             {
                 // All purchased and default tiers are available.
-                dataObject.getUnlockedTiers().add(generatorTier);
+                dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
             }
             else if (generatorTier.getRequiredMinIslandLevel() <= this.getIslandLevel(island))
             {
@@ -571,7 +576,7 @@ public class StoneGeneratorManager
                         (generatorTier.getGeneratorTierCost() <= 0 ||
                         !this.addon.isVaultProvided()))
                 {
-                    dataObject.getUnlockedTiers().add(generatorTier);
+                    dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
                 }
             }
         });
@@ -588,7 +593,7 @@ public class StoneGeneratorManager
             // There are more active generators then allowed.
             // Start to remove from first element.
 
-            Iterator<GeneratorTierObject> activeGenerators =
+            Iterator<String> activeGenerators =
                 new ArrayList<>(dataObject.getActiveGeneratorList()).iterator();
 
             while (dataObject.getActiveGeneratorList().size() > dataObject.getMaxGeneratorCount() &&
@@ -686,11 +691,11 @@ public class StoneGeneratorManager
      * @param generatorTier Generator that will be removed.
      */
     public void deactivateGenerator(@NotNull User user,
-            @NotNull GeneratorDataObject generatorData,
-            @NotNull GeneratorTierObject generatorTier)
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
     {
         user.sendMessage(Constants.MESSAGE + "generator-deactivated",
-                Constants.GENERATOR, generatorTier.getFriendlyName());
+            Constants.GENERATOR, generatorTier.getFriendlyName());
         generatorData.getActiveGeneratorList().remove(generatorTier);
 
         // Save object.
@@ -708,8 +713,8 @@ public class StoneGeneratorManager
      * @return {@code true} if can activate, {@false} if cannot activate.
      */
     public boolean canActivateGenerator(@NotNull User user,
-            @NotNull GeneratorDataObject generatorData,
-            @NotNull GeneratorTierObject generatorTier)
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
     {
         if (generatorData.getActiveGeneratorList().size() >= generatorData.getMaxGeneratorCount())
         {
@@ -722,7 +727,7 @@ public class StoneGeneratorManager
         {
             // Generator is not unlocked. Return false.
             user.sendMessage(Constants.ERRORS + "generator-not-unlocked",
-                    Constants.GENERATOR, generatorTier.getFriendlyName());
+                Constants.GENERATOR, generatorTier.getFriendlyName());
             return false;
         }
         else
@@ -731,15 +736,15 @@ public class StoneGeneratorManager
             {
                 // Return true only if user has enough money and its removal was successful.
                 if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()) &&
-                        this.addon.getVaultHook().withdraw(user,
-                                generatorTier.getActivationCost()).transactionSuccess())
+                    this.addon.getVaultHook().withdraw(user,
+                        generatorTier.getActivationCost()).transactionSuccess())
                 {
                     return true;
                 }
                 else
                 {
                     user.sendMessage(Constants.ERRORS + "no-credits",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost()));
+                        TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost()));
                     return false;
                 }
             }
@@ -765,7 +770,7 @@ public class StoneGeneratorManager
     {
         user.sendMessage(Constants.MESSAGE + "generator-activated",
             Constants.GENERATOR, generatorTier.getFriendlyName());
-        generatorData.getActiveGeneratorList().add(generatorTier);
+        generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
 
         // check and send message that generator is disabled
         if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
@@ -872,12 +877,12 @@ public class StoneGeneratorManager
      * @return {@code true} if can purchase, {@false} if cannot purchase.
      */
     public void purchaseGenerator(@NotNull User user,
-            @NotNull GeneratorDataObject generatorData,
-            @NotNull GeneratorTierObject generatorTier)
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
     {
         user.sendMessage(Constants.MESSAGE + "generator-purchased",
-                Constants.GENERATOR, generatorTier.getFriendlyName());
-        generatorData.getPurchasedTiers().add(generatorTier);
+            Constants.GENERATOR, generatorTier.getFriendlyName());
+        generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
 
         // Save object.
         this.saveGeneratorData(generatorData);

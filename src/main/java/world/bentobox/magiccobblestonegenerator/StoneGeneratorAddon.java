@@ -67,112 +67,88 @@ public class StoneGeneratorAddon extends Addon
 
         // Init new Generator Manager
         this.stoneGeneratorManager = new StoneGeneratorManager(this);
+        this.stoneGeneratorManager.load();
 
         this.getPlugin().getAddonsManager().getGameModeAddons().stream().
             filter(gameMode -> !settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
-            forEach(gameMode -> {
-                if (gameMode.getPlayerCommand().isPresent())
-                {
-                    // Add Placeholders
-                    this.registerPlaceholders(gameMode);
-
-                    // Add GameMode worlds to Generator.
-                    this.stoneGeneratorManager.addWorld(gameMode.getOverWorld());
-
-                    if (gameMode.getWorldSettings().isNetherIslands())
-                    {
-                        this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
-                    }
-
-                    if (gameMode.getWorldSettings().isEndIslands())
-                    {
-                        this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
-                    }
-
-                    MAGIC_COBBLESTONE_GENERATOR.addGameModeAddon(gameMode);
-                    MAGIC_COBBLESTONE_GENERATOR_PERMISSION.addGameModeAddon(gameMode);
-
-                    // Hook commands
-                    gameMode.getPlayerCommand().ifPresent(playerCommand ->
-                        new GeneratorPlayerCommand(this, playerCommand));
-                    gameMode.getAdminCommand().ifPresent(adminCommand ->
-                        new GeneratorAdminCommand(this, adminCommand));
-
-                    // if gamemode does not have any data, load them from template.
-                    if (this.stoneGeneratorManager.getAllGeneratorTiers(gameMode.getOverWorld()).isEmpty())
-                    {
-                        this.stoneGeneratorImportManager.importFile(null, gameMode.getOverWorld());
-                    }
-
-                    this.hooked = true;
-                }
-            });
+            forEach(this::hookIntoGameMode);
 
         if (this.hooked)
         {
-            this.generator = new MagicGenerator(this);
-
-            // Try to find Level addon and if it does not exist, display a warning
-
-            Optional<Addon> level = this.getAddonByName("Level");
-
-            if (!level.isPresent())
-            {
-                this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
-                this.levelAddon = null;
-            }
-            else
-            {
-                this.levelAddon = (Level) level.get();
-            }
-
-            // Find upgrades addon
-
-            Optional<Addon> upgrades = this.getAddonByName("Upgrades");
-
-            if (!upgrades.isPresent())
-            {
-//              this.logWarning("Upgrades add-on not found so Magic Cobblestone Generator, some parts may not work!");
-                this.upgradesAddon = null;
-            }
-            else
-            {
-                this.upgradesAddon = (UpgradesAddon) upgrades.get();
-            }
-
-            // Find vault plugin
-
-            Optional<VaultHook> vault = this.getPlugin().getVault();
-
-            if (!vault.isPresent())
-            {
-                this.vaultHook = null;
-                this.logWarning("Vault plugin not found. Economy will not work!");
-            }
-            else
-            {
-                this.vaultHook = vault.get();
-            }
-
-            // Register the listener.
-            this.registerListener(new VanillaGeneratorListener(this));
-            // TODO: fix and implement
-            //this.registerListener(new MagicGeneratorListener(this));
-
-            this.registerListener(new JoinLeaveListener(this));
-
-            // Register Flags
-            this.registerFlag(MAGIC_COBBLESTONE_GENERATOR);
-            this.registerFlag(MAGIC_COBBLESTONE_GENERATOR_PERMISSION);
-
-            // Register Request Handlers
-//			this.registerRequestHandler(REQUEST_HANDLER);
+            this.setupAddon();
         }
         else
         {
             this.logError("Magic Cobblestone Generator could not hook into any GameMode so will not do anything!");
             this.setState(State.DISABLED);
         }
+    }
+
+
+    /**
+     * Sets up everything once the addon is hooked into Game Modes
+     */
+    private void setupAddon()
+    {
+        this.generator = new MagicGenerator(this);
+
+        this.findLevel();
+        this.findVault();
+
+        // Register the listener.
+        this.registerListener(new VanillaGeneratorListener(this));
+        // TODO: fix and implement
+        //this.registerListener(new MagicGeneratorListener(this));
+
+        this.registerListener(new JoinLeaveListener(this));
+
+        // Register Flags
+        this.registerFlag(MAGIC_COBBLESTONE_GENERATOR);
+        this.registerFlag(MAGIC_COBBLESTONE_GENERATOR_PERMISSION);
+
+        // Register Request Handlers
+//			this.registerRequestHandler(REQUEST_HANDLER);
+    }
+
+
+    /**
+     * This method hooks this addon into gamemode.
+     * @param gameMode GameModeAddon where need to be hooked.
+     */
+    private void hookIntoGameMode(GameModeAddon gameMode)
+    {
+        // Add Placeholders
+        this.registerPlaceholders(gameMode);
+
+        // Add GameMode worlds to Generator.
+        this.stoneGeneratorManager.addWorld(gameMode.getOverWorld());
+
+        if (gameMode.getWorldSettings().isNetherIslands())
+        {
+            this.stoneGeneratorManager.addWorld(gameMode.getNetherWorld());
+        }
+
+        if (gameMode.getWorldSettings().isEndIslands())
+        {
+            this.stoneGeneratorManager.addWorld(gameMode.getEndWorld());
+        }
+
+        MAGIC_COBBLESTONE_GENERATOR.addGameModeAddon(gameMode);
+        MAGIC_COBBLESTONE_GENERATOR_PERMISSION.addGameModeAddon(gameMode);
+
+        // Hook commands
+        gameMode.getPlayerCommand().ifPresent(playerCommand ->
+            new GeneratorPlayerCommand(this, playerCommand));
+        gameMode.getAdminCommand().ifPresent(adminCommand ->
+            new GeneratorAdminCommand(this, adminCommand));
+
+        // if gamemode does not have any data, load them from template.
+        if (this.stoneGeneratorManager.getAllGeneratorTiers(gameMode.getOverWorld()).isEmpty())
+        {
+            this.stoneGeneratorImportManager.importFile(null, gameMode.getOverWorld());
+        }
+
+        this.hooked = true;
     }
 
 
@@ -214,8 +190,9 @@ public class StoneGeneratorAddon extends Addon
                 {
                     StringBuilder stringBuilder = new StringBuilder();
 
-                    object.getActiveGeneratorList().forEach(generator ->
-                        stringBuilder.append(generator.getFriendlyName()).append(","));
+                    object.getActiveGeneratorList().stream().
+                        map(this.stoneGeneratorManager::getGeneratorByID).
+                        forEach(generator -> stringBuilder.append(generator.getFriendlyName()).append(","));
 
                     if (stringBuilder.length() > 0)
                     {
@@ -240,8 +217,10 @@ public class StoneGeneratorAddon extends Addon
                 {
                     StringBuilder stringBuilder = new StringBuilder();
 
-                    object.getUnlockedTiers().stream().sorted().forEach(generator ->
-                        stringBuilder.append(generator.getFriendlyName()).append(","));
+                    object.getUnlockedTiers().stream().
+                        sorted().
+                        map(this.stoneGeneratorManager::getGeneratorByID).
+                        forEach(generator -> stringBuilder.append(generator.getFriendlyName()).append(","));
 
                     if (stringBuilder.length() > 0)
                     {
@@ -266,8 +245,10 @@ public class StoneGeneratorAddon extends Addon
                 {
                     StringBuilder stringBuilder = new StringBuilder();
 
-                    object.getPurchasedTiers().stream().sorted().forEach(generator ->
-                        stringBuilder.append(generator.getFriendlyName()).append(","));
+                    object.getPurchasedTiers().stream().
+                        sorted().
+                        map(this.stoneGeneratorManager::getGeneratorByID).
+                        forEach(generator -> stringBuilder.append(generator.getFriendlyName()).append(","));
 
                     if (stringBuilder.length() > 0)
                     {
@@ -281,6 +262,50 @@ public class StoneGeneratorAddon extends Addon
                     return "";
                 }
             });
+    }
+
+
+    /**
+     * This is silly method that was introduced to reduce main method complexity, and just reports
+     * if economy is enabled or not.
+     */
+    private void findVault()
+    {
+        // Find vault plugin
+
+        Optional<VaultHook> vault = this.getPlugin().getVault();
+
+        if (!vault.isPresent())
+        {
+            this.vaultHook = null;
+            this.logWarning("Vault plugin not found. Economy will not work!");
+        }
+        else
+        {
+            this.vaultHook = vault.get();
+        }
+    }
+
+
+    /**
+     * This is silly method that was introduced to reduce main method complexity, and just reports
+     * if level addon is enabled or not.
+     */
+    private void findLevel()
+    {
+        // Try to find Level addon and if it does not exist, display a warning
+
+        Optional<Addon> level = this.getAddonByName("Level");
+
+        if (!level.isPresent())
+        {
+            this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
+            this.levelAddon = null;
+        }
+        else
+        {
+            this.levelAddon = (Level) level.get();
+        }
     }
 
 
@@ -422,28 +447,6 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
-     * This method returns the upgradesAddon object.
-     *
-     * @return the upgradesAddon object.
-     */
-    public UpgradesAddon getUpgradesAddon()
-    {
-        return this.upgradesAddon;
-    }
-
-
-    /**
-     * This method returns the upgradesAddon object.
-     *
-     * @return the upgradesAddon object exists.
-     */
-    public boolean isUpgradesProvided()
-    {
-        return upgradesAddon != null;
-    }
-
-
-    /**
      * This method allows to access static addon instance.
      * @return Addon instance.
      */
@@ -491,11 +494,6 @@ public class StoneGeneratorAddon extends Addon
      * Level addon.
      */
     private Level levelAddon;
-
-    /**
-     * Upgrades addon.
-     */
-    private UpgradesAddon upgradesAddon;
 
 
     /**
