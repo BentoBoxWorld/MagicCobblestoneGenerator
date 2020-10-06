@@ -9,6 +9,16 @@ stone-generator:
       why:
         parameters: "<player>"
         description: "toggle debug messages about Magic Cobblestone Generator."
+      database:
+        description: "Main database related command"
+      import-database:
+        parameters: "<file>"
+        description: "Command that allows to import magic generators database file into Game Mode Addon"
+        confirmation: "Please confirm that you want to remove existing generators for [gamemode] and import generators from database file"
+      export:
+        parameters: "<file>"
+        description: "Command that allows to export magic generators database from Game Mode into file"
+
     player:
       main:
         description: "Main player command that opens GUI with generator selection"
@@ -172,6 +182,7 @@ stone-generator:
     generator-deactivated: "&6 Generator '[generator]' &r&6 is deactivated."
     generator-activated: "&6 Generator '[generator]' &r&6 is activated."
     generator-purchased: "&6 Generator '[generator]' &r&6 is purchased."
+    database-export-completed: "&6 Database export for [world] is completed. File [file] generated."
 
   errors:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
@@ -186,7 +197,8 @@ stone-generator:
     no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
     no-generator-data: "&c Could not find a valid generator data"
     no-generators-in-world: "&c Could not find any generator in [world]"
-
+    file-exist: "&c That file already exist. Choose different name."
+    file-error: "&c Error while generating file. Check log file."
 
 protection:
   flags:

@@ -57,6 +57,7 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 		new ImportCommand(this.getAddon(), this);
 		new GeneratorWhyCommand(this.getAddon(), this);
+		new GeneratorDatabaseCommand(this.getAddon(), this);
 	}
 
 

@@ -7,6 +7,9 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -16,14 +19,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.eclipse.jdt.annotation.Nullable;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.json.BentoboxTypeAdapterFactory;
+import world.bentobox.bentobox.database.objects.DataObject;
 import world.bentobox.bentobox.util.ItemParser;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
@@ -345,6 +350,407 @@ public class StoneGeneratorImportManager
 				generatorTier.setTreasureChanceMap(blockChances);
 			}
 		}
+	}
+
+
+	// ---------------------------------------------------------------------
+	// Section: Database Methods
+	// ---------------------------------------------------------------------
+
+
+	/**
+	 * This method generates file with a given name that contains everything from database for given world.
+	 * It creates exact copy of data from database.
+	 * @param user User who triggers this method.
+	 * @param world World which generators must be exported.
+	 * @param fileName FileName that will be used.
+	 * @return {@code true} if export was successful, {@code false} otherwise.
+	 */
+	public boolean generateDatabaseFile(User user, World world, String fileName)
+	{
+		File defaultFile = new File(this.addon.getDataFolder(), fileName + ".json");
+
+		if (defaultFile.exists())
+		{
+			if (user.isPlayer())
+			{
+				user.sendMessage(Constants.ERRORS + "file-exist");
+			}
+			else
+			{
+				this.addon.logWarning(Constants.ERRORS + "file-exist");
+			}
+
+			return false;
+		}
+
+		try
+		{
+			if (defaultFile.createNewFile())
+			{
+				String replacementString = Utils.getGameMode(world).toLowerCase() + "_";
+				StoneGeneratorManager manager = this.addon.getAddonManager();
+
+				List<GeneratorTierObject> generatorTierList = manager.getAllGeneratorTiers(world).
+					stream().
+					map(generatorTier -> {
+						// Use clone to avoid any changes in existing challenges.
+						GeneratorTierObject clone = generatorTier.clone();
+						// Remove gamemode from generatorTier id.
+						clone.setUniqueId(generatorTier.getUniqueId().replaceFirst(replacementString, ""));
+						return clone;
+					}).
+					collect(Collectors.toList());
+
+				List<GeneratorBundleObject> levelList = manager.getAllGeneratorBundles(world).
+					stream().
+					map(generatorBundle -> {
+						// Use clone to avoid any changes in existing levels.
+						GeneratorBundleObject clone = generatorBundle.clone();
+						// Remove gamemode from bundle ID.
+						clone.setUniqueId(generatorBundle.getUniqueId().replaceFirst(replacementString, ""));
+						// Remove gamemode form generators.
+						clone.setGeneratorTiers(generatorBundle.getGeneratorTiers().stream().
+							map(id -> id.replaceFirst(replacementString, "")).
+							collect(Collectors.toSet()));
+
+						return clone;
+					}).
+					collect(Collectors.toList());
+
+				DefaultDataHolder defaultChallenges = new DefaultDataHolder();
+				defaultChallenges.setGeneratorTiers(generatorTierList);
+				defaultChallenges.setGeneratorBundles(levelList);
+				defaultChallenges.setVersion(this.addon.getDescription().getVersion());
+
+				try (BufferedWriter writer = new BufferedWriter(
+					new OutputStreamWriter(new FileOutputStream(defaultFile), StandardCharsets.UTF_8))) {
+					writer.write(Objects.requireNonNull(
+						new DefaultJSONHandler(this.addon).toJsonString(defaultChallenges)));
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			if (user.isPlayer())
+			{
+				user.sendMessage(Constants.ERRORS + "file-error");
+			}
+
+			this.addon.logError("Could not save json file: " + e.getMessage());
+			return false;
+		}
+		finally
+		{
+			if (user.isPlayer())
+			{
+				user.sendMessage(Constants.MESSAGE + "database-export-completed",
+					Constants.WORLD, world.getName(),
+					Constants.FILE, fileName);
+			}
+			else
+			{
+				this.addon.logWarning(Constants.MESSAGE + "database-export-completed");
+			}
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * This method imports everything from database file into database.
+	 * @param user User who triggers this method.
+	 * @param world World which generators must be exported.
+	 * @param fileName FileName that will be used.
+	 * @return {@code true} if export was successful, {@code false} otherwise.
+	 */
+	public boolean importDatabaseFile(User user, World world, String fileName)
+	{
+		StoneGeneratorManager manager = this.addon.getAddonManager();
+
+		// If exist any generator that is bound to current world, then do not load generators.
+		if (!manager.getAllGeneratorTiers(world).isEmpty())
+		{
+			manager.wipeGameModeGenerators(this.addon.getPlugin().getIWM().getAddon(world));
+		}
+
+		try
+		{
+			// This prefix will be used to all generators. That is a unique way how to separate generators for
+			// each game mode.
+			String uniqueIDPrefix = Utils.getGameMode(world).toLowerCase() + "_";
+			DefaultDataHolder downloadedGenerators = new DefaultJSONHandler(this.addon).loadObject(fileName);
+
+			if (downloadedGenerators == null)
+			{
+				return false;
+			}
+
+			// All new generators should get correct ID. So we need to map it to loaded generators.
+			downloadedGenerators.getGeneratorTiers().forEach(generatorTier -> {
+				// Set correct generatorTier ID
+				generatorTier.setUniqueId(uniqueIDPrefix + generatorTier.getUniqueId());
+				// Load generator in memory
+				manager.loadGeneratorTier(generatorTier, false, user, user == null);
+			});
+
+			downloadedGenerators.getGeneratorBundles().forEach(generatorBundle -> {
+				// Set correct bundle ID
+				generatorBundle.setUniqueId(uniqueIDPrefix + generatorBundle.getUniqueId());
+				// Reset names for all generators.
+				generatorBundle.setGeneratorTiers(generatorBundle.getGeneratorTiers().stream().
+					map(generatorTier -> uniqueIDPrefix + generatorTier).
+					collect(Collectors.toSet()));
+				// Load level in memory
+				manager.loadGeneratorBundle(generatorBundle, false, user, user == null);
+			});
+		}
+		catch (Exception e)
+		{
+			addon.getPlugin().logStacktrace(e);
+			return false;
+		}
+
+		this.addon.getAddonManager().save();
+
+		return true;
+	}
+
+
+	// ---------------------------------------------------------------------
+	// Section: Class instances
+	// ---------------------------------------------------------------------
+
+
+	/**
+	 * This Class allows to load  and their levels as objects much easier.
+	 */
+	private static final class DefaultJSONHandler
+	{
+		/**
+		 * This constructor inits JSON builder that will be used to parse challenges.
+		 * @param addon Challenges Adddon
+		 */
+		DefaultJSONHandler(StoneGeneratorAddon addon)
+		{
+			GsonBuilder builder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().enableComplexMapKeySerialization();
+			// Register adapters
+			builder.registerTypeAdapterFactory(new BentoboxTypeAdapterFactory(addon.getPlugin()));
+
+			// Keep null in the database
+			builder.serializeNulls();
+			// Allow characters like < or > without escaping them
+			builder.disableHtmlEscaping();
+
+			this.addon = addon;
+			this.gson = builder.setPrettyPrinting().create();
+		}
+
+
+		/**
+		 * This method returns json object that is parsed to string. Json object is made from given instance.
+		 * @param instance Instance that must be parsed to json string.
+		 * @return String that contains JSON information from instance object.
+		 */
+		String toJsonString(DefaultDataHolder instance)
+		{
+			// Null check
+			if (instance == null)
+			{
+				this.addon.logError("JSON database request to store a null. ");
+				return null;
+			}
+
+			return this.gson.toJson(instance);
+		}
+
+
+		/**
+		 * This method creates and adds to list all objects from default.json file.
+		 * @return List of all objects from default.json that is with T instance.
+		 */
+		DefaultDataHolder loadObject(String fileName)
+		{
+			if (!fileName.endsWith(".json"))
+			{
+				fileName = fileName + ".json";
+			}
+
+			File defaultFile = new File(this.addon.getDataFolder(), fileName);
+
+			try (InputStreamReader reader = new InputStreamReader(new FileInputStream(defaultFile), StandardCharsets.UTF_8))
+			{
+				DefaultDataHolder object = this.gson.fromJson(reader, DefaultDataHolder.class);
+				object.setUniqueId(fileName);
+
+				reader.close(); // NOSONAR Required to keep OS file handlers low and not rely on GC
+
+				return object;
+			}
+			catch (FileNotFoundException e)
+			{
+				this.addon.logError("Could not load file '" + defaultFile.getName() + "': File not found.");
+			}
+			catch (Exception e)
+			{
+				this.addon.logError("Could not load objects " + defaultFile.getName() + " " + e.getMessage());
+			}
+
+			return null;
+		}
+
+
+		/**
+		 * This method creates and adds to list all objects from default.json file.
+		 * @return List of all objects from default.json that is with T instance.
+		 */
+		DefaultDataHolder loadWebObject(String downloadedObject)
+		{
+			return this.gson.fromJson(downloadedObject, DefaultDataHolder.class);
+		}
+
+
+		// ---------------------------------------------------------------------
+		// Section: Variables
+		// ---------------------------------------------------------------------
+
+
+		/**
+		 * Holds JSON builder object.
+		 */
+		private Gson gson;
+
+		/**
+		 * Holds StoneGeneratorAddon object.
+		 */
+		private StoneGeneratorAddon addon;
+	}
+
+
+	/**
+	 * This is simple object that will allow to store all current generators and bundles
+	 * in single file.
+	 */
+	private static final class DefaultDataHolder implements DataObject
+	{
+		/**
+		 * Default constructor. Creates object with empty lists.
+		 */
+		DefaultDataHolder()
+		{
+			this.generatorTiers = Collections.emptyList();
+			this.generatorBundles = Collections.emptyList();
+			this.version = "";
+		}
+
+
+		/**
+		 * This method returns stored challenge list.
+		 * @return list that contains default challenges.
+		 */
+		List<GeneratorTierObject> getGeneratorTiers()
+		{
+			return generatorTiers;
+		}
+
+
+		/**
+		 * This method sets given list as generator tiers.
+		 * @param generatorTiers new generator tiers.
+		 */
+		void setGeneratorTiers(List<GeneratorTierObject> generatorTiers)
+		{
+			this.generatorTiers = generatorTiers;
+		}
+
+
+		/**
+		 * This method returns list of generator bundles.
+		 * @return List that contains generator bundles.
+		 */
+		List<GeneratorBundleObject> getGeneratorBundles()
+		{
+			return generatorBundles;
+		}
+
+
+		/**
+		 * This method sets given list as generator bundle list.
+		 * @param generatorBundles new generator bundle list.
+		 */
+		void setGeneratorBundles(List<GeneratorBundleObject> generatorBundles)
+		{
+			this.generatorBundles = generatorBundles;
+		}
+
+
+		/**
+		 * This method returns the version value.
+		 * @return the value of version.
+		 */
+		public String getVersion()
+		{
+			return version;
+		}
+
+
+		/**
+		 * This method sets the version value.
+		 * @param version the version new value.
+		 *
+		 */
+		public void setVersion(String version)
+		{
+			this.version = version;
+		}
+
+
+		/**
+		 * @return unqinue Id;
+		 */
+		@Override
+		public String getUniqueId()
+		{
+			return this.uniqueId;
+		}
+
+
+		/**
+		 * @param uniqueId - unique ID the uniqueId to set
+		 */
+		@Override
+		public void setUniqueId(String uniqueId)
+		{
+			this.uniqueId = uniqueId;
+		}
+
+
+		// ---------------------------------------------------------------------
+		// Section: Variables
+		// ---------------------------------------------------------------------
+
+
+		/**
+		 * Holds a list with generator tier objects.
+		 */
+		@Expose
+		private List<GeneratorTierObject> generatorTiers;
+
+		/**
+		 * Holds a list with generator bundles.
+		 */
+		@Expose
+		private List<GeneratorBundleObject> generatorBundles;
+
+		/**
+		 * Holds a variable that stores in which addon version file was made.
+		 */
+		@Expose
+		private String version;
+
+		@Expose
+		private String uniqueId;
 	}
 
 

@@ -108,6 +108,11 @@ public class Constants
 	public static final String BLOCK = "[material]";
 
 	/**
+	 * Reference string to file parameter in translations.
+	 */
+	public static final String FILE = "[file]";
+
+	/**
 	 * Reference to number formant in 0.X
 	 */
 	public static final String TENS = "[#.#]";
