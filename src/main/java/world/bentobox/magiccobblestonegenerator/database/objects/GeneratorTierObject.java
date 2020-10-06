@@ -410,6 +410,43 @@ public class GeneratorTierObject implements DataObject
 		this.activationCost = activationCost;
 	}
 
+
+// ---------------------------------------------------------------------
+// Section: Methods
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * Creates and returns a copy of this object.  The precise meaning of "copy" may depend on the class of the object.
+	 * @return a clone of this instance.
+	 */
+	@Override
+	public GeneratorTierObject clone()
+	{
+		GeneratorTierObject clone = new GeneratorTierObject();
+
+		clone.setUniqueId(this.uniqueId);
+		clone.setFriendlyName(this.friendlyName);
+		clone.setGeneratorIcon(this.generatorIcon.clone());
+		clone.setDescription(new ArrayList<>(this.description));
+		clone.setGeneratorType(this.generatorType);
+		clone.setDefaultGenerator(this.defaultGenerator);
+		clone.setPriority(this.priority);
+		clone.setRequiredMinIslandLevel(this.requiredMinIslandLevel);
+		clone.setRequiredBiomes(new HashSet<>(this.requiredBiomes));
+		clone.setRequiredPermissions(new HashSet<>(this.requiredPermissions));
+		clone.setGeneratorTierCost(this.generatorTierCost);
+		clone.setActivationCost(this.activationCost);
+		clone.setDeployed(this.deployed);
+		clone.setBlockChanceMap(new TreeMap<>(this.blockChanceMap));
+		clone.setTreasureChanceMap(new TreeMap<>(this.treasureChanceMap));
+		clone.setTreasureChance(this.treasureChance);
+		clone.setMaxTreasureAmount(this.maxTreasureAmount);
+
+		return clone;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Enums
 // ---------------------------------------------------------------------
