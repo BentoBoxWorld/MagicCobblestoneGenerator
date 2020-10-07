@@ -209,6 +209,32 @@ stone-generator:
           Allows to clear generator and
           bundle data in current gamemode
 
+      offline_generation:
+        name: "Offline Generation"
+        description: |-
+          Allows to toggle if generators
+          should work while all island
+          members are offline.
+      use_physic:
+        name: "Use Physic"
+        description: |-
+          Allows to toggle if physic should
+          be applied to new generated blocks.
+          Disabling will break some redstone
+          machines.
+      working_range:
+        name: "Working Range"
+        description: |-
+          Allows to modify default working
+          range for generators.
+          If there are no players near
+          generator, it will stop working.
+      default_active_generators:
+        name: "Default Active Generators"
+        description: |-
+          Allows to modify amount of
+          default active generators.
+
     descriptions:
       generator-active: "&2 Active"
       activation-cost: "Activation Cost: [number]"
@@ -229,6 +255,7 @@ stone-generator:
       generator-view: "Generator: [generator]"
       generator-list: "Generators"
       admin-view: "Admin Panel"
+      edit-settings: "Edit Settings"
 
   messages:
     import-count: "&6 Imported [number] new generator tiers."
@@ -263,12 +290,15 @@ stone-generator:
     file-exist: "&c That file already exist. Choose different name."
     file-error: "&c Error while generating file. Check log file."
     file-name-exist: "&c File with name '[id]' exists. Cannot overwrite."
+    not-valid-value: "&c The given number [value] is not valid. It is require to be larger than [min] and smaller than [max]!"
+    numeric-only: "&c The given [value] is not a number!"
 
   questions:
     prefix: "&c [SERVER]: &r"
     confirm-island-data-deletion: "&6 Confirm that you want to delete all user data from database for [gamemode]."
     confirm-generator-data-deletion: "&6 Confirm that you want to delete all generator data from database for [gamemode]."
     exported-file-name: "&6 Please write file name for exported database file. (write 'cancel' to exit)"
+    input-number: "&6 Please write a number in chat."
 
 protection:
   flags:

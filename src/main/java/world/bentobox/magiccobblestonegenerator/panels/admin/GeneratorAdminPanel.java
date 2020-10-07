@@ -150,7 +150,7 @@ public class GeneratorAdminPanel extends CommonPanel
 			case SETTINGS:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-//					SettingsPanel.open(this);
+					SettingsPanel.open(this);
 					return true;
 				};
 				material = Material.CRAFTING_TABLE;

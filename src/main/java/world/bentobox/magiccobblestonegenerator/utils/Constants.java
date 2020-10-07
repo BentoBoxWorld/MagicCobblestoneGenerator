@@ -118,6 +118,16 @@ public class Constants
 	public static final String ID = "[id]";
 
 	/**
+	 * Reference string to min parameter in translations.
+	 */
+	public static final String MIN = "[min]";
+
+	/**
+	 * Reference string to max parameter in translations.
+	 */
+	public static final String MAX = "[max]";
+
+	/**
 	 * Reference to number formant in 0.X
 	 */
 	public static final String TENS = "[#.#]";

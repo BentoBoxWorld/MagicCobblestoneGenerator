@@ -7,9 +7,11 @@
 package world.bentobox.magiccobblestonegenerator.panels;
 
 
+import com.sun.org.apache.bcel.internal.Const;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.*;
+import org.eclipse.jdt.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
@@ -251,6 +253,126 @@ public class ConversationUtils
 				{
 					consumer.accept(null);
 					// send cancell message
+					abandonedEvent.getContext().getForWhom().sendRawMessage(
+						user.getTranslation(Constants.MESSAGE + "cancelled"));
+				}
+			}).
+			withLocalEcho(false).
+			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
+			buildConversation(user.getPlayer());
+
+		conversation.begin();
+	}
+
+
+	/**
+	 * This method will close opened gui and writes inputText in chat. After players answers on
+	 * inputText in chat, message will trigger consumer and gui will reopen.
+	 * @param consumer Consumer that accepts player output text.
+	 * @param question Message that will be displayed in chat when player triggers conversion.
+	 */
+	public static void createNumericInput(Consumer<Number> consumer,
+		@NotNull User user,
+		@NotNull String question,
+		Number minValue,
+		Number maxValue)
+	{
+		// Create NumericPromt instance that will validate and process input.
+		NumericPrompt numberPrompt = new NumericPrompt()
+		{
+			/**
+			 * Override this method to perform some action
+			 * with the user's integer response.
+			 *
+			 * @param context Context information about the
+			 * conversation.
+			 * @param input The user's response as a {@link
+			 * Number}.
+			 * @return The next {@link Prompt} in the prompt
+			 * graph.
+			 */
+			@Override
+			protected Prompt acceptValidatedInput(ConversationContext context, Number input)
+			{
+				// Add answer to consumer.
+				consumer.accept(input);
+				// End conversation
+				return Prompt.END_OF_CONVERSATION;
+			}
+
+
+			/**
+			 * Override this method to do further validation on the numeric player
+			 * input after the input has been determined to actually be a number.
+			 *
+			 * @param context Context information about the conversation.
+			 * @param input The number the player provided.
+			 * @return The validity of the player's input.
+			 */
+			protected boolean isNumberValid(ConversationContext context, Number input)
+			{
+				return input.doubleValue() >= minValue.doubleValue() &&
+					input.doubleValue() <= maxValue.doubleValue();
+			}
+
+
+			/**
+			 * Optionally override this method to display an additional message if the
+			 * user enters an invalid number.
+			 *
+			 * @param context Context information about the conversation.
+			 * @param invalidInput The invalid input provided by the user.
+			 * @return A message explaining how to correct the input.
+			 */
+			@Override
+			protected String getInputNotNumericText(ConversationContext context, String invalidInput)
+			{
+				return user.getTranslation(Constants.ERRORS + "numeric-only", Constants.VALUE, invalidInput);
+			}
+
+
+			/**
+			 * Optionally override this method to display an additional message if the
+			 * user enters an invalid numeric input.
+			 *
+			 * @param context Context information about the conversation.
+			 * @param invalidInput The invalid input provided by the user.
+			 * @return A message explaining how to correct the input.
+			 */
+			@Override
+			protected String getFailedValidationText(ConversationContext context, Number invalidInput)
+			{
+				return user.getTranslation(Constants.ERRORS + "not-valid-value",
+					Constants.VALUE, invalidInput.toString(),
+					Constants.MIN, Double.toString(minValue.doubleValue()),
+					Constants.MAX, Double.toString(maxValue.doubleValue()));
+			}
+
+
+			/**
+			 * @see Prompt#getPromptText(ConversationContext)
+			 */
+			@Override
+			public String getPromptText(ConversationContext conversationContext)
+			{
+				// Close input GUI.
+				user.closeInventory();
+				// There are no editable message. Just return question.
+				return question;
+			}
+		};
+
+		// Init conversation api.
+		Conversation conversation = new ConversationFactory(BentoBox.getInstance()).
+			withFirstPrompt(numberPrompt).
+			withEscapeSequence("cancel").
+			// Use null value in consumer to detect if user has abandoned conversation.
+			addConversationAbandonedListener(abandonedEvent ->
+			{
+				if (!abandonedEvent.gracefulExit())
+				{
+					consumer.accept(null);
+					// send cancel message
 					abandonedEvent.getContext().getForWhom().sendRawMessage(
 						user.getTranslation(Constants.MESSAGE + "cancelled"));
 				}
