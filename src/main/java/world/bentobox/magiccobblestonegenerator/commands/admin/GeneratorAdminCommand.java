@@ -15,6 +15,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.panels.admin.GeneratorAdminPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -73,15 +74,14 @@ public class GeneratorAdminCommand extends CompositeCommand
 	@Override
 	public boolean execute(User user, String label, List<String> args)
 	{
-//		if (args.isEmpty())
-//		{
-// 			TODO: Need to create and implement admin command.
-//			AdminPanel.openPanel(this.getAddon(), this.getWorld(), user);
-//		}
-//		else
-//		{
-//			this.showHelp(this, user);
-//		}
+		if (args.isEmpty())
+		{
+			GeneratorAdminPanel.openPanel(this.getAddon(), this.getWorld(), user);
+		}
+		else
+		{
+			this.showHelp(this, user);
+		}
 
 		this.showHelp(this, user);
 
