@@ -368,7 +368,8 @@ public class StoneGeneratorImportManager
 	 */
 	public boolean generateDatabaseFile(User user, World world, String fileName)
 	{
-		File defaultFile = new File(this.addon.getDataFolder(), fileName + ".json");
+		File defaultFile = new File(this.addon.getDataFolder(),
+			fileName.endsWith(".json") ? fileName : fileName + ".json");
 
 		if (defaultFile.exists())
 		{
@@ -418,15 +419,17 @@ public class StoneGeneratorImportManager
 					}).
 					collect(Collectors.toList());
 
-				DefaultDataHolder defaultChallenges = new DefaultDataHolder();
-				defaultChallenges.setGeneratorTiers(generatorTierList);
-				defaultChallenges.setGeneratorBundles(levelList);
-				defaultChallenges.setVersion(this.addon.getDescription().getVersion());
+				DefaultDataHolder exportedGeneratorData = new DefaultDataHolder();
+				exportedGeneratorData.setUniqueId(fileName.endsWith(".json") ?
+					fileName.substring(0, fileName.length() - 5) : fileName);
+				exportedGeneratorData.setGeneratorTiers(generatorTierList);
+				exportedGeneratorData.setGeneratorBundles(levelList);
+				exportedGeneratorData.setVersion(this.addon.getDescription().getVersion());
 
 				try (BufferedWriter writer = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(defaultFile), StandardCharsets.UTF_8))) {
 					writer.write(Objects.requireNonNull(
-						new DefaultJSONHandler(this.addon).toJsonString(defaultChallenges)));
+						new DefaultJSONHandler(this.addon).toJsonString(exportedGeneratorData)));
 				}
 			}
 		}
