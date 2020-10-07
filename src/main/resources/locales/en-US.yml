@@ -251,11 +251,17 @@ stone-generator:
       click-to-deactivate: "&e Left Click &7 to deactivate."
       click-to-purchase: "&e Click &7 to purchase."
 
+      library-author: "Author: [author]"
+      library-gamemode: "Made for [gamemode]"
+      library-lang: "Language: [lang]"
+      library-version: "Build on [version] version"
+
     titles:
       generator-view: "Generator: [generator]"
       generator-list: "Generators"
       admin-view: "Admin Panel"
       edit-settings: "Edit Settings"
+      library: "Library"
 
   messages:
     import-count: "&6 Imported [number] new generator tiers."
@@ -273,6 +279,8 @@ stone-generator:
     cancelled: "&4 Operation cancelled!"
     user-data-removed: "&6 User data are removed for [gamemode]!"
     generator-data-removed: "&6 Generator data are removed for [gamemode]!"
+    start-downloading: "&6 Start downloading library."
+    new-generators-imported: "&6 New generators are imported into database."
 
   errors:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
@@ -292,6 +300,7 @@ stone-generator:
     file-name-exist: "&c File with name '[id]' exists. Cannot overwrite."
     not-valid-value: "&c The given number [value] is not valid. It is require to be larger than [min] and smaller than [max]!"
     numeric-only: "&c The given [value] is not a number!"
+    no-library-entries: "&c Could not find any library entry!"
 
   questions:
     prefix: "&c [SERVER]: &r"
@@ -299,6 +308,7 @@ stone-generator:
     confirm-generator-data-deletion: "&6 Confirm that you want to delete all generator data from database for [gamemode]."
     exported-file-name: "&6 Please write file name for exported database file. (write 'cancel' to exit)"
     input-number: "&6 Please write a number in chat."
+    confirm-data-replacement: "&6 Confirm that you want to replace your current generators with new one."
 
 protection:
   flags:

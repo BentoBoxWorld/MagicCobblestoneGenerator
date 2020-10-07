@@ -159,7 +159,7 @@ public class GeneratorAdminPanel extends CommonPanel
 			case IMPORT_TEMPLATE:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-//					LibraryPanel.open(this, LibraryPanel.Library.TEMPLATE);
+					LibraryPanel.open(this, LibraryPanel.Library.TEMPLATE);
 					return true;
 				};
 				material = Material.BOOKSHELF;
@@ -168,7 +168,7 @@ public class GeneratorAdminPanel extends CommonPanel
 			case WEB_LIBRARY:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-//					LibraryPanel.open(this, LibraryPanel.Library.WEB);
+					LibraryPanel.open(this, LibraryPanel.Library.WEB);
 					return true;
 				};
 				material = Material.COBWEB;
@@ -211,9 +211,7 @@ public class GeneratorAdminPanel extends CommonPanel
 			case IMPORT_TO_DATABASE:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-					this.user.sendMessage(Constants.MESSAGE + "generator-data-removed",
-						Constants.GAMEMODE, Utils.getGameMode(this.world));
-//					LibraryPanel.open(this, LibraryPanel.Library.DATABASE);
+					LibraryPanel.open(this, LibraryPanel.Library.DATABASE);
 					return true;
 				};
 				material = Material.BOOKSHELF;

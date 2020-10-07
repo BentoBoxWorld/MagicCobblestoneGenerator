@@ -23,7 +23,7 @@ import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListen
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
-import world.bentobox.upgrades.UpgradesAddon;
+import world.bentobox.magiccobblestonegenerator.web.WebManager;
 
 
 /**
@@ -68,6 +68,9 @@ public class StoneGeneratorAddon extends Addon
         // Init new Generator Manager
         this.stoneGeneratorManager = new StoneGeneratorManager(this);
         this.stoneGeneratorManager.load();
+
+        // Init new Web Manager.
+        this.webManager = new WebManager(this);
 
         this.getPlugin().getAddonsManager().getGameModeAddons().stream().
             filter(gameMode -> !settings.getDisabledGameModes().contains(gameMode.getDescription().getName())).
@@ -447,6 +450,17 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
+     * Gets web manager.
+     *
+     * @return the web manager
+     */
+    public WebManager getWebManager()
+    {
+        return webManager;
+    }
+
+
+    /**
      * This method allows to access static addon instance.
      * @return Addon instance.
      */
@@ -479,6 +493,11 @@ public class StoneGeneratorAddon extends Addon
      * Variable holds Stone Generator Manager object.
      */
     private StoneGeneratorImportManager stoneGeneratorImportManager;
+
+    /**
+     * Variable holds web manager object.
+     */
+    private WebManager webManager;
 
     /**
      * Variable holds MagicGenerator object.

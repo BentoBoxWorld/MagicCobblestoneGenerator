@@ -82,11 +82,37 @@ public class StoneGeneratorImportManager
 			return false;
 		}
 
+		return this.importFile(user, world, this.generatorFile.getName());
+	}
+
+
+	/**
+	 * This method imports generator tiers from template
+	 *
+	 * @param user - user
+	 * @param world - world to import into
+	 * @param file - file that must be imported
+	 * @return true if successful
+	 */
+	public boolean importFile(@Nullable User user, World world, String file)
+	{
+		File generatorFile = new File(this.addon.getDataFolder(), file.endsWith(".yml") ? file : file + ".yml");
+
+		if (!generatorFile.exists())
+		{
+			if (user != null)
+			{
+				user.sendMessage(Constants.ERRORS + "no-file");
+			}
+
+			return false;
+		}
+
 		YamlConfiguration config = new YamlConfiguration();
 
 		try
 		{
-			config.load(this.generatorFile);
+			config.load(generatorFile);
 		}
 		catch (IOException | InvalidConfigurationException e)
 		{
@@ -425,6 +451,7 @@ public class StoneGeneratorImportManager
 				exportedGeneratorData.setGeneratorTiers(generatorTierList);
 				exportedGeneratorData.setGeneratorBundles(levelList);
 				exportedGeneratorData.setVersion(this.addon.getDescription().getVersion());
+				exportedGeneratorData.setAuthor(user.getName());
 
 				try (BufferedWriter writer = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(defaultFile), StandardCharsets.UTF_8))) {
@@ -518,6 +545,45 @@ public class StoneGeneratorImportManager
 		this.addon.getAddonManager().save();
 
 		return true;
+	}
+
+
+	/**
+	 * This method saves and imports given string as generators.
+	 * @param user User who called method.
+	 * @param world World which will be targeted.
+	 * @param stoneGeneratorLibrary String that contains all data for generators.
+	 */
+	public void processDownloadedFile(User user, World world, String stoneGeneratorLibrary)
+	{
+		DefaultDataHolder downloadedGenerators =
+			new DefaultJSONHandler(this.addon).loadWebObject(stoneGeneratorLibrary);
+
+		File downloadFile = new File(this.addon.getDataFolder(), downloadedGenerators.getUniqueId() + ".json");
+		int i = 1;
+
+		while (downloadFile.exists())
+		{
+			downloadFile = new File(this.addon.getDataFolder(),
+				downloadedGenerators.getUniqueId() + "-" + i++ + ".json");
+		}
+
+		try (BufferedWriter writer = new BufferedWriter(
+			new OutputStreamWriter(new FileOutputStream(downloadFile), StandardCharsets.UTF_8))) {
+			writer.write(Objects.requireNonNull(
+				new DefaultJSONHandler(this.addon).toJsonString(downloadedGenerators)));
+		}
+		catch (Exception e)
+		{
+			if (user.isPlayer())
+			{
+				user.sendMessage(Constants.ERRORS + "file-error");
+			}
+
+			this.addon.logError("Could not save json file: " + e.getMessage());
+		}
+
+		this.importDatabaseFile(user, world, downloadFile.getName());
 	}
 
 
@@ -645,6 +711,7 @@ public class StoneGeneratorImportManager
 			this.generatorTiers = Collections.emptyList();
 			this.generatorBundles = Collections.emptyList();
 			this.version = "";
+			this.author = null;
 		}
 
 
@@ -729,6 +796,28 @@ public class StoneGeneratorImportManager
 		}
 
 
+		/**
+		 * Gets author.
+		 *
+		 * @return the author
+		 */
+		public String getAuthor()
+		{
+			return author;
+		}
+
+
+		/**
+		 * Sets author.
+		 *
+		 * @param author the author
+		 */
+		public void setAuthor(String author)
+		{
+			this.author = author;
+		}
+
+
 		// ---------------------------------------------------------------------
 		// Section: Variables
 		// ---------------------------------------------------------------------
@@ -752,6 +841,15 @@ public class StoneGeneratorImportManager
 		@Expose
 		private String version;
 
+		/**
+		 * Holds an author for export file.
+		 */
+		@Expose
+		private String author;
+
+		/**
+		 * The Unique id.
+		 */
 		@Expose
 		private String uniqueId;
 	}

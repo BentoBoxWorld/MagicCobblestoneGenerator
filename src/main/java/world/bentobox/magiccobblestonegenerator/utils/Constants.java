@@ -128,6 +128,21 @@ public class Constants
 	public static final String MAX = "[max]";
 
 	/**
+	 * Reference to an author parameter in translation.
+	 */
+	public static final String AUTHOR = "[author]";
+
+	/**
+	 * Reference to an lang parameter in translation.
+	 */
+	public static final String LANG = "[lang]";
+
+	/**
+	 * Reference to an version parameter in translation.
+	 */
+	public static final String VERSION = "[version]";
+
+	/**
 	 * Reference to number formant in 0.X
 	 */
 	public static final String TENS = "[#.#]";
