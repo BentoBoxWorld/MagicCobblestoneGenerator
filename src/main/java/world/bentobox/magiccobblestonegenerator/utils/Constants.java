@@ -113,6 +113,11 @@ public class Constants
 	public static final String FILE = "[file]";
 
 	/**
+	 * Reference string to id parameter in translations.
+	 */
+	public static final String ID = "[id]";
+
+	/**
 	 * Reference to number formant in 0.X
 	 */
 	public static final String TENS = "[#.#]";

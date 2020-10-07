@@ -262,11 +262,13 @@ stone-generator:
     no-generators-in-world: "&c Could not find any generator in [world]"
     file-exist: "&c That file already exist. Choose different name."
     file-error: "&c Error while generating file. Check log file."
+    file-name-exist: "&c File with name '[id]' exists. Cannot overwrite."
 
   questions:
     prefix: "&c [SERVER]: &r"
     confirm-island-data-deletion: "&6 Confirm that you want to delete all user data from database for [gamemode]."
     confirm-generator-data-deletion: "&6 Confirm that you want to delete all generator data from database for [gamemode]."
+    exported-file-name: "&6 Please write file name for exported database file. (write 'cancel' to exit)"
 
 protection:
   flags:

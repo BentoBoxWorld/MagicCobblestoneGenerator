@@ -8,10 +8,13 @@ package world.bentobox.magiccobblestonegenerator.panels;
 
 
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.conversations.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
@@ -27,21 +30,19 @@ public class ConversationUtils
 
 
 	/**
-	 * This method will close opened gui and writes inputText in chat. After players answers on
-	 * inputText in chat, message will trigger consumer and gui will reopen.
+	 * This method will close opened gui and writes question in chat. After players answers on
+	 * question in chat, message will trigger consumer and gui will reopen.
 	 * Success and fail messages can be implemented like that, as user's chat options are disabled
 	 * while it is in conversation.
 	 * @param consumer Consumer that accepts player output text.
 	 * @param question Message that will be displayed in chat when player triggers conversion.
 	 * @param successMessage Message that will be displayed on successful operation.
-	 * @param failMessage Message that will be displayed on failed operation.
 	 * @param user User who is targeted with current confirmation.
 	 */
 	public static void createConfirmation(Consumer<Boolean> consumer,
+		User user,
 		@NotNull String question,
-		@Nullable String successMessage,
-		@Nullable String failMessage,
-		User user)
+		@Nullable String successMessage)
 	{
 		ValidatingPrompt confirmationPrompt = new ValidatingPrompt()
 		{
@@ -96,22 +97,7 @@ public class ConversationUtils
 
 					if (successMessage != null)
 					{
-						// Return message about successful operation.
-						return new MessagePrompt()
-						{
-							@Override
-							protected @Nullable Prompt getNextPrompt(@NotNull ConversationContext context)
-							{
-								return Prompt.END_OF_CONVERSATION;
-							}
-
-
-							@Override
-							public @NotNull String getPromptText(@NotNull ConversationContext context)
-							{
-								return successMessage;
-							}
-						};
+						context.getForWhom().sendRawMessage(successMessage);
 					}
 				}
 				else
@@ -120,24 +106,8 @@ public class ConversationUtils
 					consumer.accept(false);
 
 					// Return message about failed operation.
-					if (failMessage != null)
-					{
-						return new MessagePrompt()
-						{
-							@Override
-							protected @Nullable Prompt getNextPrompt(@NotNull ConversationContext context)
-							{
-								return Prompt.END_OF_CONVERSATION;
-							}
-
-
-							@Override
-							public @NotNull String getPromptText(@NotNull ConversationContext context)
-							{
-								return failMessage;
-							}
-						};
-					}
+					context.getForWhom().sendRawMessage(
+						user.getTranslation(Constants.MESSAGE + "cancelled"));
 				}
 
 				return Prompt.END_OF_CONVERSATION;
@@ -164,5 +134,143 @@ public class ConversationUtils
 			buildConversation(user.getPlayer());
 
 		conversation.begin();
+	}
+
+
+	/**
+	 * This method will close opened gui and writes question in chat. After players answers on
+	 * question in chat, message will trigger consumer and gui will reopen.
+	 * @param consumer Consumer that accepts player output text.
+	 * @param validation Function that validates if input value is acceptable.
+	 * @param question Message that will be displayed in chat when player triggers conversion.
+	 * @param failTranslationLocation Message that will be displayed on failed operation.
+	 * @param user User who is targeted with current confirmation.
+	 */
+	public static void createIDStringInput(Consumer<String> consumer,
+		Function<String, Boolean> validation,
+		User user,
+		@NotNull String question,
+		@Nullable String successMessage,
+		@Nullable String failTranslationLocation)
+	{
+		ValidatingPrompt validatingPrompt = new ValidatingPrompt()
+		{
+			/**
+			 * Gets the text to display to the user when
+			 * this prompt is first presented.
+			 *
+			 * @param context Context information about the
+			 * conversation.
+			 * @return The text to display.
+			 */
+			@Override
+			public String getPromptText(ConversationContext context)
+			{
+				// Close input GUI.
+				user.closeInventory();
+
+				// There are no editable message. Just return question.
+				return question;
+			}
+
+
+			/**
+			 * Override this method to check the validity of
+			 * the player's input.
+			 *
+			 * @param context Context information about the
+			 * conversation.
+			 * @param input The player's raw console input.
+			 * @return True or false depending on the
+			 * validity of the input.
+			 */
+			@Override
+			protected boolean isInputValid(ConversationContext context, String input)
+			{
+				return validation.apply(ConversationUtils.sanitizeInput(input));
+			}
+
+
+			/**
+			 * Optionally override this method to
+			 * display an additional message if the
+			 * user enters an invalid input.
+			 *
+			 * @param context Context information
+			 * about the conversation.
+			 * @param invalidInput The invalid input
+			 * provided by the user.
+			 * @return A message explaining how to
+			 * correct the input.
+			 */
+			@Override
+			protected String getFailedValidationText(ConversationContext context,
+				String invalidInput)
+			{
+				return user.getTranslation(failTranslationLocation,
+					Constants.ID,
+					ConversationUtils.sanitizeInput(invalidInput));
+			}
+
+
+			/**
+			 * Override this method to accept and processes
+			 * the validated input from the user. Using the
+			 * input, the next Prompt in the prompt graph
+			 * should be returned.
+			 *
+			 * @param context Context information about the
+			 * conversation.
+			 * @param input The validated input text from
+			 * the user.
+			 * @return The next Prompt in the prompt graph.
+			 */
+			@Override
+			protected Prompt acceptValidatedInput(ConversationContext context, String input)
+			{
+				// Add answer to consumer.
+				consumer.accept(ConversationUtils.sanitizeInput(input));
+				// Send message that it is accepted.
+				if (successMessage != null)
+				{
+					context.getForWhom().sendRawMessage(successMessage);
+				}
+				// End conversation
+				return Prompt.END_OF_CONVERSATION;
+			}
+		};
+
+		Conversation conversation = new ConversationFactory(BentoBox.getInstance()).
+			withFirstPrompt(validatingPrompt).
+			// On cancel conversation will be closed.
+			withEscapeSequence("cancel").
+			// Use null value in consumer to detect if user has abandoned conversation.
+			addConversationAbandonedListener(abandonedEvent ->
+			{
+				if (!abandonedEvent.gracefulExit())
+				{
+					consumer.accept(null);
+					// send cancell message
+					abandonedEvent.getContext().getForWhom().sendRawMessage(
+						user.getTranslation(Constants.MESSAGE + "cancelled"));
+				}
+			}).
+			withLocalEcho(false).
+			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
+			buildConversation(user.getPlayer());
+
+		conversation.begin();
+	}
+
+
+	/**
+	 * Sanitizes the provided input.
+	 * It replaces spaces and hyphens with underscores and lower cases the input.
+	 * @param input input to sanitize
+	 * @return sanitized input
+	 */
+	public static String sanitizeInput(String input)
+	{
+		return input.toLowerCase(Locale.ENGLISH).replace(" ", "_").replace("-", "_");
 	}
 }

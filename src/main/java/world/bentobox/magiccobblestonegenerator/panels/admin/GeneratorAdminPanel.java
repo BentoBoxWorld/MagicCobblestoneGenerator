@@ -7,10 +7,14 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.Material;
 import org.bukkit.World;
 
+import java.io.File;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -173,7 +177,32 @@ public class GeneratorAdminPanel extends CommonPanel
 			case EXPORT_FROM_DATABASE:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-					//this.getOutputFileName();
+					// This consumer process file exporting after user input is returned.
+					Consumer<String> fileNameConsumer = value -> {
+						if (value != null)
+						{
+							this.addon.getImportManager().generateDatabaseFile(this.user,
+								this.world,
+								value);
+						}
+
+						this.build();
+					};
+
+					// This function checks if file can be created.
+					Function<String, Boolean> validationFunction = fileName ->
+						!new File(this.addon.getDataFolder(),
+							fileName.endsWith(".json") ? fileName : fileName + ".json").exists();
+
+					// Call a conversation API to get input string.
+					ConversationUtils.createIDStringInput(fileNameConsumer,
+						validationFunction,
+						this.user,
+						this.user.getTranslation(Constants.QUESTIONS + "exported-file-name"),
+						this.user.getTranslation(Constants.MESSAGE + "database-export-completed",
+							Constants.WORLD, world.getName()),
+						Constants.ERRORS + "file-name-exist");
+
 					return true;
 				};
 				material = Material.HOPPER;
@@ -194,22 +223,24 @@ public class GeneratorAdminPanel extends CommonPanel
 			case WIPE_USER_DATA:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-					ConversationUtils.createConfirmation(value ->
+					// Create consumer that accepts value from conversation.
+					Consumer<Boolean> consumer = value -> {
+						if (value)
 						{
-							if (value)
-							{
-								this.addon.getAddonManager().
-									wipeIslandData(this.addon.getPlugin().getIWM().getAddon(this.world));
-							}
+							this.addon.getAddonManager().
+								wipeIslandData(this.addon.getPlugin().getIWM().getAddon(this.world));
+						}
 
-							this.build();
-						},
+						this.build();
+					};
+					// Create conversation that gets user acceptance to delete island data.
+					ConversationUtils.createConfirmation(
+						consumer,
+						this.user,
 						this.user.getTranslation(Constants.QUESTIONS + "confirm-island-data-deletion",
 							Constants.GAMEMODE, Utils.getGameMode(this.world)),
 						this.user.getTranslation(Constants.MESSAGE + "user-data-removed",
-							Constants.GAMEMODE, Utils.getGameMode(this.world)),
-						this.user.getTranslation(Constants.MESSAGE + "cancelled"),
-						this.user);
+							Constants.GAMEMODE, Utils.getGameMode(this.world)));
 
 					return true;
 				};
@@ -220,22 +251,24 @@ public class GeneratorAdminPanel extends CommonPanel
 			case WIPE_GENERATOR_DATA:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-					ConversationUtils.createConfirmation(value ->
+					// Create consumer that accepts value from conversation.
+					Consumer<Boolean> consumer = value -> {
+						if (value)
 						{
-							if (value)
-							{
-								this.addon.getAddonManager().
-									wipeGameModeGenerators(this.addon.getPlugin().getIWM().getAddon(this.world));
-							}
+							this.addon.getAddonManager().
+								wipeGameModeGenerators(this.addon.getPlugin().getIWM().getAddon(this.world));
+						}
 
-							this.build();
-						},
+						this.build();
+					};
+					// Create conversation that gets user acceptance to delete generator data.
+					ConversationUtils.createConfirmation(
+						consumer,
+						this.user,
 						this.user.getTranslation(Constants.QUESTIONS + "confirm-generator-data-deletion",
 							Constants.GAMEMODE, Utils.getGameMode(this.world)),
 						this.user.getTranslation(Constants.MESSAGE + "generator-data-removed",
-							Constants.GAMEMODE, Utils.getGameMode(this.world)),
-						this.user.getTranslation(Constants.MESSAGE + "cancelled"),
-						this.user);
+							Constants.GAMEMODE, Utils.getGameMode(this.world)));
 
 					return true;
 				};
