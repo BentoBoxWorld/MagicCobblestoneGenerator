@@ -361,6 +361,20 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method removes given generator tier from database.
+     * @param generatorTier generator tier that must be removed.
+     */
+    public void wipeGeneratorTier(GeneratorTierObject generatorTier)
+    {
+        if (this.generatorTierCache.containsKey(generatorTier.getUniqueId()))
+        {
+            this.generatorTierCache.remove(generatorTier.getUniqueId());
+            this.generatorTierDatabase.deleteID(generatorTier.getUniqueId());
+        }
+    }
+
+
+    /**
      * This method returns generator tier object from given generator Id.
      *
      * @param generatorId Generator Id that must be returned.

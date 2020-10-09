@@ -7,17 +7,19 @@
 package world.bentobox.magiccobblestonegenerator.utils;
 
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.entity.EntityType;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import sun.reflect.generics.tree.Tree;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.util.Util;
 
 
 /**
@@ -198,5 +200,229 @@ public class Utils
         }
 
         return returnMap;
+    }
+
+
+    /**
+     * This method converts given treeMap to pairList.
+     * @param treeMap TreeMap that contains elements which must be translated to list.
+     * @return PairList of elements from treeMap.
+     */
+    public static List<Pair<Material, Double>> treeMap2PairList(TreeMap<Double, Material> treeMap)
+    {
+        List<Pair<Material, Double>> returnList = new ArrayList<>(treeMap.size());
+        
+        if (treeMap.isEmpty())
+        {
+            // If map is empty, do not process anymore.
+            return returnList;
+        }
+        
+        Double previousValue = 0.0;
+        
+        while (!treeMap.isEmpty())
+        {
+            Map.Entry<Double, Material> entry = treeMap.pollFirstEntry();
+            returnList.add(new Pair<>(entry.getValue(), entry.getKey() - previousValue));
+            previousValue = entry.getKey();
+        }
+        
+        return returnList;
+    }
+
+
+    /**
+     * This method converts given pairList to actual TreeMap.
+     * @param pairList PairList that contains elements which must be translated to map.
+     * @return TreeMap of elements from pairList.
+     */
+    public static TreeMap<Double, Material> pairList2TreeMap(List<Pair<Material, Double>> pairList)
+    {
+        TreeMap<Double, Material> treeMap = new TreeMap<>(Double::compareTo);
+
+        if (pairList.isEmpty())
+        {
+            // Nothing to process
+            return treeMap;
+        }
+
+        Double nextMax = 0.0;
+
+        for (Pair<Material, Double> pair : pairList)
+        {
+            // drop 0 and negative values
+            if (pair.getValue() > 0.0)
+            {
+                nextMax += pair.getValue();
+                treeMap.put(nextMax, pair.getKey());
+            }
+        }
+
+        return treeMap;
+    }
+    
+
+    /**
+     * Sanitizes the provided input.
+     * It replaces spaces and hyphens with underscores and lower cases the input.
+     * @param input input to sanitize
+     * @return sanitized input
+     */
+    public static String sanitizeInput(String input)
+    {
+        return input.toLowerCase(Locale.ENGLISH).replace(" ", "_").replace("-", "_");
+    }
+
+
+    /**
+     * This method prettify given Biome name to more friendly name.
+     * @param user User which translation set will be used.
+     * @param biome Biome that requires prettifying.
+     * @return Clean and readable biome name.
+     */
+    public static String prettifyObject(User user, Biome biome)
+    {
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [biome]:
+        //       name: [name]
+        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name() + ".name");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [biome]: [name]
+
+        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find general structure with:
+        // biomes:
+        //   [biome]: [name]
+
+        translation = user.getTranslationOrNothing("biomes." + biome.name());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+        
+        // Nothing was found. Use just a prettify text function.
+        return Util.prettifyText(biome.name());
+    }
+
+
+    /**
+     * This method prettify given material name to more friendly name.
+     * @param user User which translation set will be used.
+     * @param material material that requires prettifying.
+     * @return Clean and readable material name.
+     */
+    public static String prettifyObject(User user, Material material)
+    {
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [material]:
+        //       name: [name]
+        String translation = user.getTranslationOrNothing(Constants.BIOMES + material.name() + ".name");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [material]: [name]
+
+        translation = user.getTranslationOrNothing(Constants.BIOMES + material.name());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find general structure with:
+        // biomes:
+        //   [material]: [name]
+
+        translation = user.getTranslationOrNothing("biomes." + material.name());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Nothing was found. Use just a prettify text function.
+        return Util.prettifyText(material.name());
+    }
+
+
+    /**
+     * This method prettify given entity name to more friendly name.
+     * @param user User which translation set will be used.
+     * @param entity entity that requires prettifying.
+     * @return Clean and readable entity name.
+     */
+    public static String prettifyObject(User user, EntityType entity)
+    {
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [entity]:
+        //       name: [name]
+        String translation = user.getTranslationOrNothing(Constants.BIOMES + entity.name() + ".name");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [entity]: [name]
+
+        translation = user.getTranslationOrNothing(Constants.BIOMES + entity.name());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find general structure with:
+        // biomes:
+        //   [entity]: [name]
+
+        translation = user.getTranslationOrNothing("biomes." + entity.name());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Nothing was found. Use just a prettify text function.
+        return Util.prettifyText(entity.name());
     }
 }

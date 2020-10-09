@@ -11,15 +11,23 @@ import com.sun.org.apache.bcel.internal.Const;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.*;
+import org.bukkit.entity.Player;
 import org.eclipse.jdt.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.blueprints.conversation.DescriptionPrompt;
+import world.bentobox.bentobox.blueprints.conversation.DescriptionSuccessPrompt;
+import world.bentobox.bentobox.blueprints.conversation.NameConversationPrefix;
+import world.bentobox.bentobox.panels.BlueprintManagementPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -55,21 +63,17 @@ public class ConversationUtils
 			 * @param input the input
 			 * @return the boolean
 			 */
+			@Override
 			protected boolean isInputValid(@NotNull ConversationContext context, @NotNull String input)
 			{
-				String[] accepted = new String[]{
-					"true", "false",
-					"on", "off",
-					"yes", "no",
-					"y", "n",
-					"1", "0",
-					"right", "wrong",
-					"correct", "incorrect",
-					"valid", "invalid",
-					"confirm", "deny",
-					"cancel",
-					"exit"
-				};
+				// Get valid strings from translations
+				String validEntry = user.getTranslation(Constants.DESCRIPTION + "confirm-string") +
+					"," + user.getTranslation(Constants.DESCRIPTION + "deny-string") +
+					"," + user.getTranslation(Constants.DESCRIPTION + "exit-string") +
+					"," + user.getTranslation(Constants.DESCRIPTION + "cancel-string");
+
+				// Split and check if they exist in valid entries.
+				String[] accepted = validEntry.toLowerCase().replaceAll("\\s","").split(",");
 				return ArrayUtils.contains(accepted, input.toLowerCase());
 			}
 
@@ -84,15 +88,9 @@ public class ConversationUtils
 			@Nullable
 			protected Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull String input)
 			{
-				if (input.equalsIgnoreCase("true") ||
-					input.equalsIgnoreCase("on") ||
-					input.equalsIgnoreCase("yes") ||
-					input.equalsIgnoreCase("y") ||
-					input.equals("1") ||
-					input.equalsIgnoreCase("right") ||
-					input.equalsIgnoreCase("correct") ||
-					input.equalsIgnoreCase("valid") ||
-					input.equalsIgnoreCase("confirm"))
+				String validEntry = user.getTranslation(Constants.DESCRIPTION + "confirm-string").toLowerCase();
+
+				if (ArrayUtils.contains(validEntry.replaceAll("\\s","").split(","), input.toLowerCase()))
 				{
 					// Add answer to consumer.
 					consumer.accept(true);
@@ -129,19 +127,21 @@ public class ConversationUtils
 			}
 		};
 
-		Conversation conversation = new ConversationFactory(BentoBox.getInstance()).
+		new ConversationFactory(BentoBox.getInstance()).
 			withFirstPrompt(confirmationPrompt).
 			withLocalEcho(false).
 			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
-			buildConversation(user.getPlayer());
-
-		conversation.begin();
+			buildConversation(user.getPlayer()).
+			begin();
 	}
 
 
 	/**
 	 * This method will close opened gui and writes question in chat. After players answers on
 	 * question in chat, message will trigger consumer and gui will reopen.
+	 * Be aware, consumer does not return (and validate) sanitized value, while sanitization is done
+	 * in failure for better informing. Proper implementation would be with adding new consumer for
+	 * failure message.
 	 * @param consumer Consumer that accepts player output text.
 	 * @param validation Function that validates if input value is acceptable.
 	 * @param question Message that will be displayed in chat when player triggers conversion.
@@ -189,7 +189,7 @@ public class ConversationUtils
 			@Override
 			protected boolean isInputValid(ConversationContext context, String input)
 			{
-				return validation.apply(ConversationUtils.sanitizeInput(input));
+				return validation.apply(input);
 			}
 
 
@@ -211,7 +211,7 @@ public class ConversationUtils
 			{
 				return user.getTranslation(failTranslationLocation,
 					Constants.ID,
-					ConversationUtils.sanitizeInput(invalidInput));
+					Utils.sanitizeInput(invalidInput));
 			}
 
 
@@ -231,7 +231,7 @@ public class ConversationUtils
 			protected Prompt acceptValidatedInput(ConversationContext context, String input)
 			{
 				// Add answer to consumer.
-				consumer.accept(ConversationUtils.sanitizeInput(input));
+				consumer.accept(input);
 				// Send message that it is accepted.
 				if (successMessage != null)
 				{
@@ -242,10 +242,10 @@ public class ConversationUtils
 			}
 		};
 
-		Conversation conversation = new ConversationFactory(BentoBox.getInstance()).
+		new ConversationFactory(BentoBox.getInstance()).
 			withFirstPrompt(validatingPrompt).
 			// On cancel conversation will be closed.
-			withEscapeSequence("cancel").
+			withEscapeSequence(user.getTranslation(Constants.DESCRIPTION + "cancel-string")).
 			// Use null value in consumer to detect if user has abandoned conversation.
 			addConversationAbandonedListener(abandonedEvent ->
 			{
@@ -259,9 +259,8 @@ public class ConversationUtils
 			}).
 			withLocalEcho(false).
 			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
-			buildConversation(user.getPlayer());
-
-		conversation.begin();
+			buildConversation(user.getPlayer()).
+			begin();
 	}
 
 
@@ -363,9 +362,9 @@ public class ConversationUtils
 		};
 
 		// Init conversation api.
-		Conversation conversation = new ConversationFactory(BentoBox.getInstance()).
+		new ConversationFactory(BentoBox.getInstance()).
 			withFirstPrompt(numberPrompt).
-			withEscapeSequence("cancel").
+			withEscapeSequence(user.getTranslation(Constants.DESCRIPTION + "cancel-string")).
 			// Use null value in consumer to detect if user has abandoned conversation.
 			addConversationAbandonedListener(abandonedEvent ->
 			{
@@ -379,20 +378,183 @@ public class ConversationUtils
 			}).
 			withLocalEcho(false).
 			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
-			buildConversation(user.getPlayer());
-
-		conversation.begin();
+			buildConversation(user.getPlayer()).
+			begin();
 	}
 
 
 	/**
-	 * Sanitizes the provided input.
-	 * It replaces spaces and hyphens with underscores and lower cases the input.
-	 * @param input input to sanitize
-	 * @return sanitized input
+	 * This method will close opened gui and writes question in chat. After players answers on
+	 * question in chat, message will trigger consumer and gui will reopen.
+	 * Be aware, consumer does not return (and validate) sanitized value, while sanitization is done
+	 * in failure for better informing. Proper implementation would be with adding new consumer for
+	 * failure message.
+	 * @param consumer Consumer that accepts player output text.
+	 * @param question Message that will be displayed in chat when player triggers conversion.
+	 * @param user User who is targeted with current confirmation.
 	 */
-	public static String sanitizeInput(String input)
+	public static void createStringListInput(Consumer<List<String>> consumer,
+		User user,
+		@NotNull String question,
+		@NotNull String successMessage)
 	{
-		return input.toLowerCase(Locale.ENGLISH).replace(" ", "_").replace("-", "_");
+		final String SESSION_CONSTANT = Constants.ADDON_NAME + "description";
+
+		// Successful message about completing.
+		MessagePrompt messagePrompt = new MessagePrompt()
+		{
+			@Override
+			public @NotNull String getPromptText(@NotNull ConversationContext context)
+			{
+				List<String> description = (List<String>) context.getSessionData(SESSION_CONSTANT);
+
+				if (description != null)
+				{
+					consumer.accept(description);
+					return successMessage;
+				}
+				else
+				{
+					return user.getTranslation(Constants.MESSAGE + "cancelled");
+				}
+			}
+
+			@Override
+			protected @Nullable Prompt getNextPrompt(@NotNull ConversationContext context)
+			{
+				return Prompt.END_OF_CONVERSATION;
+			}
+		};
+
+		// Text input message.
+		StringPrompt stringPrompt = new StringPrompt()
+		{
+			@Override
+			public @NotNull String getPromptText(@NotNull ConversationContext context)
+			{
+				user.closeInventory();
+
+				if (context.getSessionData(SESSION_CONSTANT) != null)
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.append(user.getTranslation(Constants.MESSAGE + "new-description"));
+					sb.append(System.getProperty("line.separator"));
+
+					for (String line : ((List<String>) context.getSessionData(SESSION_CONSTANT)))
+					{
+						sb.append(line);
+						sb.append(System.getProperty("line.separator"));
+					}
+
+					return sb.toString();
+				}
+
+				return question;
+			}
+
+
+			@Override
+			public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input)
+			{
+				String[] exit = user.getTranslation(Constants.DESCRIPTION + "exit-string").
+					toLowerCase().replaceAll("\\s","").
+					split(",");
+
+				if (ArrayUtils.contains(exit, input.toLowerCase()))
+				{
+					return messagePrompt;
+				}
+
+				List<String> desc = new ArrayList<>();
+
+				if (context.getSessionData(SESSION_CONSTANT) != null)
+				{
+					desc = ((List<String>) context.getSessionData(SESSION_CONSTANT));
+				}
+
+				desc.add(ChatColor.translateAlternateColorCodes('&', input));
+				context.setSessionData(SESSION_CONSTANT, desc);
+				return this;
+			}
+		};
+
+		new ConversationFactory(BentoBox.getInstance()).
+			withModality(true).
+			withLocalEcho(false).
+			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
+			withTimeout(90).
+			withFirstPrompt(stringPrompt).
+			withEscapeSequence(user.getTranslation(Constants.DESCRIPTION + "cancel-string")).
+			addConversationAbandonedListener(abandonedEvent ->
+			{
+				if (!abandonedEvent.gracefulExit())
+				{
+					consumer.accept(null);
+					// send canceled message
+					abandonedEvent.getContext().getForWhom().sendRawMessage(
+						user.getTranslation(Constants.MESSAGE + "cancelled"));
+				}
+			}).
+			buildConversation(user.getPlayer()).
+			begin();
+	}
+
+
+	/**
+	 * This method will close opened gui and writes question in chat. After players answers on
+	 * question in chat, message will trigger consumer and gui will reopen.
+	 * @param consumer Consumer that accepts player output text.
+	 * @param question Message that will be displayed in chat when player triggers conversion.
+	 * @param user User who is targeted with current confirmation.
+	 */
+	public static void createStringInput(Consumer<String> consumer,
+		User user,
+		@NotNull String question,
+		@Nullable String successMessage)
+	{
+		// Text input message.
+		StringPrompt stringPrompt = new StringPrompt()
+		{
+			@Override
+			public @NotNull String getPromptText(@NotNull ConversationContext context)
+			{
+				user.closeInventory();
+				return question;
+			}
+
+
+			@Override
+			public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input)
+			{
+				consumer.accept(input);
+
+				if (successMessage != null)
+				{
+					context.getForWhom().sendRawMessage(successMessage);
+				}
+
+				return Prompt.END_OF_CONVERSATION;
+			}
+		};
+
+		new ConversationFactory(BentoBox.getInstance()).
+			withFirstPrompt(stringPrompt).
+			// On cancel conversation will be closed.
+			withEscapeSequence(user.getTranslation(Constants.DESCRIPTION + "cancel-string")).
+			// Use null value in consumer to detect if user has abandoned conversation.
+			addConversationAbandonedListener(abandonedEvent ->
+			{
+				if (!abandonedEvent.gracefulExit())
+				{
+					consumer.accept(null);
+					// send cancell message
+					abandonedEvent.getContext().getForWhom().sendRawMessage(
+						user.getTranslation(Constants.MESSAGE + "cancelled"));
+				}
+			}).
+			withLocalEcho(false).
+			withPrefix(context -> user.getTranslation(Constants.QUESTIONS + "prefix")).
+			buildConversation(user.getPlayer()).
+			begin();
 	}
 }

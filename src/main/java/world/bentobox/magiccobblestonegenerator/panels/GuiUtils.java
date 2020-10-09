@@ -8,6 +8,7 @@ import java.util.*;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
 /**
@@ -122,6 +123,44 @@ public class GuiUtils
     // ---------------------------------------------------------------------
     // Section: Materials
     // ---------------------------------------------------------------------
+
+
+    /**
+     * This method assigns Material icon based on input generator type.
+     * @param generatorType Generator type which icon should be returned.
+     * @return Material for input generator type.
+     */
+    public static Material getGeneratorTypeMaterial(GeneratorTierObject.GeneratorType generatorType)
+    {
+        Material icon;
+
+        switch (generatorType)
+        {
+            case COBBLESTONE:
+                icon = Material.COBBLESTONE;
+                break;
+            case STONE:
+                icon = Material.STONE;
+                break;
+            case BASALT:
+                icon = Material.getMaterial("BASALT");
+                break;
+            case COBBLESTONE_OR_STONE:
+                icon = Material.ANDESITE;
+                break;
+            case BASALT_OR_COBBLESTONE:
+                icon = Material.GRANITE;
+                break;
+            case BASALT_OR_STONE:
+                icon = Material.getMaterial("BLACKSTONE");
+                break;
+            default:
+                icon = Material.BEDROCK;
+                break;
+        }
+
+        return icon;
+    }
 
 
     /**

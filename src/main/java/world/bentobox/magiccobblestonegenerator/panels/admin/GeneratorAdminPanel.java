@@ -7,12 +7,10 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.bukkit.Material;
 import org.bukkit.World;
 
 import java.io.File;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -24,8 +22,6 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
-import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorUserPanel;
-import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorViewPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -132,7 +128,7 @@ public class GeneratorAdminPanel extends CommonPanel
 			case MANAGE_GENERATOR_TIERS:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-//					GeneratorManagePanel.open(this);
+					GeneratorManagePanel.open(this);
 					return true;
 				};
 				material = Material.COBBLESTONE;
@@ -183,7 +179,7 @@ public class GeneratorAdminPanel extends CommonPanel
 						{
 							this.addon.getImportManager().generateDatabaseFile(this.user,
 								this.world,
-								value);
+								Utils.sanitizeInput(value));
 						}
 
 						this.build();
@@ -191,8 +187,11 @@ public class GeneratorAdminPanel extends CommonPanel
 
 					// This function checks if file can be created.
 					Function<String, Boolean> validationFunction = fileName ->
-						!new File(this.addon.getDataFolder(),
-							fileName.endsWith(".json") ? fileName : fileName + ".json").exists();
+					{
+						String sanitizedName =  Utils.sanitizeInput(fileName);
+						return !new File(this.addon.getDataFolder(),
+							sanitizedName.endsWith(".json") ? sanitizedName : sanitizedName + ".json").exists();
+					};
 
 					// Call a conversation API to get input string.
 					ConversationUtils.createIDStringInput(fileNameConsumer,

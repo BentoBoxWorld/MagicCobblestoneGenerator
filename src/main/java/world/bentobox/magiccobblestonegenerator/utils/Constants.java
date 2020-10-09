@@ -18,11 +18,6 @@ public class Constants
 	public static final String ADDON_NAME = "stone-generator.";
 
 	/**
-	 * Allows to specify how material names will be displayed in messages.
-	 */
-	public static final String MATERIAL = ADDON_NAME + "materials.";
-
-	/**
 	 * Reference string to GUI in translations.
 	 */
 	public static final String GUI = ADDON_NAME + "gui.";
@@ -63,19 +58,39 @@ public class Constants
 	public static final String COMMANDS = ADDON_NAME + "commands.";
 
 	/**
-	 * Reference string to Commands in translations.
+	 * Reference string to Admin in translations.
 	 */
 	public static final String ADMIN_COMMANDS = COMMANDS + "admin.";
 
 	/**
-	 * Reference string to Commands in translations.
+	 * Reference string to Player in translations.
 	 */
 	public static final String PLAYER_COMMANDS = COMMANDS + "player.";
 
 	/**
-	 * Reference string to types in translations.
+	 * Reference string to Types in translations.
 	 */
 	public static final String TYPES = ADDON_NAME + "types.";
+
+	/**
+	 * Reference string to Biome group Buttons in translations.
+	 */
+	public static final String BIOME_GROUP_BUTTON = BUTTON + "biome-groups.";
+
+	/**
+	 * Reference string to generator type Buttons in translations.
+	 */
+	public static final String GENERATOR_TYPE_BUTTON = BUTTON + "generator-types.";
+
+	/**
+	 * Reference string to Biomes in translations.
+	 */
+	public static final String BIOMES = ADDON_NAME + "biomes.";
+
+	/**
+	 * Reference string to materials in translations.
+	 */
+	public static final String MATERIALS = ADDON_NAME + "biomes.";
 
 	/**
 	 * Reference string to generator parameter in translations.
@@ -141,6 +156,11 @@ public class Constants
 	 * Reference to an version parameter in translation.
 	 */
 	public static final String VERSION = "[version]";
+
+	/**
+	 * Reference to an generators parameter in translation.
+	 */
+	public static final String GENERATORS = "[generators]";
 
 	/**
 	 * Reference to number formant in 0.X

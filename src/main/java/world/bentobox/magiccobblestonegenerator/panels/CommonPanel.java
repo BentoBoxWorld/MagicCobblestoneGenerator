@@ -153,6 +153,50 @@ public abstract class CommonPanel
 	}
 
 
+	/**
+	 * Admin should see simplified view. It is not necessary to view all unnecessary things.
+	 *
+	 * @param generator GeneratorTier which description must be generated.
+	 * @return List of strings that describes generator tier.
+	 */
+	protected List<String> generateGeneratorDescription(GeneratorTierObject generator)
+	{
+		List<String> description = new ArrayList<>(5);
+
+		generator.getDescription().forEach(line ->
+			description.add(ChatColor.translateAlternateColorCodes('&', line)));
+
+		if (generator.getActivationCost() > 0 && this.addon.isVaultProvided())
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "activation-cost",
+				TextVariables.NUMBER, String.valueOf(generator.getActivationCost())));
+		}
+
+		// Add missing permissions
+		if (!generator.getRequiredPermissions().isEmpty())
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-permissions"));
+
+			generator.getRequiredPermissions().forEach(permission ->
+				description.add(this.user.getTranslation(Constants.DESCRIPTION + "missing-permission",
+					TextVariables.PERMISSION, permission)));
+		}
+
+		// Add missing level
+		description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-level",
+			TextVariables.NUMBER, String.valueOf(generator.getRequiredMinIslandLevel())));
+
+		if (generator.getGeneratorTierCost() > 0 && this.addon.isVaultProvided())
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "purchase-cost",
+				Constants.GENERATOR, generator.getFriendlyName(),
+				TextVariables.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+		}
+
+		return description;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------

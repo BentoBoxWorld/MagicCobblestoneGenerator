@@ -32,10 +32,12 @@ stone-generator:
         name: "[material]"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
         description: "Chance to generate: [#.##]"
+        actual: "Database value: [number]"
       treasure-icon:
         name: "[material]"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
         description: "Chance to drop: [#.####]"
+        actual: "Database value: [number]"
 
       return:
         name: "Return"
@@ -235,6 +237,196 @@ stone-generator:
           Allows to modify amount of
           default active generators.
 
+      create:
+        name: "Add new Generator"
+        description: |-
+          Click here to add new generator
+          tier.
+          Clicking on it will close GUI
+          and will wait for your chat
+          message.
+          Write 'cancel' to return to this
+          GUI, or name of your new generator.
+      delete:
+        name: "Remove Generator(-s)"
+        description: |-
+          Click here to remove selected
+          generators.
+          You can select generators with
+          a right mouse click. Generators
+          with enchantment effect are
+          selected.
+
+      change_name:
+        name: "Change Generator Name"
+        description: |-
+          Allows to change Generator
+          name
+      change_icon:
+        name: "Change Generator Icon"
+        description: |-
+          Allows to change Generator
+          icon
+      change_description:
+        name: "Change Generator Description"
+        description: |-
+          Allows to change Generator
+          description
+      change_default:
+        name: "Change Default Status"
+        description: |-
+          Allows to change Generator
+          default status
+      change_priority:
+        name: "Change Generator Priority"
+        description: |-
+          Allows to change Generator
+          priority. Priority is used
+          in situations when multiple
+          generators fullfill requirements
+          in position.
+      change_type:
+        name: "Change Generator Type"
+        description: |-
+          Allows to change Generator
+          type.
+      change_required_min_level:
+        name: "Change Required Island Level"
+        description: |-
+          Allows to change Generator
+          minimal island level requirement.
+      change_required_permissions:
+        name: "Change Required Permissions"
+        description: |-
+          Allows to change Generator
+          required permissions.
+      change_purchase_cost:
+        name: "Change Purchase Cost"
+        description: |-
+          Allows to change amount of
+          credits required to buy
+          this generator.
+      change_activation_cost:
+        name: "Change Activation Cost"
+        description: |-
+          Allows to change amount of
+          credits required to activate
+          this generator.
+      change_biomes:
+        name: "Change Operational Biomes"
+        description: |-
+          Allows to change biomes where
+          current generator will operate.
+      change_deployed:
+        name: "Change Deployed Status"
+        description: |-
+          Allows to change if generator
+          is accessible to players.
+      change_treasure_amount:
+        name: "Change Treasure Amount"
+        description: |-
+          Allows to change amount of
+          treasures generated in single
+          drop.
+      change_treasure_chance:
+        name: "Change Treasure Chance"
+        description: |-
+          Allows to change chance for
+          treasure to be dropped on
+          block generation.
+
+      accept:
+        name: "Accept the values"
+        description: |-
+          Allows to accept selected
+          values and returns to
+          previous GUI.
+      add_material:
+        name: "Add a new Material"
+        description: |-
+          Allows to add new material
+          to the current material list.
+      remove_material:
+        name: "Remove Selected Materials"
+        description: |-
+          Allows to remove selected
+          materials from the list.
+
+      biome-groups:
+        lush:
+          name: "Lush"
+          description: |-
+            Show only lush biomes
+        dry:
+          name: "Dry"
+          description: |-
+            Show only dry biomes
+        cold:
+          name: "Cold"
+          description: |-
+            Show only cold biomes
+        snowy:
+          name: "Snowy"
+          description: |-
+            Show only snowy biomes
+        ocean:
+          name: "Ocean"
+          description: |-
+            Show only ocean biomes
+        nether:
+          name: "Nether"
+          description: |-
+            Show only nether biomes
+        the_end:
+          name: "The End"
+          description: |-
+            Show only the end biomes
+        neutral:
+          name: "Neutral"
+          description: |-
+            Show only neutral biomes
+        unused:
+          name: "Unused"
+          description: |-
+            Show only unused biomes
+
+      generator-types:
+        cobblestone:
+          name: "Cobblestone"
+          description: |-
+            Works only with cobblestone
+            generators.
+        stone:
+          name: "Stone"
+          description: |-
+            Works only with Stone
+            generators.
+        basalt:
+          name: "Basalt"
+          description: |-
+            Works only with basalt
+            generators.
+        cobblestone_or_stone:
+          name: "Cobblestone or Stone"
+          description: |-
+            Works with cobblestone and
+            stone generators.
+        basalt_or_cobblestone:
+          name: "Basalt or Cobblestone"
+          description: |-
+            Works with basalt and
+            cobblestone generators.
+        basalt_or_stone:
+          name: "Basalt or Stone"
+          description: |-
+            Works with basalt and
+            stone generators.
+        any:
+          name: "Any"
+          description: |-
+            Works with any generator.
+
+
     descriptions:
       generator-active: "&2 Active"
       activation-cost: "Activation Cost: [number]"
@@ -244,17 +436,47 @@ stone-generator:
       required-level: "&c Required [number] island level"
       purchase-cost: "&c Purchase Cost: [number]."
       current-value: "&2 Current Value: [value]"
+      current-values: "&2 Current Values:"
       current-value-list: "&2 - [value]"
+
+      confirm-string: "true, on, yes, confirm, y, valid, correct"
+      deny-string: "false, off, no, deny, n, invalid, incorrect"
+      cancel-string: "cancel"
+      exit-string: "exit, quit"
 
       click-to-view: "&e Right Click &7 to view details."
       click-to-activate: "&e Left Click &7 to activate."
       click-to-deactivate: "&e Left Click &7 to deactivate."
       click-to-purchase: "&e Click &7 to purchase."
+      click-to-previous: "&e Click &7 to view previous page."
+      click-to-next: "&e Click &7 to view next page."
+      click-to-return: "&e Click &7 to return."
+      click-to-quit: "&e Click &7 to quit."
 
       library-author: "Author: [author]"
       library-gamemode: "Made for [gamemode]"
       library-lang: "Language: [lang]"
       library-version: "Build on [version] version"
+
+      click-to-edit: "&e Left Click &7 to edit."
+      right-click-to-select: "&e Right Click &7 to select."
+      right-click-to-deselect: "&e Right Click &7 to deselect."
+      click-to-create: "&e Click &7 to create."
+      click-to-delete: "&e Click &7 to delete."
+      select-to-delete: "&e Select &7 something before delete."
+      selected: "&e Selected"
+
+      click-to-see: "&e Click &7 to view."
+      click-to-change: "&e Click &7 to change."
+      click-to-toggle: "&e Click &7 to toggle."
+      click-on-item: |-
+        &e Click &7 on item from your
+        &7 inventory.
+      click-to-cancel: "&e Click &7 to cancel."
+
+      click-to-select: "&e Click &7 to select."
+      click-to-deselect: "&e Click &7 to deselect."
+      click-to-accept: "&e Click &7 to accept and return."
 
     titles:
       generator-view: "Generator: [generator]"
@@ -262,6 +484,9 @@ stone-generator:
       admin-view: "Admin Panel"
       edit-settings: "Edit Settings"
       library: "Library"
+      manage-generators: "Manage Generators"
+      select-biome: "Select Biomes"
+      select-type: "Select Generator Type"
 
   messages:
     import-count: "&6 Imported [number] new generator tiers."
@@ -281,6 +506,11 @@ stone-generator:
     generator-data-removed: "&6 Generator data are removed for [gamemode]!"
     start-downloading: "&6 Start downloading library."
     new-generators-imported: "&6 New generators are imported into database."
+    new-generator-created: "&6 Success, new generator is created."
+    description-changed: "&6 Success, generator description is changed."
+    new-description: "&6 New description:"
+    name-changed: "&6 Success, generator name updated."
+    permissions-changed: "&6 Success, generator permissions updated."
 
   errors:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
@@ -301,6 +531,7 @@ stone-generator:
     not-valid-value: "&c The given number [value] is not valid. It is require to be larger than [min] and smaller than [max]!"
     numeric-only: "&c The given [value] is not a number!"
     no-library-entries: "&c Could not find any library entry!"
+    generator-already-exists: "&c The generator with `[id]` already is defined in gamemode. Choose different."
 
   questions:
     prefix: "&c [SERVER]: &r"
@@ -309,6 +540,11 @@ stone-generator:
     exported-file-name: "&6 Please write file name for exported database file. (write 'cancel' to exit)"
     input-number: "&6 Please write a number in chat."
     confirm-data-replacement: "&6 Confirm that you want to replace your current generators with new one."
+    write-generator-name: "&6 Please write a new generator name in chat."
+    confirm-generator-deletion: "&6 Confirm that you want to delete [number] generators: ([generators])"
+    write-description: "&6 Please write generator description in chat and 'quit' on a line by itself to finish."
+    write-name: "&6 Please write new generator name."
+    write-permissions: "&6 Please write required permissions per line in chat and 'quit' on a line by itself to finish."
 
 protection:
   flags:

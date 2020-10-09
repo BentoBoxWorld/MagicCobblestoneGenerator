@@ -24,6 +24,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -837,19 +838,12 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createMaterialButton(Map.Entry<Double, Material> blockChanceEntry, Double previousValue, Double maxValue)
 	{
-		String materialName = this.user.getTranslationOrNothing(Constants.MATERIAL + blockChanceEntry.getValue().name());
-
-		if (materialName.isEmpty())
-		{
-			materialName = Util.prettifyText(blockChanceEntry.getValue().name());
-		}
-
 		// Normalize value
 		Double value = (blockChanceEntry.getKey() - previousValue) / maxValue * 100.0;
 
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
-				Constants.BLOCK, materialName)).
+				Constants.BLOCK, Utils.prettifyObject(this.user, blockChanceEntry.getValue()))).
 			description(this.user.getTranslation(Constants.BUTTON + "block-icon.description",
 				TextVariables.NUMBER, String.valueOf(value),
 				Constants.TENS, this.tensFormat.format(value),
@@ -872,19 +866,12 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createTreasureButton(Map.Entry<Double, Material> treasureChanceEntry, Double previousValue, Double maxValue)
 	{
-		String materialName = this.user.getTranslationOrNothing(Constants.MATERIAL + treasureChanceEntry.getValue().name());
-
-		if (materialName.isEmpty())
-		{
-			materialName = Util.prettifyText(treasureChanceEntry.getValue().name());
-		}
-
 		// Normalize value
 		Double value = (treasureChanceEntry.getKey() - previousValue) / maxValue * 100.0 * this.generatorTier.getTreasureChance();
 
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
-				Constants.BLOCK, materialName)).
+				Constants.BLOCK, Utils.prettifyObject(this.user, treasureChanceEntry.getValue()))).
 			description(this.user.getTranslation(Constants.BUTTON + "treasure-icon.description",
 				TextVariables.NUMBER, String.valueOf(value),
 				Constants.TENS, this.tensFormat.format(value),
