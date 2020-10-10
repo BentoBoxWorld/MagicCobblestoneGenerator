@@ -884,7 +884,7 @@ public class StoneGeneratorManager
     {
         user.sendMessage(Constants.MESSAGE + "generator-deactivated",
             Constants.GENERATOR, generatorTier.getFriendlyName());
-        generatorData.getActiveGeneratorList().remove(generatorTier);
+        generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
 
         // Save object.
         this.saveGeneratorData(generatorData);
@@ -911,7 +911,7 @@ public class StoneGeneratorManager
             return false;
         }
 
-        if (!generatorData.getUnlockedTiers().contains(generatorTier))
+        if (!generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
             user.sendMessage(Constants.ERRORS + "generator-not-unlocked",
@@ -986,7 +986,7 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        if (generatorData.getPurchasedTiers().contains(generatorTier))
+        if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
             user.sendMessage(Constants.ERRORS + "generator-already-purchased",
