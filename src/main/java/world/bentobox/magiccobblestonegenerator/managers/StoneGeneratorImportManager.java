@@ -202,7 +202,9 @@ public class StoneGeneratorImportManager
 		reader = config.getConfigurationSection("bundles");
 		int bundleSize = 0;
 
-		for (String bundleId : reader.getKeys(false))
+		Set<String> keys = reader == null ? Collections.emptySet() : reader.getKeys(false);
+
+		for (String bundleId : keys)
 		{
 			GeneratorBundleObject generatorBundle = new GeneratorBundleObject();
 			generatorBundle.setUniqueId(prefix + bundleId.toLowerCase());
