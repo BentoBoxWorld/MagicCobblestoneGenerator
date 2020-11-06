@@ -29,7 +29,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 /**
  * This class creates and manages Admin Panel for MCG.
  */
-public class GeneratorAdminPanel extends CommonPanel
+public class AdminPanel extends CommonPanel
 {
 	/**
 	 * This is default constructor for all classes that extends CommonPanel.
@@ -38,7 +38,7 @@ public class GeneratorAdminPanel extends CommonPanel
 	 * @param user User who opens panel.
 	 * @param world GUI target world.
 	 */
-	protected GeneratorAdminPanel(StoneGeneratorAddon addon,
+	protected AdminPanel(StoneGeneratorAddon addon,
 		User user,
 		World world)
 	{
@@ -56,7 +56,7 @@ public class GeneratorAdminPanel extends CommonPanel
 		World world,
 		User user)
 	{
-		new GeneratorAdminPanel(addon, user, world).build();
+		new AdminPanel(addon, user, world).build();
 	}
 
 

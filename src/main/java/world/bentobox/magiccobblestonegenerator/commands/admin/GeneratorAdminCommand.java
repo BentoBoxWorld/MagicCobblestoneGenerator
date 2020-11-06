@@ -15,7 +15,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
-import world.bentobox.magiccobblestonegenerator.panels.admin.GeneratorAdminPanel;
+import world.bentobox.magiccobblestonegenerator.panels.admin.AdminPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -76,7 +76,7 @@ public class GeneratorAdminCommand extends CompositeCommand
 	{
 		if (args.isEmpty())
 		{
-			GeneratorAdminPanel.openPanel(this.getAddon(), this.getWorld(), user);
+			AdminPanel.openPanel(this.getAddon(), this.getWorld(), user);
 		}
 		else
 		{
