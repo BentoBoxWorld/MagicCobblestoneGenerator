@@ -136,17 +136,17 @@ public class SelectBlocksPanel
 			this.pageIndex = 0;
 		}
 
-		int entitiesIndex = MAX_ELEMENTS * this.pageIndex;
+		int materialIndex = MAX_ELEMENTS * this.pageIndex;
 
 		// I want first row to be only for navigation and return button.
 		int index = 10;
 
-		while (entitiesIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
-			entitiesIndex < this.elements.size())
+		while (materialIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
+			materialIndex < this.elements.size())
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
-				panelBuilder.item(index, this.createMaterialButton(this.elements.get(entitiesIndex++)));
+				panelBuilder.item(index, this.createMaterialButton(this.elements.get(materialIndex++)));
 			}
 
 			index++;

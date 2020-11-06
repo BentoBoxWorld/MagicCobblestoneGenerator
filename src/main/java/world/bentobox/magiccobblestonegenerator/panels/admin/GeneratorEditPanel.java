@@ -1005,7 +1005,7 @@ public class GeneratorEditPanel extends CommonPanel
 			}
 			case REMOVE_MATERIAL:
 			{
-				material = Material.LAVA_BUCKET;
+				material = this.selectedMaterial.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
 				glow = !this.selectedMaterial.isEmpty();
 
 				if (!this.selectedMaterial.isEmpty())
@@ -1074,7 +1074,7 @@ public class GeneratorEditPanel extends CommonPanel
 		description.add("");
 		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-edit"));
 
-		if (glow)
+		if (!glow)
 		{
 			description.add(this.user.getTranslation(Constants.DESCRIPTION + "right-click-to-select"));
 		}
@@ -1235,7 +1235,7 @@ public class GeneratorEditPanel extends CommonPanel
 				event.getRawSlot() > 44)
 			{
 				// set material and amount only. Other data should be removed.
-				GeneratorEditPanel.this.generatorTier.setGeneratorIcon(event.getCurrentItem());
+				GeneratorEditPanel.this.generatorTier.setGeneratorIcon(event.getCurrentItem().clone());
 				// save change
 				GeneratorEditPanel.this.manager.saveGeneratorTier(GeneratorEditPanel.this.generatorTier);
 				// Deselect icon

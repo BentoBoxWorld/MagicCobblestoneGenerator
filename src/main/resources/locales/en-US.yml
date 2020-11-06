@@ -478,6 +478,13 @@ stone-generator:
       click-to-deselect: "&e Click &7 to deselect."
       click-to-accept: "&e Click &7 to accept and return."
 
+      bundle-permission: |-
+        Permission that must be
+        asigned to player:
+        [gamemode].stone-generator.bundle.[id]
+
+      generators: "Assigned Generators: "
+
     titles:
       generator-view: "Generator: [generator]"
       generator-list: "Generators"
@@ -487,6 +494,7 @@ stone-generator:
       manage-generators: "Manage Generators"
       select-biome: "Select Biomes"
       select-type: "Select Generator Type"
+      manage-bundles: "Manage Bundles"
 
   messages:
     import-count: "&6 Imported [number] new generator tiers."
@@ -511,6 +519,8 @@ stone-generator:
     new-description: "&6 New description:"
     name-changed: "&6 Success, generator name updated."
     permissions-changed: "&6 Success, generator permissions updated."
+    new-bundle-created: "&6 Success, new bundle is created."
+    bundle-data-removed: "&6 Bundle data are removed for [gamemode]!"
 
   errors:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
@@ -532,6 +542,7 @@ stone-generator:
     numeric-only: "&c The given [value] is not a number!"
     no-library-entries: "&c Could not find any library entry!"
     generator-already-exists: "&c The generator with `[id]` already is defined in gamemode. Choose different."
+    bundle-already-exists: "&c The bundle with `[id]` already is defined in gamemode. Choose different."
 
   questions:
     prefix: "&c [SERVER]: &r"
@@ -545,6 +556,8 @@ stone-generator:
     write-description: "&6 Please write generator description in chat and 'quit' on a line by itself to finish."
     write-name: "&6 Please write new generator name."
     write-permissions: "&6 Please write required permissions per line in chat and 'quit' on a line by itself to finish."
+    write-bundle-name: "&6 Please write a new bundle name in chat."
+    confirm-bundle-deletion: "&6 Confirm that you want to delete [number] bundles: ([bundles])"
 
 protection:
   flags:

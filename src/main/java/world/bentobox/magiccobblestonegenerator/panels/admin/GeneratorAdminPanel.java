@@ -137,7 +137,7 @@ public class GeneratorAdminPanel extends CommonPanel
 			case MANAGE_GENERATOR_BUNDLES:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-//					BundleManagePanel.open(this);
+					BundleManagePanel.open(this);
 					return true;
 				};
 				material = Material.CHEST;

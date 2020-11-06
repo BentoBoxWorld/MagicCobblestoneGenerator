@@ -370,6 +370,16 @@ public class StoneGeneratorManager
         {
             this.generatorTierCache.remove(generatorTier.getUniqueId());
             this.generatorTierDatabase.deleteID(generatorTier.getUniqueId());
+
+            // remove generator tier from all bundles.
+            this.generatorBundleCache.values().forEach(bundle ->
+            {
+                if (bundle.getGeneratorTiers().remove(generatorTier.getUniqueId()))
+                {
+                    // If removing was successfully, save bundle.
+                    this.saveGeneratorBundle(bundle);
+                }
+            });
         }
     }
 
@@ -651,6 +661,32 @@ public class StoneGeneratorManager
             // Sort in order: default generators are first, followed by lowest priority,
             // Return as list collection.
             collect(Collectors.toList());
+    }
+
+
+    /**
+     * Gets bundle by id.
+     *
+     * @param bundleId the bundle id
+     * @return the bundle by id
+     */
+    public GeneratorBundleObject getBundleById(String bundleId)
+    {
+        return this.generatorBundleCache.get(bundleId);
+    }
+
+
+    /**
+     * This method removes given bundle tier from database.
+     * @param bundleObject bundle tier that must be removed.
+     */
+    public void wipeBundle(GeneratorBundleObject bundleObject)
+    {
+        if (this.generatorBundleCache.containsKey(bundleObject.getUniqueId()))
+        {
+            this.generatorBundleCache.remove(bundleObject.getUniqueId());
+            this.generatorBundleDatabase.deleteID(bundleObject.getUniqueId());
+        }
     }
 
 

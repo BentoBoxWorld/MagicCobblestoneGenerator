@@ -163,6 +163,11 @@ public class Constants
 	public static final String GENERATORS = "[generators]";
 
 	/**
+	 * Reference to an bundles parameter in translation.
+	 */
+	public static final String BUNDLES = "[bundles]";
+
+	/**
 	 * Reference to number formant in 0.X
 	 */
 	public static final String TENS = "[#.#]";
