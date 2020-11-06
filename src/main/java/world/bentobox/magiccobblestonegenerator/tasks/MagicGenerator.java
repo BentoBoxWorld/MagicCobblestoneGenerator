@@ -115,7 +115,7 @@ public class MagicGenerator
         // ask config if physics should be used
         block.setType(newMaterial, this.addon.getSettings().isUsePhysics());
 
-        if (generatorTier.getTreasureChance() > 0 && !generatorTier.getTreasureChanceMap().isEmpty())
+        if (generatorTier.getMaxTreasureAmount() > 0 && generatorTier.getTreasureChance() > 0 && !generatorTier.getTreasureChanceMap().isEmpty())
         {
             // Random check on getting treasure.
             if (this.random.nextDouble() <= generatorTier.getTreasureChance())
