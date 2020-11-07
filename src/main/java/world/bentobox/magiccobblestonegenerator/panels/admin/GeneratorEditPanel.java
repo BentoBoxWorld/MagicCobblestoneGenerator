@@ -133,7 +133,11 @@ public class GeneratorEditPanel extends CommonPanel
 
 				break;
 			case BLOCKS:
-				this.populateBlocks(panelBuilder);
+
+				if (!this.materialChanceList.isEmpty())
+				{
+					this.populateBlocks(panelBuilder);
+				}
 
 				panelBuilder.item(39, this.createButton(Action.ADD_MATERIAL));
 				panelBuilder.item(41, this.createButton(Action.REMOVE_MATERIAL));
@@ -143,7 +147,10 @@ public class GeneratorEditPanel extends CommonPanel
 
 				break;
 			case TREASURES:
-				this.populateTreasures(panelBuilder);
+				if (!this.materialChanceList.isEmpty())
+				{
+					this.populateTreasures(panelBuilder);
+				}
 
 				panelBuilder.item(39, this.createButton(Action.ADD_MATERIAL));
 				panelBuilder.item(41, this.createButton(Action.REMOVE_MATERIAL));
