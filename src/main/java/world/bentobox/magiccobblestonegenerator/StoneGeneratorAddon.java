@@ -180,7 +180,7 @@ public class StoneGeneratorAddon extends Addon
             user -> {
                 GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
                 return String.valueOf(object != null ?
-                    object.getMaxGeneratorCount() : 0);
+                    object.getActiveGeneratorCount() : 0);
             });
 
         // Placeholder returns active generator names separated with ','

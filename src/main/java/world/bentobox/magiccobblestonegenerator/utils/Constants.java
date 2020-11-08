@@ -191,4 +191,9 @@ public class Constants
 	 * Reference to number formant in 0.0000X
 	 */
 	public static final String HUNDRED_THOUSANDS = "[#.#####]";
+
+	/**
+	 * Reference to island in translations.
+	 */
+	public static final String ISLAND = "[island]";
 }

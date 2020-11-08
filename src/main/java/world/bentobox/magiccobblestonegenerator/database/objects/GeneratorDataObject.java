@@ -18,8 +18,8 @@ import world.bentobox.bentobox.database.objects.Table;
 
 
 /**
- * This object stores generator data per island.
- * In short, it allows to easily access active and unlocked generator tiers for island.
+ * This object stores generator data per island. In short, it allows to easily access active and unlocked generator
+ * tiers for island.
  */
 @Table(name = "GeneratorData")
 public class GeneratorDataObject implements DataObject
@@ -71,8 +71,8 @@ public class GeneratorDataObject implements DataObject
 
 	/**
 	 * Method GeneratorDataObject#setUnlockedTiers sets new value for the unlockedTiers of this object.
-	 * @param unlockedTiers new value for this object.
 	 *
+	 * @param unlockedTiers new value for this object.
 	 */
 	public void setUnlockedTiers(Set<String> unlockedTiers)
 	{
@@ -93,8 +93,8 @@ public class GeneratorDataObject implements DataObject
 
 	/**
 	 * Method GeneratorDataObject#setActiveGeneratorList sets new value for the activeGeneratorList of this object.
-	 * @param activeGeneratorList new value for this object.
 	 *
+	 * @param activeGeneratorList new value for this object.
 	 */
 	public void setActiveGeneratorList(Set<String> activeGeneratorList)
 	{
@@ -103,28 +103,8 @@ public class GeneratorDataObject implements DataObject
 
 
 	/**
-	 * This method returns the maxGeneratorCount value.
-	 * @return the value of maxGeneratorCount.
-	 */
-	public int getMaxGeneratorCount()
-	{
-		return maxGeneratorCount;
-	}
-
-
-	/**
-	 * This method sets the maxGeneratorCount value.
-	 * @param maxGeneratorCount the maxGeneratorCount new value.
-	 *
-	 */
-	public void setMaxGeneratorCount(int maxGeneratorCount)
-	{
-		this.maxGeneratorCount = maxGeneratorCount;
-	}
-
-
-	/**
 	 * This method returns the purchasedTiers value.
+	 *
 	 * @return the value of purchasedTiers.
 	 */
 	public Set<String> getPurchasedTiers()
@@ -135,53 +115,12 @@ public class GeneratorDataObject implements DataObject
 
 	/**
 	 * This method sets the purchasedTiers value.
-	 * @param purchasedTiers the purchasedTiers new value.
 	 *
+	 * @param purchasedTiers the purchasedTiers new value.
 	 */
 	public void setPurchasedTiers(Set<String> purchasedTiers)
 	{
 		this.purchasedTiers = purchasedTiers;
-	}
-
-
-	/**
-	 * This method returns the purchasedActiveGeneratorCount value.
-	 * @return the value of purchasedActiveGeneratorCount.
-	 */
-	public int getPurchasedActiveGeneratorCount()
-	{
-		return purchasedActiveGeneratorCount;
-	}
-
-
-	/**
-	 * This method sets the purchasedGeneratorCount value.
-	 * @param purchasedActiveGeneratorCount the purchasedGeneratorCount new value.
-	 *
-	 */
-	public void setPurchasedActiveGeneratorCount(int purchasedActiveGeneratorCount)
-	{
-		this.purchasedActiveGeneratorCount = purchasedActiveGeneratorCount;
-	}
-
-	/**
-	 * This method sets the workingRange value.
-	 * @param workingRange the workingRange new value.
-	 *
-	 */
-	public void setWorkingRange(int workingRange)
-	{
-		this.workingRange = workingRange;
-	}
-
-
-	/**
-	 * This method returns the workingRange value.
-	 * @return the value of workingRange.
-	 */
-	public int getWorkingRange()
-	{
-		return workingRange;
 	}
 
 
@@ -229,6 +168,134 @@ public class GeneratorDataObject implements DataObject
 	}
 
 
+	/**
+	 * Gets owner active generator count.
+	 *
+	 * @return the owner active generator count
+	 */
+	public int getOwnerActiveGeneratorCount()
+	{
+		return ownerActiveGeneratorCount;
+	}
+
+
+	/**
+	 * Sets owner active generator count.
+	 *
+	 * @param ownerActiveGeneratorCount the owner active generator count
+	 */
+	public void setOwnerActiveGeneratorCount(int ownerActiveGeneratorCount)
+	{
+		this.ownerActiveGeneratorCount = ownerActiveGeneratorCount;
+	}
+
+
+	/**
+	 * Gets owner working range.
+	 *
+	 * @return the owner working range
+	 */
+	public int getOwnerWorkingRange()
+	{
+		return ownerWorkingRange;
+	}
+
+
+	/**
+	 * Sets owner working range.
+	 *
+	 * @param ownerWorkingRange the owner working range
+	 */
+	public void setOwnerWorkingRange(int ownerWorkingRange)
+	{
+		this.ownerWorkingRange = ownerWorkingRange;
+	}
+
+
+	/**
+	 * Gets island active generator count.
+	 *
+	 * @return the island active generator count
+	 */
+	public int getIslandActiveGeneratorCount()
+	{
+		return islandActiveGeneratorCount;
+	}
+
+
+	/**
+	 * Sets island active generator count.
+	 *
+	 * @param islandActiveGeneratorCount the island active generator count
+	 */
+	public void setIslandActiveGeneratorCount(int islandActiveGeneratorCount)
+	{
+		this.islandActiveGeneratorCount = islandActiveGeneratorCount;
+	}
+
+
+	/**
+	 * Gets island working range.
+	 *
+	 * @return the island working range
+	 */
+	public int getIslandWorkingRange()
+	{
+		return islandWorkingRange;
+	}
+
+
+	/**
+	 * Sets island working range.
+	 *
+	 * @param islandWorkingRange the island working range
+	 */
+	public void setIslandWorkingRange(int islandWorkingRange)
+	{
+		this.islandWorkingRange = islandWorkingRange;
+	}
+
+
+// ---------------------------------------------------------------------
+// Section: Processing Methods
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * This method returns bundle for current object.
+	 * If owner has a specific bundle, then return ownerBundle, otherwise return islandBundle.
+	 * @return Bundle name for current island object to work.
+	 */
+	public String getBundle()
+	{
+		return this.ownerBundle != null ? this.ownerBundle : this.islandBundle;
+	}
+
+
+	/**
+	 * If owner has permission that defines infinite working range (-1) or has a specific range
+	 * then return the owner range, otherwise return island working range.
+	 * @return Range for generators where they will work.
+	 */
+	public int getRange()
+	{
+		return this.ownerWorkingRange == -1 || this.ownerWorkingRange > 0 ?
+			this.ownerWorkingRange : this.islandWorkingRange;
+	}
+
+
+	/**
+	 * If owner has a permission that defines infinite generator count or has a specific amount
+	 * then return ownerActiveGeneratorCount, otherwise return islandActiveGeneratorCount
+	 * @return ActiveGeneratorCount for this object.
+	 */
+	public int getActiveGeneratorCount()
+	{
+		return this.ownerActiveGeneratorCount == -1 || this.ownerActiveGeneratorCount > 0 ?
+			this.ownerActiveGeneratorCount : this.islandActiveGeneratorCount;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -259,32 +326,38 @@ public class GeneratorDataObject implements DataObject
 	private Set<String> activeGeneratorList = new HashSet<>();
 
 	/**
-	 * Stores amount of maximal active generators at the same time.
+	 * Stores maximum allowed active generator count for island object.
 	 */
 	@Expose
-	private int maxGeneratorCount = 1;
+	private int ownerActiveGeneratorCount = 0;
 
 	/**
-	 * Stores amount of bought generators.
+	 * Stores working range for generators on current island defined by owner.
 	 */
 	@Expose
-	private int purchasedActiveGeneratorCount = 0;
-
-	/**
-	 * Stores working range for current data object.
-	 */
-	@Expose
-	private int workingRange;
+	private int ownerWorkingRange = -1;
 
 	/**
 	 * Stores active bundle.
 	 */
 	@Expose
-	private @Nullable String ownerBundle;
+	private @Nullable String ownerBundle = null;
+
+	/**
+	 * Stores maximum allowed active generator count for island object.
+	 */
+	@Expose
+	private int islandActiveGeneratorCount = 0;
+
+	/**
+	 * Stores working range for generators on current island.
+	 */
+	@Expose
+	private int islandWorkingRange = -1;
 
 	/**
 	 * Stores active bundle.
 	 */
 	@Expose
-	private @Nullable String islandBundle;
+	private @Nullable String islandBundle = null;
 }

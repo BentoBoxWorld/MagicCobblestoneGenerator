@@ -446,26 +446,7 @@ public class BundleManagePanel extends CommonPanel
 	 */
 	protected List<String> generateBundleDescription(GeneratorBundleObject bundle)
 	{
-		List<String> description = new ArrayList<>(5);
-		bundle.getDescription().forEach(line ->
-			description.add(ChatColor.translateAlternateColorCodes('&', line)));
-
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "bundle-permission",
-			Constants.ID, bundle.getUniqueId(),
-			Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
-
-		// Add missing permissions
-		if (!bundle.getGeneratorTiers().isEmpty())
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "generators"));
-
-			bundle.getGeneratorTiers().stream().
-				map(this.manager::getGeneratorByID).
-				filter(Objects::nonNull).
-				forEach(generator ->
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
-						Constants.VALUE, generator.getFriendlyName())));
-		}
+		List<String> description = super.generateBundleDescription(bundle);
 
 		description.add("");
 		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-edit"));

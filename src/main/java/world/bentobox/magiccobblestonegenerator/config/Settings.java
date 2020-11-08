@@ -89,20 +89,20 @@ public class Settings implements ConfigObject
      *
      * @return the workingRange (type int) of this object.
      */
-    public int getWorkingRange()
+    public int getDefaultWorkingRange()
     {
-        return workingRange;
+        return defaultWorkingRange;
     }
 
 
     /**
      * Method Settings#setWorkingRange sets new value for the workingRange of this object.
-     * @param workingRange new value for this object.
+     * @param defaultWorkingRange new value for this object.
      *
      */
-    public void setWorkingRange(int workingRange)
+    public void getDefaultWorkingRange(int defaultWorkingRange)
     {
-        this.workingRange = workingRange;
+        this.defaultWorkingRange = defaultWorkingRange;
     }
 
 
@@ -172,7 +172,7 @@ public class Settings implements ConfigObject
     @ConfigComment("0 or less will mean that no range is checked.")
     @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.max-range.[number]`.")
     @ConfigEntry(path = "working-range")
-    private int workingRange = 0;
+    private int defaultWorkingRange = 0;
 
     @ConfigComment("")
     @ConfigComment("This allows to define how many generators can be activated at once per each island.")

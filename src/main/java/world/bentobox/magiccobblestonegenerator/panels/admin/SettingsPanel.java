@@ -139,7 +139,7 @@ public class SettingsPanel extends CommonPanel
 					Consumer<Number> numberConsumer = number -> {
 						if (number != null)
 						{
-							this.settings.setWorkingRange(number.intValue());
+							this.settings.getDefaultWorkingRange(number.intValue());
 							this.saveSettings();
 						}
 
@@ -157,10 +157,10 @@ public class SettingsPanel extends CommonPanel
 				};
 
 				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.settings.getWorkingRange())));
+					Constants.VALUE, String.valueOf(this.settings.getDefaultWorkingRange())));
 
 				material = Material.OAK_TRAPDOOR;
-				count = this.settings.getWorkingRange();
+				count = this.settings.getDefaultWorkingRange();
 
 				break;
 			}

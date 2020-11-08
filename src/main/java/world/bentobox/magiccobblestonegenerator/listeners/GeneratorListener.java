@@ -17,6 +17,7 @@ import org.bukkit.event.Listener;
 import java.util.Random;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 
 
 /**
@@ -50,7 +51,7 @@ public abstract class GeneratorListener implements Listener
 	protected boolean isInRangeToGenerate(Block block)
 	{
 		// If settings value is 0, then assume that it is not set at all.
-		int workingRange = this.addon.getSettings().getWorkingRange();
+		int workingRange = this.addon.getSettings().getDefaultWorkingRange();
 
 		if (workingRange > 0)
 		{
@@ -58,8 +59,22 @@ public abstract class GeneratorListener implements Listener
 			return this.addon.getIslands().getIslandAt(block.getLocation()).
 				map(island ->
 				{
+					GeneratorDataObject data = this.addon.getAddonManager().getGeneratorData(island);
+
+					if (data == null)
+					{
+						// If data object is not found, return false.
+						return false;
+					}
+
 					// Use range from island object.
-					int range = this.addon.getAddonManager().getGeneratorData(island).getWorkingRange();
+					int range = data.getRange();
+
+					// If range is -1 or 0, the ignore it.
+					if (range == -1 || range == 0)
+					{
+						return true;
+					}
 
 					return block.getWorld().getNearbyEntities(block.getLocation(),
 						range,

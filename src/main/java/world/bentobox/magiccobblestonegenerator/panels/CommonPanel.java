@@ -8,13 +8,16 @@ import org.jetbrains.annotations.Nullable;
 import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -191,6 +194,39 @@ public abstract class CommonPanel
 			description.add(this.user.getTranslation(Constants.DESCRIPTION + "purchase-cost",
 				Constants.GENERATOR, generator.getFriendlyName(),
 				TextVariables.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+		}
+
+		return description;
+	}
+
+
+	/**
+	 * Admin should see simplified view. It is not necessary to view all unnecessary things.
+	 *
+	 * @param bundle Bundle which description must be generated.
+	 * @return List of strings that describes bundle.
+	 */
+	protected List<String> generateBundleDescription(GeneratorBundleObject bundle)
+	{
+		List<String> description = new ArrayList<>(5);
+		bundle.getDescription().forEach(line ->
+			description.add(ChatColor.translateAlternateColorCodes('&', line)));
+
+		description.add(this.user.getTranslation(Constants.DESCRIPTION + "bundle-permission",
+			Constants.ID, bundle.getUniqueId(),
+			Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+
+		// Add missing permissions
+		if (!bundle.getGeneratorTiers().isEmpty())
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTION + "generators"));
+
+			bundle.getGeneratorTiers().stream().
+				map(this.manager::getGeneratorByID).
+				filter(Objects::nonNull).
+				forEach(generator ->
+					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
+						Constants.VALUE, generator.getFriendlyName())));
 		}
 
 		return description;
