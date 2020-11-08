@@ -109,7 +109,7 @@ public class GeneratorBundleObject implements DataObject
 	 */
 	public ItemStack getGeneratorIcon()
 	{
-		return generatorIcon;
+		return generatorIcon.clone();
 	}
 
 
