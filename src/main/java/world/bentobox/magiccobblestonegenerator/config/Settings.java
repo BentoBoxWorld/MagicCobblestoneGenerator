@@ -100,7 +100,7 @@ public class Settings implements ConfigObject
      * @param defaultWorkingRange new value for this object.
      *
      */
-    public void getDefaultWorkingRange(int defaultWorkingRange)
+    public void setDefaultWorkingRange(int defaultWorkingRange)
     {
         this.defaultWorkingRange = defaultWorkingRange;
     }

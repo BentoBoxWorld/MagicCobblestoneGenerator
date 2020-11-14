@@ -139,7 +139,7 @@ public class SettingsPanel extends CommonPanel
 					Consumer<Number> numberConsumer = number -> {
 						if (number != null)
 						{
-							this.settings.getDefaultWorkingRange(number.intValue());
+							this.settings.setDefaultWorkingRange(number.intValue());
 							this.saveSettings();
 						}
 
