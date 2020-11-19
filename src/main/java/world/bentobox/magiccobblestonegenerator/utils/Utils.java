@@ -102,6 +102,19 @@ public class Utils
     }
 
 
+    /**
+     * This method returns if given user has all required permissions.
+     * @param user User who must be checked.
+     * @param permissions List of permissions that must be checked.
+     * @return {@code true} if player has all required permissions, {@code flase} otherwise.
+     */
+    public static boolean matchAllPermissions(User user, Collection<String> permissions)
+    {
+        return permissions.isEmpty() ||
+            user.isOp() ||
+            permissions.stream().allMatch(user::hasPermission);
+    }
+
 
     /**
      * This method transforms given World into GameMode name. If world is not a GameMode

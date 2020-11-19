@@ -804,31 +804,27 @@ public class StoneGeneratorManager
         this.updateOwnerGeneratorCount(island, dataObject);
         this.updateOwnerWorkingRange(island, dataObject);
 
-        // Remove generators which island does not qualifies anymore.
-        dataObject.getUnlockedTiers().clear();
-
-        this.getAllGeneratorTiers(island.getWorld()).forEach(generatorTier -> {
-            if (dataObject.getPurchasedTiers().contains(generatorTier.getUniqueId()))
+        this.getAllGeneratorTiers(island.getWorld()).
+            forEach(generatorTier ->
             {
-                // All purchased and default tiers are available.
-                dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
-            }
-            else if (!generatorTier.isDefaultGenerator() &&
-                generatorTier.getRequiredMinIslandLevel() <= this.getIslandLevel(island))
-            {
-                // Add only if user has all required permissions and generator cost is 0 or vault
-                // is not provided.
-
-                if ((generatorTier.getRequiredPermissions().isEmpty() ||
-                        generatorTier.getRequiredPermissions().stream().allMatch(permission ->
-                        User.getInstance(island.getOwner()).hasPermission(permission))) &&
-                        (generatorTier.getGeneratorTierCost() <= 0 ||
-                        !this.addon.isVaultProvided()))
+                if (dataObject.getPurchasedTiers().contains(generatorTier.getUniqueId()))
                 {
+                    // All purchased and default tiers are available.
                     dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
                 }
-            }
-        });
+                else if (!generatorTier.isDefaultGenerator() &&
+                    generatorTier.getRequiredMinIslandLevel() <= this.getIslandLevel(island) &&
+                    (!this.addon.isVaultProvided() || generatorTier.getGeneratorTierCost() <= 0) &&
+                    Utils.matchAllPermissions(User.getInstance(island.getOwner()), generatorTier.getRequiredPermissions()))
+                {
+                    // Default generator is unlocked always.
+                    // Required island min level should be reached.
+                    // if Vault is provided, check if generator cost is 0 or less.
+                    // At the end check if owner has all permissions to use generator
+
+                    dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
+                }
+            });
 
         // Remove locked generators from active list.
         dataObject.getActiveGeneratorList().removeIf(generator ->
