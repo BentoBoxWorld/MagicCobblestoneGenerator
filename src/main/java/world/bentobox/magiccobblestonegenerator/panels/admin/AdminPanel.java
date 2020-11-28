@@ -119,7 +119,7 @@ public class AdminPanel extends CommonPanel
 			case MANAGE_USERS:
 			{
 				clickHandler = (panel, user1, clickType, slot) -> {
-//					UserManagePanel.open(this);
+					IslandManagePanel.open(this);
 					return true;
 				};
 				material = Material.PLAYER_HEAD;
