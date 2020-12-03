@@ -30,6 +30,9 @@ stone-generator:
       buy:
         description: "Player command that purchases requested generator without opening a GUI."
         parameters: "<generator_id> - id for generator"
+      activate:
+        description: "Player command that activate (deactivate) requested generator without opening a GUI."
+        parameters: "<generator_id> <boolean>"
   # This section contains translations for items inside GUI interfaces.
   gui:
     # This section contains translations for all GUI titles.
