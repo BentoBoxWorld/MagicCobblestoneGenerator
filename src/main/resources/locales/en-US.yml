@@ -834,6 +834,10 @@ stone-generator:
     confirm-data-replacement: "&e Please confirm that you want to replace your current generators with new one."
     # Message that appears after successful data importing
     new-generators-imported: "&a Success, new generators for [gamemode] are imported."
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "&e You have unlocked &r [generator] &r&e. Click here to buy it now for [number]."
+    click-text-to-activate-vault: "&e You have unlocked &r [generator] &r&e. Click here to activate it now for [number]."
+    click-text-to-activate: "&e You have unlocked &r [generator] &r&e. Click here to activate it now."
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

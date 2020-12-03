@@ -19,6 +19,7 @@ import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerC
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
+import world.bentobox.magiccobblestonegenerator.listeners.IslandLevelListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
@@ -104,6 +105,7 @@ public class StoneGeneratorAddon extends Addon
         //this.registerListener(new MagicGeneratorListener(this));
 
         this.registerListener(new JoinLeaveListener(this));
+        this.registerListener(new IslandLevelListener(this));
 
         // Register Flags
         this.registerFlag(MAGIC_COBBLESTONE_GENERATOR);

@@ -15,11 +15,16 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import sun.reflect.generics.tree.Tree;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
+import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Util;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
 /**
@@ -448,5 +453,57 @@ public class Utils
     public static void sendMessage(User user, String message)
     {
         user.sendMessage(user.getTranslation(Constants.CONVERSATIONS + "prefix") + message);
+    }
+
+
+    /**
+     * Send unlock message for user with given UUID.
+     *
+     * @param uuid the uuid
+     * @param island the island
+     * @param generator the generator
+     * @param hasVault Indicates that vault addon is provided.
+     * @param available the available
+     */
+    public static void sendUnlockMessage(UUID uuid, Island island, GeneratorTierObject generator, boolean hasVault, boolean available)
+    {
+        User user = User.getInstance(uuid);
+
+        WorldSettings settings = BentoBox.getInstance().getIWM().getWorldSettings(island.getWorld());
+
+        if (settings != null && user != null && user.isOnline())
+        {
+            TextComponent component;
+
+            String command = "/" + settings.getPlayerCommandAliases().split(" ")[0];
+
+            if (!available)
+            {
+                component = new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-purchase",
+                    Constants.GENERATOR, generator.getFriendlyName(),
+                    Constants.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+                command += " generator buy ";
+            }
+            else
+            {
+                if (hasVault && generator.getActivationCost() > 0)
+                {
+                    component = new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate-vault",
+                        Constants.GENERATOR, generator.getFriendlyName(),
+                        Constants.NUMBER, String.valueOf(generator.getActivationCost())));
+                }
+                else
+                {
+                    component = new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate",
+                        Constants.GENERATOR, generator.getFriendlyName()));
+                }
+
+                command += " generator activate ";
+            }
+
+            component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command + generator.getUniqueId()));
+
+            user.getPlayer().spigot().sendMessage(component);
+        }
     }
 }

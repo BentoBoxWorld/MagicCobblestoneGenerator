@@ -12,6 +12,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.events.addon.AddonEvent;
 import world.bentobox.bentobox.api.localization.TextVariables;
@@ -24,6 +26,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataOb
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorUnlockEvent;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -779,27 +782,8 @@ public class StoneGeneratorManager
         this.updateOwnerGeneratorCount(island, dataObject);
         this.updateOwnerWorkingRange(island, dataObject);
 
-        this.getAllGeneratorTiers(island.getWorld()).
-            forEach(generatorTier ->
-            {
-                if (dataObject.getPurchasedTiers().contains(generatorTier.getUniqueId()))
-                {
-                    // All purchased and default tiers are available.
-                    dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
-                }
-                else if (!generatorTier.isDefaultGenerator() &&
-                    generatorTier.getRequiredMinIslandLevel() <= this.getIslandLevel(island) &&
-                    (!this.addon.isVaultProvided() || generatorTier.getGeneratorTierCost() <= 0) &&
-                    Utils.matchAllPermissions(User.getInstance(island.getOwner()), generatorTier.getRequiredPermissions()))
-                {
-                    // Default generator is unlocked always.
-                    // Required island min level should be reached.
-                    // if Vault is provided, check if generator cost is 0 or less.
-                    // At the end check if owner has all permissions to use generator
-
-                    dataObject.getUnlockedTiers().add(generatorTier.getUniqueId());
-                }
-            });
+        // Call check command which finds unlocked generators.
+        this.checkGeneratorUnlockStatus(island, null, null);
 
         // Remove locked generators from active list.
         dataObject.getActiveGeneratorList().removeIf(generator ->
@@ -871,6 +855,48 @@ public class StoneGeneratorManager
 
 
     /**
+     * This method checks for all generators, if they are unlocked.
+     * @param island Island which is targeted for unlocking check.
+     * @param user User who triggered check.
+     * @param level New island level value.
+     */
+    public void checkGeneratorUnlockStatus(Island island, @Nullable User user, @Nullable Long level)
+    {
+        if (island == null || island.getOwner() == null)
+        {
+            // Island or island owner is not set.
+            return;
+        }
+
+        this.addIslandData(island);
+        GeneratorDataObject dataObject = this.generatorDataCache.get(island.getUniqueId());
+
+        if (dataObject == null)
+        {
+            // Could not find any data for current island.
+            return;
+        }
+
+        // Update owner bundle, as it may influence island generators.
+        this.updateOwnerBundle(island, dataObject);
+
+        // If level is null, check value from addon.
+        final long islandLevel = level == null ? this.getIslandLevel(island) : level;
+
+        this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
+            // Filter out unlocked generators. Not necessary to check them again
+            filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
+            // Filter out generators with larger minimal island level then current island level.
+            filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
+            // Filter out generators with missing permissions
+            filter(generator -> Utils.matchAllPermissions(
+                User.getInstance(island.getOwner()), generator.getRequiredPermissions())).
+            // Now process each generator.
+            forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+    }
+
+
+    /**
      * This method allows to get generator data for given island.
      * @param island Island which data must be returned.
      * @return instance of GeneratorDataObject.
@@ -909,6 +935,45 @@ public class StoneGeneratorManager
 
         this.addIslandData(island);
         return this.generatorDataCache.get(island.getUniqueId());
+    }
+
+
+    /**
+     * This method unlocks given generator for given island.
+     * @param dataObject DataObject where all data will be saved.
+     * @param island Island that unlocks generator.
+     * @param generator Generator that must be unlocked.
+     */
+    public void unlockGenerator(@NotNull GeneratorDataObject dataObject,
+        @Nullable User user,
+        @NotNull Island island,
+        @NotNull GeneratorTierObject generator)
+    {
+        // Create and call bukkit event to check if unlocking should be cancelled.
+        GeneratorUnlockEvent event = new GeneratorUnlockEvent(generator, user, island);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if (!event.isCancelled())
+        {
+            // Add to unlocked generator set.
+            dataObject.getUnlockedTiers().add(generator.getUniqueId());
+            // save data.
+            this.saveGeneratorData(dataObject);
+
+            // Send message to user
+            if (this.addon.isVaultProvided() && generator.getGeneratorTierCost() > 0)
+            {
+                // Send message that generator is available for purchase.
+
+                island.getMemberSet().forEach(uuid -> Utils.sendUnlockMessage(uuid, island, generator, this.addon.isVaultProvided(), false));
+            }
+            else
+            {
+                // Send message that generator is available for activation.
+
+                island.getMemberSet().forEach(uuid ->  Utils.sendUnlockMessage(uuid, island, generator, this.addon.isVaultProvided(), true));
+            }
+        }
     }
 
 
