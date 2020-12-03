@@ -63,8 +63,9 @@ public class SelectBiomePanel
      */
     private void build()
     {
-        PanelBuilder panelBuilder =
-            new PanelBuilder().user(this.user).name(this.user.getTranslation(Constants.TITLE + "select-biome"));
+        PanelBuilder panelBuilder = new PanelBuilder().
+            user(this.user).
+            name(this.user.getTranslation(Constants.TITLE + "select-biome"));
 
         GuiUtils.fillBorder(panelBuilder, Material.BLUE_STAINED_GLASS_PANE);
 
@@ -102,6 +103,9 @@ public class SelectBiomePanel
             sorted().
             collect(Collectors.toList());
 
+        // Calculate max page count.
+        this.maxPageIndex = (int) Math.ceil(1.0 * biomeList.size() / 21) - 1;
+
         if (this.pageIndex < 0)
         {
             this.pageIndex = (biomeList.size() - 1) / MAX_ELEMENTS;
@@ -127,7 +131,7 @@ public class SelectBiomePanel
         int index = 10;
 
         while (biomesIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
-            biomesIndex < (biomeList.size() - 1) &&
+            biomesIndex < biomeList.size() &&
             index < 36)
         {
             if (!panelBuilder.slotOccupied(index))
@@ -149,7 +153,7 @@ public class SelectBiomePanel
             panelBuilder.item(26, this.createButton(Action.NEXT));
         }
 
-        panelBuilder.item(40, this.createButton(Action.ACCEPT));
+        panelBuilder.item(40, this.createButton(Action.ACCEPT_BIOME));
         panelBuilder.item(44, this.createButton(Action.RETURN));
 
         panelBuilder.build();
@@ -163,24 +167,27 @@ public class SelectBiomePanel
      */
     private PanelItem createButton(Action button)
     {
-        String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
+        final String reference = Constants.BUTTON + button.name().toLowerCase();
+
+        String name = this.user.getTranslation(reference + ".name");
         List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
             // Always return true.
             return true;
         };
 
-
-        Material material = Material.PAPER;
+        Material icon = Material.PAPER;
+        int count = 1;
 
         switch (button)
         {
             case RETURN:
             {
+                description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
                 description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-cancel"));
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-cancel"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     // Return NULL.
@@ -188,15 +195,19 @@ public class SelectBiomePanel
                     return true;
                 };
 
-                material = Material.OAK_DOOR;
+                icon = Material.OAK_DOOR;
 
                 break;
             }
             case PREVIOUS:
             {
+                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                description.add(this.user.getTranslationOrNothing(reference + ".description",
+                    Constants.NUMBER, String.valueOf(count)));
+
                 // add empty line
                 description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-previous"));
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex--;
@@ -204,14 +215,18 @@ public class SelectBiomePanel
                     return true;
                 };
 
-                material = Material.ARROW;
+                icon = Material.TIPPED_ARROW;
                 break;
             }
             case NEXT:
             {
+                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                description.add(this.user.getTranslationOrNothing(reference + ".description",
+                    Constants.NUMBER, String.valueOf(count)));
+
                 // add empty line
                 description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-next"));
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex++;
@@ -219,24 +234,26 @@ public class SelectBiomePanel
                     return true;
                 };
 
-                material = Material.ARROW;
+                icon = Material.TIPPED_ARROW;
                 break;
             }
-            case ACCEPT:
+            case ACCEPT_BIOME:
             {
+                description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
                 if (!this.selectedBiomes.isEmpty())
                 {
-                    description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-values"));
+                    description.add(this.user.getTranslation(reference + ".selected-biomes"));
 
                     for (Biome biome : this.selectedBiomes)
                     {
-                        description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
+                        description.add(this.user.getTranslation(reference + ".list-value",
                             Constants.VALUE, Utils.prettifyObject(this.user, biome)));
                     }
                 }
-                
+
                 description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-accept"));
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-accept"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     // Return selected biomes.
@@ -244,7 +261,7 @@ public class SelectBiomePanel
                     return true;
                 };
 
-                material = Material.FILLED_MAP;
+                icon = Material.FILLED_MAP;
 
                 break;
             }
@@ -253,7 +270,8 @@ public class SelectBiomePanel
         return new PanelItemBuilder().
             name(name).
             description(description).
-            icon(material).
+            amount(count).
+            icon(icon).
             clickHandler(clickHandler).
             build();
     }
@@ -268,25 +286,39 @@ public class SelectBiomePanel
     private PanelItem createBiomeIcon(Biome biome)
     {
         List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslationOrNothing(Constants.BIOMES + biome.name() + ".description"));
+        description.add(this.user.getTranslationOrNothing(Constants.MATERIALS + biome.name() + ".description"));
 
         // Add empty line
         if (!description.get(0).isEmpty())
         {
+            if (this.selectedBiomes.contains(biome))
+            {
+                description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+            }
+
             description.add("");
         }
+        else if (this.selectedBiomes.contains(biome))
+        {
+            // Append to the start
+            description.add(0, this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+        }
 
+        // Add tips section
         if (this.selectedBiomes.contains(biome))
         {
-            description.add(this.user.getTranslationOrNothing(Constants.DESCRIPTION + "click-to-deselect"));
+            description.add(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-deselect"));
         }
         else
         {
-            description.add(this.user.getTranslationOrNothing(Constants.DESCRIPTION + "click-to-select"));
+            description.add(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-select"));
         }
 
+        String name = this.user.getTranslation(Constants.BUTTON + "biome-icon",
+            Constants.BIOME, Utils.prettifyObject(this.user, biome));
+
         return new PanelItemBuilder().
-            name(Utils.prettifyObject(this.user, biome)).
+            name(name).
             description(description).
             icon(Material.MAP).
             clickHandler((panel, user1, clickType, slot) -> {
@@ -297,7 +329,7 @@ public class SelectBiomePanel
 
                 // update icons
                 panel.getInventory().setItem(slot, this.createBiomeIcon(biome).getItem());
-                panel.getInventory().setItem(40, this.createButton(Action.ACCEPT).getItem());
+                panel.getInventory().setItem(40, this.createButton(Action.ACCEPT_BIOME).getItem());
                 return true;
             }).
             glow(this.selectedBiomes.contains(biome)).
@@ -322,12 +354,12 @@ public class SelectBiomePanel
         if (this.activeGroup == biomeGroup)
         {
             description.add("");
-            description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-deselect"));
+            description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-disable"));
         }
         else
         {
             description.add("");
-            description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-select"));
+            description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-enable"));
         }
 
         switch (biomeGroup)
@@ -657,7 +689,7 @@ public class SelectBiomePanel
         PREVIOUS,
         NEXT,
         RETURN,
-        ACCEPT
+        ACCEPT_BIOME
     }
 
 
@@ -690,4 +722,9 @@ public class SelectBiomePanel
      * Variable stores active pageIndex.
      */
     private int pageIndex;
+
+    /**
+     * Variable stores max page index.
+     */
+    private int maxPageIndex;
 }

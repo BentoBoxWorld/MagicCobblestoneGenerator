@@ -2,33 +2,24 @@ package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
 import com.google.common.collect.ImmutableSet;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
-import world.bentobox.bentobox.api.panels.PanelListener;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
-import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorUserPanel;
-import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorViewPanel;
-import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBlocksPanel;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBundlePanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
@@ -58,10 +49,31 @@ public class IslandEditPanel extends CommonPanel
 		this.island = island;
 		this.generatorData = this.addon.getAddonManager().getGeneratorData(island);
 
+		this.title = this.island.getName();
+
+		if (this.title == null || this.title.equals(""))
+		{
+			// Deal with situations when island name is not set.
+
+			User user = User.getInstance(island.getOwner());
+
+			if (user != null)
+			{
+				this.title = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
+					Constants.PLAYER, user.getName());
+			}
+			else
+			{
+				this.title = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
+					Constants.PLAYER, this.user.getTranslation(Constants.DESCRIPTIONS + "unknown"));
+			}
+		}
+
 		// Store generators in local list to avoid building it every time.
 		this.generatorList = this.manager.getIslandGeneratorTiers(world, this.generatorData);
 
 		this.activeTab = Tab.ISLAND_INFO;
+		this.activeFilterButton = Filter.NONE;
 	}
 
 
@@ -89,10 +101,19 @@ public class IslandEditPanel extends CommonPanel
 	@Override
 	public void build()
 	{
+		// Do not enable this GUI if there is an issue with getting data.
+		if (this.generatorData == null || this.island == null)
+		{
+			Utils.sendMessage(this.user, this.user.getTranslation(
+				Constants.ERRORS + "no-island-data"));
+			return;
+		}
+
 		// PanelBuilder is a BentoBox API that provides ability to easy create Panels.
 		PanelBuilder panelBuilder = new PanelBuilder().
 			user(this.user).
-			name(this.user.getTranslation(Constants.TITLE + "island-edit"));
+			name(this.user.getTranslation(Constants.TITLE + "view-island",
+				Constants.ISLAND, this.title));
 
 		GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 		this.populateHeader(panelBuilder);
@@ -106,6 +127,8 @@ public class IslandEditPanel extends CommonPanel
 				this.fillGeneratorTiers(panelBuilder);
 				break;
 		}
+
+		panelBuilder.item(44, this.createButton(Action.RETURN));
 
 		// Build panel.
 		panelBuilder.build();
@@ -123,30 +146,34 @@ public class IslandEditPanel extends CommonPanel
 
 		if (this.activeTab == Tab.ISLAND_GENERATORS)
 		{
-			panelBuilder.item(2, this.createButton(Action.SHOW_ACTIVE));
+			panelBuilder.item(2, this.createButton(Filter.SHOW_ACTIVE));
 
 			// Do not show cobblestone button if there are no cobblestone generators.
 			if (this.generatorList.stream().anyMatch(generator ->
 				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)))
 			{
-				panelBuilder.item(4, this.createButton(Action.SHOW_COBBLESTONE));
+				panelBuilder.item(4, this.createButton(Filter.SHOW_COBBLESTONE));
 			}
 
 			// Do not show stone if there are no stone generators.
 			if (this.generatorList.stream().anyMatch(generator ->
 				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)))
 			{
-				panelBuilder.item(5, this.createButton(Action.SHOW_STONE));
+				panelBuilder.item(5, this.createButton(Filter.SHOW_STONE));
 			}
 
 			// Do not show basalt if there are no basalt generators.
 			if (this.generatorList.stream().anyMatch(generator ->
 				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)))
 			{
-				panelBuilder.item(6, this.createButton(Action.SHOW_BASALT));
+				panelBuilder.item(6, this.createButton(Filter.SHOW_BASALT));
 			}
 
-			panelBuilder.item(8, this.createButton(Action.TOGGLE_VISIBILITY));
+			panelBuilder.item(8, this.createButton(Filter.TOGGLE_VISIBILITY));
+		}
+		else
+		{
+			panelBuilder.item(7, this.createButton(Button.RESET_TO_DEFAULT));
 		}
 	}
 
@@ -220,6 +247,8 @@ public class IslandEditPanel extends CommonPanel
 				filteredList = this.generatorList;
 		}
 
+		this.maxPageIndex = (int) Math.ceil(1.0 * filteredList.size() / MAX_ELEMENTS) - 1;
+
 		if (this.pageIndex < 0)
 		{
 			correctPage = filteredList.size() / MAX_ELEMENTS;
@@ -292,7 +321,7 @@ public class IslandEditPanel extends CommonPanel
 					this.generatorData.getUnlockedTiers().add(generatorTier.getUniqueId());
 				}
 
-				panel.getInventory().setItem(i, this.createGeneratorButton(generatorTier).getItem());
+				this.build();
 			}
 			else if (clickType.isLeftClick())
 			{
@@ -305,7 +334,7 @@ public class IslandEditPanel extends CommonPanel
 					this.generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
 				}
 
-				panel.getInventory().setItem(i, this.createGeneratorButton(generatorTier).getItem());
+				this.build();
 			}
 
 			// Always return true.
@@ -323,21 +352,59 @@ public class IslandEditPanel extends CommonPanel
 
 
 	/**
+	 * This class generates given generator tier description based on input parameters.
+	 *
+	 * @param generator GeneratorTier which description must be generated.
+	 * @param isActive Boolean that indicates if generator is active.
+	 * @param isUnlocked Boolean that indicates if generator is unlocked.
+	 * @param islandLevel Long that shows island level.
+	 * @return List of strings that describes generator tier.
+	 */
+	@Override
+	protected List<String> generateGeneratorDescription(GeneratorTierObject generator,
+		boolean isActive,
+		boolean isUnlocked,
+		long islandLevel)
+	{
+		List<String> description =
+			super.generateGeneratorDescription(generator, isActive, isUnlocked, islandLevel);
+
+		description.add("");
+
+		if (isActive)
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-deactivate"));
+		}
+		else
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-activate"));
+		}
+
+		if (isUnlocked)
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-lock"));
+		}
+		else
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-unlock"));
+		}
+
+		return description;
+	}
+
+
+	/**
 	 * This method creates panel item for given button type.
 	 * @param button Button type.
 	 * @return Clickable PanelItem button.
 	 */
 	private PanelItem createButton(Button button)
 	{
-		String name = this.user.getTranslation(
-			Constants.BUTTON + button.name().toLowerCase() + ".name");
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
 		List<String> description = new ArrayList<>();
-		description.add(this.user.getTranslationOrNothing(
-			Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
-		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-			return true;
-		};
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
 
 		boolean glow = false;
 		ItemStack itemStack = new ItemStack(Material.AIR);
@@ -346,43 +413,67 @@ public class IslandEditPanel extends CommonPanel
 		{
 			case ISLAND_NAME:
 			{
-				itemStack = new ItemStack(Material.NAME_TAG);
+				// Create owner name translated string.
+				String ownerName = this.addon.getPlayers().getName(this.island.getOwner());
 
-				UUID ownerId = this.island.getOwner();
-				String ownerName = this.addon.getPlayers().getName(ownerId);
-				description.add(ownerName);
+				if (ownerName.equals(""))
+				{
+					ownerName = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+				}
 
-				description.add(this.island.getUniqueId());
+				ownerName = this.user.getTranslation(reference + ".owner", Constants.PLAYER, ownerName);
+
+				// Create island members translated string.
+
+				StringBuilder builder = new StringBuilder();
 
 				ImmutableSet<UUID> members = this.island.getMemberSet();
-
 				if (members.size() > 1)
 				{
+					builder.append(this.user.getTranslation(reference + ".list"));
+
 					for (UUID uuid : members)
 					{
-						if (uuid != ownerId)
+						if (uuid != this.island.getOwner())
 						{
-							description.add(ChatColor.AQUA + this.addon.getPlayers().getName(uuid));
+							builder.append("\n").append(this.user.getTranslation(reference + ".value",
+								Constants.PLAYER, this.addon.getPlayers().getName(uuid)));
 						}
 					}
 				}
 
-				name = this.island.getName() != null ? this.island.getName() : ownerName;
+				// Get descriptionLine that contains [members]
+				description.add(this.user.getTranslation(reference + ".description",
+					Constants.OWNER, ownerName,
+					Constants.MEMBERS, builder.toString(),
+					Constants.ID, this.island.getUniqueId()));
+
+				itemStack = new ItemStack(Material.NAME_TAG);
+
+				// Transform name into button title.
+				name = this.user.getTranslation(reference + ".name",
+					Constants.NAME, this.title);
+
 				break;
 			}
 			case ISLAND_WORKING_RANGE:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorData.getIslandWorkingRange())));
+
 				if (this.generatorData.getOwnerWorkingRange() != 0)
 				{
 					itemStack = new ItemStack(Material.STRUCTURE_VOID);
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "overwritten-by-permission"));
+					description.add(this.user.getTranslation(reference + ".overwritten"));
 				}
 				else
 				{
 					itemStack = new ItemStack(Material.REPEATER);
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-						Constants.VALUE, String.valueOf(this.generatorData.getIslandWorkingRange())));
 				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
 				clickHandler = (panel, user, clickType, slot) ->
 				{
@@ -399,7 +490,7 @@ public class IslandEditPanel extends CommonPanel
 
 					ConversationUtils.createNumericInput(numberConsumer,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "input-number"),
+						this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
 						-1,
 						2000);
 
@@ -410,16 +501,15 @@ public class IslandEditPanel extends CommonPanel
 			}
 			case OWNER_WORKING_RANGE:
 			{
-				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "working-range-permission",
-					Constants.GAMEMODE, Utils.getGameMode(this.world)));
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
 
 				if (this.generatorData.getOwnerWorkingRange() != 0)
 				{
 					itemStack = new ItemStack(Material.REPEATER);
 
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-						Constants.VALUE, String.valueOf(this.generatorData.getOwnerWorkingRange())));
+					description.add(this.user.getTranslationOrNothing(reference + ".value",
+						Constants.NUMBER, String.valueOf(this.generatorData.getOwnerWorkingRange())));
 				}
 				else
 				{
@@ -430,17 +520,22 @@ public class IslandEditPanel extends CommonPanel
 			}
 			case ISLAND_MAX_GENERATORS:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorData.getIslandActiveGeneratorCount())));
+
 				if (this.generatorData.getOwnerActiveGeneratorCount() != 0)
 				{
 					itemStack = new ItemStack(Material.STRUCTURE_VOID);
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "overwritten-by-permission"));
+					description.add(this.user.getTranslation(reference + ".overwritten"));
 				}
 				else
 				{
 					itemStack = new ItemStack(Material.REPEATER);
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-						Constants.VALUE, String.valueOf(this.generatorData.getIslandActiveGeneratorCount())));
 				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
 				clickHandler = (panel, user, clickType, slot) ->
 				{
@@ -457,7 +552,7 @@ public class IslandEditPanel extends CommonPanel
 
 					ConversationUtils.createNumericInput(numberConsumer,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "input-number"),
+						this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
 						-1,
 						2000);
 
@@ -468,17 +563,16 @@ public class IslandEditPanel extends CommonPanel
 			}
 			case OWNER_MAX_GENERATORS:
 			{
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "active-generator-permission",
-					Constants.GAMEMODE, Utils.getGameMode(this.world)));
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
 
 				if (this.generatorData.getOwnerActiveGeneratorCount() != 0)
 				{
 					itemStack = new ItemStack(Material.COBBLESTONE,
 						Math.max(1, this.generatorData.getOwnerActiveGeneratorCount()));
 
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-						Constants.VALUE, String.valueOf(this.generatorData.getOwnerActiveGeneratorCount())));
-				}
+					description.add(this.user.getTranslationOrNothing(reference + ".value",
+						Constants.NUMBER, String.valueOf(this.generatorData.getOwnerActiveGeneratorCount())));				}
 				else
 				{
 					itemStack = new ItemStack(Material.STRUCTURE_VOID);
@@ -488,6 +582,8 @@ public class IslandEditPanel extends CommonPanel
 			}
 			case ISLAND_BUNDLE:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
 				GeneratorBundleObject ownerBundle = this.generatorData.getOwnerBundle() != null ?
 					this.addon.getAddonManager().getBundleById(this.generatorData.getOwnerBundle()) : null;
 
@@ -497,14 +593,16 @@ public class IslandEditPanel extends CommonPanel
 				if (ownerBundle != null)
 				{
 					itemStack = new ItemStack(Material.STRUCTURE_VOID);
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "overwritten-by-permission"));
+					description.add(this.user.getTranslation(reference + ".overwritten"));
 				}
 				else
 				{
 					if (islandBundle != null)
 					{
 						itemStack = islandBundle.getGeneratorIcon();
-						description = this.generateBundleDescription(islandBundle);
+
+						description.add(this.user.getTranslation(reference + ".value",
+							Constants.BUNDLE, islandBundle.getFriendlyName()));
 					}
 					else
 					{
@@ -512,10 +610,27 @@ public class IslandEditPanel extends CommonPanel
 					}
 				}
 
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+
 				clickHandler = (panel, user, clickType, slot) ->
 				{
 					SelectBundlePanel.open(this, islandBundle, bundle -> {
-						this.generatorData.setIslandBundle(bundle.getUniqueId());
+						if (bundle == null)
+						{
+							this.generatorData.setIslandBundle(null);
+						}
+						else
+						{
+							this.generatorData.setIslandBundle(bundle.getUniqueId());
+						}
+
+						this.manager.saveGeneratorData(this.generatorData);
+
+						// Recreate list based on new bundle.
+						this.generatorList =
+							this.manager.getIslandGeneratorTiers(world, this.generatorData);
+
 						this.build();
 					});
 
@@ -526,6 +641,9 @@ public class IslandEditPanel extends CommonPanel
 			}
 			case OWNER_BUNDLE:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+
 				GeneratorBundleObject bundle = this.generatorData.getOwnerBundle() != null ?
 					this.addon.getAddonManager().getBundleById(this.generatorData.getOwnerBundle()) : null;
 
@@ -533,20 +651,37 @@ public class IslandEditPanel extends CommonPanel
 				{
 					itemStack = bundle.getGeneratorIcon();
 
-					description = this.generateBundleDescription(bundle);
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "bundle-permission",
-						Constants.GAMEMODE, Utils.getGameMode(this.world),
-						Constants.BUNDLE, bundle.getUniqueId()));
+					description.add(this.user.getTranslation(reference + ".value",
+						Constants.BUNDLE, bundle.getFriendlyName()));
 				}
 				else
 				{
 					itemStack = new ItemStack(Material.STRUCTURE_VOID);
-
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "bundle-permission",
-						Constants.GAMEMODE, Utils.getGameMode(this.world)));
 				}
 
 				break;
+			}
+			case RESET_TO_DEFAULT:
+			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-perform"));
+
+				clickHandler = (panel, user, clickType, i) -> {
+					Settings settings = this.addon.getSettings();
+
+					this.generatorData.setIslandBundle(null);
+					this.generatorData.setIslandWorkingRange(settings.getDefaultWorkingRange());
+					this.generatorData.setIslandActiveGeneratorCount(settings.getDefaultActiveGeneratorCount());
+
+					this.manager.saveGeneratorData(this.generatorData);
+
+					this.build();
+					return true;
+				};
+
+				itemStack = new ItemStack(Material.OBSERVER);
 			}
 		}
 
@@ -571,7 +706,7 @@ public class IslandEditPanel extends CommonPanel
 		List<String> description = new ArrayList<>();
 		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 		description.add("");
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-see"));
+		description.add(this.user.getTranslation(Constants.TIPS + "click-to-view"));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			this.activeTab = button;
@@ -610,15 +745,31 @@ public class IslandEditPanel extends CommonPanel
 	 * @param button Button type.
 	 * @return Clickable PanelItem button.
 	 */
-	private PanelItem createButton(Action button)
+	private PanelItem createButton(Filter button)
 	{
 		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
 		List<String> description = new ArrayList<>();
 		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
-		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
+		description.add("");
+		if (this.activeFilterButton != button)
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-enable"));
+		}
+		else
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-disable"));
+		}
 
-		boolean glow = false;
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
+			this.activeFilterButton = this.activeFilterButton == button ? Filter.NONE : button;
+			// Rebuild everything.
+			this.build();
+
+			// Always return true.
+			return true;
+		};
+
 		Material material = Material.PAPER;
 
 		switch (button)
@@ -650,20 +801,43 @@ public class IslandEditPanel extends CommonPanel
 				material = Material.GREEN_STAINED_GLASS_PANE;
 				break;
 			}
+		}
+
+		return new PanelItemBuilder().
+			name(name).
+			description(description).
+			icon(material).
+			clickHandler(clickHandler).
+			build();
+	}
+
+
+	/**
+	 * This method creates panel item for given button type.
+	 * @param button Button type.
+	 * @return Clickable PanelItem button.
+	 */
+	private PanelItem createButton(Action button)
+	{
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
+		List<String> description = new ArrayList<>();
+
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
+
+		boolean glow = false;
+		Material icon = Material.PAPER;
+		int count = 1;
+
+		switch (button)
+		{
 			case RETURN:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
 				description.add("");
-				if (this.parentPanel != null)
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-return"));
-				}
-				else
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-quit"));
-				}
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
 
 				clickHandler = (panel, user, clickType, i) -> {
-
 					if (this.parentPanel != null)
 					{
 						this.parentPanel.build();
@@ -675,15 +849,19 @@ public class IslandEditPanel extends CommonPanel
 					return true;
 				};
 
-				material = Material.OAK_DOOR;
+				icon = Material.OAK_DOOR;
 
 				break;
 			}
 			case PREVIOUS:
 			{
+				count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
 				// add empty line
 				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-previous"));
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
 
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex--;
@@ -691,14 +869,18 @@ public class IslandEditPanel extends CommonPanel
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case NEXT:
 			{
+				count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
 				// add empty line
 				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-next"));
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
 
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex++;
@@ -706,7 +888,7 @@ public class IslandEditPanel extends CommonPanel
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 		}
@@ -714,7 +896,8 @@ public class IslandEditPanel extends CommonPanel
 		return new PanelItemBuilder().
 			name(name).
 			description(description).
-			icon(material).
+			icon(icon).
+			amount(count).
 			clickHandler(clickHandler).
 			glow(glow).
 			build();
@@ -729,7 +912,7 @@ public class IslandEditPanel extends CommonPanel
 	/**
 	 * This enum holds variable that allows to switch between button creation.
 	 */
-	private enum Action
+	private enum Filter
 	{
 		/**
 		 * Button that on click shows only cobblestone generators.
@@ -751,6 +934,18 @@ public class IslandEditPanel extends CommonPanel
 		 * Button that on click shows only active generators.
 		 */
 		SHOW_ACTIVE,
+		/**
+		 * Default value for filter.
+		 */
+		NONE
+	}
+
+
+	/**
+	 * Enum that holds different actions that can be performed in current gui.
+	 */
+	private enum Action
+	{
 		/**
 		 * Return button that exists GUI.
 		 */
@@ -815,6 +1010,10 @@ public class IslandEditPanel extends CommonPanel
 		 * Displays owner active bundle.
 		 */
 		OWNER_BUNDLE,
+		/**
+		 * Action that allows to reset to default values.
+		 */
+		RESET_TO_DEFAULT
 	}
 
 
@@ -828,6 +1027,11 @@ public class IslandEditPanel extends CommonPanel
 	private final Island island;
 
 	/**
+	 * Stores island title.
+	 */
+	private String title;
+
+	/**
 	 * This variable stores generator data for this island.
 	 */
 	private final GeneratorDataObject generatorData;
@@ -835,17 +1039,22 @@ public class IslandEditPanel extends CommonPanel
 	/**
 	 * This variable stores all generator tiers in the given world.
 	 */
-	private final List<GeneratorTierObject> generatorList;
+	private List<GeneratorTierObject> generatorList;
 
 	/**
 	 * Stores currently active filter button.
 	 */
-	private Action activeFilterButton;
+	private Filter activeFilterButton;
 
 	/**
 	 * This variable holds current pageIndex for multi-page generator choosing.
 	 */
 	private int pageIndex;
+
+	/**
+	 * This variable holds max page index.
+	 */
+	private int maxPageIndex;
 
 	/**
 	 * This variable stores which tab currently is active.

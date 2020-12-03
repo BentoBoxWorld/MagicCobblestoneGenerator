@@ -62,14 +62,14 @@ public class SettingsPanel extends CommonPanel
 		// PanelBuilder is a BentoBox API that provides ability to easy create Panels.
 		PanelBuilder panelBuilder = new PanelBuilder().
 			user(this.user).
-			name(this.user.getTranslation(Constants.TITLE + "edit-settings"));
+			name(this.user.getTranslation(Constants.TITLE + "settings"));
 
 		GuiUtils.fillBorder(panelBuilder, 3, Material.MAGENTA_STAINED_GLASS_PANE);
 
 		panelBuilder.item(10, this.createButton(Action.OFFLINE_GENERATION));
 		panelBuilder.item(12, this.createButton(Action.USE_PHYSIC));
 		panelBuilder.item(14, this.createButton(Action.WORKING_RANGE));
-		panelBuilder.item(16, this.createButton(Action.DEFAULT_ACTIVE_GENERATORS));
+		panelBuilder.item(16, this.createButton(Action.ACTIVE_GENERATORS));
 
 		panelBuilder.item(26, this.createButton(Action.RETURN));
 		panelBuilder.build();
@@ -84,9 +84,10 @@ public class SettingsPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
+		String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
 		List<String> description = new ArrayList<>(2);
-		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
+		description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
 		Material material;
 		PanelItem.ClickHandler clickHandler;
@@ -106,11 +107,21 @@ public class SettingsPanel extends CommonPanel
 					return true;
 				};
 
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.settings.isOfflineGeneration())));
+				glow = this.settings.isOfflineGeneration();
+
+				if (glow)
+				{
+					description.add(this.user.getTranslation(reference + ".enabled"));
+				}
+				else
+				{
+					description.add(this.user.getTranslation(reference + ".disabled"));
+				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
 
 				material = Material.REDSTONE_TORCH;
-				glow = this.settings.isOfflineGeneration();
 
 				break;
 			}
@@ -125,11 +136,21 @@ public class SettingsPanel extends CommonPanel
 					return true;
 				};
 
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.settings.isUsePhysics())));
+				glow = this.settings.isUsePhysics();
+
+				if (glow)
+				{
+					description.add(this.user.getTranslation(reference + ".enabled"));
+				}
+				else
+				{
+					description.add(this.user.getTranslation(reference + ".disabled"));
+				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
 
 				material = Material.PISTON;
-				glow = this.settings.isUsePhysics();
 
 				break;
 			}
@@ -149,22 +170,25 @@ public class SettingsPanel extends CommonPanel
 
 					ConversationUtils.createNumericInput(numberConsumer,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "input-number"),
+						this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
 						0,
 						2000);
 
 					return true;
 				};
 
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.settings.getDefaultWorkingRange())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.settings.getDefaultWorkingRange())));
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
 				material = Material.OAK_TRAPDOOR;
 				count = this.settings.getDefaultWorkingRange();
 
 				break;
 			}
-			case DEFAULT_ACTIVE_GENERATORS:
+			case ACTIVE_GENERATORS:
 			{
 				clickHandler = (panel, user, clickType, i) -> {
 					Consumer<Number> numberConsumer = number -> {
@@ -180,15 +204,18 @@ public class SettingsPanel extends CommonPanel
 
 					ConversationUtils.createNumericInput(numberConsumer,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "input-number"),
+						this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
 						1,
 						2000);
 
 					return true;
 				};
 
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.settings.getDefaultActiveGeneratorCount())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.settings.getDefaultActiveGeneratorCount())));
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
 				material = Material.BOOK;
 				count = this.settings.getDefaultActiveGeneratorCount();
@@ -197,6 +224,16 @@ public class SettingsPanel extends CommonPanel
 			}
 			case RETURN:
 			{
+				description.add("");
+				if (this.parentPanel != null)
+				{
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
+				}
+				else
+				{
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
+				}
+
 				clickHandler = (panel, user, clickType, i) -> {
 					if (this.parentPanel != null)
 					{
@@ -262,7 +299,7 @@ public class SettingsPanel extends CommonPanel
 		/**
 		 * Process Default Active Generators Action.
 		 */
-		DEFAULT_ACTIVE_GENERATORS,
+		ACTIVE_GENERATORS,
 		/**
 		 * Process Return Action.
 		 */

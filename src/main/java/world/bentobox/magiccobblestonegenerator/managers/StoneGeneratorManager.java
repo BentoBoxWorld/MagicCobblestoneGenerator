@@ -107,7 +107,7 @@ public class StoneGeneratorManager
      */
     private boolean loadGeneratorTier(GeneratorTierObject generatorTier)
     {
-        return this.loadGeneratorTier(generatorTier, true, null, true);
+        return this.loadGeneratorTier(generatorTier, true, null);
     }
 
 
@@ -117,43 +117,28 @@ public class StoneGeneratorManager
      * @param generatorTier - generatorTier that must be stored.
      * @param overwrite - true if previous biomes should be overwritten
      * @param user - user making the request
-     * @param silent - if true, no messages are sent to user
      * @return - true if imported
      */
-    public boolean loadGeneratorTier(GeneratorTierObject generatorTier, boolean overwrite, User user, boolean silent)
+    public boolean loadGeneratorTier(GeneratorTierObject generatorTier, boolean overwrite, User user)
     {
         if (this.generatorTierCache.containsKey(generatorTier.getUniqueId()))
         {
             if (!overwrite)
             {
-                if (!silent)
-                {
-                    user.sendMessage(Constants.MESSAGE + "skipping",
-                            Constants.GENERATOR,
-                            generatorTier.getFriendlyName());
-                }
-
                 return false;
             }
             else
             {
-                if (!silent)
-                {
-                    user.sendMessage(Constants.MESSAGE + "overwriting",
-                            Constants.GENERATOR,
-                            generatorTier.getFriendlyName());
-                }
-
                 this.generatorTierCache.replace(generatorTier.getUniqueId(), generatorTier);
                 return true;
             }
         }
 
-        if (!silent)
+        if (user != null)
         {
-            user.sendMessage(Constants.MESSAGE + "loaded",
-                    Constants.GENERATOR,
-                    generatorTier.getFriendlyName());
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-loaded",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
         }
 
         this.generatorTierCache.put(generatorTier.getUniqueId(), generatorTier);
@@ -169,7 +154,7 @@ public class StoneGeneratorManager
      */
     private boolean loadGeneratorBundle(GeneratorBundleObject generatorBundle)
     {
-        return this.loadGeneratorBundle(generatorBundle, true, null, true);
+        return this.loadGeneratorBundle(generatorBundle, true, null);
     }
 
 
@@ -179,43 +164,28 @@ public class StoneGeneratorManager
      * @param generatorBundle - generatorBundle that must be stored.
      * @param overwrite - true if previous biomes should be overwritten
      * @param user - user making the request
-     * @param silent - if true, no messages are sent to user
      * @return - true if imported
      */
-    public boolean loadGeneratorBundle(GeneratorBundleObject generatorBundle, boolean overwrite, User user, boolean silent)
+    public boolean loadGeneratorBundle(GeneratorBundleObject generatorBundle, boolean overwrite, User user)
     {
         if (this.generatorBundleCache.containsKey(generatorBundle.getUniqueId()))
         {
             if (!overwrite)
             {
-                if (!silent)
-                {
-                    user.sendMessage(Constants.MESSAGE + "skipping-bundle",
-                            Constants.BUNDLE,
-                            generatorBundle.getFriendlyName());
-                }
-
                 return false;
             }
             else
             {
-                if (!silent)
-                {
-                    user.sendMessage(Constants.MESSAGE + "overwriting-bundle",
-                            Constants.BUNDLE,
-                            generatorBundle.getFriendlyName());
-                }
-
                 this.generatorBundleCache.replace(generatorBundle.getUniqueId(), generatorBundle);
                 return true;
             }
         }
 
-        if (!silent)
+        if (user != null)
         {
-            user.sendMessage(Constants.MESSAGE + "loaded-bundle",
-                    Constants.BUNDLE,
-                    generatorBundle.getFriendlyName());
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "bundle-loaded",
+                    Constants.BUNDLE, generatorBundle.getFriendlyName()));
         }
 
         this.generatorBundleCache.put(generatorBundle.getUniqueId(), generatorBundle);
@@ -509,8 +479,10 @@ public class StoneGeneratorManager
             filter(generator -> generator.getGeneratorType().includes(generatorType)).
             // Filter generators that starts with name.
             filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Return first or null.
-            findFirst().orElse(null);
+            // Return first
+            findFirst().
+            // Return null if none is find.
+            orElse(null);
     }
 
 
@@ -947,8 +919,9 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        user.sendMessage(Constants.MESSAGE + "generator-deactivated",
-            Constants.GENERATOR, generatorTier.getFriendlyName());
+        Utils.sendMessage(user,
+            user.getTranslation(Constants.MESSAGES + "generator-deactivated",
+                Constants.GENERATOR, generatorTier.getFriendlyName()));
         generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
 
         // Save object.
@@ -969,18 +942,22 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        if (generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
+        if (generatorData.getActiveGeneratorCount() > 0 &&
+            generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
         {
             // Too many generators.
-            user.sendMessage(Constants.ERRORS + "active-generators-reached");
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
             return false;
         }
 
         if (!generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
-            user.sendMessage(Constants.ERRORS + "generator-not-unlocked",
-                Constants.GENERATOR, generatorTier.getFriendlyName());
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-not-unlocked",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+
             return false;
         }
         else
@@ -996,8 +973,9 @@ public class StoneGeneratorManager
                 }
                 else
                 {
-                    user.sendMessage(Constants.ERRORS + "no-credits",
-                        TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost()));
+                    Utils.sendMessage(user,
+                        user.getTranslation(Constants.MESSAGES + "no-credits",
+                            TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
                     return false;
                 }
             }
@@ -1021,14 +999,16 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        user.sendMessage(Constants.MESSAGE + "generator-activated",
-            Constants.GENERATOR, generatorTier.getFriendlyName());
+        Utils.sendMessage(user,
+            user.getTranslation(Constants.MESSAGES + "generator-activated",
+                Constants.GENERATOR, generatorTier.getFriendlyName()));
         generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
 
         // check and send message that generator is disabled
         if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
         {
-            user.sendMessage(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference());
+            Utils.sendMessage(user, user.getTranslation(
+                StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
         }
 
         // Save object.
@@ -1054,23 +1034,26 @@ public class StoneGeneratorManager
         if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
-            user.sendMessage(Constants.ERRORS + "generator-already-purchased",
-                Constants.GENERATOR, generatorTier.getFriendlyName());
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-already-purchased",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
             return false;
         }
         else if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
         {
-            user.sendMessage("general.errors.insufficient-rank",
-                TextVariables.RANK,
-                user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user))));
+            Utils.sendMessage(user,
+                user.getTranslation("general.errors.insufficient-rank",
+                    TextVariables.RANK,
+                    user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user)))));
             return false;
         }
         else if (generatorTier.getRequiredMinIslandLevel() > this.getIslandLevel(island))
         {
             // Generator is not unlocked. Return false.
-            user.sendMessage(Constants.ERRORS + "island-level-not-reached",
-                Constants.GENERATOR, generatorTier.getFriendlyName(),
-                TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel()));
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "island-level-not-reached",
+                    Constants.GENERATOR, generatorTier.getFriendlyName(),
+                    TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel())));
             return false;
         }
         else if (!generatorTier.getRequiredPermissions().isEmpty() &&
@@ -1082,9 +1065,11 @@ public class StoneGeneratorManager
                 findAny();
 
             // Generator is not unlocked. Return false.
-            user.sendMessage(Constants.ERRORS + "missing-permission",
-                Constants.GENERATOR, generatorTier.getFriendlyName(),
-                TextVariables.PERMISSION, missingPermission.get());
+            missingPermission.ifPresent(s ->
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "missing-permission",
+                        Constants.GENERATOR, generatorTier.getFriendlyName(),
+                        TextVariables.PERMISSION, s)));
             return false;
         }
         else
@@ -1108,8 +1093,9 @@ public class StoneGeneratorManager
                 }
                 else
                 {
-                    user.sendMessage(Constants.ERRORS + "no-credits",
-                        TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost()));
+                    Utils.sendMessage(user,
+                        user.getTranslation(Constants.MESSAGES + "no-credits-buy",
+                            TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
                     return false;
                 }
             }
@@ -1133,8 +1119,9 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        user.sendMessage(Constants.MESSAGE + "generator-purchased",
-            Constants.GENERATOR, generatorTier.getFriendlyName());
+        Utils.sendMessage(user,
+            user.getTranslation(Constants.MESSAGES + "generator-purchased",
+                Constants.GENERATOR, generatorTier.getFriendlyName()));
         generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
 
         // Save object.

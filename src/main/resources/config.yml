@@ -7,7 +7,7 @@ offline-generation: false
 #
 # If physics should be used when placing a block.
 # Using physics allow certain redstone machines to work,
-# but might have unwanted side effectsAllows to block addon to generate blocks if all island members are offline.
+# but might have unwanted side effects.
 # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
 use-physic: true
 #

@@ -140,8 +140,9 @@ public class GeneratorDatabaseCommand extends CompositeCommand
 			}
 
 			this.askConfirmation(user,
-				user.getTranslation(Constants.ADMIN_COMMANDS + "import-database.confirmation",
-					Constants.GAMEMODE, Utils.getGameMode(this.getWorld())),
+				user.getTranslation(Constants.CONVERSATIONS + "prefix") +
+					user.getTranslation(Constants.ADMIN_COMMANDS + "import-database.confirmation",
+						Constants.GAMEMODE, Utils.getGameMode(this.getWorld())),
 				() -> this.<StoneGeneratorAddon>getAddon().getImportManager().importDatabaseFile(user, this.getWorld(), args.get(0)));
 
 			return true;

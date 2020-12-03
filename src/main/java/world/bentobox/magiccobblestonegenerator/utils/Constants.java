@@ -17,40 +17,10 @@ public class Constants
 	 */
 	public static final String ADDON_NAME = "stone-generator.";
 
-	/**
-	 * Reference string to GUI in translations.
-	 */
-	public static final String GUI = ADDON_NAME + "gui.";
+// ---------------------------------------------------------------------
+// Section: Commands
+// ---------------------------------------------------------------------
 
-	/**
-	 * Reference string to TITLE in translations.
-	 */
-	public static final String TITLE = GUI + "titles.";
-
-	/**
-	 * Reference string to BUTTON in translations.
-	 */
-	public static final String BUTTON = GUI + "buttons.";
-
-	/**
-	 * Reference string to DESCRIPTION in translations.
-	 */
-	public static final String DESCRIPTION = GUI + "descriptions.";
-
-	/**
-	 * Reference string to Messages in translations.
-	 */
-	public static final String MESSAGE = ADDON_NAME + "messages.";
-
-	/**
-	 * Reference string to Errors in translations.
-	 */
-	public static final String ERRORS = ADDON_NAME + "errors.";
-
-	/**
-	 * Reference string to Questions in translations.
-	 */
-	public static final String QUESTIONS = ADDON_NAME + "questions.";
 
 	/**
 	 * Reference string to Commands in translations.
@@ -67,10 +37,24 @@ public class Constants
 	 */
 	public static final String PLAYER_COMMANDS = COMMANDS + "player.";
 
+// ---------------------------------------------------------------------
+// Section: GUI
+// ---------------------------------------------------------------------
+
 	/**
-	 * Reference string to Types in translations.
+	 * Reference string to GUI in translations.
 	 */
-	public static final String TYPES = ADDON_NAME + "types.";
+	public static final String GUI = ADDON_NAME + "gui.";
+
+	/**
+	 * Reference string to TITLE in translations.
+	 */
+	public static final String TITLE = GUI + "titles.";
+
+	/**
+	 * Reference string to BUTTON in translations.
+	 */
+	public static final String BUTTON = GUI + "buttons.";
 
 	/**
 	 * Reference string to Biome group Buttons in translations.
@@ -83,6 +67,35 @@ public class Constants
 	public static final String GENERATOR_TYPE_BUTTON = BUTTON + "generator-types.";
 
 	/**
+	 * Reference string to TIPS in translations.
+	 */
+	public static final String TIPS = GUI + "tips.";
+
+	/**
+	 * Reference string to DESCRIPTION in translations.
+	 */
+	public static final String DESCRIPTIONS = GUI + "descriptions.";
+
+	/**
+	 * Reference string to Messages in translations.
+	 */
+	public static final String MESSAGES = ADDON_NAME + "messages.";
+
+	/**
+	 * Reference string to Errors in translations.
+	 */
+	public static final String ERRORS = ADDON_NAME + "errors.";
+
+	/**
+	 * Reference string to Questions in translations.
+	 */
+	public static final String CONVERSATIONS = ADDON_NAME + "conversations.";
+
+// ---------------------------------------------------------------------
+// Section: Other
+// ---------------------------------------------------------------------
+
+	/**
 	 * Reference string to Biomes in translations.
 	 */
 	public static final String BIOMES = ADDON_NAME + "biomes.";
@@ -90,7 +103,21 @@ public class Constants
 	/**
 	 * Reference string to materials in translations.
 	 */
-	public static final String MATERIALS = ADDON_NAME + "biomes.";
+	public static final String MATERIALS = ADDON_NAME + "materials.";
+
+	/**
+	 * Reference string to entities in translations.
+	 */
+	public static final String ENTITIES = ADDON_NAME + "entities.";
+
+	/**
+	 * Reference string to Types in translations.
+	 */
+	public static final String TYPES = ADDON_NAME + "types.";
+
+// ---------------------------------------------------------------------
+// Section: Parameters
+// ---------------------------------------------------------------------
 
 	/**
 	 * Reference string to generator parameter in translations.
@@ -196,4 +223,49 @@ public class Constants
 	 * Reference to island in translations.
 	 */
 	public static final String ISLAND = "[island]";
+
+	/**
+	 * Reference string to number parameter in translations.
+	 */
+	public static final String NUMBER = "[number]";
+
+	/**
+	 * Reference string to type parameter in translations.
+	 */
+	public static final String TYPE = "[type]";
+
+	/**
+	 * Reference string to permission parameter in translations.
+	 */
+	public static final String PERMISSION = "[permission]";
+
+	/**
+	 * Reference string to biome parameter in translations.
+	 */
+	public static final String BIOME = "[biome]";
+
+	/**
+	 * Reference string to player parameter in translations.
+	 */
+	public static final String PLAYER = "[player]";
+
+	/**
+	 * Reference string to owner parameter in translations.
+	 */
+	public static final String OWNER = "[owner]";
+
+	/**
+	 * Reference string to members parameter in translations.
+	 */
+	public static final String MEMBERS = "[members]";
+
+	/**
+	 * Reference string to name parameter in translations.
+	 */
+	public static final String NAME = "[name]";
+
+	/**
+	 * Reference string to description parameter in translations.
+	 */
+	public static final String DESCRIPTION = "[description]";
 }

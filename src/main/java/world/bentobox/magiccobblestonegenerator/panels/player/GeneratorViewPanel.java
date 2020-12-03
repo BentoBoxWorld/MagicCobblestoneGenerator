@@ -17,7 +17,6 @@ import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -152,14 +151,15 @@ public class GeneratorViewPanel extends CommonPanel
 	{
 		if (this.generatorTier == null)
 		{
-			this.user.sendMessage(Constants.ERRORS + "no-generator-data");
+			Utils.sendMessage(this.user,
+				this.user.getTranslation(Constants.ERRORS + "no-generator-data"));
 			return;
 		}
 
 		// PanelBuilder is a BentoBox API that provides ability to easy create Panels.
 		PanelBuilder panelBuilder = new PanelBuilder().
 			user(this.user).
-			name(this.user.getTranslation(Constants.TITLE + "generator-view",
+			name(this.user.getTranslation(Constants.TITLE + "view-generator",
 				Constants.GENERATOR, this.generatorTier.getFriendlyName()));
 
 		GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
@@ -210,9 +210,7 @@ public class GeneratorViewPanel extends CommonPanel
 	private void populateInfo(PanelBuilder panelBuilder)
 	{
 		// Users should see only icon
-//		panelBuilder.item(10, this.createButton(Button.NAME));
-		panelBuilder.item(19, this.createButton(Button.ICON));
-//		panelBuilder.item(28, this.createButton(Button.DESCRIPTION));
+		panelBuilder.item(19, this.createButton(Button.GENERATOR));
 
 		// Usefull information to know about generators.
 		panelBuilder.item(11, this.createButton(Button.DEFAULT));
@@ -255,9 +253,6 @@ public class GeneratorViewPanel extends CommonPanel
 			panelBuilder.item(24, this.createButton(Button.BIOMES));
 		}
 
-		// Users should not have access to undeployed generators.
-//		 panelBuilder.item(33, this.createButton(Button.DEPLOYED));
-
 		if (!this.generatorTier.getTreasureChanceMap().isEmpty())
 		{
 			// Do not display treasures if they are not Button.
@@ -280,6 +275,9 @@ public class GeneratorViewPanel extends CommonPanel
 			this.generatorTier.getBlockChanceMap().entrySet().stream().
 				sorted(Map.Entry.comparingByKey()).
 				collect(Collectors.toList());
+
+		// Calculate max page count.
+		this.maxPageIndex = (int) Math.ceil(1.0 * materialChanceList.size() / 21) - 1;
 
 		if (this.pageIndex < 0)
 		{
@@ -345,6 +343,9 @@ public class GeneratorViewPanel extends CommonPanel
 				sorted(Map.Entry.comparingByKey()).
 				collect(Collectors.toList());
 
+		// Calculate max page count.
+		this.maxPageIndex = (int) Math.ceil(1.0 * treasureChanceList.size() / 21) - 1;
+
 		if (this.pageIndex < 0)
 		{
 			correctPage = treasureChanceList.size() / MAX_ELEMENTS;
@@ -402,109 +403,81 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Button button)
 	{
-		String name = this.user.getTranslation(
-			Constants.BUTTON + button.name().toLowerCase() + ".name");
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
 		List<String> description = new ArrayList<>();
-		description.add(this.user.getTranslationOrNothing(
-			Constants.BUTTON + button.name().toLowerCase() + ".description"));
+		description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-			return true;
-		};
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
 
 		boolean glow = false;
 		ItemStack itemStack = new ItemStack(Material.AIR);
 
 		switch (button)
 		{
-			case NAME:
-			{
-				// Not implemented in current GUI.
-				break;
-			}
-			case ICON:
+			case GENERATOR:
 			{
 				// Return created button.
 				return this.createGeneratorButton(this.generatorTier);
 			}
-			case DESCRIPTION:
-			{
-				// Not implemented in current GUI.
-				break;
-			}
 			case DEFAULT:
 			{
-				itemStack = this.generatorTier.isDefaultGenerator() ?
-					new ItemStack(Material.GREEN_BANNER) :
-					new ItemStack(Material.RED_BANNER);
+				if (this.generatorTier.isDefaultGenerator())
+				{
+					itemStack = new ItemStack(Material.GREEN_BANNER);
+					description.add(this.user.getTranslation(reference + ".enabled"));
+				}
+				else
+				{
+					itemStack = new ItemStack(Material.RED_BANNER);
+					description.add(this.user.getTranslation(reference + ".disabled"));
+				}
+
 				break;
 			}
 			case PRIORITY:
 			{
 				itemStack = new ItemStack(Material.HOPPER);
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.generatorTier.getPriority())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorTier.getPriority())));
 				break;
 			}
 			case TYPE:
 			{
-				if (this.generatorTier.getGeneratorType() == GeneratorTierObject.GeneratorType.COBBLESTONE)
-				{
-					itemStack = new ItemStack(Material.COBBLESTONE);
-				}
-				else if (this.generatorTier.getGeneratorType() == GeneratorTierObject.GeneratorType.STONE)
-				{
-					itemStack = new ItemStack(Material.STONE);
-				}
-				else if (this.generatorTier.getGeneratorType() == GeneratorTierObject.GeneratorType.BASALT)
-				{
-					if (Material.getMaterial("BASALT") == null)
-					{
-						itemStack = new ItemStack(Material.BARRIER);
-					}
-					else
-					{
-						itemStack = new ItemStack(Material.getMaterial("BASALT"));
-					}
-				}
-				else
-				{
-					// TODO: Icon for mixed generator types?
-					itemStack = new ItemStack(Material.ANDESITE);
-				}
+				itemStack = new ItemStack(
+					GuiUtils.getGeneratorTypeMaterial(this.generatorTier.getGeneratorType()));
+
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.TYPE, this.user.getTranslation(
+						Constants.GENERATOR_TYPE_BUTTON +
+							this.generatorTier.getGeneratorType().name().toLowerCase() + ".name")));
 				break;
 			}
 			case REQUIRED_MIN_LEVEL:
 			{
 				itemStack = new ItemStack(Material.DIAMOND);
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
 				break;
 			}
 			case REQUIRED_PERMISSIONS:
 			{
 				itemStack = new ItemStack(Material.BOOK);
 
-				if (this.generatorTier.getRequiredPermissions().size() == 1)
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-						Constants.VALUE, this.generatorTier.getRequiredPermissions().iterator().next()));
-				}
-				else
-				{
-					this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
-						description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
-							Constants.VALUE, permission)));
-				}
+				description.add(this.user.getTranslation(reference + ".list"));
+
+				this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
+					description.add(this.user.getTranslation(reference + ".value",
+						Constants.PERMISSION, permission)));
 
 				break;
 			}
 			case PURCHASE_COST:
 			{
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.generatorTier.getGeneratorTierCost())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
 
-				if (this.generatorData.getPurchasedTiers().contains(this.generatorTier))
+				if (this.generatorData.getPurchasedTiers().contains(this.generatorTier.getUniqueId()))
 				{
 					itemStack = new ItemStack(Material.MAP);
 				}
@@ -512,7 +485,7 @@ public class GeneratorViewPanel extends CommonPanel
 				{
 					itemStack = new ItemStack(Material.GOLD_BLOCK);
 					description.add("");
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-purchase"));
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-purchase"));
 				}
 
 				clickHandler = (panel, user, clickType, i) ->
@@ -537,10 +510,10 @@ public class GeneratorViewPanel extends CommonPanel
 			case ACTIVATION_COST:
 			{
 				itemStack = new ItemStack(Material.GOLD_INGOT);
-				glow = this.generatorData.getActiveGeneratorList().contains(this.generatorTier);
+				glow = this.generatorData.getActiveGeneratorList().contains(this.generatorTier.getUniqueId());
 
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.generatorTier.getActivationCost())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorTier.getActivationCost())));
 
 				// boolean for click-handler.
 				final boolean deactivate;
@@ -550,7 +523,7 @@ public class GeneratorViewPanel extends CommonPanel
 					if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
 					{
 						description.add("");
-						description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-deactivate"));
+						description.add(this.user.getTranslation(Constants.TIPS + "click-to-deactivate"));
 					}
 
 					deactivate = true;
@@ -560,7 +533,7 @@ public class GeneratorViewPanel extends CommonPanel
 					if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
 					{
 						description.add("");
-						description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-activate"));
+						description.add(this.user.getTranslation(Constants.TIPS + "click-to-activate"));
 					}
 
 					deactivate = false;
@@ -585,9 +558,10 @@ public class GeneratorViewPanel extends CommonPanel
 					}
 					else
 					{
-						user.sendMessage("general.errors.insufficient-rank",
-							TextVariables.RANK,
-							user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user))));
+						Utils.sendMessage(this.user,
+							this.user.getTranslation("general.errors.insufficient-rank",
+								TextVariables.RANK, user.getTranslation(
+									this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user)))));
 					}
 
 					return true;
@@ -599,37 +573,26 @@ public class GeneratorViewPanel extends CommonPanel
 			{
 				itemStack = new ItemStack(Material.FILLED_MAP);
 
-				if (this.generatorTier.getRequiredBiomes().size() == 1)
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-						Constants.VALUE, this.generatorTier.getRequiredBiomes().iterator().next().name()));
-				}
-				else
-				{
-					this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome ->
-						description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
-							Constants.VALUE, biome.name())));
-				}
+				description.add(this.user.getTranslation(reference + ".list"));
 
-				break;
-			}
-			case DEPLOYED:
-			{
-				// Not implemented in current GUI.
+				this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome ->
+					description.add(this.user.getTranslation(reference + ".value",
+						Constants.BIOME, Utils.prettifyObject(this.user, biome))));
+
 				break;
 			}
 			case TREASURE_AMOUNT:
 			{
 				itemStack = new ItemStack(Material.EMERALD, this.generatorTier.getMaxTreasureAmount());
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
 				break;
 			}
 			case TREASURE_CHANCE:
 			{
 				itemStack = new ItemStack(Material.PAPER);
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value",
-					Constants.VALUE, String.valueOf(this.generatorTier.getTreasureChance())));
+				description.add(this.user.getTranslation(reference + ".value",
+					Constants.NUMBER, String.valueOf(this.generatorTier.getTreasureChance())));
 				break;
 			}
 		}
@@ -651,8 +614,13 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Tab button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
-		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
+	    final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
+		List<String> description = new ArrayList<>();
+		description.add(this.user.getTranslationOrNothing(reference + ".description"));
+		description.add("");
+		description.add(this.user.getTranslation(Constants.TIPS + "click-to-view"));
+
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			this.activeTab = button;
@@ -693,21 +661,23 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
-		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference+ ".name");
+		List<String> description = new ArrayList<>();
 
-		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-			// Always return true.
-			return true;
-		};
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
 
-
-		Material material = Material.PAPER;
+		Material icon = Material.PAPER;
+		int count = 1;
 
 		switch (button)
 		{
 			case RETURN:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					if (this.parentPanel != null)
 					{
@@ -729,30 +699,46 @@ public class GeneratorViewPanel extends CommonPanel
 					return true;
 				};
 
-				material = Material.OAK_DOOR;
+				icon = Material.OAK_DOOR;
 
 				break;
 			}
 			case PREVIOUS:
 			{
+				count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex--;
 					this.build();
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case NEXT:
 			{
+				count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex++;
 					this.build();
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 		}
@@ -760,7 +746,8 @@ public class GeneratorViewPanel extends CommonPanel
 		return new PanelItemBuilder().
 			name(name).
 			description(description).
-			icon(material).
+			icon(icon).
+			amount(count).
 			clickHandler(clickHandler).
 			build();
 	}
@@ -773,7 +760,7 @@ public class GeneratorViewPanel extends CommonPanel
 	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier);
+		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
 
 		List<String> description;
 
@@ -781,7 +768,7 @@ public class GeneratorViewPanel extends CommonPanel
 		{
 			description = this.generateGeneratorDescription(generatorTier,
 				glow,
-				this.generatorData.getUnlockedTiers().contains(generatorTier),
+				this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
 				this.manager.getIslandLevel(this.island));
 		}
 		else
@@ -811,9 +798,10 @@ public class GeneratorViewPanel extends CommonPanel
 			}
 			else
 			{
-				user.sendMessage("general.errors.insufficient-rank",
-					TextVariables.RANK,
-					user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user))));
+				Utils.sendMessage(this.user,
+					this.user.getTranslation("general.errors.insufficient-rank",
+						TextVariables.RANK, user.getTranslation(
+							this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user)))));
 			}
 
 			return true;
@@ -886,6 +874,57 @@ public class GeneratorViewPanel extends CommonPanel
 
 
 	// ---------------------------------------------------------------------
+	// Section: Generator description
+	// ---------------------------------------------------------------------
+
+
+	/**
+	 * This class generates given generator tier description based on input parameters.
+	 *
+	 * @param generator GeneratorTier which description must be generated.
+	 * @param isActive Boolean that indicates if generator is active.
+	 * @param isUnlocked Boolean that indicates if generator is unlocked.
+	 * @param islandLevel Long that shows island level.
+	 * @return List of strings that describes generator tier.
+	 */
+	@Override
+	protected List<String> generateGeneratorDescription(GeneratorTierObject generator,
+		boolean isActive,
+		boolean isUnlocked,
+		long islandLevel)
+	{
+		List<String> description =
+			super.generateGeneratorDescription(generator, isActive, isUnlocked, islandLevel);
+
+		if (isUnlocked)
+		{
+			// Add tips.
+			description.add("");
+
+			if (isActive)
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-deactivate"));
+			}
+			else
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-activate"));
+			}
+		}
+		else
+		{
+			if (this.addon.isVaultProvided() &&
+				generator.getGeneratorTierCost() > 0 &&
+				!this.generatorData.getPurchasedTiers().contains(generator.getUniqueId()))
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "click-gold-to-purchase"));
+			}
+		}
+
+		return description;
+	}
+
+
+	// ---------------------------------------------------------------------
 	// Section: Enums
 	// ---------------------------------------------------------------------
 
@@ -936,17 +975,9 @@ public class GeneratorViewPanel extends CommonPanel
 	private enum Button
 	{
 		/**
-		 * Holds Name type that allows to interact with generator name.
+		 * Holds icon for generator.
 		 */
-		NAME,
-		/**
-		 * Holds Name type that allows to interact with generator icon.
-		 */
-		ICON,
-		/**
-		 * Holds Name type that allows to interact with generator description.
-		 */
-		DESCRIPTION,
+		GENERATOR,
 		/**
 		 * Holds Name type that allows to interact with generator default status.
 		 */
@@ -979,10 +1010,6 @@ public class GeneratorViewPanel extends CommonPanel
 		 * Holds Name type that allows to interact with generator working biomes.
 		 */
 		BIOMES,
-		/**
-		 * Holds Name type that allows to interact with generator deployment status.
-		 */
-		DEPLOYED,
 		/**
 		 * Holds Name type that allows to interact with generator treasure amount.
 		 */
@@ -1017,6 +1044,11 @@ public class GeneratorViewPanel extends CommonPanel
 	 * This variable holds current pageIndex for multi-page generator choosing.
 	 */
 	private int pageIndex;
+
+	/**
+	 * This variable holds maximal page index.
+	 */
+	private int maxPageIndex;
 
 	/**
 	 * This variable stores which tab currently is active.

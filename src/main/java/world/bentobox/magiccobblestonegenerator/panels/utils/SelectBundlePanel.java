@@ -36,6 +36,8 @@ public class SelectBundlePanel extends CommonPanel
 
         this.bundleList = this.addon.getAddonManager().getAllGeneratorBundles(this.world);
 
+        // Calculate max page count.
+        this.maxPageIndex = (int) Math.ceil(1.0 * this.bundleList.size() / 21) - 1;
         // Set page index to 0
         this.pageIndex = 0;
     }
@@ -82,7 +84,7 @@ public class SelectBundlePanel extends CommonPanel
         int index = 10;
 
         while (elementIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
-            elementIndex < (this.bundleList.size() - 1) &&
+            elementIndex < this.bundleList.size() &&
             index < 36)
         {
             if (!panelBuilder.slotOccupied(index))
@@ -119,22 +121,20 @@ public class SelectBundlePanel extends CommonPanel
     {
         String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
         List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
             // Always return true.
             return true;
         };
 
-
         Material material = Material.PAPER;
+        int count = 1;
 
         switch (button)
         {
             case RETURN:
             {
-                description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-cancel"));
+                description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     // Return NULL.
@@ -142,15 +142,17 @@ public class SelectBundlePanel extends CommonPanel
                     return true;
                 };
 
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-cancel"));
                 material = Material.OAK_DOOR;
 
                 break;
             }
             case PREVIOUS:
             {
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-previous"));
+                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
+                    Constants.NUMBER, String.valueOf(count)));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex--;
@@ -158,14 +160,18 @@ public class SelectBundlePanel extends CommonPanel
                     return true;
                 };
 
-                material = Material.ARROW;
+                // add empty line
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
+
+                material = Material.TIPPED_ARROW;
                 break;
             }
             case NEXT:
             {
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-next"));
+                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
+                    Constants.NUMBER, String.valueOf(count)));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex++;
@@ -173,7 +179,11 @@ public class SelectBundlePanel extends CommonPanel
                     return true;
                 };
 
-                material = Material.ARROW;
+                // add empty line
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
+
+                material = Material.TIPPED_ARROW;
                 break;
             }
         }
@@ -182,6 +192,7 @@ public class SelectBundlePanel extends CommonPanel
             name(name).
             description(description).
             icon(material).
+            amount(count).
             clickHandler(clickHandler).
             build();
     }
@@ -225,8 +236,10 @@ public class SelectBundlePanel extends CommonPanel
     {
         List<String> description = super.generateBundleDescription(bundle);
 
+        description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+
         description.add("");
-        description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-choose"));
+        description.add(this.user.getTranslation(Constants.TIPS + "click-to-choose"));
 
         return description;
     }
@@ -272,4 +285,9 @@ public class SelectBundlePanel extends CommonPanel
      * This variable holds current pageIndex for multi-page generator choosing.
      */
     private int pageIndex;
+
+    /**
+     * This variable holds maximal page index.
+     */
+    private final int maxPageIndex;
 }

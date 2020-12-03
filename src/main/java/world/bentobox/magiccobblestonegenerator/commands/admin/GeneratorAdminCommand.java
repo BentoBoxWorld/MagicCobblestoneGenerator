@@ -146,8 +146,9 @@ public class GeneratorAdminCommand extends CompositeCommand
 		public boolean execute(User user, String label, List<String> args)
 		{
 			this.askConfirmation(user,
-				user.getTranslation(Constants.ADMIN_COMMANDS + "import.confirmation",
-					Constants.GAMEMODE, Utils.getGameMode(this.getWorld())),
+				user.getTranslation(Constants.CONVERSATIONS + "prefix") +
+					user.getTranslation(Constants.ADMIN_COMMANDS + "import.confirmation",
+						Constants.GAMEMODE, Utils.getGameMode(this.getWorld())),
 				() -> this.<StoneGeneratorAddon>getAddon().getImportManager().importFile(user, this.getWorld()));
 
 			return true;
@@ -217,7 +218,9 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 			if (targetUUID == null)
 			{
-				user.sendMessage("general.errors.unknown-player", TextVariables.NAME, args.get(0));
+				Utils.sendMessage(user,
+					user.getTranslation("general.errors.unknown-player",
+						TextVariables.NAME, args.get(0)));
 				return false;
 			}
 
@@ -226,7 +229,8 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 			if (island == null || island.getOwner() == null)
 			{
-				user.sendMessage("general.errors.player-is-not-owner");
+				Utils.sendMessage(user,
+					user.getTranslation("general.errors.player-is-not-owner"));
 				return false;
 			}
 
@@ -234,7 +238,8 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 			if (!target.isOnline())
 			{
-				user.sendMessage("general.errors.offline-player");
+				Utils.sendMessage(user,
+					user.getTranslation("general.errors.offline-player"));
 				return false;
 			}
 
@@ -247,11 +252,15 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 			if (newValue)
 			{
-				user.sendMessage("commands.admin.why.turning-on", TextVariables.NAME, target.getName());
+				Utils.sendMessage(user,
+					user.getTranslation("commands.admin.why.turning-on",
+						TextVariables.NAME, target.getName()));
 			}
 			else
 			{
-				user.sendMessage("commands.admin.why.turning-off", TextVariables.NAME, target.getName());
+				Utils.sendMessage(user,
+					user.getTranslation("commands.admin.why.turning-off",
+						TextVariables.NAME, target.getName()));
 			}
 
 			// Set the debug meta

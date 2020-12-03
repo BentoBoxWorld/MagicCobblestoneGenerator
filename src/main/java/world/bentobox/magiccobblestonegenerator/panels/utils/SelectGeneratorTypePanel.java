@@ -93,8 +93,6 @@ public class SelectGeneratorTypePanel
         String name = this.user.getTranslation(Constants.BUTTON + "return.name");
         List<String> description = new ArrayList<>();
         description.add(this.user.getTranslationOrNothing(Constants.BUTTON + "return.description"));
-        description.add("");
-        description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-cancel"));
 
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
             // Return NULL.
@@ -103,6 +101,10 @@ public class SelectGeneratorTypePanel
         };
 
         Material material = Material.OAK_DOOR;
+
+        // Add tips:
+        description.add("");
+        description.add(this.user.getTranslation(Constants.TIPS + "click-to-cancel"));
 
         return new PanelItemBuilder().
             name(name).
@@ -123,8 +125,9 @@ public class SelectGeneratorTypePanel
         List<String> description = new ArrayList<>();
         description.add(this.user.getTranslation(Constants.GENERATOR_TYPE_BUTTON + generatorType.name().toLowerCase() + ".description"));
 
+        // Add tips:
         description.add("");
-        description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-accept"));
+        description.add(this.user.getTranslation(Constants.TIPS + "click-to-choose"));
 
         return new PanelItemBuilder().
             icon(GuiUtils.getGeneratorTypeMaterial(generatorType)).

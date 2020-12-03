@@ -9,9 +9,7 @@ package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -103,15 +101,16 @@ public class IslandManagePanel extends CommonPanel
 						this.elementList = this.searchElements(Bukkit.getOnlinePlayers().stream().
 							map(player -> this.addon.getIslands().getIsland(this.world, player.getUniqueId())).
 							filter(Objects::nonNull).
-							collect(Collectors.toSet()));
+							collect(Collectors.toList()));
 					}
 					else
 					{
 						// collection to set is required to avoid duplicates.
-						this.elementList = new ArrayList<>(Bukkit.getOnlinePlayers().stream().
+						this.elementList = Bukkit.getOnlinePlayers().stream().
 							map(player -> this.addon.getIslands().getIsland(this.world, player.getUniqueId())).
 							filter(Objects::nonNull).
-							collect(Collectors.toSet()));
+							distinct().
+							collect(Collectors.toList());
 					}
 
 					this.maxPageIndex = (int) Math.ceil(1.0 * this.elementList.size() / MAX_ELEMENTS) - 1;
@@ -151,6 +150,7 @@ public class IslandManagePanel extends CommonPanel
 					{
 						this.elementList = this.addon.getIslands().getIslands(this.world).stream().
 							filter(Island::isOwned).
+							distinct().
 							collect(Collectors.toList());
 					}
 
@@ -250,6 +250,7 @@ public class IslandManagePanel extends CommonPanel
 				// Island do not contains filter field.
 				return false;
 			}).
+			distinct().
 			collect(Collectors.toList());
 	}
 
@@ -261,27 +262,73 @@ public class IslandManagePanel extends CommonPanel
 	 */
 	private PanelItem createIslandButton(Island island)
 	{
-		List<String> description = new ArrayList<>();
+		// Generate island name.
+		String name = island.getName();
 
-		UUID ownerId = island.getOwner();
-		String ownerName = this.addon.getPlayers().getName(ownerId);
-		description.add(ownerName);
-
-		description.add(island.getUniqueId());
-
-		ImmutableSet<UUID> members = island.getMemberSet();
-
-		if (members.size() > 1)
+		// If name is not set, then use owner island translation.
+		if (name == null || name.equals(""))
 		{
-			members.forEach(uuid -> {
-				if (uuid != ownerId)
-				{
-					description.add(ChatColor.AQUA + this.addon.getPlayers().getName(uuid));
-				}
-			});
+			// Deal with situations when island name is not set.
+
+			User user = User.getInstance(island.getOwner());
+
+			if (user != null)
+			{
+				name = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
+					Constants.PLAYER, user.getName());
+			}
+			else
+			{
+				name = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
+					Constants.PLAYER, this.user.getTranslation(Constants.DESCRIPTIONS + "unknown"));
+			}
 		}
 
-		String name = island.getName() != null ? island.getName() : ownerName;
+		// Transform name into button title.
+		name = this.user.getTranslation(Constants.BUTTON + "island_name.name",
+			Constants.NAME, name);
+
+		// Create owner name translated string.
+		String ownerName = this.addon.getPlayers().getName(island.getOwner());
+
+		if (ownerName.equals(""))
+		{
+			ownerName = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+		}
+
+		ownerName = this.user.getTranslation(Constants.BUTTON + "island_name.owner",
+			Constants.PLAYER, ownerName);
+
+		// Create island members translated string.
+
+		StringBuilder builder = new StringBuilder();
+
+		ImmutableSet<UUID> members = island.getMemberSet();
+		if (members.size() > 1)
+		{
+			builder.append(this.user.getTranslation(Constants.BUTTON + "island_name.list"));
+
+			for (UUID uuid : members)
+			{
+				if (uuid != island.getOwner())
+				{
+					builder.append("\n").append(this.user.getTranslation(Constants.BUTTON + "island_name.value",
+						Constants.PLAYER, this.addon.getPlayers().getName(uuid)));
+				}
+			}
+		}
+
+		// Create description list
+		List<String> description = new ArrayList<>();
+
+		description.add(this.user.getTranslation(Constants.BUTTON + "island_name.description",
+			Constants.OWNER, ownerName,
+			Constants.MEMBERS, builder.toString(),
+			Constants.ID, island.getUniqueId()));
+
+		// Add tip
+		description.add("");
+		description.add(this.user.getTranslation(Constants.TIPS + "click-to-edit"));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			IslandEditPanel.open(this, island);
@@ -290,9 +337,9 @@ public class IslandManagePanel extends CommonPanel
 		};
 
 		return new PanelItemBuilder().
-			name(this.user.getTranslation(Constants.BUTTON + "island", Constants.ISLAND, name)).
+			name(name).
 			description(description).
-			icon(ownerName).
+			icon(this.addon.getPlayers().getName(island.getOwner())).
 			clickHandler(clickHandler).
 			build();
 	}
@@ -306,74 +353,99 @@ public class IslandManagePanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
-		List<String> description = new ArrayList<>(2);
-		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
+		List<String> description = new ArrayList<>();
 
-		Material material;
 		PanelItem.ClickHandler clickHandler;
+
+		Material icon = Material.PAPER;
 		boolean glow = false;
 		int count = 1;
 
 		switch (button)
 		{
+			case RETURN:
+			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				description.add("");
+				if (this.parentPanel != null)
+				{
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
+				}
+				else
+				{
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
+				}
+
+				clickHandler = (panel, user, clickType, i) -> {
+
+					if (this.parentPanel != null)
+					{
+						this.parentPanel.build();
+					}
+					else
+					{
+						user.closeInventory();
+					}
+					return true;
+				};
+
+				icon = Material.OAK_DOOR;
+
+				break;
+			}
 			case PREVIOUS:
 			{
+				count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex--;
 					this.build();
 					return true;
 				};
 
-				// Page 0 is viewed... back arrow = last page ... next arrow = 2
-				// Page 1 is viewed... back arrow = 1 ... next arrow = 3
-				// Page 2 is viewed... back arrow = 2 ... next arrow = 4
-				// Page n is viewed... back arrow = n ... next arrow = n+2
-				// Last page is viewed .. back arrow = last... next arrow = 1
-
-				if (this.pageIndex == 0)
-				{
-					count = this.maxPageIndex + 1;
-				}
-				else
-				{
-					count = this.pageIndex;
-				}
-
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case NEXT:
 			{
+				count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex++;
 					this.build();
 					return true;
 				};
 
-				// Page 0 is viewed... back arrow = last page ... next arrow = 2
-				// Page 1 is viewed... back arrow = 1 ... next arrow = 3
-				// Page 2 is viewed... back arrow = 2 ... next arrow = 4
-				// Page n is viewed... back arrow = n ... next arrow = n+2
-				// Last page is viewed .. back arrow = last... next arrow = 1
-
-				if (this.pageIndex == this.maxPageIndex)
-				{
-					count = 1;
-				}
-				else
-				{
-					count = this.pageIndex + 2;
-				}
-
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case SEARCH:
 			{
-				material = Material.PAPER;
-				description.add(this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".search",
-					Constants.VALUE, this.searchString));
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
+				if (this.searchString != null && !this.searchString.isEmpty())
+				{
+					description.add(this.user.getTranslation(reference + ".search",
+						Constants.VALUE, this.searchString));
+				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-edit"));
+				description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-clear"));
 
 				clickHandler = (panel, user, clickType, slot) -> {
 					if (clickType.isRightClick())
@@ -401,31 +473,12 @@ public class IslandManagePanel extends CommonPanel
 						// start conversation
 						ConversationUtils.createStringInput(consumer,
 							user,
-							user.getTranslation(Constants.QUESTIONS + "write-search"),
-							user.getTranslation(Constants.MESSAGE + "search-updated"));
+							user.getTranslation(Constants.CONVERSATIONS + "write-search"),
+							user.getTranslation(Constants.CONVERSATIONS + "search-updated"));
 					}
 
 					return true;
 				};
-
-				break;
-			}
-			case RETURN:
-			{
-				clickHandler = (panel, user, clickType, i) -> {
-					if (this.parentPanel != null)
-					{
-						this.parentPanel.build();
-					}
-					else
-					{
-						user.closeInventory();
-					}
-
-					return true;
-				};
-
-				material = Material.OAK_DOOR;
 
 				break;
 			}
@@ -436,7 +489,8 @@ public class IslandManagePanel extends CommonPanel
 		return new PanelItemBuilder().
 			name(name).
 			description(description).
-			icon(new ItemStack(material, count == 0 ? 1 : count)).
+			icon(icon).
+			amount(Math.max(count, 1)).
 			clickHandler(clickHandler).
 			glow(glow).
 			build();
@@ -454,7 +508,7 @@ public class IslandManagePanel extends CommonPanel
 		List<String> description = new ArrayList<>();
 		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 		description.add("");
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-see"));
+		description.add(this.user.getTranslation(Constants.TIPS + "click-to-view"));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 			this.activeTab = button;

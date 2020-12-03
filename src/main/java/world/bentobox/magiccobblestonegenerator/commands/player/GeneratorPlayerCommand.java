@@ -146,9 +146,10 @@ public class GeneratorPlayerCommand extends CompositeCommand
 				}
 				else
 				{
-					user.sendMessage(Constants.ERRORS + "generator-tier-not-found",
-						Constants.GENERATOR, args.get(0),
-						Constants.GAMEMODE, Utils.getGameMode(this.getWorld()));
+					Utils.sendMessage(user,
+						user.getTranslation(Constants.ERRORS + "generator-tier-not-found",
+							Constants.GENERATOR, args.get(0),
+							Constants.GAMEMODE, Utils.getGameMode(this.getWorld())));
 				}
 			}
 			else

@@ -88,7 +88,7 @@ public abstract class CommonPanel
 		if (isActive)
 		{
 			// Add message about activation
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "generator-active"));
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "generator-active"));
 		}
 		else if (isUnlocked)
 		{
@@ -96,13 +96,13 @@ public abstract class CommonPanel
 
 			if (generator.getActivationCost() > 0 && this.addon.isVaultProvided())
 			{
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "activation-cost",
+				description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "activation-cost",
 					TextVariables.NUMBER, String.valueOf(generator.getActivationCost())));
 			}
 		}
 		else
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "locked"));
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "locked"));
 
 			// Add missing permissions
 			if (!generator.getRequiredPermissions().isEmpty())
@@ -112,14 +112,14 @@ public abstract class CommonPanel
 				generator.getRequiredPermissions().forEach(permission -> {
 					if (!this.user.hasPermission(permission))
 					{
-						missingPermissions.add(this.user.getTranslation(Constants.DESCRIPTION + "missing-permission",
+						missingPermissions.add(this.user.getTranslation(Constants.DESCRIPTIONS + "missing-permission",
 							TextVariables.PERMISSION, permission));
 					}
 				});
 
 				if (!missingPermissions.isEmpty())
 				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-permissions"));
+					description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "required-permissions"));
 					description.addAll(missingPermissions);
 				}
 			}
@@ -127,29 +127,17 @@ public abstract class CommonPanel
 			// Add missing level
 			if (generator.getRequiredMinIslandLevel() > islandLevel)
 			{
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-level",
+				description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "required-level",
 					TextVariables.NUMBER, String.valueOf(generator.getRequiredMinIslandLevel())));
 			}
 
 			if (generator.getGeneratorTierCost() > 0 &&
 				this.addon.isVaultProvided())
 			{
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "purchase-cost",
+				description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "purchase-cost",
 					Constants.GENERATOR, generator.getFriendlyName(),
 					TextVariables.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
 			}
-		}
-
-		description.add("");
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-view"));
-
-		if (isActive)
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-deactivate"));
-		}
-		else if (isUnlocked)
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-activate"));
 		}
 
 		return description;
@@ -171,27 +159,27 @@ public abstract class CommonPanel
 
 		if (generator.getActivationCost() > 0 && this.addon.isVaultProvided())
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "activation-cost",
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "activation-cost",
 				TextVariables.NUMBER, String.valueOf(generator.getActivationCost())));
 		}
 
 		// Add missing permissions
 		if (!generator.getRequiredPermissions().isEmpty())
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-permissions"));
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "required-permissions"));
 
 			generator.getRequiredPermissions().forEach(permission ->
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "missing-permission",
+				description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "missing-permission",
 					TextVariables.PERMISSION, permission)));
 		}
 
 		// Add missing level
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "required-level",
+		description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "required-level",
 			TextVariables.NUMBER, String.valueOf(generator.getRequiredMinIslandLevel())));
 
 		if (generator.getGeneratorTierCost() > 0 && this.addon.isVaultProvided())
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "purchase-cost",
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "purchase-cost",
 				Constants.GENERATOR, generator.getFriendlyName(),
 				TextVariables.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
 		}
@@ -212,21 +200,21 @@ public abstract class CommonPanel
 		bundle.getDescription().forEach(line ->
 			description.add(ChatColor.translateAlternateColorCodes('&', line)));
 
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "bundle-permission",
+		description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "bundle-permission",
 			Constants.ID, bundle.getUniqueId(),
 			Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
 
 		// Add missing permissions
 		if (!bundle.getGeneratorTiers().isEmpty())
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "generators"));
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "generators"));
 
 			bundle.getGeneratorTiers().stream().
 				map(this.manager::getGeneratorByID).
 				filter(Objects::nonNull).
 				forEach(generator ->
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
-						Constants.VALUE, generator.getFriendlyName())));
+					description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "generator-list",
+						Constants.GENERATOR, generator.getFriendlyName())));
 		}
 
 		return description;

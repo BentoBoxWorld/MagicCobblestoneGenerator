@@ -11,6 +11,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -74,13 +76,12 @@ public class AdminPanel extends CommonPanel
 		// PanelBuilder is a BentoBox API that provides ability to easy create Panels.
 		PanelBuilder panelBuilder = new PanelBuilder().
 			user(this.user).
-			name(this.user.getTranslation(Constants.TITLE + "admin-view"));
+			name(this.user.getTranslation(Constants.TITLE + "admin-panel"));
 
 		GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
 		panelBuilder.item(10, this.createButton(Action.MANAGE_USERS));
 		panelBuilder.item(28, this.createButton(Action.WIPE_USER_DATA));
-
 
 		panelBuilder.item(12, this.createButton(Action.MANAGE_GENERATOR_TIERS));
 		panelBuilder.item(21, this.createButton(Action.MANAGE_GENERATOR_BUNDLES));
@@ -107,8 +108,10 @@ public class AdminPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
-		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
+		List<String> description = new ArrayList<>();
+		description.add(this.user.getTranslationOrNothing(reference + ".description"));
 		
 		Material material;
 		PanelItem.ClickHandler clickHandler;
@@ -118,6 +121,9 @@ public class AdminPanel extends CommonPanel
 		{
 			case MANAGE_USERS:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					IslandManagePanel.open(this);
 					return true;
@@ -127,6 +133,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case MANAGE_GENERATOR_TIERS:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					GeneratorManagePanel.open(this);
 					return true;
@@ -136,6 +145,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case MANAGE_GENERATOR_BUNDLES:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					BundleManagePanel.open(this);
 					return true;
@@ -145,6 +157,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case SETTINGS:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					SettingsPanel.open(this);
 					return true;
@@ -154,6 +169,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case IMPORT_TEMPLATE:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					LibraryPanel.open(this, LibraryPanel.Library.TEMPLATE);
 					return true;
@@ -163,6 +181,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case WEB_LIBRARY:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					LibraryPanel.open(this, LibraryPanel.Library.WEB);
 					return true;
@@ -172,6 +193,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case EXPORT_FROM_DATABASE:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-export"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					// This consumer process file exporting after user input is returned.
 					Consumer<String> fileNameConsumer = value -> {
@@ -197,10 +221,10 @@ public class AdminPanel extends CommonPanel
 					ConversationUtils.createIDStringInput(fileNameConsumer,
 						validationFunction,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "exported-file-name"),
-						this.user.getTranslation(Constants.MESSAGE + "database-export-completed",
+						this.user.getTranslation(Constants.CONVERSATIONS + "exported-file-name"),
+						this.user.getTranslation(Constants.CONVERSATIONS + "database-export-completed",
 							Constants.WORLD, world.getName()),
-						Constants.ERRORS + "file-name-exist");
+						Constants.CONVERSATIONS + "file-name-exist");
 
 					return true;
 				};
@@ -209,6 +233,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case IMPORT_TO_DATABASE:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-open"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					LibraryPanel.open(this, LibraryPanel.Library.DATABASE);
 					return true;
@@ -219,6 +246,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case WIPE_USER_DATA:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-wipe"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					// Create consumer that accepts value from conversation.
 					Consumer<Boolean> consumer = value -> {
@@ -234,9 +264,9 @@ public class AdminPanel extends CommonPanel
 					ConversationUtils.createConfirmation(
 						consumer,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "confirm-island-data-deletion",
+						this.user.getTranslation(Constants.CONVERSATIONS + "confirm-island-data-deletion",
 							Constants.GAMEMODE, Utils.getGameMode(this.world)),
-						this.user.getTranslation(Constants.MESSAGE + "user-data-removed",
+						this.user.getTranslation(Constants.CONVERSATIONS + "user-data-removed",
 							Constants.GAMEMODE, Utils.getGameMode(this.world)));
 
 					return true;
@@ -247,6 +277,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case WIPE_GENERATOR_DATA:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-wipe"));
+
 				clickHandler = (panel, user1, clickType, slot) -> {
 					// Create consumer that accepts value from conversation.
 					Consumer<Boolean> consumer = value -> {
@@ -262,9 +295,9 @@ public class AdminPanel extends CommonPanel
 					ConversationUtils.createConfirmation(
 						consumer,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "confirm-generator-data-deletion",
+						this.user.getTranslation(Constants.CONVERSATIONS + "confirm-generator-data-deletion",
 							Constants.GAMEMODE, Utils.getGameMode(this.world)),
-						this.user.getTranslation(Constants.MESSAGE + "generator-data-removed",
+						this.user.getTranslation(Constants.CONVERSATIONS + "generator-data-removed",
 							Constants.GAMEMODE, Utils.getGameMode(this.world)));
 
 					return true;
@@ -275,6 +308,9 @@ public class AdminPanel extends CommonPanel
 			}
 			case RETURN:
 			{
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					user.closeInventory();
 					return true;

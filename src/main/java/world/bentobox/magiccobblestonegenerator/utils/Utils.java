@@ -300,7 +300,7 @@ public class Utils
         //   biomes:
         //     [biome]:
         //       name: [name]
-        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name() + ".name");
+        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase() + ".name");
 
         if (!translation.isEmpty())
         {
@@ -313,7 +313,7 @@ public class Utils
         //   biomes:
         //     [biome]: [name]
 
-        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name());
+        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase());
 
         if (!translation.isEmpty())
         {
@@ -325,7 +325,7 @@ public class Utils
         // biomes:
         //   [biome]: [name]
 
-        translation = user.getTranslationOrNothing("biomes." + biome.name());
+        translation = user.getTranslationOrNothing("biomes." + biome.name().toLowerCase());
 
         if (!translation.isEmpty())
         {
@@ -348,10 +348,10 @@ public class Utils
     {
         // Find addon structure with:
         // [addon]:
-        //   biomes:
+        //   materials:
         //     [material]:
         //       name: [name]
-        String translation = user.getTranslationOrNothing(Constants.BIOMES + material.name() + ".name");
+        String translation = user.getTranslationOrNothing(Constants.MATERIALS + material.name().toLowerCase() + ".name");
 
         if (!translation.isEmpty())
         {
@@ -361,10 +361,10 @@ public class Utils
 
         // Find addon structure with:
         // [addon]:
-        //   biomes:
+        //   materials:
         //     [material]: [name]
 
-        translation = user.getTranslationOrNothing(Constants.BIOMES + material.name());
+        translation = user.getTranslationOrNothing(Constants.MATERIALS + material.name().toLowerCase());
 
         if (!translation.isEmpty())
         {
@@ -376,7 +376,7 @@ public class Utils
         // biomes:
         //   [material]: [name]
 
-        translation = user.getTranslationOrNothing("biomes." + material.name());
+        translation = user.getTranslationOrNothing("materials." + material.name().toLowerCase());
 
         if (!translation.isEmpty())
         {
@@ -402,7 +402,7 @@ public class Utils
         //   biomes:
         //     [entity]:
         //       name: [name]
-        String translation = user.getTranslationOrNothing(Constants.BIOMES + entity.name() + ".name");
+        String translation = user.getTranslationOrNothing(Constants.ENTITIES + entity.name().toLowerCase() + ".name");
 
         if (!translation.isEmpty())
         {
@@ -415,7 +415,7 @@ public class Utils
         //   biomes:
         //     [entity]: [name]
 
-        translation = user.getTranslationOrNothing(Constants.BIOMES + entity.name());
+        translation = user.getTranslationOrNothing(Constants.ENTITIES + entity.name().toLowerCase());
 
         if (!translation.isEmpty())
         {
@@ -427,7 +427,7 @@ public class Utils
         // biomes:
         //   [entity]: [name]
 
-        translation = user.getTranslationOrNothing("biomes." + entity.name());
+        translation = user.getTranslationOrNothing("entities." + entity.name().toLowerCase());
 
         if (!translation.isEmpty())
         {
@@ -437,5 +437,16 @@ public class Utils
 
         // Nothing was found. Use just a prettify text function.
         return Util.prettifyText(entity.name());
+    }
+
+
+    /**
+     * Send given message to user and add prefix to the start of the message.
+     * @param user User who need to receive message.
+     * @param message String of message that must be send.
+     */
+    public static void sendMessage(User user, String message)
+    {
+        user.sendMessage(user.getTranslation(Constants.CONVERSATIONS + "prefix") + message);
     }
 }

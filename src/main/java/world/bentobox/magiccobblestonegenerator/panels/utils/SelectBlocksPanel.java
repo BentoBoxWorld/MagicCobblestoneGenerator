@@ -63,6 +63,8 @@ public class SelectBlocksPanel
 		}
 
 		this.pageIndex = 0;
+		// Calculate max page count.
+		this.maxPageIndex = (int) Math.ceil(1.0 * this.elements.size() / 21) - 1;
 	}
 
 
@@ -142,7 +144,8 @@ public class SelectBlocksPanel
 		int index = 10;
 
 		while (materialIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
-			materialIndex < this.elements.size())
+			materialIndex < this.elements.size() &&
+			index < 36)
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
@@ -161,7 +164,12 @@ public class SelectBlocksPanel
 			panelBuilder.item(26, this.createButton(Action.NEXT));
 		}
 
-		panelBuilder.item(40, this.createButton(Action.ACCEPT));
+		if (!this.singleSelect)
+		{
+			// Add accept blocks only if there are multi-select.
+			panelBuilder.item(40, this.createButton(Action.ACCEPT_BLOCKS));
+		}
+
 		panelBuilder.item(44, this.createButton(Action.RETURN));
 
 		panelBuilder.build();
@@ -182,20 +190,41 @@ public class SelectBlocksPanel
 		// Add empty line
 		if (!description.get(0).isEmpty())
 		{
+			if (this.selectedMaterials.contains(material))
+			{
+				description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+			}
+
 			description.add("");
 		}
-
-		if (this.selectedMaterials.contains(material))
+		else if (this.selectedMaterials.contains(material))
 		{
-			description.add(this.user.getTranslationOrNothing(Constants.DESCRIPTION + "click-to-deselect"));
+			// Append to the start
+			description.add(0, this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+		}
+
+		// Add tips section
+		if (this.singleSelect)
+		{
+			description.add(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-choose"));
 		}
 		else
 		{
-			description.add(this.user.getTranslationOrNothing(Constants.DESCRIPTION + "click-to-select"));
+			if (this.selectedMaterials.contains(material))
+			{
+				description.add(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-deselect"));
+			}
+			else
+			{
+				description.add(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-select"));
+			}
 		}
 
+		String name = this.user.getTranslation(Constants.BUTTON + "material-icon",
+			Constants.BLOCK, Utils.prettifyObject(this.user, material));
+
 		return new PanelItemBuilder().
-			name(Utils.prettifyObject(this.user, material)).
+			name(name).
 			description(description).
 			icon(GuiUtils.getMaterialItem(material)).
 			clickHandler((panel, user1, clickType, slot) -> {
@@ -203,14 +232,18 @@ public class SelectBlocksPanel
 				{
 					this.consumer.accept(Collections.singleton(material));
 				}
-				else if (!this.selectedMaterials.remove(material))
+				else
 				{
-					this.selectedMaterials.add(material);
+					if (!this.selectedMaterials.remove(material))
+					{
+						this.selectedMaterials.add(material);
+					}
+
+					// update icons
+					panel.getInventory().setItem(slot, this.createMaterialButton(material).getItem());
+					panel.getInventory().setItem(40, this.createButton(Action.ACCEPT_BLOCKS).getItem());
 				}
 
-				// update icons
-				panel.getInventory().setItem(slot, this.createMaterialButton(material).getItem());
-				panel.getInventory().setItem(40, this.createButton(Action.ACCEPT).getItem());
 				return true;
 			}).
 			glow(this.selectedMaterials.contains(material)).
@@ -225,19 +258,23 @@ public class SelectBlocksPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+
+		String name = this.user.getTranslation(reference + ".name");
 		List<String> description = new ArrayList<>();
-		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
 		PanelItem.ClickHandler clickHandler;
 		Material icon;
+		int count = 1;
 
 		switch (button)
 		{
 			case RETURN:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
 				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-cancel"));
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-cancel"));
 
 				clickHandler = (panel, user, clickType, i) -> {
 					// Return NULL.
@@ -251,9 +288,13 @@ public class SelectBlocksPanel
 			}
 			case PREVIOUS:
 			{
+				count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
 				// add empty line
 				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-previous"));
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
 
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex--;
@@ -261,14 +302,18 @@ public class SelectBlocksPanel
 					return true;
 				};
 
-				icon = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case NEXT:
 			{
+				count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
 				// add empty line
 				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-next"));
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
 
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex++;
@@ -276,24 +321,26 @@ public class SelectBlocksPanel
 					return true;
 				};
 
-				icon = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
-			case ACCEPT:
+			case ACCEPT_BLOCKS:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
 				if (!this.selectedMaterials.isEmpty())
 				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-values"));
+					description.add(this.user.getTranslation(reference+ "selected-blocks"));
 
 					for (Material material : this.selectedMaterials)
 					{
-						description.add(this.user.getTranslation(Constants.DESCRIPTION + "current-value-list",
+						description.add(this.user.getTranslation(reference + "list-value",
 							Constants.VALUE, Utils.prettifyObject(this.user, material)));
 					}
 				}
 
 				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-accept"));
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-accept"));
 
 				clickHandler = (panel, user, clickType, i) -> {
 					// Return selected biomes.
@@ -311,6 +358,7 @@ public class SelectBlocksPanel
 
 		return new PanelItemBuilder().
 			name(name).
+			amount(count).
 			description(description).
 			icon(icon).
 			clickHandler(clickHandler).
@@ -331,7 +379,7 @@ public class SelectBlocksPanel
 		PREVIOUS,
 		NEXT,
 		RETURN,
-		ACCEPT
+		ACCEPT_BLOCKS
 	}
 
 
@@ -368,4 +416,9 @@ public class SelectBlocksPanel
 	 * Page index.
 	 */
 	private int pageIndex;
+
+	/**
+	 * This variable stores maximal page index for elements.
+	 */
+	private final int maxPageIndex;
 }

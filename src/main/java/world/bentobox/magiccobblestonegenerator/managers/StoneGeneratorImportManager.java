@@ -76,7 +76,9 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage(Constants.ERRORS + "no-file");
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "no-file",
+						Constants.FILE, this.generatorFile.getName()));
 			}
 
 			return false;
@@ -102,7 +104,9 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage(Constants.ERRORS + "no-file");
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "no-file",
+						Constants.FILE, file));
 			}
 
 			return false;
@@ -118,9 +122,10 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage(Constants.ERRORS + "no-load",
-					TextVariables.DESCRIPTION,
-					e.getMessage());
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "no-load",
+						Constants.FILE, file,
+						TextVariables.DESCRIPTION, e.getMessage()));
 			}
 			else
 			{
@@ -136,8 +141,9 @@ public class StoneGeneratorImportManager
 		{
 			if (user != null)
 			{
-				user.sendMessage(Constants.ERRORS + "not-a-gamemode-world",
-					Constants.WORLD, world.getName());
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "not-a-gamemode-world",
+						Constants.WORLD, world.getName()));
 			}
 			else
 			{
@@ -226,7 +232,7 @@ public class StoneGeneratorImportManager
 
 			// Save object in database.
 			this.addon.getAddonManager().saveGeneratorTier(generatorTier);
-			this.addon.getAddonManager().loadGeneratorTier(generatorTier, false, null, true);
+			this.addon.getAddonManager().loadGeneratorTier(generatorTier, false, null);
 			generatorSize++;
 		}
 
@@ -261,18 +267,16 @@ public class StoneGeneratorImportManager
 
 			// Save object in database.
 			this.addon.getAddonManager().saveGeneratorBundle(generatorBundle);
-			this.addon.getAddonManager().loadGeneratorBundle(generatorBundle, false, null, true);
+			this.addon.getAddonManager().loadGeneratorBundle(generatorBundle, false, null);
 			bundleSize++;
 		}
 
 		if (user != null)
 		{
-			user.sendMessage(Constants.MESSAGE + "import-count",
-				TextVariables.NUMBER,
-				String.valueOf(generatorSize));
-			user.sendMessage(Constants.MESSAGE + "import-bundle-count",
-				TextVariables.NUMBER,
-				String.valueOf(bundleSize));
+			Utils.sendMessage(user,
+				user.getTranslation(Constants.MESSAGES + "import-count",
+					Constants.BUNDLE, String.valueOf(bundleSize),
+					Constants.GENERATOR, String.valueOf(generatorSize)));
 		}
 
 		this.addon.log("Imported " + generatorSize + " generator tiers and " +
@@ -403,7 +407,9 @@ public class StoneGeneratorImportManager
 		{
 			if (user.isPlayer())
 			{
-				user.sendMessage(Constants.ERRORS + "file-exist");
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "file-exist",
+						Constants.FILE, fileName));
 			}
 			else
 			{
@@ -466,7 +472,10 @@ public class StoneGeneratorImportManager
 		{
 			if (user.isPlayer())
 			{
-				user.sendMessage(Constants.ERRORS + "file-error");
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "no-load",
+						Constants.FILE, fileName,
+						TextVariables.DESCRIPTION, e.getMessage()));
 			}
 
 			this.addon.logError("Could not save json file: " + e.getMessage());
@@ -476,13 +485,14 @@ public class StoneGeneratorImportManager
 		{
 			if (user.isPlayer())
 			{
-				user.sendMessage(Constants.MESSAGE + "database-export-completed",
-					Constants.WORLD, world.getName(),
-					Constants.FILE, fileName);
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.CONVERSATIONS + "database-export-completed",
+						Constants.WORLD, world.getName(),
+						Constants.FILE, fileName));
 			}
 			else
 			{
-				this.addon.logWarning(Constants.MESSAGE + "database-export-completed");
+				this.addon.logWarning("Database Export Completed");
 			}
 		}
 
@@ -524,7 +534,7 @@ public class StoneGeneratorImportManager
 				// Set correct generatorTier ID
 				generatorTier.setUniqueId(uniqueIDPrefix + generatorTier.getUniqueId());
 				// Load generator in memory
-				manager.loadGeneratorTier(generatorTier, false, user, user == null);
+				manager.loadGeneratorTier(generatorTier, false, user);
 			});
 
 			downloadedGenerators.getGeneratorBundles().forEach(generatorBundle -> {
@@ -535,7 +545,7 @@ public class StoneGeneratorImportManager
 					map(generatorTier -> uniqueIDPrefix + generatorTier).
 					collect(Collectors.toSet()));
 				// Load level in memory
-				manager.loadGeneratorBundle(generatorBundle, false, user, user == null);
+				manager.loadGeneratorBundle(generatorBundle, false, user);
 			});
 		}
 		catch (Exception e)
@@ -579,7 +589,10 @@ public class StoneGeneratorImportManager
 		{
 			if (user.isPlayer())
 			{
-				user.sendMessage(Constants.ERRORS + "file-error");
+				Utils.sendMessage(user,
+					user.getTranslation(Constants.ERRORS + "no-load",
+						Constants.FILE, downloadFile.getName(),
+						TextVariables.DESCRIPTION, e.getMessage()));
 			}
 
 			this.addon.logError("Could not save json file: " + e.getMessage());

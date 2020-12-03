@@ -62,6 +62,7 @@ public class LibraryPanel extends CommonPanel
 
 		// Stores how many elements will be in display.
 		this.rowCount = this.libraryEntries.size() > 14 ? 3 : this.libraryEntries.size() > 7 ? 2 : 1;
+		this.maxPageIndex = (int) Math.ceil(1.0 * this.libraryEntries.size() / (this.rowCount * 7)) - 1;
 	}
 
 
@@ -133,7 +134,7 @@ public class LibraryPanel extends CommonPanel
 			map(file ->
 			{
 				LibraryEntry entry = new LibraryEntry();
-				entry.setName(file.getName().substring(0, file.getName().length() - 5));
+				entry.setName(file.getName().substring(0, file.getName().length() - 4));
 				entry.setIcon(Material.PAPER);
 				return entry;
 			}).
@@ -149,7 +150,8 @@ public class LibraryPanel extends CommonPanel
 	{
 		if (this.libraryEntries.isEmpty())
 		{
-			this.user.sendMessage(Constants.ERRORS + "no-library-entries");
+			Utils.sendMessage(this.user, this.user.getTranslation(
+				Constants.ERRORS + "no-library-entries"));
 			return;
 		}
 
@@ -234,15 +236,24 @@ public class LibraryPanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
-		String description = this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description");
-		PanelItem.ClickHandler clickHandler;
-		Material material;
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
+		List<String> description = new ArrayList<>();
+
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
+
+		boolean glow = false;
+		Material icon = Material.PAPER;
+		int count = 1;
 
 		switch (button)
 		{
 			case RETURN:
 			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					if (this.parentPanel != null)
 					{
@@ -252,115 +263,96 @@ public class LibraryPanel extends CommonPanel
 					{
 						user.closeInventory();
 					}
-
 					return true;
 				};
 
-				material = Material.OAK_DOOR;
+				icon = Material.OAK_DOOR;
 
 				break;
 			}
 			case PREVIOUS:
 			{
+				count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex--;
 					this.build();
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case NEXT:
 			{
+				count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex++;
 					this.build();
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
-			default:
-				return PanelItem.empty();
 		}
 
 		return new PanelItemBuilder().
 			name(name).
 			description(description).
-			icon(material).
+			icon(icon).
+			amount(count).
 			clickHandler(clickHandler).
-			glow(false).
+			glow(glow).
 			build();
 	}
 
 
 	/**
 	 * This method creates button for library entry.
-	 * @param libraryEntry LibraryEntry which button must be created.
+	 * @param entry LibraryEntry which button must be created.
 	 * @return PanelItem for library entry.
 	 */
-	private PanelItem createLibraryButton(LibraryEntry libraryEntry)
+	private PanelItem createLibraryButton(LibraryEntry entry)
 	{
+		List<String> description = new ArrayList<>();
+
+		String unknown = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+		description.add(this.user.getTranslation(Constants.BUTTON + "library.description",
+			Constants.DESCRIPTION, entry.getDescription() != null ? entry.getDescription() : "",
+			Constants.AUTHOR, entry.getAuthor() != null ? entry.getAuthor() : unknown,
+			Constants.GAMEMODE, entry.getForGameMode() != null ? entry.getForGameMode() : unknown,
+			Constants.LANG, entry.getLanguage() != null ? entry.getLanguage() : unknown,
+			Constants.VERSION, entry.getVersion() != null ? entry.getVersion() : unknown));
+
+		String name = this.user.getTranslation(Constants.BUTTON + "library.name",
+			Constants.NAME, entry.getName());
+
 		PanelItemBuilder itemBuilder = new PanelItemBuilder().
-			name(libraryEntry.getName()).
-			description(this.generateEntryDescription(libraryEntry)).
-			icon(libraryEntry.getIcon()).
+			name(name).
+			description(description).
+			icon(entry.getIcon()).
 			glow(false);
 
 		itemBuilder.clickHandler((panel, user1, clickType, i) -> {
-			this.generateConfirmationInput(libraryEntry);
+			this.generateConfirmationInput(entry);
 			return true;
 		});
 
 		return itemBuilder.build();
-	}
-
-
-	/**
-	 * This method generated description for LibraryEntry object.
-	 * @param entry LibraryEntry object which description must be generated.
-	 * @return List of strings that will be placed in ItemStack lore message.
-	 */
-	private List<String> generateEntryDescription(LibraryEntry entry)
-	{
-		List<String> description = new ArrayList<>();
-
-		if (entry.getAuthor() != null)
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "library-author",
-				Constants.AUTHOR,
-				entry.getAuthor()));
-		}
-
-		if (entry.getDescription() != null)
-		{
-			description.add(entry.getDescription());
-		}
-
-		if (entry.getForGameMode() != null)
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "library-gamemode",
-				Constants.GAMEMODE,
-				entry.getForGameMode()));
-		}
-
-		if (entry.getLanguage() != null)
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "library-lang",
-				Constants.LANG,
-				entry.getLanguage()));
-		}
-
-		if (entry.getVersion() != null)
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "library-version",
-				Constants.VERSION,
-				entry.getVersion()));
-		}
-
-		return description;
 	}
 
 
@@ -413,32 +405,25 @@ public class LibraryPanel extends CommonPanel
 						{
 							this.blockedForDownland = true;
 
-							this.user.sendMessage(Constants.MESSAGE + "start-downloading");
+							Utils.sendMessage(this.user, this.user.getTranslation(
+								Constants.MESSAGES + "start-downloading"));
 
 							// Run download task after 5 ticks.
-							this.addon.getPlugin().getServer().getScheduler().
+							this.updateTask = this.addon.getPlugin().getServer().getScheduler().
 								runTaskLaterAsynchronously(
 									this.addon.getPlugin(),
-									() -> this.addon.getWebManager()
-										.requestEntryGitHubData(this.user, this.world, libraryEntry),
+									() -> this.addon.getWebManager().
+										requestEntryGitHubData(this.user, this.world, libraryEntry),
 									5L);
 
 							if (this.parentPanel != null)
 							{
-								if (this.updateTask != null)
-								{
-									this.updateTask.cancel();
-								}
-
+								this.updateTask.cancel();
 								this.parentPanel.build();
 							}
 							else
 							{
-								if (this.updateTask != null)
-								{
-									this.updateTask.cancel();
-								}
-
+								this.updateTask.cancel();
 								this.user.closeInventory();
 							}
 						}
@@ -455,9 +440,9 @@ public class LibraryPanel extends CommonPanel
 		ConversationUtils.createConfirmation(
 			consumer,
 			this.user,
-			this.user.getTranslation(Constants.QUESTIONS + "confirm-data-replacement",
+			this.user.getTranslation(Constants.CONVERSATIONS + "confirm-data-replacement",
 				Constants.GAMEMODE, Utils.getGameMode(this.world)),
-			this.user.getTranslation(Constants.MESSAGE + "new-generators-imported",
+			this.user.getTranslation(Constants.CONVERSATIONS + "new-generators-imported",
 				Constants.GAMEMODE, Utils.getGameMode(this.world)));
 	}
 
@@ -531,6 +516,11 @@ public class LibraryPanel extends CommonPanel
 	 * This variable holds current pageIndex for multi-page generator choosing.
 	 */
 	private int pageIndex;
+
+	/**
+	 * This variable holds max page index for multi-page generator choosing.
+	 */
+	private int maxPageIndex;
 
 	/**
 	 * Stores how many elements will be in display.

@@ -1,12 +1,8 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
-import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -16,16 +12,10 @@ import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
-import world.bentobox.bentobox.api.user.User;
-import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
-import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
-import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorUserPanel;
-import world.bentobox.magiccobblestonegenerator.panels.player.GeneratorViewPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -55,7 +45,7 @@ public class GeneratorManagePanel extends CommonPanel
 		this.updateRows();
 
 		// By default no-filters are active.
-		this.activeFilterButton = Action.RETURN;
+		this.activeFilterButton = Button.NONE;
 
 		// Init set with selected generators.
 		this.selectedGenerators = new HashSet<>(this.generatorList.size());
@@ -68,6 +58,7 @@ public class GeneratorManagePanel extends CommonPanel
 	private void updateRows()
 	{
 		this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
+		this.maxPageIndex = (int) Math.ceil(1.0 * this.generatorList.size() / 7 * this.rowCount) - 1;
 	}
 
 
@@ -100,28 +91,28 @@ public class GeneratorManagePanel extends CommonPanel
 
 		GuiUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
 
-		panelBuilder.item(1, this.createButton(Action.CREATE));
-		panelBuilder.item(2, this.createButton(Action.DELETE));
+		panelBuilder.item(1, this.createButton(Action.CREATE_GENERATOR));
+		panelBuilder.item(2, this.createButton(Action.DELETE_GENERATOR));
 
 		// Do not show cobblestone button if there are no cobblestone generators.
 		if (this.generatorList.stream().anyMatch(generator ->
 			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)))
 		{
-			panelBuilder.item(5, this.createButton(Action.SHOW_COBBLESTONE));
+			panelBuilder.item(5, this.createButton(Button.SHOW_COBBLESTONE));
 		}
 
 		// Do not show stone if there are no stone generators.
 		if (this.generatorList.stream().anyMatch(generator ->
 			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)))
 		{
-			panelBuilder.item(6, this.createButton(Action.SHOW_STONE));
+			panelBuilder.item(6, this.createButton(Button.SHOW_STONE));
 		}
 
 		// Do not show basalt if there are no basalt generators.
 		if (this.generatorList.stream().anyMatch(generator ->
 			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)))
 		{
-			panelBuilder.item(7, this.createButton(Action.SHOW_BASALT));
+			panelBuilder.item(7, this.createButton(Button.SHOW_BASALT));
 		}
 
 		this.fillGeneratorTiers(panelBuilder);
@@ -140,103 +131,33 @@ public class GeneratorManagePanel extends CommonPanel
 	 */
 	private PanelItem createButton(Action button)
 	{
-		String name = this.user.getTranslation(Constants.BUTTON + button.name().toLowerCase() + ".name");
-
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
 		List<String> description = new ArrayList<>();
-		description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
-		// Add helper description
+		PanelItem.ClickHandler clickHandler;
+
+		Material icon = Material.PAPER;
+		boolean glow = false;
+		int count = 1;
+
 		switch (button)
 		{
-			case SHOW_COBBLESTONE:
-			case SHOW_STONE:
-			case SHOW_BASALT:
-				// add empty line
-				description.add("");
-				if (this.activeFilterButton == button)
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-deactivate"));
-				}
-				else
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-activate"));
-				}
-				break;
-			case PREVIOUS:
-				// add empty line
-				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-previous"));
-				break;
-			case NEXT:
-				// add empty line
-				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-next"));
-				break;
-			case CREATE:
-				// add empty line
-				description.add("");
-				description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-create"));
-				break;
-			case DELETE:
-				// add empty line
-				description.add("");
-				if (this.selectedGenerators.isEmpty())
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "select-to-delete"));
-				}
-				else
-				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-delete"));
-				}
-				break;
 			case RETURN:
+			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
 				description.add("");
 				if (this.parentPanel != null)
 				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-return"));
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
 				}
 				else
 				{
-					description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-quit"));
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
 				}
-				break;
-		}
 
-		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-			this.activeFilterButton = this.activeFilterButton == button ? Action.RETURN : button;
-			// Rebuild everything.
-			this.build();
-
-			// Always return true.
-			return true;
-		};
-
-		boolean glow = this.activeFilterButton == button && button != Action.RETURN;
-
-		Material material = Material.PAPER;
-
-		switch (button)
-		{
-			case SHOW_COBBLESTONE:
-			{
-				material = Material.COBBLESTONE;
-				break;
-			}
-			case SHOW_STONE:
-			{
-				material = Material.STONE;
-				break;
-			}
-			case SHOW_BASALT:
-			{
-				// TODO: 1.15.2 support
-				material = Material.getMaterial("BASALT") == null ?
-					Material.BARRIER : Material.getMaterial("BASALT");
-				break;
-			}
-			case RETURN:
-			{
 				clickHandler = (panel, user, clickType, i) -> {
+
 					if (this.parentPanel != null)
 					{
 						this.parentPanel.build();
@@ -245,39 +166,58 @@ public class GeneratorManagePanel extends CommonPanel
 					{
 						user.closeInventory();
 					}
-					
 					return true;
 				};
 
-				material = Material.OAK_DOOR;
+				icon = Material.OAK_DOOR;
 
 				break;
 			}
 			case PREVIOUS:
 			{
+				count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex--;
 					this.build();
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
 			case NEXT:
 			{
+				count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+				description.add(this.user.getTranslationOrNothing(reference + ".description",
+					Constants.NUMBER, String.valueOf(count)));
+
+				// add empty line
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
+
 				clickHandler = (panel, user, clickType, i) -> {
 					this.pageIndex++;
 					this.build();
 					return true;
 				};
 
-				material = Material.ARROW;
+				icon = Material.TIPPED_ARROW;
 				break;
 			}
-			case CREATE:
+			case CREATE_GENERATOR:
 			{
-				material = Material.WRITABLE_BOOK;
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-create"));
+
+				icon = Material.WRITABLE_BOOK;
 				clickHandler = (panel, user1, clickType, slot) -> {
 					String gameModePrefix = Utils.getGameMode(this.world).toLowerCase() + "_";
 
@@ -298,7 +238,7 @@ public class GeneratorManagePanel extends CommonPanel
 							newGeneratorTier.setGeneratorIcon(new ItemStack(Material.PAPER));
 							
 							this.manager.saveGeneratorTier(newGeneratorTier);
-							this.manager.loadGeneratorTier(newGeneratorTier, false, this.user, true);
+							this.manager.loadGeneratorTier(newGeneratorTier, false, this.user);
 
 							// Add new generator to generatorList.
 							this.generatorList.add(newGeneratorTier);
@@ -323,23 +263,33 @@ public class GeneratorManagePanel extends CommonPanel
 					ConversationUtils.createIDStringInput(generatorIdConsumer,
 						validationFunction,
 						this.user,
-						this.user.getTranslation(Constants.QUESTIONS + "write-generator-name"),
-						this.user.getTranslation(Constants.MESSAGE + "new-generator-created",
+						this.user.getTranslation(Constants.CONVERSATIONS + "write-name"),
+						this.user.getTranslation(Constants.CONVERSATIONS + "new-object-created",
 							Constants.WORLD, world.getName()),
-						Constants.ERRORS + "generator-already-exists");
+						Constants.ERRORS + "object-already-exists");
 
 					return true;
 				};
 
 				break;
 			}
-			case DELETE:
+			case DELETE_GENERATOR:
 			{
-				material = this.selectedGenerators.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
+				icon = this.selectedGenerators.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
 				glow = !this.selectedGenerators.isEmpty();
+
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
 				if (!this.selectedGenerators.isEmpty())
 				{
+					description.add(this.user.getTranslation(reference + ".list"));
+					this.selectedGenerators.forEach(generator ->
+						description.add(this.user.getTranslation(reference + ".value",
+							Constants.GENERATOR, generator.getFriendlyName())));
+
+					description.add("");
+					description.add(this.user.getTranslation(Constants.TIPS + "click-to-remove"));
+
 					clickHandler = (panel, user1, clickType, slot) -> {
 
 						// Create consumer that accepts value from conversation.
@@ -351,6 +301,7 @@ public class GeneratorManagePanel extends CommonPanel
 									this.generatorList.remove(generator);
 								});
 
+								this.selectedGenerators.clear();
 								this.updateRows();
 							}
 
@@ -382,22 +333,95 @@ public class GeneratorManagePanel extends CommonPanel
 						ConversationUtils.createConfirmation(
 							consumer,
 							this.user,
-							this.user.getTranslation(Constants.QUESTIONS + "confirm-generator-deletion",
+							this.user.getTranslation(Constants.CONVERSATIONS + "confirm-deletion",
 								TextVariables.NUMBER, String.valueOf(this.selectedGenerators.size()),
-								Constants.GENERATORS, generatorString),
-							this.user.getTranslation(Constants.MESSAGE + "generator-data-removed",
+								Constants.VALUE, generatorString),
+							this.user.getTranslation(Constants.CONVERSATIONS + "data-removed",
 								Constants.GAMEMODE, Utils.getGameMode(this.world)));
-
 
 						return true;
 					};
 				}
 				else
 				{
+					description.add("");
+					description.add(this.user.getTranslation(Constants.TIPS + "select-before"));
+
 					// Do nothing as no generators are selected.
 					clickHandler = (panel, user1, clickType, slot) -> true;
 				}
 
+				break;
+			}
+			default:
+				clickHandler = (panel, user1, clickType, slot) -> true;
+		}
+
+		return new PanelItemBuilder().
+			name(name).
+			description(description).
+			icon(icon).
+			amount(count).
+			clickHandler(clickHandler).
+			glow(glow).
+			build();
+	}
+
+
+	/**
+	 * This method creates panel item for given button type.
+	 * @param button Button type.
+	 * @return Clickable PanelItem button.
+	 */
+	private PanelItem createButton(Button button)
+	{
+		final String reference = Constants.BUTTON + button.name().toLowerCase();
+		String name = this.user.getTranslation(reference + ".name");
+
+		List<String> description = new ArrayList<>();
+		description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
+		// Add helper description
+		description.add("");
+		if (this.activeFilterButton == button)
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "click-to-deactivate"));
+		}
+		else
+		{
+			description.add(this.user.getTranslation(Constants.TIPS + "click-to-activate"));
+		}
+
+		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
+			this.activeFilterButton = this.activeFilterButton == button ? Button.NONE : button;
+			// Rebuild everything.
+			this.build();
+
+			// Always return true.
+			return true;
+		};
+
+		boolean glow = this.activeFilterButton == button;
+
+		Material material = Material.PAPER;
+
+		switch (button)
+		{
+			case SHOW_COBBLESTONE:
+			{
+				material = Material.COBBLESTONE;
+				break;
+			}
+			case SHOW_STONE:
+			{
+				material = Material.STONE;
+				break;
+			}
+			case SHOW_BASALT:
+			{
+				// TODO: 1.15.2 support
+				material = Material.getMaterial("BASALT") == null ?
+					Material.BARRIER : Material.getMaterial("BASALT");
 				break;
 			}
 		}
@@ -550,21 +574,21 @@ public class GeneratorManagePanel extends CommonPanel
 	{
 		List<String> description = super.generateGeneratorDescription(generator);
 
+		if (this.selectedGenerators.contains(generator))
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+		}
+
 		description.add("");
-		description.add(this.user.getTranslation(Constants.DESCRIPTION + "click-to-edit"));
+		description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-edit"));
 
 		if (this.selectedGenerators.contains(generator))
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "right-click-to-deselect"));
+			description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-deselect"));
 		}
 		else
 		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "right-click-to-select"));
-		}
-
-		if (this.selectedGenerators.contains(generator))
-		{
-			description.add(this.user.getTranslation(Constants.DESCRIPTION + "selected"));
+			description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-select"));
 		}
 
 		return description;
@@ -579,7 +603,7 @@ public class GeneratorManagePanel extends CommonPanel
 	/**
 	 * This enum holds variable that allows to switch between button creation.
 	 */
-	private enum Action
+	private enum Button
 	{
 		/**
 		 * Button that on click shows only cobblestone generators.
@@ -593,6 +617,18 @@ public class GeneratorManagePanel extends CommonPanel
 		 * Button that on click shows only basalt generators.
 		 */
 		SHOW_BASALT,
+		/**
+		 * Filter for none.
+		 */
+		NONE
+	}
+
+
+	/**
+	 * This enum holds variable that allows to switch between button creation.
+	 */
+	private enum Action
+	{
 		/**
 		 * Return button that exists GUI.
 		 */
@@ -608,11 +644,11 @@ public class GeneratorManagePanel extends CommonPanel
 		/**
 		 * Allows to add new generator to the generatorList.
 		 */
-		CREATE,
+		CREATE_GENERATOR,
 		/**
 		 * Allows to delete selected generators from generatorList.
 		 */
-		DELETE
+		DELETE_GENERATOR
 	}
 
 
@@ -633,7 +669,7 @@ public class GeneratorManagePanel extends CommonPanel
 	/**
 	 * Stores currently active filter button.
 	 */
-	private Action activeFilterButton;
+	private Button activeFilterButton;
 
 	/**
 	 * This variable holds current pageIndex for multi-page generator choosing.
@@ -644,4 +680,9 @@ public class GeneratorManagePanel extends CommonPanel
 	 * Stores how many elements will be in display.
 	 */
 	private int rowCount;
+
+	/**
+	 * This variable holds current max page index for multi-page generator choosing.
+	 */
+	private int maxPageIndex;
 }
