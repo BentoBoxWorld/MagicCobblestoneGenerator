@@ -1,6 +1,7 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
 
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
@@ -21,6 +22,8 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -919,13 +922,23 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        Utils.sendMessage(user,
-            user.getTranslation(Constants.MESSAGES + "generator-deactivated",
-                Constants.GENERATOR, generatorTier.getFriendlyName()));
-        generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
+        // Call event about generator activation.
+        GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
+            user,
+            generatorData.getUniqueId(),
+            false);
+        Bukkit.getPluginManager().callEvent(event);
 
-        // Save object.
-        this.saveGeneratorData(generatorData);
+        if (!event.isCancelled())
+        {
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-deactivated",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+            generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
+
+            // Save object.
+            this.saveGeneratorData(generatorData);
+        }
     }
 
 
@@ -999,20 +1012,30 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        Utils.sendMessage(user,
-            user.getTranslation(Constants.MESSAGES + "generator-activated",
-                Constants.GENERATOR, generatorTier.getFriendlyName()));
-        generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+        // Call event about generator activation.
+        GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
+            user,
+            island.getUniqueId(),
+            true);
+        Bukkit.getPluginManager().callEvent(event);
 
-        // check and send message that generator is disabled
-        if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
+        if (!event.isCancelled())
         {
-            Utils.sendMessage(user, user.getTranslation(
-                StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
-        }
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-activated",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+            generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
 
-        // Save object.
-        this.saveGeneratorData(generatorData);
+            // check and send message that generator is disabled
+            if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
+            {
+                Utils.sendMessage(user, user.getTranslation(
+                    StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
+            }
+
+            // Save object.
+            this.saveGeneratorData(generatorData);
+        }
     }
 
 
@@ -1077,18 +1100,8 @@ public class StoneGeneratorManager
             if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0)
             {
                 // Return true only if user has enough money and its removal was successful.
-                if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()) &&
-                    this.addon.getVaultHook().withdraw(user,
-                        generatorTier.getGeneratorTierCost()).transactionSuccess())
+                if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()))
                 {
-                    Map<String, Object> keyValues = new HashMap<>();
-                    keyValues.put("eventName", "GeneratorBuyEvent");
-                    keyValues.put("targetPlayer", user.getUniqueId());
-                    keyValues.put("islandUUID", island.getUniqueId());
-                    keyValues.put("generator", generatorTier.getFriendlyName());
-                    
-                    new AddonEvent().builder().addon(addon).keyValues(keyValues).build();
-                    
                     return true;
                 }
                 else
@@ -1119,13 +1132,37 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        Utils.sendMessage(user,
-            user.getTranslation(Constants.MESSAGES + "generator-purchased",
-                Constants.GENERATOR, generatorTier.getFriendlyName()));
-        generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
+        if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0 &&
+            this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess())
+        {
+            // TODO: Deprecated code. Use "GeneratorBuyEvent" class.
+            Map<String, Object> keyValues = new HashMap<>();
+            keyValues.put("eventName", "GeneratorBuyEvent");
+            keyValues.put("targetPlayer", user.getUniqueId());
+            keyValues.put("islandUUID", generatorTier.getUniqueId());
+            keyValues.put("generator", generatorTier.getFriendlyName());
 
-        // Save object.
-        this.saveGeneratorData(generatorData);
+            new AddonEvent().builder().addon(addon).keyValues(keyValues).build();
+
+            // Call event about successful purchase
+            Bukkit.getPluginManager().callEvent(new GeneratorBuyEvent(generatorTier,
+                user,
+                generatorData.getUniqueId()));
+
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-purchased",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+            generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
+
+            // Save object.
+            this.saveGeneratorData(generatorData);
+        }
+        else
+        {
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "no-credits-buy",
+                    TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+        }
     }
 
 
