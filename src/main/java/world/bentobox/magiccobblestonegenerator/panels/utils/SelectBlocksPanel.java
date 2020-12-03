@@ -4,11 +4,13 @@ package world.bentobox.magiccobblestonegenerator.panels.utils;
 import org.bukkit.Material;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
@@ -61,6 +63,8 @@ public class SelectBlocksPanel
 				this.elements.add(material);
 			}
 		}
+
+		this.filterElements = this.elements;
 
 		this.pageIndex = 0;
 		// Calculate max page count.
@@ -129,11 +133,25 @@ public class SelectBlocksPanel
 
 		final int MAX_ELEMENTS = 21;
 
+		if (this.filterElements == null)
+		{
+			if (this.searchString == null || this.searchString.isEmpty())
+			{
+				this.filterElements = this.elements;
+			}
+			else
+			{
+				this.filterElements = this.searchElements(this.elements);
+			}
+
+			this.maxPageIndex = (int) Math.ceil(1.0 * this.filterElements.size() / 21) - 1;
+		}
+
 		if (this.pageIndex < 0)
 		{
-			this.pageIndex = this.elements.size() / MAX_ELEMENTS;
+			this.pageIndex = this.filterElements.size() / MAX_ELEMENTS;
 		}
-		else if (this.pageIndex > (this.elements.size() / MAX_ELEMENTS))
+		else if (this.pageIndex > (this.filterElements.size() / MAX_ELEMENTS))
 		{
 			this.pageIndex = 0;
 		}
@@ -144,18 +162,18 @@ public class SelectBlocksPanel
 		int index = 10;
 
 		while (materialIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
-			materialIndex < this.elements.size() &&
+			materialIndex < this.filterElements.size() &&
 			index < 36)
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
-				panelBuilder.item(index, this.createMaterialButton(this.elements.get(materialIndex++)));
+				panelBuilder.item(index, this.createMaterialButton(this.filterElements.get(materialIndex++)));
 			}
 
 			index++;
 		}
 
-		if (this.elements.size() > MAX_ELEMENTS)
+		if (this.filterElements.size() > MAX_ELEMENTS)
 		{
 			// Navigation buttons if necessary
 
@@ -169,6 +187,9 @@ public class SelectBlocksPanel
 			// Add accept blocks only if there are multi-select.
 			panelBuilder.item(40, this.createButton(Action.ACCEPT_BLOCKS));
 		}
+
+		// Add search block icon.
+		panelBuilder.item(4, this.createButton(Action.SEARCH_BLOCK));
 
 		panelBuilder.item(44, this.createButton(Action.RETURN));
 
@@ -220,7 +241,7 @@ public class SelectBlocksPanel
 			}
 		}
 
-		String name = this.user.getTranslation(Constants.BUTTON + "material-icon",
+		String name = this.user.getTranslation(Constants.BUTTON + "material-icon.name",
 			Constants.BLOCK, Utils.prettifyObject(this.user, material));
 
 		return new PanelItemBuilder().
@@ -352,6 +373,57 @@ public class SelectBlocksPanel
 
 				break;
 			}
+			case SEARCH_BLOCK:
+			{
+				description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
+				if (this.searchString != null && !this.searchString.isEmpty())
+				{
+					description.add(this.user.getTranslation(reference + ".search",
+						Constants.VALUE, this.searchString));
+				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-edit"));
+				description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-clear"));
+
+				clickHandler = (panel, user, clickType, slot) -> {
+					if (clickType.isRightClick())
+					{
+						// Clear string.
+						this.searchString = "";
+						this.filterElements = null;
+						// Rebuild gui.
+						this.build();
+					}
+					else
+					{
+						// Create consumer that process description change
+						Consumer<String> consumer = value ->
+						{
+							if (value != null)
+							{
+								this.searchString = value;
+								this.filterElements = null;
+							}
+
+							this.build();
+						};
+
+						// start conversation
+						ConversationUtils.createStringInput(consumer,
+							user,
+							user.getTranslation(Constants.CONVERSATIONS + "write-search"),
+							user.getTranslation(Constants.CONVERSATIONS + "search-updated"));
+					}
+
+					return true;
+				};
+
+				icon = Material.ANVIL;
+
+				break;
+			}
 			default:
 				return PanelItem.empty();
 		}
@@ -363,6 +435,23 @@ public class SelectBlocksPanel
 			icon(icon).
 			clickHandler(clickHandler).
 			build();
+	}
+
+
+	/**
+	 * This method filters out materials that do not contains search field.
+	 * @param materialCollection Collection of the materials from which it should search.
+	 * @return List of Materials that contains searched field.
+	 */
+	private List<Material> searchElements(Collection<Material> materialCollection)
+	{
+		return materialCollection.stream().
+			filter(material -> {
+				// If material name is set and name contains search field, then do not filter out.
+				return material.name().toLowerCase().contains(this.searchString.toLowerCase());
+			}).
+			distinct().
+			collect(Collectors.toList());
 	}
 
 
@@ -379,7 +468,8 @@ public class SelectBlocksPanel
 		PREVIOUS,
 		NEXT,
 		RETURN,
-		ACCEPT_BLOCKS
+		ACCEPT_BLOCKS,
+		SEARCH_BLOCK
 	}
 
 
@@ -388,9 +478,19 @@ public class SelectBlocksPanel
 // ---------------------------------------------------------------------
 
 	/**
+	 * String that allows to search for a material.
+	 */
+	private String searchString = null;
+
+	/**
 	 * List with elements that will be displayed in current GUI.
 	 */
 	private final List<Material> elements;
+
+	/**
+	 * List with elements that will be displayed in current GUI.
+	 */
+	private List<Material> filterElements;
 
 	/**
 	 * Set that contains selected materials.
@@ -420,5 +520,5 @@ public class SelectBlocksPanel
 	/**
 	 * This variable stores maximal page index for elements.
 	 */
-	private final int maxPageIndex;
+	private int maxPageIndex;
 }

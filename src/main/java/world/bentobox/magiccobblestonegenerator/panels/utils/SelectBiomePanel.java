@@ -314,7 +314,7 @@ public class SelectBiomePanel
             description.add(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-select"));
         }
 
-        String name = this.user.getTranslation(Constants.BUTTON + "biome-icon",
+        String name = this.user.getTranslation(Constants.BUTTON + "biome-icon.name",
             Constants.BIOME, Utils.prettifyObject(this.user, biome));
 
         return new PanelItemBuilder().

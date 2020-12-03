@@ -545,6 +545,12 @@ stone-generator:
         list-value: "&7 - [value]"
       material-icon:
         name: "&f&l [material]"
+      search_block:
+        name: "&f&l Search"
+        description: |-
+          &7 Search for a specific
+          &7 block.
+        search: "&b Value: [value]"
       # Button in GUI that allows to choose biomes for generator.
       accept_biome:
         name: "&f&l Accept the biomes"
