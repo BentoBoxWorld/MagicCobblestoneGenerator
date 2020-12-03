@@ -27,6 +27,9 @@ stone-generator:
       view:
         description: "Player command that opens GUI with detailed information about requested generator"
         parameters: "<generator_id> - id for generator"
+      buy:
+        description: "Player command that purchases requested generator without opening a GUI."
+        parameters: "<generator_id> - id for generator"
   # This section contains translations for items inside GUI interfaces.
   gui:
     # This section contains translations for all GUI titles.
