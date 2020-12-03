@@ -195,7 +195,7 @@ public class GeneratorViewPanel extends CommonPanel
 		panelBuilder.item(3, this.createButton(Tab.INFO));
 		panelBuilder.item(5, this.createButton(Tab.BLOCKS));
 
-		if (!this.generatorTier.getTreasureChanceMap().isEmpty())
+		if (!this.generatorTier.getTreasureItemChanceMap().isEmpty())
 		{
 			// This tab is useful only if there exist treasures.
 			panelBuilder.item(6, this.createButton(Tab.TREASURES));
@@ -253,7 +253,7 @@ public class GeneratorViewPanel extends CommonPanel
 			panelBuilder.item(24, this.createButton(Button.BIOMES));
 		}
 
-		if (!this.generatorTier.getTreasureChanceMap().isEmpty())
+		if (!this.generatorTier.getTreasureItemChanceMap().isEmpty())
 		{
 			// Do not display treasures if they are not Button.
 			panelBuilder.item(25, this.createButton(Button.TREASURE_CHANCE));
@@ -338,8 +338,8 @@ public class GeneratorViewPanel extends CommonPanel
 		final int MAX_ELEMENTS = 21;
 		final int correctPage;
 
-		List<Map.Entry<Double, Material>> treasureChanceList =
-			this.generatorTier.getTreasureChanceMap().entrySet().stream().
+		List<Map.Entry<Double, ItemStack>> treasureChanceList =
+			this.generatorTier.getTreasureItemChanceMap().entrySet().stream().
 				sorted(Map.Entry.comparingByKey()).
 				collect(Collectors.toList());
 
@@ -375,7 +375,7 @@ public class GeneratorViewPanel extends CommonPanel
 		// Store previous object value for displaying correct chance value.
 		Double previousValue = materialIndex > 0 ?
 			treasureChanceList.get(materialIndex - 1).getKey() : 0.0;
-		Double maxValue = this.generatorTier.getTreasureChanceMap().lastKey();
+		Double maxValue = this.generatorTier.getTreasureItemChanceMap().lastKey();
 
 		while (materialIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
 			materialIndex < treasureChanceList.size() &&
@@ -384,7 +384,7 @@ public class GeneratorViewPanel extends CommonPanel
 			if (!panelBuilder.slotOccupied(index))
 			{
 				// Get entry from list.
-				Map.Entry<Double, Material> materialEntry = treasureChanceList.get(materialIndex++);
+				Map.Entry<Double, ItemStack> materialEntry = treasureChanceList.get(materialIndex++);
 				// Add to panel
 				panelBuilder.item(index, this.createTreasureButton(materialEntry, previousValue, maxValue));
 				// Assign previous value to current entry.
@@ -852,10 +852,12 @@ public class GeneratorViewPanel extends CommonPanel
 	 * @param maxValue Displays maximal value for map.
 	 * @return PanelItem for generator tier.
 	 */
-	private PanelItem createTreasureButton(Map.Entry<Double, Material> treasureChanceEntry, Double previousValue, Double maxValue)
+	private PanelItem createTreasureButton(Map.Entry<Double, ItemStack> treasureChanceEntry, Double previousValue, Double maxValue)
 	{
 		// Normalize value
 		Double value = (treasureChanceEntry.getKey() - previousValue) / maxValue * 100.0 * this.generatorTier.getTreasureChance();
+
+		// TODO: It would be necessary to add some item meta data information.
 
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
@@ -867,7 +869,7 @@ public class GeneratorViewPanel extends CommonPanel
 				Constants.THOUSANDS, this.thousandsFormat.format(value),
 				Constants.TEN_THOUSANDS, this.tenThousandsFormat.format(value),
 				Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value))).
-			icon(treasureChanceEntry.getValue()).
+			icon(treasureChanceEntry.getValue().clone()).
 			clickHandler((panel, user1, clickType, i) -> true).
 			build();
 	}

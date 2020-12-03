@@ -115,21 +115,25 @@ public class MagicGenerator
         // ask config if physics should be used
         block.setType(newMaterial, this.addon.getSettings().isUsePhysics());
 
-        if (generatorTier.getMaxTreasureAmount() > 0 && generatorTier.getTreasureChance() > 0 && !generatorTier.getTreasureChanceMap().isEmpty())
+        if (generatorTier.getMaxTreasureAmount() > 0 &&
+            generatorTier.getTreasureChance() > 0 &&
+            !generatorTier.getTreasureItemChanceMap().isEmpty())
         {
             // Random check on getting treasure.
             if (this.random.nextDouble() <= generatorTier.getTreasureChance())
             {
                 // Use the same variables for treasures.
-                chanceMap = generatorTier.getTreasureChanceMap();
-                newMaterial = this.getMaterialFromMap(chanceMap);
+                TreeMap<Double, ItemStack> treasureMap = generatorTier.getTreasureItemChanceMap();
+                ItemStack itemStack = this.getMaterialFromMap(treasureMap);
 
                 // Double check, in general it should always be a material.
-                if (newMaterial != null)
+                if (itemStack != null)
                 {
+                    ItemStack drop = itemStack.clone();
+                    drop.setAmount(this.random.nextInt(generatorTier.getMaxTreasureAmount() - 1) + 1);
+
                     // drop item naturally in the location of the block
-                    block.getWorld().dropItemNaturally(block.getLocation(),
-                        new ItemStack(newMaterial, this.random.nextInt(generatorTier.getMaxTreasureAmount() - 1) + 1));
+                    block.getWorld().dropItemNaturally(block.getLocation(), drop);
 
                     // TODO: Add effects like sound and particle :)
                 }
@@ -143,9 +147,9 @@ public class MagicGenerator
     /**
      * This method returns a random material from given tree map.
      * @param chanceMap Map that contains all objects with their chance to drop.
-     * @return Material from map or null.
+     * @return <T> from map or null.
      */
-    private @Nullable Material getMaterialFromMap(TreeMap<Double, Material> chanceMap)
+    private <T> T getMaterialFromMap(TreeMap<Double, T> chanceMap)
     {
         if (chanceMap.isEmpty())
         {

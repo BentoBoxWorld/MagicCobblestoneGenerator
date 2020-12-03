@@ -2,6 +2,7 @@ package world.bentobox.magiccobblestonegenerator.managers;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
@@ -146,6 +147,9 @@ public class StoneGeneratorManager
                 user.getTranslation(Constants.MESSAGES + "generator-loaded",
                     Constants.GENERATOR, generatorTier.getFriendlyName()));
         }
+
+        // Migrate generator tier object.
+        this.migrateGeneratorTier(generatorTier);
 
         this.generatorTierCache.put(generatorTier.getUniqueId(), generatorTier);
         return true;
@@ -334,6 +338,25 @@ public class StoneGeneratorManager
     // ---------------------------------------------------------------------
     // Section: Generator related methods
     // ---------------------------------------------------------------------
+
+
+    /**
+     * This method migrated generator tier to a newer version.
+     * @param generator Generator that must be migrated.
+     */
+    private void migrateGeneratorTier(GeneratorTierObject generator)
+    {
+        if (generator.getTreasureChanceMap() != null)
+        {
+            generator.setTreasureItemChanceMap(new TreeMap<>());
+
+            generator.getTreasureChanceMap().forEach((chance, material) ->
+                generator.getTreasureItemChanceMap().put(chance, new ItemStack(material)));
+
+            generator.setTreasureChanceMap(null);
+            this.saveGeneratorTier(generator);
+        }
+    }
 
 
     /**

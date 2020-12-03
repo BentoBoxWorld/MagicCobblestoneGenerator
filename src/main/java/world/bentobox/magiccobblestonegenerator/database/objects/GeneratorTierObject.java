@@ -411,6 +411,28 @@ public class GeneratorTierObject implements DataObject
 	}
 
 
+	/**
+	 * Gets treasure item chance map.
+	 *
+	 * @return the treasure item chance map
+	 */
+	public TreeMap<Double, ItemStack> getTreasureItemChanceMap()
+	{
+		return treasureItemChanceMap;
+	}
+
+
+	/**
+	 * Sets treasure item chance map.
+	 *
+	 * @param treasureItemChanceMap the treasure item chance map
+	 */
+	public void setTreasureItemChanceMap(TreeMap<Double, ItemStack> treasureItemChanceMap)
+	{
+		this.treasureItemChanceMap = treasureItemChanceMap;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Methods
 // ---------------------------------------------------------------------
@@ -439,7 +461,23 @@ public class GeneratorTierObject implements DataObject
 		clone.setActivationCost(this.activationCost);
 		clone.setDeployed(this.deployed);
 		clone.setBlockChanceMap(new TreeMap<>(this.blockChanceMap));
-		clone.setTreasureChanceMap(new TreeMap<>(this.treasureChanceMap));
+
+		if (treasureChanceMap != null)
+		{
+			clone.setTreasureChanceMap(new TreeMap<>(this.treasureChanceMap));
+		}
+		else
+		{
+			clone.setTreasureChanceMap(null);
+		}
+
+		// Cloning must be done like this
+		TreeMap<Double, ItemStack> cloneMap = new TreeMap<>();
+		this.treasureItemChanceMap.forEach((chance, item) -> {
+			cloneMap.put(chance, item.clone());
+		});
+		clone.setTreasureItemChanceMap(cloneMap);
+
 		clone.setTreasureChance(this.treasureChance);
 		clone.setMaxTreasureAmount(this.maxTreasureAmount);
 
@@ -591,8 +629,15 @@ public class GeneratorTierObject implements DataObject
 	/**
 	 * Map that stores different extra treasures and their change for being dropped.
 	 */
+	@Deprecated
 	@Expose
 	private TreeMap<Double, Material> treasureChanceMap = new TreeMap<>();
+
+	/**
+	 * Map that stores different extra treasures and their change for being dropped.
+	 */
+	@Expose
+	private TreeMap<Double, ItemStack> treasureItemChanceMap = new TreeMap<>();
 
 	/**
 	 * This stores a value of dropping treasure from treasure chance map.

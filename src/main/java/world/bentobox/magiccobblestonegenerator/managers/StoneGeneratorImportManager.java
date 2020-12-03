@@ -361,7 +361,7 @@ public class StoneGeneratorImportManager
 
 			if (materials != null)
 			{
-				TreeMap<Double, Material> blockChances = new TreeMap<>();
+				TreeMap<Double, ItemStack> blockChances = new TreeMap<>();
 
 				for (String materialKey : materials.getKeys(false))
 				{
@@ -369,7 +369,7 @@ public class StoneGeneratorImportManager
 					{
 						Material material = Material.valueOf(materialKey.toUpperCase());
 						double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-						blockChances.put(lastEntry + materials.getDouble(materialKey, 0), material);
+						blockChances.put(lastEntry + materials.getDouble(materialKey, 0), new ItemStack(material));
 					}
 					catch (Exception e)
 					{
@@ -379,7 +379,7 @@ public class StoneGeneratorImportManager
 					}
 				}
 
-				generatorTier.setTreasureChanceMap(blockChances);
+				generatorTier.setTreasureItemChanceMap(blockChances);
 			}
 		}
 	}

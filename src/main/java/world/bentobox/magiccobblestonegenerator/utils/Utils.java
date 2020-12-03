@@ -11,6 +11,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -226,25 +228,25 @@ public class Utils
      * @param treeMap TreeMap that contains elements which must be translated to list.
      * @return PairList of elements from treeMap.
      */
-    public static List<Pair<Material, Double>> treeMap2PairList(TreeMap<Double, Material> treeMap)
+    public static <T> List<Pair<T, Double>> treeMap2PairList(TreeMap<Double, T> treeMap)
     {
-        List<Pair<Material, Double>> returnList = new ArrayList<>(treeMap.size());
-        
+        List<Pair<T, Double>> returnList = new ArrayList<>(treeMap.size());
+
         if (treeMap.isEmpty())
         {
             // If map is empty, do not process anymore.
             return returnList;
         }
-        
+
         Double previousValue = 0.0;
-        
+
         while (!treeMap.isEmpty())
         {
-            Map.Entry<Double, Material> entry = treeMap.pollFirstEntry();
+            Map.Entry<Double, T> entry = treeMap.pollFirstEntry();
             returnList.add(new Pair<>(entry.getValue(), entry.getKey() - previousValue));
             previousValue = entry.getKey();
         }
-        
+
         return returnList;
     }
 
@@ -254,9 +256,9 @@ public class Utils
      * @param pairList PairList that contains elements which must be translated to map.
      * @return TreeMap of elements from pairList.
      */
-    public static TreeMap<Double, Material> pairList2TreeMap(List<Pair<Material, Double>> pairList)
+    public static <T> TreeMap<Double, T> pairList2TreeMap(List<Pair<T, Double>> pairList)
     {
-        TreeMap<Double, Material> treeMap = new TreeMap<>(Double::compareTo);
+        TreeMap<Double, T> treeMap = new TreeMap<>(Double::compareTo);
 
         if (pairList.isEmpty())
         {
@@ -266,7 +268,7 @@ public class Utils
 
         Double nextMax = 0.0;
 
-        for (Pair<Material, Double> pair : pairList)
+        for (Pair<T, Double> pair : pairList)
         {
             // drop 0 and negative values
             if (pair.getValue() > 0.0)
@@ -391,6 +393,29 @@ public class Utils
 
         // Nothing was found. Use just a prettify text function.
         return Util.prettifyText(material.name());
+    }
+
+
+    /**
+     * This method prettify given itemStack name to more friendly name.
+     * @param user User which translation set will be used.
+     * @param itemStack material that requires prettifying.
+     * @return Clean and readable material name.
+     */
+    public static String prettifyObject(User user, ItemStack itemStack)
+    {
+        if (itemStack.hasItemMeta() && itemStack.getItemMeta() != null)
+        {
+            // If item has a valid display name, return it.
+
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            return itemMeta.getDisplayName();
+        }
+        else
+        {
+            // Otherwise return material object name:
+            return Utils.prettifyObject(user, itemStack.getType());
+        }
     }
 
 

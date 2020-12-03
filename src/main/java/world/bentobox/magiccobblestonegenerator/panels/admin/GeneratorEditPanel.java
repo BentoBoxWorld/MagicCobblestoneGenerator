@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -54,7 +55,9 @@ public class GeneratorEditPanel extends CommonPanel
 		// By default no-filters are active.
 		this.activeTab = Tab.INFO;
 		this.selectedMaterial = new HashSet<>();
+		this.selectedTreasures = new HashSet<>();
 		this.materialChanceList = new ArrayList<>();
+		this.treasureChanceList = new ArrayList<>();
 
 		this.applyFormatting();
 	}
@@ -147,7 +150,7 @@ public class GeneratorEditPanel extends CommonPanel
 
 				break;
 			case TREASURES:
-				if (!this.materialChanceList.isEmpty())
+				if (!this.treasureChanceList.isEmpty())
 				{
 					this.populateTreasures(panelBuilder);
 				}
@@ -296,13 +299,13 @@ public class GeneratorEditPanel extends CommonPanel
 		final int MAX_ELEMENTS = 21;
 		final int correctPage;
 
-		this.maxPageIndex = (int) Math.ceil(1.0 * materialChanceList.size() / 21) - 1;
+		this.maxPageIndex = (int) Math.ceil(1.0 * treasureChanceList.size() / 21) - 1;
 
 		if (this.pageIndex < 0)
 		{
-			correctPage = this.materialChanceList.size() / MAX_ELEMENTS;
+			correctPage = this.treasureChanceList.size() / MAX_ELEMENTS;
 		}
-		else if (this.pageIndex > (this.materialChanceList.size() / MAX_ELEMENTS))
+		else if (this.pageIndex > (this.treasureChanceList.size() / MAX_ELEMENTS))
 		{
 			correctPage = 0;
 		}
@@ -311,7 +314,7 @@ public class GeneratorEditPanel extends CommonPanel
 			correctPage = this.pageIndex;
 		}
 
-		if (this.materialChanceList.size() > MAX_ELEMENTS)
+		if (this.treasureChanceList.size() > MAX_ELEMENTS)
 		{
 			// Navigation buttons if necessary
 
@@ -325,16 +328,16 @@ public class GeneratorEditPanel extends CommonPanel
 		int index = 10;
 
 		// Store previous object value for displaying correct chance value.
-		Double maxValue = this.generatorTier.getTreasureChanceMap().lastKey();
+		Double maxValue = this.generatorTier.getTreasureItemChanceMap().lastKey();
 
 		while (materialIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
-			materialIndex < this.materialChanceList.size() &&
+			materialIndex < this.treasureChanceList.size() &&
 			index < 36)
 		{
 			if (!panelBuilder.slotOccupied(index))
 			{
 				// Get entry from list.
-				Pair<Material, Double> materialEntry = this.materialChanceList.get(materialIndex++);
+				Pair<ItemStack, Double> materialEntry = this.treasureChanceList.get(materialIndex++);
 				// Add to panel
 				panelBuilder.item(index, this.createTreasureButton(materialEntry, maxValue));
 			}
@@ -854,6 +857,8 @@ public class GeneratorEditPanel extends CommonPanel
 			{
 				this.selectedMaterial.clear();
 				this.materialChanceList.clear();
+				this.selectedTreasures.clear();
+				this.treasureChanceList.clear();
 
 				if (button == Tab.BLOCKS)
 				{
@@ -864,8 +869,8 @@ public class GeneratorEditPanel extends CommonPanel
 				else if (button == Tab.TREASURES)
 				{
 					// Operate with clone
-					this.materialChanceList =
-						Utils.treeMap2PairList(new TreeMap<>(this.generatorTier.getTreasureChanceMap()));
+					this.treasureChanceList =
+						Utils.treeMap2PairList(new TreeMap<>(this.generatorTier.getTreasureItemChanceMap()));
 				}
 			}
 
@@ -999,20 +1004,24 @@ public class GeneratorEditPanel extends CommonPanel
 								Consumer<Number> numberConsumer = number -> {
 									if (number != null)
 									{
-										this.materialChanceList.add(
-											new Pair<>(value.iterator().next(),
-												number.doubleValue()));
-
 										if (this.activeTab == Tab.BLOCKS)
 										{
+											this.materialChanceList.add(
+												new Pair<>(value.iterator().next(),
+													number.doubleValue()));
+
 											this.generatorTier.setBlockChanceMap(
 												Utils.pairList2TreeMap(this.materialChanceList));
 											this.manager.saveGeneratorTier(this.generatorTier);
 										}
 										else if (this.activeTab == Tab.TREASURES)
 										{
-											this.generatorTier.setTreasureChanceMap(
-												Utils.pairList2TreeMap(this.materialChanceList));
+											this.treasureChanceList.add(
+												new Pair<>(new ItemStack(value.iterator().next()),
+													number.doubleValue()));
+
+											this.generatorTier.setTreasureItemChanceMap(
+												Utils.pairList2TreeMap(this.treasureChanceList));
 											this.manager.saveGeneratorTier(this.generatorTier);
 										}
 									}
@@ -1039,8 +1048,9 @@ public class GeneratorEditPanel extends CommonPanel
 			}
 			case REMOVE_MATERIAL:
 			{
-				icon = this.selectedMaterial.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
-				glow = !this.selectedMaterial.isEmpty();
+				icon = this.selectedMaterial.isEmpty() && this.selectedTreasures.isEmpty() ?
+					Material.BARRIER : Material.LAVA_BUCKET;
+				glow = !this.selectedMaterial.isEmpty() || !this.selectedTreasures.isEmpty();
 
 				description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
@@ -1049,6 +1059,7 @@ public class GeneratorEditPanel extends CommonPanel
 					clickHandler = (panel, user1, clickType, slot) -> {
 
 						this.materialChanceList.removeAll(this.selectedMaterial);
+						this.treasureChanceList.removeAll(this.selectedTreasures);
 
 						if (this.activeTab == Tab.BLOCKS)
 						{
@@ -1058,9 +1069,9 @@ public class GeneratorEditPanel extends CommonPanel
 						}
 						else if (this.activeTab == Tab.TREASURES)
 						{
-							this.generatorTier.setTreasureChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
+							this.generatorTier.setTreasureItemChanceMap(Utils.pairList2TreeMap(this.treasureChanceList));
 							this.manager.saveGeneratorTier(this.generatorTier);
-							this.selectedMaterial.clear();
+							this.selectedTreasures.clear();
 						}
 
 						this.build();
@@ -1070,10 +1081,21 @@ public class GeneratorEditPanel extends CommonPanel
 
 					description.add(this.user.getTranslation(reference + ".selected-materials"));
 
-					this.selectedMaterial.forEach(pair ->
-						description.add(this.user.getTranslation(reference + ".list-value",
-							Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
-							Constants.NUMBER, String.valueOf(pair.getValue()))));
+					if (!this.selectedMaterial.isEmpty())
+					{
+						this.selectedMaterial.forEach(pair ->
+							description.add(this.user.getTranslation(reference + ".list-value",
+								Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
+								Constants.NUMBER, String.valueOf(pair.getValue()))));
+					}
+
+					if (!this.selectedTreasures.isEmpty())
+					{
+						this.selectedTreasures.forEach(pair ->
+							description.add(this.user.getTranslation(reference + ".list-value",
+								Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
+								Constants.NUMBER, String.valueOf(pair.getValue()))));
+					}
 
 					description.add("");
 					description.add(this.user.getTranslation(Constants.TIPS + "click-to-remove"));
@@ -1189,12 +1211,29 @@ public class GeneratorEditPanel extends CommonPanel
 	 * @param maxValue Displays maximal value for map.
 	 * @return PanelItem for generator tier.
 	 */
-	private PanelItem createTreasureButton(Pair<Material, Double> treasureChanceEntry, Double maxValue)
+	private PanelItem createTreasureButton(Pair<ItemStack, Double> treasureChanceEntry, Double maxValue)
 	{
+		// Get item.
+		ItemStack treasure = treasureChanceEntry.getKey().clone();
+
 		// Normalize value
 		Double value = treasureChanceEntry.getValue() / maxValue * 100.0 * this.generatorTier.getTreasureChance();
 
 		List<String> description = new ArrayList<>();
+
+		// if item meta is set and lore is not empty, add it to the description
+		if (treasure.hasItemMeta() && treasure.getItemMeta() != null)
+		{
+			ItemMeta itemMeta = treasure.getItemMeta();
+
+			if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty())
+			{
+				description.addAll(itemMeta.getLore());
+				// Add empty line after lore.
+				description.add("");
+			}
+		}
+
 		description.add(this.user.getTranslation(Constants.BUTTON + "treasure-icon.description",
 			TextVariables.NUMBER, String.valueOf(value),
 			Constants.TENS, this.tensFormat.format(value),
@@ -1227,9 +1266,9 @@ public class GeneratorEditPanel extends CommonPanel
 		PanelItem.ClickHandler clickHandler = (panel, user1, clickType, slot) -> {
 			if (clickType.isRightClick())
 			{
-				if (!this.selectedMaterial.remove(treasureChanceEntry))
+				if (!this.selectedTreasures.remove(treasureChanceEntry))
 				{
-					this.selectedMaterial.add(treasureChanceEntry);
+					this.selectedTreasures.add(treasureChanceEntry);
 				}
 
 				this.build();
@@ -1259,9 +1298,9 @@ public class GeneratorEditPanel extends CommonPanel
 
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
-				Constants.BLOCK, Utils.prettifyObject(this.user, treasureChanceEntry.getKey()))).
+				Constants.BLOCK, Utils.prettifyObject(this.user, treasure))).
 			description(description).
-			icon(treasureChanceEntry.getKey()).
+			icon(treasure).
 			clickHandler(clickHandler).
 			glow(glow).
 			build();
@@ -1483,9 +1522,19 @@ public class GeneratorEditPanel extends CommonPanel
 	private final Set<Pair<Material, Double>> selectedMaterial;
 
 	/**
+	 * This set is used to detect and delete selected blocks.
+	 */
+	private final Set<Pair<ItemStack, Double>> selectedTreasures;
+
+	/**
 	 * This list contains elements of tree map that we can edit with a panel.
 	 */
 	private List<Pair<Material, Double>> materialChanceList;
+
+	/**
+	 * This list contains elements of tree map that we can edit with a panel.
+	 */
+	private List<Pair<ItemStack, Double>> treasureChanceList;
 
 // ---------------------------------------------------------------------
 // Section: Formatting
