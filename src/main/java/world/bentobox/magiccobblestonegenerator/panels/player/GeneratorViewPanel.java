@@ -4,6 +4,7 @@ package world.bentobox.magiccobblestonegenerator.panels.player;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -858,18 +859,34 @@ public class GeneratorViewPanel extends CommonPanel
 		Double value = (treasureChanceEntry.getKey() - previousValue) / maxValue * 100.0 * this.generatorTier.getTreasureChance();
 
 		// TODO: It would be necessary to add some item meta data information.
+		ItemStack treasure = treasureChanceEntry.getValue().clone();
+		List<String> description = new ArrayList<>();
+
+		if (treasure.hasItemMeta() && treasure.getItemMeta() != null)
+		{
+			ItemMeta itemMeta = treasure.getItemMeta();
+
+			if (itemMeta.getLore() != null && !itemMeta.getLore().isEmpty())
+			{
+				description.addAll(itemMeta.getLore());
+				// Add empty line after lore.
+				description.add("");
+			}
+		}
+
+		description.add(this.user.getTranslation(Constants.BUTTON + "treasure-icon.description",
+			TextVariables.NUMBER, String.valueOf(value),
+			Constants.TENS, this.tensFormat.format(value),
+			Constants.HUNDREDS, this.hundredsFormat.format(value),
+			Constants.THOUSANDS, this.thousandsFormat.format(value),
+			Constants.TEN_THOUSANDS, this.tenThousandsFormat.format(value),
+			Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value)));
 
 		return new PanelItemBuilder().
 			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
-				Constants.BLOCK, Utils.prettifyObject(this.user, treasureChanceEntry.getValue()))).
-			description(this.user.getTranslation(Constants.BUTTON + "treasure-icon.description",
-				TextVariables.NUMBER, String.valueOf(value),
-				Constants.TENS, this.tensFormat.format(value),
-				Constants.HUNDREDS, this.hundredsFormat.format(value),
-				Constants.THOUSANDS, this.thousandsFormat.format(value),
-				Constants.TEN_THOUSANDS, this.tenThousandsFormat.format(value),
-				Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value))).
-			icon(treasureChanceEntry.getValue().clone()).
+				Constants.BLOCK, Utils.prettifyObject(this.user, treasure))).
+			description(description).
+			icon(GuiUtils.getMaterialItem(treasure.getType())).
 			clickHandler((panel, user1, clickType, i) -> true).
 			build();
 	}
