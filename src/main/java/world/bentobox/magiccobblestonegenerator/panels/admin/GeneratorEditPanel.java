@@ -159,7 +159,7 @@ public class GeneratorEditPanel extends CommonPanel
 				panelBuilder.item(41, this.createButton(Action.REMOVE_MATERIAL));
 
 				// Add listener that allows to change blocks
-//				panelBuilder.listener(new TreasureChanger());
+				panelBuilder.listener(new TreasureChanger());
 
 				break;
 		}
@@ -1343,6 +1343,102 @@ public class GeneratorEditPanel extends CommonPanel
 
 				event.getInventory().setItem(19,
 					GeneratorEditPanel.this.createButton(Button.ICON).getItem());
+			}
+		}
+
+
+		/**
+		 * On inventory close.
+		 *
+		 * @param event the event
+		 */
+		@Override
+		public void onInventoryClose(InventoryCloseEvent event)
+		{
+			// Do nothing
+		}
+
+
+		/**
+		 * Setup current listener.
+		 */
+		@Override
+		public void setup()
+		{
+			// Do nothing
+		}
+	}
+
+
+	/**
+	 * This class allows to change treasures for Generator Tier
+	 */
+	private class TreasureChanger implements PanelListener
+	{
+		/**
+		 * Process inventory click.
+		 * If generator icon is selected and user clicks on item in his inventory, then change
+		 * icon to the item from inventory.
+		 *
+		 * @param user the user
+		 * @param event the event
+		 */
+		@Override
+		public void onInventoryClick(User user, InventoryClickEvent event)
+		{
+			if (GeneratorEditPanel.this.activeTab != Tab.TREASURES)
+			{
+				// Not a treasure gui
+				event.setCancelled(true);
+				return;
+			}
+
+			if (event.getRawSlot() > 44)
+			{
+				// Can select any item outside treasure gui.
+				event.setCancelled(false);
+
+				if (event.isShiftClick())
+				{
+					this.addItemToTreasures(event.getCurrentItem());
+				}
+			}
+			else if (event.getRawSlot() < 44)
+			{
+				if (event.getCursor() == null || event.getCursor().getType().isAir())
+				{
+					// There is no selected items.
+					event.setCancelled(true);
+					return;
+				}
+
+				if (event.getCurrentItem() != null && !event.getCurrentItem().getType().isAir())
+				{
+					// There is an element in the spot.
+					event.setCancelled(true);
+					return;
+				}
+
+				this.addItemToTreasures(event.getCursor());
+			}
+		}
+
+
+		/**
+		 * This method adds item to the treasure list.
+		 * @param itemStack Object that must be added to treasure list.
+		 */
+		private void addItemToTreasures(ItemStack itemStack)
+		{
+			if (itemStack != null && !itemStack.getType().isAir())
+			{
+				// Clone to avoid issues.
+				GeneratorEditPanel.this.treasureChanceList.add(new Pair<>(itemStack.clone(), 1.0));
+				GeneratorEditPanel.this.generatorTier.setTreasureItemChanceMap(
+					Utils.pairList2TreeMap(GeneratorEditPanel.this.treasureChanceList));
+				GeneratorEditPanel.this.manager.saveGeneratorTier(GeneratorEditPanel.this.generatorTier);
+				// Recall gui building.
+				GeneratorEditPanel.this.build();
 			}
 		}
 

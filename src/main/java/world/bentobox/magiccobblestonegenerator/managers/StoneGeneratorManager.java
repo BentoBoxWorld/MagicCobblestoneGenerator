@@ -346,7 +346,7 @@ public class StoneGeneratorManager
      */
     private void migrateGeneratorTier(GeneratorTierObject generator)
     {
-        if (generator.getTreasureChanceMap() != null)
+        if (generator.getTreasureChanceMap() != null && !generator.getTreasureChanceMap().isEmpty())
         {
             generator.setTreasureItemChanceMap(new TreeMap<>());
 
