@@ -409,7 +409,9 @@ public class Utils
             // If item has a valid display name, return it.
 
             ItemMeta itemMeta = itemStack.getItemMeta();
-            return itemMeta.getDisplayName();
+            return itemMeta.getDisplayName().isEmpty() ?
+                Utils.prettifyObject(user, itemStack.getType()) :
+                itemMeta.getDisplayName();
         }
         else
         {

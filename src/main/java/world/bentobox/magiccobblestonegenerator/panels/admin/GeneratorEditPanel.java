@@ -258,6 +258,9 @@ public class GeneratorEditPanel extends CommonPanel
 			correctPage = this.pageIndex;
 		}
 
+		// Update page index.
+		this.pageIndex = correctPage;
+
 		if (this.materialChanceList.size() > MAX_ELEMENTS)
 		{
 			// Navigation buttons if necessary
@@ -313,6 +316,9 @@ public class GeneratorEditPanel extends CommonPanel
 		{
 			correctPage = this.pageIndex;
 		}
+
+		// Update page index.
+		this.pageIndex = correctPage;
 
 		if (this.treasureChanceList.size() > MAX_ELEMENTS)
 		{
@@ -849,6 +855,12 @@ public class GeneratorEditPanel extends CommonPanel
 		String name = this.user.getTranslation(reference + ".name");
 		List<String> description = new ArrayList<>();
 		description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
+		if (button == Tab.TREASURES)
+		{
+			description.add(this.user.getTranslationOrNothing(reference + ".drag-and-drop"));
+		}
+
 		description.add("");
 		description.add(this.user.getTranslation(Constants.TIPS + "click-to-view"));
 
@@ -1114,6 +1126,7 @@ public class GeneratorEditPanel extends CommonPanel
 			name(name).
 			description(description).
 			icon(icon).
+			amount(count).
 			clickHandler(clickHandler).
 			glow(glow).
 			build();
@@ -1244,7 +1257,7 @@ public class GeneratorEditPanel extends CommonPanel
 		description.add(this.user.getTranslation(Constants.BUTTON + "treasure-icon.actual",
 			TextVariables.NUMBER, String.valueOf(treasureChanceEntry.getValue())));
 
-		boolean glow = this.selectedMaterial.contains(treasureChanceEntry);
+		boolean glow = this.selectedTreasures.contains(treasureChanceEntry);
 
 		if (glow)
 		{
@@ -1300,7 +1313,7 @@ public class GeneratorEditPanel extends CommonPanel
 			name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
 				Constants.BLOCK, Utils.prettifyObject(this.user, treasure))).
 			description(description).
-			icon(treasure).
+			icon(GuiUtils.getMaterialItem(treasure.getType())).
 			clickHandler(clickHandler).
 			glow(glow).
 			build();

@@ -159,6 +159,9 @@ stone-generator:
           &7 their chances to be dropped.
           &7 Treasures are dropped
           &7 on block generating.
+        drag-and-drop: |-
+          &7 Supports drag and drop
+          &7 items in empty spaces.
       # Section for blocks and treasures icons in Generator View GUI.
       block-icon:
         name: "&f&l [material]"
