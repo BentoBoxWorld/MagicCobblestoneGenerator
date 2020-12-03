@@ -83,8 +83,6 @@ public class GeneratorAdminCommand extends CompositeCommand
 			this.showHelp(this, user);
 		}
 
-		this.showHelp(this, user);
-
 		return true;
 	}
 
