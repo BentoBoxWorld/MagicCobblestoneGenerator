@@ -983,18 +983,34 @@ public class StoneGeneratorManager
             // save data.
             this.saveGeneratorData(dataObject);
 
+            if (!this.addon.getSettings().isNotifyUnlockedGenerators())
+            {
+                // Not necessary to notify users.
+                return;
+            }
+
             // Send message to user
             if (this.addon.isVaultProvided() && generator.getGeneratorTierCost() > 0)
             {
                 // Send message that generator is available for purchase.
 
-                island.getMemberSet().forEach(uuid -> Utils.sendUnlockMessage(uuid, island, generator, this.addon.isVaultProvided(), false));
+                island.getMemberSet().forEach(uuid ->
+                    Utils.sendUnlockMessage(uuid,
+                        island,
+                        generator,
+                        this.addon,
+                        false));
             }
             else
             {
                 // Send message that generator is available for activation.
 
-                island.getMemberSet().forEach(uuid ->  Utils.sendUnlockMessage(uuid, island, generator, this.addon.isVaultProvided(), true));
+                island.getMemberSet().forEach(uuid ->
+                    Utils.sendUnlockMessage(uuid,
+                        island,
+                        generator,
+                        this.addon,
+                        true));
             }
         }
     }

@@ -21,6 +21,13 @@ working-range: 0
 # Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.
 default-active-generators: 3
 #
+# Send a notification message when player unlocks a new generator.
+# 3 messages that will be showed:
+# stone-generator.conversations.click-text-to-purchase - if generator is unlocked but is not purchased.
+# stone-generator.conversations.click-text-to-activate-vault - if generator is unlocked but requires activation cost.
+# stone-generator.conversations.click-text-to-activate - if generator is unlocked and can be activated.
+notify-on-unlock: true
+#
 # This list stores GameModes in which the addon should not work.
 # To disable addon it is necessary to write its name in new line that starts with -. Example:
 # disabled-gamemodes:

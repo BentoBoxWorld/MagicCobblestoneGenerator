@@ -573,6 +573,16 @@ stone-generator:
           &7 To set it as 1 empty space,
           &7 write "empty".
         value: "&b Name: `&r[name]&r&b`"
+      unlock_notify:
+        name: "&f&l Notify On Unlock"
+        description: |-
+          &7 A message will be send
+          &7 to a user when he unlocks
+          &7 a new generator.
+        enabled: |-
+          &b Notify on unlock is &a enabled &b .
+        disabled: |-
+          &b Notify on unlock is &c disabled &b .
       # Buttons in Library GUI
       library:
         name: "&f&l [name]"
@@ -876,9 +886,9 @@ stone-generator:
     # Message that appears after successful data importing
     new-generators-imported: "&a Success, new generators for [gamemode] are imported."
     # Message that appears after unlocking a new generator.
-    click-text-to-purchase: "&e You have unlocked &r [generator] &r&e. Click here to buy it now for [number]."
-    click-text-to-activate-vault: "&e You have unlocked &r [generator] &r&e. Click here to activate it now for [number]."
-    click-text-to-activate: "&e You have unlocked &r [generator] &r&e. Click here to activate it now."
+    click-text-to-purchase: "&e You have unlocked &r [generator]&r&e. Click here to buy it now for [number]."
+    click-text-to-activate-vault: "&e You have unlocked &r [generator]&r&e. Click here to activate it now for [number]."
+    click-text-to-activate: "&e You have unlocked &r [generator]&r&e. Click here to activate it now."
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

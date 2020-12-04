@@ -326,6 +326,29 @@ public class Settings implements ConfigObject
         this.borderBlockName = borderBlockName;
     }
 
+
+    /**
+     * Is notify unlocked generators boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isNotifyUnlockedGenerators()
+    {
+        return notifyUnlockedGenerators;
+    }
+
+
+    /**
+     * Sets notify unlocked generators.
+     *
+     * @param notifyUnlockedGenerators the notify unlocked generators
+     */
+    public void setNotifyUnlockedGenerators(boolean notifyUnlockedGenerators)
+    {
+        this.notifyUnlockedGenerators = notifyUnlockedGenerators;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
  // ---------------------------------------------------------------------
@@ -356,6 +379,15 @@ public class Settings implements ConfigObject
     @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.")
     @ConfigEntry(path = "default-active-generators")
     private int defaultActiveGeneratorCount = 3;
+
+    @ConfigComment("")
+    @ConfigComment("Send a notification message when player unlocks a new generator.")
+    @ConfigComment("3 messages that will be showed:")
+    @ConfigComment("stone-generator.conversations.click-text-to-purchase - if generator is unlocked but is not purchased.")
+    @ConfigComment("stone-generator.conversations.click-text-to-activate-vault - if generator is unlocked but requires activation cost.")
+    @ConfigComment("stone-generator.conversations.click-text-to-activate - if generator is unlocked and can be activated.")
+    @ConfigEntry(path = "notify-on-unlock")
+    private boolean notifyUnlockedGenerators = true;
 
     @ConfigComment("")
     @ConfigComment("This list stores GameModes in which the addon should not work.")

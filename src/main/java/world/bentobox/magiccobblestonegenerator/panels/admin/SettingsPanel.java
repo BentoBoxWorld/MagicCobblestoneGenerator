@@ -73,11 +73,13 @@ public class SettingsPanel extends CommonPanel
 		panelBuilder.item(11, this.createButton(Action.WORKING_RANGE));
 		panelBuilder.item(20, this.createButton(Action.ACTIVE_GENERATORS));
 
-		panelBuilder.item(13, this.createButton(Action.USE_PHYSIC));
+		panelBuilder.item(12, this.createButton(Action.USE_PHYSIC));
 
-		panelBuilder.item(15, this.createButton(Action.SHOW_FILTERS));
-		panelBuilder.item(24, this.createButton(Action.BORDER_BLOCK));
-		panelBuilder.item(25, this.createButton(Action.BORDER_BLOCK_NAME));
+		panelBuilder.item(14, this.createButton(Action.SHOW_FILTERS));
+		panelBuilder.item(23, this.createButton(Action.BORDER_BLOCK));
+		panelBuilder.item(24, this.createButton(Action.BORDER_BLOCK_NAME));
+
+		panelBuilder.item(16, this.createButton(Action.UNLOCK_NOTIFY));
 
 		panelBuilder.item(35, this.createButton(Action.RETURN));
 		panelBuilder.build();
@@ -331,6 +333,35 @@ public class SettingsPanel extends CommonPanel
 				// Not implemented in current GUI.
 				break;
 			}
+			case UNLOCK_NOTIFY:
+			{
+				clickHandler = (panel, user, clickType, i) -> {
+					this.settings.setNotifyUnlockedGenerators(!this.settings.isNotifyUnlockedGenerators());
+					this.saveSettings();
+					// Update button in panel
+					this.build();
+
+					return true;
+				};
+
+				glow = this.settings.isNotifyUnlockedGenerators();
+
+				if (glow)
+				{
+					description.add(this.user.getTranslation(reference + ".enabled"));
+				}
+				else
+				{
+					description.add(this.user.getTranslation(reference + ".disabled"));
+				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
+
+				material = Material.OAK_SIGN;
+
+				break;
+			}
 			case RETURN:
 			{
 				description.add("");
@@ -421,6 +452,10 @@ public class SettingsPanel extends CommonPanel
 		 * Process border block action.
 		 */
 		BORDER_BLOCK_NAME,
+		/**
+		 * Process unlock notification action.
+		 */
+		UNLOCK_NOTIFY,
 		/**
 		 * Process Return Action.
 		 */
