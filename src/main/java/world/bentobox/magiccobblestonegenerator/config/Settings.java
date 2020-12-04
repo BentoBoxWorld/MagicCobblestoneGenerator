@@ -1,9 +1,8 @@
 package world.bentobox.magiccobblestonegenerator.config;
 
 
-import java.util.HashMap;
+import org.bukkit.Material;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -262,6 +261,71 @@ public class Settings implements ConfigObject
     }
 
 
+    /**
+     * Is show filters boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isShowFilters()
+    {
+        return showFilters;
+    }
+
+
+    /**
+     * Sets show filters.
+     *
+     * @param showFilters the show filters
+     */
+    public void setShowFilters(boolean showFilters)
+    {
+        this.showFilters = showFilters;
+    }
+
+
+    /**
+     * Gets border block.
+     *
+     * @return the border block
+     */
+    public Material getBorderBlock()
+    {
+        return borderBlock;
+    }
+
+
+    /**
+     * Sets border block.
+     *
+     * @param borderBlock the border block
+     */
+    public void setBorderBlock(Material borderBlock)
+    {
+        this.borderBlock = borderBlock;
+    }
+
+
+    /**
+     * Gets border block name.
+     *
+     * @return the border block name
+     */
+    public String getBorderBlockName()
+    {
+        return borderBlockName;
+    }
+
+
+    /**
+     * Sets border block name.
+     *
+     * @param borderBlockName the border block name
+     */
+    public void setBorderBlockName(String borderBlockName)
+    {
+        this.borderBlockName = borderBlockName;
+    }
+
 // ---------------------------------------------------------------------
 // Section: Variables
  // ---------------------------------------------------------------------
@@ -301,7 +365,18 @@ public class Settings implements ConfigObject
     @ConfigEntry(path = "disabled-gamemodes", needsRestart = true)
     private Set<String> disabledGameModes = new HashSet<>();
 
-    @ConfigComment("")
+    @ConfigComment("This allows to toggle if filters in Generator User Panel should be showed.")
+    @ConfigEntry(path = "gui.show-filters")
+    private boolean showFilters = true;
+
+    @ConfigComment("This allows to change main border block in player panel.")
+    @ConfigEntry(path = "gui.border-block")
+    private Material borderBlock = Material.MAGENTA_STAINED_GLASS_PANE;
+
+    @ConfigComment("This allows to change border block display name.")
+    @ConfigEntry(path = "gui.border-block-name")
+    private String borderBlockName = " ";
+
     @ConfigComment("Player main sub-command to access the addon.")
     @ConfigComment("This command label will be required to write after gamemode player command label, f.e. /[label] generator")
     @ConfigComment("Each alias must be separated with an empty space.")

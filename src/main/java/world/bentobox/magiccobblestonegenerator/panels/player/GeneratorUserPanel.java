@@ -50,8 +50,21 @@ public class GeneratorUserPanel extends CommonPanel
 
 		// Store generators in local list to avoid building it every time.
 		this.generatorList = this.manager.getIslandGeneratorTiers(world, this.generatorData);
+
+		this.isBorderEnabled = !addon.getSettings().getBorderBlock().isAir();
+		this.isFiltersEnabled = addon.getSettings().isShowFilters();
+
 		// Stores how many elements will be in display.
-		this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
+		// Row Count should be influenced by border block type.
+
+		if (this.isBorderEnabled)
+		{
+			this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
+		}
+		else
+		{
+			this.rowCount = this.generatorList.size() > 18 ? 3 : this.generatorList.size() > 9 ? 2 : 1;
+		}
 
 		// By default no-filters are active.
 		this.activeFilterButton = Button.NONE;
@@ -102,40 +115,55 @@ public class GeneratorUserPanel extends CommonPanel
 			user(this.user).
 			name(this.user.getTranslation(Constants.TITLE + "player-panel"));
 
-		GuiUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
-
-		panelBuilder.item(2, this.createButton(Button.SHOW_ACTIVE));
-
-		boolean hasCobblestoneGenerators = this.generatorList.stream().anyMatch(generator ->
-			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE));
-		boolean hasStoneGenerators = this.generatorList.stream().anyMatch(generator ->
-			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE));
-		boolean hasBasaltGenerators = this.generatorList.stream().anyMatch(generator ->
-			generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT));
-
-		// Do not show cobblestone button if there are no cobblestone generators.
-		if (hasCobblestoneGenerators && (hasStoneGenerators || hasBasaltGenerators))
+		// If border block is not set, then do not build it.
+		if (this.isBorderEnabled)
 		{
-			panelBuilder.item(4, this.createButton(Button.SHOW_COBBLESTONE));
+			GuiUtils.fillBorder(panelBuilder,
+				this.rowCount + 2,
+				this.addon.getSettings().getBorderBlock(),
+				this.addon.getSettings().getBorderBlockName());
 		}
 
-		// Do not show stone if there are no stone generators.
-		if (hasStoneGenerators && (hasCobblestoneGenerators || hasBasaltGenerators))
+		// Show filters only if they are enabled.
+		if (this.isFiltersEnabled)
 		{
-			panelBuilder.item(5, this.createButton(Button.SHOW_STONE));
-		}
+			panelBuilder.item(2, this.createButton(Button.SHOW_ACTIVE));
 
-		// Do not show basalt if there are no basalt generators.
-		if (hasBasaltGenerators && (hasStoneGenerators || hasCobblestoneGenerators))
-		{
-			panelBuilder.item(6, this.createButton(Button.SHOW_BASALT));
-		}
+			boolean hasCobblestoneGenerators = this.generatorList.stream().anyMatch(generator ->
+				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE));
+			boolean hasStoneGenerators = this.generatorList.stream().anyMatch(generator ->
+				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE));
+			boolean hasBasaltGenerators = this.generatorList.stream().anyMatch(generator ->
+				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT));
 
-		panelBuilder.item(8, this.createButton(Button.TOGGLE_VISIBILITY));
+			// Do not show cobblestone button if there are no cobblestone generators.
+			if (hasCobblestoneGenerators && (hasStoneGenerators || hasBasaltGenerators))
+			{
+				panelBuilder.item(4, this.createButton(Button.SHOW_COBBLESTONE));
+			}
+
+			// Do not show stone if there are no stone generators.
+			if (hasStoneGenerators && (hasCobblestoneGenerators || hasBasaltGenerators))
+			{
+				panelBuilder.item(5, this.createButton(Button.SHOW_STONE));
+			}
+
+			// Do not show basalt if there are no basalt generators.
+			if (hasBasaltGenerators && (hasStoneGenerators || hasCobblestoneGenerators))
+			{
+				panelBuilder.item(6, this.createButton(Button.SHOW_BASALT));
+			}
+
+			panelBuilder.item(8, this.createButton(Button.TOGGLE_VISIBILITY));
+		}
 
 		this.fillGeneratorTiers(panelBuilder);
 
-		panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
+		// if border is disabled, then do not show return button.
+		if (this.isBorderEnabled)
+		{
+			panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
+		}
 
 		// Build panel.
 		panelBuilder.build();
@@ -321,9 +349,7 @@ public class GeneratorUserPanel extends CommonPanel
 	 */
 	private void fillGeneratorTiers(PanelBuilder panelBuilder)
 	{
-		int MAX_ELEMENTS = this.rowCount * 7;
-
-		final int correctPage;
+		int MAX_ELEMENTS = this.rowCount * (this.addon.getSettings().getBorderBlock().isAir() ? 9 : 7);
 
 		List<GeneratorTierObject> filteredList;
 
@@ -367,18 +393,15 @@ public class GeneratorUserPanel extends CommonPanel
 
 		if (this.pageIndex < 0)
 		{
-			correctPage = filteredList.size() / MAX_ELEMENTS;
+			this.pageIndex = filteredList.size() / MAX_ELEMENTS;
 		}
 		else if (this.pageIndex > (filteredList.size() / MAX_ELEMENTS))
 		{
-			correctPage = 0;
-		}
-		else
-		{
-			correctPage = this.pageIndex;
+			this.pageIndex = 0;
 		}
 
-		if (filteredList.size() > MAX_ELEMENTS)
+		// Currently I do not want to deal with situations, when someone disables bored and have more then 36 generators.
+		if (this.isBorderEnabled && filteredList.size() > MAX_ELEMENTS)
 		{
 			// Navigation buttons if necessary
 
@@ -386,12 +409,25 @@ public class GeneratorUserPanel extends CommonPanel
 			panelBuilder.item(17, this.createButton(Action.NEXT));
 		}
 
-		int generatorIndex = MAX_ELEMENTS * correctPage;
+		int generatorIndex = MAX_ELEMENTS * this.pageIndex;
 
 		// I want first row to be only for navigation and return button.
-		int index = 10;
+		int index;
 
-		while (generatorIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
+		if (this.isBorderEnabled)
+		{
+			index = 10;
+		}
+		else if (this.isFiltersEnabled)
+		{
+			index = 9;
+		}
+		else
+		{
+			index = 0;
+		}
+
+		while (generatorIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
 			generatorIndex < filteredList.size() &&
 			index < 36)
 		{
@@ -599,4 +635,14 @@ public class GeneratorUserPanel extends CommonPanel
 	 * This variable holds current pageIndex for multi-page generator choosing.
 	 */
 	private int maxPageIndex;
+
+	/**
+	 * This indicates if filters are enabled in the GUI.
+	 */
+	private final boolean isFiltersEnabled;
+
+	/**
+	 * This indicates if border is enabled in the GUI.
+	 */
+	private final boolean isBorderEnabled;
 }

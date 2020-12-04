@@ -531,6 +531,8 @@ stone-generator:
           &7 block generation will stop.
           &7 0 and below means that range
           &7 is not limitated.
+          &7 Setting requires server
+          &7 restart.
         value: "&b Range: [number]"
       active_generators:
         name: "&f&l Default Active Generators"
@@ -541,6 +543,36 @@ stone-generator:
           &7 0 and below means that
           &7 amount is not limitated.
         value: "&b Count: [number]"
+      show_filters:
+        name: "&f&l Show Filters"
+        description: |-
+          &7 Filters are a top row in
+          &7 Player GUI, which allows
+          &7 to show only generators
+          &7 by type or status.
+          &7 This setting allows to
+          &7 disable and hide them.
+        enabled: |-
+          &b Filters are &a enabled &b .
+        disabled: |-
+          &b Filters are &c disabled &b .
+      border_block:
+        name: "&f&l Border Block"
+        description: |-
+          &7 Border block is a material
+          &7 which surrounds user GUI.
+          &7 Setting it to air disables
+          &7 it.
+      border_block_name:
+        name: "&f&l Border Block Name"
+        description: |-
+          &7 Display name for a border
+          &7 block.
+          &7 If it is set to empty, then
+          &7 it will use block name.
+          &7 To set it as 1 empty space,
+          &7 write "empty".
+        value: "&b Name: `&r[name]&r&b`"
       # Buttons in Library GUI
       library:
         name: "&f&l [name]"

@@ -3,6 +3,7 @@ package world.bentobox.magiccobblestonegenerator.panels;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
@@ -65,6 +66,19 @@ public class GuiUtils
      */
     public static void fillBorder(PanelBuilder panelBuilder, int rowCount, Material material)
     {
+        GuiUtils.fillBorder(panelBuilder, rowCount, material, " ");
+    }
+
+
+    /**
+     * This method sets blocks with given Material around Panel with given row count.
+     * @param panelBuilder object that builds Panel.
+     * @param rowCount in Panel.
+     * @param material that will be around Panel.
+     * @param name Name of the border block.
+     */
+    public static void fillBorder(PanelBuilder panelBuilder, int rowCount, Material material, String name)
+    {
         // Only for useful filling.
         if (rowCount < 3)
         {
@@ -78,7 +92,7 @@ public class GuiUtils
 
             if (i < 9 || i > 9 * (rowCount - 1) || i % 9 == 0 || i % 9 == 8)
             {
-                panelBuilder.item(i, BorderBlock.getPanelBorder(material));
+                panelBuilder.item(i, BorderBlock.getPanelBorder(material, name));
             }
         }
     }
@@ -133,11 +147,11 @@ public class GuiUtils
         private BorderBlock(ItemStack icon)
         {
             super(new PanelItemBuilder().
-                    icon(icon.clone()).
-                    name(" ").
-                    description(Collections.emptyList()).
-                    glow(false).
-                    clickHandler(null));
+                icon(icon.clone()).
+                name(icon.getItemMeta().getDisplayName()).
+                description(Collections.emptyList()).
+                glow(false).
+                clickHandler(null));
         }
 
 
@@ -146,10 +160,12 @@ public class GuiUtils
          * @param material of which broder must be created.
          * @return PanelItem that acts like border.
          */
-        private static BorderBlock getPanelBorder(Material material)
+        private static BorderBlock getPanelBorder(Material material, String name)
         {
             ItemStack itemStack = new ItemStack(material);
-            itemStack.getItemMeta().setDisplayName(" ");
+            ItemMeta meta = itemStack.getItemMeta();
+            meta.setDisplayName(name);
+            itemStack.setItemMeta(meta);
 
             return new BorderBlock(itemStack);
         }

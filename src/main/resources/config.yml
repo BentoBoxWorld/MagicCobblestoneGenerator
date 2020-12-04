@@ -27,6 +27,13 @@ default-active-generators: 3
 #  - BSkyBlock
 # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
 disabled-gamemodes: []
+gui:
+  # This allows to toggle if filters in Generator User Panel should be showed.
+  show-filters: true
+  # This allows to change main border block in player panel.
+  border-block: MAGENTA_STAINED_GLASS_PANE
+  # This allows to change border block display name.
+  border-block-name: ' '
 commands:
   player:
     #
