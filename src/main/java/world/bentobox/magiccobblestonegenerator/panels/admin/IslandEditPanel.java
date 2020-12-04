@@ -148,23 +148,27 @@ public class IslandEditPanel extends CommonPanel
 		{
 			panelBuilder.item(2, this.createButton(Filter.SHOW_ACTIVE));
 
+			boolean hasCobblestoneGenerators = this.generatorList.stream().anyMatch(generator ->
+				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE));
+			boolean hasStoneGenerators = this.generatorList.stream().anyMatch(generator ->
+				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE));
+			boolean hasBasaltGenerators = this.generatorList.stream().anyMatch(generator ->
+				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT));
+
 			// Do not show cobblestone button if there are no cobblestone generators.
-			if (this.generatorList.stream().anyMatch(generator ->
-				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)))
+			if (hasCobblestoneGenerators && (hasStoneGenerators || hasBasaltGenerators))
 			{
 				panelBuilder.item(4, this.createButton(Filter.SHOW_COBBLESTONE));
 			}
 
 			// Do not show stone if there are no stone generators.
-			if (this.generatorList.stream().anyMatch(generator ->
-				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)))
+			if (hasStoneGenerators && (hasCobblestoneGenerators || hasBasaltGenerators))
 			{
 				panelBuilder.item(5, this.createButton(Filter.SHOW_STONE));
 			}
 
 			// Do not show basalt if there are no basalt generators.
-			if (this.generatorList.stream().anyMatch(generator ->
-				generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)))
+			if (hasBasaltGenerators && (hasStoneGenerators || hasCobblestoneGenerators))
 			{
 				panelBuilder.item(6, this.createButton(Filter.SHOW_BASALT));
 			}
