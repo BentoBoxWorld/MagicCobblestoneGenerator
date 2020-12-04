@@ -32,7 +32,10 @@ public class GeneratorAdminCommand extends CompositeCommand
 	 */
 	public GeneratorAdminCommand(StoneGeneratorAddon addon, CompositeCommand parentCommand)
 	{
-		super(addon, parentCommand, "generator");
+		super(addon,
+			parentCommand,
+			addon.getSettings().getAdminMainCommand().split(" ")[0],
+			addon.getSettings().getAdminMainCommand().split(" "));
 	}
 
 

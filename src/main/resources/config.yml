@@ -27,3 +27,32 @@ default-active-generators: 3
 #  - BSkyBlock
 # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
 disabled-gamemodes: []
+commands:
+  player:
+    #
+    # Player main sub-command to access the addon.
+    # This command label will be required to write after gamemode player command label, f.e. /[label] generator
+    # Each alias must be separated with an empty space.
+    # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
+    main: generator
+    # Player view sub-command that allows to see detailed generator view.
+    # This command label will be required to write after player main command, f.e. /[label] generator view
+    # Each alias must be separated with an empty space.
+    # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
+    view: view
+    # Player buy sub-command that allows to buy generator with a command.
+    # This command label will be required to write after player main command, f.e. /[label] generator buy
+    # Each alias must be separated with an empty space.
+    # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
+    buy: buy
+    # Player activate sub-command that allows to activate or deactivate generator with a command.
+    # This command label will be required to write after player main command, f.e. /[label] generator activate
+    # Each alias must be separated with an empty space.
+    # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
+    activate: activate
+  admin:
+    # Admin main sub-command to access the addon.
+    # This command label will be required to write after gamemode admin command label, f.e. /[label] generator
+    # Each alias must be separated with an empty space.
+    # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
+    main: generator

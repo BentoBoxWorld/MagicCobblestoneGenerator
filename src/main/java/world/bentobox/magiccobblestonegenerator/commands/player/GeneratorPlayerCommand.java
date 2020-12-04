@@ -33,7 +33,10 @@ public class GeneratorPlayerCommand extends CompositeCommand
 	 */
 	public GeneratorPlayerCommand(StoneGeneratorAddon addon, CompositeCommand parentCommand)
 	{
-		super(addon, parentCommand, "generator");
+		super(addon,
+			parentCommand,
+			addon.getSettings().getPlayerMainCommand().split(" ")[0],
+			addon.getSettings().getPlayerMainCommand().split(" "));
 	}
 
 
@@ -134,7 +137,12 @@ public class GeneratorPlayerCommand extends CompositeCommand
 		 */
 		public GeneratorViewPlayerCommand(CompositeCommand parentCommand)
 		{
-			super(parentCommand.getAddon(), parentCommand, "view");
+			// Not an optimal way how to do it, but I do not care when I wrote it.
+			// Copy-paste in a nutshell.
+			super(parentCommand.getAddon(),
+				parentCommand,
+				parentCommand.<StoneGeneratorAddon>getAddon().getSettings().getPlayerViewCommand().split(" ")[0],
+				parentCommand.<StoneGeneratorAddon>getAddon().getSettings().getPlayerViewCommand().split(" "));
 		}
 
 
@@ -225,7 +233,10 @@ public class GeneratorPlayerCommand extends CompositeCommand
 		 */
 		public GeneratorBuyPlayerCommand(CompositeCommand parentCommand)
 		{
-			super(parentCommand.getAddon(), parentCommand, "buy");
+			super(parentCommand.getAddon(),
+				parentCommand,
+				parentCommand.<StoneGeneratorAddon>getAddon().getSettings().getPlayerBuyCommand().split(" ")[0],
+				parentCommand.<StoneGeneratorAddon>getAddon().getSettings().getPlayerBuyCommand().split(" "));
 		}
 
 
@@ -336,7 +347,10 @@ public class GeneratorPlayerCommand extends CompositeCommand
 		 */
 		public GeneratorActivatePlayerCommand(CompositeCommand parentCommand)
 		{
-			super(parentCommand.getAddon(), parentCommand, "activate");
+			super(parentCommand.getAddon(),
+				parentCommand,
+				parentCommand.<StoneGeneratorAddon>getAddon().getSettings().getPlayerActivateCommand().split(" ")[0],
+				parentCommand.<StoneGeneratorAddon>getAddon().getSettings().getPlayerActivateCommand().split(" "));
 		}
 
 

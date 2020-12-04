@@ -1,7 +1,9 @@
 package world.bentobox.magiccobblestonegenerator.config;
 
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -150,9 +152,119 @@ public class Settings implements ConfigObject
     }
 
 
-    // ---------------------------------------------------------------------
-    // Section: Variables
-    // ---------------------------------------------------------------------
+    /**
+     * Gets player main command.
+     *
+     * @return the player main command
+     */
+    public String getPlayerMainCommand()
+    {
+        return playerMainCommand;
+    }
+
+
+    /**
+     * Sets player main command.
+     *
+     * @param playerMainCommand the player main command
+     */
+    public void setPlayerMainCommand(String playerMainCommand)
+    {
+        this.playerMainCommand = playerMainCommand;
+    }
+
+
+    /**
+     * Gets player view command.
+     *
+     * @return the player view command
+     */
+    public String getPlayerViewCommand()
+    {
+        return playerViewCommand;
+    }
+
+
+    /**
+     * Sets player view command.
+     *
+     * @param playerViewCommand the player view command
+     */
+    public void setPlayerViewCommand(String playerViewCommand)
+    {
+        this.playerViewCommand = playerViewCommand;
+    }
+
+
+    /**
+     * Gets player buy command.
+     *
+     * @return the player buy command
+     */
+    public String getPlayerBuyCommand()
+    {
+        return playerBuyCommand;
+    }
+
+
+    /**
+     * Sets player buy command.
+     *
+     * @param playerBuyCommand the player buy command
+     */
+    public void setPlayerBuyCommand(String playerBuyCommand)
+    {
+        this.playerBuyCommand = playerBuyCommand;
+    }
+
+
+    /**
+     * Gets player activate command.
+     *
+     * @return the player activate command
+     */
+    public String getPlayerActivateCommand()
+    {
+        return playerActivateCommand;
+    }
+
+
+    /**
+     * Sets player activate command.
+     *
+     * @param playerActivateCommand the player activate command
+     */
+    public void setPlayerActivateCommand(String playerActivateCommand)
+    {
+        this.playerActivateCommand = playerActivateCommand;
+    }
+
+
+    /**
+     * Gets admin main command.
+     *
+     * @return the admin main command
+     */
+    public String getAdminMainCommand()
+    {
+        return adminMainCommand;
+    }
+
+
+    /**
+     * Sets admin main command.
+     *
+     * @param adminMainCommand the admin main command
+     */
+    public void setAdminMainCommand(String adminMainCommand)
+    {
+        this.adminMainCommand = adminMainCommand;
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Variables
+ // ---------------------------------------------------------------------
 
 
     @ConfigComment("")
@@ -188,4 +300,35 @@ public class Settings implements ConfigObject
     @ConfigComment(" - BSkyBlock")
     @ConfigEntry(path = "disabled-gamemodes", needsRestart = true)
     private Set<String> disabledGameModes = new HashSet<>();
+
+    @ConfigComment("")
+    @ConfigComment("Player main sub-command to access the addon.")
+    @ConfigComment("This command label will be required to write after gamemode player command label, f.e. /[label] generator")
+    @ConfigComment("Each alias must be separated with an empty space.")
+    @ConfigEntry(path = "commands.player.main", needsRestart = true)
+    private String playerMainCommand = "generator";
+
+    @ConfigComment("Player view sub-command that allows to see detailed generator view.")
+    @ConfigComment("This command label will be required to write after player main command, f.e. /[label] generator view")
+    @ConfigComment("Each alias must be separated with an empty space.")
+    @ConfigEntry(path = "commands.player.view", needsRestart = true)
+    private String playerViewCommand = "view";
+
+    @ConfigComment("Player buy sub-command that allows to buy generator with a command.")
+    @ConfigComment("This command label will be required to write after player main command, f.e. /[label] generator buy")
+    @ConfigComment("Each alias must be separated with an empty space.")
+    @ConfigEntry(path = "commands.player.buy", needsRestart = true)
+    private String playerBuyCommand = "buy";
+
+    @ConfigComment("Player activate sub-command that allows to activate or deactivate generator with a command.")
+    @ConfigComment("This command label will be required to write after player main command, f.e. /[label] generator activate")
+    @ConfigComment("Each alias must be separated with an empty space.")
+    @ConfigEntry(path = "commands.player.activate", needsRestart = true)
+    private String playerActivateCommand = "activate";
+
+    @ConfigComment("Admin main sub-command to access the addon.")
+    @ConfigComment("This command label will be required to write after gamemode admin command label, f.e. /[label] generator")
+    @ConfigComment("Each alias must be separated with an empty space.")
+    @ConfigEntry(path = "commands.admin.main", needsRestart = true)
+    private String adminMainCommand = "generator";
 }
