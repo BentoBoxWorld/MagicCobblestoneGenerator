@@ -410,10 +410,11 @@ public class GeneratorUserPanel extends CommonPanel
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
 		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+		boolean unlocked = this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
 			glow,
-			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
+			unlocked,
 			this.manager.getIslandLevel(this.island));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
@@ -455,7 +456,7 @@ public class GeneratorUserPanel extends CommonPanel
 		return new PanelItemBuilder().
 			name(generatorTier.getFriendlyName()).
 			description(description).
-			icon(generatorTier.getGeneratorIcon()).
+			icon(unlocked ? generatorTier.getGeneratorIcon() : generatorTier.getLockedIcon()).
 			clickHandler(clickHandler).
 			glow(glow).
 			build();

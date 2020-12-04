@@ -433,6 +433,28 @@ public class GeneratorTierObject implements DataObject
 	}
 
 
+	/**
+	 * Gets locked icon.
+	 *
+	 * @return the locked icon
+	 */
+	public ItemStack getLockedIcon()
+	{
+		return lockedIcon.clone();
+	}
+
+
+	/**
+	 * Sets locked icon.
+	 *
+	 * @param lockedIcon the locked icon
+	 */
+	public void setLockedIcon(ItemStack lockedIcon)
+	{
+		this.lockedIcon = lockedIcon;
+	}
+
+
 // ---------------------------------------------------------------------
 // Section: Methods
 // ---------------------------------------------------------------------
@@ -450,6 +472,7 @@ public class GeneratorTierObject implements DataObject
 		clone.setUniqueId(this.uniqueId);
 		clone.setFriendlyName(this.friendlyName);
 		clone.setGeneratorIcon(this.generatorIcon.clone());
+		clone.setLockedIcon(this.lockedIcon.clone());
 		clone.setDescription(new ArrayList<>(this.description));
 		clone.setGeneratorType(this.generatorType);
 		clone.setDefaultGenerator(this.defaultGenerator);
@@ -560,6 +583,12 @@ public class GeneratorTierObject implements DataObject
 	 */
 	@Expose
 	private ItemStack generatorIcon = new ItemStack(Material.STONE);
+
+	/**
+	 * Stores display icon for current generator tier.
+	 */
+	@Expose
+	private ItemStack lockedIcon = new ItemStack(Material.BARRIER);
 
 	/**
 	 * Stores type of the generator for this tier.

@@ -189,15 +189,17 @@ public class GeneratorEditPanel extends CommonPanel
 	 */
 	private void populateInfo(PanelBuilder panelBuilder)
 	{
-		// Users should see only icon
 		panelBuilder.item(10, this.createButton(Button.NAME));
 		panelBuilder.item(19, this.createButton(Button.ICON));
 		panelBuilder.item(28, this.createButton(Button.DESCRIPTION));
 
+		// Add locked icon
+		panelBuilder.item(20, this.createButton(Button.LOCKED_ICON));
+
 		// Usefull information to know about generators.
-		panelBuilder.item(11, this.createButton(Button.DEFAULT));
-		panelBuilder.item(20, this.createButton(Button.PRIORITY));
-		panelBuilder.item(29, this.createButton(Button.TYPE));
+		panelBuilder.item(12, this.createButton(Button.DEFAULT));
+		panelBuilder.item(21, this.createButton(Button.PRIORITY));
+		panelBuilder.item(30, this.createButton(Button.TYPE));
 
 		// Default genertator do not have requirements.
 		if (!this.generatorTier.isDefaultGenerator())
@@ -409,19 +411,23 @@ public class GeneratorEditPanel extends CommonPanel
 				break;
 			}
 			case ICON:
+			case LOCKED_ICON:
 			{
-				itemStack = this.generatorTier.getGeneratorIcon();
+				itemStack = button == Button.LOCKED_ICON ?
+					this.generatorTier.getLockedIcon() :
+					this.generatorTier.getGeneratorIcon();
 
 				clickHandler = (panel, user, clickType, i) ->
 				{
 					// TODO: implement GUI for block selection
-					this.isIconSelected = !this.isIconSelected;
-					panel.getInventory().setItem(i, this.createButton(button).getItem());
+					this.selectedButton = button;
+					// Requires more then one button updating.
+					this.build();
 
 					return true;
 				};
 
-				if (!this.isIconSelected)
+				if (this.selectedButton != button)
 				{
 					description.add("");
 					description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
@@ -432,7 +438,7 @@ public class GeneratorEditPanel extends CommonPanel
 					description.add(this.user.getTranslation(Constants.TIPS + "click-on-item"));
 				}
 
-				glow = this.isIconSelected;
+				glow = this.selectedButton == button;
 
 				break;
 			}
@@ -1342,20 +1348,36 @@ public class GeneratorEditPanel extends CommonPanel
 		public void onInventoryClick(User user, InventoryClickEvent event)
 		{
 			// Handle icon changing
-			if (GeneratorEditPanel.this.isIconSelected &&
+			if (GeneratorEditPanel.this.selectedButton != null &&
 				event.getCurrentItem() != null &&
 				!event.getCurrentItem().getType().equals(Material.AIR) &&
 				event.getRawSlot() > 44)
 			{
 				// set material and amount only. Other data should be removed.
-				GeneratorEditPanel.this.generatorTier.setGeneratorIcon(event.getCurrentItem().clone());
+
+				if (GeneratorEditPanel.this.selectedButton == Button.ICON)
+				{
+					GeneratorEditPanel.this.generatorTier.setGeneratorIcon(event.getCurrentItem().clone());
+
+					// Deselect icon
+					GeneratorEditPanel.this.selectedButton = null;
+					// Rebuild icon
+					event.getInventory().setItem(19,
+						GeneratorEditPanel.this.createButton(Button.ICON).getItem());
+				}
+				else
+				{
+					GeneratorEditPanel.this.generatorTier.setLockedIcon(event.getCurrentItem().clone());
+
+					// Deselect icon
+					GeneratorEditPanel.this.selectedButton = null;
+					// Rebuild icon
+					event.getInventory().setItem(20,
+						GeneratorEditPanel.this.createButton(Button.LOCKED_ICON).getItem());
+				}
+
 				// save change
 				GeneratorEditPanel.this.manager.saveGeneratorTier(GeneratorEditPanel.this.generatorTier);
-				// Deselect icon
-				GeneratorEditPanel.this.isIconSelected = false;
-
-				event.getInventory().setItem(19,
-					GeneratorEditPanel.this.createButton(Button.ICON).getItem());
 			}
 		}
 
@@ -1546,6 +1568,10 @@ public class GeneratorEditPanel extends CommonPanel
 		 */
 		ICON,
 		/**
+		 * Holds Name type that allows to interact with generator locked icon.
+		 */
+		LOCKED_ICON,
+		/**
 		 * Holds Name type that allows to interact with generator description.
 		 */
 		DESCRIPTION,
@@ -1623,7 +1649,7 @@ public class GeneratorEditPanel extends CommonPanel
 	/**
 	 * This variable stores if icon is selected for changing.
 	 */
-	private boolean isIconSelected;
+	private Button selectedButton;
 
 	/**
 	 * This set is used to detect and delete selected blocks.

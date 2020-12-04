@@ -334,6 +334,12 @@ stone-generator:
         description: |-
           &7 Item used to display this
           &7 generator in all GUIs.
+      locked_icon:
+        name: "&f&l Locked Icon"
+        description: |-
+          &7 Item used to display this
+          &7 generator in all GUIs if
+          &7 it is locked.
       description:
         name: "&f&l Generator Description"
         description: |-
