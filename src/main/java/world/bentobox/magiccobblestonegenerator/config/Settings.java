@@ -13,13 +13,14 @@ import world.bentobox.bentobox.api.configuration.StoreAt;
 
 
 /**
- * Settings that implements ConfigObject is powerful and dynamic Config Objects that
- * does not need custom parsing. If it is correctly loaded, all its values will be available.
- *
+ * Settings that implements ConfigObject is powerful and dynamic Config Objects that does not need custom parsing. If it
+ * is correctly loaded, all its values will be available.
+ * <p>
  * Without Getter and Setter this class will not work.
- *
- * To specify location for config object to be stored, you should use @StoreAt(filename="{config file name}", path="{Path to your addon}")
- * To save comments in config file you should use @ConfigComment("{message}") that adds any message you want to be in file.
+ * <p>
+ * To specify location for config object to be stored, you should use @StoreAt(filename="{config file name}",
+ * path="{Path to your addon}") To save comments in config file you should use @ConfigComment("{message}") that adds any
+ * message you want to be in file.
  */
 @StoreAt(filename="config.yml", path="addons/MagicCobblestoneGenerator")
 @ConfigComment("MagicCobblestoneGenerator Configuration [version]")
@@ -437,6 +438,28 @@ public class Settings implements ConfigObject
     }
 
 
+    /**
+     * Is overwrite on active boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isOverwriteOnActive()
+    {
+        return overwriteOnActive;
+    }
+
+
+    /**
+     * Sets overwrite on active.
+     *
+     * @param overwriteOnActive the overwrite on active
+     */
+    public void setOverwriteOnActive(boolean overwriteOnActive)
+    {
+        this.overwriteOnActive = overwriteOnActive;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -494,6 +517,13 @@ public class Settings implements ConfigObject
     @ConfigComment("Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.")
     @ConfigEntry(path = "default-active-generators")
     private int defaultActiveGeneratorCount = 3;
+
+    @ConfigComment("")
+    @ConfigComment("Enabling this functionality will disable one of active generators if active generator limit")
+    @ConfigComment("is reached when clicking on a new generator.")
+    @ConfigComment("Useful for situations with one active generator, which will be changed upon activating next one.")
+    @ConfigEntry(path = "overwrite-on-activate")
+    private boolean overwriteOnActive = false;
 
     @ConfigComment("")
     @ConfigComment("Send a notification message when player unlocks a new generator.")

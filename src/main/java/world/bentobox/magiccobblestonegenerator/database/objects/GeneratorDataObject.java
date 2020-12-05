@@ -11,6 +11,7 @@ import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import world.bentobox.bentobox.database.objects.DataObject;
@@ -323,7 +324,7 @@ public class GeneratorDataObject implements DataObject
 	 * Stores currently active generator names.
 	 */
 	@Expose
-	private Set<String> activeGeneratorList = new HashSet<>();
+	private Set<String> activeGeneratorList = new LinkedHashSet<>();
 
 	/**
 	 * Stores maximum allowed active generator count for island object.

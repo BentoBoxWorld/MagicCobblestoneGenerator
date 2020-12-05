@@ -21,6 +21,11 @@ working-range: 0
 # Can be changed with a permission `[gamemode].stone-generator.active-generators.[number]`.
 default-active-generators: 3
 #
+# Enabling this functionality will disable one of active generators if active generator limit
+# is reached when clicking on a new generator.
+# Useful for situations with one active generator, which will be changed upon activating next one.
+overwrite-on-activate: false
+#
 # Send a notification message when player unlocks a new generator.
 # 3 messages that will be showed:
 # stone-generator.conversations.click-text-to-purchase - if generator is unlocked but is not purchased.

@@ -1024,11 +1024,18 @@ public class StoneGeneratorManager
      * @param user User who deactivates generator.
      * @param generatorData Data which will be populated.
      * @param generatorTier Generator that will be removed.
+     * @return {@code true} if deactivation was successful, {@code false} otherwise.
      */
-    public void deactivateGenerator(@NotNull User user,
+    public boolean deactivateGenerator(@NotNull User user,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
+        // If generator is not active, do nothing.
+        if (!generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId()))
+        {
+            return false;
+        }
+
         // Call event about generator activation.
         GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
             user,
@@ -1045,6 +1052,12 @@ public class StoneGeneratorManager
 
             // Save object.
             this.saveGeneratorData(generatorData);
+            return true;
+        }
+        else
+        {
+            // Generator is not deactivated.
+            return false;
         }
     }
 
@@ -1065,10 +1078,13 @@ public class StoneGeneratorManager
         if (generatorData.getActiveGeneratorCount() > 0 &&
             generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
         {
-            // Too many generators.
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
-            return false;
+            if (!this.addon.getSettings().isOverwriteOnActive())
+            {
+                // Too many generators.
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
+                return false;
+            }
         }
 
         if (!generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()))
@@ -1130,6 +1146,22 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
+        if (this.addon.getSettings().isOverwriteOnActive() &&
+            generatorData.getActiveGeneratorCount() > 0 &&
+            generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
+        {
+            // Try to deactivate first generator, because overwrite is active.
+            GeneratorTierObject oldGenerator =
+                this.getGeneratorByID(generatorData.getActiveGeneratorList().iterator().next());
+
+            if (!this.deactivateGenerator(user, generatorData, oldGenerator))
+            {
+                // If deactivation was not successful, send message about reached limit.
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
+            }
+        }
+
         // Call event about generator activation.
         GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
             user,
