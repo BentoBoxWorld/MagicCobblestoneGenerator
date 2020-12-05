@@ -623,7 +623,7 @@ public class IslandEditPanel extends CommonPanel
 				clickHandler = (panel, user, clickType, slot) ->
 				{
 					SelectBundlePanel.open(this, islandBundle, bundle -> {
-						if (bundle == null)
+						if (bundle == null || bundle == GeneratorBundleObject.dummyBundle)
 						{
 							this.generatorData.setIslandBundle(null);
 						}

@@ -171,6 +171,34 @@ public class GeneratorBundleObject implements DataObject
 
 
 // ---------------------------------------------------------------------
+// Section: Static dummy bundle.
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * Dummy bundle is used to display a bundle that contains all generators.
+	 */
+	public final static GeneratorBundleObject dummyBundle;
+
+	/**
+	 * Populate dummy bundle with some values.
+	 */
+	static
+	{
+		dummyBundle = new GeneratorBundleObject();
+		dummyBundle.setGeneratorIcon(new ItemStack(Material.STRUCTURE_VOID));
+		dummyBundle.setFriendlyName("&f&l No Bundle");
+		dummyBundle.setUniqueId(null);
+
+		List<String> description = new ArrayList<>();
+		description.add("&cThis is not an actual");
+		description.add("&cbundle.");
+
+		dummyBundle.setDescription(description);
+	}
+
+
+// ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
 

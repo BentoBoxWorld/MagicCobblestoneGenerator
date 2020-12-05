@@ -494,9 +494,12 @@ public abstract class CommonPanel
 		bundle.getDescription().forEach(line ->
 			description.add(ChatColor.translateAlternateColorCodes('&', line)));
 
-		description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "bundle-permission",
-			Constants.ID, bundle.getUniqueId(),
-			Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+		if (bundle != GeneratorBundleObject.dummyBundle)
+		{
+			description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "bundle-permission",
+				Constants.ID, bundle.getUniqueId(),
+				Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+		}
 
 		// Add missing permissions
 		if (!bundle.getGeneratorTiers().isEmpty())

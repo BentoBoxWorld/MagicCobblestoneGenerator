@@ -5,11 +5,13 @@ import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -32,9 +34,17 @@ public class SelectBundlePanel extends CommonPanel
     {
         super(panel);
         this.consumer = consumer;
-        this.selectedBundle = bundle;
+        this.selectedBundle = bundle == null ? GeneratorBundleObject.dummyBundle : bundle;
 
         this.bundleList = this.addon.getAddonManager().getAllGeneratorBundles(this.world);
+
+        // Add dummy bundle that contains all generators from GameMode.
+        this.bundleList.add(0, GeneratorBundleObject.dummyBundle);
+        // Add all generators to the dummy bundle
+        GeneratorBundleObject.dummyBundle.setGeneratorTiers(
+            this.addon.getAddonManager().getAllGeneratorTiers(this.world).stream().
+                map(GeneratorTierObject::getUniqueId).
+                collect(Collectors.toSet()));
 
         // Calculate max page count.
         this.maxPageIndex = (int) Math.ceil(1.0 * this.bundleList.size() / 21) - 1;
@@ -236,7 +246,10 @@ public class SelectBundlePanel extends CommonPanel
     {
         List<String> description = super.generateBundleDescription(bundle);
 
-        description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+        if (this.selectedBundle == bundle)
+        {
+            description.add(this.user.getTranslation(Constants.DESCRIPTIONS + "selected"));
+        }
 
         description.add("");
         description.add(this.user.getTranslation(Constants.TIPS + "click-to-choose"));
