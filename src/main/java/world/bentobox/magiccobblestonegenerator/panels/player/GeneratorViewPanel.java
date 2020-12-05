@@ -135,7 +135,13 @@ public class GeneratorViewPanel extends CommonPanel
 			name(this.user.getTranslation(Constants.TITLE + "view-generator",
 				Constants.GENERATOR, this.generatorTier.getFriendlyName()));
 
-		GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
+		if (!this.addon.getSettings().getBorderBlock().isAir())
+		{
+			GuiUtils.fillBorder(panelBuilder,
+				5,
+				this.addon.getSettings().getBorderBlock(),
+				this.addon.getSettings().getBorderBlockName());
+		}
 
 		this.populateHeader(panelBuilder);
 
