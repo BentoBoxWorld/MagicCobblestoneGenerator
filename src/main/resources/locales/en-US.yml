@@ -711,9 +711,6 @@ stone-generator:
       click-to-purchase: "&e Click &7 to purchase."
       click-to-return: "&e Click &7 to return."
       click-to-quit: "&e Click &7 to quit."
-      right-click-to-view: "&e Right Click &7 to view details."
-      left-click-to-activate: "&e Left Click &7 to activate."
-      left-click-to-deactivate: "&e Left Click &7 to deactivate."
       click-to-wipe: "&e Click &7 to wipe."
       click-to-open: "&e Click &7 to open."
       click-to-export: "&e Click &7 to start exporting."
@@ -735,6 +732,19 @@ stone-generator:
       click-to-perform: "&e Click &7 to perform."
       click-to-edit: "&e Click &7 to edit."
       right-click-to-clear: "&e Right Click &7 to clear."
+      # These tooltips are showed in user gui.
+      left-click-to-view: "&e Left Click &7 to view."
+      left-click-to-purchase: "&e Left Click &7 to buy."
+      left-click-to-activate: "&e Left Click &7 to activate."
+      left-click-to-deactivate: "&e Left Click &7 to deactivate."
+      right-click-to-view: "&e Right Click &7 to view."
+      right-click-to-purchase: "&e Right Click &7 to buy."
+      right-click-to-activate: "&e Right Click &7 to activate."
+      right-click-to-deactivate: "&e Right Click &7 to deactivate."
+      shift-click-to-view: "&e Shift Click &7 to view."
+      shift-click-to-purchase: "&e Shift Click &7 to buy."
+      shift-click-to-activate: "&e Shift Click &7 to activate."
+      shift-click-to-deactivate: "&e Shift Click &7 to deactivate."
     # This section contains translations for some different GUI descriptions.
     descriptions:
       # Generator lore message generator. All elements in generator lore is generated
@@ -830,6 +840,8 @@ stone-generator:
     active-generators-reached: "&c Too many generators are activated. Try to deactivate some before activating a new one."
     # Message that appears when trying to activate locked generator.
     generator-not-unlocked: "&c Generator &r '[generator]' &r&c is not unlocked."
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "&c Generator &r '[generator]' &r&c is not purchased."
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
     no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
     # Message that appears when activating the generator.

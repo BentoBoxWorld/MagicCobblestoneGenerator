@@ -1080,6 +1080,17 @@ public class StoneGeneratorManager
 
             return false;
         }
+        else if (!generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()) &&
+            this.addon.isVaultProvided() &&
+            generatorTier.getGeneratorTierCost() > 0)
+        {
+            // Generator is not purchased. Return false.
+            Utils.sendMessage(user,
+                user.getTranslation(Constants.MESSAGES + "generator-not-purchased",
+                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+
+            return false;
+        }
         else
         {
             if (this.addon.isVaultProvided() && generatorTier.getActivationCost() > 0)

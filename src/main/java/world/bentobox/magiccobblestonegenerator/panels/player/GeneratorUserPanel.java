@@ -1,6 +1,7 @@
 package world.bentobox.magiccobblestonegenerator.panels.player;
 
 
+import org.bukkit.event.inventory.ClickType;
 import org.jetbrains.annotations.Nullable;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -15,6 +16,7 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
@@ -457,6 +459,8 @@ public class GeneratorUserPanel extends CommonPanel
 			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
 		// Default generators cannot be purchased.
 		boolean purchased = generatorTier.isDefaultGenerator() ||
+			!this.addon.isVaultProvided() ||
+			generatorTier.getGeneratorTierCost() == 0 ||
 			this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId());
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
@@ -469,32 +473,33 @@ public class GeneratorUserPanel extends CommonPanel
 			// Click handler should work only if user has a permission to change anything.
 			// Otherwise just to view.
 
-			if (clickType.isRightClick())
+			if (clickType.isShiftClick())
 			{
-				// Open view panel.
-				GeneratorViewPanel.openPanel(this, generatorTier);
+				this.processClick(this.addon.getSettings().getShiftClickAction(),
+					glow,
+					purchased,
+					generatorTier);
 			}
-			else if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+			else if (this.addon.getSettings().getClickAction() != Settings.GuiAction.NONE)
 			{
-				if (glow)
-				{
-					this.manager.deactivateGenerator(user, this.generatorData, generatorTier);
-					// Rebuild whole gui.
-					this.build();
-				}
-				else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
-				{
-					this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
-					// Build whole gui.
-					this.build();
-				}
+				this.processClick(this.addon.getSettings().getClickAction(),
+					glow,
+					purchased,
+					generatorTier);
+			}
+			else if (clickType.isRightClick())
+			{
+				this.processClick(this.addon.getSettings().getRightClickAction(),
+					glow,
+					purchased,
+					generatorTier);
 			}
 			else
 			{
-				Utils.sendMessage(this.user,
-					this.user.getTranslation("general.errors.insufficient-rank",
-						TextVariables.RANK, user.getTranslation(
-							this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(user)))));
+				this.processClick(this.addon.getSettings().getLeftClickAction(),
+					glow,
+					purchased,
+					generatorTier);
 			}
 
 			// Always return true.
@@ -532,21 +537,189 @@ public class GeneratorUserPanel extends CommonPanel
 			super.generateGeneratorDescription(generator, isActive, isUnlocked, isPurchased, islandLevel);
 
 		description.add("");
-		description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-view"));
 
-		if (isUnlocked)
+		if (this.addon.getSettings().getClickAction() != Settings.GuiAction.NONE)
 		{
-			if (isActive)
-			{
-				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-deactivate"));
-			}
-			else
-			{
-				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-activate"));
-			}
+			description.addAll(
+				this.generateToolTips(this.addon.getSettings().getClickAction(),
+					Constants.TIPS,
+					isUnlocked,
+					isActive,
+					isPurchased,
+					generator.isDefaultGenerator()));
+		}
+		else
+		{
+			// Add left click tooltip
+			description.addAll(
+				this.generateToolTips(this.addon.getSettings().getLeftClickAction(),
+					Constants.TIPS + "left-",
+					isUnlocked,
+					isActive,
+					isPurchased,
+					generator.isDefaultGenerator()));
+
+			// Add right click tooltip
+			description.addAll(
+				this.generateToolTips(this.addon.getSettings().getRightClickAction(),
+					Constants.TIPS + "right-",
+					isUnlocked,
+					isActive,
+					isPurchased,
+					generator.isDefaultGenerator()));
+		}
+
+		// Add shift click tooltip.
+		description.addAll(
+			this.generateToolTips(this.addon.getSettings().getShiftClickAction(),
+				Constants.TIPS + "shift",
+				isUnlocked,
+				isActive,
+				isPurchased,
+				generator.isDefaultGenerator()));
+
+		return description;
+	}
+
+
+	/**
+	 * This method generated tool tips based on given parameters for given action.
+	 * @param action Action that is performed.
+	 * @param reference Reference to translation string.
+	 * @param isUnlocked Boolean that indicate if generator is unlocked.
+	 * @param isActive Boolean that indicate if generator is active.
+	 * @param isPurchased Boolean that indicate if generator is purchased.
+	 * @param isDefault Boolean that indicate if generator is default generator.
+	 * @return List of string that contains tool tips.
+	 */
+	private List<String> generateToolTips(Settings.GuiAction action,
+		String reference,
+		boolean isUnlocked,
+		boolean isActive,
+		boolean isPurchased,
+		boolean isDefault)
+	{
+		List<String> description = new ArrayList<>(3);
+
+		switch (action)
+		{
+			case VIEW:
+				description.add(this.user.getTranslation(reference + "click-to-view"));
+				break;
+			case BUY:
+				if (isUnlocked && !isPurchased && !isDefault)
+				{
+					description.add(this.user.getTranslation(reference + "click-to-purchase"));
+				}
+				break;
+			case TOGGLE:
+				if (isUnlocked && !isDefault && isPurchased)
+				{
+					if (isActive)
+					{
+						description.add(this.user.getTranslation(reference + "click-to-deactivate"));
+					}
+					else
+					{
+						description.add(this.user.getTranslation(reference + "click-to-activate"));
+					}
+				}
+				break;
+			case BUY_OR_TOGGLE:
+				if (isUnlocked && !isDefault)
+				{
+					if (!isPurchased)
+					{
+						description.add(this.user.getTranslation(reference + "click-to-purchase"));
+					}
+					else
+					{
+						if (isActive)
+						{
+							description.add(this.user.getTranslation(reference + "click-to-deactivate"));
+						}
+						else
+						{
+							description.add(this.user.getTranslation(reference + "click-to-activate"));
+						}
+					}
+				}
+				break;
 		}
 
 		return description;
+	}
+
+
+	/**
+	 * This method process given click action.
+	 * @param action Action that must be performed/
+	 * @param isActive Indicates if generator is active or is not purchased.
+	 * @param isPurchased Generator Tier object that will be targeted.
+	 */
+	private void processClick(Settings.GuiAction action,
+		boolean isActive,
+		boolean isPurchased,
+		GeneratorTierObject generatorTier)
+	{
+		switch (action)
+		{
+			case VIEW:
+				// Open view panel.
+				GeneratorViewPanel.openPanel(this, generatorTier);
+				break;
+			case BUY_OR_TOGGLE:
+			case BUY:
+			case TOGGLE:
+
+				if (generatorTier.isDefaultGenerator())
+				{
+					// Do nothing if generator is default.
+				}
+				// Check if player is allowed to do something.
+				else if (this.island.isAllowed(this.user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+				{
+					if (action == Settings.GuiAction.BUY ||
+						!isPurchased && action == Settings.GuiAction.BUY_OR_TOGGLE)
+					{
+						if (!isPurchased)
+						{
+							if (this.manager.canPurchaseGenerator(user, this.island, this.generatorData, generatorTier))
+							{
+								this.manager.purchaseGenerator(this.user, this.generatorData, generatorTier);
+								// Build whole gui.
+								this.build();
+							}
+						}
+					}
+					else
+					{
+						if (isActive)
+						{
+							this.manager.deactivateGenerator(user, this.generatorData, generatorTier);
+							// Rebuild whole gui.
+							this.build();
+						}
+						else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
+						{
+							this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
+							// Build whole gui.
+							this.build();
+						}
+					}
+				}
+				else
+				{
+					Utils.sendMessage(this.user,
+						this.user.getTranslation("general.errors.insufficient-rank",
+							TextVariables.RANK, this.user.getTranslation(
+								this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(this.user)))));
+				}
+
+				break;
+			case NONE:
+				break;
+		}
 	}
 
 

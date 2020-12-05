@@ -349,9 +349,124 @@ public class Settings implements ConfigObject
     }
 
 
+    /**
+     * Gets left click action.
+     *
+     * @return the left click action
+     */
+    public GuiAction getLeftClickAction()
+    {
+        return leftClickAction;
+    }
+
+
+    /**
+     * Sets left click action.
+     *
+     * @param leftClickAction the left click action
+     */
+    public void setLeftClickAction(GuiAction leftClickAction)
+    {
+        this.leftClickAction = leftClickAction;
+    }
+
+
+    /**
+     * Gets right click action.
+     *
+     * @return the right click action
+     */
+    public GuiAction getRightClickAction()
+    {
+        return rightClickAction;
+    }
+
+
+    /**
+     * Sets right click action.
+     *
+     * @param rightClickAction the right click action
+     */
+    public void setRightClickAction(GuiAction rightClickAction)
+    {
+        this.rightClickAction = rightClickAction;
+    }
+
+
+    /**
+     * Gets shift click action.
+     *
+     * @return the shift click action
+     */
+    public GuiAction getShiftClickAction()
+    {
+        return shiftClickAction;
+    }
+
+
+    /**
+     * Sets shift click action.
+     *
+     * @param shiftClickAction the shift click action
+     */
+    public void setShiftClickAction(GuiAction shiftClickAction)
+    {
+        this.shiftClickAction = shiftClickAction;
+    }
+
+
+    /**
+     * Gets click action.
+     *
+     * @return the click action
+     */
+    public GuiAction getClickAction()
+    {
+        return clickAction;
+    }
+
+
+    /**
+     * Sets click action.
+     *
+     * @param clickAction the click action
+     */
+    public void setClickAction(GuiAction clickAction)
+    {
+        this.clickAction = clickAction;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
- // ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+
+    /**
+     * This enum holds options for choosing on click setting.
+     */
+    public enum GuiAction
+    {
+        /**
+         * Opens detailed menu GUI.
+         */
+        VIEW,
+        /**
+         * Tries to purchase generator
+         */
+        BUY,
+        /**
+         * Tries to activate/deactivate generator
+         */
+        TOGGLE,
+        /**
+         * Tries to buy generator if it is not purchased and activates/deactivates generator if it is.
+         */
+        BUY_OR_TOGGLE,
+        /**
+         * No action is done.
+         */
+        NONE
+    }
 
 
     @ConfigComment("")
@@ -408,6 +523,49 @@ public class Settings implements ConfigObject
     @ConfigComment("This allows to change border block display name.")
     @ConfigEntry(path = "gui.border-block-name")
     private String borderBlockName = " ";
+
+    @ConfigComment("Allows to change what action will be performed when user clicks on generator.")
+    @ConfigComment("NOTE!! This action will overwrite left-click and right-click actions.")
+    @ConfigComment("Supported values:")
+    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
+    @ConfigComment("- VIEW - opens detailed view for generators.")
+    @ConfigComment("- BUY - tries to purchase generator.")
+    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
+    @ConfigComment("- NONE - no actions are performed.")
+    @ConfigEntry(path = "gui.actions.click-action")
+    private GuiAction clickAction = GuiAction.NONE;
+
+    @ConfigComment("Allows to change what action will be performed when user left clicks on generator.")
+    @ConfigComment("NOTE!! This action will be overwritten by click-action.")
+    @ConfigComment("Supported values:")
+    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
+    @ConfigComment("- VIEW - opens detailed view for generators.")
+    @ConfigComment("- BUY - tries to purchase generator.")
+    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
+    @ConfigComment("- NONE - no actions are performed.")
+    @ConfigEntry(path = "gui.actions.left-click-action")
+    private GuiAction leftClickAction = GuiAction.BUY_OR_TOGGLE;
+
+    @ConfigComment("Allows to change what action will be performed when user right clicks on generator.")
+    @ConfigComment("NOTE!! This action will be overwritten by click-action.")
+    @ConfigComment("Supported values:")
+    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
+    @ConfigComment("- VIEW - opens detailed view for generators.")
+    @ConfigComment("- BUY - tries to purchase generator.")
+    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
+    @ConfigComment("- NONE - no actions are performed.")
+    @ConfigEntry(path = "gui.actions.right-click-action")
+    private GuiAction rightClickAction = GuiAction.VIEW;
+
+    @ConfigComment("Allows to change what action will be performed when user shift-clicks on generator.")
+    @ConfigComment("Supported values:")
+    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
+    @ConfigComment("- VIEW - opens detailed view for generators.")
+    @ConfigComment("- BUY - tries to purchase generator.")
+    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
+    @ConfigComment("- NONE - no actions are performed.")
+    @ConfigEntry(path = "gui.actions.shift-click-action")
+    private GuiAction shiftClickAction = GuiAction.NONE;
 
     @ConfigComment("Player main sub-command to access the addon.")
     @ConfigComment("This command label will be required to write after gamemode player command label, f.e. /[label] generator")
