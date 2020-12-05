@@ -451,10 +451,12 @@ public class GeneratorUserPanel extends CommonPanel
 	{
 		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
 		boolean unlocked = this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
+		boolean purchased = this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId());
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
 			glow,
 			unlocked,
+			purchased,
 			this.manager.getIslandLevel(this.island));
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
@@ -509,6 +511,7 @@ public class GeneratorUserPanel extends CommonPanel
 	 * @param generator GeneratorTier which description must be generated.
 	 * @param isActive Boolean that indicates if generator is active.
 	 * @param isUnlocked Boolean that indicates if generator is unlocked.
+	 * @param isPurchased Boolean that indicates if generator is purchased.
 	 * @param islandLevel Long that shows island level.
 	 * @return List of strings that describes generator tier.
 	 */
@@ -516,10 +519,11 @@ public class GeneratorUserPanel extends CommonPanel
 	protected List<String> generateGeneratorDescription(GeneratorTierObject generator,
 		boolean isActive,
 		boolean isUnlocked,
+		boolean isPurchased,
 		long islandLevel)
 	{
 		List<String> description =
-			super.generateGeneratorDescription(generator, isActive, isUnlocked, islandLevel);
+			super.generateGeneratorDescription(generator, isActive, isUnlocked, isPurchased, islandLevel);
 
 		description.add("");
 		description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-view"));

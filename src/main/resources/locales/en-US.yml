@@ -737,21 +737,72 @@ stone-generator:
       right-click-to-clear: "&e Right Click &7 to clear."
     # This section contains translations for some different GUI descriptions.
     descriptions:
-      # String in generator description that appears for active generators.
-      generator-active: "&2 Active"
-      # String in generator description that appears for unlocked but non-active generators.
-      # It also requires that cost value is set,
-      activation-cost: "&7 Activation Cost: [number]"
-      # String in generator description that appears for locked generators.
-      locked: "&c Locked!"
-      # String in generator description that appears for generators with missing permissions.
-      required-permissions: "&c Required Permissions:"
-      # String that lists all missing permissions.
-      missing-permission: "&c - [permission]"
-      # String that displays requires island level from Level Addon.
-      required-level: "&c Requires island level [number]"
-      # String that displays cost for generator. Requires Vault and Cost.
-      purchase-cost: "&c Purchase Cost: [number]."
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "&7&l Blocks:"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "&8 [material] - [#.##]%"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "&7&l Treasures:"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "&8 [material] - [#.####]%"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "&c&l Required Level: &r&c [number]"
+          # Generates [missing-permission] message title.
+          permission-title: "&c&l Missing Permissions:"
+          # Generates [missing-permission] message values.
+          permission: "&c  -[permission]"
+          # Generates [biomes] message title.
+          biome-title: "&7&l Operates in:"
+          # Generates [biomes] message values.
+          biome: "&8 [biome]"
+          # Generates [biomes] message for All Biomes.
+          any: "&7&l Operates in &e&o all &r&7&l biomes"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "&c Locked!"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "&c Not Deployed!"
+          # Message that is showed for Active generators.
+          active: "&2 Active"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "&e Purchase Cost: $[number]"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "&e Activation Cost: $[number]"
+        # Generates [type] section
+        type:
+          title: "&7&l Supports:"
+          cobblestone: "&8 Cobblestone Generators"
+          stone: "&8 Stone Generators"
+          basalt: "&8 Basalt Generators"
+          any: "&7&l Supports &e&o all &r&7&l generators"
       # String that displays required permission that must be set for user to set bundle.
       bundle-permission: |-
         &7 Permission that must be

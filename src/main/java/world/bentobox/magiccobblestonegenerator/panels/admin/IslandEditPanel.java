@@ -306,6 +306,7 @@ public class IslandEditPanel extends CommonPanel
 		List<String> description = this.generateGeneratorDescription(generatorTier,
 			glow,
 			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
+			this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()),
 			this.manager.getIslandLevel(this.island));
 
 		final boolean isUnlocked = this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
@@ -361,6 +362,7 @@ public class IslandEditPanel extends CommonPanel
 	 * @param generator GeneratorTier which description must be generated.
 	 * @param isActive Boolean that indicates if generator is active.
 	 * @param isUnlocked Boolean that indicates if generator is unlocked.
+	 * @param isPurchased Boolean that indicates if generator is purchased.
 	 * @param islandLevel Long that shows island level.
 	 * @return List of strings that describes generator tier.
 	 */
@@ -368,10 +370,11 @@ public class IslandEditPanel extends CommonPanel
 	protected List<String> generateGeneratorDescription(GeneratorTierObject generator,
 		boolean isActive,
 		boolean isUnlocked,
+		boolean isPurchased,
 		long islandLevel)
 	{
 		List<String> description =
-			super.generateGeneratorDescription(generator, isActive, isUnlocked, islandLevel);
+			super.generateGeneratorDescription(generator, isActive, isUnlocked, isPurchased, islandLevel);
 
 		description.add("");
 

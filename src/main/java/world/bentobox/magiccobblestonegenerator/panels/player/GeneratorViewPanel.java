@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +57,6 @@ public class GeneratorViewPanel extends CommonPanel
 
 		// By default no-filters are active.
 		this.activeTab = Tab.INFO;
-
-		this.applyFormatting();
 	}
 
 
@@ -82,30 +78,6 @@ public class GeneratorViewPanel extends CommonPanel
 
 		// By default no-filters are active.
 		this.activeTab = Tab.INFO;
-
-		this.applyFormatting();
-	}
-
-
-	/**
-	 * This method creates number formatting for user locale.
-	 */
-	private void applyFormatting()
-	{
-		this.tensFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.tensFormat.applyPattern("###.#");
-
-		this.hundredsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.hundredsFormat.applyPattern("###.##");
-
-		this.thousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.thousandsFormat.applyPattern("###.###");
-
-		this.tenThousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.tenThousandsFormat.applyPattern("###.####");
-
-		this.hundredThousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.hundredThousandsFormat.applyPattern("###.#####");
 	}
 
 
@@ -770,6 +742,7 @@ public class GeneratorViewPanel extends CommonPanel
 			description = this.generateGeneratorDescription(generatorTier,
 				glow,
 				this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
+				this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()),
 				this.manager.getIslandLevel(this.island));
 		}
 		else
@@ -777,12 +750,14 @@ public class GeneratorViewPanel extends CommonPanel
 			description = this.generateGeneratorDescription(generatorTier,
 				false,
 				false,
+				false,
 				0L);
 		}
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) ->
 		{
-			if (this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+			if (this.island != null &&
+				this.island.isAllowed(user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
 			{
 				if (glow)
 				{
@@ -903,6 +878,7 @@ public class GeneratorViewPanel extends CommonPanel
 	 * @param generator GeneratorTier which description must be generated.
 	 * @param isActive Boolean that indicates if generator is active.
 	 * @param isUnlocked Boolean that indicates if generator is unlocked.
+	 * @param isPurchased Boolean that indicates if generator is purchased.
 	 * @param islandLevel Long that shows island level.
 	 * @return List of strings that describes generator tier.
 	 */
@@ -910,10 +886,11 @@ public class GeneratorViewPanel extends CommonPanel
 	protected List<String> generateGeneratorDescription(GeneratorTierObject generator,
 		boolean isActive,
 		boolean isUnlocked,
+		boolean isPurchased,
 		long islandLevel)
 	{
 		List<String> description =
-			super.generateGeneratorDescription(generator, isActive, isUnlocked, islandLevel);
+			super.generateGeneratorDescription(generator, isActive, isUnlocked, isPurchased, islandLevel);
 
 		if (isUnlocked)
 		{
@@ -1079,34 +1056,4 @@ public class GeneratorViewPanel extends CommonPanel
 	 * If generator is purchased, it is necessary to recreate user gui.
 	 */
 	private boolean hasPurchased;
-
-// ---------------------------------------------------------------------
-// Section: Formatting
-// ---------------------------------------------------------------------
-
-
-	/**
-	 * Stores decimal format object for one digit after separator.
-	 */
-	private DecimalFormat tensFormat;
-
-	/**
-	 * Stores decimal format object for two digit after separator.
-	 */
-	private DecimalFormat hundredsFormat;
-
-	/**
-	 * Stores decimal format object for three digit after separator.
-	 */
-	private DecimalFormat thousandsFormat;
-
-	/**
-	 * Stores decimal format object for four digit after separator.
-	 */
-	private DecimalFormat tenThousandsFormat;
-
-	/**
-	 * Stores decimal format object for five digit after separator.
-	 */
-	private DecimalFormat hundredThousandsFormat;
 }

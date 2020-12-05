@@ -6,8 +6,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -58,30 +56,6 @@ public class GeneratorEditPanel extends CommonPanel
 		this.selectedTreasures = new HashSet<>();
 		this.materialChanceList = new ArrayList<>();
 		this.treasureChanceList = new ArrayList<>();
-
-		this.applyFormatting();
-	}
-
-
-	/**
-	 * This method creates number formatting for user locale.
-	 */
-	private void applyFormatting()
-	{
-		this.tensFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.tensFormat.applyPattern("###.#");
-
-		this.hundredsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.hundredsFormat.applyPattern("###.##");
-
-		this.thousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.thousandsFormat.applyPattern("###.###");
-
-		this.tenThousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.tenThousandsFormat.applyPattern("###.####");
-
-		this.hundredThousandsFormat = (DecimalFormat) NumberFormat.getNumberInstance(this.user.getLocale());
-		this.hundredThousandsFormat.applyPattern("###.#####");
 	}
 
 
@@ -1670,34 +1644,4 @@ public class GeneratorEditPanel extends CommonPanel
 	 * This list contains elements of tree map that we can edit with a panel.
 	 */
 	private List<Pair<ItemStack, Double>> treasureChanceList;
-
-// ---------------------------------------------------------------------
-// Section: Formatting
-// ---------------------------------------------------------------------
-
-
-	/**
-	 * Stores decimal format object for one digit after separator.
-	 */
-	private DecimalFormat tensFormat;
-
-	/**
-	 * Stores decimal format object for two digit after separator.
-	 */
-	private DecimalFormat hundredsFormat;
-
-	/**
-	 * Stores decimal format object for three digit after separator.
-	 */
-	private DecimalFormat thousandsFormat;
-
-	/**
-	 * Stores decimal format object for four digit after separator.
-	 */
-	private DecimalFormat tenThousandsFormat;
-
-	/**
-	 * Stores decimal format object for five digit after separator.
-	 */
-	private DecimalFormat hundredThousandsFormat;
 }
