@@ -572,7 +572,7 @@ public class GeneratorUserPanel extends CommonPanel
 		// Add shift click tooltip.
 		description.addAll(
 			this.generateToolTips(this.addon.getSettings().getShiftClickAction(),
-				Constants.TIPS + "shift",
+				Constants.TIPS + "shift-",
 				isUnlocked,
 				isActive,
 				isPurchased,
