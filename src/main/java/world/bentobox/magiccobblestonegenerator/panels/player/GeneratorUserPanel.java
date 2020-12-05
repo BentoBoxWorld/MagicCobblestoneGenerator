@@ -449,9 +449,15 @@ public class GeneratorUserPanel extends CommonPanel
 	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
-		boolean unlocked = this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
-		boolean purchased = this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId());
+		// Default generator should be active.
+		boolean glow = generatorTier.isDefaultGenerator() ||
+			this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+		// Default generator should be always unlocked.
+		boolean unlocked = generatorTier.isDefaultGenerator() ||
+			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
+		// Default generators cannot be purchased.
+		boolean purchased = generatorTier.isDefaultGenerator() ||
+			this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId());
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
 			glow,

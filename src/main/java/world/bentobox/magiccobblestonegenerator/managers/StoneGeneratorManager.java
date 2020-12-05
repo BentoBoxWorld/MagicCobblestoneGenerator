@@ -807,8 +807,11 @@ public class StoneGeneratorManager
         this.checkGeneratorUnlockStatus(island, null, null);
 
         // Remove locked generators from active list.
-        dataObject.getActiveGeneratorList().removeIf(generator ->
-            !dataObject.getUnlockedTiers().contains(generator));
+        dataObject.getActiveGeneratorList().removeIf(
+            generator -> !dataObject.getUnlockedTiers().contains(generator));
+        // Remove all default generators from active list.
+        dataObject.getActiveGeneratorList().removeIf(
+            id -> this.getGeneratorByID(id).isDefaultGenerator());
 
         if (dataObject.getActiveGeneratorCount() > 0 &&
             dataObject.getActiveGeneratorCount() < dataObject.getActiveGeneratorList().size())
@@ -905,6 +908,8 @@ public class StoneGeneratorManager
         final long islandLevel = level == null ? this.getIslandLevel(island) : level;
 
         this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
+            // Filter out default generators. They are always unlocked and active.
+            filter(generator -> !generator.isDefaultGenerator()).
             // Filter out unlocked generators. Not necessary to check them again
             filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
             // Filter out generators with larger minimal island level then current island level.
