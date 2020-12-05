@@ -36,6 +36,7 @@ Monetary system is implemented and now users can purchase generators. Server own
 5. Restart the server
 
 To change generators, you can simply edit generatorTemplate.yml at any point. However, to apply changes for GameMode addon, you need to write `/[gamemode_admin_command] generator import`.
+Admins can also add/edit/remove generators using AdminGUI.
 
 Magic Cobblestone Generator does not limit how many generators are active. You can activate multiple generators at the same time, but only best suitable for given location will be used.
 Users have a nice GUI that allows interacting with generators by executing command: `/[gamemode_user_command] generator`.
