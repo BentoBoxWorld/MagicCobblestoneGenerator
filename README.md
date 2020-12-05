@@ -44,10 +44,25 @@ By right clicking on GUI element, users can see detailed information about each 
 There are 2 new permissions that could be useful to customize experience:
 - `[gamemode].stone-generator.active-generators.[NUMBER]` - permission for island owner that allows increasing active generator number.
 - `[gamemode].stone-generator.max-range.[NUMBER]` - permission for island owner that allows increasing range in which generator will work. Be aware, it must be enabled in the config.
+- `[gamemode].stone-generator.bundle.[bundle_id]` - permission for island owner that allows to set specific generator bundle that will work on his island.
+
+## Bundles
+
+Bundles are a new feature in this addon. It allows specifying generators that can be used per island. Players will be able to see only generators that are assigned to the bundle.
+Bundles can be created with template file, or using new Admin Menu.
+
+## Placeholders
+
+Magic Cobblestone Generator have 5 placeholders:
+- `[gamemode]_magiccobblestonegenerator_active_generator_count` - Returns number of currently active generator tiers.
+- `[gamemode]_magiccobblestonegenerator_max_active_generator_count` - Returns number of maximal amount of active generator tiers.
+- `[gamemode]_magiccobblestonegenerator_active_generator_names` - Returns text that contains all active generator names separated with `,`.
+- `[gamemode]_magiccobblestonegenerator_unlocked_generator_names` - Returns text that contains all unlocked generator names separated with `,`.
+- `[gamemode]_magiccobblestonegenerator_purchased_generator_names` - Returns text that contains all purchased generator names separated with `,`.
 
 ## Compatibility
 
-- [x] BentoBox - 1.14 version
+- [x] BentoBox - 1.15 version
 
 ## Config.yml
 
@@ -55,8 +70,14 @@ The config.yml has the following sections:
 
 * **Offline Generation** - ability to disable addon processing on islands where none of members are online.
 * **Physic Usage** - ability to specify if block generation should use game physic. Disabling will allow floating gravel, however some redstone machines may stop working.
-* **Working Range** - specify working range for the generator to work. If players are not in the given range, then generator will not work.
-* **Active Generator Count** - specify how many generators users can activate at the same time.
+* **Working Range** - specify default working range for the generator to work. If players are not in the given range, then generator will not work.
+* **Active Generator Count** - specify default amount of generators users can activate at the same time.
+* **Notify On Unlock** - allows to toggle if message about unlocked generators should be send to island members.
+* **Show Filters in GUI** - allows to toggle if in player generator selection view filters should be visible.
+* **User GUI border block** - allows to change border block around player menus. 
+* **Border block name** - allows to change border block name in player menus.
+
+As well as addon contains section that allows to change command aliases. Changing them requires server restart.
 
 ## generatorTemplate.yml
 
@@ -132,6 +153,28 @@ Only generator ID must be specified. Other parts can be skipped.
       # It will be from 1 till defined amount.
       # Default value: 1
       amount: 1
+```
+
+Bundles can be created in using the same template file in the section below all generators.
+Bundles are optimal, and addon can work without them.
+```
+  # bundle_id
+  bundle_unique_id:
+    # Display name for users
+    name: "Something fancy"
+    # Description in lore message. Supports colour codes.
+    # Can be defined empty by replacing eveything with [].
+    # Default value: []
+    description: -|
+      First Line Of lore Message
+      &2Second Line Of lore Message
+    # Icon used in GUI's. Number at the end allows to specify stack size for item.
+    # Default value: Paper.
+    icon: "PAPER:1"
+    # List of generators that bundle will work have access.
+    generators:
+      - generator_id_1
+      - generator_id_2
 ```
 
 ## Information
