@@ -187,13 +187,30 @@ public class StoneGeneratorImportManager
 
 			if (details != null)
 			{
-				// Read prefix
-				generatorTier.setFriendlyName(details.getString("prefix",
+				// Set name for description
+				generatorTier.setFriendlyName(details.getString("name",
 					generatorId.replaceAll("_", " ")));
-				// Read description
-				generatorTier.setDescription(details.getStringList("description"));
-				// Read icon
 
+				// Read description
+				if (details.isList("description"))
+				{
+					generatorTier.setDescription(details.getStringList("description"));
+				}
+				else if (details.isString("description"))
+				{
+					String description = details.getString("description");
+
+					if (description != null)
+					{
+						// Define as list.
+						generatorTier.setDescription(Arrays.asList(
+							description.replaceAll("\\|", "\n").
+								split("\n").
+								clone()));
+					}
+				}
+
+				// Read icon
 				// TODO: 1.15.2 compatibility
 				ItemStack icon = ItemParser.parse(details.getString("icon"));
 				generatorTier.setGeneratorIcon(icon == null ? new ItemStack(Material.PAPER) : icon);
@@ -251,10 +268,28 @@ public class StoneGeneratorImportManager
 			if (details != null)
 			{
 				// Read prefix
-				generatorBundle.setFriendlyName(details.getString("prefix",
+				generatorBundle.setFriendlyName(details.getString("name",
 					bundleId.replaceAll("_", " ")));
+
 				// Read description
-				generatorBundle.setDescription(details.getStringList("description"));
+				if (details.isList("description"))
+				{
+					generatorBundle.setDescription(details.getStringList("description"));
+				}
+				else if (details.isString("description"))
+				{
+					String description = details.getString("description");
+
+					if (description != null)
+					{
+						// Define as list.
+						generatorBundle.setDescription(Arrays.asList(
+							description.replaceAll("\\|", "\n").
+								split("\n").
+								clone()));
+					}
+				}
+
 				// Read icon
 				ItemStack icon = ItemParser.parse(details.getString("icon"));
 				generatorBundle.setGeneratorIcon(icon == null ? new ItemStack(Material.PAPER) : icon);
