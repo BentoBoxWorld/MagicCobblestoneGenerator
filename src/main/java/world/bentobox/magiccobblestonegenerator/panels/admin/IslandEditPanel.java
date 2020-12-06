@@ -301,16 +301,23 @@ public class IslandEditPanel extends CommonPanel
 	 */
 	private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
 	{
-		boolean glow = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+		// Default generator should be active.
+		boolean isActive = generatorTier.isDefaultGenerator() ||
+			this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
+		// Default generator should be always unlocked.
+		boolean isUnlocked = generatorTier.isDefaultGenerator() ||
+			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
+		// Default generators cannot be purchased.
+		boolean isPurchased = generatorTier.isDefaultGenerator() ||
+			!this.addon.isVaultProvided() ||
+			generatorTier.getGeneratorTierCost() == 0 ||
+			this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId());
 
 		List<String> description = this.generateGeneratorDescription(generatorTier,
-			glow,
-			this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId()),
-			this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()),
+			isActive,
+			isUnlocked,
+			isPurchased,
 			this.manager.getIslandLevel(this.island));
-
-		final boolean isUnlocked = this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
-		final boolean isActive = this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
 
 		PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
 
@@ -319,24 +326,47 @@ public class IslandEditPanel extends CommonPanel
 				// Open view panel.
 				if (isUnlocked)
 				{
-					this.generatorData.getUnlockedTiers().remove(generatorTier.getUniqueId());
+					// Default generators are not lockable.
+					if (!generatorTier.isDefaultGenerator())
+					{
+						// Direct access to data.
+						this.generatorData.getUnlockedTiers().remove(generatorTier.getUniqueId());
+					}
 				}
 				else
 				{
-					this.generatorData.getUnlockedTiers().add(generatorTier.getUniqueId());
+					// Call a proper method.
+					this.addon.getAddonManager().unlockGenerator(this.generatorData,
+						this.user,
+						this.island,
+						generatorTier);
 				}
 
 				this.build();
 			}
 			else if (clickType.isLeftClick())
 			{
-				if (isActive)
+				if (isUnlocked)
 				{
-					this.generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
-				}
-				else
-				{
-					this.generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+					if (!isPurchased)
+					{
+						this.addon.getAddonManager().purchaseGenerator(this.user,
+							this.generatorData,
+							generatorTier);
+					}
+					else if (isActive)
+					{
+						this.addon.getAddonManager().deactivateGenerator(this.user,
+							this.generatorData,
+							generatorTier);
+					}
+					else
+					{
+						this.addon.getAddonManager().activateGenerator(this.user,
+							this.island,
+							this.generatorData,
+							generatorTier);
+					}
 				}
 
 				this.build();
@@ -349,9 +379,9 @@ public class IslandEditPanel extends CommonPanel
 		return new PanelItemBuilder().
 			name(generatorTier.getFriendlyName()).
 			description(description).
-			icon(generatorTier.getGeneratorIcon()).
+			icon(isUnlocked ? generatorTier.getGeneratorIcon() : generatorTier.getLockedIcon()).
 			clickHandler(clickHandler).
-			glow(glow).
+			glow(isActive).
 			build();
 	}
 
@@ -378,22 +408,32 @@ public class IslandEditPanel extends CommonPanel
 
 		description.add("");
 
-		if (isActive)
-		{
-			description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-deactivate"));
-		}
-		else
-		{
-			description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-activate"));
-		}
-
 		if (isUnlocked)
 		{
-			description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-lock"));
+			if (!isPurchased)
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-purchase"));
+			}
+			else if (isActive)
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-deactivate"));
+			}
+			else
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-activate"));
+			}
 		}
-		else
+
+		if (!generator.isDefaultGenerator())
 		{
-			description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-unlock"));
+			if (isUnlocked)
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-lock"));
+			}
+			else
+			{
+				description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-unlock"));
+			}
 		}
 
 		return description;

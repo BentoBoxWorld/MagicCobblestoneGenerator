@@ -981,6 +981,18 @@ public class StoneGeneratorManager
         @NotNull Island island,
         @NotNull GeneratorTierObject generator)
     {
+        if (!generator.isDeployed() || generator.isDefaultGenerator())
+        {
+            // Do not add undeployed generators and default generators to the unlock list.
+            if (user != null)
+            {
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "generator-cannot-be-unlocked",
+                        Constants.GENERATOR, generator.getFriendlyName()));
+            }
+            return;
+        }
+
         // Create and call bukkit event to check if unlocking should be cancelled.
         GeneratorUnlockEvent event = new GeneratorUnlockEvent(generator, user, island);
         Bukkit.getPluginManager().callEvent(event);

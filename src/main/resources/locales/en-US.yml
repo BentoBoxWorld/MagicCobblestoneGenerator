@@ -838,6 +838,8 @@ stone-generator:
     generator-deactivated: "&e Generator &r '[generator]' &r&e is deactivated."
     # Message that appears when trying to activate too many generators.
     active-generators-reached: "&c Too many generators are activated. Try to deactivate some before activating a new one."
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "&c Generator &r '[generator]' &r&c is not unlocked."
     # Message that appears when trying to activate locked generator.
     generator-not-unlocked: "&c Generator &r '[generator]' &r&c is not unlocked."
     # Message that appears when purchasing the generator.
