@@ -806,12 +806,18 @@ public class StoneGeneratorManager
         // Call check command which finds unlocked generators.
         this.checkGeneratorUnlockStatus(island, null, null);
 
-        // Remove locked generators from active list.
-        dataObject.getActiveGeneratorList().removeIf(
-            generator -> !dataObject.getUnlockedTiers().contains(generator));
-        // Remove all default generators from active list.
-        dataObject.getActiveGeneratorList().removeIf(
-            id -> this.getGeneratorByID(id).isDefaultGenerator());
+        // Remove Generators From Active Generator List:
+        dataObject.getActiveGeneratorList().removeIf(generator ->
+        {
+            // if generator is not unlocked (by admin?) then remove from active list.
+            return !dataObject.getUnlockedTiers().contains(generator) ||
+                // if generator does not exist anymore, most likely after reimporting.
+                this.getGeneratorByID(generator) == null ||
+                // if generator is default then it should not be here
+                this.getGeneratorByID(generator).isDefaultGenerator() ||
+                // if generator is undeployed, remove from active list too.
+                !this.getGeneratorByID(generator).isDeployed();
+        });
 
         if (dataObject.getActiveGeneratorCount() > 0 &&
             dataObject.getActiveGeneratorCount() < dataObject.getActiveGeneratorList().size())
