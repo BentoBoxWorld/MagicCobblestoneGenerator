@@ -80,6 +80,7 @@ public class SettingsPanel extends CommonPanel
 		panelBuilder.item(24, this.createButton(Action.BORDER_BLOCK_NAME));
 
 		panelBuilder.item(16, this.createButton(Action.UNLOCK_NOTIFY));
+		panelBuilder.item(25, this.createButton(Action.DISABLE_ON_ACTIVATE));
 
 		panelBuilder.item(35, this.createButton(Action.RETURN));
 		panelBuilder.build();
@@ -362,6 +363,35 @@ public class SettingsPanel extends CommonPanel
 
 				break;
 			}
+			case DISABLE_ON_ACTIVATE:
+			{
+				clickHandler = (panel, user, clickType, i) -> {
+					this.settings.setOverwriteOnActive(!this.settings.isOverwriteOnActive());
+					this.saveSettings();
+					// Update button in panel
+					this.build();
+
+					return true;
+				};
+
+				glow = this.settings.isOverwriteOnActive();
+
+				if (glow)
+				{
+					description.add(this.user.getTranslation(reference + ".enabled"));
+				}
+				else
+				{
+					description.add(this.user.getTranslation(reference + ".disabled"));
+				}
+
+				description.add("");
+				description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
+
+				material = Material.SADDLE;
+
+				break;
+			}
 			case RETURN:
 			{
 				description.add("");
@@ -456,6 +486,10 @@ public class SettingsPanel extends CommonPanel
 		 * Process unlock notification action.
 		 */
 		UNLOCK_NOTIFY,
+		/**
+		 * Process disable on activate action.
+		 */
+		DISABLE_ON_ACTIVATE,
 		/**
 		 * Process Return Action.
 		 */

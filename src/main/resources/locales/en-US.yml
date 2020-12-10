@@ -580,9 +580,21 @@ stone-generator:
           &7 to a user when he unlocks
           &7 a new generator.
         enabled: |-
-          &b Notify on unlock is &a enabled &b .
+          &b Notify on unlock is &a enabled &b.
         disabled: |-
-          &b Notify on unlock is &c disabled &b .
+          &b Notify on unlock is &c disabled &b.
+      disable_on_activate:
+        name: "&f&l Disable on Activation"
+        description: |-
+          &7 Disable oldest active generator,
+          &7 if user is activation a new
+          &7 generator.
+          &7 Usefull for situations where
+          &7 only single generator is allwoed.
+        enabled: |-
+          &b Disable on activation is &a enabled &b.
+        disabled: |-
+          &b Disable on activation is &c disabled &b.
       # Buttons in Library GUI
       library:
         name: "&f&l [name]"
