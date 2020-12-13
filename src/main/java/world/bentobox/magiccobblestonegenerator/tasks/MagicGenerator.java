@@ -130,7 +130,7 @@ public class MagicGenerator
                 if (itemStack != null)
                 {
                     ItemStack drop = itemStack.clone();
-                    drop.setAmount(this.random.nextInt(generatorTier.getMaxTreasureAmount() - 1) + 1);
+                    drop.setAmount(this.random.nextInt(generatorTier.getMaxTreasureAmount() + 1) + 1);
 
                     // drop item naturally in the location of the block
                     block.getWorld().dropItemNaturally(block.getLocation(), drop);
