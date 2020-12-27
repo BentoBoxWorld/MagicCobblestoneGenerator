@@ -7,6 +7,7 @@
 package world.bentobox.magiccobblestonegenerator.events;
 
 
+import org.bukkit.event.HandlerList;
 import java.util.UUID;
 
 import world.bentobox.bentobox.api.events.BentoBoxEvent;
@@ -125,6 +126,34 @@ public class GeneratorBuyEvent extends BentoBoxEvent
 
 
 // ---------------------------------------------------------------------
+// Section: Handler methods
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * Gets handlers.
+	 *
+	 * @return the handlers
+	 */
+	@Override
+	public HandlerList getHandlers()
+	{
+		return GeneratorBuyEvent.handlers;
+	}
+
+
+	/**
+	 * Gets handlers.
+	 *
+	 * @return the handlers
+	 */
+	public static HandlerList getHandlerList()
+	{
+		return GeneratorBuyEvent.handlers;
+	}
+
+
+// ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
 
@@ -148,4 +177,9 @@ public class GeneratorBuyEvent extends BentoBoxEvent
 	 * Generator ID.
 	 */
 	private String generatorID;
+
+	/**
+	 * Event listener list for current
+	 */
+	private static final HandlerList handlers = new HandlerList();
 }

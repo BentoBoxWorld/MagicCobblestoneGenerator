@@ -8,6 +8,7 @@ package world.bentobox.magiccobblestonegenerator.events;
 
 
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.HandlerList;
 import java.util.UUID;
 
 import world.bentobox.bentobox.api.events.BentoBoxEvent;
@@ -178,6 +179,34 @@ public class GeneratorActivationEvent extends BentoBoxEvent implements Cancellab
 
 
 // ---------------------------------------------------------------------
+// Section: Handler methods
+// ---------------------------------------------------------------------
+
+
+	/**
+	 * Gets handlers.
+	 *
+	 * @return the handlers
+	 */
+	@Override
+	public HandlerList getHandlers()
+	{
+		return GeneratorActivationEvent.handlers;
+	}
+
+
+	/**
+	 * Gets handlers.
+	 *
+	 * @return the handlers
+	 */
+	public static HandlerList getHandlerList()
+	{
+		return GeneratorActivationEvent.handlers;
+	}
+
+
+// ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
 
@@ -211,4 +240,9 @@ public class GeneratorActivationEvent extends BentoBoxEvent implements Cancellab
 	 * Boolean that indicates if event is cancelled.
 	 */
 	private boolean cancelled;
+
+	/**
+	 * Event listener list for current
+	 */
+	private static final HandlerList handlers = new HandlerList();
 }
