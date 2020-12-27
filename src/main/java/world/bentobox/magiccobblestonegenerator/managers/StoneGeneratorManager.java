@@ -142,8 +142,8 @@ public class StoneGeneratorManager
         if (user != null)
         {
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-loaded",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-loaded",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
         }
 
         // Migrate generator tier object.
@@ -192,8 +192,8 @@ public class StoneGeneratorManager
         if (user != null)
         {
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "bundle-loaded",
-                    Constants.BUNDLE, generatorBundle.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "bundle-loaded",
+                            Constants.BUNDLE, generatorBundle.getFriendlyName()));
         }
 
         this.generatorBundleCache.put(generatorBundle.getUniqueId(), generatorBundle);
@@ -349,7 +349,7 @@ public class StoneGeneratorManager
             generator.setTreasureItemChanceMap(new TreeMap<>());
 
             generator.getTreasureChanceMap().forEach((chance, material) ->
-                generator.getTreasureItemChanceMap().put(chance, new ItemStack(material)));
+            generator.getTreasureItemChanceMap().put(chance, new ItemStack(material)));
 
             generator.setTreasureChanceMap(null);
             this.saveGeneratorTier(generator);
@@ -401,7 +401,7 @@ public class StoneGeneratorManager
      * @return GeneratorTierObject that operates in given island or null.
      */
     public @Nullable GeneratorTierObject getGeneratorTier(Location location,
-        GeneratorTierObject.GeneratorType generatorType)
+            GeneratorTierObject.GeneratorType generatorType)
     {
         Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
 
@@ -416,8 +416,8 @@ public class StoneGeneratorManager
 
         // Gets biome from location.
         final Biome biome = location.getWorld().getBiome(location.getBlockX(),
-            location.getBlockY(),
-            location.getBlockZ());
+                location.getBlockY(),
+                location.getBlockZ());
 
         // TODO: It is necessary to reset user cache when import new generators are don.
         // I changed implementation for faster work, so it gets challenges on island data loading,
@@ -427,7 +427,7 @@ public class StoneGeneratorManager
 
         // Find generator from active generator list.
         Optional<GeneratorTierObject> optionalGenerator =
-            data.getActiveGeneratorList().stream().
+                data.getActiveGeneratorList().stream().
                 // Map generator id with proper generator object.
                 map(this.addon.getAddonManager()::getGeneratorByID).
                 // Remove generators that are apparently removed from database.
@@ -474,7 +474,7 @@ public class StoneGeneratorManager
                 });
 
         return optionalGenerator.orElse(
-            this.findDefaultGeneratorTier(location.getWorld(), generatorType));
+                this.findDefaultGeneratorTier(location.getWorld(), generatorType));
     }
 
 
@@ -487,10 +487,10 @@ public class StoneGeneratorManager
      * @return GeneratorTierObject
      */
     private @Nullable GeneratorTierObject findDefaultGeneratorTier(World world,
-        GeneratorTierObject.GeneratorType generatorType)
+            GeneratorTierObject.GeneratorType generatorType)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
-            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+                gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
 
         if (gameMode.isEmpty())
         {
@@ -500,16 +500,16 @@ public class StoneGeneratorManager
 
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
-            // Filter all default generators
-            filter(GeneratorTierObject::isDefaultGenerator).
-            // Filter generators with necessary type.
-            filter(generator -> generator.getGeneratorType().includes(generatorType)).
-            // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Return first
-            findFirst().
-            // Return null if none is find.
-            orElse(null);
+                // Filter all default generators
+                filter(GeneratorTierObject::isDefaultGenerator).
+                // Filter generators with necessary type.
+                filter(generator -> generator.getGeneratorType().includes(generatorType)).
+                // Filter generators that starts with name.
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                // Return first
+                findFirst().
+                // Return null if none is find.
+                orElse(null);
     }
 
 
@@ -522,7 +522,7 @@ public class StoneGeneratorManager
     public List<GeneratorTierObject> getAllGeneratorTiers(World world)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
-            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+                gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
 
         if (gameMode.isEmpty())
         {
@@ -532,16 +532,16 @@ public class StoneGeneratorManager
 
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
-            // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Sort in order: default generators are first, followed by lowest priority,
-            // generator type and then by generator name.
-            sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
-                thenComparing(GeneratorTierObject::getPriority).
-                thenComparing(GeneratorTierObject::getGeneratorType).
-                thenComparing(GeneratorTierObject::getFriendlyName)).
-            // Return as list collection.
-            collect(Collectors.toList());
+                // Filter generators that starts with name.
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                // Sort in order: default generators are first, followed by lowest priority,
+                // generator type and then by generator name.
+                sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
+                        thenComparing(GeneratorTierObject::getPriority).
+                        thenComparing(GeneratorTierObject::getGeneratorType).
+                        thenComparing(GeneratorTierObject::getFriendlyName)).
+                // Return as list collection.
+                collect(Collectors.toList());
     }
 
 
@@ -569,28 +569,28 @@ public class StoneGeneratorManager
         // Optimization could be done by generating bundles for each situation, but currently I do not
         // think it should be an actual problem here.
         Stream<GeneratorTierObject> generatorTiers =
-            this.getAllGeneratorTiers(world).stream().filter(GeneratorTierObject::isDeployed);
+                this.getAllGeneratorTiers(world).stream().filter(GeneratorTierObject::isDeployed);
 
         if (islandData != null)
         {
             // Owner bundle has larger priority then island bundle.
             if (islandData.getOwnerBundle() != null &&
-                this.generatorBundleCache.containsKey(islandData.getOwnerBundle()))
+                    this.generatorBundleCache.containsKey(islandData.getOwnerBundle()))
             {
                 GeneratorBundleObject bundle = this.generatorBundleCache.get(islandData.getOwnerBundle());
 
                 return generatorTiers.
-                    filter(generatorTier -> bundle.getGeneratorTiers().contains(generatorTier.getUniqueId())).
-                    collect(Collectors.toList());
+                        filter(generatorTier -> bundle.getGeneratorTiers().contains(generatorTier.getUniqueId())).
+                        collect(Collectors.toList());
             }
             else if (islandData.getIslandBundle() != null &&
-                this.generatorBundleCache.containsKey(islandData.getIslandBundle()))
+                    this.generatorBundleCache.containsKey(islandData.getIslandBundle()))
             {
                 GeneratorBundleObject bundle = this.generatorBundleCache.get(islandData.getIslandBundle());
 
                 return generatorTiers.
-                    filter(generatorTier -> bundle.getGeneratorTiers().contains(generatorTier.getUniqueId())).
-                    collect(Collectors.toList());
+                        filter(generatorTier -> bundle.getGeneratorTiers().contains(generatorTier.getUniqueId())).
+                        collect(Collectors.toList());
             }
             else
             {
@@ -612,7 +612,7 @@ public class StoneGeneratorManager
     public List<GeneratorTierObject> findDefaultGeneratorList(World world)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
-            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+                gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
 
         if (gameMode.isEmpty())
         {
@@ -622,13 +622,13 @@ public class StoneGeneratorManager
 
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
-            // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Filter deployed and default generators.
-            filter(GeneratorTierObject::isDefaultGenerator).
-            filter(GeneratorTierObject::isDeployed).
-            // Return as list collection.
-            collect(Collectors.toList());
+                // Filter generators that starts with name.
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                // Filter deployed and default generators.
+                filter(GeneratorTierObject::isDefaultGenerator).
+                filter(GeneratorTierObject::isDeployed).
+                // Return as list collection.
+                collect(Collectors.toList());
     }
 
 
@@ -646,7 +646,7 @@ public class StoneGeneratorManager
     public List<GeneratorBundleObject> getAllGeneratorBundles(World world)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
-            gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
+                gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
 
         if (gameMode.isEmpty())
         {
@@ -656,11 +656,11 @@ public class StoneGeneratorManager
 
         // Find default generator from cache.
         return this.generatorBundleCache.values().stream().
-            // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Sort in order: default generators are first, followed by lowest priority,
-            // Return as list collection.
-            collect(Collectors.toList());
+                // Filter generators that starts with name.
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                // Sort in order: default generators are first, followed by lowest priority,
+                // Return as list collection.
+                collect(Collectors.toList());
     }
 
 
@@ -703,20 +703,20 @@ public class StoneGeneratorManager
     public void loadUserIslands(UUID uniqueId)
     {
         this.operationWorlds.stream().
-            map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
-            filter(Objects::nonNull).
-            forEach(island -> {
-                if (island.getOwner() == uniqueId)
-                {
-                    // Owner island must be validated.
-                    this.validateIslandData(island);
-                }
-                else
-                {
-                    // Members does not influence island data.
-                    this.addIslandData(island);
-                }
-            });
+        map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
+        filter(Objects::nonNull).
+        forEach(island -> {
+            if (island.getOwner() == uniqueId)
+            {
+                // Owner island must be validated.
+                this.validateIslandData(island);
+            }
+            else
+            {
+                // Members does not influence island data.
+                this.addIslandData(island);
+            }
+        });
     }
 
 
@@ -811,25 +811,25 @@ public class StoneGeneratorManager
         {
             // if generator is not unlocked (by admin?) then remove from active list.
             return !dataObject.getUnlockedTiers().contains(generator) ||
-                // if generator does not exist anymore, most likely after reimporting.
-                this.getGeneratorByID(generator) == null ||
-                // if generator is default then it should not be here
-                this.getGeneratorByID(generator).isDefaultGenerator() ||
-                // if generator is undeployed, remove from active list too.
-                !this.getGeneratorByID(generator).isDeployed();
+                    // if generator does not exist anymore, most likely after reimporting.
+                    this.getGeneratorByID(generator) == null ||
+                    // if generator is default then it should not be here
+                    this.getGeneratorByID(generator).isDefaultGenerator() ||
+                    // if generator is undeployed, remove from active list too.
+                    !this.getGeneratorByID(generator).isDeployed();
         });
 
         if (dataObject.getActiveGeneratorCount() > 0 &&
-            dataObject.getActiveGeneratorCount() < dataObject.getActiveGeneratorList().size())
+                dataObject.getActiveGeneratorCount() < dataObject.getActiveGeneratorList().size())
         {
             // There are more active generators then allowed.
             // Start to remove from first element.
 
             Iterator<String> activeGenerators =
-                new ArrayList<>(dataObject.getActiveGeneratorList()).iterator();
+                    new ArrayList<>(dataObject.getActiveGeneratorList()).iterator();
 
             while (dataObject.getActiveGeneratorList().size() > dataObject.getActiveGeneratorCount() &&
-                activeGenerators.hasNext())
+                    activeGenerators.hasNext())
             {
                 dataObject.getActiveGeneratorList().remove(activeGenerators.next());
             }
@@ -848,8 +848,8 @@ public class StoneGeneratorManager
     {
         // Update max island generation range.
         int permissionRange = Utils.getPermissionValue(User.getInstance(island.getOwner()),
-            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.max-range"),
-            0);
+                Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.max-range"),
+                0);
         dataObject.setOwnerWorkingRange(permissionRange);
     }
 
@@ -863,8 +863,8 @@ public class StoneGeneratorManager
     {
         // Update max active generator count.
         int permissionSize = Utils.getPermissionValue(User.getInstance(island.getOwner()),
-            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.active-generators"),
-            0);
+                Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.active-generators"),
+                0);
         dataObject.setOwnerActiveGeneratorCount(permissionSize);
     }
 
@@ -878,8 +878,8 @@ public class StoneGeneratorManager
     {
         // Update max island generation range.
         String permissionBundle = Utils.getPermissionValue(User.getInstance(island.getOwner()),
-            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.bundle"),
-            null);
+                Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.bundle"),
+                null);
         dataObject.setOwnerBundle(permissionBundle);
     }
 
@@ -914,17 +914,17 @@ public class StoneGeneratorManager
         final long islandLevel = level == null ? this.getIslandLevel(island) : level;
 
         this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
-            // Filter out default generators. They are always unlocked and active.
-            filter(generator -> !generator.isDefaultGenerator()).
-            // Filter out unlocked generators. Not necessary to check them again
-            filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
-            // Filter out generators with larger minimal island level then current island level.
-            filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
-            // Filter out generators with missing permissions
-            filter(generator -> Utils.matchAllPermissions(
+        // Filter out default generators. They are always unlocked and active.
+        filter(generator -> !generator.isDefaultGenerator()).
+        // Filter out unlocked generators. Not necessary to check them again
+        filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
+        // Filter out generators with larger minimal island level then current island level.
+        filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
+        // Filter out generators with missing permissions
+        filter(generator -> Utils.matchAllPermissions(
                 User.getInstance(island.getOwner()), generator.getRequiredPermissions())).
-            // Now process each generator.
-            forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+        // Now process each generator.
+        forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
     }
 
 
@@ -977,9 +977,9 @@ public class StoneGeneratorManager
      * @param generator Generator that must be unlocked.
      */
     public void unlockGenerator(@NotNull GeneratorDataObject dataObject,
-        @Nullable User user,
-        @NotNull Island island,
-        @NotNull GeneratorTierObject generator)
+            @Nullable User user,
+            @NotNull Island island,
+            @NotNull GeneratorTierObject generator)
     {
         if (!generator.isDeployed() || generator.isDefaultGenerator())
         {
@@ -987,8 +987,8 @@ public class StoneGeneratorManager
             if (user != null)
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.MESSAGES + "generator-cannot-be-unlocked",
-                        Constants.GENERATOR, generator.getFriendlyName()));
+                        user.getTranslation(Constants.MESSAGES + "generator-cannot-be-unlocked",
+                                Constants.GENERATOR, generator.getFriendlyName()));
             }
             return;
         }
@@ -1016,7 +1016,7 @@ public class StoneGeneratorManager
                 // Send message that generator is available for purchase.
 
                 island.getMemberSet().forEach(uuid ->
-                    Utils.sendUnlockMessage(uuid,
+                Utils.sendUnlockMessage(uuid,
                         island,
                         generator,
                         this.addon,
@@ -1027,7 +1027,7 @@ public class StoneGeneratorManager
                 // Send message that generator is available for activation.
 
                 island.getMemberSet().forEach(uuid ->
-                    Utils.sendUnlockMessage(uuid,
+                Utils.sendUnlockMessage(uuid,
                         island,
                         generator,
                         this.addon,
@@ -1045,8 +1045,8 @@ public class StoneGeneratorManager
      * @return {@code true} if deactivation was successful, {@code false} otherwise.
      */
     public boolean deactivateGenerator(@NotNull User user,
-        @NotNull GeneratorDataObject generatorData,
-        @NotNull GeneratorTierObject generatorTier)
+            @NotNull GeneratorDataObject generatorData,
+            @NotNull GeneratorTierObject generatorTier)
     {
         // If generator is not active, do nothing.
         if (!generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId()))
@@ -1056,16 +1056,16 @@ public class StoneGeneratorManager
 
         // Call event about generator activation.
         GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
-            user,
-            generatorData.getUniqueId(),
-            false);
+                user,
+                generatorData.getUniqueId(),
+                false);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled())
         {
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-deactivated",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-deactivated",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
             generatorData.getActiveGeneratorList().remove(generatorTier.getUniqueId());
 
             // Save object.
@@ -1087,20 +1087,20 @@ public class StoneGeneratorManager
      * @param user User who will pay for activating.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be activated.
-     * @return {@code true} if can activate, {@false} if cannot activate.
+     * @return {@code true} if can activate, {@code false} if cannot activate.
      */
     public boolean canActivateGenerator(@NotNull User user,
-        @NotNull GeneratorDataObject generatorData,
-        @NotNull GeneratorTierObject generatorTier)
+            @NotNull GeneratorDataObject generatorData,
+            @NotNull GeneratorTierObject generatorTier)
     {
         if (generatorData.getActiveGeneratorCount() > 0 &&
-            generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
+                generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
         {
             if (!this.addon.getSettings().isOverwriteOnActive())
             {
                 // Too many generators.
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
+                        user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
                 return false;
             }
         }
@@ -1109,19 +1109,19 @@ public class StoneGeneratorManager
         {
             // Generator is not unlocked. Return false.
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-not-unlocked",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-not-unlocked",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
 
             return false;
         }
         else if (!generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()) &&
-            this.addon.isVaultProvided() &&
-            generatorTier.getGeneratorTierCost() > 0)
+                this.addon.isVaultProvided() &&
+                generatorTier.getGeneratorTierCost() > 0)
         {
             // Generator is not purchased. Return false.
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-not-purchased",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-not-purchased",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
 
             return false;
         }
@@ -1131,16 +1131,16 @@ public class StoneGeneratorManager
             {
                 // Return true only if user has enough money and its removal was successful.
                 if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()) &&
-                    this.addon.getVaultHook().withdraw(user,
-                        generatorTier.getActivationCost()).transactionSuccess())
+                        this.addon.getVaultHook().withdraw(user,
+                                generatorTier.getActivationCost()).transactionSuccess())
                 {
                     return true;
                 }
                 else
                 {
                     Utils.sendMessage(user,
-                        user.getTranslation(Constants.MESSAGES + "no-credits",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
+                            user.getTranslation(Constants.MESSAGES + "no-credits",
+                                    TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
                     return false;
                 }
             }
@@ -1160,45 +1160,45 @@ public class StoneGeneratorManager
      * @param generatorTier Generator that will be added.
      */
     public void activateGenerator(@NotNull User user,
-        @NotNull Island island,
-        @NotNull GeneratorDataObject generatorData,
-        @NotNull GeneratorTierObject generatorTier)
+            @NotNull Island island,
+            @NotNull GeneratorDataObject generatorData,
+            @NotNull GeneratorTierObject generatorTier)
     {
         if (this.addon.getSettings().isOverwriteOnActive() &&
-            generatorData.getActiveGeneratorCount() > 0 &&
-            generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
+                generatorData.getActiveGeneratorCount() > 0 &&
+                generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
         {
             // Try to deactivate first generator, because overwrite is active.
             GeneratorTierObject oldGenerator =
-                this.getGeneratorByID(generatorData.getActiveGeneratorList().iterator().next());
+                    this.getGeneratorByID(generatorData.getActiveGeneratorList().iterator().next());
 
             if (!this.deactivateGenerator(user, generatorData, oldGenerator))
             {
                 // If deactivation was not successful, send message about reached limit.
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
+                        user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
             }
         }
 
         // Call event about generator activation.
         GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
-            user,
-            island.getUniqueId(),
-            true);
+                user,
+                island.getUniqueId(),
+                true);
         Bukkit.getPluginManager().callEvent(event);
 
         if (!event.isCancelled())
         {
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-activated",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-activated",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
             generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
 
             // check and send message that generator is disabled
             if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
             {
                 Utils.sendMessage(user, user.getTranslation(
-                    StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
+                        StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
             }
 
             // Save object.
@@ -1215,52 +1215,52 @@ public class StoneGeneratorManager
      * @param island GeneratorData linked island.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
-     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     * @return {@code true} if can purchase, {@code false} if cannot purchase.
      */
     public boolean canPurchaseGenerator(@NotNull User user,
-        @NotNull Island island,
-        @NotNull GeneratorDataObject generatorData,
-        @NotNull GeneratorTierObject generatorTier)
+            @NotNull Island island,
+            @NotNull GeneratorDataObject generatorData,
+            @NotNull GeneratorTierObject generatorTier)
     {
         if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-already-purchased",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-already-purchased",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
             return false;
         }
         else if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
         {
             Utils.sendMessage(user,
-                user.getTranslation("general.errors.insufficient-rank",
-                    TextVariables.RANK,
-                    user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user)))));
+                    user.getTranslation("general.errors.insufficient-rank",
+                            TextVariables.RANK,
+                            user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user)))));
             return false;
         }
         else if (generatorTier.getRequiredMinIslandLevel() > this.getIslandLevel(island))
         {
             // Generator is not unlocked. Return false.
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "island-level-not-reached",
-                    Constants.GENERATOR, generatorTier.getFriendlyName(),
-                    TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel())));
+                    user.getTranslation(Constants.MESSAGES + "island-level-not-reached",
+                            Constants.GENERATOR, generatorTier.getFriendlyName(),
+                            TextVariables.NUMBER, String.valueOf(generatorTier.getRequiredMinIslandLevel())));
             return false;
         }
         else if (!generatorTier.getRequiredPermissions().isEmpty() &&
-            !generatorTier.getRequiredPermissions().stream().allMatch(permission ->
+                !generatorTier.getRequiredPermissions().stream().allMatch(permission ->
                 User.getInstance(island.getOwner()).hasPermission(permission)))
         {
             Optional<String> missingPermission = generatorTier.getRequiredPermissions().stream().
-                filter(permission -> !User.getInstance(island.getOwner()).hasPermission(permission)).
-                findAny();
+                    filter(permission -> !User.getInstance(island.getOwner()).hasPermission(permission)).
+                    findAny();
 
             // Generator is not unlocked. Return false.
             missingPermission.ifPresent(s ->
-                Utils.sendMessage(user,
+            Utils.sendMessage(user,
                     user.getTranslation(Constants.MESSAGES + "missing-permission",
-                        Constants.GENERATOR, generatorTier.getFriendlyName(),
-                        TextVariables.PERMISSION, s)));
+                            Constants.GENERATOR, generatorTier.getFriendlyName(),
+                            TextVariables.PERMISSION, s)));
             return false;
         }
         else
@@ -1275,8 +1275,8 @@ public class StoneGeneratorManager
                 else
                 {
                     Utils.sendMessage(user,
-                        user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                            user.getTranslation(Constants.MESSAGES + "no-credits-buy",
+                                    TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
                     return false;
                 }
             }
@@ -1294,14 +1294,14 @@ public class StoneGeneratorManager
      * @param user User who will pays.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
-     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     * @return {@code true} if can purchase, {@code false} if cannot purchase.
      */
     public void purchaseGenerator(@NotNull User user,
-        @NotNull GeneratorDataObject generatorData,
-        @NotNull GeneratorTierObject generatorTier)
+            @NotNull GeneratorDataObject generatorData,
+            @NotNull GeneratorTierObject generatorTier)
     {
         if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0 &&
-            this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess())
+                this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess())
         {
             // TODO: Deprecated code. Use "GeneratorBuyEvent" class.
             Map<String, Object> keyValues = new HashMap<>();
@@ -1314,12 +1314,12 @@ public class StoneGeneratorManager
 
             // Call event about successful purchase
             Bukkit.getPluginManager().callEvent(new GeneratorBuyEvent(generatorTier,
-                user,
-                generatorData.getUniqueId()));
+                    user,
+                    generatorData.getUniqueId()));
 
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-purchased",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    user.getTranslation(Constants.MESSAGES + "generator-purchased",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
             generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
 
             // Save object.
@@ -1328,8 +1328,8 @@ public class StoneGeneratorManager
         else
         {
             Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-                    TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                    user.getTranslation(Constants.MESSAGES + "no-credits-buy",
+                            TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
         }
     }
 
