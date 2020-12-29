@@ -12,9 +12,8 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
 /**
- * Main Generator Listener. This class contains listener that process Generator options.
- * This class contains listener and all methods that detect if custom generation can be
- * processed.
+ * Main Generator Listener. This class contains listener that process Generator options. This class contains listener
+ * and all methods that detect if custom generation can be processed.
  */
 public class MagicGeneratorListener extends GeneratorListener
 {
@@ -35,9 +34,9 @@ public class MagicGeneratorListener extends GeneratorListener
 
 
     /**
-     * This method detects if BlockFromToEvent can be used by Magic Cobblestone Generator
-     * by checking all requirements and calls custom generator if all requirements are met.
-     * It cancels this event only if a custom generator manages to change material.
+     * This method detects if BlockFromToEvent can be used by Magic Cobblestone Generator by checking all requirements
+     * and calls custom generator if all requirements are met. It cancels this event only if a custom generator manages
+     * to change material.
      *
      * @param event BlockFromToEvent which result will be overwritten.
      */
@@ -157,10 +156,10 @@ public class MagicGeneratorListener extends GeneratorListener
     /**
      * This method returns if current targetBlock could generate Stone Block. (Stone Generators).
      * <p>
-     * Stone can be generated only when lava flows over water. Stone will be always
-     * generated in a block where water is located.
+     * Stone can be generated only when lava flows over water. Stone will be always generated in a block where water is
+     * located.
      *
-     * @param liquid      Liquid that flows.
+     * @param liquid Liquid that flows.
      * @param targetBlock Block in which liquid will flow
      * @return true, if below targetBlock is water and liquid is lava or up is lava and liquid is water.
      */
@@ -177,11 +176,10 @@ public class MagicGeneratorListener extends GeneratorListener
     /**
      * This method returns if lava can generate cobblestone.
      * <p>
-     * Lava is generating cobblestone in situations if next block where it flows (air block)
-     * is adjacent to block that contains water.
-     * If that is true than airBlock will be replaced with cobblestone.
+     * Lava is generating cobblestone in situations if next block where it flows (air block) is adjacent to block that
+     * contains water. If that is true than airBlock will be replaced with cobblestone.
      *
-     * @param airBlock      Air Block that will be replaced with cobblestone
+     * @param airBlock Air Block that will be replaced with cobblestone
      * @param flowDirection Lava flow direction.
      * @return true, if lava will generate cobblestone
      */
@@ -200,8 +198,10 @@ public class MagicGeneratorListener extends GeneratorListener
 
                 return MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.UP)) ||
                     MagicGeneratorListener.containsWater(airBlock.getRelative(flowDirection)) ||
-                    MagicGeneratorListener.containsWater(airBlock.getRelative(MagicGeneratorListener.getClockwiseDirection(flowDirection))) ||
-                    MagicGeneratorListener.containsWater(airBlock.getRelative(MagicGeneratorListener.getCounterClockwiseDirection(flowDirection)));
+                    MagicGeneratorListener.containsWater(airBlock
+                        .getRelative(MagicGeneratorListener.getClockwiseDirection(flowDirection))) ||
+                    MagicGeneratorListener.containsWater(airBlock
+                        .getRelative(MagicGeneratorListener.getCounterClockwiseDirection(flowDirection)));
 
             case DOWN:
                 // If lava flows down then we should search for water in horizontally adjacent blocks.
@@ -219,15 +219,14 @@ public class MagicGeneratorListener extends GeneratorListener
     /**
      * This method checks if water can generate cobblestone.
      * <p>
-     * Water is generating cobblestone in situations when it is directly adjacent to lava
-     * block, and this block is not a source block.
+     * Water is generating cobblestone in situations when it is directly adjacent to lava block, and this block is not a
+     * source block.
      * <p>
-     * Node: by default Minecraft logic, lava is replaced with cobblestone/obsidian only
-     * if the water is trying to flow on lava. It allows creating situations where lava
-     * and water hit each other at max flow distance without creating cobblestone.
-     * This overwrite it as it checks next blocks to air block. It is done on intentional!
+     * Node: by default Minecraft logic, lava is replaced with cobblestone/obsidian only if the water is trying to flow
+     * on lava. It allows creating situations where lava and water hit each other at max flow distance without creating
+     * cobblestone. This overwrite it as it checks next blocks to air block. It is done on intentional!
      *
-     * @param airBlock      Air Block that will be replaced with water
+     * @param airBlock Air Block that will be replaced with water
      * @param flowDirection Water flow direction.
      * @return Lava block that will be replaced with water or null, if there is no lava near air block.
      */
@@ -351,8 +350,8 @@ public class MagicGeneratorListener extends GeneratorListener
 
 
     /**
-     * This method transforms input block face to next BlockFace by 90 degree in clockwise direction. Only on
-     * horizontal pane for NORTH,EAST,SOUTH,WEST directions.
+     * This method transforms input block face to next BlockFace by 90 degree in clockwise direction. Only on horizontal
+     * pane for NORTH,EAST,SOUTH,WEST directions.
      *
      * @param face input BlockFace
      * @return Output BlockFace that is 90 degree from input BlockFace in clockwise direction
@@ -377,8 +376,8 @@ public class MagicGeneratorListener extends GeneratorListener
 
 
     /**
-     * This method transforms input block face to next BlockFace by 90 degree in counter clockwise direction.
-     * Only on horizontal pane for NORTH,EAST,SOUTH,WEST directions.
+     * This method transforms input block face to next BlockFace by 90 degree in counter clockwise direction. Only on
+     * horizontal pane for NORTH,EAST,SOUTH,WEST directions.
      *
      * @param face input BlockFace
      * @return Output BlockFace that is 90 degree from input BlockFace in counter clockwise direction

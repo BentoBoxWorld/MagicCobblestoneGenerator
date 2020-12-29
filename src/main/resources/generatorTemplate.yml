@@ -2,29 +2,72 @@
 
 tiers:
   # generator ID
-  stone_age:
+  starting_generator:
     # Display name for users
-    name: "Stone Age"
+    name: "&r&lStarting Generator"
     # Description in lore message
-    description:
-      - Generates cobblestone and
-      - stone a bit
+    description: |-
+       &7 Starting generator for
+       &7 everyone.
     # Icon used in GUI's
     icon: "COBBLESTONE:1"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
+    # Valid Generator types:
+    #   - COBBLESTONE - classic block generator
+    #   - STONE - https://minecraft.gamepedia.com/File:Stone_generator.gif
+    #   - BASALT - https://minecraft.gamepedia.com/File:Basalt_generator.gif
+    #   - COBBLESTONE_OR_STONE - to specify that this tier works with cobblestone and stone generators
+    #   - BASALT_OR_COBBLESTONE - to specify that this tier works with basalt and cobblestone generators
+    #   - BASALT_OR_STONE - to specify that this tier works with basalt and stone generators
+    #   - ANY - to specify that this tier works with all generator types.
+    type: COBBLESTONE_OR_STONE
     # Indicates that generator is used as default.
     # Requirements will be ignored.
     default: true
-    # Cost for activating current generator tier. Requires Vault plugin.
-    # Will be payed only on active switching between generators.
-    activation-cost: 0.0
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
     blocks:
       STONE: 10
-      COBBLESTONE: 89
+      COBBLESTONE: 86
+      GRAVEL: 1
+      GRANITE: 1
+      DIORITE: 1
+      ANDESITE: 1
+    # Treasure that has a chance to be dropped when block is generated.
+    # ONLY on generation, not on block break.
+    treasure:
+      # Chance from 0 till 1.
+      chance: 0.001
+      # Materials that can be dropped.
+      material:
+        COAL: 1
+      # Maximal amount of items dropped.
+      # it will be from 1 till defined amount.
+      amount: 1
+  # You can set up multiple default generators.
+  starting_nether_generator:
+    # Display name for users
+    name: "&r&lStarting Nether Generator"
+    # Description in lore message
+    description: |-
+      &7 The soulsand and ice
+      &7 now creates netherrack.
+    # Icon used in GUI's
+    icon: "BASALT:1"
+    # Indicate that it is a default generator.
+    default: true
+    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
+    type: BASALT
+    # Users selects active generators.
+    # Priority indicates which generator will be used
+    # if multiple of them fulfills requirements.
+    priority: 1
+    # Materials and their chances. Use actual blocks please.
+    # Chance supports any positive number.
+    # Everything in the end will be normalized.
+    blocks:
+      BASALT: 80
+      NETHERRACK: 19
       GRAVEL: 1
     # Treasure that has a chance to be dropped when block is generated.
     # ONLY on generation, not on block break.
@@ -33,24 +76,23 @@ tiers:
       chance: 0.001
       # Materials that can be dropped.
       material:
-        COAL: 99
-        IRON_NUGGET: 1
+        GOLD_NUGGET: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
-      amount: 2
+      amount: 1
 
-  # List of a lot of previous generators. Just in new format.
-  coal_age:
+  # List some more examples.
+  coal_generator:
     # Display name for users
-    name: "Coal Age"
+    name: "&r&lCoal Generator"
     # Description in lore message
-    description:
-      - Generates coal and
-      - stone a bit
+    description: |-
+      &7 Lava and water now
+      &7 can can produce coal.
     # Icon used in GUI's
     icon: "COAL_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
+    type: COBBLESTONE_OR_STONE
     # Users selects active generators.
     # Priority indicates which generator will be used
     # if multiple of them fulfills requirements.
@@ -58,12 +100,8 @@ tiers:
     # There are several requirements that can be defined here.
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
-      island-level: 10
-      # List of required permissions for users to select this generator.
-      required-permissions: []
-      # List of required biomes for generator to work.
-      required-biomes: []
-      # Cost for activating current generator.
+      island-level: 20
+      # Cost for buying current generator.
       purchase-cost: 5.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
@@ -72,13 +110,13 @@ tiers:
     # Chance supports any positive number.
     # Everything in the end will be normalized.
     blocks:
+      COBBLESTONE: 65
       STONE: 15
-      DIORITE: 4
-      GRANITE: 4
-      ANDESITE: 4
-      COBBLESTONE: 69
-      GRAVEL: 3
-      COAL_ORE: 1
+      GRAVEL: 5
+      GRANITE: 1
+      DIORITE: 1
+      ANDESITE: 1
+      COAL_ORE: 12
     # Treasure that has a chance to be dropped when block is generated.
     # ONLY on generation, not on block break.
     treasure:
@@ -86,31 +124,78 @@ tiers:
       chance: 0.001
       # Materials that can be dropped.
       material:
-        COAL: 99
         IRON_NUGGET: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
-      amount: 2
-  iron_age:
+      amount: 1
+  iron_generator:
     # Display name for users
-    name: "Iron Age"
+    name: "&r&lIron Generator"
     # Description in lore message
-    description:
-      - Generates some iron
+    description: |-
+      &7 There is something
+      &7 usefull.
     # Icon used in GUI's
     icon: "IRON_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
+    type: COBBLESTONE_OR_STONE
     # Users selects active generators.
     # Priority indicates which generator will be used
     # if multiple of them fulfills requirements.
     priority: 2
+    # There are several requirements that can be defined here.
+    requirements:
+      # Can define minimal island level for generator to work. Required Level Addon.
+      island-level: 50
+      # Cost for buying current generator.
+      purchase-cost: 5.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
+    # Materials and their chances. Use actual blocks please.
+    # Chance supports any positive number.
+    # Everything in the end will be normalized.
+    blocks:
+      COBBLESTONE: 40
+      STONE: 25
+      GRAVEL: 5
+      GRANITE: 1
+      DIORITE: 1
+      ANDESITE: 1
+      COAL_ORE: 15
+      IRON_ORE: 12
+    # Treasure that has a chance to be dropped when block is generated.
+    # ONLY on generation, not on block break.
+    treasure:
+      # Chance from 0 till 1.
+      chance: 0.001
+      # Materials that can be dropped.
+      material:
+        GOLD_NUGGET: 1
+      # Maximal amount of items dropped.
+      # it will be from 1 till defined amount.
+      amount: 1
+  gold_generator:
+    # Display name for users
+    name: "&r&lGold Generator"
+    # Description in lore message
+    description: |-
+      &7 There are some shiny
+      &7 things between rocks.
+    # Icon used in GUI's
+    icon: "GOLD_ORE:1"
+    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
+    type: COBBLESTONE_OR_STONE
+    # Users selects active generators.
+    # Priority indicates which generator will be used
+    # if multiple of them fulfills requirements.
+    priority: 3
     # There are several requirements that can be defined here.
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
       island-level: 100
-      # Cost for activating current generator.
-      purchase-cost: 10.0
+      # Cost for buying current generator.
+      purchase-cost: 5.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -118,64 +203,15 @@ tiers:
     # Chance supports any positive number.
     # Everything in the end will be normalized.
     blocks:
-      STONE: 20
-      DIORITE: 6
-      GRANITE: 6
-      ANDESITE: 6
-      COBBLESTONE: 48
-      GRAVEL: 4
-      COAL_ORE: 5
-      IRON_ORE: 5
-    # Treasure that has a chance to be dropped when block is generated.
-    # ONLY on generation, not on block break.
-    treasure:
-      # Chance from 0 till 1.
-      chance: 0.001
-      # Materials that can be dropped.
-      material:
-        COAL: 99
-        IRON_NUGGET: 1
-        GOLD_NUGGET: 1
-      # Maximal amount of items dropped.
-      # it will be from 1 till defined amount.
-      amount: 2
-
-  redstone_age:
-    # Display name for users
-    name: "Redstone Age"
-    # Description in lore message
-    description:
-      - Generates some redstone
-    # Icon used in GUI's
-    icon: "REDSTONE_ORE:1"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
-    # Users selects active generators.
-    # Priority indicates which generator will be used
-    # if multiple of them fulfills requirements.
-    priority: 2
-    # There are several requirements that can be defined here.
-    requirements:
-      # Can define minimal island level for generator to work. Required Level Addon.
-      island-level: 500
-      # Cost for activating current generator.
-      purchase-cost: 50.0
-    # Cost for activating current generator tier. Requires Vault plugin.
-    # Will be payed only on active switching between generators.
-    activation-cost: 0.0
-    # Materials and their chances. Use actual blocks please.
-    # Chance supports any positive number.
-    # Everything in the end will be normalized.
-    blocks:
-      STONE: 25
-      DIORITE: 8
-      GRANITE: 8
-      ANDESITE: 8
-      COBBLESTONE: 25
+      COBBLESTONE: 20
+      STONE: 30
       GRAVEL: 5
+      GRANITE: 1
+      DIORITE: 1
+      ANDESITE: 1
       COAL_ORE: 10
-      IRON_ORE: 10
-      REDSTONE_ORE: 1
+      IRON_ORE: 20
+      GOLD_ORE: 12
     # Treasure that has a chance to be dropped when block is generated.
     # ONLY on generation, not on block break.
     treasure:
@@ -183,86 +219,31 @@ tiers:
       chance: 0.001
       # Materials that can be dropped.
       material:
-        COAL: 16
-        IRON_NUGGET: 2
-        GOLD_NUGGET: 2
-        REDSTONE: 7
-      # Maximal amount of items dropped.
-      # it will be from 1 till defined amount.
-      amount: 2
-  gold_age:
-    # Display name for users
-    name: "Gold Age"
-    # Description in lore message
-    description:
-      - Generates some gold
-    # Icon used in GUI's
-    icon: "GOLD_ORE:1"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
-    # Users selects active generators.
-    # Priority indicates which generator will be used
-    # if multiple of them fulfills requirements.
-    priority: 2
-    # There are several requirements that can be defined here.
-    requirements:
-      # Can define minimal island level for generator to work. Required Level Addon.
-      island-level: 1000
-      # Cost for activating current generator.
-      purchase-cost: 100.0
-    # Cost for activating current generator tier. Requires Vault plugin.
-    # Will be payed only on active switching between generators.
-    activation-cost: 0.0
-    # Materials and their chances. Use actual blocks please.
-    # Chance supports any positive number.
-    # Everything in the end will be normalized.
-    blocks:
-      STONE: 20
-      DIORITE: 6
-      GRANITE: 6
-      ANDESITE: 6
-      COBBLESTONE: 11
-      GRAVEL: 5
-      COAL_ORE: 10
-      IRON_ORE: 15
-      GOLD_ORE: 5
-      LAPIS_ORE: 5
-      REDSTONE_ORE: 10
-      DIRT: 1
-    # Treasure that has a chance to be dropped when block is generated.
-    # ONLY on generation, not on block break.
-    treasure:
-      # Chance from 0 till 1.
-      chance: 0.001
-      # Materials that can be dropped.
-      material:
-        COAL: 5
-        IRON_NUGGET: 21
-        GOLD_NUGGET: 33
         REDSTONE: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
-      amount: 2
-  diamond_age:
+      amount: 1
+  redstone_generator:
     # Display name for users
-    name: "Diamond Age"
+    name: "&r&lRedstone Generator"
     # Description in lore message
-    description:
-      - Generates some diamond
+    description: |-
+      &7 Some red parts appears
+      &7 between stone.
     # Icon used in GUI's
-    icon: "DIAMOND_ORE:1"
+    icon: "REDSTONE_ORE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
+    type: COBBLESTONE_OR_STONE
     # Users selects active generators.
     # Priority indicates which generator will be used
     # if multiple of them fulfills requirements.
-    priority: 2
+    priority: 4
     # There are several requirements that can be defined here.
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
-      island-level: 5000
-      # Cost for activating current generator.
-      purchase-cost: 500.0
+      island-level: 150
+      # Cost for buying current generator.
+      purchase-cost: 5.0
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
@@ -270,18 +251,104 @@ tiers:
     # Chance supports any positive number.
     # Everything in the end will be normalized.
     blocks:
-      STONE: 15
-      DIORITE: 5
-      GRANITE: 5
-      ANDESITE: 5
-      COBBLESTONE: 5
+      COBBLESTONE: 15
+      STONE: 25
       GRAVEL: 5
       COAL_ORE: 10
-      IRON_ORE: 10
+      IRON_ORE: 20
       GOLD_ORE: 10
-      LAPIS_ORE: 5
       REDSTONE_ORE: 15
-      DIRT: 5
+    # Treasure that has a chance to be dropped when block is generated.
+    # ONLY on generation, not on block break.
+    treasure:
+      # Chance from 0 till 1.
+      chance: 0.0001
+      # Materials that can be dropped.
+      material:
+        EMERALD: 1
+      # Maximal amount of items dropped.
+      # it will be from 1 till defined amount.
+      amount: 1
+  emerald_generator:
+    # Display name for users
+    name: "&r&lEmerald Generator"
+    # Description in lore message
+    description: |-
+      &7 Emeralds, there are
+      &7 emeralds now.
+    # Icon used in GUI's
+    icon: "EMERALD_ORE:1"
+    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
+    type: COBBLESTONE_OR_STONE
+    # Users selects active generators.
+    # Priority indicates which generator will be used
+    # if multiple of them fulfills requirements.
+    priority: 5
+    # There are several requirements that can be defined here.
+    requirements:
+      # Can define minimal island level for generator to work. Required Level Addon.
+      island-level: 200
+      # Cost for buying current generator.
+      purchase-cost: 5.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
+    # Materials and their chances. Use actual blocks please.
+    # Chance supports any positive number.
+    # Everything in the end will be normalized.
+    blocks:
+      STONE: 20
+      GRAVEL: 5
+      COAL_ORE: 10
+      IRON_ORE: 25
+      GOLD_ORE: 15
+      REDSTONE_ORE: 20
+      EMERALD_ORE: 5
+    # Treasure that has a chance to be dropped when block is generated.
+    # ONLY on generation, not on block break.
+    treasure:
+      # Chance from 0 till 1.
+      chance: 0.0001
+      # Materials that can be dropped.
+      material:
+        DIAMOND: 1
+      # Maximal amount of items dropped.
+      # it will be from 1 till defined amount.
+      amount: 1
+  diamond_generator:
+    # Display name for users
+    name: "&r&lDiamond Generator"
+    # Description in lore message
+    description: |-
+      &7 At last, now diamonds
+      &7 are generated.
+    # Icon used in GUI's
+    icon: "DIAMOND_ORE:1"
+    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
+    type: COBBLESTONE_OR_STONE
+    # Users selects active generators.
+    # Priority indicates which generator will be used
+    # if multiple of them fulfills requirements.
+    priority: 6
+    # There are several requirements that can be defined here.
+    requirements:
+      # Can define minimal island level for generator to work. Required Level Addon.
+      island-level: 250
+      # Cost for buying current generator.
+      purchase-cost: 5.0
+    # Cost for activating current generator tier. Requires Vault plugin.
+    # Will be payed only on active switching between generators.
+    activation-cost: 0.0
+    # Materials and their chances. Use actual blocks please.
+    # Chance supports any positive number.
+    # Everything in the end will be normalized.
+    blocks:
+      STONE: 20
+      COAL_ORE: 5
+      IRON_ORE: 35
+      GOLD_ORE: 10
+      REDSTONE_ORE: 20
+      EMERALD_ORE: 5
       DIAMOND_ORE: 5
     # Treasure that has a chance to be dropped when block is generated.
     # ONLY on generation, not on block break.
@@ -290,89 +357,34 @@ tiers:
       chance: 0.001
       # Materials that can be dropped.
       material:
-        IRON_NUGGET: 32
-        GOLD_NUGGET: 13
-        REDSTONE: 11
         DIAMOND: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
-      amount: 2
-  emerald_age:
+      amount: 1
+
+  # One more nether generator
+  nether_generator:
     # Display name for users
-    name: "Emerald Age"
+    name: "&r&lNether Generator"
     # Description in lore message
-    description:
-      - Generates some emeralds
+    description: |-
+      &7 Just more than
+      &7 Basalt
     # Icon used in GUI's
-    icon: "EMERALD_ORE:1"
+    icon: "BLACKSTONE:1"
     # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: COBBLESTONE
+    type: BASALT
     # Users selects active generators.
     # Priority indicates which generator will be used
     # if multiple of them fulfills requirements.
-    priority: 2
+    priority: 3
     # There are several requirements that can be defined here.
     requirements:
       # Can define minimal island level for generator to work. Required Level Addon.
-      island-level: 10000
-      # Cost for activating current generator.
-      purchase-cost: 1000.0
-    # Cost for activating current generator tier. Requires Vault plugin.
-    # Will be payed only on active switching between generators.
-    activation-cost: 0.0
-    # Materials and their chances. Use actual blocks please.
-    # Chance supports any positive number.
-    # Everything in the end will be normalized.
-    blocks:
-      STONE: 10
-      DIORITE: 1
-      GRANITE: 1
-      ANDESITE: 1
-      COBBLESTONE: 1
-      GRAVEL: 5
-      DIRT: 5
-      GRASS_BLOCK: 1
-      COAL_ORE: 10
-      IRON_ORE: 10
-      GOLD_ORE: 10
-      LAPIS_ORE: 5
-      REDSTONE_ORE: 20
-      DIAMOND_ORE: 15
-      EMERALD_ORE: 5
-    # Treasure that has a chance to be dropped when block is generated.
-    # ONLY on generation, not on block break.
-    treasure:
-      # Chance from 0 till 1.
-      chance: 0.001
-      # Materials that can be dropped.
-      material:
-        IRON_NUGGET: 22
-        GOLD_NUGGET: 67
-        REDSTONE: 21
-        DIAMOND: 1
-        EMERALD: 1
-      # Maximal amount of items dropped.
-      # it will be from 1 till defined amount.
-      amount: 2
-  nether_generator:
-    # Display name for users
-    name: "Nether Generator"
-    # Description in lore message
-    description:
-      - Generates nether materials
-    # Icon used in GUI's
-    icon: "BASALT:2"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: BASALT
-    # Indicates that generator is used as default.
-    # Requirements will be ignored.
-    # Each type allows exactly one default template.
-    default: false
-    # There are several requirements that can be defined here.
-    requirements:
-      # Can define minimal island level for generator to work. Required Level Addon.
-      island-level: 10
-      # List of required biomes for generator to work.
+      island-level: 100
+      # Cost for buying current generator.
+      purchase-cost: 5.0
+      # Limit biomes where it operates:
       required-biomes:
         - NETHER_WASTES
         - SOUL_SAND_VALLEY
@@ -386,18 +398,17 @@ tiers:
     # Chance supports any positive number.
     # Everything in the end will be normalized.
     blocks:
-      BASALT: 20
-      NETHERRACK: 50
-      BLACKSTONE: 20
-      SOUL_SAND: 4
+      BASALT: 40
+      SOUL_SAND: 5
+      MAGMA_BLOCK: 10
       SOUL_SOIL: 5
-      MAGMA_BLOCK: 2
-      GLOWSTONE: 5
-      NETHER_QUARTZ_ORE: 1
-      ANCIENT_DEBRIS: 0.1
-      NETHER_GOLD_ORE: 2
-      WARPED_NYLIUM: 15
-      CRIMSON_NYLIUM: 15
+      GLOWSTONE: 10
+      NETHER_QUARTZ_ORE: 5
+      ANCIENT_DEBRIS: 0.01
+      NETHER_GOLD_ORE: 1
+      NETHERRACK: 15
+      WARPED_NYLIUM: 5
+      CRIMSON_NYLIUM: 5
     # Treasure that has a chance to be dropped when block is generated.
     # ONLY on generation, not on block break.
     treasure:
@@ -405,86 +416,8 @@ tiers:
       chance: 0.001
       # Materials that can be dropped.
       material:
-        GOLD_NUGGET: 1
+        GOLD_NUGGET: 99
+        NETHERITE_SCRAP: 1
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
-      amount: 2
-
-  # You can also define stone and basalt generators.
-  # generator ID
-  stone_upgraded_age:
-    # Display name for users
-    name: "Stone Age"
-    # Description in lore message
-    description:
-      - Generates stone and
-      - cobblestone a bit
-    # Icon used in GUI's
-    icon: "STONE:2"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: STONE
-    # Indicates that generator is used as default.
-    # Requirements will be ignored.
-    # Each type allows exactly one default template.
-    default: true
-    # Cost for activating current generator tier. Requires Vault plugin.
-    # Will be payed only on active switching between generators.
-    activation-cost: 0.0
-    # Materials and their chances. Use actual blocks please.
-    # Chance supports any positive number.
-    # Everything in the end will be normalized.
-    blocks:
-      STONE: 89
-      COBBLESTONE: 10
-      GRAVEL: 1
-    # Treasure that has a chance to be dropped when block is generated.
-    # ONLY on generation, not on block break.
-    treasure:
-      # Chance from 0 till 1.
-      chance: 0.001
-      # Materials that can be dropped.
-      material:
-        COAL: 99
-        IRON_NUGGET: 1
-      # Maximal amount of items dropped.
-      # it will be from 1 till defined amount.
-      amount: 2
-
-  # You can also define stone and basalt generators.
-  # generator ID
-  stone_basalt_age:
-    # Display name for users
-    name: "Stone Age"
-    # Description in lore message
-    description:
-      - Generates Basalt and
-      - netherrack
-    # Icon used in GUI's
-    icon: "BASALT:2"
-    # Generator type: COBBLESTONE, STONE or BASALT. Self explanatory.
-    type: BASALT
-    # Indicates that generator is used as default.
-    # Requirements will be ignored.
-    # Each type allows exactly one default template.
-    default: true
-    # Cost for activating current generator tier. Requires Vault plugin.
-    # Will be payed only on active switching between generators.
-    activation-cost: 0.0
-    # Materials and their chances. Use actual blocks please.
-    # Chance supports any positive number.
-    # Everything in the end will be normalized.
-    blocks:
-      BASALT: 10
-      NETHERRACK: 89
-      GRAVEL: 1
-    # Treasure that has a chance to be dropped when block is generated.
-    # ONLY on generation, not on block break.
-    treasure:
-      # Chance from 0 till 1.
-      chance: 0.001
-      # Materials that can be dropped.
-      material:
-        GOLD_NUGGET: 1
-      # Maximal amount of items dropped.
-      # it will be from 1 till defined amount.
-      amount: 2
+      amount: 1

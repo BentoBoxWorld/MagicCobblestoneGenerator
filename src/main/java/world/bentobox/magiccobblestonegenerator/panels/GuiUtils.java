@@ -3,11 +3,15 @@ package world.bentobox.magiccobblestonegenerator.panels;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import java.util.*;
+import org.bukkit.inventory.meta.ItemMeta;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
 /**
@@ -15,7 +19,8 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
  */
 public class GuiUtils
 {
-    private GuiUtils() {
+    private GuiUtils()
+    {
         // Private constructor to hide the implicit public one
     }
 
@@ -26,6 +31,7 @@ public class GuiUtils
 
     /**
      * This method creates border of black panes around given panel with 5 rows.
+     *
      * @param panelBuilder PanelBuilder which must be filled with border blocks.
      */
     public static void fillBorder(PanelBuilder panelBuilder)
@@ -36,6 +42,7 @@ public class GuiUtils
 
     /**
      * This method sets black stained glass pane around Panel with given row count.
+     *
      * @param panelBuilder object that builds Panel.
      * @param rowCount in Panel.
      */
@@ -47,6 +54,7 @@ public class GuiUtils
 
     /**
      * This method sets blocks with given Material around Panel with 5 rows.
+     *
      * @param panelBuilder object that builds Panel.
      * @param material that will be around Panel.
      */
@@ -58,11 +66,26 @@ public class GuiUtils
 
     /**
      * This method sets blocks with given Material around Panel with given row count.
+     *
      * @param panelBuilder object that builds Panel.
      * @param rowCount in Panel.
      * @param material that will be around Panel.
      */
     public static void fillBorder(PanelBuilder panelBuilder, int rowCount, Material material)
+    {
+        GuiUtils.fillBorder(panelBuilder, rowCount, material, " ");
+    }
+
+
+    /**
+     * This method sets blocks with given Material around Panel with given row count.
+     *
+     * @param panelBuilder object that builds Panel.
+     * @param rowCount in Panel.
+     * @param material that will be around Panel.
+     * @param name Name of the border block.
+     */
+    public static void fillBorder(PanelBuilder panelBuilder, int rowCount, Material material, String name)
     {
         // Only for useful filling.
         if (rowCount < 3)
@@ -77,9 +100,47 @@ public class GuiUtils
 
             if (i < 9 || i > 9 * (rowCount - 1) || i % 9 == 0 || i % 9 == 8)
             {
-                panelBuilder.item(i, BorderBlock.getPanelBorder(material));
+                panelBuilder.item(i, BorderBlock.getPanelBorder(material, name));
             }
         }
+    }
+
+
+    /**
+     * This method returns index of previous page based on current page index and max page index.
+     *
+     * @param pageIndex Current page index.
+     * @param maxPageIndex Maximal page count.
+     * @return Integer of previous page index.
+     */
+    public static int getPreviousPage(int pageIndex, int maxPageIndex)
+    {
+        // Page 0 is viewed... back arrow = last page ... next arrow = 2
+        // Page 1 is viewed... back arrow = 1 ... next arrow = 3
+        // Page 2 is viewed... back arrow = 2 ... next arrow = 4
+        // Page n is viewed... back arrow = n ... next arrow = n+2
+        // Last page is viewed .. back arrow = last... next arrow = 1
+
+        return pageIndex == 0 ? maxPageIndex + 1 : pageIndex;
+    }
+
+
+    /**
+     * This method returns index of next page based on current page index and max page index.
+     *
+     * @param pageIndex Current page index.
+     * @param maxPageIndex Maximal page count.
+     * @return Integer of next page index.
+     */
+    public static int getNextPage(int pageIndex, int maxPageIndex)
+    {
+        // Page 0 is viewed... back arrow = last page ... next arrow = 2
+        // Page 1 is viewed... back arrow = 1 ... next arrow = 3
+        // Page 2 is viewed... back arrow = 2 ... next arrow = 4
+        // Page n is viewed... back arrow = n ... next arrow = n+2
+        // Last page is viewed .. back arrow = last... next arrow = 1
+
+        return pageIndex == maxPageIndex ? 1 : pageIndex + 2;
     }
 
 
@@ -89,33 +150,41 @@ public class GuiUtils
 
 
     /**
-     * This BorderBlock is simple PanelItem but without item meta data.
+     * This method assigns Material icon based on input generator type.
+     *
+     * @param generatorType Generator type which icon should be returned.
+     * @return Material for input generator type.
      */
-    private static class BorderBlock extends PanelItem
+    public static Material getGeneratorTypeMaterial(GeneratorTierObject.GeneratorType generatorType)
     {
-        private BorderBlock(ItemStack icon)
+        Material icon;
+
+        switch (generatorType)
         {
-            super(new PanelItemBuilder().
-                    icon(icon.clone()).
-                    name(" ").
-                    description(Collections.emptyList()).
-                    glow(false).
-                    clickHandler(null));
+            case COBBLESTONE:
+                icon = Material.COBBLESTONE;
+                break;
+            case STONE:
+                icon = Material.STONE;
+                break;
+            case BASALT:
+                icon = Material.getMaterial("BASALT");
+                break;
+            case COBBLESTONE_OR_STONE:
+                icon = Material.ANDESITE;
+                break;
+            case BASALT_OR_COBBLESTONE:
+                icon = Material.GRANITE;
+                break;
+            case BASALT_OR_STONE:
+                icon = Material.getMaterial("BLACKSTONE");
+                break;
+            default:
+                icon = Material.BEDROCK;
+                break;
         }
 
-
-        /**
-         * This method retunrs BorderBlock with requested item stack.
-         * @param material of which broder must be created.
-         * @return PanelItem that acts like border.
-         */
-        private static BorderBlock getPanelBorder(Material material)
-        {
-            ItemStack itemStack = new ItemStack(material);
-            itemStack.getItemMeta().setDisplayName(" ");
-
-            return new BorderBlock(itemStack);
-        }
+        return icon;
     }
 
 
@@ -125,8 +194,8 @@ public class GuiUtils
 
 
     /**
-     * This method transforms material into item stack that can be displayed in users
-     * inventory.
+     * This method transforms material into item stack that can be displayed in users inventory.
+     *
      * @param material Material which item stack must be returned.
      * @return ItemStack that represents given material.
      */
@@ -137,8 +206,8 @@ public class GuiUtils
 
 
     /**
-     * This method transforms material into item stack that can be displayed in users
-     * inventory.
+     * This method transforms material into item stack that can be displayed in users inventory.
+     *
      * @param material Material which item stack must be returned.
      * @param amount Amount of ItemStack elements.
      * @return ItemStack that represents given material.
@@ -158,7 +227,8 @@ public class GuiUtils
             // Materials Potted elements cannot be in inventory.
             itemStack = new ItemStack(Material.getMaterial(material.name().replace("POTTED_", "")));
         }
-        else if (M2M.containsKey(material)) {
+        else if (M2M.containsKey(material))
+        {
             itemStack = new ItemStack(M2M.get(material));
         }
         else
@@ -171,9 +241,45 @@ public class GuiUtils
         return itemStack;
     }
 
+
+    /**
+     * This BorderBlock is simple PanelItem but without item meta data.
+     */
+    private static class BorderBlock extends PanelItem
+    {
+        private BorderBlock(ItemStack icon)
+        {
+            super(new PanelItemBuilder().
+                icon(icon.clone()).
+                name(icon.getItemMeta().getDisplayName()).
+                description(Collections.emptyList()).
+                glow(false).
+                clickHandler(null));
+        }
+
+
+        /**
+         * This method retunrs BorderBlock with requested item stack.
+         *
+         * @param material of which broder must be created.
+         * @return PanelItem that acts like border.
+         */
+        private static BorderBlock getPanelBorder(Material material, String name)
+        {
+            ItemStack itemStack = new ItemStack(material);
+            ItemMeta meta = itemStack.getItemMeta();
+            meta.setDisplayName(name);
+            itemStack.setItemMeta(meta);
+
+            return new BorderBlock(itemStack);
+        }
+    }
+
+
     private static final Map<Material, Material> M2M;
 
-    static {
+    static
+    {
         Map<Material, Material> aMap = new EnumMap<>(Material.class);
         aMap.put(Material.MELON_STEM, Material.MELON_SEEDS);
         aMap.put(Material.ATTACHED_MELON_STEM, Material.MELON_SEEDS);
@@ -191,7 +297,7 @@ public class GuiUtils
         aMap.put(Material.END_PORTAL, Material.PAPER);
         aMap.put(Material.END_GATEWAY, Material.PAPER);
         aMap.put(Material.NETHER_PORTAL, Material.PAPER);
-        aMap.put(Material.BUBBLE_COLUMN,Material.WATER_BUCKET);
+        aMap.put(Material.BUBBLE_COLUMN, Material.WATER_BUCKET);
         aMap.put(Material.WATER, Material.WATER_BUCKET);
         aMap.put(Material.LAVA, Material.LAVA_BUCKET);
         aMap.put(Material.FIRE, Material.FIRE_CHARGE);

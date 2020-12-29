@@ -1,16 +1,16 @@
 package world.bentobox.magiccobblestonegenerator.tasks;
 
 
-import java.util.Random;
-import java.util.TreeMap;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.eclipse.jdt.annotation.Nullable;
+import java.util.Random;
+import java.util.TreeMap;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.Why;
 
 
 /**
@@ -20,6 +20,7 @@ public class MagicGenerator
 {
     /**
      * Default constructor. Inits Generator once.
+     *
      * @param addon Magic Cobblestone Generator addon.
      */
     public MagicGenerator(StoneGeneratorAddon addon)
@@ -30,6 +31,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace given block with new object and returns true if it was successful.
+     *
      * @param block Block that should be replaced.
      * @return <code>true</code> if replacing block was successful.
      */
@@ -45,6 +47,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace given block with new object and returns true if it was successful.
+     *
      * @param block Block that should be replaced.
      * @return <code>true</code> if replacing block was successful.
      */
@@ -60,6 +63,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace given block with new object and returns true if it was successful.
+     *
      * @param block Block that should be replaced.
      * @return <code>true</code> if replacing block was successful.
      */
@@ -75,6 +79,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace block from chance map and returns if it was successful.
+     *
      * @param block Block that need to be replaced.
      * @param generatorTier Object that contains all possible chances.
      * @return {@code true} if it was successful, {@code false} otherwise.
@@ -83,6 +88,7 @@ public class MagicGenerator
     {
         if (generatorTier == null)
         {
+            Why.report(block.getLocation(), "Missing Generator Tier");
             // Check if generator exists.
             return false;
         }
@@ -91,6 +97,8 @@ public class MagicGenerator
 
         if (chanceMap.isEmpty())
         {
+            Why.report(block.getLocation(), "Missing Block Chances in " + generatorTier.getUniqueId());
+
             // Check if any block has a chance to spawn
             return false;
         }
@@ -99,28 +107,37 @@ public class MagicGenerator
 
         if (newMaterial == null)
         {
+            Why.report(block.getLocation(), "Cannot parse material from ChanceMap in " + generatorTier.getUniqueId());
+
             // Check if a material was found
             return false;
         }
 
+        Why.report(block.getLocation(),
+            "Replace " + block.getType() + " with " + newMaterial + " by " + generatorTier.getUniqueId());
+
         // ask config if physics should be used
         block.setType(newMaterial, this.addon.getSettings().isUsePhysics());
 
-        if (generatorTier.getTreasureChance() > 0 && !generatorTier.getTreasureChanceMap().isEmpty())
+        if (generatorTier.getMaxTreasureAmount() > 0 &&
+            generatorTier.getTreasureChance() > 0 &&
+            !generatorTier.getTreasureItemChanceMap().isEmpty())
         {
             // Random check on getting treasure.
             if (this.random.nextDouble() <= generatorTier.getTreasureChance())
             {
                 // Use the same variables for treasures.
-                chanceMap = generatorTier.getTreasureChanceMap();
-                newMaterial = this.getMaterialFromMap(chanceMap);
+                TreeMap<Double, ItemStack> treasureMap = generatorTier.getTreasureItemChanceMap();
+                ItemStack itemStack = this.getMaterialFromMap(treasureMap);
 
                 // Double check, in general it should always be a material.
-                if (newMaterial != null)
+                if (itemStack != null)
                 {
+                    ItemStack drop = itemStack.clone();
+                    drop.setAmount(this.random.nextInt(generatorTier.getMaxTreasureAmount() + 1) + 1);
+
                     // drop item naturally in the location of the block
-                    block.getWorld().dropItemNaturally(block.getLocation(),
-                        new ItemStack(newMaterial, this.random.nextInt(generatorTier.getMaxTreasureAmount() - 1) + 1));
+                    block.getWorld().dropItemNaturally(block.getLocation(), drop);
 
                     // TODO: Add effects like sound and particle :)
                 }
@@ -133,10 +150,11 @@ public class MagicGenerator
 
     /**
      * This method returns a random material from given tree map.
+     *
      * @param chanceMap Map that contains all objects with their chance to drop.
-     * @return Material from map or null.
+     * @return <T> from map or null.
      */
-    private @Nullable Material getMaterialFromMap(TreeMap<Double, Material> chanceMap)
+    private <T> T getMaterialFromMap(TreeMap<Double, T> chanceMap)
     {
         if (chanceMap.isEmpty())
         {
@@ -164,7 +182,6 @@ public class MagicGenerator
      * This variable holds stone generator addon object.
      */
     private final StoneGeneratorAddon addon;
-
 
     /**
      * Random for generator
