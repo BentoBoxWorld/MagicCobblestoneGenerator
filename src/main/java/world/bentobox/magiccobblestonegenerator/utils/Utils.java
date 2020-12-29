@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import sun.reflect.generics.tree.Tree;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
@@ -36,8 +35,9 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
 public class Utils
 {
     /**
-     * This method gets string value of given permission prefix. If user does not have
-     * given permission or it have all (*), then return default value.
+     * This method gets string value of given permission prefix. If user does not have given permission or it have all
+     * (*), then return default value.
+     *
      * @param user User who's permission should be checked.
      * @param permissionPrefix Prefix that need to be found.
      * @param defaultValue Default value that will be returned if permission not found.
@@ -55,9 +55,9 @@ public class Utils
             String permPrefix = permissionPrefix + ".";
 
             List<String> permissions = user.getEffectivePermissions().stream().
-                    map(PermissionAttachmentInfo::getPermission).
-                    filter(permission -> permission.startsWith(permPrefix)).
-                    collect(Collectors.toList());
+                map(PermissionAttachmentInfo::getPermission).
+                filter(permission -> permission.startsWith(permPrefix)).
+                collect(Collectors.toList());
 
             for (String permission : permissions)
             {
@@ -81,8 +81,9 @@ public class Utils
 
 
     /**
-     * This method gets integer value of given permission prefix. If user does not have
-     * given permission or it have all (*), then return default value.
+     * This method gets integer value of given permission prefix. If user does not have given permission or it have all
+     * (*), then return default value.
+     *
      * @param user User who's permission should be checked.
      * @param permissionPrefix Prefix that need to be found.
      * @param defaultValue Default value that will be returned if permission not found.
@@ -95,8 +96,9 @@ public class Utils
 
 
     /**
-     * This method replaces "[gamemode] and [number] in permission template with a requested
-     * gamemode and empty space accordantly.
+     * This method replaces "[gamemode] and [number] in permission template with a requested gamemode and empty space
+     * accordantly.
+     *
      * @param world World where permission is operating.
      * @param permissionTemplate permission template.
      * @return Parsed permission String.
@@ -112,6 +114,7 @@ public class Utils
 
     /**
      * This method returns if given user has all required permissions.
+     *
      * @param user User who must be checked.
      * @param permissions List of permissions that must be checked.
      * @return {@code true} if player has all required permissions, {@code flase} otherwise.
@@ -125,21 +128,22 @@ public class Utils
 
 
     /**
-     * This method transforms given World into GameMode name. If world is not a GameMode
-     * world then it returns null.
+     * This method transforms given World into GameMode name. If world is not a GameMode world then it returns null.
+     *
      * @param world World which gameMode name must be found out.
      * @return GameMode name or null.
      */
     public static String getGameMode(World world)
     {
         return BentoBox.getInstance().getIWM().getAddon(world).
-                map(gameModeAddon -> gameModeAddon.getDescription().getName()).
-                orElse(null);
+            map(gameModeAddon -> gameModeAddon.getDescription().getName()).
+            orElse(null);
     }
 
 
     /**
      * This method transforms given GameMode into name.
+     *
      * @param gameModeAddon GameMode which name must be returned.
      * @return GameMode name.
      */
@@ -151,6 +155,7 @@ public class Utils
 
     /**
      * This method allows to get next value from array list after given value.
+     *
      * @param values Array that should be searched for given value.
      * @param currentValue Value which next element should be found.
      * @param <T> Instance of given object.
@@ -179,6 +184,7 @@ public class Utils
 
     /**
      * This method allows to get previous value from array list after given value.
+     *
      * @param values Array that should be searched for given value.
      * @param currentValue Value which previous element should be found.
      * @param <T> Instance of given object.
@@ -207,6 +213,7 @@ public class Utils
 
     /**
      * This method returns map that contains biomes name as key and biome as value.
+     *
      * @return Map that contains relation from biome name to biome.
      */
     public static Map<String, Biome> getBiomeNameMap()
@@ -226,6 +233,7 @@ public class Utils
 
     /**
      * This method converts given treeMap to pairList.
+     *
      * @param treeMap TreeMap that contains elements which must be translated to list.
      * @return PairList of elements from treeMap.
      */
@@ -254,6 +262,7 @@ public class Utils
 
     /**
      * This method converts given pairList to actual TreeMap.
+     *
      * @param pairList PairList that contains elements which must be translated to map.
      * @return TreeMap of elements from pairList.
      */
@@ -281,11 +290,11 @@ public class Utils
 
         return treeMap;
     }
-    
+
 
     /**
-     * Sanitizes the provided input.
-     * It replaces spaces and hyphens with underscores and lower cases the input.
+     * Sanitizes the provided input. It replaces spaces and hyphens with underscores and lower cases the input.
+     *
      * @param input input to sanitize
      * @return sanitized input
      */
@@ -297,6 +306,7 @@ public class Utils
 
     /**
      * This method prettify given Biome name to more friendly name.
+     *
      * @param user User which translation set will be used.
      * @param biome Biome that requires prettifying.
      * @return Clean and readable biome name.
@@ -340,7 +350,7 @@ public class Utils
             // We found our translation.
             return translation;
         }
-        
+
         // Nothing was found. Use just a prettify text function.
         return Util.prettifyText(biome.name());
     }
@@ -348,6 +358,7 @@ public class Utils
 
     /**
      * This method prettify given material name to more friendly name.
+     *
      * @param user User which translation set will be used.
      * @param material material that requires prettifying.
      * @return Clean and readable material name.
@@ -359,7 +370,8 @@ public class Utils
         //   materials:
         //     [material]:
         //       name: [name]
-        String translation = user.getTranslationOrNothing(Constants.MATERIALS + material.name().toLowerCase() + ".name");
+        String translation =
+            user.getTranslationOrNothing(Constants.MATERIALS + material.name().toLowerCase() + ".name");
 
         if (!translation.isEmpty())
         {
@@ -399,6 +411,7 @@ public class Utils
 
     /**
      * This method prettify given itemStack name to more friendly name.
+     *
      * @param user User which translation set will be used.
      * @param itemStack material that requires prettifying.
      * @return Clean and readable material name.
@@ -424,6 +437,7 @@ public class Utils
 
     /**
      * This method prettify given entity name to more friendly name.
+     *
      * @param user User which translation set will be used.
      * @param entity entity that requires prettifying.
      * @return Clean and readable entity name.
@@ -475,6 +489,7 @@ public class Utils
 
     /**
      * Send given message to user and add prefix to the start of the message.
+     *
      * @param user User who need to receive message.
      * @param message String of message that must be send.
      */
@@ -493,7 +508,11 @@ public class Utils
      * @param addon instance of stone generator addon.
      * @param available the available
      */
-    public static void sendUnlockMessage(UUID uuid, Island island, GeneratorTierObject generator, StoneGeneratorAddon addon, boolean available)
+    public static void sendUnlockMessage(UUID uuid,
+        Island island,
+        GeneratorTierObject generator,
+        StoneGeneratorAddon addon,
+        boolean available)
     {
         User user = User.getInstance(uuid);
 
@@ -522,14 +541,16 @@ public class Utils
             {
                 if (addon.isVaultProvided() && generator.getActivationCost() > 0)
                 {
-                    component = new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate-vault",
-                        Constants.GENERATOR, generator.getFriendlyName(),
-                        Constants.NUMBER, String.valueOf(generator.getActivationCost())));
+                    component =
+                        new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate-vault",
+                            Constants.GENERATOR, generator.getFriendlyName(),
+                            Constants.NUMBER, String.valueOf(generator.getActivationCost())));
                 }
                 else
                 {
-                    component = new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate",
-                        Constants.GENERATOR, generator.getFriendlyName()));
+                    component =
+                        new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate",
+                            Constants.GENERATOR, generator.getFriendlyName()));
                 }
 
                 commandBuilder.append(addon.getSettings().getPlayerActivateCommand().split(" ")[0]);

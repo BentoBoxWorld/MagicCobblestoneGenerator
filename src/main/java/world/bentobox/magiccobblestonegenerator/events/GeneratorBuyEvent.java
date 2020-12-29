@@ -20,109 +20,109 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
  */
 public class GeneratorBuyEvent extends BentoBoxEvent
 {
-	/**
-	 * Instantiates a new Generator buy event.
-	 *
-	 * @param generator the generator
-	 * @param user the user
-	 * @param island the island
-	 */
-	public GeneratorBuyEvent(GeneratorTierObject generator, User user, String island)
-	{
-		this.generator = generator.getFriendlyName();
-		this.generatorID = generator.getUniqueId();
+    /**
+     * Instantiates a new Generator buy event.
+     *
+     * @param generator the generator
+     * @param user the user
+     * @param island the island
+     */
+    public GeneratorBuyEvent(GeneratorTierObject generator, User user, String island)
+    {
+        this.generator = generator.getFriendlyName();
+        this.generatorID = generator.getUniqueId();
 
-		this.targetPlayer = user.getUniqueId();
-		this.islandUUID = island;
-	}
-
-
-	/**
-	 * Gets target player.
-	 *
-	 * @return the target player
-	 */
-	public UUID getTargetPlayer()
-	{
-		return targetPlayer;
-	}
+        this.targetPlayer = user.getUniqueId();
+        this.islandUUID = island;
+    }
 
 
-	/**
-	 * Sets target player.
-	 *
-	 * @param targetPlayer the target player
-	 */
-	public void setTargetPlayer(UUID targetPlayer)
-	{
-		this.targetPlayer = targetPlayer;
-	}
+    /**
+     * Gets target player.
+     *
+     * @return the target player
+     */
+    public UUID getTargetPlayer()
+    {
+        return targetPlayer;
+    }
 
 
-	/**
-	 * Gets island uuid.
-	 *
-	 * @return the island uuid
-	 */
-	public String getIslandUUID()
-	{
-		return islandUUID;
-	}
+    /**
+     * Sets target player.
+     *
+     * @param targetPlayer the target player
+     */
+    public void setTargetPlayer(UUID targetPlayer)
+    {
+        this.targetPlayer = targetPlayer;
+    }
 
 
-	/**
-	 * Sets island uuid.
-	 *
-	 * @param islandUUID the island uuid
-	 */
-	public void setIslandUUID(String islandUUID)
-	{
-		this.islandUUID = islandUUID;
-	}
+    /**
+     * Gets island uuid.
+     *
+     * @return the island uuid
+     */
+    public String getIslandUUID()
+    {
+        return islandUUID;
+    }
 
 
-	/**
-	 * Gets generator.
-	 *
-	 * @return the generator
-	 */
-	public String getGenerator()
-	{
-		return generator;
-	}
+    /**
+     * Sets island uuid.
+     *
+     * @param islandUUID the island uuid
+     */
+    public void setIslandUUID(String islandUUID)
+    {
+        this.islandUUID = islandUUID;
+    }
 
 
-	/**
-	 * Sets generator.
-	 *
-	 * @param generator the generator
-	 */
-	public void setGenerator(String generator)
-	{
-		this.generator = generator;
-	}
+    /**
+     * Gets generator.
+     *
+     * @return the generator
+     */
+    public String getGenerator()
+    {
+        return generator;
+    }
 
 
-	/**
-	 * Gets generator id.
-	 *
-	 * @return the generator id
-	 */
-	public String getGeneratorID()
-	{
-		return generatorID;
-	}
+    /**
+     * Sets generator.
+     *
+     * @param generator the generator
+     */
+    public void setGenerator(String generator)
+    {
+        this.generator = generator;
+    }
 
 
-	/**
-	 * Sets generator id.
-	 *
-	 * @param generatorID the generator id
-	 */
-	public void setGeneratorID(String generatorID)
-	{
-		this.generatorID = generatorID;
-	}
+    /**
+     * Gets generator id.
+     *
+     * @return the generator id
+     */
+    public String getGeneratorID()
+    {
+        return generatorID;
+    }
+
+
+    /**
+     * Sets generator id.
+     *
+     * @param generatorID the generator id
+     */
+    public void setGeneratorID(String generatorID)
+    {
+        this.generatorID = generatorID;
+    }
 
 
 // ---------------------------------------------------------------------
@@ -130,56 +130,55 @@ public class GeneratorBuyEvent extends BentoBoxEvent
 // ---------------------------------------------------------------------
 
 
-	/**
-	 * Gets handlers.
-	 *
-	 * @return the handlers
-	 */
-	@Override
-	public HandlerList getHandlers()
-	{
-		return GeneratorBuyEvent.handlers;
-	}
+    /**
+     * Gets handlers.
+     *
+     * @return the handlers
+     */
+    @Override
+    public HandlerList getHandlers()
+    {
+        return GeneratorBuyEvent.handlers;
+    }
 
 
-	/**
-	 * Gets handlers.
-	 *
-	 * @return the handlers
-	 */
-	public static HandlerList getHandlerList()
-	{
-		return GeneratorBuyEvent.handlers;
-	}
+    /**
+     * Gets handlers.
+     *
+     * @return the handlers
+     */
+    public static HandlerList getHandlerList()
+    {
+        return GeneratorBuyEvent.handlers;
+    }
 
 
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
 
+    /**
+     * Player who bought generator Id.
+     */
+    private UUID targetPlayer;
 
-	/**
-	 * Player who bought generator Id.
-	 */
-	private UUID targetPlayer;
+    /**
+     * Island Id.
+     */
+    private String islandUUID;
 
-	/**
-	 * Island Id.
-	 */
-	private String islandUUID;
+    /**
+     * Friendly name for generator.
+     */
+    private String generator;
 
-	/**
-	 * Friendly name for generator.
-	 */
-	private String generator;
+    /**
+     * Generator ID.
+     */
+    private String generatorID;
 
-	/**
-	 * Generator ID.
-	 */
-	private String generatorID;
-
-	/**
-	 * Event listener list for current
-	 */
-	private static final HandlerList handlers = new HandlerList();
+    /**
+     * Event listener list for current
+     */
+    private static final HandlerList handlers = new HandlerList();
 }

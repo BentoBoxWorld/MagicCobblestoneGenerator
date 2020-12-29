@@ -54,19 +54,6 @@ public class SelectBundlePanel extends CommonPanel
 
 
     /**
-     * Opens panel for this class without necessity to create new class instance.
-     *
-     * @param panel the parent panel
-     * @param bundle the input bundle
-     * @param consumer the consumer
-     */
-    public static void open(CommonPanel panel, GeneratorBundleObject bundle, Consumer<GeneratorBundleObject> consumer)
-    {
-        new SelectBundlePanel(panel, bundle, consumer).build();
-    }
-
-
-    /**
      * This method builds panel that allows to select single challenge from input challenges.
      */
     public void build()
@@ -124,6 +111,7 @@ public class SelectBundlePanel extends CommonPanel
 
     /**
      * This method creates panel item for given button type.
+     *
      * @param button Button type.
      * @return Clickable PanelItem button.
      */
@@ -144,7 +132,8 @@ public class SelectBundlePanel extends CommonPanel
         {
             case RETURN:
             {
-                description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
+                description.add(this.user
+                    .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     // Return NULL.
@@ -161,8 +150,9 @@ public class SelectBundlePanel extends CommonPanel
             case PREVIOUS:
             {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                description.add(this.user
+                    .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
+                        Constants.NUMBER, String.valueOf(count)));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex--;
@@ -180,8 +170,9 @@ public class SelectBundlePanel extends CommonPanel
             case NEXT:
             {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                description.add(this.user
+                    .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
+                        Constants.NUMBER, String.valueOf(count)));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex++;
@@ -258,6 +249,19 @@ public class SelectBundlePanel extends CommonPanel
     }
 
 
+    /**
+     * Opens panel for this class without necessity to create new class instance.
+     *
+     * @param panel the parent panel
+     * @param bundle the input bundle
+     * @param consumer the consumer
+     */
+    public static void open(CommonPanel panel, GeneratorBundleObject bundle, Consumer<GeneratorBundleObject> consumer)
+    {
+        new SelectBundlePanel(panel, bundle, consumer).build();
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Enums
     // ---------------------------------------------------------------------
@@ -278,7 +282,6 @@ public class SelectBundlePanel extends CommonPanel
     // Section: Variables
     // ---------------------------------------------------------------------
 
-
     /**
      * This variable stores consumer.
      */
@@ -295,12 +298,12 @@ public class SelectBundlePanel extends CommonPanel
     private final List<GeneratorBundleObject> bundleList;
 
     /**
-     * This variable holds current pageIndex for multi-page generator choosing.
-     */
-    private int pageIndex;
-
-    /**
      * This variable holds maximal page index.
      */
     private final int maxPageIndex;
+
+    /**
+     * This variable holds current pageIndex for multi-page generator choosing.
+     */
+    private int pageIndex;
 }

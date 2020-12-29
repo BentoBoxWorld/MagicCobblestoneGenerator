@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import java.util.HashSet;
 import java.util.Set;
 
-
 import world.bentobox.bentobox.api.configuration.ConfigComment;
 import world.bentobox.bentobox.api.configuration.ConfigEntry;
 import world.bentobox.bentobox.api.configuration.ConfigObject;
@@ -22,7 +21,7 @@ import world.bentobox.bentobox.api.configuration.StoreAt;
  * path="{Path to your addon}") To save comments in config file you should use @ConfigComment("{message}") that adds any
  * message you want to be in file.
  */
-@StoreAt(filename="config.yml", path="addons/MagicCobblestoneGenerator")
+@StoreAt(filename = "config.yml", path = "addons/MagicCobblestoneGenerator")
 @ConfigComment("MagicCobblestoneGenerator Configuration [version]")
 @ConfigComment("This config file is dynamic and saved when the server is shutdown.")
 @ConfigComment("")
@@ -55,8 +54,8 @@ public class Settings implements ConfigObject
 
     /**
      * Method Settings#setOfflineGeneration sets new value for the offlineGeneration of this object.
-     * @param offlineGeneration new value for this object.
      *
+     * @param offlineGeneration new value for this object.
      */
     public void setOfflineGeneration(boolean offlineGeneration)
     {
@@ -77,8 +76,8 @@ public class Settings implements ConfigObject
 
     /**
      * Method Settings#setPhysics sets new value for the physics of this object.
-     * @param usePhysics new value for this object.
      *
+     * @param usePhysics new value for this object.
      */
     public void setUsePhysics(boolean usePhysics)
     {
@@ -99,8 +98,8 @@ public class Settings implements ConfigObject
 
     /**
      * Method Settings#setWorkingRange sets new value for the workingRange of this object.
-     * @param defaultWorkingRange new value for this object.
      *
+     * @param defaultWorkingRange new value for this object.
      */
     public void setDefaultWorkingRange(int defaultWorkingRange)
     {
@@ -120,9 +119,10 @@ public class Settings implements ConfigObject
 
 
     /**
-     * Method Settings#setDefaultActiveGeneratorCount sets new value for the defaultActiveGeneratorCount of this object.
-     * @param defaultActiveGeneratorCount new value for this object.
+     * Method Settings#setDefaultActiveGeneratorCount sets new value for the defaultActiveGeneratorCount of this
+     * object.
      *
+     * @param defaultActiveGeneratorCount new value for this object.
      */
     public void setDefaultActiveGeneratorCount(int defaultActiveGeneratorCount)
     {
@@ -463,6 +463,7 @@ public class Settings implements ConfigObject
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
+
 
     /**
      * This enum holds options for choosing on click setting.

@@ -3,10 +3,10 @@ package world.bentobox.magiccobblestonegenerator.utils;
 
 /**
  * Class to store pairs of objects, e.g. coordinates
- * @author tastybento, BONNe
  *
  * @param <X> the x part of the pair
  * @param <Z> the z part of the pair
+ * @author tastybento, BONNe
  */
 public class Pair<X, Z>
 {
@@ -29,17 +29,6 @@ public class Pair<X, Z>
 
 
     /**
-     * Gets second object.
-     *
-     * @return the second
-     */
-    public Z getValue()
-    {
-        return second;
-    }
-
-
-    /**
      * Sets first.
      *
      * @param first the first
@@ -47,6 +36,17 @@ public class Pair<X, Z>
     public void setKey(X first)
     {
         this.first = first;
+    }
+
+
+    /**
+     * Gets second object.
+     *
+     * @return the second
+     */
+    public Z getValue()
+    {
+        return second;
     }
 
 

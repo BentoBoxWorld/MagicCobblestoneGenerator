@@ -17,165 +17,164 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
 
 
 /**
- * This event is fired when user is trying to activate or deactivate generator.
- * It is cancellable.
+ * This event is fired when user is trying to activate or deactivate generator. It is cancellable.
  */
 public class GeneratorActivationEvent extends BentoBoxEvent implements Cancellable
 {
-	/**
-	 * Instantiates a new Generator activation event.
-	 *
-	 * @param generator the generator
-	 * @param user the user
-	 * @param island the island
-	 * @param activate the activate
-	 */
-	public GeneratorActivationEvent(GeneratorTierObject generator, User user, String island, boolean activate)
-	{
-		this.generator = generator.getFriendlyName();
-		this.generatorID = generator.getUniqueId();
+    /**
+     * Instantiates a new Generator activation event.
+     *
+     * @param generator the generator
+     * @param user the user
+     * @param island the island
+     * @param activate the activate
+     */
+    public GeneratorActivationEvent(GeneratorTierObject generator, User user, String island, boolean activate)
+    {
+        this.generator = generator.getFriendlyName();
+        this.generatorID = generator.getUniqueId();
 
-		this.targetPlayer = user.getUniqueId();
-		this.islandUUID = island;
+        this.targetPlayer = user.getUniqueId();
+        this.islandUUID = island;
 
-		this.activate = activate;
-	}
-
-
-	/**
-	 * Gets target player.
-	 *
-	 * @return the target player
-	 */
-	public UUID getTargetPlayer()
-	{
-		return targetPlayer;
-	}
+        this.activate = activate;
+    }
 
 
-	/**
-	 * Sets target player.
-	 *
-	 * @param targetPlayer the target player
-	 */
-	public void setTargetPlayer(UUID targetPlayer)
-	{
-		this.targetPlayer = targetPlayer;
-	}
+    /**
+     * Gets target player.
+     *
+     * @return the target player
+     */
+    public UUID getTargetPlayer()
+    {
+        return targetPlayer;
+    }
 
 
-	/**
-	 * Gets island uuid.
-	 *
-	 * @return the island uuid
-	 */
-	public String getIslandUUID()
-	{
-		return islandUUID;
-	}
+    /**
+     * Sets target player.
+     *
+     * @param targetPlayer the target player
+     */
+    public void setTargetPlayer(UUID targetPlayer)
+    {
+        this.targetPlayer = targetPlayer;
+    }
 
 
-	/**
-	 * Sets island uuid.
-	 *
-	 * @param islandUUID the island uuid
-	 */
-	public void setIslandUUID(String islandUUID)
-	{
-		this.islandUUID = islandUUID;
-	}
+    /**
+     * Gets island uuid.
+     *
+     * @return the island uuid
+     */
+    public String getIslandUUID()
+    {
+        return islandUUID;
+    }
 
 
-	/**
-	 * Gets generator.
-	 *
-	 * @return the generator
-	 */
-	public String getGenerator()
-	{
-		return generator;
-	}
+    /**
+     * Sets island uuid.
+     *
+     * @param islandUUID the island uuid
+     */
+    public void setIslandUUID(String islandUUID)
+    {
+        this.islandUUID = islandUUID;
+    }
 
 
-	/**
-	 * Sets generator.
-	 *
-	 * @param generator the generator
-	 */
-	public void setGenerator(String generator)
-	{
-		this.generator = generator;
-	}
+    /**
+     * Gets generator.
+     *
+     * @return the generator
+     */
+    public String getGenerator()
+    {
+        return generator;
+    }
 
 
-	/**
-	 * Gets generator id.
-	 *
-	 * @return the generator id
-	 */
-	public String getGeneratorID()
-	{
-		return generatorID;
-	}
+    /**
+     * Sets generator.
+     *
+     * @param generator the generator
+     */
+    public void setGenerator(String generator)
+    {
+        this.generator = generator;
+    }
 
 
-	/**
-	 * Sets generator id.
-	 *
-	 * @param generatorID the generator id
-	 */
-	public void setGeneratorID(String generatorID)
-	{
-		this.generatorID = generatorID;
-	}
+    /**
+     * Gets generator id.
+     *
+     * @return the generator id
+     */
+    public String getGeneratorID()
+    {
+        return generatorID;
+    }
 
 
-	/**
-	 * Is activate boolean.
-	 *
-	 * @return the boolean
-	 */
-	public boolean isActivate()
-	{
-		return activate;
-	}
+    /**
+     * Sets generator id.
+     *
+     * @param generatorID the generator id
+     */
+    public void setGeneratorID(String generatorID)
+    {
+        this.generatorID = generatorID;
+    }
 
 
-	/**
-	 * Sets activate.
-	 *
-	 * @param activate the activate
-	 */
-	public void setActivate(boolean activate)
-	{
-		this.activate = activate;
-	}
+    /**
+     * Is activate boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isActivate()
+    {
+        return activate;
+    }
 
 
-	/**
-	 * Gets the cancellation state of this event. A cancelled event will not be executed in the server, but will still
-	 * pass to other plugins
-	 *
-	 * @return true if this event is cancelled
-	 */
-	@Override
-	public boolean isCancelled()
-	{
-		return this.cancelled;
-	}
+    /**
+     * Sets activate.
+     *
+     * @param activate the activate
+     */
+    public void setActivate(boolean activate)
+    {
+        this.activate = activate;
+    }
 
 
-	/**
-	 * Sets the cancellation state of this event. A cancelled event will not be executed in the server, but will still
-	 * pass to other plugins.
-	 *
-	 * @param cancel true if you wish to cancel this event
-	 */
-	@Override
-	public void setCancelled(boolean cancel)
-	{
-		this.cancelled = cancel;
-	}
+    /**
+     * Gets the cancellation state of this event. A cancelled event will not be executed in the server, but will still
+     * pass to other plugins
+     *
+     * @return true if this event is cancelled
+     */
+    @Override
+    public boolean isCancelled()
+    {
+        return this.cancelled;
+    }
+
+
+    /**
+     * Sets the cancellation state of this event. A cancelled event will not be executed in the server, but will still
+     * pass to other plugins.
+     *
+     * @param cancel true if you wish to cancel this event
+     */
+    @Override
+    public void setCancelled(boolean cancel)
+    {
+        this.cancelled = cancel;
+    }
 
 
 // ---------------------------------------------------------------------
@@ -183,66 +182,65 @@ public class GeneratorActivationEvent extends BentoBoxEvent implements Cancellab
 // ---------------------------------------------------------------------
 
 
-	/**
-	 * Gets handlers.
-	 *
-	 * @return the handlers
-	 */
-	@Override
-	public HandlerList getHandlers()
-	{
-		return GeneratorActivationEvent.handlers;
-	}
+    /**
+     * Gets handlers.
+     *
+     * @return the handlers
+     */
+    @Override
+    public HandlerList getHandlers()
+    {
+        return GeneratorActivationEvent.handlers;
+    }
 
 
-	/**
-	 * Gets handlers.
-	 *
-	 * @return the handlers
-	 */
-	public static HandlerList getHandlerList()
-	{
-		return GeneratorActivationEvent.handlers;
-	}
+    /**
+     * Gets handlers.
+     *
+     * @return the handlers
+     */
+    public static HandlerList getHandlerList()
+    {
+        return GeneratorActivationEvent.handlers;
+    }
 
 
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
 
+    /**
+     * Player who activates generator.
+     */
+    private UUID targetPlayer;
 
-	/**
-	 * Player who activates generator.
-	 */
-	private UUID targetPlayer;
+    /**
+     * Island Id.
+     */
+    private String islandUUID;
 
-	/**
-	 * Island Id.
-	 */
-	private String islandUUID;
+    /**
+     * Friendly name for generator.
+     */
+    private String generator;
 
-	/**
-	 * Friendly name for generator.
-	 */
-	private String generator;
+    /**
+     * Generator ID.
+     */
+    private String generatorID;
 
-	/**
-	 * Generator ID.
-	 */
-	private String generatorID;
+    /**
+     * Boolean that indicates if generator will be activated or deactivated.
+     */
+    private boolean activate;
 
-	/**
-	 * Boolean that indicates if generator will be activated or deactivated.
-	 */
-	private boolean activate;
+    /**
+     * Boolean that indicates if event is cancelled.
+     */
+    private boolean cancelled;
 
-	/**
-	 * Boolean that indicates if event is cancelled.
-	 */
-	private boolean cancelled;
-
-	/**
-	 * Event listener list for current
-	 */
-	private static final HandlerList handlers = new HandlerList();
+    /**
+     * Event listener list for current
+     */
+    private static final HandlerList handlers = new HandlerList();
 }

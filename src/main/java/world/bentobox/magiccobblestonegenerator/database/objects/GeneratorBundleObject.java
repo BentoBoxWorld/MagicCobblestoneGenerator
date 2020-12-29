@@ -22,12 +22,12 @@ import world.bentobox.bentobox.database.objects.Table;
 @Table(name = "GeneratorBundle")
 public class GeneratorBundleObject implements DataObject
 {
-	/**
-	 * Instantiates a new Generator bundle object.
-	 */
-	public GeneratorBundleObject()
-	{
-	}
+    /**
+     * Instantiates a new Generator bundle object.
+     */
+    public GeneratorBundleObject()
+    {
+    }
 
 
 // ---------------------------------------------------------------------
@@ -35,115 +35,116 @@ public class GeneratorBundleObject implements DataObject
 // ---------------------------------------------------------------------
 
 
-	/**
-	 * Gets uniqueId
-	 *
-	 * @return the unique id
-	 */
-	@Override
-	public String getUniqueId()
-	{
-		return uniqueId;
-	}
+    /**
+     * Gets uniqueId
+     *
+     * @return the unique id
+     */
+    @Override
+    public String getUniqueId()
+    {
+        return uniqueId;
+    }
 
 
-	/**
-	 * Sets the uniqueId
-	 * @param uniqueId the uniqueId
-	 */
-	@Override
-	public void setUniqueId(String uniqueId)
-	{
-		this.uniqueId = uniqueId;
-	}
+    /**
+     * Sets the uniqueId
+     *
+     * @param uniqueId the uniqueId
+     */
+    @Override
+    public void setUniqueId(String uniqueId)
+    {
+        this.uniqueId = uniqueId;
+    }
 
 
-	/**
-	 * Gets friendly name.
-	 *
-	 * @return the friendly name
-	 */
-	public String getFriendlyName()
-	{
-		return friendlyName;
-	}
+    /**
+     * Gets friendly name.
+     *
+     * @return the friendly name
+     */
+    public String getFriendlyName()
+    {
+        return friendlyName;
+    }
 
 
-	/**
-	 * Sets friendly name.
-	 *
-	 * @param friendlyName the friendly name
-	 */
-	public void setFriendlyName(String friendlyName)
-	{
-		this.friendlyName = friendlyName;
-	}
+    /**
+     * Sets friendly name.
+     *
+     * @param friendlyName the friendly name
+     */
+    public void setFriendlyName(String friendlyName)
+    {
+        this.friendlyName = friendlyName;
+    }
 
 
-	/**
-	 * Gets description.
-	 *
-	 * @return the description
-	 */
-	public List<String> getDescription()
-	{
-		return description;
-	}
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public List<String> getDescription()
+    {
+        return description;
+    }
 
 
-	/**
-	 * Sets description.
-	 *
-	 * @param description the description
-	 */
-	public void setDescription(List<String> description)
-	{
-		this.description = description;
-	}
+    /**
+     * Sets description.
+     *
+     * @param description the description
+     */
+    public void setDescription(List<String> description)
+    {
+        this.description = description;
+    }
 
 
-	/**
-	 * Gets generator icon.
-	 *
-	 * @return the generator icon
-	 */
-	public ItemStack getGeneratorIcon()
-	{
-		return generatorIcon.clone();
-	}
+    /**
+     * Gets generator icon.
+     *
+     * @return the generator icon
+     */
+    public ItemStack getGeneratorIcon()
+    {
+        return generatorIcon.clone();
+    }
 
 
-	/**
-	 * Sets generator icon.
-	 *
-	 * @param generatorIcon the generator icon
-	 */
-	public void setGeneratorIcon(ItemStack generatorIcon)
-	{
-		this.generatorIcon = generatorIcon;
-	}
+    /**
+     * Sets generator icon.
+     *
+     * @param generatorIcon the generator icon
+     */
+    public void setGeneratorIcon(ItemStack generatorIcon)
+    {
+        this.generatorIcon = generatorIcon;
+    }
 
 
-	/**
-	 * Gets generator tiers.
-	 *
-	 * @return the generator tiers
-	 */
-	public Set<String> getGeneratorTiers()
-	{
-		return generatorTiers;
-	}
+    /**
+     * Gets generator tiers.
+     *
+     * @return the generator tiers
+     */
+    public Set<String> getGeneratorTiers()
+    {
+        return generatorTiers;
+    }
 
 
-	/**
-	 * Sets generator tiers.
-	 *
-	 * @param generatorTiers the generator tiers
-	 */
-	public void setGeneratorTiers(Set<String> generatorTiers)
-	{
-		this.generatorTiers = generatorTiers;
-	}
+    /**
+     * Sets generator tiers.
+     *
+     * @param generatorTiers the generator tiers
+     */
+    public void setGeneratorTiers(Set<String> generatorTiers)
+    {
+        this.generatorTiers = generatorTiers;
+    }
 
 
 // ---------------------------------------------------------------------
@@ -151,85 +152,84 @@ public class GeneratorBundleObject implements DataObject
 // ---------------------------------------------------------------------
 
 
-	/**
-	 * Creates and returns a copy of this object.  The precise meaning of "copy" may depend on the class of the object.
-	 * @return a clone of this instance.
-	 */
-	@Override
-	public GeneratorBundleObject clone()
-	{
-		GeneratorBundleObject clone = new GeneratorBundleObject();
+    /**
+     * Creates and returns a copy of this object.  The precise meaning of "copy" may depend on the class of the object.
+     *
+     * @return a clone of this instance.
+     */
+    @Override
+    public GeneratorBundleObject clone()
+    {
+        GeneratorBundleObject clone = new GeneratorBundleObject();
 
-		clone.setUniqueId(this.uniqueId);
-		clone.setFriendlyName(this.friendlyName);
-		clone.setGeneratorIcon(this.generatorIcon.clone());
-		clone.setDescription(new ArrayList<>(this.description));
-		clone.setGeneratorTiers(new HashSet<>(this.generatorTiers));
+        clone.setUniqueId(this.uniqueId);
+        clone.setFriendlyName(this.friendlyName);
+        clone.setGeneratorIcon(this.generatorIcon.clone());
+        clone.setDescription(new ArrayList<>(this.description));
+        clone.setGeneratorTiers(new HashSet<>(this.generatorTiers));
 
-		return clone;
-	}
+        return clone;
+    }
 
 
 // ---------------------------------------------------------------------
 // Section: Static dummy bundle.
 // ---------------------------------------------------------------------
 
+    /**
+     * The Unique id.
+     */
+    @Expose
+    private String uniqueId;
 
-	/**
-	 * Dummy bundle is used to display a bundle that contains all generators.
-	 */
-	public final static GeneratorBundleObject dummyBundle;
-
-	/**
-	 * Populate dummy bundle with some values.
-	 */
-	static
-	{
-		dummyBundle = new GeneratorBundleObject();
-		dummyBundle.setGeneratorIcon(new ItemStack(Material.STRUCTURE_VOID));
-		dummyBundle.setFriendlyName("&f&l No Bundle");
-		dummyBundle.setUniqueId(null);
-
-		List<String> description = new ArrayList<>();
-		description.add("&cThis is not an actual");
-		description.add("&cbundle.");
-
-		dummyBundle.setDescription(description);
-	}
+    /**
+     * The Friendly name.
+     */
+    @Expose
+    private String friendlyName;
 
 
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
 
+    /**
+     * The Description.
+     */
+    @Expose
+    private List<String> description = Collections.emptyList();
 
-	/**
-	 * The Unique id.
-	 */
-	@Expose
-	private String uniqueId;
+    /**
+     * The Generator icon.
+     */
+    @Expose
+    private ItemStack generatorIcon = new ItemStack(Material.STONE);
 
-	/**
-	 * The Friendly name.
-	 */
-	@Expose
-	private String friendlyName;
+    /**
+     * The Generator tiers.
+     */
+    @Expose
+    private Set<String> generatorTiers = new HashSet<>();
 
-	/**
-	 * The Description.
-	 */
-	@Expose
-	private List<String> description = Collections.emptyList();
+    /**
+     * Dummy bundle is used to display a bundle that contains all generators.
+     */
+    public final static GeneratorBundleObject dummyBundle;
 
-	/**
-	 * The Generator icon.
-	 */
-	@Expose
-	private ItemStack generatorIcon = new ItemStack(Material.STONE);
+    /**
+     * Populate dummy bundle with some values.
+     */
+    static
+    {
+        dummyBundle = new GeneratorBundleObject();
+        dummyBundle.setGeneratorIcon(new ItemStack(Material.STRUCTURE_VOID));
+        dummyBundle.setFriendlyName("&f&l No Bundle");
+        dummyBundle.setUniqueId(null);
 
-	/**
-	 * The Generator tiers.
-	 */
-	@Expose
-	private Set<String> generatorTiers = new HashSet<>();
+        List<String> description = new ArrayList<>();
+        description.add("&cThis is not an actual");
+        description.add("&cbundle.");
+
+        dummyBundle.setDescription(description);
+    }
 }

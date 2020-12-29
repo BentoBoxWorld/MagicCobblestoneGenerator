@@ -4,7 +4,10 @@ package world.bentobox.magiccobblestonegenerator.panels.utils;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -42,19 +45,6 @@ public class SelectBiomePanel
 
         // Set page index to 0
         this.pageIndex = 0;
-    }
-
-
-    /**
-     * Opens panel for this class without necessity to create new class instance.
-     *
-     * @param user the user
-     * @param inputBiomes the input biomes
-     * @param consumer the consumer
-     */
-    public static void open(User user, Set<Biome> inputBiomes, Consumer<Set<Biome>> consumer)
-    {
-        new SelectBiomePanel(user, inputBiomes, consumer).build();
     }
 
 
@@ -162,6 +152,7 @@ public class SelectBiomePanel
 
     /**
      * This method creates panel item for given button type.
+     *
      * @param button Button type.
      * @return Clickable PanelItem button.
      */
@@ -346,10 +337,12 @@ public class SelectBiomePanel
     private PanelItem buildButton(BiomeGroup biomeGroup)
     {
         ItemStack icon;
-        String name = this.user.getTranslation(Constants.BIOME_GROUP_BUTTON + biomeGroup.name().toLowerCase() + ".name");
+        String name =
+            this.user.getTranslation(Constants.BIOME_GROUP_BUTTON + biomeGroup.name().toLowerCase() + ".name");
 
         List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslation(Constants.BIOME_GROUP_BUTTON + biomeGroup.name().toLowerCase() + ".description"));
+        description.add(this.user
+            .getTranslation(Constants.BIOME_GROUP_BUTTON + biomeGroup.name().toLowerCase() + ".description"));
 
         if (this.activeGroup == biomeGroup)
         {
@@ -417,6 +410,19 @@ public class SelectBiomePanel
                 return true;
             }).
             build();
+    }
+
+
+    /**
+     * Opens panel for this class without necessity to create new class instance.
+     *
+     * @param user the user
+     * @param inputBiomes the input biomes
+     * @param consumer the consumer
+     */
+    public static void open(User user, Set<Biome> inputBiomes, Consumer<Set<Biome>> consumer)
+    {
+        new SelectBiomePanel(user, inputBiomes, consumer).build();
     }
 
 
@@ -696,7 +702,6 @@ public class SelectBiomePanel
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
-
 
     /**
      * This variable stores consumer.

@@ -1,10 +1,10 @@
 package world.bentobox.magiccobblestonegenerator;
 
-import org.bukkit.Bukkit;
-import java.util.Optional;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import java.util.Optional;
 
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
@@ -18,8 +18,8 @@ import world.bentobox.magiccobblestonegenerator.commands.admin.GeneratorAdminCom
 import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
-import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.IslandLevelListener;
+import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
@@ -29,6 +29,7 @@ import world.bentobox.magiccobblestonegenerator.web.WebManager;
 
 /**
  * Main addon Class. It starts all processes so addon could properly work.
+ *
  * @author BONNe
  */
 public class StoneGeneratorAddon extends Addon
@@ -118,6 +119,7 @@ public class StoneGeneratorAddon extends Addon
 
     /**
      * This method hooks this addon into gamemode.
+     *
      * @param gameMode GameModeAddon where need to be hooked.
      */
     private void hookIntoGameMode(GameModeAddon gameMode)
@@ -159,6 +161,7 @@ public class StoneGeneratorAddon extends Addon
 
     /**
      * Registers the placeholders
+     *
      * @param addon GameMode addon where placeholders are added.
      * @since 2.0.0
      */
@@ -271,8 +274,8 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
-     * This is silly method that was introduced to reduce main method complexity, and just reports
-     * if economy is enabled or not.
+     * This is silly method that was introduced to reduce main method complexity, and just reports if economy is enabled
+     * or not.
      */
     private void findVault()
     {
@@ -293,8 +296,8 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
-     * This is silly method that was introduced to reduce main method complexity, and just reports
-     * if level addon is enabled or not.
+     * This is silly method that was introduced to reduce main method complexity, and just reports if level addon is
+     * enabled or not.
      */
     private void findLevel()
     {
@@ -443,6 +446,7 @@ public class StoneGeneratorAddon extends Addon
 
     /**
      * This method adds access to vaulthook.
+     *
      * @return VaultHook.
      */
     public VaultHook getVaultHook()
@@ -464,6 +468,7 @@ public class StoneGeneratorAddon extends Addon
 
     /**
      * This method allows to access static addon instance.
+     *
      * @return Addon instance.
      */
     public static StoneGeneratorAddon getInstance()
@@ -516,7 +521,6 @@ public class StoneGeneratorAddon extends Addon
      */
     private Level levelAddon;
 
-
     /**
      * Static addon isntance.
      */
@@ -527,16 +531,13 @@ public class StoneGeneratorAddon extends Addon
     // Section: Flags
     // ---------------------------------------------------------------------
 
-
     /**
      * Settings flags allows to modifying parameters of the island.
-     *
-     * It can be modified by the players (island owner).
-     * This is usually an on/off setting.
-     *
-     * MAGIC_COBBLESTONE_GENERATOR should also be defined in language file under
-     * protection.flags section.
-     *
+     * <p>
+     * It can be modified by the players (island owner). This is usually an on/off setting.
+     * <p>
+     * MAGIC_COBBLESTONE_GENERATOR should also be defined in language file under protection.flags section.
+     * <p>
      * By default setting is set to false.
      */
     public final static Flag MAGIC_COBBLESTONE_GENERATOR =
@@ -546,14 +547,15 @@ public class StoneGeneratorAddon extends Addon
             build();
 
     /**
-     * This flag allows to change who have access to modify island generator tiers option.
-     * Owner can change it from member rank till owner rank.
-     * Default value is set to subowner.
+     * This flag allows to change who have access to modify island generator tiers option. Owner can change it from
+     * member rank till owner rank. Default value is set to subowner.
      */
     public final static Flag MAGIC_COBBLESTONE_GENERATOR_PERMISSION =
         new Flag.Builder("MAGIC_COBBLESTONE_GENERATOR_PERMISSION", Material.DIAMOND_PICKAXE).
             type(Flag.Type.PROTECTION).
             defaultRank(RanksManager.SUB_OWNER_RANK).
-            clickHandler(new CycleClick("MAGIC_COBBLESTONE_GENERATOR_PERMISSION", RanksManager.MEMBER_RANK, RanksManager.OWNER_RANK)).
+            clickHandler(new CycleClick("MAGIC_COBBLESTONE_GENERATOR_PERMISSION",
+                RanksManager.MEMBER_RANK,
+                RanksManager.OWNER_RANK)).
             build();
 }

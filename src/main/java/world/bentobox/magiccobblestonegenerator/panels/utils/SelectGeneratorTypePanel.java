@@ -27,7 +27,7 @@ public class SelectGeneratorTypePanel
      * @param generatorType the generator type
      * @param consumer the consumer
      */
-    private SelectGeneratorTypePanel(User user, 
+    private SelectGeneratorTypePanel(User user,
         GeneratorTierObject.GeneratorType generatorType,
         Consumer<GeneratorTierObject.GeneratorType> consumer)
     {
@@ -37,21 +37,6 @@ public class SelectGeneratorTypePanel
     }
 
 
-    /**
-     * Opens panel for this class without necessity to create new class instance.
-     *
-     * @param user the user
-     * @param generatorType the input generator type
-     * @param consumer the consumer
-     */
-    public static void open(User user, 
-        GeneratorTierObject.GeneratorType generatorType,
-        Consumer<GeneratorTierObject.GeneratorType> consumer)
-    {
-        new SelectGeneratorTypePanel(user, generatorType, consumer).build();
-    }
-    
-    
     /**
      * This method builds panel.
      */
@@ -79,13 +64,14 @@ public class SelectGeneratorTypePanel
         panelBuilder.item(16, this.buildButton(GeneratorTierObject.GeneratorType.ANY));
 
         panelBuilder.item(26, this.createButton());
-        
+
         panelBuilder.build();
     }
 
 
     /**
      * This method creates return button.
+     *
      * @return Return Button item.
      */
     private PanelItem createButton()
@@ -117,13 +103,15 @@ public class SelectGeneratorTypePanel
 
     /**
      * This method builds icon for given GeneratorType object.
+     *
      * @param generatorType object which icon must be created.
      * @return PanelItem for given BiomeGroup.
      */
     private PanelItem buildButton(GeneratorTierObject.GeneratorType generatorType)
     {
         List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslation(Constants.GENERATOR_TYPE_BUTTON + generatorType.name().toLowerCase() + ".description"));
+        description.add(this.user
+            .getTranslation(Constants.GENERATOR_TYPE_BUTTON + generatorType.name().toLowerCase() + ".description"));
 
         // Add tips:
         description.add("");
@@ -131,7 +119,8 @@ public class SelectGeneratorTypePanel
 
         return new PanelItemBuilder().
             icon(GuiUtils.getGeneratorTypeMaterial(generatorType)).
-            name(this.user.getTranslation(Constants.GENERATOR_TYPE_BUTTON + generatorType.name().toLowerCase() + ".name")).
+            name(this.user
+                .getTranslation(Constants.GENERATOR_TYPE_BUTTON + generatorType.name().toLowerCase() + ".name")).
             description(description).
             glow(this.generatorType == generatorType).
             clickHandler((panel, user, clickType, slot) -> {
@@ -142,10 +131,24 @@ public class SelectGeneratorTypePanel
     }
 
 
+    /**
+     * Opens panel for this class without necessity to create new class instance.
+     *
+     * @param user the user
+     * @param generatorType the input generator type
+     * @param consumer the consumer
+     */
+    public static void open(User user,
+        GeneratorTierObject.GeneratorType generatorType,
+        Consumer<GeneratorTierObject.GeneratorType> consumer)
+    {
+        new SelectGeneratorTypePanel(user, generatorType, consumer).build();
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
-
 
     /**
      * This variable stores consumer.

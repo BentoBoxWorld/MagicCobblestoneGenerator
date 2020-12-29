@@ -2,16 +2,15 @@ package world.bentobox.magiccobblestonegenerator.managers;
 
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.events.addon.AddonEvent;
@@ -340,6 +339,7 @@ public class StoneGeneratorManager
 
     /**
      * This method migrated generator tier to a newer version.
+     *
      * @param generator Generator that must be migrated.
      */
     private void migrateGeneratorTier(GeneratorTierObject generator)
@@ -359,6 +359,7 @@ public class StoneGeneratorManager
 
     /**
      * This method removes given generator tier from database.
+     *
      * @param generatorTier generator tier that must be removed.
      */
     public void wipeGeneratorTier(GeneratorTierObject generatorTier)
@@ -429,23 +430,23 @@ public class StoneGeneratorManager
         Optional<GeneratorTierObject> optionalGenerator =
             data.getActiveGeneratorList().stream().
                 // Map generator id with proper generator object.
-                map(this.addon.getAddonManager()::getGeneratorByID).
+                    map(this.addon.getAddonManager()::getGeneratorByID).
                 // Remove generators that are apparently removed from database.
-                filter(Objects::nonNull).
+                    filter(Objects::nonNull).
                 // Filter out generators that are not deployed.
-                filter(GeneratorTierObject::isDeployed).
+                    filter(GeneratorTierObject::isDeployed).
                 // Filter objects with the same generator type.
-                filter(generator -> generator.getGeneratorType().includes(generatorType)).
+                    filter(generator -> generator.getGeneratorType().includes(generatorType)).
                 // Filter out objects with incorrect biomes.
-                filter(generator -> generator.getRequiredBiomes().isEmpty() ||
-                        generator.getRequiredBiomes().contains(biome)).
+                    filter(generator -> generator.getRequiredBiomes().isEmpty() ||
+                    generator.getRequiredBiomes().contains(biome)).
                 // Get a generator that has largest priority and has required biome
-                max((o1, o2) -> {
+                    max((o1, o2) -> {
                     // If required biomes is empty, the it works in all biomes.
                     boolean o1HasBiome = o1.getRequiredBiomes().isEmpty() ||
-                            o1.getRequiredBiomes().contains(biome);
+                        o1.getRequiredBiomes().contains(biome);
                     boolean o2HasBiome = o2.getRequiredBiomes().isEmpty() ||
-                            o2.getRequiredBiomes().contains(biome);
+                        o2.getRequiredBiomes().contains(biome);
 
                     if (o1HasBiome != o2HasBiome)
                     {
@@ -501,15 +502,15 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
             // Filter all default generators
-            filter(GeneratorTierObject::isDefaultGenerator).
+                filter(GeneratorTierObject::isDefaultGenerator).
             // Filter generators with necessary type.
-            filter(generator -> generator.getGeneratorType().includes(generatorType)).
+                filter(generator -> generator.getGeneratorType().includes(generatorType)).
             // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Return first
-            findFirst().
+                findFirst().
             // Return null if none is find.
-            orElse(null);
+                orElse(null);
     }
 
 
@@ -533,20 +534,21 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
             // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Sort in order: default generators are first, followed by lowest priority,
             // generator type and then by generator name.
-            sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
+                sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
                 thenComparing(GeneratorTierObject::getPriority).
                 thenComparing(GeneratorTierObject::getGeneratorType).
                 thenComparing(GeneratorTierObject::getFriendlyName)).
             // Return as list collection.
-            collect(Collectors.toList());
+                collect(Collectors.toList());
     }
 
 
     /**
      * This method returns all generator tiers for given world accessible by user.
+     *
      * @param world World which generators must be returned.
      * @param user Targeted user.
      * @return List of generator tier objects for given world.
@@ -606,6 +608,7 @@ public class StoneGeneratorManager
 
     /**
      * Tis method finds all default generators in given world.
+     *
      * @param world World where generators must be searched
      * @return List with default generators.
      */
@@ -623,12 +626,12 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
             // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Filter deployed and default generators.
-            filter(GeneratorTierObject::isDefaultGenerator).
-            filter(GeneratorTierObject::isDeployed).
+                filter(GeneratorTierObject::isDefaultGenerator).
+                filter(GeneratorTierObject::isDeployed).
             // Return as list collection.
-            collect(Collectors.toList());
+                collect(Collectors.toList());
     }
 
 
@@ -657,10 +660,10 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorBundleCache.values().stream().
             // Filter generators that starts with name.
-            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Sort in order: default generators are first, followed by lowest priority,
             // Return as list collection.
-            collect(Collectors.toList());
+                collect(Collectors.toList());
     }
 
 
@@ -678,6 +681,7 @@ public class StoneGeneratorManager
 
     /**
      * This method removes given bundle tier from database.
+     *
      * @param bundleObject bundle tier that must be removed.
      */
     public void wipeBundle(GeneratorBundleObject bundleObject)
@@ -841,6 +845,7 @@ public class StoneGeneratorManager
 
     /**
      * This method updates owner working range for island.
+     *
      * @param island Island object that requires update.
      * @param dataObject Data Object that need to be populated.
      */
@@ -856,6 +861,7 @@ public class StoneGeneratorManager
 
     /**
      * This method updates owner active generator count.
+     *
      * @param island Island object that requires update.
      * @param dataObject Data Object that need to be populated.
      */
@@ -871,6 +877,7 @@ public class StoneGeneratorManager
 
     /**
      * This method updates owner bundle for island.
+     *
      * @param island Island object that requires update.
      * @param dataObject Data Object that need to be populated.
      */
@@ -886,6 +893,7 @@ public class StoneGeneratorManager
 
     /**
      * This method checks for all generators, if they are unlocked.
+     *
      * @param island Island which is targeted for unlocking check.
      * @param user User who triggered check.
      * @param level New island level value.
@@ -915,21 +923,22 @@ public class StoneGeneratorManager
 
         this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
             // Filter out default generators. They are always unlocked and active.
-            filter(generator -> !generator.isDefaultGenerator()).
+                filter(generator -> !generator.isDefaultGenerator()).
             // Filter out unlocked generators. Not necessary to check them again
-            filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
+                filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
             // Filter out generators with larger minimal island level then current island level.
-            filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
+                filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
             // Filter out generators with missing permissions
-            filter(generator -> Utils.matchAllPermissions(
+                filter(generator -> Utils.matchAllPermissions(
                 User.getInstance(island.getOwner()), generator.getRequiredPermissions())).
             // Now process each generator.
-            forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+                forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
     }
 
 
     /**
      * This method allows to get generator data for given island.
+     *
      * @param island Island which data must be returned.
      * @return instance of GeneratorDataObject.
      */
@@ -947,6 +956,7 @@ public class StoneGeneratorManager
 
     /**
      * This method allows to get generator data for given user.
+     *
      * @param user User which data must be returned.
      * @param world World where user island must be returned.
      * @return instance of GeneratorDataObject.
@@ -972,6 +982,7 @@ public class StoneGeneratorManager
 
     /**
      * This method unlocks given generator for given island.
+     *
      * @param dataObject DataObject where all data will be saved.
      * @param island Island that unlocks generator.
      * @param generator Generator that must be unlocked.
@@ -1039,6 +1050,7 @@ public class StoneGeneratorManager
 
     /**
      * This is just a wrapper method that allows to deactivate generator.
+     *
      * @param user User who deactivates generator.
      * @param generatorData Data which will be populated.
      * @param generatorTier Generator that will be removed.
@@ -1081,9 +1093,9 @@ public class StoneGeneratorManager
 
 
     /**
-     * This method checks if given user can activate given generator tier.
-     * This method includes money withdraw, so it is assumed, that it is used as check
-     * before activating the generator tier.
+     * This method checks if given user can activate given generator tier. This method includes money withdraw, so it is
+     * assumed, that it is used as check before activating the generator tier.
+     *
      * @param user User who will pay for activating.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be activated.
@@ -1155,6 +1167,7 @@ public class StoneGeneratorManager
 
     /**
      * This is just a wrapper method that allows to activate generator.
+     *
      * @param user User who activates generator.
      * @param generatorData Data which will be populated.
      * @param generatorTier Generator that will be added.
@@ -1208,9 +1221,9 @@ public class StoneGeneratorManager
 
 
     /**
-     * This method checks if given user can purchase given generator tier.
-     * This method includes money withdraw, so it is assumed, that it is used as check
-     * before purchasing the generator tier.
+     * This method checks if given user can purchase given generator tier. This method includes money withdraw, so it is
+     * assumed, that it is used as check before purchasing the generator tier.
+     *
      * @param user User who will pay for purchase.
      * @param island GeneratorData linked island.
      * @param generatorData Data that stores island generators.
@@ -1291,6 +1304,7 @@ public class StoneGeneratorManager
 
     /**
      * This method adds generator tier to purchased generators.
+     *
      * @param user User who will pays.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
@@ -1336,6 +1350,7 @@ public class StoneGeneratorManager
 
     /**
      * This method removes given data object from cache and database.
+     *
      * @param uniqueId Object that must be removed.
      */
     public void wipeGeneratorData(String uniqueId)
@@ -1347,6 +1362,7 @@ public class StoneGeneratorManager
 
     /**
      * This method removes given data object from cache and database.
+     *
      * @param dataObject Object that must be removed.
      */
     public void wipeGeneratorData(GeneratorDataObject dataObject)
@@ -1362,6 +1378,7 @@ public class StoneGeneratorManager
 
     /**
      * This method returns if Stone generator should operate in given world.
+     *
      * @param world World object that must be checked.
      * @return <code>true</code> if addon should work in given world.
      */
@@ -1373,6 +1390,7 @@ public class StoneGeneratorManager
 
     /**
      * This method returns true if offline generation is enabled or at least one member of island is online.
+     *
      * @param location Location of the generated block.
      * @return true if offline generation is enabled or at least one member is online.
      */
@@ -1402,6 +1420,7 @@ public class StoneGeneratorManager
 
     /**
      * This method returns long that represents given island level.
+     *
      * @param island the island.
      * @return Island level
      */
@@ -1414,12 +1433,13 @@ public class StoneGeneratorManager
         }
 
         return this.addon.getLevelAddon().getIslandLevel(island.getWorld(),
-                island.getOwner());
+            island.getOwner());
     }
 
 
     /**
      * This method returns long that represents given user level.
+     *
      * @param user the user.
      * @return Island level
      */
@@ -1432,14 +1452,13 @@ public class StoneGeneratorManager
         }
 
         return this.addon.getLevelAddon().getIslandLevel(user.getWorld(),
-                user.getUniqueId());
+            user.getUniqueId());
     }
 
 
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
-
 
     /**
      * This variable holds Generator addon.

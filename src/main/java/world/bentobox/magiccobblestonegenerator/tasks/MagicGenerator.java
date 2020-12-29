@@ -1,13 +1,12 @@
 package world.bentobox.magiccobblestonegenerator.tasks;
 
 
-import java.util.Random;
-import java.util.TreeMap;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.eclipse.jdt.annotation.Nullable;
+import java.util.Random;
+import java.util.TreeMap;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -21,6 +20,7 @@ public class MagicGenerator
 {
     /**
      * Default constructor. Inits Generator once.
+     *
      * @param addon Magic Cobblestone Generator addon.
      */
     public MagicGenerator(StoneGeneratorAddon addon)
@@ -31,6 +31,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace given block with new object and returns true if it was successful.
+     *
      * @param block Block that should be replaced.
      * @return <code>true</code> if replacing block was successful.
      */
@@ -46,6 +47,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace given block with new object and returns true if it was successful.
+     *
      * @param block Block that should be replaced.
      * @return <code>true</code> if replacing block was successful.
      */
@@ -61,6 +63,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace given block with new object and returns true if it was successful.
+     *
      * @param block Block that should be replaced.
      * @return <code>true</code> if replacing block was successful.
      */
@@ -76,6 +79,7 @@ public class MagicGenerator
 
     /**
      * This method tries to replace block from chance map and returns if it was successful.
+     *
      * @param block Block that need to be replaced.
      * @param generatorTier Object that contains all possible chances.
      * @return {@code true} if it was successful, {@code false} otherwise.
@@ -146,6 +150,7 @@ public class MagicGenerator
 
     /**
      * This method returns a random material from given tree map.
+     *
      * @param chanceMap Map that contains all objects with their chance to drop.
      * @return <T> from map or null.
      */
@@ -177,7 +182,6 @@ public class MagicGenerator
      * This variable holds stone generator addon object.
      */
     private final StoneGeneratorAddon addon;
-
 
     /**
      * Random for generator
