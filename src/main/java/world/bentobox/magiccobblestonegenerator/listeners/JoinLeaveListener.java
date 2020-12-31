@@ -12,7 +12,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import world.bentobox.bentobox.api.events.island.IslandEvent;
+import world.bentobox.bentobox.api.events.island.IslandCreatedEvent;
+import world.bentobox.bentobox.api.events.island.IslandDeleteEvent;
+import world.bentobox.bentobox.api.events.island.IslandRegisteredEvent;
+import world.bentobox.bentobox.api.events.island.IslandResettedEvent;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
@@ -44,19 +47,38 @@ public class JoinLeaveListener implements Listener
 
 
     /**
-     * This method handles Island Created, Resetted and Registered events.
+     * This method handles Island Created event.
      *
      * @param event Event that must be handled.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onNewIsland(IslandEvent event)
+    public void onIslandCreated(IslandCreatedEvent event)
     {
-        if (event.getReason().equals(IslandEvent.Reason.CREATED) ||
-            event.getReason().equals(IslandEvent.Reason.RESETTED) ||
-            event.getReason().equals(IslandEvent.Reason.REGISTERED))
-        {
-            this.addon.getAddonManager().validateIslandData(event.getIsland());
-        }
+        this.addon.getAddonManager().validateIslandData(event.getIsland());
+    }
+
+
+    /**
+     * This method handles Island Resetted event.
+     *
+     * @param event Event that must be handled.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onIslandCreated(IslandResettedEvent event)
+    {
+        this.addon.getAddonManager().validateIslandData(event.getIsland());
+    }
+
+
+    /**
+     * This method handles Island Registered event.
+     *
+     * @param event Event that must be handled.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onIslandCreated(IslandRegisteredEvent event)
+    {
+        this.addon.getAddonManager().validateIslandData(event.getIsland());
     }
 
 
@@ -66,7 +88,7 @@ public class JoinLeaveListener implements Listener
      * @param event IslandDeletedEvent instance.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onIslandDelete(IslandEvent.IslandDeleteEvent event)
+    public void onIslandDelete(IslandDeleteEvent event)
     {
         this.addon.getAddonManager().wipeGeneratorData(event.getIsland().getUniqueId());
     }
