@@ -397,23 +397,24 @@ public class StoneGeneratorManager
     /**
      * This method returns active generator tier object for island at given location.
      *
+     * @param island Island on which generation is happening.
      * @param location Location of the block.
      * @param generatorType Generator type.
      * @return GeneratorTierObject that operates in given island or null.
      */
-    public @Nullable GeneratorTierObject getGeneratorTier(Location location,
+    public @Nullable GeneratorTierObject getGeneratorTier(
+        @Nullable Island island,
+        Location location,
         GeneratorTierObject.GeneratorType generatorType)
     {
-        Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
-
-        if (!optionalIsland.isPresent())
+        if (island == null)
         {
-            // No islands at given location. Do not generate
-            return null;
+            // No islands at given location, find and use default generator tier.
+            return this.findDefaultGeneratorTier(location.getWorld(), generatorType);
         }
 
-        this.addIslandData(optionalIsland.get());
-        GeneratorDataObject data = this.generatorDataCache.get(optionalIsland.get().getUniqueId());
+        this.addIslandData(island);
+        GeneratorDataObject data = this.generatorDataCache.get(island.getUniqueId());
 
         // Gets biome from location.
         final Biome biome = location.getWorld().getBiome(location.getBlockX(),
@@ -430,18 +431,19 @@ public class StoneGeneratorManager
         Optional<GeneratorTierObject> optionalGenerator =
             data.getActiveGeneratorList().stream().
                 // Map generator id with proper generator object.
-                    map(this.addon.getAddonManager()::getGeneratorByID).
+                map(this.addon.getAddonManager()::getGeneratorByID).
                 // Remove generators that are apparently removed from database.
-                    filter(Objects::nonNull).
+                filter(Objects::nonNull).
                 // Filter out generators that are not deployed.
-                    filter(GeneratorTierObject::isDeployed).
+                filter(GeneratorTierObject::isDeployed).
                 // Filter objects with the same generator type.
-                    filter(generator -> generator.getGeneratorType().includes(generatorType)).
+                filter(generator -> generator.getGeneratorType().includes(generatorType)).
                 // Filter out objects with incorrect biomes.
-                    filter(generator -> generator.getRequiredBiomes().isEmpty() ||
+                filter(generator -> generator.getRequiredBiomes().isEmpty() ||
                     generator.getRequiredBiomes().contains(biome)).
                 // Get a generator that has largest priority and has required biome
-                    max((o1, o2) -> {
+                max((o1, o2) ->
+                {
                     // If required biomes is empty, the it works in all biomes.
                     boolean o1HasBiome = o1.getRequiredBiomes().isEmpty() ||
                         o1.getRequiredBiomes().contains(biome);
@@ -502,15 +504,15 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
             // Filter all default generators
-                filter(GeneratorTierObject::isDefaultGenerator).
+            filter(GeneratorTierObject::isDefaultGenerator).
             // Filter generators with necessary type.
-                filter(generator -> generator.getGeneratorType().includes(generatorType)).
+            filter(generator -> generator.getGeneratorType().includes(generatorType)).
             // Filter generators that starts with name.
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Return first
-                findFirst().
+            findFirst().
             // Return null if none is find.
-                orElse(null);
+            orElse(null);
     }
 
 
@@ -534,15 +536,15 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
             // Filter generators that starts with name.
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Sort in order: default generators are first, followed by lowest priority,
             // generator type and then by generator name.
-                sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
+            sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
                 thenComparing(GeneratorTierObject::getPriority).
                 thenComparing(GeneratorTierObject::getGeneratorType).
                 thenComparing(GeneratorTierObject::getFriendlyName)).
             // Return as list collection.
-                collect(Collectors.toList());
+            collect(Collectors.toList());
     }
 
 
@@ -626,12 +628,12 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorTierCache.values().stream().
             // Filter generators that starts with name.
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Filter deployed and default generators.
-                filter(GeneratorTierObject::isDefaultGenerator).
-                filter(GeneratorTierObject::isDeployed).
+            filter(GeneratorTierObject::isDefaultGenerator).
+            filter(GeneratorTierObject::isDeployed).
             // Return as list collection.
-                collect(Collectors.toList());
+            collect(Collectors.toList());
     }
 
 
@@ -660,10 +662,10 @@ public class StoneGeneratorManager
         // Find default generator from cache.
         return this.generatorBundleCache.values().stream().
             // Filter generators that starts with name.
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
             // Sort in order: default generators are first, followed by lowest priority,
             // Return as list collection.
-                collect(Collectors.toList());
+            collect(Collectors.toList());
     }
 
 
@@ -709,7 +711,8 @@ public class StoneGeneratorManager
         this.operationWorlds.stream().
             map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
             filter(Objects::nonNull).
-            forEach(island -> {
+            forEach(island ->
+            {
                 if (island.getOwner() == uniqueId)
                 {
                     // Owner island must be validated.
@@ -923,16 +926,16 @@ public class StoneGeneratorManager
 
         this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
             // Filter out default generators. They are always unlocked and active.
-                filter(generator -> !generator.isDefaultGenerator()).
+            filter(generator -> !generator.isDefaultGenerator()).
             // Filter out unlocked generators. Not necessary to check them again
-                filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
+            filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
             // Filter out generators with larger minimal island level then current island level.
-                filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
+            filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
             // Filter out generators with missing permissions
-                filter(generator -> Utils.matchAllPermissions(
+            filter(generator -> Utils.matchAllPermissions(
                 User.getInstance(island.getOwner()), generator.getRequiredPermissions())).
             // Now process each generator.
-                forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+            forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
     }
 
 

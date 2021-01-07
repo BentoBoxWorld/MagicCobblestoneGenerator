@@ -1,3 +1,8 @@
+///
+// Created by BONNe
+// Copyright - 2021
+///
+
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
@@ -8,6 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFromToEvent;
 
+import java.util.Optional;
+
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
@@ -82,21 +90,29 @@ public class MagicGeneratorListener extends GeneratorListener
             return;
         }
 
-        if (this.addon.getIslands().getIslandAt(eventToBlock.getLocation()).
-            map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
-            orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventToBlock.getWorld())))
+        Optional<Island> islandOptional = this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation());
+
+        if (!islandOptional.isPresent())
         {
-            // if flag is toggled off, return
+            // If not operating in non-island regions.
             return;
         }
 
-        if (!this.addon.getAddonManager().isMembersOnline(eventSourceBlock.getLocation()))
+        Island island = islandOptional.get();
+
+        if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
         {
-            // If island members are not online then do not continue
+            // Currently addon is not working outside island protection ranges.
             return;
         }
 
-        if (!this.isInRangeToGenerate(eventSourceBlock))
+        if (!this.isSomeoneOnline(island))
+        {
+            // Offline generation is not enabled and all island members are offline.
+            return;
+        }
+
+        if (!this.isInRangeToGenerate(island, eventSourceBlock))
         {
             // Check if any island member is at generator range.
             return;
@@ -107,8 +123,11 @@ public class MagicGeneratorListener extends GeneratorListener
         {
             // Return from here at any case. Even if could not manage to replace stone.
 
-            if (this.isStoneReplacementGenerated(eventToBlock))
+            Material material = this.generateStoneReplacement(island, eventToBlock.getLocation());
+
+            if (material != null)
             {
+                eventToBlock.setType(material);
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
                 event.setCancelled(true);
@@ -127,9 +146,12 @@ public class MagicGeneratorListener extends GeneratorListener
 
         if (liquid.equals(Material.LAVA) && this.canLavaGenerateCobblestone(eventToBlock, event.getFace()))
         {
+            Material material = this.generateCobblestoneReplacement(island, eventToBlock.getLocation());
+
             // Lava is generating cobblestone into eventToBlock place
-            if (this.isCobblestoneReplacementGenerated(eventToBlock))
+            if (material != null)
             {
+                eventToBlock.setType(material);
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
                 event.setCancelled(true);
@@ -144,10 +166,16 @@ public class MagicGeneratorListener extends GeneratorListener
             // Water flow should not be cancelled even if replacement is generated, as replacement block will
             // never be in the flow block, as it will always be next block.
 
-            if (replacedBlock != null && this.isStoneReplacementGenerated(replacedBlock))
+            if (replacedBlock != null)
             {
-                // sound when lava transforms to cobble
-                this.playEffects(replacedBlock);
+                Material material = this.generateStoneReplacement(island, replacedBlock.getLocation());
+
+                if (material != null)
+                {
+                    replacedBlock.setType(material);
+                    // sound when lava transforms to cobble
+                    this.playEffects(eventToBlock);
+                }
             }
         }
     }
