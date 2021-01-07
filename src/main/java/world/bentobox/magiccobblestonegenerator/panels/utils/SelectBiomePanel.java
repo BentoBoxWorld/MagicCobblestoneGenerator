@@ -626,15 +626,13 @@ public class SelectBiomePanel
      */
     private static boolean isNetherBiome(Biome biome)
     {
-        // TODO: 1.15.2 support.
-        switch (biome.name())
+        switch (biome)
         {
-            case "NETHER":
-            case "NETHER_WASTES":
-            case "SOUL_SAND_VALLEY":
-            case "CRIMSON_FOREST":
-            case "WARPED_FOREST":
-            case "BASALT_DELTAS":
+            case NETHER_WASTES:
+            case SOUL_SAND_VALLEY:
+            case CRIMSON_FOREST:
+            case WARPED_FOREST:
+            case BASALT_DELTAS:
                 return true;
             default:
                 return false;

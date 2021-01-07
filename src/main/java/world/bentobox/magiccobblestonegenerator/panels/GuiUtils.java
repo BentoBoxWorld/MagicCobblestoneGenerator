@@ -168,7 +168,7 @@ public class GuiUtils
                 icon = Material.STONE;
                 break;
             case BASALT:
-                icon = Material.getMaterial("BASALT");
+                icon = Material.BASALT;
                 break;
             case COBBLESTONE_OR_STONE:
                 icon = Material.ANDESITE;
@@ -177,7 +177,7 @@ public class GuiUtils
                 icon = Material.GRANITE;
                 break;
             case BASALT_OR_STONE:
-                icon = Material.getMaterial("BLACKSTONE");
+                icon = Material.BLACKSTONE;
                 break;
             default:
                 icon = Material.BEDROCK;

@@ -95,7 +95,7 @@ public class VanillaGeneratorListener extends GeneratorListener
             {
                 playEffect = this.isStoneReplacementGenerated(eventSourceBlock);
             }
-            else if (eventSourceBlock.getType().name().equals("BASALT"))
+            else if (eventSourceBlock.getType() == Material.BASALT)
             {
                 playEffect = this.isBasaltReplacementGenerated(eventSourceBlock);
             }

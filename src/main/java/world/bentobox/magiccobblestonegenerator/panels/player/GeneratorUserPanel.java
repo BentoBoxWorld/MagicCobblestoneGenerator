@@ -205,9 +205,7 @@ public class GeneratorUserPanel extends CommonPanel
             }
             case SHOW_BASALT:
             {
-                // TODO: 1.15.2 support
-                material = Material.getMaterial("BASALT") == null ?
-                    Material.BARRIER : Material.getMaterial("BASALT");
+                material = Material.BASALT;
                 break;
             }
             case TOGGLE_VISIBILITY:
