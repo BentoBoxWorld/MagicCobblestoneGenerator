@@ -99,7 +99,7 @@ public class VanillaGeneratorListener extends GeneratorListener
         {
             Material material = this.generateCobblestoneReplacement(island, eventSourceBlock.getLocation());
 
-            if (material != null)
+            if (material != null && material.isBlock())
             {
                 // Replace new state with a proper material.
                 event.getNewState().setType(material);
@@ -109,7 +109,7 @@ public class VanillaGeneratorListener extends GeneratorListener
         {
             Material material = this.generateStoneReplacement(island, eventSourceBlock.getLocation());
 
-            if (material != null)
+            if (material != null && material.isBlock())
             {
                 // Replace new state with a proper material.
                 event.getNewState().setType(material);
@@ -119,7 +119,7 @@ public class VanillaGeneratorListener extends GeneratorListener
         {
             Material material = this.generateBasaltReplacement(island, eventSourceBlock.getLocation());
 
-            if (material != null)
+            if (material != null && material.isBlock())
             {
                 // Replace new state with a proper material.
                 event.getNewState().setType(material);
