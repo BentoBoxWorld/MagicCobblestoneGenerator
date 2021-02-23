@@ -505,16 +505,18 @@ public class StoneGeneratorManager
         }
 
         // Find default generator from cache.
+        // Filter all default generators
+        // Filter generators with necessary type.
+        // Filter generators that starts with name.
+        // Sort generators by priority, type and name in reversed order
+        // Return return the generator tier with max value or null
         return this.generatorTierCache.values().stream().
-            // Filter all default generators
                 filter(GeneratorTierObject::isDefaultGenerator).
-            // Filter generators with necessary type.
                 filter(generator -> generator.getGeneratorType().includes(generatorType)).
-            // Filter generators that starts with name.
                 filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Return first
-                findFirst().
-            // Return null if none is find.
+                max(Comparator.comparingInt(GeneratorTierObject::getPriority).
+                    thenComparing(GeneratorTierObject::getGeneratorType).
+                    thenComparing(Comparator.comparing(GeneratorTierObject::getFriendlyName).reversed())).
                 orElse(null);
     }
 
