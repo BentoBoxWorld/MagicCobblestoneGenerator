@@ -351,7 +351,7 @@ public class Utils
             return translation;
         }
 
-        // Nothing was found. Use just a prettify text function.
+        // Nothing was found. Use just a prettify text function (used with LangUtilsHook).
         return LangUtilsHook.getBiomeName(biome, user);
     }
 
@@ -404,8 +404,8 @@ public class Utils
             return translation;
         }
 
-        // Nothing was found. Use just a prettify text function.
-        return LangUtilsHook.getItemName(new ItemStack(material), user);
+        // Nothing was found. Use just a prettify text function (used with LangUtilsHook).
+        return LangUtilsHook.getMaterialName(material, user);
     }
 
 
@@ -482,7 +482,7 @@ public class Utils
             return translation;
         }
 
-        // Nothing was found. Use just a prettify text function.
+        // Nothing was found. Use just a prettify text function (used with LangUtilsHook).
         return LangUtilsHook.getEntityName(entity, user);
     }
 
