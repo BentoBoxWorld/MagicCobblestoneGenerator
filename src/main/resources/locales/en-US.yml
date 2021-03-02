@@ -753,6 +753,7 @@ stone-generator:
       shift-click-to-purchase: "&e Shift Click &7 to buy."
       shift-click-to-activate: "&e Shift Click &7 to activate."
       shift-click-to-deactivate: "&e Shift Click &7 to deactivate."
+      shift-click-to-reset: "&e Shift Click &7 to reset."
     # This section contains translations for some different GUI descriptions.
     descriptions:
       # Generator lore message generator. All elements in generator lore is generated
