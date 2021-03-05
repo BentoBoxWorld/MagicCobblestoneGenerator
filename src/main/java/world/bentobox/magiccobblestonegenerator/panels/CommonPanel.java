@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -124,8 +125,9 @@ public abstract class CommonPanel
         final String reference = Constants.DESCRIPTIONS + "generator.";
 
         // Get description in single string
-        String description = ChatColor.translateAlternateColorCodes('&',
-            String.join("\n", generator.getDescription()));
+        String description = Util.stripSpaceAfterColorCodes(
+            ChatColor.translateAlternateColorCodes('&',
+                String.join("\n", generator.getDescription())));
 
         // Non-memory optimal code used for easier debugging and nicer code layout for my eye :)
         // Get blocks in single string
@@ -196,8 +198,9 @@ public abstract class CommonPanel
         final String reference = Constants.DESCRIPTIONS + "generator.";
 
         // Get description in single string
-        String description = ChatColor.translateAlternateColorCodes('&',
-            String.join("\n", generator.getDescription()));
+        String description = Util.stripSpaceAfterColorCodes(
+            ChatColor.translateAlternateColorCodes('&',
+                String.join("\n", generator.getDescription())));
 
         // Non-memory optimal code used for easier debugging and nicer code layout for my eye :)
         // Get blocks in single string
