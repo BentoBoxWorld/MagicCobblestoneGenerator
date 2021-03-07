@@ -175,8 +175,6 @@ public class StoneGeneratorImportManager
 
         ConfigurationSection reader = config.getConfigurationSection("tiers");
 
-        // TODO: 1.15.2 compatibility.
-        boolean canAddBasaltGenerator = Material.getMaterial("BASALT") != null;
         Map<String, Biome> biomeMap = Utils.getBiomeNameMap();
 
         for (String generatorId : reader.getKeys(false))
@@ -212,20 +210,12 @@ public class StoneGeneratorImportManager
                 }
 
                 // Read icon
-                // TODO: 1.15.2 compatibility
                 ItemStack icon = ItemParser.parse(details.getString("icon"));
                 generatorTier.setGeneratorIcon(icon == null ? new ItemStack(Material.PAPER) : icon);
 
                 // Read type
                 generatorTier.setGeneratorType(GeneratorTierObject.GeneratorType.valueOf(
                     details.getString("type", "COBBLESTONE").toUpperCase()));
-
-                if (!canAddBasaltGenerator &&
-                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT))
-                {
-                    // Basalt generators cannot be added yet in 1.15.2
-                    continue;
-                }
 
                 // Get default generator option
                 generatorTier.setDefaultGenerator(details.getBoolean("default", false));
@@ -335,7 +325,7 @@ public class StoneGeneratorImportManager
             generatorTier.setRequiredMinIslandLevel(requirements.getLong("island-level", 0));
             generatorTier.setRequiredPermissions(new HashSet<>(requirements.getStringList("required-permissions")));
 
-            // TODO: 1.15.2 compatibility. Non-existing biomes will be removed.
+            // Non-existing biomes will be removed.
             Set<Biome> biomeSet = requirements.getStringList("required-biomes").stream().
                 map(name -> biomeMap.get(name.toUpperCase())).
                 filter(Objects::nonNull).

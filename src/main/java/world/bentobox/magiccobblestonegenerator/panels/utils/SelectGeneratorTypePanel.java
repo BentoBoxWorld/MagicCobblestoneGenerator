@@ -50,16 +50,11 @@ public class SelectGeneratorTypePanel
 
         panelBuilder.item(10, this.buildButton(GeneratorTierObject.GeneratorType.COBBLESTONE));
         panelBuilder.item(11, this.buildButton(GeneratorTierObject.GeneratorType.STONE));
+        panelBuilder.item(12, this.buildButton(GeneratorTierObject.GeneratorType.BASALT));
 
         panelBuilder.item(13, this.buildButton(GeneratorTierObject.GeneratorType.COBBLESTONE_OR_STONE));
-
-        if (Material.getMaterial("BASALT") != null)
-        {
-            panelBuilder.item(12, this.buildButton(GeneratorTierObject.GeneratorType.BASALT));
-
-            panelBuilder.item(14, this.buildButton(GeneratorTierObject.GeneratorType.BASALT_OR_COBBLESTONE));
-            panelBuilder.item(15, this.buildButton(GeneratorTierObject.GeneratorType.BASALT_OR_STONE));
-        }
+        panelBuilder.item(14, this.buildButton(GeneratorTierObject.GeneratorType.BASALT_OR_COBBLESTONE));
+        panelBuilder.item(15, this.buildButton(GeneratorTierObject.GeneratorType.BASALT_OR_STONE));
 
         panelBuilder.item(16, this.buildButton(GeneratorTierObject.GeneratorType.ANY));
 

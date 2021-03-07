@@ -7,13 +7,15 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFormEvent;
 
+import java.util.Optional;
+
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.utils.Why;
 
@@ -45,70 +47,83 @@ public class VanillaGeneratorListener extends GeneratorListener
     {
         Block eventSourceBlock = event.getBlock();
 
-        if (!this.addon.getAddonManager().canOperateInWorld(eventSourceBlock.getWorld()))
-        {
-            // If not operating in world, then return as fast as possible
-            return;
-        }
-
-        if (!this.addon.getAddonManager().isMembersOnline(eventSourceBlock.getLocation()))
-        {
-            // If island members are not online then do not continue
-            return;
-        }
-
         if (!eventSourceBlock.isLiquid())
         {
             // We are interested only in blocks that were created from lava or water
             return;
         }
 
-        // if flag is toggled off, return
-        if (this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation()).
-            map(island -> !island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)).
-            orElse(!StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.isSetForWorld(eventSourceBlock.getWorld())))
+        if (!this.addon.getAddonManager().canOperateInWorld(eventSourceBlock.getWorld()))
         {
-            Why.report(eventSourceBlock.getLocation(), "MCG is disabled by MAGIC_COBBLESTONE_GENERATOR flag!");
-
+            // If not operating in world, then return as fast as possible
             return;
         }
 
-        if (!this.isInRangeToGenerate(eventSourceBlock))
-        {
-            Why.report(eventSourceBlock.getLocation(), "No players in range!");
+        Optional<Island> islandOptional = this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation());
 
+        if (!islandOptional.isPresent())
+        {
+            // If not operating in non-island regions.
+            return;
+        }
+
+        Island island = islandOptional.get();
+
+        if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
+        {
+            // Currently addon is not working outside island protection ranges.
+            // New flag is required for enabling this feature.
+            Why.report(island, eventSourceBlock.getLocation(), "MCG is disabled by MAGIC_COBBLESTONE_GENERATOR flag!");
+            return;
+        }
+
+        if (!this.isSomeoneOnline(island))
+        {
+            // Offline generation is not enabled and all island members are offline.
+            // TODO: probably need another option to disable generation if members are not on the island :)
+            Why.report(island, eventSourceBlock.getLocation(), "All island members are offline!");
+            return;
+        }
+
+        if (!this.isInRangeToGenerate(island, eventSourceBlock))
+        {
             // Check if any island member is at generator range.
+            Why.report(island, eventSourceBlock.getLocation(), "No players in range!");
             return;
         }
 
-        // Run 1-tick later to catch the type made and only take action on cobblestone, stone and basalt
-        Bukkit.getScheduler().runTask(this.addon.getPlugin(), () -> {
-            // Lava is generating cobblestone into eventToBlock place
+        // All edge cases are processed. Not deal with block generation.
+        // Use new block state to detect which generator to use.
 
-            final boolean playEffect;
+        if (event.getNewState().getType() == Material.COBBLESTONE)
+        {
+            Material material = this.generateCobblestoneReplacement(island, eventSourceBlock.getLocation());
 
-            if (eventSourceBlock.getType() == Material.COBBLESTONE)
+            if (material != null && material.isBlock())
             {
-                playEffect = this.isCobblestoneReplacementGenerated(eventSourceBlock);
+                // Replace new state with a proper material.
+                event.getNewState().setType(material);
             }
-            else if (eventSourceBlock.getType() == Material.STONE)
-            {
-                playEffect = this.isStoneReplacementGenerated(eventSourceBlock);
-            }
-            else if (eventSourceBlock.getType().name().equals("BASALT"))
-            {
-                playEffect = this.isBasaltReplacementGenerated(eventSourceBlock);
-            }
-            else
-            {
-                playEffect = false;
-            }
+        }
+        else if (event.getNewState().getType() == Material.STONE)
+        {
+            Material material = this.generateStoneReplacement(island, eventSourceBlock.getLocation());
 
-            if (playEffect)
+            if (material != null && material.isBlock())
             {
-                // sound when lava transforms to cobble
-                this.playEffects(eventSourceBlock);
+                // Replace new state with a proper material.
+                event.getNewState().setType(material);
             }
-        });
+        }
+        else if (event.getNewState().getType() == Material.BASALT)
+        {
+            Material material = this.generateBasaltReplacement(island, eventSourceBlock.getLocation());
+
+            if (material != null && material.isBlock())
+            {
+                // Replace new state with a proper material.
+                event.getNewState().setType(material);
+            }
+        }
     }
 }

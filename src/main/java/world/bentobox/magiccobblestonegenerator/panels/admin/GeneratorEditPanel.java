@@ -429,11 +429,25 @@ public class GeneratorEditPanel extends CommonPanel
                         this.build();
                     };
 
-                    // start conversation
-                    ConversationUtils.createStringListInput(consumer,
-                        user,
-                        user.getTranslation(Constants.CONVERSATIONS + "write-description"),
-                        user.getTranslation(Constants.CONVERSATIONS + "description-changed"));
+                    if (!this.generatorTier.getDescription().isEmpty() &&
+                        clickType.isShiftClick())
+                    {
+                        // Reset to the empty value
+                        consumer.accept(Collections.emptyList());
+                    }
+                    else
+                    {
+                        // start conversation
+                        ConversationUtils.createStringListInput(consumer,
+                            user,
+                            user.getTranslation(Constants.CONVERSATIONS + "write-description"),
+                            user.getTranslation(Constants.CONVERSATIONS + "description-changed"));
+                    }
+
+                    if (!this.generatorTier.getDescription().isEmpty())
+                    {
+                        description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                    }
 
                     return true;
                 };
@@ -594,17 +608,31 @@ public class GeneratorEditPanel extends CommonPanel
                         this.build();
                     };
 
-                    // start conversation
-                    ConversationUtils.createStringListInput(consumer,
-                        user,
-                        user.getTranslation(Constants.CONVERSATIONS + "write-permissions"),
-                        user.getTranslation(Constants.CONVERSATIONS + "permissions-changed"));
+                    if (!this.generatorTier.getRequiredPermissions().isEmpty() &&
+                        clickType.isShiftClick())
+                    {
+                        // Reset to the empty value
+                        consumer.accept(Collections.emptyList());
+                    }
+                    else
+                    {
+                        // start conversation
+                        ConversationUtils.createStringListInput(consumer,
+                            user,
+                            user.getTranslation(Constants.CONVERSATIONS + "write-permissions"),
+                            user.getTranslation(Constants.CONVERSATIONS + "permissions-changed"));
+                    }
 
                     return true;
                 };
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+
+                if (!this.generatorTier.getRequiredPermissions().isEmpty())
+                {
+                    description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                }
 
                 break;
             }

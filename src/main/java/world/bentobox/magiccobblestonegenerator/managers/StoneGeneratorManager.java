@@ -276,7 +276,8 @@ public class StoneGeneratorManager
         List<String> keySet = new ArrayList<>(this.generatorTierCache.keySet());
 
         // Remove everything that starts with gamemode name.
-        keySet.forEach(uniqueId -> {
+        keySet.forEach(uniqueId ->
+        {
             if (uniqueId.startsWith(objectKey))
             {
                 this.generatorTierCache.remove(uniqueId);
@@ -290,7 +291,8 @@ public class StoneGeneratorManager
         keySet = new ArrayList<>(this.generatorBundleCache.keySet());
 
         // Remove everything that starts with gamemode name.
-        keySet.forEach(uniqueId -> {
+        keySet.forEach(uniqueId ->
+        {
             if (uniqueId.startsWith(objectKey))
             {
                 this.generatorBundleCache.remove(uniqueId);
@@ -320,7 +322,8 @@ public class StoneGeneratorManager
         List<String> keySet = new ArrayList<>(this.generatorDataCache.keySet());
 
         // Remove everything that starts with gamemode name.
-        keySet.forEach(uniqueId -> {
+        keySet.forEach(uniqueId ->
+        {
             if (uniqueId.startsWith(objectKey))
             {
                 this.generatorDataCache.remove(uniqueId);
@@ -397,23 +400,24 @@ public class StoneGeneratorManager
     /**
      * This method returns active generator tier object for island at given location.
      *
+     * @param island Island on which generation is happening.
      * @param location Location of the block.
      * @param generatorType Generator type.
      * @return GeneratorTierObject that operates in given island or null.
      */
-    public @Nullable GeneratorTierObject getGeneratorTier(Location location,
+    public @Nullable GeneratorTierObject getGeneratorTier(
+        @Nullable Island island,
+        Location location,
         GeneratorTierObject.GeneratorType generatorType)
     {
-        Optional<Island> optionalIsland = this.addon.getIslands().getIslandAt(location);
-
-        if (!optionalIsland.isPresent())
+        if (island == null)
         {
-            // No islands at given location. Do not generate
-            return null;
+            // No islands at given location, find and use default generator tier.
+            return this.findDefaultGeneratorTier(location.getWorld(), generatorType);
         }
 
-        this.addIslandData(optionalIsland.get());
-        GeneratorDataObject data = this.generatorDataCache.get(optionalIsland.get().getUniqueId());
+        this.addIslandData(island);
+        GeneratorDataObject data = this.generatorDataCache.get(island.getUniqueId());
 
         // Gets biome from location.
         final Biome biome = location.getWorld().getBiome(location.getBlockX(),
@@ -441,7 +445,8 @@ public class StoneGeneratorManager
                     filter(generator -> generator.getRequiredBiomes().isEmpty() ||
                     generator.getRequiredBiomes().contains(biome)).
                 // Get a generator that has largest priority and has required biome
-                    max((o1, o2) -> {
+                    max((o1, o2) ->
+                {
                     // If required biomes is empty, the it works in all biomes.
                     boolean o1HasBiome = o1.getRequiredBiomes().isEmpty() ||
                         o1.getRequiredBiomes().contains(biome);
@@ -500,16 +505,18 @@ public class StoneGeneratorManager
         }
 
         // Find default generator from cache.
+        // Filter all default generators
+        // Filter generators with necessary type.
+        // Filter generators that starts with name.
+        // Sort generators by priority, type and name in reversed order
+        // Return return the generator tier with max value or null
         return this.generatorTierCache.values().stream().
-            // Filter all default generators
                 filter(GeneratorTierObject::isDefaultGenerator).
-            // Filter generators with necessary type.
                 filter(generator -> generator.getGeneratorType().includes(generatorType)).
-            // Filter generators that starts with name.
                 filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-            // Return first
-                findFirst().
-            // Return null if none is find.
+                max(Comparator.comparingInt(GeneratorTierObject::getPriority).
+                    thenComparing(GeneratorTierObject::getGeneratorType).
+                    thenComparing(Comparator.comparing(GeneratorTierObject::getFriendlyName).reversed())).
                 orElse(null);
     }
 
@@ -709,7 +716,8 @@ public class StoneGeneratorManager
         this.operationWorlds.stream().
             map(world -> this.addon.getIslands().getIsland(world, uniqueId)).
             filter(Objects::nonNull).
-            forEach(island -> {
+            forEach(island ->
+            {
                 if (island.getOwner() == uniqueId)
                 {
                     // Owner island must be validated.
@@ -851,11 +859,17 @@ public class StoneGeneratorManager
      */
     private void updateOwnerWorkingRange(@NotNull Island island, @NotNull GeneratorDataObject dataObject)
     {
-        // Update max island generation range.
-        int permissionRange = Utils.getPermissionValue(User.getInstance(island.getOwner()),
-            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.max-range"),
-            0);
-        dataObject.setOwnerWorkingRange(permissionRange);
+        User owner = User.getInstance(island.getOwner());
+
+        // Permission check can be done only to a player object.
+        if (owner != null && owner.isPlayer())
+        {
+            // Update max island generation range.
+            int permissionRange = Utils.getPermissionValue(owner,
+                Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.max-range"),
+                0);
+            dataObject.setOwnerWorkingRange(permissionRange);
+        }
     }
 
 
@@ -867,11 +881,17 @@ public class StoneGeneratorManager
      */
     private void updateOwnerGeneratorCount(@NotNull Island island, @NotNull GeneratorDataObject dataObject)
     {
-        // Update max active generator count.
-        int permissionSize = Utils.getPermissionValue(User.getInstance(island.getOwner()),
-            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.active-generators"),
-            0);
-        dataObject.setOwnerActiveGeneratorCount(permissionSize);
+        User owner = User.getInstance(island.getOwner());
+
+        // Permission check can be done only to a player object.
+        if (owner != null && owner.isPlayer())
+        {
+            // Update max active generator count.
+            int permissionSize = Utils.getPermissionValue(owner,
+                Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.active-generators"),
+                0);
+            dataObject.setOwnerActiveGeneratorCount(permissionSize);
+        }
     }
 
 
@@ -883,11 +903,17 @@ public class StoneGeneratorManager
      */
     private void updateOwnerBundle(@NotNull Island island, @NotNull GeneratorDataObject dataObject)
     {
-        // Update max island generation range.
-        String permissionBundle = Utils.getPermissionValue(User.getInstance(island.getOwner()),
-            Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.bundle"),
-            null);
-        dataObject.setOwnerBundle(permissionBundle);
+        User owner = User.getInstance(island.getOwner());
+
+        // Permission check can be done only to a player object.
+        if (owner != null && owner.isPlayer())
+        {
+            // Update max island generation range.
+            String permissionBundle = Utils.getPermissionValue(owner,
+                Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.bundle"),
+                null);
+            dataObject.setOwnerBundle(permissionBundle);
+        }
     }
 
 
@@ -920,19 +946,20 @@ public class StoneGeneratorManager
 
         // If level is null, check value from addon.
         final long islandLevel = level == null ? this.getIslandLevel(island) : level;
+        final User owner = User.getInstance(island.getOwner());
 
         this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
             // Filter out default generators. They are always unlocked and active.
-                filter(generator -> !generator.isDefaultGenerator()).
+            filter(generator -> !generator.isDefaultGenerator()).
             // Filter out unlocked generators. Not necessary to check them again
-                filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
+            filter(generator -> !dataObject.getUnlockedTiers().contains(generator.getUniqueId())).
             // Filter out generators with larger minimal island level then current island level.
-                filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
+            filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
             // Filter out generators with missing permissions
-                filter(generator -> Utils.matchAllPermissions(
-                User.getInstance(island.getOwner()), generator.getRequiredPermissions())).
+            filter(generator -> owner != null && owner.isPlayer() &&
+                Utils.matchAllPermissions(owner, generator.getRequiredPermissions())).
             // Now process each generator.
-                forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+            forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
     }
 
 
@@ -1235,6 +1262,8 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
+        final User owner = User.getInstance(island.getOwner());
+
         if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()))
         {
             // Generator is not unlocked. Return false.
@@ -1261,11 +1290,11 @@ public class StoneGeneratorManager
             return false;
         }
         else if (!generatorTier.getRequiredPermissions().isEmpty() &&
-            !generatorTier.getRequiredPermissions().stream().allMatch(permission ->
-                User.getInstance(island.getOwner()).hasPermission(permission)))
+            (owner == null || !owner.isPlayer() ||
+                !generatorTier.getRequiredPermissions().stream().allMatch(owner::hasPermission)))
         {
             Optional<String> missingPermission = generatorTier.getRequiredPermissions().stream().
-                filter(permission -> !User.getInstance(island.getOwner()).hasPermission(permission)).
+                filter(permission -> owner == null || !owner.isPlayer() || !owner.hasPermission(permission)).
                 findAny();
 
             // Generator is not unlocked. Return false.

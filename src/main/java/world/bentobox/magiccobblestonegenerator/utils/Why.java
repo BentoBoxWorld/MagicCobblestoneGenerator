@@ -16,6 +16,7 @@ import java.util.UUID;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
@@ -32,6 +33,13 @@ public class Why
 
             Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
         });
+    }
+
+
+    public static void report(@NotNull Island island, Location location, String why)
+    {
+        User owner = User.getInstance(island.getOwner());
+        Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
     }
 
 

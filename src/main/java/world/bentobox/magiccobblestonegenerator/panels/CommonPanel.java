@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -124,8 +125,9 @@ public abstract class CommonPanel
         final String reference = Constants.DESCRIPTIONS + "generator.";
 
         // Get description in single string
-        String description = ChatColor.translateAlternateColorCodes('&',
-            String.join("\n", generator.getDescription()));
+        String description = Util.stripSpaceAfterColorCodes(
+            ChatColor.translateAlternateColorCodes('&',
+                String.join("\n", generator.getDescription())));
 
         // Non-memory optimal code used for easier debugging and nicer code layout for my eye :)
         // Get blocks in single string
@@ -139,19 +141,49 @@ public abstract class CommonPanel
         // Get status in single string
         String status = this.generateStatusDescription(generator, isActive, isUnlocked, isPurchased);
 
-        String returnString = this.user.getTranslation(reference + "lore",
-            Constants.DESCRIPTION, description,
-            "[blocks]", blocks,
-            "[treasures]", treasures,
-            "[requirements]", requirements,
-            "[type]", type,
-            "[status]", status);
+        if (!description.replaceAll("(?m)^[ \\t]*\\r?\\n", "").isEmpty())
+        {
+            String returnString = this.user.getTranslation(reference + "lore",
+                "[blocks]", blocks,
+                "[treasures]", treasures,
+                "[requirements]", requirements,
+                "[type]", type,
+                "[status]", status);
 
-        // Remove empty lines and returns as a list.
+            // remove empty lines from the generated text.
+            List<String> collect =
+                Arrays.stream(returnString.replaceAll("(?m)^[ \\t]*\\r?\\n", "").
+                    split("\n")).
+                    collect(Collectors.toList());
 
-        return Arrays.stream(returnString.replaceAll("(?m)^[ \\t]*\\r?\\n", "").
-            split("\n")).
-            collect(Collectors.toList());
+            // find and replace description from collected blocks.
+
+            for (int i = 0; i < collect.size(); i++)
+            {
+                if (collect.get(i).contains(Constants.DESCRIPTION))
+                {
+                    collect.set(i, collect.get(i).replace(Constants.DESCRIPTION, description));
+                }
+            }
+
+            return collect;
+        }
+        else
+        {
+            String returnString = this.user.getTranslation(reference + "lore",
+                Constants.DESCRIPTION, description,
+                "[blocks]", blocks,
+                "[treasures]", treasures,
+                "[requirements]", requirements,
+                "[type]", type,
+                "[status]", status);
+
+            // Remove empty lines and returns as a list.
+
+            return Arrays.stream(returnString.replaceAll("(?m)^[ \\t]*\\r?\\n", "").
+                split("\n")).
+                collect(Collectors.toList());
+        }
     }
 
 
@@ -166,8 +198,9 @@ public abstract class CommonPanel
         final String reference = Constants.DESCRIPTIONS + "generator.";
 
         // Get description in single string
-        String description = ChatColor.translateAlternateColorCodes('&',
-            String.join("\n", generator.getDescription()));
+        String description = Util.stripSpaceAfterColorCodes(
+            ChatColor.translateAlternateColorCodes('&',
+                String.join("\n", generator.getDescription())));
 
         // Non-memory optimal code used for easier debugging and nicer code layout for my eye :)
         // Get blocks in single string
@@ -181,19 +214,49 @@ public abstract class CommonPanel
         // Get status in single string
         String status = this.generateStatusDescription(generator, false, true, false);
 
-        String returnString = this.user.getTranslation(reference + "lore",
-            Constants.DESCRIPTION, description,
-            "[blocks]", blocks,
-            "[treasures]", treasures,
-            "[requirements]", requirements,
-            "[type]", type,
-            "[status]", status);
+        if (!description.replaceAll("(?m)^[ \\t]*\\r?\\n", "").isEmpty())
+        {
+            String returnString = this.user.getTranslation(reference + "lore",
+                "[blocks]", blocks,
+                "[treasures]", treasures,
+                "[requirements]", requirements,
+                "[type]", type,
+                "[status]", status);
 
-        // Remove empty lines and returns as a list.
+            // remove empty lines from the generated text.
+            List<String> collect =
+                Arrays.stream(returnString.replaceAll("(?m)^[ \\t]*\\r?\\n", "").
+                    split("\n")).
+                    collect(Collectors.toList());
 
-        return Arrays.stream(returnString.replaceAll("(?m)^[ \\t]*\\r?\\n", "").
-            split("\n")).
-            collect(Collectors.toList());
+            // find and replace description from collected blocks.
+
+            for (int i = 0; i < collect.size(); i++)
+            {
+                if (collect.get(i).contains(Constants.DESCRIPTION))
+                {
+                    collect.set(i, collect.get(i).replace(Constants.DESCRIPTION, description));
+                }
+            }
+
+            return collect;
+        }
+        else
+        {
+            String returnString = this.user.getTranslation(reference + "lore",
+                Constants.DESCRIPTION, description,
+                "[blocks]", blocks,
+                "[treasures]", treasures,
+                "[requirements]", requirements,
+                "[type]", type,
+                "[status]", status);
+
+            // Remove empty lines and returns as a list.
+
+            return Arrays.stream(returnString.replaceAll("(?m)^[ \\t]*\\r?\\n", "").
+                split("\n")).
+                collect(Collectors.toList());
+        }
     }
 
 
