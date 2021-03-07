@@ -45,6 +45,10 @@
         <!-- This allows to change between versions and snapshots. -->
         <build.version>2.4.0</build.version>
         <build.number>-LOCAL</build.number>
+        <!-- Sonar Cloud -->
+        <sonar.projectKey>BentoBoxWorld_MagicCobblestoneGenerator</sonar.projectKey>
+        <sonar.organization>bentobox-world</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <profiles>

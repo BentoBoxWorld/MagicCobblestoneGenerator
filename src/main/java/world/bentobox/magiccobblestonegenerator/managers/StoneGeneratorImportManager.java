@@ -7,9 +7,26 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -18,10 +35,10 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.eclipse.jdt.annotation.Nullable;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.localization.TextVariables;
@@ -41,6 +58,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
  */
 public class StoneGeneratorImportManager
 {
+
     /**
      * Default constructor.
      *
@@ -77,8 +95,8 @@ public class StoneGeneratorImportManager
             if (user != null)
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "no-file",
-                        Constants.FILE, this.generatorFile.getName()));
+                        user.getTranslation(Constants.ERRORS + "no-file",
+                                Constants.FILE, this.generatorFile.getName()));
             }
 
             return false;
@@ -105,8 +123,8 @@ public class StoneGeneratorImportManager
             if (user != null)
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "no-file",
-                        Constants.FILE, file));
+                        user.getTranslation(Constants.ERRORS + "no-file",
+                                Constants.FILE, file));
             }
 
             return false;
@@ -123,9 +141,9 @@ public class StoneGeneratorImportManager
             if (user != null)
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "no-load",
-                        Constants.FILE, file,
-                        TextVariables.DESCRIPTION, e.getMessage()));
+                        user.getTranslation(Constants.ERRORS + "no-load",
+                                Constants.FILE, file,
+                                TextVariables.DESCRIPTION, e.getMessage()));
             }
             else
             {
@@ -142,8 +160,8 @@ public class StoneGeneratorImportManager
             if (user != null)
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "not-a-gamemode-world",
-                        Constants.WORLD, world.getName()));
+                        user.getTranslation(Constants.ERRORS + "not-a-gamemode-world",
+                                Constants.WORLD, world.getName()));
             }
             else
             {
@@ -188,22 +206,22 @@ public class StoneGeneratorImportManager
             {
                 // Set name for description
                 generatorTier.setFriendlyName(details.getString("name",
-                    generatorId.replaceAll("_", " ")));
+                        generatorId.replaceAll("_", " ")));
 
                 // Read description
-                if (details.isList("description"))
+                if (details.isList(DESCRIPTION))
                 {
-                    generatorTier.setDescription(details.getStringList("description"));
+                    generatorTier.setDescription(details.getStringList(DESCRIPTION));
                 }
-                else if (details.isString("description"))
+                else if (details.isString(DESCRIPTION))
                 {
-                    String description = details.getString("description");
+                    String description = details.getString(DESCRIPTION);
 
                     if (description != null)
                     {
                         // Define as list.
                         generatorTier.setDescription(Arrays.asList(
-                            description.replaceAll("\\|", "\n").
+                                description.replaceAll("\\|", "\n").
                                 split("\n").
                                 clone()));
                     }
@@ -215,7 +233,7 @@ public class StoneGeneratorImportManager
 
                 // Read type
                 generatorTier.setGeneratorType(GeneratorTierObject.GeneratorType.valueOf(
-                    details.getString("type", "COBBLESTONE").toUpperCase()));
+                        details.getString("type", "COBBLESTONE").toUpperCase()));
 
                 // Get default generator option
                 generatorTier.setDefaultGenerator(details.getBoolean("default", false));
@@ -228,8 +246,8 @@ public class StoneGeneratorImportManager
                 if (!generatorTier.isDefaultGenerator())
                 {
                     this.populateRequirements(generatorTier,
-                        details.getConfigurationSection("requirements"),
-                        biomeMap);
+                            details.getConfigurationSection("requirements"),
+                            biomeMap);
                 }
 
                 // Read blocks
@@ -247,9 +265,27 @@ public class StoneGeneratorImportManager
         reader = config.getConfigurationSection("bundles");
         int bundleSize = 0;
 
-        Set<String> keys = reader == null ? Collections.emptySet() : reader.getKeys(false);
+        if (reader != null) {
+            bundleSize = importBundles(reader, prefix);
 
-        for (String bundleId : keys)
+        }
+
+        if (user != null)
+        {
+            Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "import-count",
+                            Constants.BUNDLE, String.valueOf(bundleSize),
+                            Constants.GENERATOR, String.valueOf(generatorSize)));
+        }
+
+        this.addon.log("Imported " + generatorSize + " generator tiers and " +
+                bundleSize + " bundles into database.");
+    }
+
+
+    private int importBundles(ConfigurationSection reader, String prefix) {
+        int bundleSize = 0;
+        for (String bundleId : reader.getKeys(false))
         {
             GeneratorBundleObject generatorBundle = new GeneratorBundleObject();
             generatorBundle.setUniqueId(prefix + bundleId.toLowerCase());
@@ -260,22 +296,22 @@ public class StoneGeneratorImportManager
             {
                 // Read prefix
                 generatorBundle.setFriendlyName(details.getString("name",
-                    bundleId.replaceAll("_", " ")));
+                        bundleId.replaceAll("_", " ")));
 
                 // Read description
-                if (details.isList("description"))
+                if (details.isList(DESCRIPTION))
                 {
-                    generatorBundle.setDescription(details.getStringList("description"));
+                    generatorBundle.setDescription(details.getStringList(DESCRIPTION));
                 }
-                else if (details.isString("description"))
+                else if (details.isString(DESCRIPTION))
                 {
-                    String description = details.getString("description");
+                    String description = details.getString(DESCRIPTION);
 
                     if (description != null)
                     {
                         // Define as list.
                         generatorBundle.setDescription(Arrays.asList(
-                            description.replaceAll("\\|", "\n").
+                                description.replaceAll("\\|", "\n").
                                 split("\n").
                                 clone()));
                     }
@@ -286,7 +322,7 @@ public class StoneGeneratorImportManager
                 generatorBundle.setGeneratorIcon(icon == null ? new ItemStack(Material.PAPER) : icon);
                 // Read generators
                 generatorBundle.setGeneratorTiers(
-                    details.getStringList("generators").stream().
+                        details.getStringList("generators").stream().
                         map(id -> prefix + id).
                         collect(Collectors.toSet()));
             }
@@ -296,19 +332,8 @@ public class StoneGeneratorImportManager
             this.addon.getAddonManager().loadGeneratorBundle(generatorBundle, false, null);
             bundleSize++;
         }
-
-        if (user != null)
-        {
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "import-count",
-                    Constants.BUNDLE, String.valueOf(bundleSize),
-                    Constants.GENERATOR, String.valueOf(generatorSize)));
-        }
-
-        this.addon.log("Imported " + generatorSize + " generator tiers and " +
-            bundleSize + " bundles into database.");
+        return bundleSize;
     }
-
 
     /**
      * This method populates generatorTier object with requirements from given config section.
@@ -317,8 +342,8 @@ public class StoneGeneratorImportManager
      * @param requirements Config that contains data.
      */
     private void populateRequirements(GeneratorTierObject generatorTier,
-        ConfigurationSection requirements,
-        Map<String, Biome> biomeMap)
+            ConfigurationSection requirements,
+            Map<String, Biome> biomeMap)
     {
         if (requirements != null)
         {
@@ -327,9 +352,9 @@ public class StoneGeneratorImportManager
 
             // Non-existing biomes will be removed.
             Set<Biome> biomeSet = requirements.getStringList("required-biomes").stream().
-                map(name -> biomeMap.get(name.toUpperCase())).
-                filter(Objects::nonNull).
-                collect(Collectors.toSet());
+                    map(name -> biomeMap.get(name.toUpperCase())).
+                    filter(Objects::nonNull).
+                    collect(Collectors.toSet());
 
             generatorTier.setRequiredBiomes(biomeSet);
             generatorTier.setGeneratorTierCost(requirements.getDouble("purchase-cost", 0.0));
@@ -344,7 +369,7 @@ public class StoneGeneratorImportManager
      * @param materials Config that contains data.
      */
     private void populateMaterials(GeneratorTierObject generatorTier,
-        ConfigurationSection materials)
+            ConfigurationSection materials)
     {
         if (materials != null)
         {
@@ -361,8 +386,8 @@ public class StoneGeneratorImportManager
                 catch (Exception e)
                 {
                     this.addon.logWarning("Unknown material (" + materialKey +
-                        ") in generatorTemplate.yml blocks section for tier " +
-                        generatorTier.getUniqueId() + ". Skipping...");
+                            ") in generatorTemplate.yml blocks section for tier " +
+                            generatorTier.getUniqueId() + ". Skipping...");
                 }
             }
 
@@ -378,7 +403,7 @@ public class StoneGeneratorImportManager
      * @param treasures Config that contains data.
      */
     private void populateTreasures(GeneratorTierObject generatorTier,
-        ConfigurationSection treasures)
+            ConfigurationSection treasures)
     {
         if (treasures != null)
         {
@@ -403,8 +428,8 @@ public class StoneGeneratorImportManager
                     catch (Exception e)
                     {
                         this.addon.logWarning("Unknown material (" + materialKey +
-                            ") in generatorTemplate.yml blocks section for tier " +
-                            generatorTier.getUniqueId() + ". Skipping...");
+                                ") in generatorTemplate.yml blocks section for tier " +
+                                generatorTier.getUniqueId() + ". Skipping...");
                     }
                 }
 
@@ -431,15 +456,15 @@ public class StoneGeneratorImportManager
     public boolean generateDatabaseFile(User user, World world, String fileName)
     {
         File defaultFile = new File(this.addon.getDataFolder(),
-            fileName.endsWith(".json") ? fileName : fileName + ".json");
+                fileName.endsWith(".json") ? fileName : fileName + ".json");
 
         if (defaultFile.exists())
         {
             if (user.isPlayer())
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "file-exist",
-                        Constants.FILE, fileName));
+                        user.getTranslation(Constants.ERRORS + "file-exist",
+                                Constants.FILE, fileName));
             }
             else
             {
@@ -457,45 +482,45 @@ public class StoneGeneratorImportManager
                 StoneGeneratorManager manager = this.addon.getAddonManager();
 
                 List<GeneratorTierObject> generatorTierList = manager.getAllGeneratorTiers(world).
-                    stream().
-                    map(generatorTier -> {
-                        // Use clone to avoid any changes in existing challenges.
-                        GeneratorTierObject clone = generatorTier.clone();
-                        // Remove gamemode from generatorTier id.
-                        clone.setUniqueId(generatorTier.getUniqueId().replaceFirst(replacementString, ""));
-                        return clone;
-                    }).
-                    collect(Collectors.toList());
+                        stream().
+                        map(generatorTier -> {
+                            // Use clone to avoid any changes in existing challenges.
+                            GeneratorTierObject clone = generatorTier.clone();
+                            // Remove gamemode from generatorTier id.
+                            clone.setUniqueId(generatorTier.getUniqueId().replaceFirst(replacementString, ""));
+                            return clone;
+                        }).
+                        collect(Collectors.toList());
 
                 List<GeneratorBundleObject> levelList = manager.getAllGeneratorBundles(world).
-                    stream().
-                    map(generatorBundle -> {
-                        // Use clone to avoid any changes in existing levels.
-                        GeneratorBundleObject clone = generatorBundle.clone();
-                        // Remove gamemode from bundle ID.
-                        clone.setUniqueId(generatorBundle.getUniqueId().replaceFirst(replacementString, ""));
-                        // Remove gamemode form generators.
-                        clone.setGeneratorTiers(generatorBundle.getGeneratorTiers().stream().
-                            map(id -> id.replaceFirst(replacementString, "")).
-                            collect(Collectors.toSet()));
+                        stream().
+                        map(generatorBundle -> {
+                            // Use clone to avoid any changes in existing levels.
+                            GeneratorBundleObject clone = generatorBundle.clone();
+                            // Remove gamemode from bundle ID.
+                            clone.setUniqueId(generatorBundle.getUniqueId().replaceFirst(replacementString, ""));
+                            // Remove gamemode form generators.
+                            clone.setGeneratorTiers(generatorBundle.getGeneratorTiers().stream().
+                                    map(id -> id.replaceFirst(replacementString, "")).
+                                    collect(Collectors.toSet()));
 
-                        return clone;
-                    }).
-                    collect(Collectors.toList());
+                            return clone;
+                        }).
+                        collect(Collectors.toList());
 
                 DefaultDataHolder exportedGeneratorData = new DefaultDataHolder();
                 exportedGeneratorData.setUniqueId(fileName.endsWith(".json") ?
-                    fileName.substring(0, fileName.length() - 5) : fileName);
+                        fileName.substring(0, fileName.length() - 5) : fileName);
                 exportedGeneratorData.setGeneratorTiers(generatorTierList);
                 exportedGeneratorData.setGeneratorBundles(levelList);
                 exportedGeneratorData.setVersion(this.addon.getDescription().getVersion());
                 exportedGeneratorData.setAuthor(user.getName());
 
                 try (BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(new FileOutputStream(defaultFile), StandardCharsets.UTF_8)))
+                        new OutputStreamWriter(new FileOutputStream(defaultFile), StandardCharsets.UTF_8)))
                 {
                     writer.write(Objects.requireNonNull(
-                        new DefaultJSONHandler(this.addon).toJsonString(exportedGeneratorData)));
+                            new DefaultJSONHandler(this.addon).toJsonString(exportedGeneratorData)));
                 }
             }
         }
@@ -504,9 +529,9 @@ public class StoneGeneratorImportManager
             if (user.isPlayer())
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "no-load",
-                        Constants.FILE, fileName,
-                        TextVariables.DESCRIPTION, e.getMessage()));
+                        user.getTranslation(Constants.ERRORS + "no-load",
+                                Constants.FILE, fileName,
+                                TextVariables.DESCRIPTION, e.getMessage()));
             }
 
             this.addon.logError("Could not save json file: " + e.getMessage());
@@ -517,9 +542,9 @@ public class StoneGeneratorImportManager
             if (user.isPlayer())
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.CONVERSATIONS + "database-export-completed",
-                        Constants.WORLD, world.getName(),
-                        Constants.FILE, fileName));
+                        user.getTranslation(Constants.CONVERSATIONS + "database-export-completed",
+                                Constants.WORLD, world.getName(),
+                                Constants.FILE, fileName));
             }
             else
             {
@@ -574,8 +599,8 @@ public class StoneGeneratorImportManager
                 generatorBundle.setUniqueId(uniqueIDPrefix + generatorBundle.getUniqueId());
                 // Reset names for all generators.
                 generatorBundle.setGeneratorTiers(generatorBundle.getGeneratorTiers().stream().
-                    map(generatorTier -> uniqueIDPrefix + generatorTier).
-                    collect(Collectors.toSet()));
+                        map(generatorTier -> uniqueIDPrefix + generatorTier).
+                        collect(Collectors.toSet()));
                 // Load level in memory
                 manager.loadGeneratorBundle(generatorBundle, false, user);
             });
@@ -602,7 +627,7 @@ public class StoneGeneratorImportManager
     public void processDownloadedFile(User user, World world, String stoneGeneratorLibrary)
     {
         DefaultDataHolder downloadedGenerators =
-            new DefaultJSONHandler(this.addon).loadWebObject(stoneGeneratorLibrary);
+                new DefaultJSONHandler(this.addon).loadWebObject(stoneGeneratorLibrary);
 
         File downloadFile = new File(this.addon.getDataFolder(), downloadedGenerators.getUniqueId() + ".json");
         int i = 1;
@@ -610,23 +635,23 @@ public class StoneGeneratorImportManager
         while (downloadFile.exists())
         {
             downloadFile = new File(this.addon.getDataFolder(),
-                downloadedGenerators.getUniqueId() + "-" + i++ + ".json");
+                    downloadedGenerators.getUniqueId() + "-" + i++ + ".json");
         }
 
         try (BufferedWriter writer = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(downloadFile), StandardCharsets.UTF_8)))
+                new OutputStreamWriter(new FileOutputStream(downloadFile), StandardCharsets.UTF_8)))
         {
             writer.write(Objects.requireNonNull(
-                new DefaultJSONHandler(this.addon).toJsonString(downloadedGenerators)));
+                    new DefaultJSONHandler(this.addon).toJsonString(downloadedGenerators)));
         }
         catch (Exception e)
         {
             if (user.isPlayer())
             {
                 Utils.sendMessage(user,
-                    user.getTranslation(Constants.ERRORS + "no-load",
-                        Constants.FILE, downloadFile.getName(),
-                        TextVariables.DESCRIPTION, e.getMessage()));
+                        user.getTranslation(Constants.ERRORS + "no-load",
+                                Constants.FILE, downloadFile.getName(),
+                                TextVariables.DESCRIPTION, e.getMessage()));
             }
 
             this.addon.logError("Could not save json file: " + e.getMessage());
@@ -654,7 +679,7 @@ public class StoneGeneratorImportManager
         DefaultJSONHandler(StoneGeneratorAddon addon)
         {
             GsonBuilder builder =
-                new GsonBuilder().excludeFieldsWithoutExposeAnnotation().enableComplexMapKeySerialization();
+                    new GsonBuilder().excludeFieldsWithoutExposeAnnotation().enableComplexMapKeySerialization();
             // Register adapters
             builder.registerTypeAdapterFactory(new BentoboxTypeAdapterFactory(addon.getPlugin()));
 
@@ -702,7 +727,7 @@ public class StoneGeneratorImportManager
             File defaultFile = new File(this.addon.getDataFolder(), fileName);
 
             try (InputStreamReader reader = new InputStreamReader(new FileInputStream(defaultFile),
-                StandardCharsets.UTF_8))
+                    StandardCharsets.UTF_8))
             {
                 DefaultDataHolder object = this.gson.fromJson(reader, DefaultDataHolder.class);
                 object.setUniqueId(fileName);
@@ -925,4 +950,7 @@ public class StoneGeneratorImportManager
      * Variable stores generatorTemplate.yml location
      */
     private final File generatorFile;
+    
+    private static final String DESCRIPTION = "description";
+
 }

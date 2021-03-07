@@ -7,15 +7,23 @@
 package world.bentobox.magiccobblestonegenerator.panels;
 
 
-import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.ChatColor;
-import org.bukkit.conversations.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.conversations.ConversationAbandonedListener;
+import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.conversations.MessagePrompt;
+import org.bukkit.conversations.NumericPrompt;
+import org.bukkit.conversations.Prompt;
+import org.bukkit.conversations.StringPrompt;
+import org.bukkit.conversations.ValidatingPrompt;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.user.User;
@@ -26,8 +34,8 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 public class ConversationUtils
 {
     // ---------------------------------------------------------------------
-// Section: Conversation API implementation
-// ---------------------------------------------------------------------
+    // Section: Conversation API implementation
+    // ---------------------------------------------------------------------
 
 
     /**
@@ -41,9 +49,9 @@ public class ConversationUtils
      * @param user User who is targeted with current confirmation.
      */
     public static void createConfirmation(Consumer<Boolean> consumer,
-        User user,
-        @NotNull String question,
-        @Nullable String successMessage)
+            User user,
+            @NotNull String question,
+            @Nullable String successMessage)
     {
         ValidatingPrompt confirmationPrompt = new ValidatingPrompt()
         {
@@ -59,9 +67,9 @@ public class ConversationUtils
             {
                 // Get valid strings from translations
                 String validEntry = user.getTranslation(Constants.CONVERSATIONS + "confirm-string") +
-                    "," + user.getTranslation(Constants.CONVERSATIONS + "deny-string") +
-                    "," + user.getTranslation(Constants.CONVERSATIONS + "exit-string") +
-                    "," + user.getTranslation(Constants.CONVERSATIONS + "cancel-string");
+                        "," + user.getTranslation(Constants.CONVERSATIONS + "deny-string") +
+                        "," + user.getTranslation(Constants.CONVERSATIONS + "exit-string") +
+                        "," + user.getTranslation(Constants.CONVERSATIONS + "cancel-string");
 
                 // Split and check if they exist in valid entries.
                 String[] accepted = validEntry.toLowerCase().replaceAll("\\s", "").split(",");
@@ -76,6 +84,7 @@ public class ConversationUtils
              * @param input the input
              * @return the prompt
              */
+            @Override
             @Nullable
             protected Prompt acceptValidatedInput(@NotNull ConversationContext context, @NotNull String input)
             {
@@ -95,7 +104,7 @@ public class ConversationUtils
 
                     // Return message about failed operation.
                     return ConversationUtils.endMessagePrompt(
-                        user.getTranslation(Constants.CONVERSATIONS + "cancelled"));
+                            user.getTranslation(Constants.CONVERSATIONS + "cancelled"));
                 }
             }
 
@@ -114,12 +123,12 @@ public class ConversationUtils
         };
 
         new ConversationFactory(BentoBox.getInstance()).
-            withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
-            withFirstPrompt(confirmationPrompt).
-            withLocalEcho(false).
-            withTimeout(90).
-            buildConversation(user.getPlayer()).
-            begin();
+        withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
+        withFirstPrompt(confirmationPrompt).
+        withLocalEcho(false).
+        withTimeout(90).
+        buildConversation(user.getPlayer()).
+        begin();
     }
 
 
@@ -136,11 +145,11 @@ public class ConversationUtils
      * @param user User who is targeted with current confirmation.
      */
     public static void createIDStringInput(Consumer<String> consumer,
-        Function<String, Boolean> validation,
-        User user,
-        @NotNull String question,
-        @Nullable String successMessage,
-        @Nullable String failTranslationLocation)
+            Function<String, Boolean> validation,
+            User user,
+            @NotNull String question,
+            @Nullable String successMessage,
+            @Nullable String failTranslationLocation)
     {
         ValidatingPrompt validatingPrompt = new ValidatingPrompt()
         {
@@ -194,11 +203,11 @@ public class ConversationUtils
              */
             @Override
             protected String getFailedValidationText(ConversationContext context,
-                String invalidInput)
+                    String invalidInput)
             {
                 return user.getTranslation(failTranslationLocation,
-                    Constants.ID,
-                    Utils.sanitizeInput(invalidInput));
+                        Constants.ID,
+                        Utils.sanitizeInput(invalidInput));
             }
 
 
@@ -225,16 +234,16 @@ public class ConversationUtils
         };
 
         new ConversationFactory(BentoBox.getInstance()).
-            withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
-            withFirstPrompt(validatingPrompt).
-            withLocalEcho(false).
-            withTimeout(90).
-            // On cancel conversation will be closed.
-                withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
-            // Use null value in consumer to detect if user has abandoned conversation.
-                addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
-            buildConversation(user.getPlayer()).
-            begin();
+        withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
+        withFirstPrompt(validatingPrompt).
+        withLocalEcho(false).
+        withTimeout(90).
+        // On cancel conversation will be closed.
+        withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
+        // Use null value in consumer to detect if user has abandoned conversation.
+        addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
+        buildConversation(user.getPlayer()).
+        begin();
     }
 
 
@@ -246,10 +255,10 @@ public class ConversationUtils
      * @param question Message that will be displayed in chat when player triggers conversion.
      */
     public static void createNumericInput(Consumer<Number> consumer,
-        @NotNull User user,
-        @NotNull String question,
-        Number minValue,
-        Number maxValue)
+            @NotNull User user,
+            @NotNull String question,
+            Number minValue,
+            Number maxValue)
     {
         // Create NumericPromt instance that will validate and process input.
         NumericPrompt numberPrompt = new NumericPrompt()
@@ -283,10 +292,11 @@ public class ConversationUtils
              * @param input The number the player provided.
              * @return The validity of the player's input.
              */
+            @Override
             protected boolean isNumberValid(ConversationContext context, Number input)
             {
                 return input.doubleValue() >= minValue.doubleValue() &&
-                    input.doubleValue() <= maxValue.doubleValue();
+                        input.doubleValue() <= maxValue.doubleValue();
             }
 
 
@@ -317,9 +327,9 @@ public class ConversationUtils
             protected String getFailedValidationText(ConversationContext context, Number invalidInput)
             {
                 return user.getTranslation(Constants.CONVERSATIONS + "not-valid-value",
-                    Constants.VALUE, invalidInput.toString(),
-                    Constants.MIN, Double.toString(minValue.doubleValue()),
-                    Constants.MAX, Double.toString(maxValue.doubleValue()));
+                        Constants.VALUE, invalidInput.toString(),
+                        Constants.MIN, Double.toString(minValue.doubleValue()),
+                        Constants.MAX, Double.toString(maxValue.doubleValue()));
             }
 
 
@@ -338,15 +348,15 @@ public class ConversationUtils
 
         // Init conversation api.
         new ConversationFactory(BentoBox.getInstance()).
-            withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
-            withFirstPrompt(numberPrompt).
-            withLocalEcho(false).
-            withTimeout(90).
-            withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
-            // Use null value in consumer to detect if user has abandoned conversation.
-                addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
-            buildConversation(user.getPlayer()).
-            begin();
+        withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
+        withFirstPrompt(numberPrompt).
+        withLocalEcho(false).
+        withTimeout(90).
+        withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
+        // Use null value in consumer to detect if user has abandoned conversation.
+        addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
+        buildConversation(user.getPlayer()).
+        begin();
     }
 
 
@@ -361,9 +371,9 @@ public class ConversationUtils
      * @param user User who is targeted with current confirmation.
      */
     public static void createStringListInput(Consumer<List<String>> consumer,
-        User user,
-        @NotNull String question,
-        @NotNull String successMessage)
+            User user,
+            @NotNull String question,
+            @NotNull String successMessage)
     {
         final String SESSION_CONSTANT = Constants.CONVERSATIONS + user.getUniqueId();
 
@@ -425,10 +435,10 @@ public class ConversationUtils
             public @Nullable Prompt acceptInput(@NotNull ConversationContext context, @Nullable String input)
             {
                 String[] exit = user.getTranslation(Constants.CONVERSATIONS + "exit-string").
-                    toLowerCase().replaceAll("\\s", "").
-                    split(",");
+                        toLowerCase().replaceAll("\\s", "").
+                        split(",");
 
-                if (ArrayUtils.contains(exit, input.toLowerCase()))
+                if (input != null && ArrayUtils.contains(exit, input.toLowerCase()))
                 {
                     return messagePrompt;
                 }
@@ -439,23 +449,24 @@ public class ConversationUtils
                 {
                     desc = ((List<String>) context.getSessionData(SESSION_CONSTANT));
                 }
-
-                desc.add(ChatColor.translateAlternateColorCodes('&', input));
+                if (input != null) {
+                    desc.add(ChatColor.translateAlternateColorCodes('&', input));
+                }
                 context.setSessionData(SESSION_CONSTANT, desc);
                 return this;
             }
         };
 
         new ConversationFactory(BentoBox.getInstance()).
-            withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
-            withFirstPrompt(stringPrompt).
-            withModality(true).
-            withLocalEcho(false).
-            withTimeout(90).
-            withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
-            addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
-            buildConversation(user.getPlayer()).
-            begin();
+        withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
+        withFirstPrompt(stringPrompt).
+        withModality(true).
+        withLocalEcho(false).
+        withTimeout(90).
+        withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
+        addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
+        buildConversation(user.getPlayer()).
+        begin();
     }
 
 
@@ -468,9 +479,9 @@ public class ConversationUtils
      * @param user User who is targeted with current confirmation.
      */
     public static void createStringInput(Consumer<String> consumer,
-        User user,
-        @NotNull String question,
-        @Nullable String successMessage)
+            User user,
+            @NotNull String question,
+            @Nullable String successMessage)
     {
         // Text input message.
         StringPrompt stringPrompt = new StringPrompt()
@@ -492,16 +503,16 @@ public class ConversationUtils
         };
 
         new ConversationFactory(BentoBox.getInstance()).
-            withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
-            withFirstPrompt(stringPrompt).
-            // On cancel conversation will be closed.
-                withLocalEcho(false).
-            withTimeout(90).
-            withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
-            // Use null value in consumer to detect if user has abandoned conversation.
-                addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
-            buildConversation(user.getPlayer()).
-            begin();
+        withPrefix(context -> user.getTranslation(Constants.CONVERSATIONS + "prefix")).
+        withFirstPrompt(stringPrompt).
+        // On cancel conversation will be closed.
+        withLocalEcho(false).
+        withTimeout(90).
+        withEscapeSequence(user.getTranslation(Constants.CONVERSATIONS + "cancel-string")).
+        // Use null value in consumer to detect if user has abandoned conversation.
+        addConversationAbandonedListener(ConversationUtils.getAbandonListener(consumer, user)).
+        buildConversation(user.getPlayer()).
+        begin();
     }
 
 
@@ -547,7 +558,7 @@ public class ConversationUtils
                 consumer.accept(null);
                 // send cancell message
                 abandonedEvent.getContext().getForWhom().sendRawMessage(
-                    user.getTranslation(Constants.CONVERSATIONS + "prefix") +
+                        user.getTranslation(Constants.CONVERSATIONS + "prefix") +
                         user.getTranslation(Constants.CONVERSATIONS + "cancelled"));
             }
         };
