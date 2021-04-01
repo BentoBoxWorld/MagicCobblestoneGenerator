@@ -638,6 +638,8 @@ public class GeneratorEditPanel extends CommonPanel
             }
             case PURCHASE_COST:
             {
+                itemStack = new ItemStack(Material.GOLD_BLOCK);
+                
                 description.add(this.user.getTranslation(reference + ".value",
                     Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
 
