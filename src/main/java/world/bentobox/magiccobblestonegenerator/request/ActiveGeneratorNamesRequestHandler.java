@@ -25,7 +25,7 @@ public class ActiveGeneratorNamesRequestHandler extends AddonRequestHandler
 {
     public ActiveGeneratorNamesRequestHandler(StoneGeneratorAddon addon)
     {
-        super("magic-generator-type");
+        super("active-generator-names");
         this.addon = addon;
     }
 
