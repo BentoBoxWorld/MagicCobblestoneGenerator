@@ -15,24 +15,24 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
 /**
  * Request for active generator names.
- *
+ * Returns a list of active generator friendly names or null.
  * @author AuroraLS3
  */
-public class ActiveGeneratorNamesRequestHandler extends AddonRequestHandler {
-
-    private static final Object WORLD_NAME = "world-name";
-    private static final Object PLAYER = "player";
-    private final StoneGeneratorAddon addon;
-
-    public ActiveGeneratorNamesRequestHandler(StoneGeneratorAddon addon) {
+public class ActiveGeneratorNamesRequestHandler extends AddonRequestHandler
+{
+    public ActiveGeneratorNamesRequestHandler(StoneGeneratorAddon addon)
+    {
         super("magic-generator-type");
         this.addon = addon;
     }
 
+
     @Override
-    public Object handle(Map<String, Object> map) {
+    public Object handle(Map<String, Object> map)
+    {
         /*
             What we need in the map:
             0. "world-name" -> String
@@ -40,27 +40,61 @@ public class ActiveGeneratorNamesRequestHandler extends AddonRequestHandler {
             What we will return:
             - null if invalid input/player has no island
             - empty Collection if the player has no active magic generators on their island or player is offline.
-            - Collection<String> of active magic generator names on their island.
+            - List<String> of active magic generator names on their island.
          */
 
-        if (map == null || map.isEmpty()) return null;
-        Object worldName = map.get(WORLD_NAME);
-        Object playerUUID = map.get(PLAYER);
-        if (!(worldName instanceof String) || !(playerUUID instanceof UUID)) { // instanceof covers null cases
+        if (map == null || map.isEmpty())
+        {
             return null;
         }
+
+        Object worldName = map.get(WORLD_NAME);
+        Object playerUUID = map.get(PLAYER);
+
+        // Check for missing data.
+        if (!(worldName instanceof String) || !(playerUUID instanceof UUID))
+        {
+            return null;
+        }
+
         World world = Bukkit.getWorld((String) worldName);
-        if (world == null) return null;
 
-        StoneGeneratorManager addonManager = addon.getAddonManager();
-        GeneratorDataObject generatorData = addonManager.getGeneratorData(User.getInstance((UUID) playerUUID), world);
+        // Check for missing world.
+        if (world == null)
+        {
+            return null;
+        }
 
-        if (generatorData == null) return Collections.emptySet();
+        StoneGeneratorManager addonManager = this.addon.getAddonManager();
+        GeneratorDataObject generatorPlayerData = addonManager.getGeneratorData(User.getInstance((UUID) playerUUID), world);
 
-        return generatorData.getActiveGeneratorList().stream()
-                .map(addonManager::getGeneratorByID)
-                .filter(Objects::nonNull)
-                .map(GeneratorTierObject::getFriendlyName)
-                .collect(Collectors.toSet());
+        if (generatorPlayerData == null) 
+        {
+            return Collections.emptyList();
+        }
+        else
+        {
+            return generatorPlayerData.getActiveGeneratorList().stream().
+                map(addonManager::getGeneratorByID).
+                filter(Objects::nonNull).
+                map(GeneratorTierObject::getFriendlyName).
+                collect(Collectors.toList());
+        }
     }
+
+
+    /**
+     * Instance of Addon
+     */
+    private final StoneGeneratorAddon addon;
+
+    /**
+     * World name constant
+     */
+    private static final Object WORLD_NAME = "world-name";
+
+    /**
+     * Player constant.
+     */
+    private static final Object PLAYER = "player";
 }
