@@ -23,6 +23,7 @@ import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
+import world.bentobox.magiccobblestonegenerator.request.ActiveGeneratorNamesRequestHandler;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 import world.bentobox.magiccobblestonegenerator.web.WebManager;
 
@@ -113,7 +114,7 @@ public class StoneGeneratorAddon extends Addon
         this.registerFlag(MAGIC_COBBLESTONE_GENERATOR_PERMISSION);
 
         // Register Request Handlers
-//			this.registerRequestHandler(REQUEST_HANDLER);
+        this.registerRequestHandler(new ActiveGeneratorNamesRequestHandler(this));
     }
 
 
