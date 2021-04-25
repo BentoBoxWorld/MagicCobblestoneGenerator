@@ -410,19 +410,19 @@ public class StoneGeneratorManager
         Location location,
         GeneratorTierObject.GeneratorType generatorType)
     {
-        if (island == null)
-        {
-            // No islands at given location, find and use default generator tier.
-            return this.findDefaultGeneratorTier(location.getWorld(), generatorType);
-        }
-
-        this.addIslandData(island);
-        GeneratorDataObject data = this.generatorDataCache.get(island.getUniqueId());
-
         // Gets biome from location.
         final Biome biome = location.getWorld().getBiome(location.getBlockX(),
             location.getBlockY(),
             location.getBlockZ());
+
+        if (island == null)
+        {
+            // No islands at given location, find and use default generator tier.
+            return this.findDefaultGeneratorTier(location.getWorld(), generatorType, biome);
+        }
+
+        this.addIslandData(island);
+        GeneratorDataObject data = this.generatorDataCache.get(island.getUniqueId());
 
         // TODO: It is necessary to reset user cache when import new generators are don.
         // I changed implementation for faster work, so it gets challenges on island data loading,
@@ -480,7 +480,7 @@ public class StoneGeneratorManager
                 });
 
         return optionalGenerator.orElse(
-            this.findDefaultGeneratorTier(location.getWorld(), generatorType));
+            this.findDefaultGeneratorTier(location.getWorld(), generatorType, biome));
     }
 
 
@@ -490,10 +490,12 @@ public class StoneGeneratorManager
      *
      * @param world of type World
      * @param generatorType of type GeneratorType
+     * @param biome of the generator location.
      * @return GeneratorTierObject
      */
     private @Nullable GeneratorTierObject findDefaultGeneratorTier(World world,
-        GeneratorTierObject.GeneratorType generatorType)
+        GeneratorTierObject.GeneratorType generatorType,
+        Biome biome)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
             gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
@@ -508,16 +510,43 @@ public class StoneGeneratorManager
         // Filter all default generators
         // Filter generators with necessary type.
         // Filter generators that starts with name.
-        // Sort generators by priority, type and name in reversed order
+        // Get a generator that has largest priority and has required biome
         // Return return the generator tier with max value or null
         return this.generatorTierCache.values().stream().
-                filter(GeneratorTierObject::isDefaultGenerator).
-                filter(generator -> generator.getGeneratorType().includes(generatorType)).
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-                max(Comparator.comparingInt(GeneratorTierObject::getPriority).
-                    thenComparing(GeneratorTierObject::getGeneratorType).
-                    thenComparing(Comparator.comparing(GeneratorTierObject::getFriendlyName).reversed())).
-                orElse(null);
+            filter(GeneratorTierObject::isDefaultGenerator).
+            filter(generator -> generator.getGeneratorType().includes(generatorType)).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getRequiredBiomes().isEmpty() ||
+                generator.getRequiredBiomes().contains(biome)).
+            max((o1, o2) ->
+            {
+                // If required biomes is empty, the it works in all biomes.
+                boolean o1HasBiome = o1.getRequiredBiomes().isEmpty() ||
+                    o1.getRequiredBiomes().contains(biome);
+                boolean o2HasBiome = o2.getRequiredBiomes().isEmpty() ||
+                    o2.getRequiredBiomes().contains(biome);
+
+                if (o1HasBiome != o2HasBiome)
+                {
+                    return Boolean.compare(o1HasBiome, o2HasBiome);
+                }
+                else if (o1.getPriority() != o2.getPriority())
+                {
+                    // Larger priority must be in the end.
+                    return Integer.compare(o1.getPriority(), o2.getPriority());
+                }
+                else if (o1.getGeneratorType() != o2.getGeneratorType())
+                {
+                    // Compare by type. Generators which are more specified should be first.
+                    return o1.getGeneratorType().compareTo(o2.getGeneratorType());
+                }
+                else
+                {
+                    // Compare by unique id.
+                    return o1.getUniqueId().compareTo(o2.getUniqueId());
+                }
+            }).
+            orElse(null);
     }
 
 
