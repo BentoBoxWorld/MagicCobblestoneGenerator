@@ -24,7 +24,7 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.util.Util;
+import world.bentobox.bentobox.hooks.LangUtilsHook;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
@@ -351,8 +351,8 @@ public class Utils
             return translation;
         }
 
-        // Nothing was found. Use just a prettify text function.
-        return Util.prettifyText(biome.name());
+        // Nothing was found. Use just a prettify text function (used with LangUtilsHook).
+        return LangUtilsHook.getBiomeName(biome, user);
     }
 
 
@@ -404,8 +404,8 @@ public class Utils
             return translation;
         }
 
-        // Nothing was found. Use just a prettify text function.
-        return Util.prettifyText(material.name());
+        // Nothing was found. Use just a prettify text function (used with LangUtilsHook).
+        return LangUtilsHook.getMaterialName(material, user);
     }
 
 
@@ -482,8 +482,8 @@ public class Utils
             return translation;
         }
 
-        // Nothing was found. Use just a prettify text function.
-        return Util.prettifyText(entity.name());
+        // Nothing was found. Use just a prettify text function (used with LangUtilsHook).
+        return LangUtilsHook.getEntityName(entity, user);
     }
 
 
