@@ -985,8 +985,8 @@ public class StoneGeneratorManager
             // Filter out generators with larger minimal island level then current island level.
             filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
             // Filter out generators with missing permissions
-            filter(generator -> owner != null && owner.isPlayer() &&
-                Utils.matchAllPermissions(owner, generator.getRequiredPermissions())).
+            filter(generator -> generator.getRequiredPermissions().isEmpty() ||
+                owner != null && owner.isOnline() && Utils.matchAllPermissions(owner, generator.getRequiredPermissions())).
             // Now process each generator.
             forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
     }
