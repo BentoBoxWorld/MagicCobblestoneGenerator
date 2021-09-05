@@ -32,11 +32,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <powermock.version>2.0.2</powermock.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.16.4-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.15.4</bentobox.version>
+        <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+        <bentobox.version>1.17.2</bentobox.version>
         <level.version>2.5.0</level.version>
         <!-- Vault API version -->
         <vault.version>1.7</vault.version>
@@ -143,6 +143,12 @@
             <artifactId>spigot-api</artifactId>
             <version>${spigot.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>plugin-annotations</artifactId>
+            <version>1.2.3-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Mockito (Unit testing) -->
         <dependency>

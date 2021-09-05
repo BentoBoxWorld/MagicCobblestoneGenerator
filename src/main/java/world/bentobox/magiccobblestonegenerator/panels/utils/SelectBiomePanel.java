@@ -600,6 +600,25 @@ public class SelectBiomePanel
 
 
     /**
+     * This method returns if current biome is locally detected as cave biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is cave biome, {@code false} otherwise.
+     */
+    private static boolean isCave(Biome biome)
+    {
+        switch (biome)
+        {
+            case LUSH_CAVES:
+            case DRIPSTONE_CAVES:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
+    /**
      * This method returns if current biome is locally detected as unused biome.
      *
      * @param biome Biome that must be checked.
@@ -611,6 +630,8 @@ public class SelectBiomePanel
         {
             case MOUNTAIN_EDGE:
             case DEEP_WARM_OCEAN:
+            case DRIPSTONE_CAVES:
+            case LUSH_CAVES:
                 return true;
             default:
                 return false;
