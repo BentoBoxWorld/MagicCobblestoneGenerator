@@ -7,6 +7,7 @@
 package world.bentobox.magiccobblestonegenerator.utils;
 
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -294,13 +295,16 @@ public class Utils
 
     /**
      * Sanitizes the provided input. It replaces spaces and hyphens with underscores and lower cases the input.
-     *
+     * This code also removes all color codes from the input.
      * @param input input to sanitize
      * @return sanitized input
      */
     public static String sanitizeInput(String input)
     {
-        return input.toLowerCase(Locale.ENGLISH).replace(" ", "_").replace("-", "_");
+        return ChatColor.stripColor(
+            Util.translateColorCodes(input.toLowerCase(Locale.ENGLISH).
+                replace(" ", "_").
+                replace("-", "_")));
     }
 
 
