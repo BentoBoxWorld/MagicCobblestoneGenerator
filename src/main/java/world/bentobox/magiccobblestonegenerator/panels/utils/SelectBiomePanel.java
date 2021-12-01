@@ -68,24 +68,24 @@ public class SelectBiomePanel
                 {
                     case NONE:
                         return true;
-                    case LUSH:
-                        return SelectBiomePanel.isLushBiome(biome);
-                    case DRY:
-                        return SelectBiomePanel.isDryBiome(biome);
+                    case TEMPERATE:
+                        return SelectBiomePanel.isTemperateBiome(biome);
+                    case WARM:
+                        return SelectBiomePanel.isWarmBiome(biome);
                     case COLD:
                         return SelectBiomePanel.isColdBiome(biome);
                     case SNOWY:
                         return SelectBiomePanel.isSnowyBiome(biome);
-                    case OCEAN:
-                        return SelectBiomePanel.isOceanBiome(biome);
+                    case AQUATIC:
+                        return SelectBiomePanel.isAquaticBiome(biome);
+                    case CAVE:
+                        return SelectBiomePanel.isCaveBiome(biome);
                     case NETHER:
                         return SelectBiomePanel.isNetherBiome(biome);
                     case THE_END:
                         return SelectBiomePanel.isTheEndBiome(biome);
                     case NEUTRAL:
                         return SelectBiomePanel.isNeutralBiome(biome);
-                    case UNUSED:
-                        return SelectBiomePanel.isUnusedBiome(biome);
                     default:
                         return true;
                 }
@@ -105,15 +105,15 @@ public class SelectBiomePanel
             this.pageIndex = 0;
         }
 
-        panelBuilder.item(0, this.buildButton(BiomeGroup.LUSH));
-        panelBuilder.item(1, this.buildButton(BiomeGroup.DRY));
+        panelBuilder.item(0, this.buildButton(BiomeGroup.TEMPERATE));
+        panelBuilder.item(1, this.buildButton(BiomeGroup.WARM));
         panelBuilder.item(2, this.buildButton(BiomeGroup.COLD));
         panelBuilder.item(3, this.buildButton(BiomeGroup.SNOWY));
-        panelBuilder.item(4, this.buildButton(BiomeGroup.OCEAN));
+        panelBuilder.item(4, this.buildButton(BiomeGroup.AQUATIC));
         panelBuilder.item(5, this.buildButton(BiomeGroup.NETHER));
         panelBuilder.item(6, this.buildButton(BiomeGroup.THE_END));
         panelBuilder.item(7, this.buildButton(BiomeGroup.NEUTRAL));
-        panelBuilder.item(8, this.buildButton(BiomeGroup.UNUSED));
+        panelBuilder.item(8, this.buildButton(BiomeGroup.CAVE));
 
         int biomesIndex = MAX_ELEMENTS * this.pageIndex;
 
@@ -357,10 +357,10 @@ public class SelectBiomePanel
 
         switch (biomeGroup)
         {
-            case LUSH:
+            case TEMPERATE:
                 icon = new ItemStack(Material.SUNFLOWER);
                 break;
-            case DRY:
+            case WARM:
                 icon = new ItemStack(Material.SAND);
                 break;
             case COLD:
@@ -369,7 +369,7 @@ public class SelectBiomePanel
             case SNOWY:
                 icon = new ItemStack(Material.SNOW_BLOCK);
                 break;
-            case OCEAN:
+            case AQUATIC:
                 icon = new ItemStack(Material.TROPICAL_FISH);
                 break;
             case NETHER:
@@ -377,6 +377,9 @@ public class SelectBiomePanel
                 break;
             case THE_END:
                 icon = new ItemStack(Material.END_STONE);
+                break;
+            case CAVE:
+                icon = new ItemStack(Material.POINTED_DRIPSTONE);
                 break;
             case NEUTRAL:
                 icon = new ItemStack(Material.STRUCTURE_VOID);
@@ -441,10 +444,10 @@ public class SelectBiomePanel
     {
         switch (biome)
         {
-            case SNOWY_TUNDRA:
-            case ICE_SPIKES:
+            //case SNOWY_SLOPES:
+            case SNOWY_PLAINS:
             case SNOWY_TAIGA:
-            case SNOWY_TAIGA_MOUNTAINS:
+            case ICE_SPIKES:
             case FROZEN_RIVER:
             case SNOWY_BEACH:
                 return true;
@@ -464,15 +467,13 @@ public class SelectBiomePanel
     {
         switch (biome)
         {
-            case MOUNTAINS:
-            case GRAVELLY_MOUNTAINS:
-            case WOODED_MOUNTAINS:
-            case MODIFIED_GRAVELLY_MOUNTAINS:
+            case WINDSWEPT_HILLS:
+            case WINDSWEPT_GRAVELLY_HILLS:
+            case WINDSWEPT_FOREST:
             case TAIGA:
-            case TAIGA_MOUNTAINS:
-            case GIANT_TREE_TAIGA:
-            case GIANT_SPRUCE_TAIGA:
-            case STONE_SHORE:
+            case OLD_GROWTH_PINE_TAIGA:
+            case OLD_GROWTH_SPRUCE_TAIGA:
+            case STONY_SHORE:
                 return true;
             default:
                 return false;
@@ -481,12 +482,12 @@ public class SelectBiomePanel
 
 
     /**
-     * This method returns if current biome is locally detected as lush biome.
+     * This method returns if current biome is locally detected as temperate biome.
      *
      * @param biome Biome that must be checked.
-     * @return {@code true} if I think it is lush biome, {@code false} otherwise.
+     * @return {@code true} if I think it is temperate biome, {@code false} otherwise.
      */
-    private static boolean isLushBiome(Biome biome)
+    private static boolean isTemperateBiome(Biome biome)
     {
         switch (biome)
         {
@@ -495,20 +496,15 @@ public class SelectBiomePanel
             case FOREST:
             case FLOWER_FOREST:
             case BIRCH_FOREST:
-            case TALL_BIRCH_FOREST:
+            case OLD_GROWTH_BIRCH_FOREST:
             case DARK_FOREST:
-            case DARK_FOREST_HILLS:
             case SWAMP:
-            case SWAMP_HILLS:
             case JUNGLE:
-            case MODIFIED_JUNGLE:
-            case JUNGLE_EDGE:
-            case MODIFIED_JUNGLE_EDGE:
+            case SPARSE_JUNGLE:
             case BAMBOO_JUNGLE:
             case RIVER:
             case BEACH:
             case MUSHROOM_FIELDS:
-            case MUSHROOM_FIELD_SHORE:
                 return true;
             default:
                 return false;
@@ -517,27 +513,23 @@ public class SelectBiomePanel
 
 
     /**
-     * This method returns if current biome is locally detected as dry biome.
+     * This method returns if current biome is locally detected as warm biome.
      *
      * @param biome Biome that must be checked.
-     * @return {@code true} if I think it is dry biome, {@code false} otherwise.
+     * @return {@code true} if I think it is warm biome, {@code false} otherwise.
      */
-    private static boolean isDryBiome(Biome biome)
+    private static boolean isWarmBiome(Biome biome)
     {
         switch (biome)
         {
             case DESERT:
-            case DESERT_LAKES:
             case SAVANNA:
-            case SHATTERED_SAVANNA:
+            case WINDSWEPT_SAVANNA:
             case BADLANDS:
             case ERODED_BADLANDS:
-            case WOODED_BADLANDS_PLATEAU:
-            case MODIFIED_WOODED_BADLANDS_PLATEAU:
-            case BADLANDS_PLATEAU:
+            case WOODED_BADLANDS:
             case SAVANNA_PLATEAU:
-            case MODIFIED_BADLANDS_PLATEAU:
-            case SHATTERED_SAVANNA_PLATEAU:
+            // case BADLANDS_PLATEAU:
                 return true;
             default:
                 return false;
@@ -546,12 +538,12 @@ public class SelectBiomePanel
 
 
     /**
-     * This method returns if current biome is locally detected as ocean biome.
+     * This method returns if current biome is locally detected as aquatic biome.
      *
      * @param biome Biome that must be checked.
-     * @return {@code true} if I think it is ocean biome, {@code false} otherwise.
+     * @return {@code true} if I think it is aquatic biome, {@code false} otherwise.
      */
-    private static boolean isOceanBiome(Biome biome)
+    private static boolean isAquaticBiome(Biome biome)
     {
         switch (biome)
         {
@@ -579,23 +571,7 @@ public class SelectBiomePanel
      */
     private static boolean isNeutralBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case THE_VOID:
-            case WOODED_HILLS:
-            case TAIGA_HILLS:
-            case SNOWY_TAIGA_HILLS:
-            case JUNGLE_HILLS:
-            case DESERT_HILLS:
-            case BIRCH_FOREST_HILLS:
-            case TALL_BIRCH_HILLS:
-            case GIANT_TREE_TAIGA_HILLS:
-            case GIANT_SPRUCE_TAIGA_HILLS:
-            case SNOWY_MOUNTAINS:
-                return true;
-            default:
-                return false;
-        }
+        return biome == Biome.THE_VOID;
     }
 
 
@@ -605,33 +581,12 @@ public class SelectBiomePanel
      * @param biome Biome that must be checked.
      * @return {@code true} if I think it is cave biome, {@code false} otherwise.
      */
-    private static boolean isCave(Biome biome)
+    private static boolean isCaveBiome(Biome biome)
     {
         switch (biome)
         {
             case LUSH_CAVES:
             case DRIPSTONE_CAVES:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-
-    /**
-     * This method returns if current biome is locally detected as unused biome.
-     *
-     * @param biome Biome that must be checked.
-     * @return {@code true} if I think it is unused biome, {@code false} otherwise.
-     */
-    private static boolean isUnusedBiome(Biome biome)
-    {
-        switch (biome)
-        {
-            case MOUNTAIN_EDGE:
-            case DEEP_WARM_OCEAN:
-            case DRIPSTONE_CAVES:
-            case LUSH_CAVES:
                 return true;
             default:
                 return false;
@@ -693,15 +648,16 @@ public class SelectBiomePanel
      */
     private enum BiomeGroup
     {
-        LUSH,
-        DRY,
-        COLD,
         SNOWY,
-        OCEAN,
+        COLD,
+        TEMPERATE,
+        WARM,
+        AQUATIC,
+        NEUTRAL,
         NETHER,
         THE_END,
-        NEUTRAL,
         UNUSED,
+        CAVE,
         NONE
     }
 

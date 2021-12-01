@@ -628,14 +628,14 @@ stone-generator:
         name: "&f&l [biome]"
       # This section contains names for filter biome groups.
       biome-groups:
-        lush:
-          name: "&f&l Lush"
+        temperate:
+          name: "&f&l Temperate"
           description: |-
-            &7 Show only lush biomes
-        dry:
-          name: "&f&l Dry"
+            &7 Show only temperate biomes
+        warm:
+          name: "&f&l Warm"
           description: |-
-            &7 Show only dry biomes
+            &7 Show only warm biomes
         cold:
           name: "&f&l Cold"
           description: |-
@@ -664,6 +664,10 @@ stone-generator:
           name: "&f&l Unused"
           description: |-
             &7 Show only unused biomes
+        cave:
+          name: "&f&l Cave"
+          description: |-
+            &7 Show only cave biomes
       # This section contains names and descriptions for generator type buttons.
       generator-types:
         cobblestone:
