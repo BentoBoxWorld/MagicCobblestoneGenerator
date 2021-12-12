@@ -1,19 +1,20 @@
 package world.bentobox.magiccobblestonegenerator.request;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+
 import world.bentobox.bentobox.api.addons.request.AddonRequestHandler;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 /**

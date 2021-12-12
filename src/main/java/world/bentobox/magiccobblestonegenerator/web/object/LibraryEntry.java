@@ -1,9 +1,10 @@
 package world.bentobox.magiccobblestonegenerator.web.object;
 
 
-import com.google.gson.JsonObject;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
+
+import com.google.gson.JsonObject;
 
 
 /**

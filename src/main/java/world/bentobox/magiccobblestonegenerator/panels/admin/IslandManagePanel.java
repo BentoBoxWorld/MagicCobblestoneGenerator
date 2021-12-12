@@ -7,12 +7,19 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import com.google.common.collect.ImmutableSet;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+
+import com.google.common.collect.ImmutableSet;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -515,19 +522,11 @@ public class IslandManagePanel extends CommonPanel
             return true;
         };
 
-        Material material;
-
-        switch (button)
-        {
-            case IS_ONLINE:
-                material = Material.WRITTEN_BOOK;
-                break;
-            case ALL_ISLANDS:
-                material = Material.CHEST;
-                break;
-            default:
-                material = Material.PAPER;
-        }
+        Material material = switch (button) {
+            case IS_ONLINE -> Material.WRITTEN_BOOK;
+            case ALL_ISLANDS -> Material.CHEST;
+            default -> Material.PAPER;
+        };
 
         return new PanelItemBuilder().
             name(name).

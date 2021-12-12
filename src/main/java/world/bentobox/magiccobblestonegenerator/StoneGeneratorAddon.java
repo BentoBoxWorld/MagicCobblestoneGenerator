@@ -1,10 +1,11 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import java.util.Optional;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import java.util.Optional;
 
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
@@ -286,7 +287,7 @@ public class StoneGeneratorAddon extends Addon
 
         Optional<VaultHook> vault = this.getPlugin().getVault();
 
-        if (!vault.isPresent())
+        if (vault.isEmpty())
         {
             this.vaultHook = null;
             this.logWarning("Vault plugin not found. Economy will not work!");
@@ -308,7 +309,7 @@ public class StoneGeneratorAddon extends Addon
 
         Optional<Addon> level = this.getAddonByName("Level");
 
-        if (!level.isPresent())
+        if (level.isEmpty())
         {
             this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
             this.levelAddon = null;

@@ -1,9 +1,10 @@
 package world.bentobox.magiccobblestonegenerator.config;
 
 
-import org.bukkit.Material;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bukkit.Material;
 
 import world.bentobox.bentobox.api.configuration.ConfigComment;
 import world.bentobox.bentobox.api.configuration.ConfigEntry;

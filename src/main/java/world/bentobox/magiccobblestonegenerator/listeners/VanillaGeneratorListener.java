@@ -7,13 +7,13 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
+import java.util.Optional;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFormEvent;
-
-import java.util.Optional;
 
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
@@ -61,7 +61,7 @@ public class VanillaGeneratorListener extends GeneratorListener
 
         Optional<Island> islandOptional = this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation());
 
-        if (!islandOptional.isPresent())
+        if (islandOptional.isEmpty())
         {
             // If not operating in non-island regions.
             return;

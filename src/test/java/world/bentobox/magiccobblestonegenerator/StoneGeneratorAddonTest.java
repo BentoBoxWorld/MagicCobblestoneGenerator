@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -96,7 +96,7 @@ public class StoneGeneratorAddonTest
     private static AbstractDatabaseHandler<Object> handler;
     
     /**
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception exception
      */
     @Before
     public void setUp() throws Exception
@@ -123,7 +123,7 @@ public class StoneGeneratorAddonTest
         File jFile = new File("addon.jar");
         List<String> lines = Arrays.asList("# MagicCobblestoneGenerator Addon Configuration", "uniqueId: config");
         Path path = Paths.get("config.yml");
-        Files.write(path, lines, Charset.forName("UTF-8"));
+        Files.write(path, lines, StandardCharsets.UTF_8);
         Path template = Paths.get("src/main/resources/generatorTemplate.yml");
         Path copyTo = Paths.get("generatorTemplate.yml");
         Files.copy(template, copyTo);
@@ -175,7 +175,7 @@ public class StoneGeneratorAddonTest
 
 
     /**
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception exception
      */
     @After
     public void tearDown() throws Exception

@@ -155,7 +155,7 @@ public class StoneGeneratorImportManager
 
         Optional<GameModeAddon> optional = this.addon.getPlugin().getIWM().getAddon(world);
 
-        if (!optional.isPresent())
+        if (optional.isEmpty())
         {
             if (user != null)
             {

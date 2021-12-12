@@ -7,8 +7,9 @@
 package world.bentobox.magiccobblestonegenerator.events;
 
 
-import org.bukkit.event.HandlerList;
 import java.util.UUID;
+
+import org.bukkit.event.HandlerList;
 
 import world.bentobox.bentobox.api.events.BentoBoxEvent;
 import world.bentobox.bentobox.api.user.User;

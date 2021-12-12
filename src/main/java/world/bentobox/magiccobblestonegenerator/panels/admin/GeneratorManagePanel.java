@@ -1,12 +1,17 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
@@ -135,29 +140,21 @@ public class GeneratorManagePanel extends CommonPanel
         boolean glow = false;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
+        switch (button) {
+            case RETURN -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
-                if (this.parentPanel != null)
-                {
+                if (this.parentPanel != null) {
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                }
-                else
-                {
+                } else {
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
                 }
 
                 clickHandler = (panel, user, clickType, i) -> {
 
-                    if (this.parentPanel != null)
-                    {
+                    if (this.parentPanel != null) {
                         this.parentPanel.build();
-                    }
-                    else
-                    {
+                    } else {
                         user.closeInventory();
                     }
                     return true;
@@ -167,11 +164,10 @@ public class GeneratorManagePanel extends CommonPanel
 
                 break;
             }
-            case PREVIOUS:
-            {
+            case PREVIOUS -> {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -186,11 +182,10 @@ public class GeneratorManagePanel extends CommonPanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case NEXT:
-            {
+            case NEXT -> {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -205,8 +200,7 @@ public class GeneratorManagePanel extends CommonPanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case CREATE_GENERATOR:
-            {
+            case CREATE_GENERATOR -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-create"));
@@ -218,8 +212,7 @@ public class GeneratorManagePanel extends CommonPanel
                     // This consumer process new generator creating with a name and id from given
                     // consumer value..
                     Consumer<String> generatorIdConsumer = value -> {
-                        if (value != null)
-                        {
+                        if (value != null) {
                             GeneratorTierObject newGeneratorTier = new GeneratorTierObject();
                             newGeneratorTier.setFriendlyName(value);
                             newGeneratorTier.setUniqueId(gameModePrefix + Utils.sanitizeInput(value));
@@ -241,9 +234,7 @@ public class GeneratorManagePanel extends CommonPanel
 
                             // Open generator edit panel.
                             GeneratorEditPanel.open(this, newGeneratorTier);
-                        }
-                        else
-                        {
+                        } else {
                             // Operation is canceled. Open this panel again.
                             this.build();
                         }
@@ -251,35 +242,33 @@ public class GeneratorManagePanel extends CommonPanel
 
                     // This function checks if generator with a given ID already exist.
                     Function<String, Boolean> validationFunction = generatorId ->
-                        this.manager.getGeneratorByID(gameModePrefix + Utils.sanitizeInput(generatorId)) == null;
+                            this.manager.getGeneratorByID(gameModePrefix + Utils.sanitizeInput(generatorId)) == null;
 
                     // Call a conversation API to get input string.
                     ConversationUtils.createIDStringInput(generatorIdConsumer,
-                        validationFunction,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "write-name"),
-                        this.user.getTranslation(Constants.CONVERSATIONS + "new-object-created",
-                            Constants.WORLD, world.getName()),
-                        Constants.ERRORS + "object-already-exists");
+                            validationFunction,
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "write-name"),
+                            this.user.getTranslation(Constants.CONVERSATIONS + "new-object-created",
+                                    Constants.WORLD, world.getName()),
+                            Constants.ERRORS + "object-already-exists");
 
                     return true;
                 };
 
                 break;
             }
-            case DELETE_GENERATOR:
-            {
+            case DELETE_GENERATOR -> {
                 icon = this.selectedGenerators.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
                 glow = !this.selectedGenerators.isEmpty();
 
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-                if (!this.selectedGenerators.isEmpty())
-                {
+                if (!this.selectedGenerators.isEmpty()) {
                     description.add(this.user.getTranslation(reference + ".list"));
                     this.selectedGenerators.forEach(generator ->
-                        description.add(this.user.getTranslation(reference + ".value",
-                            Constants.GENERATOR, generator.getFriendlyName())));
+                            description.add(this.user.getTranslation(reference + ".value",
+                                    Constants.GENERATOR, generator.getFriendlyName())));
 
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-remove"));
@@ -288,8 +277,7 @@ public class GeneratorManagePanel extends CommonPanel
 
                         // Create consumer that accepts value from conversation.
                         Consumer<Boolean> consumer = value -> {
-                            if (value)
-                            {
+                            if (value) {
                                 this.selectedGenerators.forEach(generator -> {
                                     this.manager.wipeGeneratorTier(generator);
                                     this.generatorList.remove(generator);
@@ -304,40 +292,34 @@ public class GeneratorManagePanel extends CommonPanel
 
                         String generatorString;
 
-                        if (!this.selectedGenerators.isEmpty())
-                        {
+                        if (!this.selectedGenerators.isEmpty()) {
                             Iterator<GeneratorTierObject> iterator = this.selectedGenerators.iterator();
 
                             StringBuilder builder = new StringBuilder();
                             builder.append(iterator.next().getFriendlyName());
 
-                            while (iterator.hasNext())
-                            {
+                            while (iterator.hasNext()) {
                                 builder.append(", ").append(iterator.next().getFriendlyName());
                             }
 
                             generatorString = builder.toString();
-                        }
-                        else
-                        {
+                        } else {
                             generatorString = "";
                         }
 
                         // Create conversation that gets user acceptance to delete selected generator data.
                         ConversationUtils.createConfirmation(
-                            consumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "confirm-deletion",
-                                TextVariables.NUMBER, String.valueOf(this.selectedGenerators.size()),
-                                Constants.VALUE, generatorString),
-                            this.user.getTranslation(Constants.CONVERSATIONS + "data-removed",
-                                Constants.GAMEMODE, Utils.getGameMode(this.world)));
+                                consumer,
+                                this.user,
+                                this.user.getTranslation(Constants.CONVERSATIONS + "confirm-deletion",
+                                        TextVariables.NUMBER, String.valueOf(this.selectedGenerators.size()),
+                                        Constants.VALUE, generatorString),
+                                this.user.getTranslation(Constants.CONVERSATIONS + "data-removed",
+                                        Constants.GAMEMODE, Utils.getGameMode(this.world)));
 
                         return true;
                     };
-                }
-                else
-                {
+                } else {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "select-before"));
 
@@ -347,8 +329,7 @@ public class GeneratorManagePanel extends CommonPanel
 
                 break;
             }
-            default:
-                clickHandler = (panel, user1, clickType, slot) -> true;
+            default -> clickHandler = (panel, user1, clickType, slot) -> true;
         }
 
         return new PanelItemBuilder().
@@ -400,20 +381,16 @@ public class GeneratorManagePanel extends CommonPanel
 
         Material material = Material.PAPER;
 
-        switch (button)
-        {
-            case SHOW_COBBLESTONE:
-            {
+        switch (button) {
+            case SHOW_COBBLESTONE -> {
                 material = Material.COBBLESTONE;
                 break;
             }
-            case SHOW_STONE:
-            {
+            case SHOW_STONE -> {
                 material = Material.STONE;
                 break;
             }
-            case SHOW_BASALT:
-            {
+            case SHOW_BASALT -> {
                 material = Material.BASALT;
                 break;
             }
@@ -440,31 +417,21 @@ public class GeneratorManagePanel extends CommonPanel
 
         final int correctPage;
 
-        List<GeneratorTierObject> filteredList;
-
-        switch (this.activeFilterButton)
-        {
-            case SHOW_COBBLESTONE:
-                filteredList = this.generatorList.stream().
+        List<GeneratorTierObject> filteredList = switch (this.activeFilterButton) {
+            case SHOW_COBBLESTONE -> this.generatorList.stream().
                     filter(generatorTier ->
-                        generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
+                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
                     collect(Collectors.toList());
-                break;
-            case SHOW_STONE:
-                filteredList = this.generatorList.stream().
+            case SHOW_STONE -> this.generatorList.stream().
                     filter(generatorTier ->
-                        generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
+                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
                     collect(Collectors.toList());
-                break;
-            case SHOW_BASALT:
-                filteredList = this.generatorList.stream().
+            case SHOW_BASALT -> this.generatorList.stream().
                     filter(generatorTier ->
-                        generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
+                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
                     collect(Collectors.toList());
-                break;
-            default:
-                filteredList = this.generatorList;
-        }
+            default -> this.generatorList;
+        };
 
         if (this.pageIndex < 0)
         {

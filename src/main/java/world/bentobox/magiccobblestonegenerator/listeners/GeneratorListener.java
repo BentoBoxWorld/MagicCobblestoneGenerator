@@ -7,6 +7,9 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
+import java.util.Objects;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,8 +20,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.Nullable;
-import java.util.Objects;
-import java.util.Random;
 
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;

@@ -1,11 +1,12 @@
 package world.bentobox.magiccobblestonegenerator.panels.utils;
 
 
-import org.bukkit.Material;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.bukkit.Material;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -128,12 +129,10 @@ public class SelectBundlePanel extends CommonPanel
         Material material = Material.PAPER;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
+        switch (button) {
+            case RETURN -> {
                 description.add(this.user
-                    .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
+                        .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description"));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     // Return NULL.
@@ -147,12 +146,11 @@ public class SelectBundlePanel extends CommonPanel
 
                 break;
             }
-            case PREVIOUS:
-            {
+            case PREVIOUS -> {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user
-                    .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
+                        .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
+                                Constants.NUMBER, String.valueOf(count)));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex--;
@@ -167,12 +165,11 @@ public class SelectBundlePanel extends CommonPanel
                 material = Material.TIPPED_ARROW;
                 break;
             }
-            case NEXT:
-            {
+            case NEXT -> {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user
-                    .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
+                        .getTranslationOrNothing(Constants.BUTTON + button.name().toLowerCase() + ".description",
+                                Constants.NUMBER, String.valueOf(count)));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     this.pageIndex++;

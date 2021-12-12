@@ -1,6 +1,22 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -8,9 +24,6 @@ import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.events.addon.AddonEvent;
@@ -264,7 +277,7 @@ public class StoneGeneratorManager
      */
     public void wipeGameModeGenerators(Optional<GameModeAddon> optional)
     {
-        if (!optional.isPresent())
+        if (optional.isEmpty())
         {
             // Done.
             return;
@@ -311,7 +324,7 @@ public class StoneGeneratorManager
      */
     public void wipeIslandData(Optional<GameModeAddon> optional)
     {
-        if (!optional.isPresent())
+        if (optional.isEmpty())
         {
             // Done.
             return;
@@ -1155,7 +1168,7 @@ public class StoneGeneratorManager
      * @param user User who will pay for activating.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be activated.
-     * @return {@code true} if can activate, {@false} if cannot activate.
+     * @return {@code true} if can activate, {@code false} if cannot activate.
      */
     public boolean canActivateGenerator(@NotNull User user,
         @NotNull GeneratorDataObject generatorData,
@@ -1284,7 +1297,7 @@ public class StoneGeneratorManager
      * @param island GeneratorData linked island.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
-     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     * @return {@code true} if can purchase, {@code false} if cannot purchase.
      */
     public boolean canPurchaseGenerator(@NotNull User user,
         @NotNull Island island,
@@ -1366,7 +1379,6 @@ public class StoneGeneratorManager
      * @param user User who will pays.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
-     * @return {@code true} if can purchase, {@false} if cannot purchase.
      */
     public void purchaseGenerator(@NotNull User user,
         @NotNull GeneratorDataObject generatorData,

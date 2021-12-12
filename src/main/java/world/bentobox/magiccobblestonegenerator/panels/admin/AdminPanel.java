@@ -7,13 +7,14 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import org.bukkit.Material;
-import org.bukkit.World;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import org.bukkit.Material;
+import org.bukkit.World;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -53,7 +54,7 @@ public class AdminPanel extends CommonPanel
     @Override
     public void build()
     {
-        // PanelBuilder is a BentoBox API that provides ability to easy create Panels.
+        // PanelBuilder is a BentoBox API that provides ability to easily create Panels.
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "admin-panel"));

@@ -7,11 +7,12 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.panels.PanelItem;

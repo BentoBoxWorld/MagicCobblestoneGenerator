@@ -1,12 +1,13 @@
 package world.bentobox.magiccobblestonegenerator.panels.player;
 
 
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.jetbrains.annotations.Nullable;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
@@ -191,30 +192,24 @@ public class GeneratorUserPanel extends CommonPanel
 
         Material material = Material.PAPER;
 
-        switch (button)
-        {
-            case SHOW_COBBLESTONE:
-            {
+        switch (button) {
+            case SHOW_COBBLESTONE -> {
                 material = Material.COBBLESTONE;
                 break;
             }
-            case SHOW_STONE:
-            {
+            case SHOW_STONE -> {
                 material = Material.STONE;
                 break;
             }
-            case SHOW_BASALT:
-            {
+            case SHOW_BASALT -> {
                 material = Material.BASALT;
                 break;
             }
-            case TOGGLE_VISIBILITY:
-            {
+            case TOGGLE_VISIBILITY -> {
                 material = Material.REDSTONE;
                 break;
             }
-            case SHOW_ACTIVE:
-            {
+            case SHOW_ACTIVE -> {
                 material = Material.GREEN_STAINED_GLASS_PANE;
                 break;
             }
@@ -247,29 +242,21 @@ public class GeneratorUserPanel extends CommonPanel
         Material icon = Material.PAPER;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
+        switch (button) {
+            case RETURN -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
 
-                if (this.parentPanel != null)
-                {
+                if (this.parentPanel != null) {
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                }
-                else
-                {
+                } else {
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
                 }
 
                 clickHandler = (panel, user, clickType, i) -> {
-                    if (this.parentPanel != null)
-                    {
+                    if (this.parentPanel != null) {
                         this.parentPanel.build();
-                    }
-                    else
-                    {
+                    } else {
                         user.closeInventory();
                     }
                     return true;
@@ -279,11 +266,10 @@ public class GeneratorUserPanel extends CommonPanel
 
                 break;
             }
-            case PREVIOUS:
-            {
+            case PREVIOUS -> {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -298,11 +284,10 @@ public class GeneratorUserPanel extends CommonPanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case NEXT:
-            {
+            case NEXT -> {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -338,43 +323,29 @@ public class GeneratorUserPanel extends CommonPanel
     {
         int MAX_ELEMENTS = this.rowCount * (this.addon.getSettings().getBorderBlock().isAir() ? 9 : 7);
 
-        List<GeneratorTierObject> filteredList;
-
-        switch (this.activeFilterButton)
-        {
-            case SHOW_COBBLESTONE:
-                filteredList = this.generatorList.stream().
+        List<GeneratorTierObject> filteredList = switch (this.activeFilterButton) {
+            case SHOW_COBBLESTONE -> this.generatorList.stream().
                     filter(generatorTier ->
-                        generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
+                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
                     collect(Collectors.toList());
-                break;
-            case SHOW_STONE:
-                filteredList = this.generatorList.stream().
+            case SHOW_STONE -> this.generatorList.stream().
                     filter(generatorTier ->
-                        generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
+                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
                     collect(Collectors.toList());
-                break;
-            case SHOW_BASALT:
-                filteredList = this.generatorList.stream().
+            case SHOW_BASALT -> this.generatorList.stream().
                     filter(generatorTier ->
-                        generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
+                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
                     collect(Collectors.toList());
-                break;
-            case TOGGLE_VISIBILITY:
-                filteredList = this.generatorList.stream().
+            case TOGGLE_VISIBILITY -> this.generatorList.stream().
                     filter(generatorTier ->
-                        this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
+                            this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
                     collect(Collectors.toList());
-                break;
-            case SHOW_ACTIVE:
-                filteredList = this.generatorList.stream().
+            case SHOW_ACTIVE -> this.generatorList.stream().
                     filter(generatorTier ->
-                        this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
+                            this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
                     collect(Collectors.toList());
-                break;
-            default:
-                filteredList = this.generatorList;
-        }
+            default -> this.generatorList;
+        };
 
         this.maxPageIndex = (int) Math.ceil(1.0 * filteredList.size() / MAX_ELEMENTS) - 1;
 

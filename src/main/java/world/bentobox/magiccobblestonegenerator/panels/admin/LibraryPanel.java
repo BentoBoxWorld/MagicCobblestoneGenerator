@@ -7,8 +7,6 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitTask;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.bukkit.Material;
+import org.bukkit.scheduler.BukkitTask;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -46,19 +47,11 @@ public class LibraryPanel extends CommonPanel
         super(parentPanel);
         this.mode = mode;
 
-        switch (mode)
-        {
-            case WEB:
-                this.libraryEntries = this.addon.getWebManager().getLibraryEntries();
-                break;
-            case DATABASE:
-                this.libraryEntries = this.generateDatabaseEntries();
-                break;
-            case TEMPLATE:
-                this.libraryEntries = this.generateTemplateEntries();
-                break;
-            default:
-                this.libraryEntries = Collections.emptyList();
+        switch (mode) {
+            case WEB -> this.libraryEntries = this.addon.getWebManager().getLibraryEntries();
+            case DATABASE -> this.libraryEntries = this.generateDatabaseEntries();
+            case TEMPLATE -> this.libraryEntries = this.generateTemplateEntries();
+            default -> this.libraryEntries = Collections.emptyList();
         }
 
         // Stores how many elements will be in display.
@@ -237,21 +230,16 @@ public class LibraryPanel extends CommonPanel
         Material icon = Material.PAPER;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
+        switch (button) {
+            case RETURN -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
 
                 clickHandler = (panel, user, clickType, i) -> {
-                    if (this.parentPanel != null)
-                    {
+                    if (this.parentPanel != null) {
                         this.parentPanel.build();
-                    }
-                    else
-                    {
+                    } else {
                         user.closeInventory();
                     }
                     return true;
@@ -261,11 +249,10 @@ public class LibraryPanel extends CommonPanel
 
                 break;
             }
-            case PREVIOUS:
-            {
+            case PREVIOUS -> {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -280,11 +267,10 @@ public class LibraryPanel extends CommonPanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case NEXT:
-            {
+            case NEXT -> {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");

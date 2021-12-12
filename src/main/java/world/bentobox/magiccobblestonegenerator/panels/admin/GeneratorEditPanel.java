@@ -1,13 +1,19 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Consumer;
+
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import java.util.*;
-import java.util.function.Consumer;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
@@ -82,42 +88,34 @@ public class GeneratorEditPanel extends CommonPanel
 
         this.populateHeader(panelBuilder);
 
-        switch (this.activeTab)
-        {
-            case INFO:
+        switch (this.activeTab) {
+            case INFO -> {
                 this.populateInfo(panelBuilder);
 
                 // Add listener that allows to change icons
                 panelBuilder.listener(new IconChanger());
-
-                break;
-            case BLOCKS:
-
-                if (!this.materialChanceList.isEmpty())
-                {
+            }
+            case BLOCKS -> {
+                if (!this.materialChanceList.isEmpty()) {
                     this.populateBlocks(panelBuilder);
                 }
-
                 panelBuilder.item(39, this.createButton(Action.ADD_MATERIAL));
                 panelBuilder.item(41, this.createButton(Action.REMOVE_MATERIAL));
+            }
 
-                // Add listener that allows to change blocks
+            // Add listener that allows to change blocks
 //				panelBuilder.listener(new BlockChanger());
 
-                break;
-            case TREASURES:
-                if (!this.treasureChanceList.isEmpty())
-                {
+            case TREASURES -> {
+                if (!this.treasureChanceList.isEmpty()) {
                     this.populateTreasures(panelBuilder);
                 }
-
                 panelBuilder.item(39, this.createButton(Action.ADD_MATERIAL));
                 panelBuilder.item(41, this.createButton(Action.REMOVE_MATERIAL));
 
                 // Add listener that allows to change blocks
                 panelBuilder.listener(new TreasureChanger());
-
-                break;
+            }
         }
 
         panelBuilder.item(44, this.createButton(Action.RETURN));
@@ -338,12 +336,10 @@ public class GeneratorEditPanel extends CommonPanel
         boolean glow = false;
         ItemStack itemStack = new ItemStack(Material.AIR);
 
-        switch (button)
-        {
-            case NAME:
-            {
+        switch (button) {
+            case NAME -> {
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.GENERATOR, this.generatorTier.getFriendlyName()));
+                        Constants.GENERATOR, this.generatorTier.getFriendlyName()));
 
                 itemStack = new ItemStack(Material.NAME_TAG);
 
@@ -352,8 +348,7 @@ public class GeneratorEditPanel extends CommonPanel
                     // Create consumer that process description change
                     Consumer<String> consumer = value ->
                     {
-                        if (value != null)
-                        {
+                        if (value != null) {
                             this.generatorTier.setFriendlyName(value);
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -363,9 +358,9 @@ public class GeneratorEditPanel extends CommonPanel
 
                     // start conversation
                     ConversationUtils.createStringInput(consumer,
-                        user,
-                        user.getTranslation(Constants.CONVERSATIONS + "write-name"),
-                        user.getTranslation(Constants.CONVERSATIONS + "name-changed"));
+                            user,
+                            user.getTranslation(Constants.CONVERSATIONS + "write-name"),
+                            user.getTranslation(Constants.CONVERSATIONS + "name-changed"));
 
                     return true;
                 };
@@ -376,12 +371,10 @@ public class GeneratorEditPanel extends CommonPanel
                 // Not implemented in current GUI.
                 break;
             }
-            case ICON:
-            case LOCKED_ICON:
-            {
+            case ICON, LOCKED_ICON -> {
                 itemStack = button == Button.LOCKED_ICON ?
-                    this.generatorTier.getLockedIcon() :
-                    this.generatorTier.getGeneratorIcon();
+                        this.generatorTier.getLockedIcon() :
+                        this.generatorTier.getGeneratorIcon();
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
@@ -393,13 +386,10 @@ public class GeneratorEditPanel extends CommonPanel
                     return true;
                 };
 
-                if (this.selectedButton != button)
-                {
+                if (this.selectedButton != button) {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-                }
-                else
-                {
+                } else {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-on-item"));
                 }
@@ -408,8 +398,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case DESCRIPTION:
-            {
+            case DESCRIPTION -> {
                 itemStack = new ItemStack(Material.WRITTEN_BOOK);
 
                 description.add(this.user.getTranslation(reference + ".value"));
@@ -420,8 +409,7 @@ public class GeneratorEditPanel extends CommonPanel
                     // Create consumer that process description change
                     Consumer<List<String>> consumer = value ->
                     {
-                        if (value != null)
-                        {
+                        if (value != null) {
                             this.generatorTier.setDescription(value);
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -430,22 +418,18 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     if (!this.generatorTier.getDescription().isEmpty() &&
-                        clickType.isShiftClick())
-                    {
+                            clickType.isShiftClick()) {
                         // Reset to the empty value
                         consumer.accept(Collections.emptyList());
-                    }
-                    else
-                    {
+                    } else {
                         // start conversation
                         ConversationUtils.createStringListInput(consumer,
-                            user,
-                            user.getTranslation(Constants.CONVERSATIONS + "write-description"),
-                            user.getTranslation(Constants.CONVERSATIONS + "description-changed"));
+                                user,
+                                user.getTranslation(Constants.CONVERSATIONS + "write-description"),
+                                user.getTranslation(Constants.CONVERSATIONS + "description-changed"));
                     }
 
-                    if (!this.generatorTier.getDescription().isEmpty())
-                    {
+                    if (!this.generatorTier.getDescription().isEmpty()) {
                         description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
                     }
 
@@ -458,15 +442,11 @@ public class GeneratorEditPanel extends CommonPanel
                 // Not implemented in current GUI.
                 break;
             }
-            case DEFAULT:
-            {
-                if (this.generatorTier.isDefaultGenerator())
-                {
+            case DEFAULT -> {
+                if (this.generatorTier.isDefaultGenerator()) {
                     itemStack = new ItemStack(Material.GREEN_BANNER);
                     description.add(this.user.getTranslation(reference + ".enabled"));
-                }
-                else
-                {
+                } else {
                     itemStack = new ItemStack(Material.RED_BANNER);
                     description.add(this.user.getTranslation(reference + ".disabled"));
                 }
@@ -485,16 +465,14 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case PRIORITY:
-            {
+            case PRIORITY -> {
                 itemStack = new ItemStack(Material.HOPPER);
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getPriority())));
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getPriority())));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     Consumer<Number> numberConsumer = number -> {
-                        if (number != null)
-                        {
+                        if (number != null) {
                             this.generatorTier.setPriority(number.intValue());
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -504,10 +482,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                        0,
-                        2000);
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            0,
+                            2000);
 
                     return true;
                 };
@@ -517,28 +495,26 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case TYPE:
-            {
+            case TYPE -> {
                 itemStack = new ItemStack(
-                    GuiUtils.getGeneratorTypeMaterial(this.generatorTier.getGeneratorType()));
+                        GuiUtils.getGeneratorTypeMaterial(this.generatorTier.getGeneratorType()));
 
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.TYPE, this.user.getTranslation(
-                        Constants.GENERATOR_TYPE_BUTTON +
-                            this.generatorTier.getGeneratorType().name().toLowerCase() + ".name")));
+                        Constants.TYPE, this.user.getTranslation(
+                                Constants.GENERATOR_TYPE_BUTTON +
+                                        this.generatorTier.getGeneratorType().name().toLowerCase() + ".name")));
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
                     SelectGeneratorTypePanel.open(user,
-                        this.generatorTier.getGeneratorType(),
-                        type -> {
-                            if (type != null)
-                            {
-                                this.generatorTier.setGeneratorType(type);
-                            }
+                            this.generatorTier.getGeneratorType(),
+                            type -> {
+                                if (type != null) {
+                                    this.generatorTier.setGeneratorType(type);
+                                }
 
-                            this.build();
-                        });
+                                this.build();
+                            });
 
                     return true;
                 };
@@ -548,16 +524,14 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case REQUIRED_MIN_LEVEL:
-            {
+            case REQUIRED_MIN_LEVEL -> {
                 itemStack = new ItemStack(Material.DIAMOND);
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     Consumer<Number> numberConsumer = number -> {
-                        if (number != null)
-                        {
+                        if (number != null) {
                             this.generatorTier.setRequiredMinIslandLevel(number.longValue());
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -567,10 +541,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                        0,
-                        Long.MAX_VALUE);
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            0,
+                            Long.MAX_VALUE);
 
                     return true;
                 };
@@ -580,17 +554,15 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case REQUIRED_PERMISSIONS:
-            {
+            case REQUIRED_PERMISSIONS -> {
                 itemStack = new ItemStack(Material.BOOK);
 
                 description.add(this.user.getTranslation(reference + ".list"));
                 this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
-                    description.add(this.user.getTranslation(reference + ".value",
-                        Constants.PERMISSION, permission)));
+                        description.add(this.user.getTranslation(reference + ".value",
+                                Constants.PERMISSION, permission)));
 
-                if (this.generatorTier.getRequiredPermissions().isEmpty())
-                {
+                if (this.generatorTier.getRequiredPermissions().isEmpty()) {
                     description.add(this.user.getTranslation(reference + ".none"));
                 }
 
@@ -599,8 +571,7 @@ public class GeneratorEditPanel extends CommonPanel
                     // Create consumer that process description change
                     Consumer<List<String>> consumer = value ->
                     {
-                        if (value != null)
-                        {
+                        if (value != null) {
                             this.generatorTier.setRequiredPermissions(new HashSet<>(value));
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -609,18 +580,15 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     if (!this.generatorTier.getRequiredPermissions().isEmpty() &&
-                        clickType.isShiftClick())
-                    {
+                            clickType.isShiftClick()) {
                         // Reset to the empty value
                         consumer.accept(Collections.emptyList());
-                    }
-                    else
-                    {
+                    } else {
                         // start conversation
                         ConversationUtils.createStringListInput(consumer,
-                            user,
-                            user.getTranslation(Constants.CONVERSATIONS + "write-permissions"),
-                            user.getTranslation(Constants.CONVERSATIONS + "permissions-changed"));
+                                user,
+                                user.getTranslation(Constants.CONVERSATIONS + "write-permissions"),
+                                user.getTranslation(Constants.CONVERSATIONS + "permissions-changed"));
                     }
 
                     return true;
@@ -629,24 +597,21 @@ public class GeneratorEditPanel extends CommonPanel
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
-                if (!this.generatorTier.getRequiredPermissions().isEmpty())
-                {
+                if (!this.generatorTier.getRequiredPermissions().isEmpty()) {
                     description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
                 }
 
                 break;
             }
-            case PURCHASE_COST:
-            {
+            case PURCHASE_COST -> {
                 itemStack = new ItemStack(Material.GOLD_BLOCK);
-                
+
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     Consumer<Number> numberConsumer = number -> {
-                        if (number != null)
-                        {
+                        if (number != null) {
                             this.generatorTier.setGeneratorTierCost(number.doubleValue());
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -656,10 +621,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                        0,
-                        Double.MAX_VALUE);
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            0,
+                            Double.MAX_VALUE);
 
                     return true;
                 };
@@ -669,17 +634,15 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case ACTIVATION_COST:
-            {
+            case ACTIVATION_COST -> {
                 itemStack = new ItemStack(Material.GOLD_INGOT);
 
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getActivationCost())));
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getActivationCost())));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     Consumer<Number> numberConsumer = number -> {
-                        if (number != null)
-                        {
+                        if (number != null) {
                             this.generatorTier.setActivationCost(number.doubleValue());
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -689,10 +652,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                        0,
-                        Double.MAX_VALUE);
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            0,
+                            Double.MAX_VALUE);
 
                     return true;
                 };
@@ -702,36 +665,31 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case BIOMES:
-            {
+            case BIOMES -> {
                 itemStack = new ItemStack(Material.FILLED_MAP);
 
                 description.add(this.user.getTranslation(reference + ".list"));
 
-                if (this.generatorTier.getRequiredBiomes().isEmpty())
-                {
+                if (this.generatorTier.getRequiredBiomes().isEmpty()) {
                     description.add(this.user.getTranslation(reference + ".any"));
-                }
-                else
-                {
+                } else {
                     this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome ->
-                        description.add(this.user.getTranslation(reference + ".value",
-                            Constants.BIOME, Utils.prettifyObject(this.user, biome))));
+                            description.add(this.user.getTranslation(reference + ".value",
+                                    Constants.BIOME, Utils.prettifyObject(this.user, biome))));
                 }
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
                     SelectBiomePanel.open(user,
-                        this.generatorTier.getRequiredBiomes(),
-                        biomes -> {
-                            if (biomes != null)
-                            {
-                                this.generatorTier.setRequiredBiomes(biomes);
-                                this.manager.saveGeneratorTier(this.generatorTier);
-                            }
+                            this.generatorTier.getRequiredBiomes(),
+                            biomes -> {
+                                if (biomes != null) {
+                                    this.generatorTier.setRequiredBiomes(biomes);
+                                    this.manager.saveGeneratorTier(this.generatorTier);
+                                }
 
-                            this.build();
-                        });
+                                this.build();
+                            });
 
                     return true;
                 };
@@ -741,16 +699,12 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case DEPLOYED:
-            {
+            case DEPLOYED -> {
                 itemStack = new ItemStack(Material.LEVER);
 
-                if (this.generatorTier.isDeployed())
-                {
+                if (this.generatorTier.isDeployed()) {
                     description.add(this.user.getTranslation(reference + ".enabled"));
-                }
-                else
-                {
+                } else {
                     description.add(this.user.getTranslation(reference + ".disabled"));
                 }
 
@@ -770,16 +724,14 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case TREASURE_AMOUNT:
-            {
+            case TREASURE_AMOUNT -> {
                 itemStack = new ItemStack(Material.EMERALD);
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     Consumer<Number> numberConsumer = number -> {
-                        if (number != null)
-                        {
+                        if (number != null) {
                             this.generatorTier.setMaxTreasureAmount(number.intValue());
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -789,10 +741,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                        1,
-                        Integer.MAX_VALUE);
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            1,
+                            Integer.MAX_VALUE);
 
                     return true;
                 };
@@ -802,16 +754,14 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case TREASURE_CHANCE:
-            {
+            case TREASURE_CHANCE -> {
                 itemStack = new ItemStack(Material.PAPER);
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getTreasureChance())));
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getTreasureChance())));
 
                 clickHandler = (panel, user, clickType, i) -> {
                     Consumer<Number> numberConsumer = number -> {
-                        if (number != null)
-                        {
+                        if (number != null) {
                             this.generatorTier.setTreasureChance(number.doubleValue());
                             this.manager.saveGeneratorTier(this.generatorTier);
                         }
@@ -821,10 +771,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                        0,
-                        Double.MAX_VALUE);
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            0,
+                            Double.MAX_VALUE);
 
                     return true;
                 };
@@ -896,21 +846,12 @@ public class GeneratorEditPanel extends CommonPanel
             return true;
         };
 
-        Material material = Material.PAPER;
-
-        switch (button)
-        {
-            case INFO:
-                material = Material.WRITTEN_BOOK;
-                // add empty line
-                break;
-            case BLOCKS:
-                material = Material.CHEST;
-                break;
-            case TREASURES:
-                material = Material.SHULKER_BOX;
-                break;
-        }
+        Material material = switch (button) {
+            case INFO -> Material.WRITTEN_BOOK;
+            // add empty line
+            case BLOCKS -> Material.CHEST;
+            case TREASURES -> Material.SHULKER_BOX;
+        };
 
         return new PanelItemBuilder().
             name(name).
@@ -940,21 +881,16 @@ public class GeneratorEditPanel extends CommonPanel
         Material icon = Material.PAPER;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
+        switch (button) {
+            case RETURN -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
 
                 clickHandler = (panel, user, clickType, i) -> {
-                    if (this.parentPanel != null)
-                    {
+                    if (this.parentPanel != null) {
                         this.parentPanel.build();
-                    }
-                    else
-                    {
+                    } else {
                         user.closeInventory();
                     }
                     return true;
@@ -964,11 +900,10 @@ public class GeneratorEditPanel extends CommonPanel
 
                 break;
             }
-            case PREVIOUS:
-            {
+            case PREVIOUS -> {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -983,11 +918,10 @@ public class GeneratorEditPanel extends CommonPanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case NEXT:
-            {
+            case NEXT -> {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -1002,8 +936,7 @@ public class GeneratorEditPanel extends CommonPanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case ADD_MATERIAL:
-            {
+            case ADD_MATERIAL -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-add"));
@@ -1012,81 +945,69 @@ public class GeneratorEditPanel extends CommonPanel
                 clickHandler = (panel, user1, clickType, slot) -> {
 
                     SelectBlocksPanel.open(user1,
-                        true,
-                        this.activeTab == Tab.BLOCKS,
-                        value -> {
-                            if (value != null)
-                            {
-                                Consumer<Number> numberConsumer = number -> {
-                                    if (number != null)
-                                    {
-                                        if (this.activeTab == Tab.BLOCKS)
-                                        {
-                                            this.materialChanceList.add(
-                                                new Pair<>(value.iterator().next(),
-                                                    number.doubleValue()));
+                            true,
+                            this.activeTab == Tab.BLOCKS,
+                            value -> {
+                                if (value != null) {
+                                    Consumer<Number> numberConsumer = number -> {
+                                        if (number != null) {
+                                            if (this.activeTab == Tab.BLOCKS) {
+                                                this.materialChanceList.add(
+                                                        new Pair<>(value.iterator().next(),
+                                                                number.doubleValue()));
 
-                                            this.generatorTier.setBlockChanceMap(
-                                                Utils.pairList2TreeMap(this.materialChanceList));
-                                            this.manager.saveGeneratorTier(this.generatorTier);
+                                                this.generatorTier.setBlockChanceMap(
+                                                        Utils.pairList2TreeMap(this.materialChanceList));
+                                                this.manager.saveGeneratorTier(this.generatorTier);
+                                            } else if (this.activeTab == Tab.TREASURES) {
+                                                this.treasureChanceList.add(
+                                                        new Pair<>(new ItemStack(value.iterator().next()),
+                                                                number.doubleValue()));
+
+                                                this.generatorTier.setTreasureItemChanceMap(
+                                                        Utils.pairList2TreeMap(this.treasureChanceList));
+                                                this.manager.saveGeneratorTier(this.generatorTier);
+                                            }
                                         }
-                                        else if (this.activeTab == Tab.TREASURES)
-                                        {
-                                            this.treasureChanceList.add(
-                                                new Pair<>(new ItemStack(value.iterator().next()),
-                                                    number.doubleValue()));
 
-                                            this.generatorTier.setTreasureItemChanceMap(
-                                                Utils.pairList2TreeMap(this.treasureChanceList));
-                                            this.manager.saveGeneratorTier(this.generatorTier);
-                                        }
-                                    }
+                                        this.build();
+                                    };
 
+                                    ConversationUtils.createNumericInput(numberConsumer,
+                                            this.user,
+                                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                                            0.0,
+                                            Long.MAX_VALUE);
+                                } else {
                                     this.build();
-                                };
-
-                                ConversationUtils.createNumericInput(numberConsumer,
-                                    this.user,
-                                    this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                                    0.0,
-                                    Long.MAX_VALUE);
-                            }
-                            else
-                            {
-                                this.build();
-                            }
-                        });
+                                }
+                            });
 
                     return true;
                 };
 
                 break;
             }
-            case REMOVE_MATERIAL:
-            {
+            case REMOVE_MATERIAL -> {
                 icon = this.selectedMaterial.isEmpty() && this.selectedTreasures.isEmpty() ?
-                    Material.BARRIER : Material.LAVA_BUCKET;
+                        Material.BARRIER : Material.LAVA_BUCKET;
                 glow = !this.selectedMaterial.isEmpty() || !this.selectedTreasures.isEmpty();
 
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-                if (glow)
-                {
+                if (glow) {
                     clickHandler = (panel, user1, clickType, slot) -> {
 
                         this.materialChanceList.removeAll(this.selectedMaterial);
                         this.treasureChanceList.removeAll(this.selectedTreasures);
 
-                        if (this.activeTab == Tab.BLOCKS)
-                        {
+                        if (this.activeTab == Tab.BLOCKS) {
                             this.generatorTier.setBlockChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
                             this.manager.saveGeneratorTier(this.generatorTier);
                             this.selectedMaterial.clear();
-                        }
-                        else if (this.activeTab == Tab.TREASURES)
-                        {
+                        } else if (this.activeTab == Tab.TREASURES) {
                             this.generatorTier
-                                .setTreasureItemChanceMap(Utils.pairList2TreeMap(this.treasureChanceList));
+                                    .setTreasureItemChanceMap(Utils.pairList2TreeMap(this.treasureChanceList));
                             this.manager.saveGeneratorTier(this.generatorTier);
                             this.selectedTreasures.clear();
                         }
@@ -1098,27 +1019,23 @@ public class GeneratorEditPanel extends CommonPanel
 
                     description.add(this.user.getTranslation(reference + ".selected-materials"));
 
-                    if (!this.selectedMaterial.isEmpty())
-                    {
+                    if (!this.selectedMaterial.isEmpty()) {
                         this.selectedMaterial.forEach(pair ->
-                            description.add(this.user.getTranslation(reference + ".list-value",
-                                Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
-                                Constants.NUMBER, String.valueOf(pair.getValue()))));
+                                description.add(this.user.getTranslation(reference + ".list-value",
+                                        Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
+                                        Constants.NUMBER, String.valueOf(pair.getValue()))));
                     }
 
-                    if (!this.selectedTreasures.isEmpty())
-                    {
+                    if (!this.selectedTreasures.isEmpty()) {
                         this.selectedTreasures.forEach(pair ->
-                            description.add(this.user.getTranslation(reference + ".list-value",
-                                Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
-                                Constants.NUMBER, String.valueOf(pair.getValue()))));
+                                description.add(this.user.getTranslation(reference + ".list-value",
+                                        Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
+                                        Constants.NUMBER, String.valueOf(pair.getValue()))));
                     }
 
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-remove"));
-                }
-                else
-                {
+                } else {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "select-before"));
                 }

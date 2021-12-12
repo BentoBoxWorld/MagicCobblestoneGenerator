@@ -1,15 +1,16 @@
 package world.bentobox.magiccobblestonegenerator.panels.utils;
 
 
-import org.bukkit.Material;
-import org.bukkit.block.Biome;
-import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.bukkit.Material;
+import org.bukkit.block.Biome;
+import org.bukkit.inventory.ItemStack;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -64,31 +65,19 @@ public class SelectBiomePanel
 
         List<Biome> biomeList = Utils.getBiomeNameMap().values().stream().
             filter(biome -> {
-                switch (activeGroup)
-                {
-                    case NONE:
-                        return true;
-                    case TEMPERATE:
-                        return SelectBiomePanel.isTemperateBiome(biome);
-                    case WARM:
-                        return SelectBiomePanel.isWarmBiome(biome);
-                    case COLD:
-                        return SelectBiomePanel.isColdBiome(biome);
-                    case SNOWY:
-                        return SelectBiomePanel.isSnowyBiome(biome);
-                    case AQUATIC:
-                        return SelectBiomePanel.isAquaticBiome(biome);
-                    case CAVE:
-                        return SelectBiomePanel.isCaveBiome(biome);
-                    case NETHER:
-                        return SelectBiomePanel.isNetherBiome(biome);
-                    case THE_END:
-                        return SelectBiomePanel.isTheEndBiome(biome);
-                    case NEUTRAL:
-                        return SelectBiomePanel.isNeutralBiome(biome);
-                    default:
-                        return true;
-                }
+                return switch (activeGroup) {
+                    case NONE -> true;
+                    case TEMPERATE -> SelectBiomePanel.isTemperateBiome(biome);
+                    case WARM -> SelectBiomePanel.isWarmBiome(biome);
+                    case COLD -> SelectBiomePanel.isColdBiome(biome);
+                    case SNOWY -> SelectBiomePanel.isSnowyBiome(biome);
+                    case AQUATIC -> SelectBiomePanel.isAquaticBiome(biome);
+                    case CAVE -> SelectBiomePanel.isCaveBiome(biome);
+                    case NETHER -> SelectBiomePanel.isNetherBiome(biome);
+                    case THE_END -> SelectBiomePanel.isTheEndBiome(biome);
+                    case NEUTRAL -> SelectBiomePanel.isNeutralBiome(biome);
+                    default -> true;
+                };
             }).
             sorted().
             collect(Collectors.toList());
@@ -171,10 +160,8 @@ public class SelectBiomePanel
         Material icon = Material.PAPER;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
+        switch (button) {
+            case RETURN -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
                 description.add("");
@@ -190,11 +177,10 @@ public class SelectBiomePanel
 
                 break;
             }
-            case PREVIOUS:
-            {
+            case PREVIOUS -> {
                 count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -209,11 +195,10 @@ public class SelectBiomePanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case NEXT:
-            {
+            case NEXT -> {
                 count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
+                        Constants.NUMBER, String.valueOf(count)));
 
                 // add empty line
                 description.add("");
@@ -228,18 +213,15 @@ public class SelectBiomePanel
                 icon = Material.TIPPED_ARROW;
                 break;
             }
-            case ACCEPT_BIOME:
-            {
+            case ACCEPT_BIOME -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-                if (!this.selectedBiomes.isEmpty())
-                {
+                if (!this.selectedBiomes.isEmpty()) {
                     description.add(this.user.getTranslation(reference + ".selected-biomes"));
 
-                    for (Biome biome : this.selectedBiomes)
-                    {
+                    for (Biome biome : this.selectedBiomes) {
                         description.add(this.user.getTranslation(reference + ".list-value",
-                            Constants.VALUE, Utils.prettifyObject(this.user, biome)));
+                                Constants.VALUE, Utils.prettifyObject(this.user, biome)));
                     }
                 }
 
@@ -355,41 +337,21 @@ public class SelectBiomePanel
             description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-enable"));
         }
 
-        switch (biomeGroup)
-        {
-            case TEMPERATE:
-                icon = new ItemStack(Material.SUNFLOWER);
-                break;
-            case WARM:
-                icon = new ItemStack(Material.SAND);
-                break;
-            case COLD:
-                icon = new ItemStack(Material.GRAVEL);
-                break;
-            case SNOWY:
-                icon = new ItemStack(Material.SNOW_BLOCK);
-                break;
-            case AQUATIC:
-                icon = new ItemStack(Material.TROPICAL_FISH);
-                break;
-            case NETHER:
-                icon = new ItemStack(Material.NETHERRACK);
-                break;
-            case THE_END:
-                icon = new ItemStack(Material.END_STONE);
-                break;
-            case CAVE:
-                icon = new ItemStack(Material.POINTED_DRIPSTONE);
-                break;
-            case NEUTRAL:
-                icon = new ItemStack(Material.STRUCTURE_VOID);
-                break;
-            case UNUSED:
-                icon = new ItemStack(Material.BARRIER);
-                break;
-            default:
+        switch (biomeGroup) {
+            case TEMPERATE -> icon = new ItemStack(Material.SUNFLOWER);
+            case WARM -> icon = new ItemStack(Material.SAND);
+            case COLD -> icon = new ItemStack(Material.GRAVEL);
+            case SNOWY -> icon = new ItemStack(Material.SNOW_BLOCK);
+            case AQUATIC -> icon = new ItemStack(Material.TROPICAL_FISH);
+            case NETHER -> icon = new ItemStack(Material.NETHERRACK);
+            case THE_END -> icon = new ItemStack(Material.END_STONE);
+            case CAVE -> icon = new ItemStack(Material.POINTED_DRIPSTONE);
+            case NEUTRAL -> icon = new ItemStack(Material.STRUCTURE_VOID);
+            case UNUSED -> icon = new ItemStack(Material.BARRIER);
+            default -> {
                 name = "";
                 icon = new ItemStack(Material.AIR);
+            }
         }
 
         return new PanelItemBuilder().
@@ -442,18 +404,11 @@ public class SelectBiomePanel
      */
     private static boolean isSnowyBiome(Biome biome)
     {
-        switch (biome)
-        {
+        return switch (biome) {
             //case SNOWY_SLOPES:
-            case SNOWY_PLAINS:
-            case SNOWY_TAIGA:
-            case ICE_SPIKES:
-            case FROZEN_RIVER:
-            case SNOWY_BEACH:
-                return true;
-            default:
-                return false;
-        }
+            case SNOWY_PLAINS, SNOWY_TAIGA, ICE_SPIKES, FROZEN_RIVER, SNOWY_BEACH -> true;
+            default -> false;
+        };
     }
 
 
@@ -465,19 +420,10 @@ public class SelectBiomePanel
      */
     private static boolean isColdBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case WINDSWEPT_HILLS:
-            case WINDSWEPT_GRAVELLY_HILLS:
-            case WINDSWEPT_FOREST:
-            case TAIGA:
-            case OLD_GROWTH_PINE_TAIGA:
-            case OLD_GROWTH_SPRUCE_TAIGA:
-            case STONY_SHORE:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case WINDSWEPT_HILLS, WINDSWEPT_GRAVELLY_HILLS, WINDSWEPT_FOREST, TAIGA, OLD_GROWTH_PINE_TAIGA, OLD_GROWTH_SPRUCE_TAIGA, STONY_SHORE -> true;
+            default -> false;
+        };
     }
 
 
@@ -489,26 +435,10 @@ public class SelectBiomePanel
      */
     private static boolean isTemperateBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case PLAINS:
-            case SUNFLOWER_PLAINS:
-            case FOREST:
-            case FLOWER_FOREST:
-            case BIRCH_FOREST:
-            case OLD_GROWTH_BIRCH_FOREST:
-            case DARK_FOREST:
-            case SWAMP:
-            case JUNGLE:
-            case SPARSE_JUNGLE:
-            case BAMBOO_JUNGLE:
-            case RIVER:
-            case BEACH:
-            case MUSHROOM_FIELDS:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case PLAINS, SUNFLOWER_PLAINS, FOREST, FLOWER_FOREST, BIRCH_FOREST, OLD_GROWTH_BIRCH_FOREST, DARK_FOREST, SWAMP, JUNGLE, SPARSE_JUNGLE, BAMBOO_JUNGLE, RIVER, BEACH, MUSHROOM_FIELDS -> true;
+            default -> false;
+        };
     }
 
 
@@ -520,20 +450,12 @@ public class SelectBiomePanel
      */
     private static boolean isWarmBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case DESERT:
-            case SAVANNA:
-            case WINDSWEPT_SAVANNA:
-            case BADLANDS:
-            case ERODED_BADLANDS:
-            case WOODED_BADLANDS:
-            case SAVANNA_PLATEAU:
-            // case BADLANDS_PLATEAU:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case DESERT, SAVANNA, WINDSWEPT_SAVANNA, BADLANDS, ERODED_BADLANDS, WOODED_BADLANDS, SAVANNA_PLATEAU ->
+                    // case BADLANDS_PLATEAU:
+                    true;
+            default -> false;
+        };
     }
 
 
@@ -545,21 +467,10 @@ public class SelectBiomePanel
      */
     private static boolean isAquaticBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case WARM_OCEAN:
-            case LUKEWARM_OCEAN:
-            case DEEP_LUKEWARM_OCEAN:
-            case OCEAN:
-            case DEEP_OCEAN:
-            case COLD_OCEAN:
-            case DEEP_COLD_OCEAN:
-            case FROZEN_OCEAN:
-            case DEEP_FROZEN_OCEAN:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case WARM_OCEAN, LUKEWARM_OCEAN, DEEP_LUKEWARM_OCEAN, OCEAN, DEEP_OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, FROZEN_OCEAN, DEEP_FROZEN_OCEAN -> true;
+            default -> false;
+        };
     }
 
 
@@ -583,14 +494,10 @@ public class SelectBiomePanel
      */
     private static boolean isCaveBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case LUSH_CAVES:
-            case DRIPSTONE_CAVES:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case LUSH_CAVES, DRIPSTONE_CAVES -> true;
+            default -> false;
+        };
     }
 
 
@@ -602,17 +509,10 @@ public class SelectBiomePanel
      */
     private static boolean isNetherBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case NETHER_WASTES:
-            case SOUL_SAND_VALLEY:
-            case CRIMSON_FOREST:
-            case WARPED_FOREST:
-            case BASALT_DELTAS:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case NETHER_WASTES, SOUL_SAND_VALLEY, CRIMSON_FOREST, WARPED_FOREST, BASALT_DELTAS -> true;
+            default -> false;
+        };
     }
 
 
@@ -624,17 +524,10 @@ public class SelectBiomePanel
      */
     private static boolean isTheEndBiome(Biome biome)
     {
-        switch (biome)
-        {
-            case THE_END:
-            case SMALL_END_ISLANDS:
-            case END_MIDLANDS:
-            case END_HIGHLANDS:
-            case END_BARRENS:
-                return true;
-            default:
-                return false;
-        }
+        return switch (biome) {
+            case THE_END, SMALL_END_ISLANDS, END_MIDLANDS, END_HIGHLANDS, END_BARRENS -> true;
+            default -> false;
+        };
     }
 
 

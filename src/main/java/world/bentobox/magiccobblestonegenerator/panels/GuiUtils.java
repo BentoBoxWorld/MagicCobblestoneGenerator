@@ -1,12 +1,13 @@
 package world.bentobox.magiccobblestonegenerator.panels;
 
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -157,32 +158,15 @@ public class GuiUtils
      */
     public static Material getGeneratorTypeMaterial(GeneratorTierObject.GeneratorType generatorType)
     {
-        Material icon;
-
-        switch (generatorType)
-        {
-            case COBBLESTONE:
-                icon = Material.COBBLESTONE;
-                break;
-            case STONE:
-                icon = Material.STONE;
-                break;
-            case BASALT:
-                icon = Material.BASALT;
-                break;
-            case COBBLESTONE_OR_STONE:
-                icon = Material.ANDESITE;
-                break;
-            case BASALT_OR_COBBLESTONE:
-                icon = Material.GRANITE;
-                break;
-            case BASALT_OR_STONE:
-                icon = Material.BLACKSTONE;
-                break;
-            default:
-                icon = Material.BEDROCK;
-                break;
-        }
+        Material icon = switch (generatorType) {
+            case COBBLESTONE -> Material.COBBLESTONE;
+            case STONE -> Material.STONE;
+            case BASALT -> Material.BASALT;
+            case COBBLESTONE_OR_STONE -> Material.ANDESITE;
+            case BASALT_OR_COBBLESTONE -> Material.GRANITE;
+            case BASALT_OR_STONE -> Material.BLACKSTONE;
+            default -> Material.BEDROCK;
+        };
 
         return icon;
     }
@@ -227,14 +211,7 @@ public class GuiUtils
             // Materials Potted elements cannot be in inventory.
             itemStack = new ItemStack(Material.getMaterial(material.name().replace("POTTED_", "")));
         }
-        else if (M2M.containsKey(material))
-        {
-            itemStack = new ItemStack(M2M.get(material));
-        }
-        else
-        {
-            itemStack = new ItemStack(material);
-        }
+        else itemStack = new ItemStack(M2M.getOrDefault(material, material));
 
         itemStack.setAmount(amount);
 

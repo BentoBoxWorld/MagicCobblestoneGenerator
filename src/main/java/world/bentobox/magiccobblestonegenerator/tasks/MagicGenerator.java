@@ -1,12 +1,13 @@
 package world.bentobox.magiccobblestonegenerator.tasks;
 
 
+import java.util.Random;
+import java.util.TreeMap;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import java.util.Random;
-import java.util.TreeMap;
 
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -84,7 +85,7 @@ public class MagicGenerator
                     ItemStack drop = itemStack.clone();
                     drop.setAmount(this.random.nextInt(generatorTier.getMaxTreasureAmount() + 1) + 1);
 
-                    Why.report(location, "Dropping treasure " + drop.toString() + " by " + generatorTier.getUniqueId());
+                    Why.report(location, "Dropping treasure " + drop + " by " + generatorTier.getUniqueId());
 
                     // drop item naturally in the location of the block
                     location.getWorld().dropItemNaturally(location, drop);
