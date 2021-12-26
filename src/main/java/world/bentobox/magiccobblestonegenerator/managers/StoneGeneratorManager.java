@@ -1384,8 +1384,10 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0 &&
-            this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess())
+        if (!this.addon.isVaultProvided() ||
+            generatorTier.getGeneratorTierCost() == 0 ||
+            (generatorTier.getGeneratorTierCost() > 0 &&
+                this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess()))
         {
             // TODO: Deprecated code. Use "GeneratorBuyEvent" class.
             Map<String, Object> keyValues = new HashMap<>();
