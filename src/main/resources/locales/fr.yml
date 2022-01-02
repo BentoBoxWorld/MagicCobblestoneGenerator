@@ -13,9 +13,18 @@ stone-generator:
       why:
         parameters: "<joueur>"
         description: basculer les messages de débogage sur le générateur Magic Cobblestone.
-      database: {}
-      import-database: {}
-      export: {}
+      database:
+        description: Base de données principale
+      import-database:
+        parameters: "<file>"
+        description: importe le fichier de base de données des générateurs magiques
+        confirmation: Cela permettra de supprimer les générateurs existants pour le
+          [gamemode] et d'importer les générateurs du fichier base de données - veuillez
+          confirmer
+      export:
+        parameters: "<file>"
+        description: Exporter la base de données du générateur magique a partir du
+          mode jeu dans un fichier
     player:
       main:
         description: Commande du joueur principal qui ouvre l'interface graphique
@@ -24,13 +33,34 @@ stone-generator:
         description: Commande Player qui ouvre l'interface graphique avec des informations
           détaillées sur le générateur demandé
         parameters: "<generator_id> - id du générateur"
-      buy: {}
-      activate: {}
+      buy:
+        description: Achète le générateur souhaité
+        parameters: "<generator-id>"
+      activate:
+        description: Activer/désactiver le générateur demandé
+        parameters: "<generator-id> <true/false>"
   gui:
-    titles: {}
+    titles:
+      player-panel: "&0&l Générateur"
+      view-generator: "&0&l Générateur : &r [generator]"
+      admin-panel: "&0&l Menu Administrateur"
+      select-biome: "&0&l Sélectionnez Biomes"
+      select-block: "&0&l Sélectionnez block"
+      select-bundle: "&0&l Sélectionnez le Bundle"
+      select-type: "&0&l Sélectionnez le type de générateur"
+      view-bundle: "&0&l Bundle: &r [bundle]"
+      manage-bundles: "&0&l Gérer Bundles"
+      manage-generators: "&0&l Gérer les générateurs"
+      view-island: "&0&l Île : [island]"
+      manage-islands: "&0&l Gérer les données des îles"
+      library: "&0&l Bibliothèque"
+      settings: "&0&l Paramètres"
     buttons:
       default:
         name: Générateur par défaut
+        description: "&7Les générateurs par défaut sont toujours &7 activé."
+        enabled: "&b Il s'agit du générateur par &a défaut."
+        disabled: "&cIl ne s'agit pas du générateur par défaut."
       priority:
         name: Priorité du générateur
         description: |-
@@ -39,19 +69,33 @@ stone-generator:
           être préféré si plusieurs
           peut être appliqué au
           même endroit
+        value: "&b Priorité: &7 [number]"
       type:
         name: Type de générateur
+        description: |-
+          &7Définit le type de générateur
+          &7qui sera appliqué à l'actuelle &7Générateur.
+        value: "&b Type: &7 [type]"
       required_min_level:
         name: Niveau d'île requis
         description: Niveau insulaire minimal
+        value: "&bIs level minimum requis: [number]"
       required_permissions:
         name: Autorisations requises
+        description: |-
+          &7 Liste des autorisations qui
+          &7 sont nécessaires pour débloquer
+          &7 ce générateur.
+        list: "&b Permissions nécessaires :"
+        value: "&b - [permission]"
+        none: "&b - aucun"
       purchase_cost:
         name: Coût d'achat
         description: |-
           Montant de crédits
           doivent être payés une fois pour
           déverrouiller ce générateur
+        value: "&b Coût: [number]"
       activation_cost:
         name: Coût d'activation
         description: |-
@@ -59,22 +103,28 @@ stone-generator:
           doivent être payés à chaque fois
           pour l'activer
           Générateur
+        value: "&b Coût: [number]"
       biomes:
         name: Biomes opérationnels
         description: |-
           Liste des biomes où
           ce générateur
           travail
+        list: "&b Biomes:"
+        value: "&b - [biome]"
+        any: "&b - tout"
       treasure_amount:
         name: Quantité de trésor
         description: |-
           Quantité de trésors
           qui sera abandonné.
+        value: "&b Montant: [number]"
       treasure_chance:
         name: Treasure Chance
         description: |-
           Chance d'obtenir un trésor
           être abandonné.
+        value: "&b Chance: [number]"
       info:
         name: Informations générales
         description: |-
@@ -94,12 +144,16 @@ stone-generator:
           être abandonné.
           Les trésors sont lâchés
           sur la génération de blocs
+        drag-and-drop: "&7 Supporte le glisser-déposer \n&7 des objets aux espaces
+          vides."
       block-icon:
         name: "[Matériel]"
         description: 'Possibilité de générer: [#. ##]'
+        actual: "&b Valeur de la base de données: [number]"
       treasure-icon:
         name: "[Matériel]"
         description: 'Chance de tomber: [#. ####]'
+        actual: "&b Valeur de la base de données: [number]"
       show_cobblestone:
         name: Générateurs Cobblestone
         description: |-
@@ -136,52 +190,255 @@ stone-generator:
       next:
         name: Page suivante
         description: Passer à la page suivante
-      manage_users: {}
-      manage_generator_tiers: {}
-      manage_generator_bundles: {}
-      settings: {}
-      import_template: {}
-      web_library: {}
-      export_from_database: {}
-      import_to_database: {}
-      wipe_user_data: {}
-      wipe_generator_data: {}
-      bundle_name: {}
-      bundle_icon: {}
-      bundle_description: {}
-      bundle_info: {}
-      bundle_generators: {}
-      add_generator: {}
-      remove_generator: {}
-      create_bundle: {}
-      delete_bundle: {}
+      manage_users:
+        name: "&f&l Gérer les données des îles"
+        description: |-
+          &7 Gérer les données des îles
+          &7 dans le mode de jeu actuel.
+      manage_generator_tiers:
+        name: "&f&l Gérer les générateurs"
+        description: |-
+          &7 Gérer les générateurs
+          &7 dans le mode de jeu actuel.
+      manage_generator_bundles:
+        name: "&f&l Manage Bundles"
+        description: |-
+          &7 Gérer les Bundles
+          &7 dans le mode de jeu actuel.
+      settings:
+        name: "&f&l Paramètres"
+        description: |-
+          &7 Vérifier et modifier
+          &7 les paramètres de l'addon.
+      import_template:
+        name: "&f&l Modèle d'importation"
+        description: |-
+          &7 Modèle d'importation
+          &7 situé dans le dossier
+          &7 addon.
+      web_library:
+        name: "&f&l Bibliothèque en ligne"
+        description: |-
+          &7 Accéder au web
+          &7 bibliothèque qui contient
+          &7 générateurs partagés.
+      export_from_database:
+        name: "&f&l Exportation de la base de donnée"
+        description: |-
+          &7 Exporter la base de données
+          &7 en un seul fichier situé dans
+          &7 le répertoire addon.
+      import_to_database:
+        name: "&f&l Importation de la base de données"
+        description: |-
+          &7 Importer une base de données à partir de
+          &7 un fichier situé dans l'addon
+           &7 répertoire.
+      wipe_user_data:
+        name: "&f&l Effacer la base de données des utilisateurs"
+        description: |-
+          &7 Suppression des données des utilisateurs
+          &7 pour chaque île du
+          &7 mode de jeu actuel.
+      wipe_generator_data:
+        name: "&f&l Supprimer la base de donnée des générateurs"
+        description: |-
+          &7 Efface les générateurs et bundle
+          &7 dans le mode de jeu actuel.
+      bundle_name:
+        name: "&f&l Nom du Bundle "
+        description: "&7 Change le nom du bundle."
+        value: "&b Nom: &r [bundle]"
+      bundle_icon:
+        name: "&f&l Icone du Bundle "
+        description: "&7 Changer l'icône du bundle."
+      bundle_description:
+        name: "&f&l Description du Bundle"
+      bundle_info:
+        name: "&f&l Information général "
+        description: |-
+          &7 Afficher les informations générales
+          &7 à propos de ce bundle.
+      bundle_generators:
+        name: "&f&l Générateur"
+        description: |-
+          &7 Afficher une liste de générateurs
+          &7 affectés à ce bundle.
+      add_generator:
+        name: "&f&l Ajouter un générateur"
+        description: |-
+          &7 Ajouter un générateur
+          &7 à ce bundle.
+        list: "&b Générateurs sélectionnés:"
+        value: "&b - [generator]"
+      remove_generator:
+        name: "&f&l Supprimer le générateur"
+        description: |-
+          &7 Supprimer un générateur
+          &7 de ce bundle.
+        list: "&b Générateurs sélectionnés:"
+        value: "&b - [generator]"
+      create_bundle:
+        name: "&f&l Créer Bundle"
+        description: |-
+          &7 Créer un nouveau bundle
+          &7 pour ce mode de jeu.
+      delete_bundle:
+        name: "&f&l Supprimer le Bundle"
+        description: "&7 Supprimer complétement un bundle \n&7 de ce mode de jeu."
+        list: "&b Bundles sélectionnés:"
+        value: "&b - [bundle]"
       name:
         name: Nom du générateur
+        description: |-
+          &7 Titre pour ce générateur.
+          &7 Supporte les codes couleur.
+        value: "&b Nom : &r [generator]"
       icon:
         name: Icône de générateur
-      locked_icon: {}
+        description: "&7 Objet utilisé pour afficher ce \n&7 Générateur  dans toutes
+          les menus"
+      locked_icon:
+        name: "&f&l Icône verrouillée"
+        description: "&7 Objet utilisé pour afficher ce générateur\n&7 dans toutes
+          les interfaces graphiques \n&7 si il est verrouillé."
       description:
         name: Description du générateur
+        description: |-
+          &7 Texte pour le générateur qui
+          &7 être écrit sous le titre.
+        value: "&b Description:"
       deployed:
         name: Déployé
-      add_material: {}
-      remove_material: {}
-      create_generator: {}
-      delete_generator: {}
-      island_name: {}
-      island_working_range: {}
-      owner_working_range: {}
-      island_max_generators: {}
-      owner_max_generators: {}
-      island_bundle: {}
-      owner_bundle: {}
-      island_info: {}
-      island_generators: {}
-      reset_to_default: {}
-      is_online: {}
-      all_islands: {}
-      search: {}
+        description: |-
+          &7 Les générateurs déployés sont visibles
+          &7 aux joueurs et accessible par eux.
+          &7 Les générateurs non déployés ne
+          &7 génère pas des blocs.
+        enabled: "&b Ce générateur est &a déployé."
+        disabled: "&b Ce générateur &an'est pas déployé."
+      add_material:
+        name: "&f&l Ajouter matériel"
+        description: |-
+          &7 Ajouter du nouveau matériel à la
+          &7 liste des matériaux actuels.
+      remove_material:
+        name: "&f&l Enlever des matériaux"
+        description: |-
+          &7 Supprimer les matériaux
+          &7 sélectionner de la liste.
+        selected-materials: "&7 Matériaux sélectionnés:"
+        list-value: "&7 - [number] x [value]"
+      create_generator:
+        name: "&f&l Créer un générateur"
+        description: |-
+          &7 Créer un nouveau
+          &7 générateur pour
+          &7 le mode de jeu.
+      delete_generator:
+        name: "&f&l Supprimer le générateur"
+        description: "&7 Supprimer définitivement le \n&7 générateur du mode jeu ."
+        list: "&b Générateurs sélectionnés:"
+        value: "&b - [generator]"
+      island_name:
+        name: "&f&l [name]"
+        description: |-
+          &7 [owner]
+          &b [members]
+          &b Île ID: &7 [id]
+        owner: "&b Propriétaire: [player]"
+        list: "&b Membres :"
+        value: "&b - [player]"
+      island_working_range:
+        name: "&f&l Distance de travail de l'ile"
+        description: |-
+          &7 Distance de travail pour les générateurs
+          &7 sur l'île actuelle.
+          &7 0 et moins signifie illimité.
+        value: "&b Distance : [number]"
+        overwritten: |-
+          &c Le propriétaire a une autorisation qui
+          &c écrase la distance de travail.
+      owner_working_range:
+        name: "&f&l Distance de travail du propriétaire"
+        description: |-
+          &7 Gamme de travail pour les générateurs
+          &7 pour le propriétaire actuel.
+          &7 "0" signifie que la fourchette du propriétaire est
+          &7 ignorée.
+          &7 "-1" signifie que le propriétaire a
+          &7 portée de travail illimitée.
+          "&7 Autorisation pour l'utilisateur d'attribuer :"
+          "&7&o '[gamemode].générateur de pierres."
+          "&7&o max-range.<nombre>'"
+        value: "&b Distance: [number]"
+      island_max_generators:
+        name: "&f&l Nombre de générateur maximum"
+        description: "&7 Nombre de générateur \n&7 maximum actif autorisés\n&7 en
+          même temps \n&7 pour l'île actuelle.\n&7 0 et en dessous signifie \n&7 illimité."
+        value: "&b Générateurs Max: [number]"
+        overwritten: |-
+          &c Le propriétaire a une autorisation qui
+          &c écrase le compte du générateur.
+      owner_max_generators:
+        name: "&f&l Maximum de propriétaire du générateur"
+        description: "&7 Maximum de concurrent actif \n&7 niveaux de générateur que
+          le\nLe propriétaire de l'île \n&7 est autorisé.\n&7 \"0\" signifie que le
+          montant du propriétaire\n&7 est ignorée.\n&7 \"-1\" signifie que le propriétaire
+          a\n&7 nombre illimité de générateurs.\n\"&7 Autorisation pour l'utilisateur
+          d'attribuer :\"\n\"&7&o '[gamemode].stone-generator.\"\n\"&7&o active-generators.<number>'\""
+        value: "&b Maximum de générateur: [number]"
+      island_bundle:
+        name: "&f&l Bundle d'île"
+        description: |-
+          &7 Bundle qui est attribuée à
+          &7 l'île actuelle.
+          &7 Seuls les générateurs de ce bundle
+          &7 peut être utilisé sur l'île.
+        value: "&b Bundle: [bundle]"
+        overwritten: |-
+          &c Le propriétaire a une autorisation qui
+          &c écrase le bundle.
+      owner_bundle:
+        name: "&f&l Propriétaire du Bundle"
+        description: |-
+          &7 bundle qui est attribuée au
+          &7 propriétaire actuel de l'île.
+          &7 Seuls les générateurs de ce bundle
+          &7 peut être utilisé sur l'île.
+          "&7 Permission pour l'utilisateur d'attribuer :"
+          "&7&o '[gamemode].stone-generator."
+          "&7&o bundle.<bundle-id>'"
+        value: "&b Bundle: [bundle]"
+      island_info:
+        name: "&f&l Information général"
+        description: |-
+          &7 Affiche des informations générales
+          &7 de cette île.
+      island_generators:
+        name: "&f&l Générateurs de l'île"
+        description: |-
+          &7 Affiche la liste de tous les générateurs
+          &7 qui sont disponibles pour
+          &7 l'île actuelle.
+      reset_to_default:
+        name: "&f&l Rétablir par défauts"
+        description: "&7 Remise à zéro de toutes les valeurs\n&7 aux valeurs par défaut
+          \n&7 des réglages."
+      is_online:
+        name: "&f&l Joueurs en ligne"
+        description: |-
+          &7 List of online player
+          &7 islands.
+      all_islands:
+        name: "&f&l Toutes les îles"
+        description: "&7 Liste de toutes les îles."
+      search:
+        name: "&f&l Recherchez"
+        description: "&7 Recherche d'une île spécifique."
+        search: "&b Valeur : [value]"
       offline_generation:
+        name: "&f&l Génération hors ligne"
         description: |-
           & 7 Empêche les blocs d'être
           & 7 générés si tous les îlots
@@ -466,6 +723,7 @@ stone-generator:
     generator-loaded: "& a Generator & r '[generator]' & r & a est chargé dans le
       cache local."
     bundle-loaded: "& un Bundle & r '[bundle]' & r & a est chargé dans le cache local."
+    generator-deactivated: "& 6 Le générateur '[generator]' & r & 6 est désactivé."
     active-generators-reached: "& c Trop de générateurs sont activés. Essayez d'en
       désactiver certains avant d'en activer un nouveau."
     generator-cannot-be-unlocked: "& c Le générateur & r '[générateur]' & r & c n'est
@@ -475,6 +733,8 @@ stone-generator:
     generator-not-purchased: "& c Generator & r '[generator]' & r & c n'est pas acheté."
     no-credits: "& c Pas assez de crédits pour activer le générateur. L'activation
       nécessite [number] crédits."
+    generator-activated: "& 6 Le générateur '[generator]' & r & 6 est activé."
+    generator-purchased: "& 6 Générateur '[generator]' & r & 6 est acheté."
     generator-already-purchased: "& c Generator & r '[generator]' & r & c est déjà
       acheté."
     island-level-not-reached: "& c Générateur & r '[générateur]' & r & c nécessite
@@ -483,6 +743,8 @@ stone-generator:
       `[permission]`."
     no-credits-buy: "& c Pas assez de crédits pour acheter un générateur. Ce générateur
       coûte [nombre] crédits."
+    import-count: "&e Importation de [generator] nouveaux générateurs et de [bundle]
+      nouveaux bundle."
     start-downloading: "& e Démarrez le téléchargement de la bibliothèque."
   errors:
     no-generator-data: "& c Impossible de trouver des données de générateur valides"
@@ -491,8 +753,12 @@ stone-generator:
     no-library-entries: "& c Impossible de trouver une entrée de bibliothèque!"
     no-file: Fichier & c generatorTemplate.yml introuvable. Impossible d'effectuer
       l'importation.
+    no-load: "& c Impossible de charger le fichier `[file]`. Erreur lors de la lecture:
+      [description]."
     not-a-gamemode-world: "& c World '[world]' n'est pas un monde Addon Mode Jeu."
     file-exist: "& c Le fichier «[fichier]» existe déjà. Choisissez un autre nom."
+    generator-tier-not-found: "& c Générateur avec l'ID '[generator]' & r & c introuvable
+      dans [gamemode]."
     no-generators-in-world: "& c Impossible de trouver un générateur dans [monde]"
   conversations:
     confirm-string: vrai, allumé, oui, confirmer, y, valide, correct
@@ -531,14 +797,36 @@ stone-generator:
       Choisissez-en un autre."
     confirm-deletion: "& e Confirmez que vous souhaitez supprimer [nombre] objets:
       ([valeur])"
+    data-removed: "&a Succès, les données ont été supprimées !"
+    input-number: "&e Veuillez entrer un numéro dans le chat."
+    write-permissions: '&e Veuillez entrer les autorisations requises, une par ligne
+      dans le chat, et "quitter" sur une ligne seule pour terminer.'
+    permissions-changed: "&a Succès, les autorisations des générateurs ont été mises
+      à jour."
+    confirm-data-replacement: "&e Veuillez confirmer que vous souhaitez remplacer
+      vos générateurs actuels par de nouveaux."
+    new-generators-imported: "&a Succès, nouveaux générateurs pour [gamemode] ont
+      été importés."
+    click-text-to-purchase: "&e Vous avez déverrouillé &r [generator]&r&e! Cliquez
+      ici pour l'acheter maintenant pour [number]."
+    click-text-to-activate-vault: "&e Vous avez déverrouillé &r [generator]&r&e! Cliquez
+      ici pour l'activer maintenant pour [number]."
+    click-text-to-activate: "&e Vous avez déverrouillé &r [generator]&r&e! Cliquez
+      ici pour l'activer maintenant."
   materials:
-    stone: {}
+    cobblestone: Cobblestone
+    stone:
+      name: Stone
   biomes:
-    flower_forest: {}
+    plains: Plaines
+    flower_forest:
+      name: Forêt de fleurs
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:
+      name: Générateur magique
       description: Basculer le générateur de pavés magiques
+      hint: "&e Magic Generators est désactivé dans les réglages de l'île"
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
       name: Autorisations du générateur de pavés magiques
       description: Changer qui peut activer et désactiver les générateurs
