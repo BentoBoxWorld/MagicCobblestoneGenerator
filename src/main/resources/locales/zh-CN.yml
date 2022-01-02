@@ -513,6 +513,7 @@ stone-generator:
       shift-click-to-purchase: "&eShift单击 &7购买"
       shift-click-to-activate: "&eShift单击 &7激活"
       shift-click-to-deactivate: "&eShift单击 &7禁用"
+      shift-click-to-reset: "&e按住 Shift 键&7 单击以重置"
     descriptions:
       generator:
         lore: |-
