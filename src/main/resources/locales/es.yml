@@ -16,6 +16,7 @@ stone-generator:
       database:
         description: Comando de la base de datos principal
       import-database:
+        parameters: "<file>"
         description: importa el archivo de base de datos de generadores mágicos
         confirmation: Esto eliminará los generadores existentes para [modo de juego]
           y los generadores de importación del archivo de la base de datos. Confirme.
