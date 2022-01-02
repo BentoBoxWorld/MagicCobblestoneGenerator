@@ -301,8 +301,15 @@ stone-generator:
         value: "& b Nombre: & r [generador]"
       icon:
         name: Icono de generador
+        description: |-
+          & 7 Elemento utilizado para mostrar este
+          & 7 generador en todas las GUI.
       locked_icon:
         name: "& f & l Icono de bloqueo"
+        description: |-
+          & 7 Elemento utilizado para mostrar este
+          & 7 generador en todas las GUI si
+          & 7 está bloqueado.
       description:
         name: Descripción del generador
         description: |-
