@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.jetbrains.annotations.Nullable;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -20,7 +21,6 @@ import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -101,10 +101,8 @@ public class GeneratorUserPanel extends CommonPanel
         // If border block is not set, then do not build it.
         if (this.isBorderEnabled)
         {
-            GuiUtils.fillBorder(panelBuilder,
-                this.rowCount + 2,
-                this.addon.getSettings().getBorderBlock(),
-                this.addon.getSettings().getBorderBlockName());
+            PanelUtils.fillBorder(panelBuilder,
+                this.rowCount + 2);
         }
 
         // Show filters only if they are enabled.
@@ -267,7 +265,7 @@ public class GeneratorUserPanel extends CommonPanel
                 break;
             }
             case PREVIOUS -> {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 
@@ -285,7 +283,7 @@ public class GeneratorUserPanel extends CommonPanel
                 break;
             }
             case NEXT -> {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 

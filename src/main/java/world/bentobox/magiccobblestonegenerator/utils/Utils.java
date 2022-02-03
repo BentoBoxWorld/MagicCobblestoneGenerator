@@ -43,6 +43,74 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
  */
 public class Utils
 {
+// ---------------------------------------------------------------------
+// Section: Other
+// ---------------------------------------------------------------------
+
+
+    /**
+     * This method returns index of previous page based on current page index and max page index.
+     *
+     * @param pageIndex Current page index.
+     * @param maxPageIndex Maximal page count.
+     * @return Integer of previous page index.
+     */
+    public static int getPreviousPage(int pageIndex, int maxPageIndex)
+    {
+        // Page 0 is viewed... back arrow = last page ... next arrow = 2
+        // Page 1 is viewed... back arrow = 1 ... next arrow = 3
+        // Page 2 is viewed... back arrow = 2 ... next arrow = 4
+        // Page n is viewed... back arrow = n ... next arrow = n+2
+        // Last page is viewed .. back arrow = last... next arrow = 1
+
+        return pageIndex == 0 ? maxPageIndex + 1 : pageIndex;
+    }
+
+
+    /**
+     * This method returns index of next page based on current page index and max page index.
+     *
+     * @param pageIndex Current page index.
+     * @param maxPageIndex Maximal page count.
+     * @return Integer of next page index.
+     */
+    public static int getNextPage(int pageIndex, int maxPageIndex)
+    {
+        // Page 0 is viewed... back arrow = last page ... next arrow = 2
+        // Page 1 is viewed... back arrow = 1 ... next arrow = 3
+        // Page 2 is viewed... back arrow = 2 ... next arrow = 4
+        // Page n is viewed... back arrow = n ... next arrow = n+2
+        // Last page is viewed .. back arrow = last... next arrow = 1
+
+        return pageIndex == maxPageIndex ? 1 : pageIndex + 2;
+    }
+
+
+    /**
+     * This method assigns Material icon based on input generator type.
+     *
+     * @param generatorType Generator type which icon should be returned.
+     * @return Material for input generator type.
+     */
+    public static Material getGeneratorTypeMaterial(GeneratorTierObject.GeneratorType generatorType)
+    {
+        return switch (generatorType) {
+            case COBBLESTONE -> Material.COBBLESTONE;
+            case STONE -> Material.STONE;
+            case BASALT -> Material.BASALT;
+            case COBBLESTONE_OR_STONE -> Material.ANDESITE;
+            case BASALT_OR_COBBLESTONE -> Material.GRANITE;
+            case BASALT_OR_STONE -> Material.BLACKSTONE;
+            default -> Material.BEDROCK;
+        };
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Permissions
+// ---------------------------------------------------------------------
+
+
     /**
      * This method gets string value of given permission prefix. If user does not have given permission or it have all
      * (*), then return default value.

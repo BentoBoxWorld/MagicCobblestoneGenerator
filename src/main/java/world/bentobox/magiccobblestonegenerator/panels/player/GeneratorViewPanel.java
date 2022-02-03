@@ -11,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -21,7 +22,6 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -103,10 +103,8 @@ public class GeneratorViewPanel extends CommonPanel
 
         if (!this.addon.getSettings().getBorderBlock().isAir())
         {
-            GuiUtils.fillBorder(panelBuilder,
-                5,
-                this.addon.getSettings().getBorderBlock(),
-                this.addon.getSettings().getBorderBlockName());
+            PanelUtils.fillBorder(panelBuilder,
+                5);
         }
 
         this.populateHeader(panelBuilder);
@@ -385,7 +383,7 @@ public class GeneratorViewPanel extends CommonPanel
             }
             case TYPE -> {
                 itemStack = new ItemStack(
-                        GuiUtils.getGeneratorTypeMaterial(this.generatorTier.getGeneratorType()));
+                        Utils.getGeneratorTypeMaterial(this.generatorTier.getGeneratorType()));
 
                 description.add(this.user.getTranslation(reference + ".value",
                         Constants.TYPE, this.user.getTranslation(
@@ -607,7 +605,7 @@ public class GeneratorViewPanel extends CommonPanel
                 break;
             }
             case PREVIOUS -> {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 
@@ -625,7 +623,7 @@ public class GeneratorViewPanel extends CommonPanel
                 break;
             }
             case NEXT -> {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 
@@ -797,7 +795,7 @@ public class GeneratorViewPanel extends CommonPanel
             name(this.user.getTranslation(Constants.BUTTON + "treasure-icon.name",
                 Constants.BLOCK, Utils.prettifyObject(this.user, treasure))).
             description(description).
-            icon(GuiUtils.getMaterialItem(treasure.getType())).
+            icon(PanelUtils.getMaterialItem(treasure.getType())).
             clickHandler((panel, user1, clickType, i) -> true).
             build();
     }

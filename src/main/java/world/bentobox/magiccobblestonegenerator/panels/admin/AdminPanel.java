@@ -16,6 +16,7 @@ import java.util.function.Function;
 import org.bukkit.Material;
 import org.bukkit.World;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
@@ -23,7 +24,6 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -59,7 +59,7 @@ public class AdminPanel extends CommonPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "admin-panel"));
 
-        GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(10, this.createButton(Action.MANAGE_USERS));
         panelBuilder.item(28, this.createButton(Action.WIPE_USER_DATA));

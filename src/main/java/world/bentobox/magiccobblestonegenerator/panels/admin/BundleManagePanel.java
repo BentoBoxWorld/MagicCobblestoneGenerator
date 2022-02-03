@@ -12,6 +12,7 @@ import java.util.function.Function;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -19,7 +20,6 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -74,7 +74,8 @@ public class BundleManagePanel extends CommonPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "manage-bundles"));
 
-        GuiUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
+
+        PanelUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(1, this.createButton(Action.CREATE_BUNDLE));
         panelBuilder.item(2, this.createButton(Action.DELETE_BUNDLE));
@@ -136,7 +137,7 @@ public class BundleManagePanel extends CommonPanel
                 break;
             }
             case PREVIOUS -> {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 
@@ -154,7 +155,7 @@ public class BundleManagePanel extends CommonPanel
                 break;
             }
             case NEXT -> {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 

@@ -21,6 +21,7 @@ import org.bukkit.Material;
 
 import com.google.common.collect.ImmutableSet;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
@@ -28,8 +29,8 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -63,7 +64,7 @@ public class IslandManagePanel extends CommonPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "manage-islands"));
 
-        GuiUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(3, this.createButton(Tab.IS_ONLINE));
         panelBuilder.item(5, this.createButton(Tab.ALL_ISLANDS));
@@ -398,7 +399,7 @@ public class IslandManagePanel extends CommonPanel
             }
             case PREVIOUS:
             {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                     Constants.NUMBER, String.valueOf(count)));
 
@@ -417,7 +418,7 @@ public class IslandManagePanel extends CommonPanel
             }
             case NEXT:
             {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                     Constants.NUMBER, String.valueOf(count)));
 

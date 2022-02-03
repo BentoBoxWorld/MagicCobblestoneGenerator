@@ -12,11 +12,11 @@ import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -58,7 +58,7 @@ public class SelectBiomePanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "select-biome"));
 
-        GuiUtils.fillBorder(panelBuilder, Material.BLUE_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, Material.BLUE_STAINED_GLASS_PANE);
 
         // Maximal elements in page.
         final int MAX_ELEMENTS = 21;
@@ -178,7 +178,7 @@ public class SelectBiomePanel
                 break;
             }
             case PREVIOUS -> {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 
@@ -196,7 +196,7 @@ public class SelectBiomePanel
                 break;
             }
             case NEXT -> {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 

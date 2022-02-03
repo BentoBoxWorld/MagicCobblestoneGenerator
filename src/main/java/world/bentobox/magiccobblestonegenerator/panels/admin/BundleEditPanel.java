@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.PanelListener;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -24,7 +25,6 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundle
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -78,8 +78,7 @@ public class BundleEditPanel extends CommonPanel
             name(this.user.getTranslation(Constants.TITLE + "view-bundle",
                 Constants.BUNDLE, this.bundle.getFriendlyName()));
 
-        GuiUtils
-            .fillBorder(panelBuilder, this.activeTab == Tab.BUNDLE_INFO ? 3 : 5, Material.MAGENTA_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, this.activeTab == Tab.BUNDLE_INFO ? 3 : 5, Material.MAGENTA_STAINED_GLASS_PANE);
         this.populateHeader(panelBuilder);
 
         switch (this.activeTab) {
@@ -419,7 +418,7 @@ public class BundleEditPanel extends CommonPanel
                 break;
             }
             case PREVIOUS -> {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 
@@ -437,7 +436,7 @@ public class BundleEditPanel extends CommonPanel
                 break;
             }
             case NEXT -> {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                         Constants.NUMBER, String.valueOf(count)));
 

@@ -33,11 +33,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <powermock.version>2.0.2</powermock.version>
+        <powermock.version>2.0.9</powermock.version>
+        <mockito.version>4.2.0</mockito.version>
         <!-- More visible way how to change dependency versions -->
         <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.17.3</bentobox.version>
+        <bentobox.version>1.20.0-SNAPSHOT</bentobox.version>
         <level.version>2.5.0</level.version>
+        <!-- Panel Utils version -->
+        <panelutils.version>1.0.0</panelutils.version>
         <!-- Vault API version -->
         <vault.version>1.7</vault.version>
         <!-- Revision variable removes warning about dynamic version -->
@@ -137,7 +140,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.0.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -173,7 +176,12 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>18.0.0</version>
+            <version>22.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>lv.id.bonne</groupId>
+            <artifactId>panelutils</artifactId>
+            <version>${panelutils.version}</version>
         </dependency>
     </dependencies>
 
@@ -296,6 +304,22 @@
                 <version>3.3.1-SNAPSHOT</version>
                 <configuration>
                     <minimizeJar>true</minimizeJar>
+                    <artifactSet>
+                        <includes>
+                            <include>lv.id.bonne:panelutils:*</include>
+                        </includes>
+                    </artifactSet>
+                    <transformers>
+                        <!-- Add a transformer to exclude any other manifest files (possibly from dependencies). -->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                            <resource>MANIFEST.MF</resource>
+                        </transformer>
+                        <!-- Add a transformer to include your custom manifest file. -->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                            <resource>META-INF/MANIFEST.MF</resource>
+                            <file>src/main/resources/META-INF/MANIFEST.MF</file>
+                        </transformer>
+                    </transformers>
                 </configuration>
                 <executions>
                     <execution>

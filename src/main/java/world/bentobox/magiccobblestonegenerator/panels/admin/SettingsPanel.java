@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
@@ -21,7 +22,6 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBlocksPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
@@ -54,7 +54,7 @@ public class SettingsPanel extends CommonPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "settings"));
 
-        GuiUtils.fillBorder(panelBuilder, 4, Material.MAGENTA_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, 4, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(10, this.createButton(Action.OFFLINE_GENERATION));
         panelBuilder.item(11, this.createButton(Action.WORKING_RANGE));

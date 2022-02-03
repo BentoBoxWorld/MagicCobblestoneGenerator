@@ -7,13 +7,14 @@ import java.util.function.Consumer;
 
 import org.bukkit.Material;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
 /**
@@ -47,7 +48,7 @@ public class SelectGeneratorTypePanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "select-type"));
 
-        GuiUtils.fillBorder(panelBuilder, 3, Material.BLUE_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, 3, Material.BLUE_STAINED_GLASS_PANE);
 
         panelBuilder.item(10, this.buildButton(GeneratorTierObject.GeneratorType.COBBLESTONE));
         panelBuilder.item(11, this.buildButton(GeneratorTierObject.GeneratorType.STONE));
@@ -114,7 +115,7 @@ public class SelectGeneratorTypePanel
         description.add(this.user.getTranslation(Constants.TIPS + "click-to-choose"));
 
         return new PanelItemBuilder().
-            icon(GuiUtils.getGeneratorTypeMaterial(generatorType)).
+            icon(Utils.getGeneratorTypeMaterial(generatorType)).
             name(this.user
                 .getTranslation(Constants.GENERATOR_TYPE_BUTTON + generatorType.name().toLowerCase() + ".name")).
             description(description).

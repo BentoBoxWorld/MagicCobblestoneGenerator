@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -86,7 +86,7 @@ public class SelectBlocksPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "select-block"));
 
-        GuiUtils.fillBorder(panelBuilder, Material.BLUE_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, Material.BLUE_STAINED_GLASS_PANE);
 
         final int MAX_ELEMENTS = 21;
 
@@ -205,7 +205,7 @@ public class SelectBlocksPanel
         return new PanelItemBuilder().
             name(name).
             description(description).
-            icon(GuiUtils.getMaterialItem(material)).
+            icon(PanelUtils.getMaterialItem(material)).
             clickHandler((panel, user1, clickType, slot) -> {
                 if (this.singleSelect)
                 {
@@ -268,7 +268,7 @@ public class SelectBlocksPanel
             }
             case PREVIOUS:
             {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                     Constants.NUMBER, String.valueOf(count)));
 
@@ -287,7 +287,7 @@ public class SelectBlocksPanel
             }
             case NEXT:
             {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
+                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
                     Constants.NUMBER, String.valueOf(count)));
 
