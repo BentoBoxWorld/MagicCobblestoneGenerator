@@ -16,7 +16,6 @@ import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
-import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
@@ -59,12 +58,10 @@ public class IslandEditPanel extends CommonPanel
         {
             // Deal with situations when island name is not set.
 
-            User user = User.getInstance(island.getOwner());
-
-            if (user != null)
+            if (island.getOwner() != null)
             {
                 this.title = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
-                    Constants.PLAYER, user.getName());
+                    Constants.PLAYER, this.addon.getPlayers().getName(island.getOwner()));
             }
             else
             {
@@ -95,7 +92,7 @@ public class IslandEditPanel extends CommonPanel
             return;
         }
 
-        // PanelBuilder is a BentoBox API that provides ability to easy create Panels.
+        // PanelBuilder is a BentoBox API that provides ability to easily create Panels.
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "view-island",
@@ -429,7 +426,6 @@ public class IslandEditPanel extends CommonPanel
 
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
 
-        boolean glow = false;
         ItemStack itemStack = new ItemStack(Material.AIR);
 
         switch (button) {
@@ -470,8 +466,6 @@ public class IslandEditPanel extends CommonPanel
                 // Transform name into button title.
                 name = this.user.getTranslation(reference + ".name",
                         Constants.NAME, this.title);
-
-                break;
             }
             case ISLAND_WORKING_RANGE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
@@ -508,8 +502,6 @@ public class IslandEditPanel extends CommonPanel
 
                     return true;
                 };
-
-                break;
             }
             case OWNER_WORKING_RANGE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
@@ -523,8 +515,6 @@ public class IslandEditPanel extends CommonPanel
                 } else {
                     itemStack = new ItemStack(Material.STRUCTURE_VOID);
                 }
-
-                break;
             }
             case ISLAND_MAX_GENERATORS -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
@@ -561,8 +551,6 @@ public class IslandEditPanel extends CommonPanel
 
                     return true;
                 };
-
-                break;
             }
             case OWNER_MAX_GENERATORS -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
@@ -577,8 +565,6 @@ public class IslandEditPanel extends CommonPanel
                 } else {
                     itemStack = new ItemStack(Material.STRUCTURE_VOID);
                 }
-
-                break;
             }
             case ISLAND_BUNDLE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
@@ -626,8 +612,6 @@ public class IslandEditPanel extends CommonPanel
 
                     return true;
                 };
-
-                break;
             }
             case OWNER_BUNDLE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
@@ -644,8 +628,6 @@ public class IslandEditPanel extends CommonPanel
                 } else {
                     itemStack = new ItemStack(Material.STRUCTURE_VOID);
                 }
-
-                break;
             }
             case RESET_TO_DEFAULT -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
@@ -675,7 +657,6 @@ public class IslandEditPanel extends CommonPanel
             description(description).
             icon(itemStack).
             clickHandler(clickHandler).
-            glow(glow).
             build();
     }
 
@@ -706,7 +687,6 @@ public class IslandEditPanel extends CommonPanel
         Material material = switch (button) {
             case ISLAND_INFO -> Material.WRITTEN_BOOK;
             case ISLAND_GENERATORS -> Material.COBBLESTONE;
-            default -> Material.PAPER;
         };
 
         return new PanelItemBuilder().
@@ -754,26 +734,11 @@ public class IslandEditPanel extends CommonPanel
         Material material = Material.PAPER;
 
         switch (button) {
-            case SHOW_COBBLESTONE -> {
-                material = Material.COBBLESTONE;
-                break;
-            }
-            case SHOW_STONE -> {
-                material = Material.STONE;
-                break;
-            }
-            case SHOW_BASALT -> {
-                material = Material.BASALT;
-                break;
-            }
-            case TOGGLE_VISIBILITY -> {
-                material = Material.REDSTONE;
-                break;
-            }
-            case SHOW_ACTIVE -> {
-                material = Material.GREEN_STAINED_GLASS_PANE;
-                break;
-            }
+            case SHOW_COBBLESTONE -> material = Material.COBBLESTONE;
+            case SHOW_STONE -> material = Material.STONE;
+            case SHOW_BASALT -> material = Material.BASALT;
+            case TOGGLE_VISIBILITY -> material = Material.REDSTONE;
+            case SHOW_ACTIVE -> material = Material.GREEN_STAINED_GLASS_PANE;
         }
 
         return new PanelItemBuilder().
@@ -799,7 +764,6 @@ public class IslandEditPanel extends CommonPanel
 
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
 
-        boolean glow = false;
         Material icon = Material.PAPER;
         int count = 1;
 
@@ -819,8 +783,6 @@ public class IslandEditPanel extends CommonPanel
                 };
 
                 icon = Material.OAK_DOOR;
-
-                break;
             }
             case PREVIOUS -> {
                 count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
@@ -838,7 +800,6 @@ public class IslandEditPanel extends CommonPanel
                 };
 
                 icon = Material.TIPPED_ARROW;
-                break;
             }
             case NEXT -> {
                 count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
@@ -856,7 +817,6 @@ public class IslandEditPanel extends CommonPanel
                 };
 
                 icon = Material.TIPPED_ARROW;
-                break;
             }
         }
 
@@ -866,7 +826,6 @@ public class IslandEditPanel extends CommonPanel
             icon(icon).
             amount(count).
             clickHandler(clickHandler).
-            glow(glow).
             build();
     }
 
@@ -932,7 +891,7 @@ public class IslandEditPanel extends CommonPanel
          */
         RETURN,
         /**
-         * Allows to select previous generators in multi-page situation.
+         * Allows selecting previous generators in multi-page situation.
          */
         PREVIOUS,
         /**
@@ -1003,12 +962,12 @@ public class IslandEditPanel extends CommonPanel
     // ---------------------------------------------------------------------
 
     /**
-     * This variable stores island that is viewed.
+     * This variable store island that is viewed.
      */
     private final Island island;
 
     /**
-     * This variable stores generator data for this island.
+     * This variable store generator data for this island.
      */
     private final GeneratorDataObject generatorData;
 
