@@ -672,58 +672,6 @@ public class Utils
 
 
     /**
-     * This method prettify given Biome name to more friendly name.
-     *
-     * @param user User which translation set will be used.
-     * @param biome Biome that requires prettifying.
-     * @return Clean and readable biome name.
-     */
-    public static String prettifyObject(User user, Biome biome)
-    {
-        // Find addon structure with:
-        // [addon]:
-        //   biomes:
-        //     [biome]:
-        //       name: [name]
-        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase() + ".name");
-
-        if (!translation.isEmpty())
-        {
-            // We found our translation.
-            return translation;
-        }
-
-        // Find addon structure with:
-        // [addon]:
-        //   biomes:
-        //     [biome]: [name]
-
-        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase());
-
-        if (!translation.isEmpty())
-        {
-            // We found our translation.
-            return translation;
-        }
-
-        // Find general structure with:
-        // biomes:
-        //   [biome]: [name]
-
-        translation = user.getTranslationOrNothing("biomes." + biome.name().toLowerCase());
-
-        if (!translation.isEmpty())
-        {
-            // We found our translation.
-            return translation;
-        }
-
-        // Nothing was found. Use just a prettify text function.
-        return Util.prettifyText(biome.name());
-    }
-
-
-    /**
      * This method prettify given material name to more friendly name.
      *
      * @param user User which translation set will be used.

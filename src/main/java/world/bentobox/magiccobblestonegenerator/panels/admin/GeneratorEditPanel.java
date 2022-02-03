@@ -690,7 +690,7 @@ public class GeneratorEditPanel extends CommonPanel
                 {
                     this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome ->
                         description.add(this.user.getTranslation(reference + ".value",
-                            Constants.BIOME, Utils.prettifyObject(this.user, biome))));
+                            Constants.BIOME, Utils.prettifyObject(biome, this.user))));
                 }
 
                 clickHandler = (panel, user, clickType, i) ->

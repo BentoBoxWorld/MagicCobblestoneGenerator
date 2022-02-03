@@ -479,7 +479,7 @@ public abstract class CommonPanel
                 {
                     biomes.append("\n");
                     biomes.append(this.user.getTranslationOrNothing(reference + "biome",
-                        Constants.BIOME, Utils.prettifyObject(this.user, biome)));
+                        Constants.BIOME, Utils.prettifyObject(biome, this.user)));
                 });
         }
         else

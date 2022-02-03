@@ -194,7 +194,7 @@ public class MultiBiomeSelector extends PagedSelector<Biome>
 
                     for (Biome biome : this.selectedBiomes) {
                         description.add(this.user.getTranslation(reference + ".list-value",
-                                Constants.VALUE, Utils.prettifyObject(this.user, biome)));
+                                Constants.VALUE, Utils.prettifyObject(biome, this.user)));
                     }
                 }
 
@@ -260,7 +260,7 @@ public class MultiBiomeSelector extends PagedSelector<Biome>
         }
 
         String name = this.user.getTranslation(Constants.BUTTON + "biome-icon.name",
-            Constants.BIOME, Utils.prettifyObject(this.user, biome));
+            Constants.BIOME, Utils.prettifyObject(biome, this.user));
 
         return new PanelItemBuilder().
             name(name).
