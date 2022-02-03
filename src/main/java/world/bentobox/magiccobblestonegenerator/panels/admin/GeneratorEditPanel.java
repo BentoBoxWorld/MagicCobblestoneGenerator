@@ -26,7 +26,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.utils.MultiBiomeSelector;
-import world.bentobox.magiccobblestonegenerator.panels.utils.SelectGeneratorTypePanel;
+import world.bentobox.magiccobblestonegenerator.panels.utils.GeneratorTypeSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Pair;
@@ -506,7 +506,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
-                    SelectGeneratorTypePanel.open(user,
+                    GeneratorTypeSelector.open(user,
                             this.generatorTier.getGeneratorType(),
                             type -> {
                                 if (type != null) {

@@ -20,7 +20,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 /**
  * The type Select generator type panel.
  */
-public class SelectGeneratorTypePanel
+public class GeneratorTypeSelector
 {
     /**
      * Instantiates a new Select generator type panel.
@@ -29,7 +29,7 @@ public class SelectGeneratorTypePanel
      * @param generatorType the generator type
      * @param consumer the consumer
      */
-    private SelectGeneratorTypePanel(User user,
+    private GeneratorTypeSelector(User user,
         GeneratorTierObject.GeneratorType generatorType,
         Consumer<GeneratorTierObject.GeneratorType> consumer)
     {
@@ -139,7 +139,7 @@ public class SelectGeneratorTypePanel
         GeneratorTierObject.GeneratorType generatorType,
         Consumer<GeneratorTierObject.GeneratorType> consumer)
     {
-        new SelectGeneratorTypePanel(user, generatorType, consumer).build();
+        new GeneratorTypeSelector(user, generatorType, consumer).build();
     }
 
 
