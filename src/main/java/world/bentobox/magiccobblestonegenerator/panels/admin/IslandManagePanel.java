@@ -384,7 +384,7 @@ public class IslandManagePanel extends CommonPanel
 
                     if (this.parentPanel != null)
                     {
-                        this.parentPanel.build();
+                        this.parentPanel.reopen();
                     }
                     else
                     {

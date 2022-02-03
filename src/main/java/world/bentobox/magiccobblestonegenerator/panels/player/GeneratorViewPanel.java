@@ -592,7 +592,7 @@ public class GeneratorViewPanel extends CommonPanel
                             GeneratorUserPanel.openPanel(this.addon, this.world, this.user);
                         } else {
                             // Just open a parent gui.
-                            this.parentPanel.build();
+                            this.parentPanel.reopen();
                         }
                     } else {
                         user.closeInventory();

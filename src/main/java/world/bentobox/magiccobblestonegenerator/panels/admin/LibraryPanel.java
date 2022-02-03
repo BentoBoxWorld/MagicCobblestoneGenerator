@@ -238,7 +238,7 @@ public class LibraryPanel extends CommonPanel
 
                 clickHandler = (panel, user, clickType, i) -> {
                     if (this.parentPanel != null) {
-                        this.parentPanel.build();
+                        this.parentPanel.reopen();
                     } else {
                         user.closeInventory();
                     }
@@ -355,7 +355,7 @@ public class LibraryPanel extends CommonPanel
 
                         if (this.parentPanel != null)
                         {
-                            this.parentPanel.build();
+                            this.parentPanel.reopen();
                         }
                         else
                         {
@@ -370,7 +370,7 @@ public class LibraryPanel extends CommonPanel
 
                         if (this.parentPanel != null)
                         {
-                            this.parentPanel.build();
+                            this.parentPanel.reopen();
                         }
                         else
                         {
@@ -397,7 +397,7 @@ public class LibraryPanel extends CommonPanel
                             if (this.parentPanel != null)
                             {
                                 this.updateTask.cancel();
-                                this.parentPanel.build();
+                                this.parentPanel.reopen();
                             }
                             else
                             {
