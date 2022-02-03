@@ -328,12 +328,6 @@ public class StoneGeneratorAddon extends Addon
     public void onDisable()
     {
         // Do some stuff...
-
-        if (this.hooked)
-        {
-            // Save database on disable.
-            this.getAddonManager().save();
-        }
     }
 
 

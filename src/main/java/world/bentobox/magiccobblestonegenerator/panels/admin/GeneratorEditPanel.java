@@ -118,7 +118,7 @@ public class GeneratorEditPanel extends CommonPanel
             }
         }
 
-        panelBuilder.item(44, this.createButton(Action.RETURN));
+        panelBuilder.item(44, this.returnButton);
 
         // Build panel.
         panelBuilder.build();
@@ -336,10 +336,11 @@ public class GeneratorEditPanel extends CommonPanel
         boolean glow = false;
         ItemStack itemStack = new ItemStack(Material.AIR);
 
-        switch (button) {
+        switch (button)
+        {
             case NAME -> {
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.GENERATOR, this.generatorTier.getFriendlyName()));
+                    Constants.GENERATOR, this.generatorTier.getFriendlyName()));
 
                 itemStack = new ItemStack(Material.NAME_TAG);
 
@@ -348,9 +349,10 @@ public class GeneratorEditPanel extends CommonPanel
                     // Create consumer that process description change
                     Consumer<String> consumer = value ->
                     {
-                        if (value != null) {
+                        if (value != null)
+                        {
                             this.generatorTier.setFriendlyName(value);
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         this.build();
@@ -358,9 +360,9 @@ public class GeneratorEditPanel extends CommonPanel
 
                     // start conversation
                     ConversationUtils.createStringInput(consumer,
-                            user,
-                            user.getTranslation(Constants.CONVERSATIONS + "write-name"),
-                            user.getTranslation(Constants.CONVERSATIONS + "name-changed"));
+                        user,
+                        user.getTranslation(Constants.CONVERSATIONS + "write-name"),
+                        user.getTranslation(Constants.CONVERSATIONS + "name-changed"));
 
                     return true;
                 };
@@ -370,8 +372,8 @@ public class GeneratorEditPanel extends CommonPanel
             }
             case ICON, LOCKED_ICON -> {
                 itemStack = button == Button.LOCKED_ICON ?
-                        this.generatorTier.getLockedIcon() :
-                        this.generatorTier.getGeneratorIcon();
+                    this.generatorTier.getLockedIcon() :
+                    this.generatorTier.getGeneratorIcon();
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
@@ -383,10 +385,13 @@ public class GeneratorEditPanel extends CommonPanel
                     return true;
                 };
 
-                if (this.selectedButton != button) {
+                if (this.selectedButton != button)
+                {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-                } else {
+                }
+                else
+                {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-on-item"));
                 }
@@ -404,27 +409,32 @@ public class GeneratorEditPanel extends CommonPanel
                     // Create consumer that process description change
                     Consumer<List<String>> consumer = value ->
                     {
-                        if (value != null) {
+                        if (value != null)
+                        {
                             this.generatorTier.setDescription(value);
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         this.build();
                     };
 
                     if (!this.generatorTier.getDescription().isEmpty() &&
-                            clickType.isShiftClick()) {
+                        clickType.isShiftClick())
+                    {
                         // Reset to the empty value
                         consumer.accept(Collections.emptyList());
-                    } else {
+                    }
+                    else
+                    {
                         // start conversation
                         ConversationUtils.createStringListInput(consumer,
-                                user,
-                                user.getTranslation(Constants.CONVERSATIONS + "write-description"),
-                                user.getTranslation(Constants.CONVERSATIONS + "description-changed"));
+                            user,
+                            user.getTranslation(Constants.CONVERSATIONS + "write-description"),
+                            user.getTranslation(Constants.CONVERSATIONS + "description-changed"));
                     }
 
-                    if (!this.generatorTier.getDescription().isEmpty()) {
+                    if (!this.generatorTier.getDescription().isEmpty())
+                    {
                         description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
                     }
 
@@ -435,10 +445,13 @@ public class GeneratorEditPanel extends CommonPanel
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
             }
             case DEFAULT -> {
-                if (this.generatorTier.isDefaultGenerator()) {
+                if (this.generatorTier.isDefaultGenerator())
+                {
                     itemStack = new ItemStack(Material.GREEN_BANNER);
                     description.add(this.user.getTranslation(reference + ".enabled"));
-                } else {
+                }
+                else
+                {
                     itemStack = new ItemStack(Material.RED_BANNER);
                     description.add(this.user.getTranslation(reference + ".disabled"));
                 }
@@ -446,7 +459,7 @@ public class GeneratorEditPanel extends CommonPanel
                 clickHandler = (panel, user, clickType, i) ->
                 {
                     this.generatorTier.setDefaultGenerator(!this.generatorTier.isDefaultGenerator());
-                    this.manager.saveGeneratorTier(this.generatorTier);
+                    this.save();
                     this.build();
 
                     return true;
@@ -458,13 +471,16 @@ public class GeneratorEditPanel extends CommonPanel
             case PRIORITY -> {
                 itemStack = new ItemStack(Material.HOPPER);
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.NUMBER, String.valueOf(this.generatorTier.getPriority())));
+                    Constants.NUMBER, String.valueOf(this.generatorTier.getPriority())));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    Consumer<Number> numberConsumer = number -> {
-                        if (number != null) {
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
                             this.generatorTier.setPriority(number.intValue());
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         // reopen panel
@@ -472,10 +488,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                            0,
-                            2000);
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        0,
+                        2000);
 
                     return true;
                 };
@@ -488,21 +504,24 @@ public class GeneratorEditPanel extends CommonPanel
                     Utils.getGeneratorTypeMaterial(this.generatorTier.getGeneratorType()));
 
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.TYPE, this.user.getTranslation(
-                                Constants.GENERATOR_TYPE_BUTTON +
-                                        this.generatorTier.getGeneratorType().name().toLowerCase() + ".name")));
+                    Constants.TYPE, this.user.getTranslation(
+                        Constants.GENERATOR_TYPE_BUTTON +
+                            this.generatorTier.getGeneratorType().name().toLowerCase() + ".name")));
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
                     GeneratorTypeSelector.open(user,
-                            this.generatorTier.getGeneratorType(),
-                            type -> {
-                                if (type != null) {
-                                    this.generatorTier.setGeneratorType(type);
-                                }
+                        this.generatorTier.getGeneratorType(),
+                        type ->
+                        {
+                            if (type != null)
+                            {
+                                this.generatorTier.setGeneratorType(type);
+                                this.save();
+                            }
 
-                                this.build();
-                            });
+                            this.build();
+                        });
 
                     return true;
                 };
@@ -513,13 +532,16 @@ public class GeneratorEditPanel extends CommonPanel
             case REQUIRED_MIN_LEVEL -> {
                 itemStack = new ItemStack(Material.DIAMOND);
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.NUMBER, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
+                    Constants.NUMBER, String.valueOf(this.generatorTier.getRequiredMinIslandLevel())));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    Consumer<Number> numberConsumer = number -> {
-                        if (number != null) {
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
                             this.generatorTier.setRequiredMinIslandLevel(number.longValue());
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         // reopen panel
@@ -527,10 +549,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                            0,
-                            Long.MAX_VALUE);
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        0,
+                        Long.MAX_VALUE);
 
                     return true;
                 };
@@ -543,10 +565,11 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add(this.user.getTranslation(reference + ".list"));
                 this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
-                        description.add(this.user.getTranslation(reference + ".value",
-                                Constants.PERMISSION, permission)));
+                    description.add(this.user.getTranslation(reference + ".value",
+                        Constants.PERMISSION, permission)));
 
-                if (this.generatorTier.getRequiredPermissions().isEmpty()) {
+                if (this.generatorTier.getRequiredPermissions().isEmpty())
+                {
                     description.add(this.user.getTranslation(reference + ".none"));
                 }
 
@@ -555,24 +578,28 @@ public class GeneratorEditPanel extends CommonPanel
                     // Create consumer that process description change
                     Consumer<List<String>> consumer = value ->
                     {
-                        if (value != null) {
+                        if (value != null)
+                        {
                             this.generatorTier.setRequiredPermissions(new HashSet<>(value));
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         this.build();
                     };
 
                     if (!this.generatorTier.getRequiredPermissions().isEmpty() &&
-                            clickType.isShiftClick()) {
+                        clickType.isShiftClick())
+                    {
                         // Reset to the empty value
                         consumer.accept(Collections.emptyList());
-                    } else {
+                    }
+                    else
+                    {
                         // start conversation
                         ConversationUtils.createStringListInput(consumer,
-                                user,
-                                user.getTranslation(Constants.CONVERSATIONS + "write-permissions"),
-                                user.getTranslation(Constants.CONVERSATIONS + "permissions-changed"));
+                            user,
+                            user.getTranslation(Constants.CONVERSATIONS + "write-permissions"),
+                            user.getTranslation(Constants.CONVERSATIONS + "permissions-changed"));
                     }
 
                     return true;
@@ -581,7 +608,8 @@ public class GeneratorEditPanel extends CommonPanel
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
-                if (!this.generatorTier.getRequiredPermissions().isEmpty()) {
+                if (!this.generatorTier.getRequiredPermissions().isEmpty())
+                {
                     description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
                 }
             }
@@ -589,13 +617,16 @@ public class GeneratorEditPanel extends CommonPanel
                 itemStack = new ItemStack(Material.GOLD_BLOCK);
 
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
+                    Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    Consumer<Number> numberConsumer = number -> {
-                        if (number != null) {
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
                             this.generatorTier.setGeneratorTierCost(number.doubleValue());
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         // reopen panel
@@ -603,10 +634,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                            0,
-                            Double.MAX_VALUE);
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        0,
+                        Double.MAX_VALUE);
 
                     return true;
                 };
@@ -618,13 +649,16 @@ public class GeneratorEditPanel extends CommonPanel
                 itemStack = new ItemStack(Material.GOLD_INGOT);
 
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.NUMBER, String.valueOf(this.generatorTier.getActivationCost())));
+                    Constants.NUMBER, String.valueOf(this.generatorTier.getActivationCost())));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    Consumer<Number> numberConsumer = number -> {
-                        if (number != null) {
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
                             this.generatorTier.setActivationCost(number.doubleValue());
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         // reopen panel
@@ -632,10 +666,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                            0,
-                            Double.MAX_VALUE);
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        0,
+                        Double.MAX_VALUE);
 
                     return true;
                 };
@@ -648,26 +682,31 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add(this.user.getTranslation(reference + ".list"));
 
-                if (this.generatorTier.getRequiredBiomes().isEmpty()) {
+                if (this.generatorTier.getRequiredBiomes().isEmpty())
+                {
                     description.add(this.user.getTranslation(reference + ".any"));
-                } else {
+                }
+                else
+                {
                     this.generatorTier.getRequiredBiomes().stream().sorted().forEach(biome ->
-                            description.add(this.user.getTranslation(reference + ".value",
-                                    Constants.BIOME, Utils.prettifyObject(this.user, biome))));
+                        description.add(this.user.getTranslation(reference + ".value",
+                            Constants.BIOME, Utils.prettifyObject(this.user, biome))));
                 }
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
                     MultiBiomeSelector.open(user,
-                            this.generatorTier.getRequiredBiomes(),
-                            biomes -> {
-                                if (biomes != null) {
-                                    this.generatorTier.setRequiredBiomes(biomes);
-                                    this.manager.saveGeneratorTier(this.generatorTier);
-                                }
+                        this.generatorTier.getRequiredBiomes(),
+                        biomes ->
+                        {
+                            if (biomes != null)
+                            {
+                                this.generatorTier.setRequiredBiomes(biomes);
+                                this.save();
+                            }
 
-                                this.build();
-                            });
+                            this.build();
+                        });
 
                     return true;
                 };
@@ -678,16 +717,19 @@ public class GeneratorEditPanel extends CommonPanel
             case DEPLOYED -> {
                 itemStack = new ItemStack(Material.LEVER);
 
-                if (this.generatorTier.isDeployed()) {
+                if (this.generatorTier.isDeployed())
+                {
                     description.add(this.user.getTranslation(reference + ".enabled"));
-                } else {
+                }
+                else
+                {
                     description.add(this.user.getTranslation(reference + ".disabled"));
                 }
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
                     this.generatorTier.setDeployed(!this.generatorTier.isDeployed());
-                    this.manager.saveGeneratorTier(this.generatorTier);
+                    this.save();
                     this.build();
 
                     return true;
@@ -701,13 +743,16 @@ public class GeneratorEditPanel extends CommonPanel
             case TREASURE_AMOUNT -> {
                 itemStack = new ItemStack(Material.EMERALD);
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.NUMBER, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
+                    Constants.NUMBER, String.valueOf(this.generatorTier.getMaxTreasureAmount())));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    Consumer<Number> numberConsumer = number -> {
-                        if (number != null) {
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
                             this.generatorTier.setMaxTreasureAmount(number.intValue());
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         // reopen panel
@@ -715,10 +760,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                            1,
-                            Integer.MAX_VALUE);
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        1,
+                        Integer.MAX_VALUE);
 
                     return true;
                 };
@@ -729,13 +774,16 @@ public class GeneratorEditPanel extends CommonPanel
             case TREASURE_CHANCE -> {
                 itemStack = new ItemStack(Material.PAPER);
                 description.add(this.user.getTranslation(reference + ".value",
-                        Constants.NUMBER, String.valueOf(this.generatorTier.getTreasureChance())));
+                    Constants.NUMBER, String.valueOf(this.generatorTier.getTreasureChance())));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    Consumer<Number> numberConsumer = number -> {
-                        if (number != null) {
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
                             this.generatorTier.setTreasureChance(number.doubleValue());
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                         }
 
                         // reopen panel
@@ -743,10 +791,10 @@ public class GeneratorEditPanel extends CommonPanel
                     };
 
                     ConversationUtils.createNumericInput(numberConsumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                            0,
-                            Double.MAX_VALUE);
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        0,
+                        Double.MAX_VALUE);
 
                     return true;
                 };
@@ -852,22 +900,6 @@ public class GeneratorEditPanel extends CommonPanel
         int count = 1;
 
         switch (button) {
-            case RETURN -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    if (this.parentPanel != null) {
-                        this.parentPanel.reopen();
-                    } else {
-                        user.closeInventory();
-                    }
-                    return true;
-                };
-
-                icon = Material.OAK_DOOR;
-            }
             case PREVIOUS -> {
                 count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
@@ -928,7 +960,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                                             this.generatorTier.setBlockChanceMap(
                                                 Utils.pairList2TreeMap(this.materialChanceList));
-                                            this.manager.saveGeneratorTier(this.generatorTier);
+                                            this.save();
                                         }
                                         else if (this.activeTab == Tab.TREASURES)
                                         {
@@ -938,7 +970,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                                             this.generatorTier.setTreasureItemChanceMap(
                                                 Utils.pairList2TreeMap(this.treasureChanceList));
-                                            this.manager.saveGeneratorTier(this.generatorTier);
+                                            this.save();
                                         }
                                     }
 
@@ -973,14 +1005,17 @@ public class GeneratorEditPanel extends CommonPanel
                         this.materialChanceList.removeAll(this.selectedMaterial);
                         this.treasureChanceList.removeAll(this.selectedTreasures);
 
-                        if (this.activeTab == Tab.BLOCKS) {
+                        if (this.activeTab == Tab.BLOCKS)
+                        {
                             this.generatorTier.setBlockChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                            this.save();
                             this.selectedMaterial.clear();
-                        } else if (this.activeTab == Tab.TREASURES) {
-                            this.generatorTier
-                                    .setTreasureItemChanceMap(Utils.pairList2TreeMap(this.treasureChanceList));
-                            this.manager.saveGeneratorTier(this.generatorTier);
+                        }
+                        else if (this.activeTab == Tab.TREASURES)
+                        {
+
+                            this.generatorTier.setTreasureItemChanceMap(Utils.pairList2TreeMap(this.treasureChanceList));
+                            this.save();
                             this.selectedTreasures.clear();
                         }
 
@@ -1084,7 +1119,7 @@ public class GeneratorEditPanel extends CommonPanel
                     {
                         blockChanceEntry.setValue(newValue.doubleValue());
                         this.generatorTier.setBlockChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
-                        this.manager.saveGeneratorTier(this.generatorTier);
+                        this.save();
                     }
 
                     this.build();
@@ -1187,7 +1222,7 @@ public class GeneratorEditPanel extends CommonPanel
                     {
                         treasureChanceEntry.setValue(newValue.doubleValue());
                         this.generatorTier.setTreasureChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
-                        this.manager.saveGeneratorTier(this.generatorTier);
+                        this.save();
                     }
 
                     this.build();
@@ -1211,6 +1246,15 @@ public class GeneratorEditPanel extends CommonPanel
             clickHandler(clickHandler).
             glow(glow).
             build();
+    }
+
+
+    /**
+     * This method saves generator bundle when change is detected.
+     */
+    private void save()
+    {
+        this.addon.getAddonManager().saveGeneratorTier(this.generatorTier);
     }
 
 
@@ -1278,7 +1322,7 @@ public class GeneratorEditPanel extends CommonPanel
                 }
 
                 // save change
-                GeneratorEditPanel.this.manager.saveGeneratorTier(GeneratorEditPanel.this.generatorTier);
+                GeneratorEditPanel.this.save();
             }
         }
 
@@ -1372,7 +1416,7 @@ public class GeneratorEditPanel extends CommonPanel
                 GeneratorEditPanel.this.treasureChanceList.add(new Pair<>(itemStack.clone(), 1.0));
                 GeneratorEditPanel.this.generatorTier.setTreasureItemChanceMap(
                     Utils.pairList2TreeMap(GeneratorEditPanel.this.treasureChanceList));
-                GeneratorEditPanel.this.manager.saveGeneratorTier(GeneratorEditPanel.this.generatorTier);
+                GeneratorEditPanel.this.save();
                 // Recall gui building.
                 GeneratorEditPanel.this.build();
             }
@@ -1412,10 +1456,6 @@ public class GeneratorEditPanel extends CommonPanel
      */
     private enum Action
     {
-        /**
-         * Return button that exists GUI.
-         */
-        RETURN,
         /**
          * Allows to select previous generators in multi-page situation.
          */

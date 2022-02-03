@@ -208,7 +208,7 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
                     {
                         if (value != null) {
                             this.bundle.setFriendlyName(value);
-                            this.manager.saveGeneratorBundle(this.bundle);
+                            this.save();
                         }
 
                         this.build();
@@ -236,6 +236,7 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
                     // TODO: implement GUI for block selection
                     this.isIconSelected = !this.isIconSelected;
                     panel.getInventory().setItem(i, this.createButton(button).getItem());
+                    this.save();
 
                     return true;
                 };
@@ -261,7 +262,7 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
                     {
                         if (value != null) {
                             this.bundle.setDescription(value);
-                            this.manager.saveGeneratorBundle(this.bundle);
+                            this.save();
                         }
 
                         this.build();
@@ -378,10 +379,11 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
 
                         // Add all selected generators to the current bundle
                         this.selectedGenerators.forEach(generator ->
-                                this.bundle.getGeneratorTiers().add(generator.getUniqueId()));
+                            this.bundle.getGeneratorTiers().add(generator.getUniqueId()));
 
                         // clear selected generator list.
                         this.selectedGenerators.clear();
+                        this.save();
                     }
 
                     this.build();
@@ -413,6 +415,7 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
 
                             // clear selected generator list.
                             this.selectedGenerators.clear();
+                            this.save();
                             this.build();
                         }
 
@@ -508,6 +511,15 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
 
 
     /**
+     * This method saves generator bundle when change is detected.
+     */
+    private void save()
+    {
+        this.addon.getAddonManager().saveGeneratorBundle(this.bundle);
+    }
+
+
+    /**
      * This method is used to open UserPanel outside this class. It will be much easier to open panel with single method
      * call then initializing new object.
      *
@@ -550,7 +562,7 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
                 // set material and amount only. Other data should be removed.
                 BundleEditPanel.this.bundle.setGeneratorIcon(event.getCurrentItem().clone());
                 // save change
-                BundleEditPanel.this.manager.saveGeneratorBundle(BundleEditPanel.this.bundle);
+                BundleEditPanel.this.save();
                 // Deselect icon
                 BundleEditPanel.this.isIconSelected = false;
 
