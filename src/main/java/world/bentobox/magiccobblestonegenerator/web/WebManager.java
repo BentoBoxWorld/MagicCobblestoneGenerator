@@ -115,9 +115,9 @@ public class WebManager
                     this.library.clear();
                 }
 
-                JsonObject catalog = new JsonParser().parse(catalogContent).getAsJsonObject();
+                JsonObject catalog = JsonParser.parseString(catalogContent).getAsJsonObject();
                 catalog.getAsJsonArray("generators").forEach(gamemode ->
-                    this.library.add(new LibraryEntry(gamemode.getAsJsonObject())));
+                    this.library.add(LibraryEntry.fromJson(gamemode.getAsJsonObject())));
             }
         });
     }
@@ -145,7 +145,7 @@ public class WebManager
             try
             {
                 stoneGeneratorLibrary = gitHubWebAPI.getRepository("BentoBoxWorld", "weblink").
-                    getContent("mcg/library/" + entry.getRepository() + ".json").
+                    getContent("mcg/library/" + entry.repository() + ".json").
                     getContent().
                     replaceAll("\\n", "");
             }
@@ -198,7 +198,7 @@ public class WebManager
     public List<LibraryEntry> getLibraryEntries()
     {
         List<LibraryEntry> entries = new ArrayList<>(this.library);
-        entries.sort(Comparator.comparingInt(LibraryEntry::getSlot));
+        entries.sort(Comparator.comparingInt(LibraryEntry::slot));
 
         return entries;
     }
@@ -222,15 +222,15 @@ public class WebManager
     /**
      * StoneGeneratorAddon variable.
      */
-    private StoneGeneratorAddon addon;
+    private final StoneGeneratorAddon addon;
 
     /**
      * BentoBox plugin variable.
      */
-    private BentoBox plugin;
+    private final BentoBox plugin;
 
     /**
      * This list contains all entries that were downloaded from GitHub.
      */
-    private List<LibraryEntry> library;
+    private final List<LibraryEntry> library;
 }
