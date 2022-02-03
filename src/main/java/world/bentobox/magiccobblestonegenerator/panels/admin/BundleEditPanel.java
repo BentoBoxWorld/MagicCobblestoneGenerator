@@ -23,6 +23,7 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.panels.CommonPagedPanel;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -32,7 +33,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 /**
  * This class opens GUI that shows bundle view for user.
  */
-public class BundleEditPanel extends CommonPanel
+public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
 {
     // ---------------------------------------------------------------------
     // Section: Internal Constructor
@@ -56,6 +57,13 @@ public class BundleEditPanel extends CommonPanel
         this.activeTab = Tab.BUNDLE_INFO;
         this.mode = Mode.VIEW;
         this.selectedGenerators = new HashSet<>();
+    }
+
+
+    @Override
+    protected void updateFilters()
+    {
+        // Do nothing here.
     }
 
 
@@ -102,7 +110,7 @@ public class BundleEditPanel extends CommonPanel
             }
         }
 
-        panelBuilder.item(this.activeTab == Tab.BUNDLE_INFO ? 26 : 44, this.createButton(Action.RETURN));
+        panelBuilder.item(this.activeTab == Tab.BUNDLE_INFO ? 26 : 44, this.returnButton);
 
         // Build panel.
         panelBuilder.build();
@@ -167,49 +175,7 @@ public class BundleEditPanel extends CommonPanel
                 collect(Collectors.toList());
         }
 
-        final int MAX_ELEMENTS = 21;
-        final int correctPage;
-        this.maxPageIndex = (int) Math.ceil(1.0 * generatorTierObjects.size() / MAX_ELEMENTS) - 1;
-
-        if (this.pageIndex < 0)
-        {
-            correctPage = generatorTierObjects.size() / MAX_ELEMENTS;
-        }
-        else if (this.pageIndex > (generatorTierObjects.size() / MAX_ELEMENTS))
-        {
-            correctPage = 0;
-        }
-        else
-        {
-            correctPage = this.pageIndex;
-        }
-
-        if (generatorTierObjects.size() > MAX_ELEMENTS)
-        {
-            // Navigation buttons if necessary
-
-            panelBuilder.item(18, this.createButton(Action.PREVIOUS));
-            panelBuilder.item(26, this.createButton(Action.NEXT));
-        }
-
-        int generatorIndex = MAX_ELEMENTS * correctPage;
-
-        // I want first row to be only for navigation and return button.
-        int index = 10;
-
-        while (generatorIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
-            generatorIndex < generatorTierObjects.size() &&
-            index < 36)
-        {
-            if (!panelBuilder.slotOccupied(index))
-            {
-                // Add to panel
-                panelBuilder.item(index,
-                    this.createGeneratorButton(generatorTierObjects.get(generatorIndex++)));
-            }
-
-            index++;
-        }
+        this.populateElements(panelBuilder, generatorTierObjects);
     }
 
 
@@ -261,9 +227,6 @@ public class BundleEditPanel extends CommonPanel
                         Constants.BUNDLE, this.bundle.getFriendlyName()));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                // Not implemented in current GUI.
-                break;
             }
             case BUNDLE_ICON -> {
                 itemStack = this.bundle.getGeneratorIcon();
@@ -286,8 +249,6 @@ public class BundleEditPanel extends CommonPanel
                 }
 
                 glow = this.isIconSelected;
-
-                break;
             }
             case BUNDLE_DESCRIPTION -> {
                 itemStack = new ItemStack(Material.WRITTEN_BOOK);
@@ -317,9 +278,6 @@ public class BundleEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                // Not implemented in current GUI.
-                break;
             }
         }
 
@@ -350,8 +308,6 @@ public class BundleEditPanel extends CommonPanel
 
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
             this.activeTab = button;
-            this.pageIndex = 0;
-
             this.build();
             return true;
         };
@@ -359,7 +315,6 @@ public class BundleEditPanel extends CommonPanel
         Material material = switch (button) {
             case BUNDLE_INFO -> Material.WRITTEN_BOOK;
             case BUNDLE_GENERATORS -> Material.CHEST;
-            default -> Material.PAPER;
         };
 
         return new PanelItemBuilder().
@@ -390,69 +345,6 @@ public class BundleEditPanel extends CommonPanel
         int count = 1;
 
         switch (button) {
-            case RETURN -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
-                description.add("");
-                if (this.parentPanel != null) {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                } else {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
-                }
-
-                clickHandler = (panel, user, clickType, i) -> {
-
-                    if (this.mode == Mode.ADD) {
-                        // Rebuild view mode.
-                        this.mode = Mode.VIEW;
-                        this.build();
-                    } else if (this.parentPanel != null) {
-                        this.parentPanel.reopen();
-                    } else {
-                        user.closeInventory();
-                    }
-                    return true;
-                };
-
-                icon = Material.OAK_DOOR;
-
-                break;
-            }
-            case PREVIOUS -> {
-                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex--;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
-            case NEXT -> {
-                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex++;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
             case ADD_GENERATOR -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
@@ -480,13 +372,9 @@ public class BundleEditPanel extends CommonPanel
 
                     if (this.mode == Mode.VIEW) {
                         this.mode = Mode.ADD;
-                        this.pageIndex = 0;
                     } else {
                         // Switch mode to view.
                         this.mode = Mode.VIEW;
-
-                        // Switch page mode.
-                        this.pageIndex = 0;
 
                         // Add all selected generators to the current bundle
                         this.selectedGenerators.forEach(generator ->
@@ -499,8 +387,6 @@ public class BundleEditPanel extends CommonPanel
                     this.build();
                     return true;
                 };
-
-                break;
             }
             case REMOVE_GENERATOR -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
@@ -536,8 +422,6 @@ public class BundleEditPanel extends CommonPanel
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "select-before"));
                 }
-
-                break;
             }
         }
 
@@ -558,7 +442,8 @@ public class BundleEditPanel extends CommonPanel
      * @param generatorTier GeneratorTier which button must be created.
      * @return PanelItem for generator tier.
      */
-    private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
+    @Override
+    protected PanelItem createElementButton(GeneratorTierObject generatorTier)
     {
         boolean glow = this.selectedGenerators.contains(generatorTier);
 
@@ -709,18 +594,6 @@ public class BundleEditPanel extends CommonPanel
     private enum Action
     {
         /**
-         * Return button that exists GUI.
-         */
-        RETURN,
-        /**
-         * Allows to select previous generators in multi-page situation.
-         */
-        PREVIOUS,
-        /**
-         * Allows to select next generators in multi-page situation.
-         */
-        NEXT,
-        /**
          * Allows to add a new generator to the generator list.
          */
         ADD_GENERATOR,
@@ -796,16 +669,6 @@ public class BundleEditPanel extends CommonPanel
      * Thi map stores selected generators.
      */
     private final Set<GeneratorTierObject> selectedGenerators;
-
-    /**
-     * This variable holds current pageIndex for multi-page generator choosing.
-     */
-    private int pageIndex;
-
-    /**
-     * This variable holds max page index for multi-page generator choosing.
-     */
-    private int maxPageIndex;
 
     /**
      * This variable stores which tab currently is active.
