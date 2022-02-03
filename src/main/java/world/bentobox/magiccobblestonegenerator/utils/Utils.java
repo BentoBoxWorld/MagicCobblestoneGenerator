@@ -25,6 +25,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.jetbrains.annotations.Nullable;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -33,6 +34,7 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.hooks.LangUtilsHook;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -384,6 +386,291 @@ public class Utils
     }
 
 
+// ---------------------------------------------------------------------
+// Section: Biome Type Resolver
+// ---------------------------------------------------------------------
+
+    /**
+     * This method returns if current biome is locally detected as snowy biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is snowy biome, {@code false} otherwise.
+     */
+    public static boolean isSnowyBiome(Biome biome)
+    {
+        return switch (biome) {
+            //case SNOWY_SLOPES:
+            case SNOWY_PLAINS, SNOWY_TAIGA, ICE_SPIKES, FROZEN_RIVER, SNOWY_BEACH -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as cold biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is cold biome, {@code false} otherwise.
+     */
+    public static boolean isColdBiome(Biome biome)
+    {
+        return switch (biome) {
+            case WINDSWEPT_HILLS, WINDSWEPT_GRAVELLY_HILLS, WINDSWEPT_FOREST, TAIGA, OLD_GROWTH_PINE_TAIGA, OLD_GROWTH_SPRUCE_TAIGA, STONY_SHORE -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as temperate biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is temperate biome, {@code false} otherwise.
+     */
+    public static boolean isTemperateBiome(Biome biome)
+    {
+        return switch (biome) {
+            case PLAINS, SUNFLOWER_PLAINS, FOREST, FLOWER_FOREST, BIRCH_FOREST, OLD_GROWTH_BIRCH_FOREST, DARK_FOREST, SWAMP, JUNGLE, SPARSE_JUNGLE, BAMBOO_JUNGLE, RIVER, BEACH, MUSHROOM_FIELDS -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as warm biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is warm biome, {@code false} otherwise.
+     */
+    public static boolean isWarmBiome(Biome biome)
+    {
+        return switch (biome) {
+            case DESERT, SAVANNA, WINDSWEPT_SAVANNA, BADLANDS, ERODED_BADLANDS, WOODED_BADLANDS, SAVANNA_PLATEAU ->
+                // case BADLANDS_PLATEAU:
+                true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as aquatic biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is aquatic biome, {@code false} otherwise.
+     */
+    public static boolean isAquaticBiome(Biome biome)
+    {
+        return switch (biome) {
+            case WARM_OCEAN, LUKEWARM_OCEAN, DEEP_LUKEWARM_OCEAN, OCEAN, DEEP_OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, FROZEN_OCEAN, DEEP_FROZEN_OCEAN -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as neutral biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is neutral biome, {@code false} otherwise.
+     */
+    public static boolean isNeutralBiome(Biome biome)
+    {
+        return biome == Biome.THE_VOID;
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as cave biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is cave biome, {@code false} otherwise.
+     */
+    public static boolean isCaveBiome(Biome biome)
+    {
+        return switch (biome) {
+            case LUSH_CAVES, DRIPSTONE_CAVES -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as nether biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is nether biome, {@code false} otherwise.
+     */
+    public static boolean isNetherBiome(Biome biome)
+    {
+        return switch (biome) {
+            case NETHER_WASTES, SOUL_SAND_VALLEY, CRIMSON_FOREST, WARPED_FOREST, BASALT_DELTAS -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as the end biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is the end biome, {@code false} otherwise.
+     */
+    public static boolean isTheEndBiome(Biome biome)
+    {
+        return switch (biome) {
+            case THE_END, SMALL_END_ISLANDS, END_MIDLANDS, END_HIGHLANDS, END_BARRENS -> true;
+            default -> false;
+        };
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Prettify Object translations
+// ---------------------------------------------------------------------
+
+
+    /**
+     * Prettify Material object for user.
+     * @param object Object that must be pretty.
+     * @param user User who will see the object.
+     * @return Prettified string for Material.
+     */
+    public static String prettifyObject(@Nullable Material object, User user)
+    {
+        // Nothing to translate
+        if (object == null)
+        {
+            return "";
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   materials:
+        //     [material]:
+        //       name: [name]
+        String translation = user.getTranslationOrNothing(Constants.MATERIALS + object.name().toLowerCase() + ".name");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   materials:
+        //     [material]: [name]
+
+        translation = user.getTranslationOrNothing(Constants.MATERIALS + object.name().toLowerCase());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find general structure with:
+        // materials:
+        //   [material]: [name]
+
+        translation = user.getTranslationOrNothing("materials." + object.name().toLowerCase());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Use Lang Utils Hook to translate material
+        return LangUtilsHook.getMaterialName(object, user);
+    }
+
+
+    /**
+     * Prettify Material object description for user.
+     * @param object Object that must be pretty.
+     * @param user User who will see the object.
+     * @return Prettified description string for Material.
+     */
+    public static String prettifyDescription(@Nullable Material object, User user)
+    {
+        // Nothing to translate
+        if (object == null)
+        {
+            return "";
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   materials:
+        //     [material]:
+        //       description: [text]
+        String translation = user.getTranslationOrNothing(Constants.MATERIALS + object.name().toLowerCase() + ".description");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // No text to return.
+        return "";
+    }
+
+
+    /**
+     * This method prettify given Biome name to more friendly name.
+     *
+     * @param user User which translation set will be used.
+     * @param biome Biome that requires prettifying.
+     * @return Clean and readable biome name.
+     */
+    public static String prettifyObject(Biome biome, User user)
+    {
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [biome]:
+        //       name: [name]
+        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase() + ".name");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   biomes:
+        //     [biome]: [name]
+
+        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find general structure with:
+        // biomes:
+        //   [biome]: [name]
+
+        translation = user.getTranslationOrNothing("biomes." + biome.name().toLowerCase());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Nothing was found. Use just a prettify text function.
+        return Util.prettifyText(biome.name());
+    }
+
+
     /**
      * This method prettify given Biome name to more friendly name.
      *
@@ -565,6 +852,11 @@ public class Utils
         // Nothing was found. Use just a prettify text function.
         return Util.prettifyText(entity.name());
     }
+
+
+// ---------------------------------------------------------------------
+// Section: Messages
+// ---------------------------------------------------------------------
 
 
     /**
