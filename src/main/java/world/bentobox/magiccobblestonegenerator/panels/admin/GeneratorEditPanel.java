@@ -367,9 +367,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                // Not implemented in current GUI.
-                break;
             }
             case ICON, LOCKED_ICON -> {
                 itemStack = button == Button.LOCKED_ICON ?
@@ -395,8 +392,6 @@ public class GeneratorEditPanel extends CommonPanel
                 }
 
                 glow = this.selectedButton == button;
-
-                break;
             }
             case DESCRIPTION -> {
                 itemStack = new ItemStack(Material.WRITTEN_BOOK);
@@ -438,9 +433,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                // Not implemented in current GUI.
-                break;
             }
             case DEFAULT -> {
                 if (this.generatorTier.isDefaultGenerator()) {
@@ -462,8 +454,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
-
-                break;
             }
             case PRIORITY -> {
                 itemStack = new ItemStack(Material.HOPPER);
@@ -492,8 +482,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case TYPE -> {
                 itemStack = new ItemStack(
@@ -521,8 +509,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case REQUIRED_MIN_LEVEL -> {
                 itemStack = new ItemStack(Material.DIAMOND);
@@ -551,8 +537,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case REQUIRED_PERMISSIONS -> {
                 itemStack = new ItemStack(Material.BOOK);
@@ -600,8 +584,6 @@ public class GeneratorEditPanel extends CommonPanel
                 if (!this.generatorTier.getRequiredPermissions().isEmpty()) {
                     description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
                 }
-
-                break;
             }
             case PURCHASE_COST -> {
                 itemStack = new ItemStack(Material.GOLD_BLOCK);
@@ -631,8 +613,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case ACTIVATION_COST -> {
                 itemStack = new ItemStack(Material.GOLD_INGOT);
@@ -662,8 +642,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case BIOMES -> {
                 itemStack = new ItemStack(Material.FILLED_MAP);
@@ -696,8 +674,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case DEPLOYED -> {
                 itemStack = new ItemStack(Material.LEVER);
@@ -721,8 +697,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
-
-                break;
             }
             case TREASURE_AMOUNT -> {
                 itemStack = new ItemStack(Material.EMERALD);
@@ -751,8 +725,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
             case TREASURE_CHANCE -> {
                 itemStack = new ItemStack(Material.PAPER);
@@ -781,8 +753,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                break;
             }
         }
 
@@ -897,8 +867,6 @@ public class GeneratorEditPanel extends CommonPanel
                 };
 
                 icon = Material.OAK_DOOR;
-
-                break;
             }
             case PREVIOUS -> {
                 count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
@@ -916,7 +884,6 @@ public class GeneratorEditPanel extends CommonPanel
                 };
 
                 icon = Material.TIPPED_ARROW;
-                break;
             }
             case NEXT -> {
                 count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
@@ -934,7 +901,6 @@ public class GeneratorEditPanel extends CommonPanel
                 };
 
                 icon = Material.TIPPED_ARROW;
-                break;
             }
             case ADD_MATERIAL -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
@@ -993,8 +959,6 @@ public class GeneratorEditPanel extends CommonPanel
 
                     return true;
                 };
-
-                break;
             }
             case REMOVE_MATERIAL -> {
                 icon = this.selectedMaterial.isEmpty() && this.selectedTreasures.isEmpty() ?
@@ -1047,8 +1011,6 @@ public class GeneratorEditPanel extends CommonPanel
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "select-before"));
                 }
-
-                break;
             }
         }
 
