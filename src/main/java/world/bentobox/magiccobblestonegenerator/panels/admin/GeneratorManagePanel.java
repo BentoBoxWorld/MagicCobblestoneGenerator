@@ -19,6 +19,7 @@ import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.panels.CommonPagedPanel;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -28,7 +29,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 /**
  * This class opens GUI that allows to manage all generators for admin.
  */
-public class GeneratorManagePanel extends CommonPanel
+public class GeneratorManagePanel extends CommonPagedPanel<GeneratorTierObject>
 {
     // ---------------------------------------------------------------------
     // Section: Internal Constructor
@@ -44,26 +45,43 @@ public class GeneratorManagePanel extends CommonPanel
     {
         super(parentPanel);
         // Store generators in local list to avoid building it every time.
-        this.generatorList = this.manager.getAllGeneratorTiers(this.world);
-
-        // Stores how many elements will be in display.
-        this.updateRows();
+        this.elementList = this.manager.getAllGeneratorTiers(this.world);
 
         // By default no-filters are active.
         this.activeFilterButton = Button.NONE;
 
         // Init set with selected generators.
-        this.selectedGenerators = new HashSet<>(this.generatorList.size());
+        this.selectedGenerators = new HashSet<>(this.elementList.size());
+        this.updateFilters();
     }
 
 
-    /**
-     * This method updates row count for Panel.
-     */
-    private void updateRows()
+    @Override
+    protected void updateFilters()
     {
-        this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
-        this.maxPageIndex = (int) Math.ceil(1.0 * this.generatorList.size() / 7 * this.rowCount) - 1;
+        this.filterElements = switch (this.activeFilterButton) {
+            case SHOW_COBBLESTONE -> this.elementList.stream().
+                filter(generatorTier ->
+                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
+                collect(Collectors.toList());
+            case SHOW_STONE -> this.elementList.stream().
+                filter(generatorTier ->
+                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
+                collect(Collectors.toList());
+            case SHOW_BASALT -> this.elementList.stream().
+                filter(generatorTier ->
+                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
+                collect(Collectors.toList());
+            default -> new ArrayList<>(this.elementList);
+        };
+
+        if (this.searchString != null && !this.searchString.isEmpty())
+        {
+            // Remove all that does not match search string.
+
+            this.filterElements.removeIf(tier -> !tier.getUniqueId().contains(this.searchString.toLowerCase()) &&
+                !tier.getFriendlyName().toLowerCase().contains(this.searchString.toLowerCase()));
+        }
     }
 
 
@@ -78,16 +96,16 @@ public class GeneratorManagePanel extends CommonPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "manage-generators"));
 
-        PanelUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(1, this.createButton(Action.CREATE_GENERATOR));
         panelBuilder.item(2, this.createButton(Action.DELETE_GENERATOR));
 
-        boolean hasCobblestoneGenerators = this.generatorList.stream().anyMatch(generator ->
+        boolean hasCobblestoneGenerators = this.elementList.stream().anyMatch(generator ->
             generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE));
-        boolean hasStoneGenerators = this.generatorList.stream().anyMatch(generator ->
+        boolean hasStoneGenerators = this.elementList.stream().anyMatch(generator ->
             generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE));
-        boolean hasBasaltGenerators = this.generatorList.stream().anyMatch(generator ->
+        boolean hasBasaltGenerators = this.elementList.stream().anyMatch(generator ->
             generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT));
 
         // Do not show cobblestone button if there are no cobblestone generators.
@@ -108,9 +126,9 @@ public class GeneratorManagePanel extends CommonPanel
             panelBuilder.item(7, this.createButton(Button.SHOW_BASALT));
         }
 
-        this.fillGeneratorTiers(panelBuilder);
+        this.populateElements(panelBuilder, this.filterElements);
 
-        panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
+        panelBuilder.item(44, this.returnButton);
 
         // Build panel.
         panelBuilder.build();
@@ -141,65 +159,6 @@ public class GeneratorManagePanel extends CommonPanel
         int count = 1;
 
         switch (button) {
-            case RETURN -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
-                description.add("");
-                if (this.parentPanel != null) {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                } else {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
-                }
-
-                clickHandler = (panel, user, clickType, i) -> {
-
-                    if (this.parentPanel != null) {
-                        this.parentPanel.reopen();
-                    } else {
-                        user.closeInventory();
-                    }
-                    return true;
-                };
-
-                icon = Material.OAK_DOOR;
-
-                break;
-            }
-            case PREVIOUS -> {
-                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex--;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
-            case NEXT -> {
-                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex++;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
             case CREATE_GENERATOR -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
@@ -228,9 +187,9 @@ public class GeneratorManagePanel extends CommonPanel
                             this.manager.loadGeneratorTier(newGeneratorTier, false, this.user);
 
                             // Add new generator to generatorList.
-                            this.generatorList.add(newGeneratorTier);
+                            this.elementList.add(newGeneratorTier);
                             // Update row count
-                            this.updateRows();
+                            this.updateFilters();
 
                             // Open generator edit panel.
                             GeneratorEditPanel.open(this, newGeneratorTier);
@@ -255,8 +214,6 @@ public class GeneratorManagePanel extends CommonPanel
 
                     return true;
                 };
-
-                break;
             }
             case DELETE_GENERATOR -> {
                 icon = this.selectedGenerators.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
@@ -280,11 +237,11 @@ public class GeneratorManagePanel extends CommonPanel
                             if (value) {
                                 this.selectedGenerators.forEach(generator -> {
                                     this.manager.wipeGeneratorTier(generator);
-                                    this.generatorList.remove(generator);
+                                    this.elementList.remove(generator);
                                 });
 
                                 this.selectedGenerators.clear();
-                                this.updateRows();
+                                this.updateFilters();
                             }
 
                             this.build();
@@ -326,8 +283,6 @@ public class GeneratorManagePanel extends CommonPanel
                     // Do nothing as no generators are selected.
                     clickHandler = (panel, user1, clickType, slot) -> true;
                 }
-
-                break;
             }
             default -> clickHandler = (panel, user1, clickType, slot) -> true;
         }
@@ -371,6 +326,7 @@ public class GeneratorManagePanel extends CommonPanel
         PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
             this.activeFilterButton = this.activeFilterButton == button ? Button.NONE : button;
             // Rebuild everything.
+            this.updateFilters();
             this.build();
 
             // Always return true.
@@ -379,22 +335,12 @@ public class GeneratorManagePanel extends CommonPanel
 
         boolean glow = this.activeFilterButton == button;
 
-        Material material = Material.PAPER;
-
-        switch (button) {
-            case SHOW_COBBLESTONE -> {
-                material = Material.COBBLESTONE;
-                break;
-            }
-            case SHOW_STONE -> {
-                material = Material.STONE;
-                break;
-            }
-            case SHOW_BASALT -> {
-                material = Material.BASALT;
-                break;
-            }
-        }
+        Material material = switch (button) {
+            case SHOW_COBBLESTONE -> Material.COBBLESTONE;
+            case SHOW_STONE -> Material.STONE;
+            case SHOW_BASALT -> Material.BASALT;
+            case NONE -> Material.PAPER;
+        };
 
         return new PanelItemBuilder().
             name(name).
@@ -407,80 +353,13 @@ public class GeneratorManagePanel extends CommonPanel
 
 
     /**
-     * This method fills panel builder empty spaces with generator tiers and adds previous next buttons if necessary.
-     *
-     * @param panelBuilder PanelBuilder that is necessary to populate.
-     */
-    private void fillGeneratorTiers(PanelBuilder panelBuilder)
-    {
-        int MAX_ELEMENTS = this.rowCount * 7;
-
-        final int correctPage;
-
-        List<GeneratorTierObject> filteredList = switch (this.activeFilterButton) {
-            case SHOW_COBBLESTONE -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
-                    collect(Collectors.toList());
-            case SHOW_STONE -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
-                    collect(Collectors.toList());
-            case SHOW_BASALT -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
-                    collect(Collectors.toList());
-            default -> this.generatorList;
-        };
-
-        if (this.pageIndex < 0)
-        {
-            correctPage = filteredList.size() / MAX_ELEMENTS;
-        }
-        else if (this.pageIndex > (filteredList.size() / MAX_ELEMENTS))
-        {
-            correctPage = 0;
-        }
-        else
-        {
-            correctPage = this.pageIndex;
-        }
-
-        if (filteredList.size() > MAX_ELEMENTS)
-        {
-            // Navigation buttons if necessary
-
-            panelBuilder.item(9, this.createButton(Action.PREVIOUS));
-            panelBuilder.item(17, this.createButton(Action.NEXT));
-        }
-
-        int generatorIndex = MAX_ELEMENTS * correctPage;
-
-        // I want first row to be only for navigation and return button.
-        int index = 10;
-
-        while (generatorIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
-            generatorIndex < filteredList.size() &&
-            index < 36)
-        {
-            if (!panelBuilder.slotOccupied(index))
-            {
-                panelBuilder.item(index,
-                    this.createGeneratorButton(filteredList.get(generatorIndex++)));
-            }
-
-            index++;
-        }
-    }
-
-
-    /**
      * This method creates button for generator tier.
      *
      * @param generatorTier GeneratorTier which button must be created.
      * @return PanelItem for generator tier.
      */
-    private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
+    @Override
+    protected PanelItem createElementButton(GeneratorTierObject generatorTier)
     {
         boolean glow = this.selectedGenerators.contains(generatorTier);
 
@@ -603,18 +482,6 @@ public class GeneratorManagePanel extends CommonPanel
     private enum Action
     {
         /**
-         * Return button that exists GUI.
-         */
-        RETURN,
-        /**
-         * Allows to select previous generators in multi-page situation.
-         */
-        PREVIOUS,
-        /**
-         * Allows to select next generators in multi-page situation.
-         */
-        NEXT,
-        /**
          * Allows to add new generator to the generatorList.
          */
         CREATE_GENERATOR,
@@ -632,7 +499,7 @@ public class GeneratorManagePanel extends CommonPanel
     /**
      * This variable stores all generator tiers in the given world.
      */
-    private final List<GeneratorTierObject> generatorList;
+    private final List<GeneratorTierObject> elementList;
 
     /**
      * This variable stores all selected generator tiers.
@@ -640,22 +507,12 @@ public class GeneratorManagePanel extends CommonPanel
     private final Set<GeneratorTierObject> selectedGenerators;
 
     /**
+     * This list contains currently displayed gui list.
+     */
+    private List<GeneratorTierObject> filterElements;
+
+    /**
      * Stores currently active filter button.
      */
     private Button activeFilterButton;
-
-    /**
-     * This variable holds current pageIndex for multi-page generator choosing.
-     */
-    private int pageIndex;
-
-    /**
-     * Stores how many elements will be in display.
-     */
-    private int rowCount;
-
-    /**
-     * This variable holds current max page index for multi-page generator choosing.
-     */
-    private int maxPageIndex;
 }
