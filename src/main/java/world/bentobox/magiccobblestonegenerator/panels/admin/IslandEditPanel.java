@@ -24,7 +24,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataOb
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBundlePanel;
+import world.bentobox.magiccobblestonegenerator.panels.utils.BundleSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -608,7 +608,7 @@ public class IslandEditPanel extends CommonPanel
 
                 clickHandler = (panel, user, clickType, slot) ->
                 {
-                    SelectBundlePanel.open(this, islandBundle, bundle -> {
+                    BundleSelector.open(this, islandBundle, bundle -> {
                         if (bundle == null || bundle == GeneratorBundleObject.dummyBundle) {
                             this.generatorData.setIslandBundle(null);
                         } else {

@@ -18,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
+import world.bentobox.bentobox.api.panels.PanelItem;
+import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
@@ -57,6 +59,18 @@ public abstract class CommonPanel
 
         // Apply formatting for each instance.
         this.applyFormatting();
+
+        this.returnButton = new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "quit.name")).
+            description(this.user.getTranslationOrNothing(Constants.BUTTON + "quit.description")).
+            description("").
+            description(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-quit")).
+            icon(Material.OAK_DOOR).
+            clickHandler((panel, user1, clickType, i) ->
+            {
+                this.user.closeInventory();
+                return true;
+            }).build();
     }
 
 
@@ -80,6 +94,18 @@ public abstract class CommonPanel
         this.thousandsFormat = parentPanel.thousandsFormat;
         this.tenThousandsFormat = parentPanel.tenThousandsFormat;
         this.hundredThousandsFormat = parentPanel.hundredThousandsFormat;
+
+        this.returnButton = new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "return.name")).
+            description(this.user.getTranslationOrNothing(Constants.BUTTON + "return.description")).
+            description("").
+            description(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-return")).
+            icon(Material.OAK_DOOR).
+            clickHandler((panel, user1, clickType, i) ->
+            {
+                this.parentPanel.build();
+                return true;
+            }).build();
     }
 
 
@@ -629,9 +655,13 @@ public abstract class CommonPanel
     /**
      * This variable allows to create nested panel structure.
      */
-    protected @Nullable
-    final CommonPanel parentPanel;
+    @Nullable
+    protected final CommonPanel parentPanel;
 
+    /**
+     * This object holds PanelItem that allows to return to previous panel.
+     */
+    protected PanelItem returnButton;
 
 // ---------------------------------------------------------------------
 // Section: Formatting
