@@ -18,6 +18,7 @@ import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
+import world.bentobox.magiccobblestonegenerator.panels.CommonPagedPanel;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -27,7 +28,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 /**
  * This class opens GUI that allows to manage all generators for admin.
  */
-public class BundleManagePanel extends CommonPanel
+public class BundleManagePanel extends CommonPagedPanel<GeneratorBundleObject>
 {
     // ---------------------------------------------------------------------
     // Section: Internal Constructor
@@ -43,23 +44,20 @@ public class BundleManagePanel extends CommonPanel
     {
         super(parentPanel);
         // Store bundles in local list to avoid building it every time.
-        this.bundleList = this.manager.getAllGeneratorBundles(this.world);
-
-        // Stores how many elements will be in display.
-        this.updateRows();
+        this.elementList = this.manager.getAllGeneratorBundles(this.world);
 
         // Init set with selected bundles.
-        this.selectedBundles = new HashSet<>(this.bundleList.size());
+        this.selectedBundles = new HashSet<>(this.elementList.size());
     }
 
 
     /**
-     * This method updates row count for Panel.
+     * Update filters.
      */
-    private void updateRows()
+    @Override
+    protected void updateFilters()
     {
-        this.rowCount = this.bundleList.size() > 14 ? 3 : this.bundleList.size() > 7 ? 2 : 1;
-        this.maxPageIndex = (int) Math.ceil(1.0 * this.bundleList.size() / 7 * this.rowCount) - 1;
+        // There are no filters that should be updated.
     }
 
 
@@ -75,14 +73,14 @@ public class BundleManagePanel extends CommonPanel
             name(this.user.getTranslation(Constants.TITLE + "manage-bundles"));
 
 
-        PanelUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
+        PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(1, this.createButton(Action.CREATE_BUNDLE));
         panelBuilder.item(2, this.createButton(Action.DELETE_BUNDLE));
 
-        this.fillBundles(panelBuilder);
+        this.populateElements(panelBuilder, this.elementList);
 
-        panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
+        panelBuilder.item(44, this.returnButton);
 
         // Build panel.
         panelBuilder.build();
@@ -113,65 +111,6 @@ public class BundleManagePanel extends CommonPanel
         int count = 1;
 
         switch (button) {
-            case RETURN -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
-                description.add("");
-                if (this.parentPanel != null) {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                } else {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
-                }
-
-                clickHandler = (panel, user, clickType, i) -> {
-
-                    if (this.parentPanel != null) {
-                        this.parentPanel.reopen();
-                    } else {
-                        user.closeInventory();
-                    }
-                    return true;
-                };
-
-                icon = Material.OAK_DOOR;
-
-                break;
-            }
-            case PREVIOUS -> {
-                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex--;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
-            case NEXT -> {
-                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex++;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
             case CREATE_BUNDLE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
@@ -197,9 +136,7 @@ public class BundleManagePanel extends CommonPanel
                             this.manager.loadGeneratorBundle(newBundle, false, this.user);
 
                             // Add new generator to generatorList.
-                            this.bundleList.add(newBundle);
-                            // Update row count
-                            this.updateRows();
+                            this.elementList.add(newBundle);
                             // Open bundle edit panel.
                             BundleEditPanel.open(this, newBundle);
                         } else {
@@ -223,8 +160,6 @@ public class BundleManagePanel extends CommonPanel
 
                     return true;
                 };
-
-                break;
             }
             case DELETE_BUNDLE -> {
                 icon = this.selectedBundles.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
@@ -248,11 +183,10 @@ public class BundleManagePanel extends CommonPanel
                             if (value) {
                                 this.selectedBundles.forEach(bundle -> {
                                     this.manager.wipeBundle(bundle);
-                                    this.bundleList.remove(bundle);
+                                    this.elementList.remove(bundle);
                                 });
 
                                 this.selectedBundles.clear();
-                                this.updateRows();
                             }
 
                             this.build();
@@ -295,8 +229,6 @@ public class BundleManagePanel extends CommonPanel
                     // Do nothing as no generators are selected.
                     clickHandler = (panel, user1, clickType, slot) -> true;
                 }
-
-                break;
             }
             default -> clickHandler = (panel, user1, clickType, slot) -> true;
         }
@@ -313,64 +245,13 @@ public class BundleManagePanel extends CommonPanel
 
 
     /**
-     * This method fills panel builder empty spaces with bundles tiers and adds previous next buttons if necessary.
-     *
-     * @param panelBuilder PanelBuilder that is necessary to populate.
-     */
-    private void fillBundles(PanelBuilder panelBuilder)
-    {
-        int MAX_ELEMENTS = this.rowCount * 7;
-
-        final int correctPage;
-
-        if (this.pageIndex < 0)
-        {
-            correctPage = this.bundleList.size() / MAX_ELEMENTS;
-        }
-        else if (this.pageIndex > (this.bundleList.size() / MAX_ELEMENTS))
-        {
-            correctPage = 0;
-        }
-        else
-        {
-            correctPage = this.pageIndex;
-        }
-
-        if (this.bundleList.size() > MAX_ELEMENTS)
-        {
-            // Navigation buttons if necessary
-
-            panelBuilder.item(9, this.createButton(Action.PREVIOUS));
-            panelBuilder.item(17, this.createButton(Action.NEXT));
-        }
-
-        int bundleIndex = MAX_ELEMENTS * correctPage;
-
-        // I want first row to be only for navigation and return button.
-        int index = 10;
-
-        while (bundleIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
-            bundleIndex < this.bundleList.size() &&
-            index < 36)
-        {
-            if (!panelBuilder.slotOccupied(index))
-            {
-                panelBuilder.item(index,
-                    this.createBundleButton(this.bundleList.get(bundleIndex++)));
-            }
-
-            index++;
-        }
-    }
-
-
-    /**
      * This method creates button for bundle tier.
      *
      * @param bundle Bundle which button must be created.
      * @return PanelItem for bundle.
      */
-    private PanelItem createBundleButton(GeneratorBundleObject bundle)
+    @Override
+    protected PanelItem createElementButton(GeneratorBundleObject bundle)
     {
         boolean glow = this.selectedBundles.contains(bundle);
 
@@ -468,18 +349,6 @@ public class BundleManagePanel extends CommonPanel
     private enum Action
     {
         /**
-         * Return button that exists GUI.
-         */
-        RETURN,
-        /**
-         * Allows to select previous bundles in multi-page situation.
-         */
-        PREVIOUS,
-        /**
-         * Allows to select next bundles in multi-page situation.
-         */
-        NEXT,
-        /**
          * Allows to add new bundles to the bundleList.
          */
         CREATE_BUNDLE,
@@ -497,25 +366,10 @@ public class BundleManagePanel extends CommonPanel
     /**
      * This variable stores all bundles in the given world.
      */
-    private final List<GeneratorBundleObject> bundleList;
+    private final List<GeneratorBundleObject> elementList;
 
     /**
      * This variable stores all selected bundles.
      */
     private final Set<GeneratorBundleObject> selectedBundles;
-
-    /**
-     * This variable holds current pageIndex for multi-page bundle choosing.
-     */
-    private int pageIndex;
-
-    /**
-     * Stores how many elements will be in display.
-     */
-    private int rowCount;
-
-    /**
-     * This variable holds max page index for multi-page bundle choosing.
-     */
-    private int maxPageIndex;
 }
