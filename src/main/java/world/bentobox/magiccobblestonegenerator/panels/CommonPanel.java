@@ -86,7 +86,16 @@ public abstract class CommonPanel
     /**
      * This method allows to build panel.
      */
-    public abstract void build();
+    protected abstract void build();
+
+
+    /**
+     * Rebuilds this GUI.
+     */
+    public final void reopen()
+    {
+        this.build();
+    }
 
 
 // ---------------------------------------------------------------------

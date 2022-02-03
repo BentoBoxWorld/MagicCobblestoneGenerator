@@ -26,8 +26,8 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBiomePanel;
-import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBlocksPanel;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SelectGeneratorTypePanel;
+import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Pair;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
@@ -889,7 +889,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                 clickHandler = (panel, user, clickType, i) -> {
                     if (this.parentPanel != null) {
-                        this.parentPanel.build();
+                        this.parentPanel.reopen();
                     } else {
                         user.closeInventory();
                     }
@@ -942,46 +942,54 @@ public class GeneratorEditPanel extends CommonPanel
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-add"));
 
                 icon = Material.WRITABLE_BOOK;
-                clickHandler = (panel, user1, clickType, slot) -> {
+                clickHandler = (panel, user1, clickType, slot) ->
+                {
+                    SingleBlockSelector.open(this.user,
+                        this.activeTab == Tab.BLOCKS ? SingleBlockSelector.Mode.BLOCKS : SingleBlockSelector.Mode.ANY,
+                        (value, material) ->
+                        {
+                            if (value)
+                            {
+                                Consumer<Number> numberConsumer = number ->
+                                {
+                                    if (number != null)
+                                    {
+                                        if (this.activeTab == Tab.BLOCKS)
+                                        {
+                                            this.materialChanceList.add(
+                                                new Pair<>(material,
+                                                    number.doubleValue()));
 
-                    SelectBlocksPanel.open(user1,
-                            true,
-                            this.activeTab == Tab.BLOCKS,
-                            value -> {
-                                if (value != null) {
-                                    Consumer<Number> numberConsumer = number -> {
-                                        if (number != null) {
-                                            if (this.activeTab == Tab.BLOCKS) {
-                                                this.materialChanceList.add(
-                                                        new Pair<>(value.iterator().next(),
-                                                                number.doubleValue()));
-
-                                                this.generatorTier.setBlockChanceMap(
-                                                        Utils.pairList2TreeMap(this.materialChanceList));
-                                                this.manager.saveGeneratorTier(this.generatorTier);
-                                            } else if (this.activeTab == Tab.TREASURES) {
-                                                this.treasureChanceList.add(
-                                                        new Pair<>(new ItemStack(value.iterator().next()),
-                                                                number.doubleValue()));
-
-                                                this.generatorTier.setTreasureItemChanceMap(
-                                                        Utils.pairList2TreeMap(this.treasureChanceList));
-                                                this.manager.saveGeneratorTier(this.generatorTier);
-                                            }
+                                            this.generatorTier.setBlockChanceMap(
+                                                Utils.pairList2TreeMap(this.materialChanceList));
+                                            this.manager.saveGeneratorTier(this.generatorTier);
                                         }
+                                        else if (this.activeTab == Tab.TREASURES)
+                                        {
+                                            this.treasureChanceList.add(
+                                                new Pair<>(new ItemStack(material),
+                                                    number.doubleValue()));
 
-                                        this.build();
-                                    };
+                                            this.generatorTier.setTreasureItemChanceMap(
+                                                Utils.pairList2TreeMap(this.treasureChanceList));
+                                            this.manager.saveGeneratorTier(this.generatorTier);
+                                        }
+                                    }
 
-                                    ConversationUtils.createNumericInput(numberConsumer,
-                                            this.user,
-                                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
-                                            0.0,
-                                            Long.MAX_VALUE);
-                                } else {
                                     this.build();
-                                }
-                            });
+                                };
+
+                                ConversationUtils.createNumericInput(numberConsumer,
+                                    this.user,
+                                    this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                                    0.0,
+                                    Long.MAX_VALUE);
+                            }
+                            else
+                            {
+                                this.build();
+                            }
+                        });
 
                     return true;
                 };

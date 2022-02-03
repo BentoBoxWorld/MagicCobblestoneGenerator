@@ -22,7 +22,7 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.utils.SelectBlocksPanel;
+import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
 
@@ -257,13 +257,11 @@ public class SettingsPanel extends CommonPanel
                 material = this.settings.getBorderBlock();
                 clickHandler = (panel, user1, clickType, slot) -> {
 
-                    SelectBlocksPanel.open(user1,
-                        true,
-                        false,
-                        value -> {
-                            if (value != null)
+                    SingleBlockSelector.open(this.user,
+                        (value, newMaterial) -> {
+                            if (value)
                             {
-                                this.settings.setBorderBlock(value.iterator().next());
+                                this.settings.setBorderBlock(newMaterial);
                                 this.saveSettings();
                             }
 
@@ -394,7 +392,7 @@ public class SettingsPanel extends CommonPanel
                 clickHandler = (panel, user, clickType, i) -> {
                     if (this.parentPanel != null)
                     {
-                        this.parentPanel.build();
+                        this.parentPanel.reopen();
                     }
                     else
                     {

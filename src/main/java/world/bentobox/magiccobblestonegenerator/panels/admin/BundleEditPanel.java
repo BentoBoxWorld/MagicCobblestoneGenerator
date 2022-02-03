@@ -406,7 +406,7 @@ public class BundleEditPanel extends CommonPanel
                         this.mode = Mode.VIEW;
                         this.build();
                     } else if (this.parentPanel != null) {
-                        this.parentPanel.build();
+                        this.parentPanel.reopen();
                     } else {
                         user.closeInventory();
                     }
