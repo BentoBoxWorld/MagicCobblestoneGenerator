@@ -203,7 +203,11 @@ stone-generator:
         name: "&f&l Return"
         description: |-
           &7 Return to previous menu
-          &7 or exit GUI
+      quit:
+        name: "&f&l Quit"
+        description: |-
+          &7 Exit the current menu
+      # Button that is used in multi-page GUIs which allows to return to previous page.
       # Button that is used in multi-page GUIs which allows to return to previous page.
       previous:
         name: "&f&l Previous Page"

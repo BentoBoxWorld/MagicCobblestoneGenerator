@@ -1,23 +1,27 @@
 package world.bentobox.magiccobblestonegenerator.panels.player;
 
 
+import com.google.common.base.Enums;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import lv.id.bonne.panelutils.PanelUtils;
-import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
-import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
+import world.bentobox.bentobox.api.panels.TemplatedPanel;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
+import world.bentobox.bentobox.api.panels.builders.TemplatedPanelBuilder;
+import world.bentobox.bentobox.api.panels.reader.ItemTemplateRecord;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
-import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
@@ -53,23 +57,11 @@ public class GeneratorUserPanel extends CommonPanel
         // Store generators in local list to avoid building it every time.
         this.generatorList = this.manager.getIslandGeneratorTiers(world, this.generatorData);
 
-        this.isBorderEnabled = !addon.getSettings().getBorderBlock().isAir();
-        this.isFiltersEnabled = addon.getSettings().isShowFilters();
-
-        // Stores how many elements will be in display.
-        // Row Count should be influenced by border block type.
-
-        if (this.isBorderEnabled)
-        {
-            this.rowCount = this.generatorList.size() > 14 ? 3 : this.generatorList.size() > 7 ? 2 : 1;
-        }
-        else
-        {
-            this.rowCount = this.generatorList.size() > 18 ? 3 : this.generatorList.size() > 9 ? 2 : 1;
-        }
-
         // By default no-filters are active.
-        this.activeFilterButton = Button.NONE;
+        this.activeFilterButton = Filter.NONE;
+
+        // Update element list.
+        this.updateElements();
     }
 
 
@@ -79,604 +71,625 @@ public class GeneratorUserPanel extends CommonPanel
     @Override
     public void build()
     {
-        if (this.generatorList.isEmpty())
-        {
-            Utils.sendMessage(this.user, this.user.getTranslation(
-                Constants.ERRORS + "no-generators-in-world",
-                Constants.WORLD, this.world.getName()));
-            return;
-        }
-
         if (this.island == null || this.generatorData == null)
         {
             Utils.sendMessage(this.user, this.user.getTranslation("general.errors.no-island"));
             return;
         }
 
-        // PanelBuilder is a BentoBox API that provides ability to easy create Panels.
-        PanelBuilder panelBuilder = new PanelBuilder().
-            user(this.user).
-            name(this.user.getTranslation(Constants.TITLE + "player-panel"));
-
-        // If border block is not set, then do not build it.
-        if (this.isBorderEnabled)
+        // Do not open gui if there is no magic sticks.
+        if (this.generatorList.isEmpty())
         {
-            PanelUtils.fillBorder(panelBuilder,
-                this.rowCount + 2);
+            this.addon.logError("There are no available generators!");
+            Utils.sendMessage(this.user, this.user.getTranslation(
+                Constants.ERRORS + "no-generators-in-world",
+                Constants.WORLD, this.world.getName()));
+            return;
         }
 
-        // Show filters only if they are enabled.
-        if (this.isFiltersEnabled)
-        {
-            panelBuilder.item(2, this.createButton(Button.SHOW_ACTIVE));
+        // Start building panel.
+        TemplatedPanelBuilder panelBuilder = new TemplatedPanelBuilder();
 
-            boolean hasCobblestoneGenerators = this.generatorList.stream().anyMatch(generator ->
-                generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE));
-            boolean hasStoneGenerators = this.generatorList.stream().anyMatch(generator ->
-                generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE));
-            boolean hasBasaltGenerators = this.generatorList.stream().anyMatch(generator ->
-                generator.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT));
+        // Set main template.
+        panelBuilder.template("main_panel", new File(this.addon.getDataFolder(), "panels"));
+        panelBuilder.user(this.user);
+        panelBuilder.world(this.user.getWorld());
 
-            // Do not show cobblestone button if there are no cobblestone generators.
-            if (hasCobblestoneGenerators && (hasStoneGenerators || hasBasaltGenerators))
-            {
-                panelBuilder.item(4, this.createButton(Button.SHOW_COBBLESTONE));
-            }
+        // Register button builders
+        panelBuilder.registerTypeBuilder("GENERATOR", this::createGeneratorButton);
 
-            // Do not show stone if there are no stone generators.
-            if (hasStoneGenerators && (hasCobblestoneGenerators || hasBasaltGenerators))
-            {
-                panelBuilder.item(5, this.createButton(Button.SHOW_STONE));
-            }
+        // Register next and previous builders
+        panelBuilder.registerTypeBuilder("NEXT", this::createNextButton);
+        panelBuilder.registerTypeBuilder("PREVIOUS", this::createPreviousButton);
+        panelBuilder.registerTypeBuilder("RETURN", this::createReturnButton);
 
-            // Do not show basalt if there are no basalt generators.
-            if (hasBasaltGenerators && (hasStoneGenerators || hasCobblestoneGenerators))
-            {
-                panelBuilder.item(6, this.createButton(Button.SHOW_BASALT));
-            }
+        // Register Filter button
+        panelBuilder.registerTypeBuilder("FILTER", this::createFilterButton);
 
-            panelBuilder.item(8, this.createButton(Button.TOGGLE_VISIBILITY));
-        }
-
-        this.fillGeneratorTiers(panelBuilder);
-
-        // if border is disabled, then do not show return button.
-        if (this.isBorderEnabled)
-        {
-            panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
-        }
-
-        // Build panel.
+        // Register unknown type builder.
         panelBuilder.build();
     }
 
 
 // ---------------------------------------------------------------------
-// Section: Methods
+// Section: Create Action Buttons
 // ---------------------------------------------------------------------
 
 
     /**
-     * This method creates panel item for given button type.
+     * Create next button panel item.
      *
-     * @param button Button type.
-     * @return Clickable PanelItem button.
+     * @param template the template
+     * @param slot the slot
+     * @return the panel item
      */
-    private PanelItem createButton(Button button)
+    @Nullable
+    private PanelItem createNextButton(@NotNull ItemTemplateRecord template, TemplatedPanel.ItemSlot slot)
     {
-        final String reference = Constants.BUTTON + button.name().toLowerCase();
-        String name = this.user.getTranslation(reference + ".name");
-        List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslationOrNothing(reference + ".description"));
+        int size = this.elementList.size();
 
-        description.add("");
-        if (this.activeFilterButton != button)
+        if (size <= slot.amountMap().getOrDefault("GENERATOR", 1) ||
+            1.0 * size / slot.amountMap().getOrDefault("GENERATOR", 1) <= this.generatorIndex + 1)
         {
-            description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-enable"));
-        }
-        else
-        {
-            description.add(this.user.getTranslation(Constants.TIPS + "click-to-filter-disable"));
+            // There are no next elements
+            return null;
         }
 
-        PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-            this.activeFilterButton = this.activeFilterButton == button ? Button.NONE : button;
-            // Rebuild everything.
-            this.build();
+        int nextPageIndex = this.generatorIndex + 2;
+
+        PanelItemBuilder builder = new PanelItemBuilder();
+
+        if (template.icon() != null)
+        {
+            ItemStack clone = template.icon().clone();
+
+            if ((Boolean) template.dataMap().getOrDefault("indexing", false))
+            {
+                clone.setAmount(nextPageIndex);
+            }
+
+            builder.icon(clone);
+        }
+
+        if (template.title() != null)
+        {
+            builder.name(this.user.getTranslation(this.world, template.title()));
+        }
+
+        if (template.description() != null)
+        {
+            builder.description(this.user.getTranslation(this.world, template.description(),
+                Constants.NUMBER, String.valueOf(nextPageIndex)));
+        }
+
+        // Add ClickHandler
+        builder.clickHandler((panel, user, clickType, i) ->
+        {
+            for (ItemTemplateRecord.ActionRecords action : template.actions())
+            {
+                if (clickType == action.clickType() || ClickType.UNKNOWN.equals(action.clickType()))
+                {
+                    if ("NEXT".equalsIgnoreCase(action.actionType()))
+                    {
+                        this.generatorIndex++;
+                        this.build();
+                    }
+                }
+            }
 
             // Always return true.
             return true;
-        };
+        });
 
-        Material material = Material.PAPER;
+        // Collect tooltips.
+        List<String> tooltips = template.actions().stream().
+            filter(action -> action.tooltip() != null).
+            map(action -> this.user.getTranslation(this.world, action.tooltip())).
+            filter(text -> !text.isBlank()).
+            collect(Collectors.toCollection(() -> new ArrayList<>(template.actions().size())));
 
-        switch (button) {
-            case SHOW_COBBLESTONE -> {
-                material = Material.COBBLESTONE;
-                break;
-            }
-            case SHOW_STONE -> {
-                material = Material.STONE;
-                break;
-            }
-            case SHOW_BASALT -> {
-                material = Material.BASALT;
-                break;
-            }
-            case TOGGLE_VISIBILITY -> {
-                material = Material.REDSTONE;
-                break;
-            }
-            case SHOW_ACTIVE -> {
-                material = Material.GREEN_STAINED_GLASS_PANE;
-                break;
-            }
+        // Add tooltips.
+        if (!tooltips.isEmpty())
+        {
+            // Empty line and tooltips.
+            builder.description("");
+            builder.description(tooltips);
         }
 
-        return new PanelItemBuilder().
-            name(name).
-            description(description).
-            icon(material).
-            clickHandler(clickHandler).
-            glow(this.activeFilterButton == button).
-            build();
+        return builder.build();
     }
 
 
     /**
-     * This method creates panel item for given button type.
+     * Create previous button panel item.
      *
-     * @param button Button type.
-     * @return Clickable PanelItem button.
+     * @param template the template
+     * @param slot the slot
+     * @return the panel item
      */
-    private PanelItem createButton(Action button)
+    @Nullable
+    private PanelItem createPreviousButton(@NotNull ItemTemplateRecord template, TemplatedPanel.ItemSlot slot)
     {
-        final String reference = Constants.BUTTON + button.name().toLowerCase();
-        String name = this.user.getTranslation(reference + ".name");
-        List<String> description = new ArrayList<>();
+        if (this.generatorIndex == 0)
+        {
+            // There are no next elements
+            return null;
+        }
 
-        PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> true;
+        int previousPageIndex = this.generatorIndex;
 
-        Material icon = Material.PAPER;
-        int count = 1;
+        PanelItemBuilder builder = new PanelItemBuilder();
 
-        switch (button) {
-            case RETURN -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
-                description.add("");
+        if (template.icon() != null)
+        {
+            ItemStack clone = template.icon().clone();
 
-                if (this.parentPanel != null) {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                } else {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
-                }
+            if ((Boolean) template.dataMap().getOrDefault("indexing", false))
+            {
+                clone.setAmount(previousPageIndex);
+            }
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    if (this.parentPanel != null) {
-                        this.parentPanel.reopen();
-                    } else {
-                        user.closeInventory();
+            builder.icon(clone);
+        }
+
+        if (template.title() != null)
+        {
+            builder.name(this.user.getTranslation(this.world, template.title()));
+        }
+
+        if (template.description() != null)
+        {
+            builder.description(this.user.getTranslation(this.world, template.description(),
+                Constants.NUMBER, String.valueOf(previousPageIndex)));
+        }
+
+        // Add ClickHandler
+        builder.clickHandler((panel, user, clickType, i) ->
+        {
+            for (ItemTemplateRecord.ActionRecords action : template.actions())
+            {
+                if (clickType == action.clickType() || ClickType.UNKNOWN.equals(action.clickType()))
+                {
+                    if ("PREVIOUS".equalsIgnoreCase(action.actionType()))
+                    {
+                        this.generatorIndex--;
+                        this.build();
                     }
-                    return true;
-                };
-
-                icon = Material.OAK_DOOR;
-
-                break;
+                }
             }
-            case PREVIOUS -> {
-                count = Utils.getPreviousPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
 
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
+            // Always return true.
+            return true;
+        });
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex--;
-                    this.build();
-                    return true;
-                };
+        // Collect tooltips.
+        List<String> tooltips = template.actions().stream().
+            filter(action -> action.tooltip() != null).
+            map(action -> this.user.getTranslation(this.world, action.tooltip())).
+            filter(text -> !text.isBlank()).
+            collect(Collectors.toCollection(() -> new ArrayList<>(template.actions().size())));
 
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
-            case NEXT -> {
-                count = Utils.getNextPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                        Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex++;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
+        // Add tooltips.
+        if (!tooltips.isEmpty())
+        {
+            // Empty line and tooltips.
+            builder.description("");
+            builder.description(tooltips);
         }
 
-        return new PanelItemBuilder().
-            name(name).
-            description(description).
-            icon(icon).
-            amount(count).
-            clickHandler(clickHandler).
-            build();
+        return builder.build();
     }
 
 
     /**
-     * This method fills panel builder empty spaces with generator tiers and adds previous next buttons if necessary.
+     * Create return button panel item.
      *
-     * @param panelBuilder PanelBuilder that is necessary to populate.
+     * @param template the template
+     * @param slot the slot
+     * @return the panel item
      */
-    private void fillGeneratorTiers(PanelBuilder panelBuilder)
+    @Nullable
+    private PanelItem createReturnButton(@NotNull ItemTemplateRecord template, TemplatedPanel.ItemSlot slot)
     {
-        int MAX_ELEMENTS = this.rowCount * (this.addon.getSettings().getBorderBlock().isAir() ? 9 : 7);
+        PanelItemBuilder builder = new PanelItemBuilder();
 
-        List<GeneratorTierObject> filteredList = switch (this.activeFilterButton) {
-            case SHOW_COBBLESTONE -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
-                    collect(Collectors.toList());
-            case SHOW_STONE -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
-                    collect(Collectors.toList());
-            case SHOW_BASALT -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
-                    collect(Collectors.toList());
-            case TOGGLE_VISIBILITY -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
-                    collect(Collectors.toList());
-            case SHOW_ACTIVE -> this.generatorList.stream().
-                    filter(generatorTier ->
-                            this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
-                    collect(Collectors.toList());
-            default -> this.generatorList;
-        };
-
-        this.maxPageIndex = (int) Math.ceil(1.0 * filteredList.size() / MAX_ELEMENTS) - 1;
-
-        if (this.pageIndex < 0)
+        if (template.icon() != null)
         {
-            this.pageIndex = filteredList.size() / MAX_ELEMENTS;
-        }
-        else if (this.pageIndex > (filteredList.size() / MAX_ELEMENTS))
-        {
-            this.pageIndex = 0;
+            builder.icon(template.icon().clone());
         }
 
-        // Currently I do not want to deal with situations, when someone disables bored and have more then 36 generators.
-        if (this.isBorderEnabled && filteredList.size() > MAX_ELEMENTS)
+        if (template.title() != null)
         {
-            // Navigation buttons if necessary
-
-            panelBuilder.item(9, this.createButton(Action.PREVIOUS));
-            panelBuilder.item(17, this.createButton(Action.NEXT));
+            builder.name(this.user.getTranslation(this.world, template.title()));
         }
 
-        int generatorIndex = MAX_ELEMENTS * this.pageIndex;
-
-        // I want first row to be only for navigation and return button.
-        int index;
-
-        if (this.isBorderEnabled)
+        if (template.description() != null)
         {
-            index = 10;
+            builder.description(this.user.getTranslation(this.world, template.description()));
         }
-        else if (this.isFiltersEnabled)
+
+        // Add ClickHandler
+        if (this.returnButton.getClickHandler().isPresent())
         {
-            index = 9;
+            builder.clickHandler(this.returnButton.getClickHandler().get());
+        }
+
+        // Collect tooltips.
+        List<String> tooltips = template.actions().stream().
+            filter(action -> action.tooltip() != null).
+            map(action -> this.user.getTranslation(this.world, action.tooltip())).
+            filter(text -> !text.isBlank()).
+            collect(Collectors.toCollection(() -> new ArrayList<>(template.actions().size())));
+
+        // Add tooltips.
+        if (!tooltips.isEmpty())
+        {
+            // Empty line and tooltips.
+            builder.description("");
+            builder.description(tooltips);
+        }
+
+        return builder.build();
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Create Filter Buttons
+// ---------------------------------------------------------------------
+
+
+    /**
+     * Create filter button panel item.
+     *
+     * @param template the template
+     * @param slot the slot
+     * @return the panel item
+     */
+    @Nullable
+    private PanelItem createFilterButton(@NotNull ItemTemplateRecord template, TemplatedPanel.ItemSlot slot)
+    {
+        PanelItemBuilder builder = new PanelItemBuilder();
+
+        if (template.icon() != null)
+        {
+            // Set icon
+            builder.icon(template.icon().clone());
+        }
+
+        if (template.title() != null)
+        {
+            // Set title
+            builder.name(this.user.getTranslation(this.world, template.title()));
+        }
+
+        if (template.description() != null)
+        {
+            // Set description
+            builder.description(this.user.getTranslation(this.world, template.description()));
+        }
+
+        Filter filter = Enums.getIfPresent(Filter.class, String.valueOf(template.dataMap().get("filter"))).or(Filter.NONE);
+
+        // Get only possible actions, by removing all inactive ones.
+        List<ItemTemplateRecord.ActionRecords> activeActions = new ArrayList<>(template.actions());
+
+        activeActions.removeIf(action ->
+        {
+            switch (action.actionType().toUpperCase())
+            {
+                case "ENABLE" -> {
+                    return this.activeFilterButton == filter;
+                }
+                case "DISABLE" -> {
+                    return this.activeFilterButton != filter;
+                }
+                default -> {
+                    return false;
+                }
+            }
+        });
+
+        // Add Click handler
+        builder.clickHandler((panel, user, clickType, i) ->
+        {
+            for (ItemTemplateRecord.ActionRecords action : activeActions)
+            {
+                if (clickType == action.clickType() || ClickType.UNKNOWN.equals(action.clickType()))
+                {
+                    switch (action.actionType().toUpperCase())
+                    {
+                        case "ENABLE" -> this.activeFilterButton = filter;
+                        case "DISABLE" -> this.activeFilterButton = Filter.NONE;
+                    }
+
+                    // Reset page.
+                    this.generatorIndex = 0;
+                    // Update elements.
+                    this.updateElements();
+                    this.build();
+                }
+            }
+
+            return true;
+        });
+
+        // Collect tooltips.
+        List<String> tooltips = activeActions.stream().
+            filter(action -> action.tooltip() != null).
+            map(action -> this.user.getTranslation(this.world, action.tooltip())).
+            filter(text -> !text.isBlank()).
+            collect(Collectors.toCollection(() -> new ArrayList<>(template.actions().size())));
+
+        // Add tooltips.
+        if (!tooltips.isEmpty())
+        {
+            // Empty line and tooltips.
+            builder.description("");
+            builder.description(tooltips);
+        }
+
+        builder.glow(this.activeFilterButton == filter);
+
+        return builder.build();
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Create Generator Buttons
+// ---------------------------------------------------------------------
+
+
+    /**
+     * Create generator button panel item.
+     *
+     * @param template the template
+     * @param slot the slot
+     * @return the panel item
+     */
+    @Nullable
+    private PanelItem createGeneratorButton(ItemTemplateRecord template, TemplatedPanel.ItemSlot slot)
+    {
+        if (this.elementList.isEmpty())
+        {
+            // Does not contain any generators.
+            return null;
+        }
+
+        GeneratorTierObject generatorTier;
+
+        // Check if that is a specific generator
+        if (template.dataMap().containsKey("id"))
+        {
+            String id = (String) template.dataMap().get("id");
+
+            // Find a generator with given id;
+            generatorTier = this.generatorList.stream().
+                filter(generatorId -> generatorId.getUniqueId().equals(id)).
+                findFirst().
+                orElse(null);
+
+            if (generatorTier == null)
+            {
+                // There is no generator in the list with specific id.
+                return null;
+            }
         }
         else
         {
-            index = 0;
-        }
+            int index = this.generatorIndex * slot.amountMap().getOrDefault("GENERATOR", 1) + slot.slot();
 
-        while (generatorIndex < ((this.pageIndex + 1) * MAX_ELEMENTS) &&
-            generatorIndex < filteredList.size() &&
-            index < 36)
-        {
-            if (!panelBuilder.slotOccupied(index))
+            if (index >= this.elementList.size())
             {
-                panelBuilder.item(index,
-                    this.createGeneratorButton(filteredList.get(generatorIndex++)));
+                // Out of index.
+                return null;
             }
 
-            index++;
+            generatorTier = this.elementList.get(index);
         }
+
+        return this.createGeneratorButton(template, generatorTier);
     }
 
 
     /**
-     * This method creates button for generator tier.
+     * Create generator button panel item.
      *
-     * @param generatorTier GeneratorTier which button must be created.
-     * @return PanelItem for generator tier.
+     * @param template the template
+     * @param generatorTier the generator tier object
+     * @return the panel item
      */
-    private PanelItem createGeneratorButton(GeneratorTierObject generatorTier)
+    @NotNull
+    private PanelItem createGeneratorButton(ItemTemplateRecord template, GeneratorTierObject generatorTier)
     {
         // Default generator should be active.
-        boolean glow = generatorTier.isDefaultGenerator() ||
+        boolean isActive = generatorTier.isDefaultGenerator() ||
             this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId());
-        // Default generator should be always unlocked.
-        boolean unlocked = generatorTier.isDefaultGenerator() ||
+        // Default generator should be always isUnlocked.
+        boolean isUnlocked = generatorTier.isDefaultGenerator() ||
             this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId());
-        // Default generators cannot be purchased.
-        boolean purchased = generatorTier.isDefaultGenerator() ||
+        // Default generators cannot be isPurchased.
+        boolean isPurchased = generatorTier.isDefaultGenerator() ||
             !this.addon.isVaultProvided() ||
             generatorTier.getGeneratorTierCost() == 0 ||
             this.generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId());
 
-        List<String> description = this.generateGeneratorDescription(generatorTier,
-            glow,
-            unlocked,
-            purchased,
-            this.manager.getIslandLevel(this.island));
+        PanelItemBuilder builder = new PanelItemBuilder();
 
-        PanelItem.ClickHandler clickHandler = (panel, user, clickType, i) -> {
-            // Click handler should work only if user has a permission to change anything.
-            // Otherwise just to view.
-
-            if (clickType.isShiftClick())
-            {
-                this.processClick(this.addon.getSettings().getShiftClickAction(),
-                    glow,
-                    purchased,
-                    generatorTier);
-            }
-            else if (this.addon.getSettings().getClickAction() != Settings.GuiAction.NONE)
-            {
-                this.processClick(this.addon.getSettings().getClickAction(),
-                    glow,
-                    purchased,
-                    generatorTier);
-            }
-            else if (clickType.isRightClick())
-            {
-                this.processClick(this.addon.getSettings().getRightClickAction(),
-                    glow,
-                    purchased,
-                    generatorTier);
-            }
-            else
-            {
-                this.processClick(this.addon.getSettings().getLeftClickAction(),
-                    glow,
-                    purchased,
-                    generatorTier);
-            }
-
-            // Always return true.
-            return true;
-        };
-
-        return new PanelItemBuilder().
-            name(generatorTier.getFriendlyName()).
-            description(description).
-            icon(unlocked ? generatorTier.getGeneratorIcon() : generatorTier.getLockedIcon()).
-            clickHandler(clickHandler).
-            glow(glow).
-            build();
-    }
-
-
-    /**
-     * This class generates given generator tier description based on input parameters.
-     *
-     * @param generator GeneratorTier which description must be generated.
-     * @param isActive Boolean that indicates if generator is active.
-     * @param isUnlocked Boolean that indicates if generator is unlocked.
-     * @param isPurchased Boolean that indicates if generator is purchased.
-     * @param islandLevel Long that shows island level.
-     * @return List of strings that describes generator tier.
-     */
-    @Override
-    protected List<String> generateGeneratorDescription(GeneratorTierObject generator,
-        boolean isActive,
-        boolean isUnlocked,
-        boolean isPurchased,
-        long islandLevel)
-    {
-        List<String> description =
-            super.generateGeneratorDescription(generator, isActive, isUnlocked, isPurchased, islandLevel);
-
-        description.add("");
-
-        if (this.addon.getSettings().getClickAction() != Settings.GuiAction.NONE)
+        // Template specification are always more important than dynamic content.
+        if (template.icon() != null)
         {
-            description.addAll(
-                this.generateToolTips(this.addon.getSettings().getClickAction(),
-                    Constants.TIPS,
-                    isUnlocked,
-                    isActive,
-                    isPurchased,
-                    generator.isDefaultGenerator()));
+            builder.icon(template.icon());
+        }
+        else if (isUnlocked)
+        {
+            builder.icon(generatorTier.getGeneratorIcon());
         }
         else
         {
-            // Add left click tooltip
-            description.addAll(
-                this.generateToolTips(this.addon.getSettings().getLeftClickAction(),
-                    Constants.TIPS + "left-",
-                    isUnlocked,
-                    isActive,
-                    isPurchased,
-                    generator.isDefaultGenerator()));
-
-            // Add right click tooltip
-            description.addAll(
-                this.generateToolTips(this.addon.getSettings().getRightClickAction(),
-                    Constants.TIPS + "right-",
-                    isUnlocked,
-                    isActive,
-                    isPurchased,
-                    generator.isDefaultGenerator()));
+            builder.icon(generatorTier.getLockedIcon());
         }
 
-        // Add shift click tooltip.
-        description.addAll(
-            this.generateToolTips(this.addon.getSettings().getShiftClickAction(),
-                Constants.TIPS + "shift-",
-                isUnlocked,
+        builder.icon(template.icon() != null ? template.icon().clone() : generatorTier.getGeneratorIcon());
+
+        // Template specific title is always more important than generatorTier name.
+        if (template.title() != null && !template.title().isBlank())
+        {
+            builder.name(this.user.getTranslation(this.world, template.title(),
+                Constants.NAME, generatorTier.getFriendlyName()));
+        }
+        else
+        {
+            builder.name(Util.translateColorCodes(generatorTier.getFriendlyName()));
+        }
+
+        if (template.description() != null && !template.description().isBlank())
+        {
+            // TODO: adding parameters could be useful.
+            builder.description(this.user.getTranslation(this.world, template.description()));
+        }
+        else
+        {
+            builder.description(this.generateGeneratorDescription(generatorTier,
                 isActive,
+                isUnlocked,
                 isPurchased,
-                generator.isDefaultGenerator()));
-
-        return description;
-    }
-
-
-    /**
-     * This method generated tool tips based on given parameters for given action.
-     *
-     * @param action Action that is performed.
-     * @param reference Reference to translation string.
-     * @param isUnlocked Boolean that indicate if generator is unlocked.
-     * @param isActive Boolean that indicate if generator is active.
-     * @param isPurchased Boolean that indicate if generator is purchased.
-     * @param isDefault Boolean that indicate if generator is default generator.
-     * @return List of string that contains tool tips.
-     */
-    private List<String> generateToolTips(Settings.GuiAction action,
-        String reference,
-        boolean isUnlocked,
-        boolean isActive,
-        boolean isPurchased,
-        boolean isDefault)
-    {
-        List<String> description = new ArrayList<>(3);
-
-        switch (action)
-        {
-            case VIEW:
-                description.add(this.user.getTranslation(reference + "click-to-view"));
-                break;
-            case BUY:
-                if (isUnlocked && !isPurchased && !isDefault)
-                {
-                    description.add(this.user.getTranslation(reference + "click-to-purchase"));
-                }
-                break;
-            case TOGGLE:
-                if (isUnlocked && !isDefault && isPurchased)
-                {
-                    if (isActive)
-                    {
-                        description.add(this.user.getTranslation(reference + "click-to-deactivate"));
-                    }
-                    else
-                    {
-                        description.add(this.user.getTranslation(reference + "click-to-activate"));
-                    }
-                }
-                break;
-            case BUY_OR_TOGGLE:
-                if (isUnlocked && !isDefault)
-                {
-                    if (!isPurchased)
-                    {
-                        description.add(this.user.getTranslation(reference + "click-to-purchase"));
-                    }
-                    else
-                    {
-                        if (isActive)
-                        {
-                            description.add(this.user.getTranslation(reference + "click-to-deactivate"));
-                        }
-                        else
-                        {
-                            description.add(this.user.getTranslation(reference + "click-to-activate"));
-                        }
-                    }
-                }
-                break;
+                this.manager.getIslandLevel(this.island)));
         }
 
-        return description;
-    }
+        // Get only possible actions, by removing all inactive ones.
+        List<ItemTemplateRecord.ActionRecords> activeActions = new ArrayList<>(template.actions());
 
-
-    /**
-     * This method process given click action.
-     *
-     * @param action Action that must be performed/
-     * @param isActive Indicates if generator is active or is not purchased.
-     * @param isPurchased Generator Tier object that will be targeted.
-     */
-    private void processClick(Settings.GuiAction action,
-        boolean isActive,
-        boolean isPurchased,
-        GeneratorTierObject generatorTier)
-    {
-        switch (action)
+        activeActions.removeIf(action ->
         {
-            case VIEW:
-                // Open view panel.
-                GeneratorViewPanel.openPanel(this, generatorTier);
-                break;
-            case BUY_OR_TOGGLE:
-            case BUY:
-            case TOGGLE:
-
-                if (generatorTier.isDefaultGenerator())
-                {
-                    // Do nothing if generator is default.
+            switch (action.actionType().toUpperCase())
+            {
+                case "BUY" -> {
+                    return this.island == null ||
+                        !this.island.isAllowed(this.user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION) ||
+                        !isUnlocked ||
+                        isPurchased ||
+                        generatorTier.isDefaultGenerator();
                 }
-                // Check if player is allowed to do something.
-                else if (this.island.isAllowed(this.user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION))
+                case "ACTIVATE" -> {
+                    return this.island == null ||
+                        !this.island.isAllowed(this.user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION) ||
+                        !isUnlocked ||
+                        !isPurchased ||
+                        generatorTier.isDefaultGenerator() ||
+                        isActive;
+                }
+                case "DEACTIVATE" -> {
+                    return this.island == null ||
+                        !this.island.isAllowed(this.user, StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION) ||
+                        !isUnlocked ||
+                        !isPurchased ||
+                        generatorTier.isDefaultGenerator() ||
+                        !isActive;
+                }
+                default -> {
+                    return false;
+                }
+            }
+        });
+
+        // Add Click handler
+        builder.clickHandler((panel, user, clickType, i) ->
+        {
+            for (ItemTemplateRecord.ActionRecords action : activeActions)
+            {
+                if (clickType == action.clickType() || ClickType.UNKNOWN.equals(action.clickType()))
                 {
-                    if (action == Settings.GuiAction.BUY ||
-                        !isPurchased && action == Settings.GuiAction.BUY_OR_TOGGLE)
+                    switch (action.actionType().toUpperCase())
                     {
-                        if (!isPurchased)
-                        {
-                            if (this.manager.canPurchaseGenerator(user, this.island, this.generatorData, generatorTier))
+                        case "VIEW" -> {
+                            GeneratorViewPanel.openPanel(this, generatorTier);
+                        }
+                        case "BUY" -> {
+                            if (this.island != null && this.manager.canPurchaseGenerator(user, this.island, this.generatorData, generatorTier))
                             {
                                 this.manager.purchaseGenerator(this.user, this.generatorData, generatorTier);
-                                // Build whole gui.
-                                this.build();
                             }
+
+                            // Build whole gui.
+                            this.build();
                         }
-                    }
-                    else
-                    {
-                        if (isActive)
-                        {
+                        case "ACTIVATE" -> {
+                            if (this.island != null && this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
+                            {
+                                this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
+                            }
+
+                            // Build whole gui.
+                            this.build();
+                        }
+                        case "DEACTIVATE" -> {
                             this.manager.deactivateGenerator(user, this.generatorData, generatorTier);
                             // Rebuild whole gui.
                             this.build();
                         }
-                        else if (this.manager.canActivateGenerator(user, this.generatorData, generatorTier))
-                        {
-                            this.manager.activateGenerator(user, this.island, this.generatorData, generatorTier);
-                            // Build whole gui.
-                            this.build();
-                        }
                     }
                 }
-                else
-                {
-                    Utils.sendMessage(this.user,
-                        this.user.getTranslation("general.errors.insufficient-rank",
-                            TextVariables.RANK, this.user.getTranslation(
-                                this.addon.getPlugin().getRanksManager().getRank(this.island.getRank(this.user)))));
-                }
+            }
 
-                break;
-            case NONE:
-                break;
+            return true;
+        });
+
+        // Collect tooltips.
+        List<String> tooltips = activeActions.stream().
+            filter(action -> action.tooltip() != null).
+            map(action -> this.user.getTranslation(this.world, action.tooltip())).
+            filter(text -> !text.isBlank()).
+            collect(Collectors.toCollection(() -> new ArrayList<>(template.actions().size())));
+
+        // Add tooltips.
+        if (!tooltips.isEmpty())
+        {
+            // Empty line and tooltips.
+            builder.description("");
+            builder.description(tooltips);
         }
+
+        // Add glow
+        builder.glow(isActive);
+
+        // Click Handlers are managed by custom addon buttons.
+        return builder.build();
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Other Methods
+// ---------------------------------------------------------------------
+
+
+    /**
+     * This method updates element list with active filter.
+     */
+    private void updateElements()
+    {
+        this.elementList = switch (this.activeFilterButton) {
+            case COBBLESTONE -> this.generatorList.stream().
+                filter(generatorTier ->
+                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.COBBLESTONE)).
+                collect(Collectors.toList());
+            case STONE -> this.generatorList.stream().
+                filter(generatorTier ->
+                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.STONE)).
+                collect(Collectors.toList());
+            case BASALT -> this.generatorList.stream().
+                filter(generatorTier ->
+                    generatorTier.getGeneratorType().includes(GeneratorTierObject.GeneratorType.BASALT)).
+                collect(Collectors.toList());
+            case VISIBILITY -> this.generatorList.stream().
+                filter(generatorTier -> generatorTier.isDefaultGenerator() ||
+                    this.generatorData.getUnlockedTiers().contains(generatorTier.getUniqueId())).
+                collect(Collectors.toList());
+            case ACTIVE -> this.generatorList.stream().
+                filter(generatorTier -> generatorTier.isDefaultGenerator() ||
+                    this.generatorData.getActiveGeneratorList().contains(generatorTier.getUniqueId())).
+                collect(Collectors.toList());
+            default -> this.generatorList;
+        };
     }
 
 
@@ -703,52 +716,32 @@ public class GeneratorUserPanel extends CommonPanel
     /**
      * This enum holds variable that allows to switch between button creation.
      */
-    private enum Button
+    private enum Filter
     {
         /**
          * Button that on click shows only cobblestone generators.
          */
-        SHOW_COBBLESTONE,
+        COBBLESTONE,
         /**
          * Button that on click shows only stone generators.
          */
-        SHOW_STONE,
+        STONE,
         /**
          * Button that on click shows only basalt generators.
          */
-        SHOW_BASALT,
+        BASALT,
         /**
          * Button that toggles between visibility modes.
          */
-        TOGGLE_VISIBILITY,
+        VISIBILITY,
         /**
          * Button that on click shows only active generators.
          */
-        SHOW_ACTIVE,
+        ACTIVE,
         /**
          * Filter for none.
          */
         NONE
-    }
-
-
-    /**
-     * This enum holds variable that allows to switch between actions.
-     */
-    private enum Action
-    {
-        /**
-         * Return button that exists GUI.
-         */
-        RETURN,
-        /**
-         * Allows to select previous generators in multi-page situation.
-         */
-        PREVIOUS,
-        /**
-         * Allows to select next generators in multi-page situation.
-         */
-        NEXT
     }
 
 
@@ -759,8 +752,8 @@ public class GeneratorUserPanel extends CommonPanel
     /**
      * This variable holds targeted island.
      */
-    private @Nullable
-    final Island island;
+    @Nullable
+    private final Island island;
 
     /**
      * This variable holds user's island generator data.
@@ -773,32 +766,17 @@ public class GeneratorUserPanel extends CommonPanel
     private final List<GeneratorTierObject> generatorList;
 
     /**
-     * Stores how many elements will be in display.
+     * This variable stores all generator tiers in the given world.
      */
-    private final int rowCount;
-
-    /**
-     * This indicates if filters are enabled in the GUI.
-     */
-    private final boolean isFiltersEnabled;
-
-    /**
-     * This indicates if border is enabled in the GUI.
-     */
-    private final boolean isBorderEnabled;
+    private List<GeneratorTierObject> elementList;
 
     /**
      * Stores currently active filter button.
      */
-    private Button activeFilterButton;
+    private Filter activeFilterButton;
 
     /**
      * This variable holds current pageIndex for multi-page generator choosing.
      */
-    private int pageIndex;
-
-    /**
-     * This variable holds current pageIndex for multi-page generator choosing.
-     */
-    private int maxPageIndex;
+    private int generatorIndex;
 }

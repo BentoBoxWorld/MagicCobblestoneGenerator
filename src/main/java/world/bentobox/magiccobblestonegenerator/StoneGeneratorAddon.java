@@ -58,6 +58,19 @@ public class StoneGeneratorAddon extends Addon
      * {@inheritDoc}
      */
     @Override
+    public void saveDefaultConfig()
+    {
+        super.saveDefaultConfig();
+
+        this.saveResource("panels/main_panel.yml", false);
+        this.saveResource("generatorTemplate.yml", false);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void onEnable()
     {
         // Check if addon is not disabled before.
@@ -99,9 +112,6 @@ public class StoneGeneratorAddon extends Addon
     private void setupAddon()
     {
         this.generator = new MagicGenerator(this);
-
-        this.findLevel();
-        this.findVault();
 
         // Register the listener.
         this.registerListener(new VanillaGeneratorListener(this));
@@ -274,6 +284,19 @@ public class StoneGeneratorAddon extends Addon
                     return "";
                 }
             });
+    }
+
+
+    /**
+     * Run methods when everything is loaded.
+     */
+    @Override
+    public void allLoaded()
+    {
+        super.allLoaded();
+
+        this.findLevel();
+        this.findVault();
     }
 
 
