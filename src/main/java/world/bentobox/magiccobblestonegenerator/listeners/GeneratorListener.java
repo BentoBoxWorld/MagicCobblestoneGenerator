@@ -58,7 +58,8 @@ public abstract class GeneratorListener implements Listener
      */
     protected boolean isSomeoneOnline(Island island)
     {
-        return addon.getSettings().isOfflineGeneration() ||
+        return island.isSpawn() ||
+            addon.getSettings().isOfflineGeneration() ||
             island.getMemberSet().stream().
                 map(User::getInstance).
                 filter(Objects::nonNull).
