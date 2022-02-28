@@ -22,7 +22,6 @@ import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 
 
@@ -61,10 +60,6 @@ public class SettingsPanel extends CommonPanel
         panelBuilder.item(20, this.createButton(Action.ACTIVE_GENERATORS));
 
         panelBuilder.item(12, this.createButton(Action.USE_PHYSIC));
-
-        panelBuilder.item(14, this.createButton(Action.SHOW_FILTERS));
-        panelBuilder.item(23, this.createButton(Action.BORDER_BLOCK));
-        panelBuilder.item(24, this.createButton(Action.BORDER_BLOCK_NAME));
 
         panelBuilder.item(16, this.createButton(Action.UNLOCK_NOTIFY));
         panelBuilder.item(25, this.createButton(Action.DISABLE_ON_ACTIVATE));
@@ -220,105 +215,6 @@ public class SettingsPanel extends CommonPanel
 
                 break;
             }
-            case SHOW_FILTERS:
-            {
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.settings.setShowFilters(!this.settings.isShowFilters());
-                    this.saveSettings();
-                    // Update button in panel
-                    this.build();
-
-                    return true;
-                };
-
-                glow = this.settings.isShowFilters();
-
-                if (glow)
-                {
-                    description.add(this.user.getTranslation(reference + ".enabled"));
-                }
-                else
-                {
-                    description.add(this.user.getTranslation(reference + ".disabled"));
-                }
-
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
-
-                material = Material.HOPPER;
-
-                break;
-            }
-            case BORDER_BLOCK:
-            {
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-add"));
-
-                material = this.settings.getBorderBlock();
-                clickHandler = (panel, user1, clickType, slot) -> {
-
-                    SingleBlockSelector.open(this.user,
-                        (value, newMaterial) -> {
-                            if (value)
-                            {
-                                this.settings.setBorderBlock(newMaterial);
-                                this.saveSettings();
-                            }
-
-                            this.build();
-                        });
-
-                    return true;
-                };
-
-                name = this.settings.getBorderBlockName();
-
-                break;
-            }
-            case BORDER_BLOCK_NAME:
-            {
-                description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NAME, this.settings.getBorderBlockName()));
-
-                material = Material.NAME_TAG;
-
-                clickHandler = (panel, user, clickType, i) ->
-                {
-                    // Create consumer that process description change
-                    Consumer<String> consumer = value ->
-                    {
-                        if (value != null)
-                        {
-                            if (value.equals("empty"))
-                            {
-                                this.settings.setBorderBlockName(" ");
-                            }
-                            else
-                            {
-                                this.settings.setBorderBlockName(value);
-                            }
-
-                            this.saveSettings();
-                        }
-
-                        this.build();
-                    };
-
-                    // start conversation
-                    ConversationUtils.createStringInput(consumer,
-                        user,
-                        user.getTranslation(Constants.CONVERSATIONS + "write-name"),
-                        user.getTranslation(Constants.CONVERSATIONS + "name-changed"));
-
-                    return true;
-                };
-
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
-
-                // Not implemented in current GUI.
-                break;
-            }
             case UNLOCK_NOTIFY:
             {
                 clickHandler = (panel, user, clickType, i) -> {
@@ -466,18 +362,6 @@ public class SettingsPanel extends CommonPanel
          * Process Default Active Generators Action.
          */
         ACTIVE_GENERATORS,
-        /**
-         * Process show filters action.
-         */
-        SHOW_FILTERS,
-        /**
-         * Process border block action.
-         */
-        BORDER_BLOCK,
-        /**
-         * Process border block action.
-         */
-        BORDER_BLOCK_NAME,
         /**
          * Process unlock notification action.
          */

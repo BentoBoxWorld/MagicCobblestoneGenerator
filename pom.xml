@@ -37,7 +37,7 @@
         <mockito.version>4.2.0</mockito.version>
         <!-- More visible way how to change dependency versions -->
         <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.20.0-SNAPSHOT</bentobox.version>
+        <bentobox.version>1.20.0</bentobox.version>
         <level.version>2.5.0</level.version>
         <!-- Panel Utils version -->
         <panelutils.version>1.0.0</panelutils.version>

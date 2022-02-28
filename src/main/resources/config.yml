@@ -39,49 +39,6 @@ notify-on-unlock: true
 #  - BSkyBlock
 # /!\ In order to apply the changes made to this option, you must restart your server. Reloading BentoBox or the server won't work.
 disabled-gamemodes: []
-gui:
-  # This allows to toggle if filters in Generator User Panel should be showed.
-  show-filters: true
-  # This allows to change main border block in player panel.
-  border-block: MAGENTA_STAINED_GLASS_PANE
-  # This allows to change border block display name.
-  border-block-name: ' '
-  actions:
-    # Allows to change what action will be performed when user clicks on generator.
-    # NOTE!! This action will overwrite left-click and right-click actions.
-    # Supported values:
-    # - TOGGLE - tries to activate/deactivate generator.
-    # - VIEW - opens detailed view for generators.
-    # - BUY - tries to purchase generator.
-    # - BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.
-    # - NONE - no actions are performed.
-    click-action: NONE
-    # Allows to change what action will be performed when user left clicks on generator.
-    # NOTE!! This action will be overwritten by click-action.
-    # Supported values:
-    # - TOGGLE - tries to activate/deactivate generator.
-    # - VIEW - opens detailed view for generators.
-    # - BUY - tries to purchase generator.
-    # - BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.
-    # - NONE - no actions are performed.
-    left-click-action: BUY_OR_TOGGLE
-    # Allows to change what action will be performed when user right clicks on generator.
-    # NOTE!! This action will be overwritten by click-action.
-    # Supported values:
-    # - TOGGLE - tries to activate/deactivate generator.
-    # - VIEW - opens detailed view for generators.
-    # - BUY - tries to purchase generator.
-    # - BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.
-    # - NONE - no actions are performed.
-    right-click-action: VIEW
-    # Allows to change what action will be performed when user shift-clicks on generator.
-    # Supported values:
-    # - TOGGLE - tries to activate/deactivate generator.
-    # - VIEW - opens detailed view for generators.
-    # - BUY - tries to purchase generator.
-    # - BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.
-    # - NONE - no actions are performed.
-    shift-click-action: NONE
 commands:
   player:
     #
