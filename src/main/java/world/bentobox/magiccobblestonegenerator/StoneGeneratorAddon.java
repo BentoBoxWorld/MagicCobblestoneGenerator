@@ -63,6 +63,7 @@ public class StoneGeneratorAddon extends Addon
         super.saveDefaultConfig();
 
         this.saveResource("panels/main_panel.yml", false);
+        this.saveResource("panels/view_panel.yml", false);
         this.saveResource("generatorTemplate.yml", false);
     }
 
