@@ -291,7 +291,8 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
                         this.addon.getAddonManager().purchaseGenerator(this.user,
                             this.island,
                             this.generatorData,
-                            generatorTier);
+                            generatorTier,
+                            true);
                     }
                     else if (isActive)
                     {
@@ -304,7 +305,8 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
                         this.addon.getAddonManager().activateGenerator(this.user,
                             this.island,
                             this.generatorData,
-                            generatorTier);
+                            generatorTier,
+                            true);
                     }
                 }
 

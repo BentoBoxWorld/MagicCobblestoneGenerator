@@ -510,7 +510,7 @@ public class StoneGeneratorManager
      * @param world of type World
      * @param generatorType of type GeneratorType
      * @param biome of the generator location.
-     * @return GeneratorTierObject
+     * @return GeneratorTierObject generator tier object
      */
     private @Nullable GeneratorTierObject findDefaultGeneratorTier(World world,
         GeneratorTierObject.GeneratorType generatorType,
@@ -1059,6 +1059,7 @@ public class StoneGeneratorManager
      * This method unlocks given generator for given island.
      *
      * @param dataObject DataObject where all data will be saved.
+     * @param user the user
      * @param island Island that unlocks generator.
      * @param generator Generator that must be unlocked.
      */
@@ -1260,16 +1261,36 @@ public class StoneGeneratorManager
 
 
     /**
-     * This is just a wrapper method that allows to activate generator.
+     * This is just a wrapper method that allows to activate generator with money withdraw.
      *
-     * @param user User who activates generator.
-     * @param generatorData Data which will be populated.
-     * @param generatorTier Generator that will be added.
+     * @param user the user
+     * @param island the island
+     * @param generatorData the generator data
+     * @param generatorTier the generator tier
      */
     public void activateGenerator(@NotNull User user,
         @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
+    {
+        this.activateGenerator(user, island, generatorData, generatorTier, false);
+    }
+
+
+    /**
+     * This is just a wrapper method that allows to activate generator.
+     *
+     * @param user User who activates generator.
+     * @param island the island
+     * @param generatorData Data which will be populated.
+     * @param generatorTier Generator that will be added.
+     * @param bypassCost the bypass cost
+     */
+    public void activateGenerator(@NotNull User user,
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier,
+        boolean bypassCost)
     {
         CompletableFuture<Boolean> activateGenerator = new CompletableFuture<>();
         activateGenerator.thenAccept(runActivationTask ->
@@ -1320,7 +1341,7 @@ public class StoneGeneratorManager
             }
         }
 
-        if (!activateGenerator.isDone() && this.addon.isVaultProvided())
+        if (!activateGenerator.isDone() && this.addon.isVaultProvided() && !bypassCost)
         {
             this.withdrawMoney(activateGenerator, user, island, generatorTier.getActivationCost());
         }
@@ -1435,17 +1456,36 @@ public class StoneGeneratorManager
 
 
     /**
+     * his method adds generator tier to purchased generators without bypassing cost.
+     *
+     * @param user the user
+     * @param island the island
+     * @param generatorData the generator data
+     * @param generatorTier the generator tier
+     */
+    public void purchaseGenerator(@NotNull User user,
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier)
+    {
+        this.purchaseGenerator(user, island, generatorData, generatorTier, false);
+    }
+
+
+    /**
      * This method adds generator tier to purchased generators.
      *
      * @param user User who will pays.
      * @param island the island
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
+     * @param bypassCost indicate if cost can be bypassed.
      */
     public void purchaseGenerator(@NotNull User user,
         @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
-        @NotNull GeneratorTierObject generatorTier)
+        @NotNull GeneratorTierObject generatorTier,
+        boolean bypassCost)
     {
         CompletableFuture<Boolean> purchaseGenerator = new CompletableFuture<>();
         purchaseGenerator.thenAccept(runActivationTask ->
@@ -1467,7 +1507,7 @@ public class StoneGeneratorManager
             }
         });
 
-        if (this.addon.isVaultProvided())
+        if (this.addon.isVaultProvided() && !bypassCost)
         {
             this.withdrawMoney(purchaseGenerator, user, island, generatorTier.getGeneratorTierCost());
         }
