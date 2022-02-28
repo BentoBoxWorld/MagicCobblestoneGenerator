@@ -312,7 +312,7 @@ public class GeneratorPlayerCommand extends CompositeCommand
 
                 if (addonManager.canPurchaseGenerator(user, island, data, generator))
                 {
-                    addonManager.purchaseGenerator(user, data, generator);
+                    addonManager.purchaseGenerator(user, island, data, generator);
                     return true;
                 }
             }
@@ -430,7 +430,7 @@ public class GeneratorPlayerCommand extends CompositeCommand
                 if (activate)
                 {
                     // Check before activating.
-                    if (addonManager.canActivateGenerator(user, data, generator))
+                    if (addonManager.canActivateGenerator(user, island, data, generator))
                     {
                         addonManager.activateGenerator(user, island, data, generator);
                     }

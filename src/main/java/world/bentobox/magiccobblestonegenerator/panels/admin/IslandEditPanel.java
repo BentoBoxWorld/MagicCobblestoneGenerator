@@ -289,6 +289,7 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
                     if (!isPurchased)
                     {
                         this.addon.getAddonManager().purchaseGenerator(this.user,
+                            this.island,
                             this.generatorData,
                             generatorTier);
                     }

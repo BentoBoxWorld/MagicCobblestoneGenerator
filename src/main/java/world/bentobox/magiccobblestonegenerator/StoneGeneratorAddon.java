@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 
+import world.bentobox.bank.Bank;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
@@ -298,6 +299,7 @@ public class StoneGeneratorAddon extends Addon
 
         this.findLevel();
         this.findVault();
+        this.findBank();
     }
 
 
@@ -318,6 +320,7 @@ public class StoneGeneratorAddon extends Addon
         }
         else
         {
+            this.log("MagicCobblestoneGenerator Addon hooked into Economy.");
             this.vaultHook = vault.get();
         }
     }
@@ -335,12 +338,34 @@ public class StoneGeneratorAddon extends Addon
 
         if (level.isEmpty())
         {
-            this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
             this.levelAddon = null;
         }
         else
         {
+            this.log("MagicCobblestoneGenerator Addon hooked into Level addon.");
             this.levelAddon = (Level) level.get();
+        }
+    }
+
+
+    /**
+     * This is silly method that was introduced to reduce main method complexity, and just reports if bank addon is
+     * enabled or not.
+     */
+    private void findBank()
+    {
+        // Try to find bank addon and if it does not exist, display a warning
+
+        Optional<Addon> addon = this.getAddonByName("Bank");
+
+        if (addon.isEmpty())
+        {
+            this.bankAddon = null;
+        }
+        else
+        {
+            this.log("MagicCobblestoneGenerator Addon hooked into Bank addon.");
+            this.bankAddon = (Bank) addon.get();
         }
     }
 
@@ -445,13 +470,35 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
-     * This method returns the levelProvided object.
+     * This method returns if the levelAddon object exist.
      *
-     * @return the levelProvided object.
+     * @return the levelAddon object exist.
      */
     public boolean isLevelProvided()
     {
         return levelAddon != null;
+    }
+
+
+    /**
+     * This method returns the bankAddon object.
+     *
+     * @return the bankAddon object.
+     */
+    public Bank getBankAddon()
+    {
+        return this.bankAddon;
+    }
+
+
+    /**
+     * This method returns if the bankAddon object exist.
+     *
+     * @return the bankAddon object exist.
+     */
+    public boolean isBankProvided()
+    {
+        return bankAddon != null;
     }
 
 
@@ -544,7 +591,12 @@ public class StoneGeneratorAddon extends Addon
     private Level levelAddon;
 
     /**
-     * Static addon isntance.
+     * Bank addon.
+     */
+    private Bank bankAddon;
+
+    /**
+     * Static addon instance.
      */
     private static StoneGeneratorAddon instance;
 

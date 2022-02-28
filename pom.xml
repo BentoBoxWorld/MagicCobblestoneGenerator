@@ -39,6 +39,7 @@
         <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.20.0</bentobox.version>
         <level.version>2.5.0</level.version>
+        <bank.version>1.4.0</bank.version>
         <!-- Panel Utils version -->
         <panelutils.version>1.0.0</panelutils.version>
         <!-- Vault API version -->
@@ -165,6 +166,12 @@
             <groupId>world.bentobox</groupId>
             <artifactId>level</artifactId>
             <version>${level.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>world.bentobox</groupId>
+            <artifactId>bank</artifactId>
+            <version>${bank.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

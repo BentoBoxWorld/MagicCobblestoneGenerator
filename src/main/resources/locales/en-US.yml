@@ -526,6 +526,17 @@ stone-generator:
           &b Physics is &a enabled &b .
         disabled: |-
           &b Physics is &c disabled &b .
+      use_bank:
+        name: "&f&l Use Bank"
+        description: |-
+          &7 Using island bank account
+          &7 for all purchases and
+          &7 activations.
+          &7 Requires Bank Addon.
+        enabled: |-
+          &b Bank usage is &a enabled &b .
+        disabled: |-
+          &b Bank usage is &c disabled &b .
       working_range:
         name: "&f&l Default Working Range"
         description: |-
@@ -863,6 +874,8 @@ stone-generator:
     generator-not-purchased: "&c Generator &r '[generator]' &r&c is not purchased."
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
     no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "&c Your bank account has not enough credits to activate generator. Activation requires [number] credits."
     # Message that appears when activating the generator.
     generator-activated: "&e Generator &r '[generator]' &r&e is activated."
     # Message that appears when purchasing the generator.
@@ -875,6 +888,8 @@ stone-generator:
     missing-permission: "&c Generator &r '[generator]' &r&c requires permission `[permission]`."
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
     no-credits-buy: "&c Not enough credits to purchase generator. This generator cost [number] credits."
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "&c Your bank account has not enough credits. This generator cost [number] credits."
     # Message that appears after importing a file.
     import-count: "&e Imported [generator] new generators and [bundle] new bundles."
     # Message that appears after clicking on download button in web library.
@@ -901,6 +916,8 @@ stone-generator:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
     # Error message that is displayed when user uses generator command in world without generators.
     no-generators-in-world: "&c There are no available generators for you in [world]"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "&c Something went wrong while withdrawing money."
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

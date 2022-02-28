@@ -33,6 +33,10 @@ overwrite-on-activate: false
 # stone-generator.conversations.click-text-to-activate - if generator is unlocked and can be activated.
 notify-on-unlock: true
 #
+# This indicates if all monetary payments should be done via Bank Addon Account.
+# Requires Bank Addon
+use-bank: false
+#
 # This list stores GameModes in which the addon should not work.
 # To disable addon it is necessary to write its name in new line that starts with -. Example:
 # disabled-gamemodes:

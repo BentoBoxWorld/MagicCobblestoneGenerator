@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,6 +26,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.milkbowl.vault.economy.EconomyResponse;
+import world.bentobox.bank.BankManager;
+import world.bentobox.bank.BankResponse;
+import world.bentobox.bank.data.Money;
+import world.bentobox.bank.data.TxType;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.events.addon.AddonEvent;
 import world.bentobox.bentobox.api.localization.TextVariables;
@@ -1166,11 +1172,13 @@ public class StoneGeneratorManager
      * assumed, that it is used as check before activating the generator tier.
      *
      * @param user User who will pay for activating.
+     * @param island the island
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be activated.
      * @return {@code true} if can activate, {@code false} if cannot activate.
      */
     public boolean canActivateGenerator(@NotNull User user,
+        @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
@@ -1210,19 +1218,36 @@ public class StoneGeneratorManager
         {
             if (this.addon.isVaultProvided() && generatorTier.getActivationCost() > 0)
             {
-                // Return true only if user has enough money and its removal was successful.
-                if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()) &&
-                    this.addon.getVaultHook().withdraw(user,
-                        generatorTier.getActivationCost()).transactionSuccess())
+                if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided())
                 {
-                    return true;
+                    // Return true only if user has enough money and its removal was successful.
+
+                    if (this.addon.getBankAddon().getBankManager().getBalance(island).getValue() >= generatorTier.getActivationCost())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits-bank",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
+                        return false;
+                    }
                 }
                 else
                 {
-                    Utils.sendMessage(user,
-                        user.getTranslation(Constants.MESSAGES + "no-credits",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
-                    return false;
+                    // Return true only if user has enough money and its removal was successful.
+                    if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
+                        return false;
+                    }
                 }
             }
             else
@@ -1246,6 +1271,38 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
+        CompletableFuture<Boolean> activateGenerator = new CompletableFuture<>();
+        activateGenerator.thenAccept(runActivationTask ->
+        {
+            if (runActivationTask)
+            {
+                // Call event about generator activation.
+                GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
+                    user,
+                    island.getUniqueId(),
+                    true);
+                Bukkit.getPluginManager().callEvent(event);
+
+                if (!event.isCancelled())
+                {
+                    Utils.sendMessage(user,
+                        user.getTranslation(Constants.MESSAGES + "generator-activated",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+
+                    // check and send message that generator is disabled
+                    if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
+                    {
+                        Utils.sendMessage(user, user.getTranslation(
+                            StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
+                    }
+
+                    // Save object.
+                    this.saveGeneratorData(generatorData);
+                }
+            }
+        });
+
         if (this.addon.getSettings().isOverwriteOnActive() &&
             generatorData.getActiveGeneratorCount() > 0 &&
             generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
@@ -1259,32 +1316,18 @@ public class StoneGeneratorManager
                 // If deactivation was not successful, send message about reached limit.
                 Utils.sendMessage(user,
                     user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
+                activateGenerator.complete(false);
             }
         }
 
-        // Call event about generator activation.
-        GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
-            user,
-            island.getUniqueId(),
-            true);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (!event.isCancelled())
+        if (!activateGenerator.isDone() && this.addon.isVaultProvided())
         {
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-activated",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
-            generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+            this.withdrawMoney(activateGenerator, user, island, generatorTier.getActivationCost());
+        }
 
-            // check and send message that generator is disabled
-            if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
-            {
-                Utils.sendMessage(user, user.getTranslation(
-                    StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
-            }
-
-            // Save object.
-            this.saveGeneratorData(generatorData);
+        if (!activateGenerator.isDone())
+        {
+            activateGenerator.complete(true);
         }
     }
 
@@ -1351,17 +1394,35 @@ public class StoneGeneratorManager
         {
             if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0)
             {
-                // Return true only if user has enough money and its removal was successful.
-                if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()))
+                if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided())
                 {
-                    return true;
+                    if (this.addon.getBankAddon().getBankManager().getBalance(island).getValue() >= generatorTier.getGeneratorTierCost())
+                    {
+                        // Return true only if user has enough money.
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits-buy-bank",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                        return false;
+                    }
                 }
                 else
                 {
-                    Utils.sendMessage(user,
-                        user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
-                    return false;
+                    if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()))
+                    {
+                        // Return true only if user has enough money.
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits-buy",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                        return false;
+                    }
                 }
             }
             else
@@ -1377,45 +1438,83 @@ public class StoneGeneratorManager
      * This method adds generator tier to purchased generators.
      *
      * @param user User who will pays.
+     * @param island the island
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
      */
     public void purchaseGenerator(@NotNull User user,
+        @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        if (!this.addon.isVaultProvided() ||
-            generatorTier.getGeneratorTierCost() == 0 ||
-            (generatorTier.getGeneratorTierCost() > 0 &&
-                this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess()))
+        CompletableFuture<Boolean> purchaseGenerator = new CompletableFuture<>();
+        purchaseGenerator.thenAccept(runActivationTask ->
         {
-            // TODO: Deprecated code. Use "GeneratorBuyEvent" class.
-            Map<String, Object> keyValues = new HashMap<>();
-            keyValues.put("eventName", "GeneratorBuyEvent");
-            keyValues.put("targetPlayer", user.getUniqueId());
-            keyValues.put("islandUUID", generatorTier.getUniqueId());
-            keyValues.put("generator", generatorTier.getFriendlyName());
+            if (runActivationTask)
+            {
+                // Call event about successful purchase
+                Bukkit.getPluginManager().callEvent(new GeneratorBuyEvent(generatorTier,
+                    user,
+                    generatorData.getUniqueId()));
 
-            new AddonEvent().builder().addon(addon).keyValues(keyValues).build();
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "generator-purchased",
+                        Constants.GENERATOR, generatorTier.getFriendlyName()));
+                generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
 
-            // Call event about successful purchase
-            Bukkit.getPluginManager().callEvent(new GeneratorBuyEvent(generatorTier,
-                user,
-                generatorData.getUniqueId()));
+                // Save object.
+                this.saveGeneratorData(generatorData);
+            }
+        });
 
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-purchased",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
-            generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
+        if (this.addon.isVaultProvided())
+        {
+            this.withdrawMoney(purchaseGenerator, user, island, generatorTier.getGeneratorTierCost());
+        }
 
-            // Save object.
-            this.saveGeneratorData(generatorData);
+        if (!purchaseGenerator.isDone())
+        {
+            purchaseGenerator.complete(true);
+        }
+    }
+
+
+    /**
+     * Withdraw money for activating/purchasing generator tier.
+     *
+     * @param withdrawStage the change biome stage
+     * @param user the user
+     * @param island the island
+     * @param money the money
+     */
+    private void withdrawMoney(CompletableFuture<Boolean> withdrawStage, User user, Island island, double money)
+    {
+        if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided())
+        {
+            BankManager bankManager = this.addon.getBankAddon().getBankManager();
+            bankManager.withdraw(user, island, new Money(money), TxType.WITHDRAW).
+                thenAccept(response -> {
+                    if (response != BankResponse.SUCCESS)
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.ERRORS + "could-not-remove-money"));
+                        withdrawStage.complete(false);
+                    }
+                });
         }
         else
         {
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-                    TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+            EconomyResponse withdraw = this.addon.getVaultHook().withdraw(user, money);
+
+            if (!withdraw.transactionSuccess())
+            {
+                // Something went wrong on withdraw.
+
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.ERRORS + "could-not-remove-money"));
+                this.addon.logError(withdraw.errorMessage);
+                withdrawStage.complete(false);
+            }
         }
     }
 

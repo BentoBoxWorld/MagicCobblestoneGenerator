@@ -61,6 +61,11 @@ public class SettingsPanel extends CommonPanel
 
         panelBuilder.item(12, this.createButton(Action.USE_PHYSIC));
 
+        if (this.addon.isBankProvided())
+        {
+            panelBuilder.item(14, this.createButton(Action.USE_BANK));
+        }
+
         panelBuilder.item(16, this.createButton(Action.UNLOCK_NOTIFY));
         panelBuilder.item(25, this.createButton(Action.DISABLE_ON_ACTIVATE));
 
@@ -302,6 +307,35 @@ public class SettingsPanel extends CommonPanel
 
                 break;
             }
+            case USE_BANK:
+            {
+                clickHandler = (panel, user, clickType, i) -> {
+                    this.settings.setUseBankAccount(!this.settings.isUseBankAccount());
+                    this.saveSettings();
+                    // Update button in panel
+                    this.build();
+
+                    return true;
+                };
+
+                glow = this.settings.isUseBankAccount();
+
+                if (glow)
+                {
+                    description.add(this.user.getTranslation(reference + ".enabled"));
+                }
+                else
+                {
+                    description.add(this.user.getTranslation(reference + ".disabled"));
+                }
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
+
+                material = Material.GOLD_INGOT;
+
+                break;
+            }
             default:
                 return PanelItem.empty();
         }
@@ -354,6 +388,10 @@ public class SettingsPanel extends CommonPanel
          * Process Use Physic Action.
          */
         USE_PHYSIC,
+        /**
+         * Process Use Bank Action.
+         */
+        USE_BANK,
         /**
          * Process Working Range Action.
          */

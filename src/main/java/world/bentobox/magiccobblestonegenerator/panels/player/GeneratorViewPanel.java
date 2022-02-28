@@ -784,14 +784,14 @@ public class GeneratorViewPanel extends CommonPanel
                         case "BUY" -> {
                             if (this.island != null && this.manager.canPurchaseGenerator(user, this.island, this.generatorData, this.generatorTier))
                             {
-                                this.manager.purchaseGenerator(this.user, this.generatorData, this.generatorTier);
+                                this.manager.purchaseGenerator(this.user, this.island, this.generatorData, this.generatorTier);
                             }
 
                             // Build whole gui.
                             this.build();
                         }
                         case "ACTIVATE" -> {
-                            if (this.island != null && this.manager.canActivateGenerator(user, this.generatorData, this.generatorTier))
+                            if (this.island != null && this.manager.canActivateGenerator(user, this.island, this.generatorData, this.generatorTier))
                             {
                                 this.manager.activateGenerator(user, this.island, this.generatorData, this.generatorTier);
                             }
@@ -1099,14 +1099,14 @@ public class GeneratorViewPanel extends CommonPanel
                         case "BUY" -> {
                             if (this.island != null && this.manager.canPurchaseGenerator(user, this.island, this.generatorData, this.generatorTier))
                             {
-                                this.manager.purchaseGenerator(this.user, this.generatorData, this.generatorTier);
+                                this.manager.purchaseGenerator(this.user, this.island, this.generatorData, this.generatorTier);
                             }
 
                             // Build whole gui.
                             this.build();
                         }
                         case "ACTIVATE" -> {
-                            if (this.island != null && this.manager.canActivateGenerator(user, this.generatorData, this.generatorTier))
+                            if (this.island != null && this.manager.canActivateGenerator(user, this.island, this.generatorData, this.generatorTier))
                             {
                                 this.manager.activateGenerator(user, this.island, this.generatorData, this.generatorTier);
                             }

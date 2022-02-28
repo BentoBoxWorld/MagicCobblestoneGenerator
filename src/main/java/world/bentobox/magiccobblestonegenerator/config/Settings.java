@@ -306,6 +306,28 @@ public class Settings implements ConfigObject
     }
 
 
+    /**
+     * Is use bank account boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isUseBankAccount()
+    {
+        return useBankAccount;
+    }
+
+
+    /**
+     * Sets use bank account.
+     *
+     * @param useBankAccount the use bank account
+     */
+    public void setUseBankAccount(boolean useBankAccount)
+    {
+        this.useBankAccount = useBankAccount;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -380,6 +402,12 @@ public class Settings implements ConfigObject
     @ConfigComment("stone-generator.conversations.click-text-to-activate - if generator is unlocked and can be activated.")
     @ConfigEntry(path = "notify-on-unlock")
     private boolean notifyUnlockedGenerators = true;
+
+    @ConfigComment("")
+    @ConfigComment("This indicates if all monetary payments should be done via Bank Addon Account.")
+    @ConfigComment("Requires Bank Addon.")
+    @ConfigEntry(path = "use-bank-account")
+    private boolean useBankAccount = false;
 
     @ConfigComment("")
     @ConfigComment("This list stores GameModes in which the addon should not work.")
