@@ -64,6 +64,10 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
                 this.title = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
                     Constants.PLAYER, this.addon.getPlayers().getName(island.getOwner()));
             }
+            else if (island.isSpawn())
+            {
+                this.title = this.user.getTranslation(Constants.DESCRIPTIONS + "spawn-island");
+            }
             else
             {
                 this.title = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
@@ -223,10 +227,13 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
         panelBuilder.item(14, this.createButton(Button.ISLAND_WORKING_RANGE));
         panelBuilder.item(15, this.createButton(Button.ISLAND_BUNDLE));
 
-        // Owner things are defined by permission. Show in view mode.
-        panelBuilder.item(31, this.createButton(Button.OWNER_MAX_GENERATORS));
-        panelBuilder.item(32, this.createButton(Button.OWNER_WORKING_RANGE));
-        panelBuilder.item(33, this.createButton(Button.OWNER_BUNDLE));
+        if (!this.island.isSpawn())
+        {
+            // Owner things are defined by permission. Show in view mode.
+            panelBuilder.item(31, this.createButton(Button.OWNER_MAX_GENERATORS));
+            panelBuilder.item(32, this.createButton(Button.OWNER_WORKING_RANGE));
+            panelBuilder.item(33, this.createButton(Button.OWNER_BUNDLE));
+        }
     }
 
 
@@ -401,14 +408,24 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
         {
             case ISLAND_NAME -> {
                 // Create owner name translated string.
-                String ownerName = this.addon.getPlayers().getName(this.island.getOwner());
 
-                if (ownerName.equals(""))
+                String ownerName;
+
+                if (this.island.isSpawn())
                 {
-                    ownerName = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+                    ownerName = "";
                 }
+                else
+                {
+                    ownerName = this.addon.getPlayers().getName(this.island.getOwner());
 
-                ownerName = this.user.getTranslation(reference + ".owner", Constants.PLAYER, ownerName);
+                    if (ownerName.equals(""))
+                    {
+                        ownerName = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+                    }
+
+                    ownerName = this.user.getTranslation(reference + ".owner", Constants.PLAYER, ownerName);
+                }
 
                 // Create island members translated string.
 

@@ -49,9 +49,14 @@ public class IslandManagePanel extends CommonPagedPanel<Island>
 
         // Store bundles in local list to avoid building it every time.
         this.elementList = this.addon.getIslands().getIslands(this.world).stream().
-            filter(Island::isOwned).
+            filter(island -> island.isOwned() || island.isSpawn()).
             sorted((o1, o2) ->
             {
+                if (o1.isSpawn() || o2.isSpawn())
+                {
+                    return Boolean.compare(!o1.isSpawn(), !o2.isSpawn());
+                }
+
                 User u1 = User.getInstance(Objects.requireNonNull(o1.getOwner()));
                 User u2 = User.getInstance(Objects.requireNonNull(o2.getOwner()));
 
@@ -146,7 +151,7 @@ public class IslandManagePanel extends CommonPagedPanel<Island>
                 map(Player::getUniqueId).collect(Collectors.toSet());
 
             // Remove all islands from filter list where none of members are online.
-            this.filterElements.removeIf(island ->
+            this.filterElements.removeIf(island -> !island.isSpawn() &&
                 island.getMemberSet().stream().noneMatch(onlinePlayerSet::contains));
         }
     }
@@ -174,6 +179,10 @@ public class IslandManagePanel extends CommonPagedPanel<Island>
                 name = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
                     Constants.PLAYER, this.addon.getPlayers().getName(island.getOwner()));
             }
+            else if (island.isSpawn())
+            {
+                name = this.user.getTranslation(Constants.DESCRIPTIONS + "spawn-island");
+            }
             else
             {
                 name = this.user.getTranslation(Constants.DESCRIPTIONS + "island-owner",
@@ -186,15 +195,24 @@ public class IslandManagePanel extends CommonPagedPanel<Island>
             Constants.NAME, name);
 
         // Create owner name translated string.
-        String ownerName = this.addon.getPlayers().getName(island.getOwner());
+        String ownerName;
 
-        if (ownerName.equals(""))
+        if (island.isSpawn())
         {
-            ownerName = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+            ownerName = "";
         }
+        else
+        {
+            ownerName = this.addon.getPlayers().getName(island.getOwner());
 
-        ownerName = this.user.getTranslation(Constants.BUTTON + "island_name.owner",
-            Constants.PLAYER, ownerName);
+            if (ownerName.equals(""))
+            {
+                ownerName = this.user.getTranslation(Constants.DESCRIPTIONS + "unknown");
+            }
+
+            ownerName = this.user.getTranslation(Constants.BUTTON + "island_name.owner",
+                Constants.PLAYER, ownerName);
+        }
 
         // Create island members translated string.
 
@@ -233,12 +251,24 @@ public class IslandManagePanel extends CommonPagedPanel<Island>
             return true;
         };
 
-        return new PanelItemBuilder().
-            name(name).
-            description(description).
-            icon(this.addon.getPlayers().getName(island.getOwner())).
-            clickHandler(clickHandler).
-            build();
+        if (island.isSpawn())
+        {
+            return new PanelItemBuilder().
+                name(name).
+                description(description).
+                icon(Material.STRUCTURE_VOID).
+                clickHandler(clickHandler).
+                build();
+        }
+        else
+        {
+            return new PanelItemBuilder().
+                name(name).
+                description(description).
+                icon(this.addon.getPlayers().getName(island.getOwner())).
+                clickHandler(clickHandler).
+                build();
+        }
     }
 
 

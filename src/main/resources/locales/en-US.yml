@@ -854,6 +854,8 @@ stone-generator:
       selected: "&e Selected"
       # Used to refer to players island.
       island-owner: "[player]'s island"
+      # Used to refer to spawn island.
+      spawn-island: "&e&l Spawn island"
       # Used to refer to unknown player.
       unknown: "unknown"
   # This section contains translations for different informative messages.
