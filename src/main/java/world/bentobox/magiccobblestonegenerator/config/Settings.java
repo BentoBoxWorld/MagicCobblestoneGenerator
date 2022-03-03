@@ -1,7 +1,6 @@
 package world.bentobox.magiccobblestonegenerator.config;
 
 
-import org.bukkit.Material;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +20,7 @@ import world.bentobox.bentobox.api.configuration.StoreAt;
  * path="{Path to your addon}") To save comments in config file you should use @ConfigComment("{message}") that adds any
  * message you want to be in file.
  */
+@SuppressWarnings("unused")
 @StoreAt(filename = "config.yml", path = "addons/MagicCobblestoneGenerator")
 @ConfigComment("MagicCobblestoneGenerator Configuration [version]")
 @ConfigComment("This config file is dynamic and saved when the server is shutdown.")
@@ -263,72 +263,6 @@ public class Settings implements ConfigObject
 
 
     /**
-     * Is show filters boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isShowFilters()
-    {
-        return showFilters;
-    }
-
-
-    /**
-     * Sets show filters.
-     *
-     * @param showFilters the show filters
-     */
-    public void setShowFilters(boolean showFilters)
-    {
-        this.showFilters = showFilters;
-    }
-
-
-    /**
-     * Gets border block.
-     *
-     * @return the border block
-     */
-    public Material getBorderBlock()
-    {
-        return borderBlock;
-    }
-
-
-    /**
-     * Sets border block.
-     *
-     * @param borderBlock the border block
-     */
-    public void setBorderBlock(Material borderBlock)
-    {
-        this.borderBlock = borderBlock;
-    }
-
-
-    /**
-     * Gets border block name.
-     *
-     * @return the border block name
-     */
-    public String getBorderBlockName()
-    {
-        return borderBlockName;
-    }
-
-
-    /**
-     * Sets border block name.
-     *
-     * @param borderBlockName the border block name
-     */
-    public void setBorderBlockName(String borderBlockName)
-    {
-        this.borderBlockName = borderBlockName;
-    }
-
-
-    /**
      * Is notify unlocked generators boolean.
      *
      * @return the boolean
@@ -351,94 +285,6 @@ public class Settings implements ConfigObject
 
 
     /**
-     * Gets left click action.
-     *
-     * @return the left click action
-     */
-    public GuiAction getLeftClickAction()
-    {
-        return leftClickAction;
-    }
-
-
-    /**
-     * Sets left click action.
-     *
-     * @param leftClickAction the left click action
-     */
-    public void setLeftClickAction(GuiAction leftClickAction)
-    {
-        this.leftClickAction = leftClickAction;
-    }
-
-
-    /**
-     * Gets right click action.
-     *
-     * @return the right click action
-     */
-    public GuiAction getRightClickAction()
-    {
-        return rightClickAction;
-    }
-
-
-    /**
-     * Sets right click action.
-     *
-     * @param rightClickAction the right click action
-     */
-    public void setRightClickAction(GuiAction rightClickAction)
-    {
-        this.rightClickAction = rightClickAction;
-    }
-
-
-    /**
-     * Gets shift click action.
-     *
-     * @return the shift click action
-     */
-    public GuiAction getShiftClickAction()
-    {
-        return shiftClickAction;
-    }
-
-
-    /**
-     * Sets shift click action.
-     *
-     * @param shiftClickAction the shift click action
-     */
-    public void setShiftClickAction(GuiAction shiftClickAction)
-    {
-        this.shiftClickAction = shiftClickAction;
-    }
-
-
-    /**
-     * Gets click action.
-     *
-     * @return the click action
-     */
-    public GuiAction getClickAction()
-    {
-        return clickAction;
-    }
-
-
-    /**
-     * Sets click action.
-     *
-     * @param clickAction the click action
-     */
-    public void setClickAction(GuiAction clickAction)
-    {
-        this.clickAction = clickAction;
-    }
-
-
-    /**
      * Is overwrite on active boolean.
      *
      * @return the boolean
@@ -457,6 +303,28 @@ public class Settings implements ConfigObject
     public void setOverwriteOnActive(boolean overwriteOnActive)
     {
         this.overwriteOnActive = overwriteOnActive;
+    }
+
+
+    /**
+     * Is use bank account boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isUseBankAccount()
+    {
+        return useBankAccount;
+    }
+
+
+    /**
+     * Sets use bank account.
+     *
+     * @param useBankAccount the use bank account
+     */
+    public void setUseBankAccount(boolean useBankAccount)
+    {
+        this.useBankAccount = useBankAccount;
     }
 
 
@@ -536,67 +404,18 @@ public class Settings implements ConfigObject
     private boolean notifyUnlockedGenerators = true;
 
     @ConfigComment("")
+    @ConfigComment("This indicates if all monetary payments should be done via Bank Addon Account.")
+    @ConfigComment("Requires Bank Addon.")
+    @ConfigEntry(path = "use-bank-account")
+    private boolean useBankAccount = false;
+
+    @ConfigComment("")
     @ConfigComment("This list stores GameModes in which the addon should not work.")
     @ConfigComment("To disable addon it is necessary to write its name in new line that starts with -. Example:")
     @ConfigComment("disabled-gamemodes:")
     @ConfigComment(" - BSkyBlock")
     @ConfigEntry(path = "disabled-gamemodes", needsRestart = true)
     private Set<String> disabledGameModes = new HashSet<>();
-
-    @ConfigComment("This allows to toggle if filters in Generator User Panel should be showed.")
-    @ConfigEntry(path = "gui.show-filters")
-    private boolean showFilters = true;
-
-    @ConfigComment("This allows to change main border block in player panel.")
-    @ConfigEntry(path = "gui.border-block")
-    private Material borderBlock = Material.MAGENTA_STAINED_GLASS_PANE;
-
-    @ConfigComment("This allows to change border block display name.")
-    @ConfigEntry(path = "gui.border-block-name")
-    private String borderBlockName = " ";
-
-    @ConfigComment("Allows to change what action will be performed when user clicks on generator.")
-    @ConfigComment("NOTE!! This action will overwrite left-click and right-click actions.")
-    @ConfigComment("Supported values:")
-    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
-    @ConfigComment("- VIEW - opens detailed view for generators.")
-    @ConfigComment("- BUY - tries to purchase generator.")
-    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
-    @ConfigComment("- NONE - no actions are performed.")
-    @ConfigEntry(path = "gui.actions.click-action")
-    private GuiAction clickAction = GuiAction.NONE;
-
-    @ConfigComment("Allows to change what action will be performed when user left clicks on generator.")
-    @ConfigComment("NOTE!! This action will be overwritten by click-action.")
-    @ConfigComment("Supported values:")
-    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
-    @ConfigComment("- VIEW - opens detailed view for generators.")
-    @ConfigComment("- BUY - tries to purchase generator.")
-    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
-    @ConfigComment("- NONE - no actions are performed.")
-    @ConfigEntry(path = "gui.actions.left-click-action")
-    private GuiAction leftClickAction = GuiAction.BUY_OR_TOGGLE;
-
-    @ConfigComment("Allows to change what action will be performed when user right clicks on generator.")
-    @ConfigComment("NOTE!! This action will be overwritten by click-action.")
-    @ConfigComment("Supported values:")
-    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
-    @ConfigComment("- VIEW - opens detailed view for generators.")
-    @ConfigComment("- BUY - tries to purchase generator.")
-    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
-    @ConfigComment("- NONE - no actions are performed.")
-    @ConfigEntry(path = "gui.actions.right-click-action")
-    private GuiAction rightClickAction = GuiAction.VIEW;
-
-    @ConfigComment("Allows to change what action will be performed when user shift-clicks on generator.")
-    @ConfigComment("Supported values:")
-    @ConfigComment("- TOGGLE - tries to activate/deactivate generator.")
-    @ConfigComment("- VIEW - opens detailed view for generators.")
-    @ConfigComment("- BUY - tries to purchase generator.")
-    @ConfigComment("- BUY_OR_TOGGLE - it combines BUY and TOGGLE buttons in with a signle type.")
-    @ConfigComment("- NONE - no actions are performed.")
-    @ConfigEntry(path = "gui.actions.shift-click-action")
-    private GuiAction shiftClickAction = GuiAction.NONE;
 
     @ConfigComment("Player main sub-command to access the addon.")
     @ConfigComment("This command label will be required to write after gamemode player command label, f.e. /[label] generator")

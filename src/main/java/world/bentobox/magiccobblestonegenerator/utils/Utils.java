@@ -7,6 +7,17 @@
 package world.bentobox.magiccobblestonegenerator.utils;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -14,8 +25,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import java.util.*;
-import java.util.stream.Collectors;
+import org.jetbrains.annotations.Nullable;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,6 +34,7 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.WorldSettings;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.hooks.LangUtilsHook;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
@@ -34,6 +45,74 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
  */
 public class Utils
 {
+// ---------------------------------------------------------------------
+// Section: Other
+// ---------------------------------------------------------------------
+
+
+    /**
+     * This method returns index of previous page based on current page index and max page index.
+     *
+     * @param pageIndex Current page index.
+     * @param maxPageIndex Maximal page count.
+     * @return Integer of previous page index.
+     */
+    public static int getPreviousPage(int pageIndex, int maxPageIndex)
+    {
+        // Page 0 is viewed... back arrow = last page ... next arrow = 2
+        // Page 1 is viewed... back arrow = 1 ... next arrow = 3
+        // Page 2 is viewed... back arrow = 2 ... next arrow = 4
+        // Page n is viewed... back arrow = n ... next arrow = n+2
+        // Last page is viewed .. back arrow = last... next arrow = 1
+
+        return pageIndex == 0 ? maxPageIndex + 1 : pageIndex;
+    }
+
+
+    /**
+     * This method returns index of next page based on current page index and max page index.
+     *
+     * @param pageIndex Current page index.
+     * @param maxPageIndex Maximal page count.
+     * @return Integer of next page index.
+     */
+    public static int getNextPage(int pageIndex, int maxPageIndex)
+    {
+        // Page 0 is viewed... back arrow = last page ... next arrow = 2
+        // Page 1 is viewed... back arrow = 1 ... next arrow = 3
+        // Page 2 is viewed... back arrow = 2 ... next arrow = 4
+        // Page n is viewed... back arrow = n ... next arrow = n+2
+        // Last page is viewed .. back arrow = last... next arrow = 1
+
+        return pageIndex == maxPageIndex ? 1 : pageIndex + 2;
+    }
+
+
+    /**
+     * This method assigns Material icon based on input generator type.
+     *
+     * @param generatorType Generator type which icon should be returned.
+     * @return Material for input generator type.
+     */
+    public static Material getGeneratorTypeMaterial(GeneratorTierObject.GeneratorType generatorType)
+    {
+        return switch (generatorType) {
+            case COBBLESTONE -> Material.COBBLESTONE;
+            case STONE -> Material.STONE;
+            case BASALT -> Material.BASALT;
+            case COBBLESTONE_OR_STONE -> Material.ANDESITE;
+            case BASALT_OR_COBBLESTONE -> Material.GRANITE;
+            case BASALT_OR_STONE -> Material.BLACKSTONE;
+            default -> Material.BEDROCK;
+        };
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Permissions
+// ---------------------------------------------------------------------
+
+
     /**
      * This method gets string value of given permission prefix. If user does not have given permission or it have all
      * (*), then return default value.
@@ -294,13 +373,249 @@ public class Utils
 
     /**
      * Sanitizes the provided input. It replaces spaces and hyphens with underscores and lower cases the input.
-     *
+     * This code also removes all color codes from the input.
      * @param input input to sanitize
      * @return sanitized input
      */
     public static String sanitizeInput(String input)
     {
-        return input.toLowerCase(Locale.ENGLISH).replace(" ", "_").replace("-", "_");
+        return ChatColor.stripColor(
+            Util.translateColorCodes(input.toLowerCase(Locale.ENGLISH).
+                replace(" ", "_").
+                replace("-", "_")));
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Biome Type Resolver
+// ---------------------------------------------------------------------
+
+    /**
+     * This method returns if current biome is locally detected as snowy biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is snowy biome, {@code false} otherwise.
+     */
+    public static boolean isSnowyBiome(Biome biome)
+    {
+        return switch (biome) {
+            //case SNOWY_SLOPES:
+            case SNOWY_PLAINS, SNOWY_TAIGA, ICE_SPIKES, FROZEN_RIVER, SNOWY_BEACH -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as cold biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is cold biome, {@code false} otherwise.
+     */
+    public static boolean isColdBiome(Biome biome)
+    {
+        return switch (biome) {
+            case WINDSWEPT_HILLS, WINDSWEPT_GRAVELLY_HILLS, WINDSWEPT_FOREST, TAIGA, OLD_GROWTH_PINE_TAIGA, OLD_GROWTH_SPRUCE_TAIGA, STONY_SHORE -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as temperate biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is temperate biome, {@code false} otherwise.
+     */
+    public static boolean isTemperateBiome(Biome biome)
+    {
+        return switch (biome) {
+            case PLAINS, SUNFLOWER_PLAINS, FOREST, FLOWER_FOREST, BIRCH_FOREST, OLD_GROWTH_BIRCH_FOREST, DARK_FOREST, SWAMP, JUNGLE, SPARSE_JUNGLE, BAMBOO_JUNGLE, RIVER, BEACH, MUSHROOM_FIELDS -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as warm biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is warm biome, {@code false} otherwise.
+     */
+    public static boolean isWarmBiome(Biome biome)
+    {
+        return switch (biome) {
+            case DESERT, SAVANNA, WINDSWEPT_SAVANNA, BADLANDS, ERODED_BADLANDS, WOODED_BADLANDS, SAVANNA_PLATEAU ->
+                // case BADLANDS_PLATEAU:
+                true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as aquatic biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is aquatic biome, {@code false} otherwise.
+     */
+    public static boolean isAquaticBiome(Biome biome)
+    {
+        return switch (biome) {
+            case WARM_OCEAN, LUKEWARM_OCEAN, DEEP_LUKEWARM_OCEAN, OCEAN, DEEP_OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, FROZEN_OCEAN, DEEP_FROZEN_OCEAN -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as neutral biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is neutral biome, {@code false} otherwise.
+     */
+    public static boolean isNeutralBiome(Biome biome)
+    {
+        return biome == Biome.THE_VOID;
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as cave biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is cave biome, {@code false} otherwise.
+     */
+    public static boolean isCaveBiome(Biome biome)
+    {
+        return switch (biome) {
+            case LUSH_CAVES, DRIPSTONE_CAVES -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as nether biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is nether biome, {@code false} otherwise.
+     */
+    public static boolean isNetherBiome(Biome biome)
+    {
+        return switch (biome) {
+            case NETHER_WASTES, SOUL_SAND_VALLEY, CRIMSON_FOREST, WARPED_FOREST, BASALT_DELTAS -> true;
+            default -> false;
+        };
+    }
+
+
+    /**
+     * This method returns if current biome is locally detected as the end biome.
+     *
+     * @param biome Biome that must be checked.
+     * @return {@code true} if I think it is the end biome, {@code false} otherwise.
+     */
+    public static boolean isTheEndBiome(Biome biome)
+    {
+        return switch (biome) {
+            case THE_END, SMALL_END_ISLANDS, END_MIDLANDS, END_HIGHLANDS, END_BARRENS -> true;
+            default -> false;
+        };
+    }
+
+
+// ---------------------------------------------------------------------
+// Section: Prettify Object translations
+// ---------------------------------------------------------------------
+
+
+    /**
+     * Prettify Material object for user.
+     * @param object Object that must be pretty.
+     * @param user User who will see the object.
+     * @return Prettified string for Material.
+     */
+    public static String prettifyObject(@Nullable Material object, User user)
+    {
+        // Nothing to translate
+        if (object == null)
+        {
+            return "";
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   materials:
+        //     [material]:
+        //       name: [name]
+        String translation = user.getTranslationOrNothing(Constants.MATERIALS + object.name().toLowerCase() + ".name");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   materials:
+        //     [material]: [name]
+
+        translation = user.getTranslationOrNothing(Constants.MATERIALS + object.name().toLowerCase());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Find general structure with:
+        // materials:
+        //   [material]: [name]
+
+        translation = user.getTranslationOrNothing("materials." + object.name().toLowerCase());
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // Use Lang Utils Hook to translate material
+        return LangUtilsHook.getMaterialName(object, user);
+    }
+
+
+    /**
+     * Prettify Material object description for user.
+     * @param object Object that must be pretty.
+     * @param user User who will see the object.
+     * @return Prettified description string for Material.
+     */
+    public static String prettifyDescription(@Nullable Material object, User user)
+    {
+        // Nothing to translate
+        if (object == null)
+        {
+            return "";
+        }
+
+        // Find addon structure with:
+        // [addon]:
+        //   materials:
+        //     [material]:
+        //       description: [text]
+        String translation = user.getTranslationOrNothing(Constants.MATERIALS + object.name().toLowerCase() + ".description");
+
+        if (!translation.isEmpty())
+        {
+            // We found our translation.
+            return translation;
+        }
+
+        // No text to return.
+        return "";
     }
 
 
@@ -311,7 +626,7 @@ public class Utils
      * @param biome Biome that requires prettifying.
      * @return Clean and readable biome name.
      */
-    public static String prettifyObject(User user, Biome biome)
+    public static String prettifyObject(Biome biome, User user)
     {
         // Find addon structure with:
         // [addon]:
@@ -485,6 +800,11 @@ public class Utils
         // Nothing was found. Use just a prettify text function.
         return Util.prettifyText(entity.name());
     }
+
+
+// ---------------------------------------------------------------------
+// Section: Messages
+// ---------------------------------------------------------------------
 
 
     /**

@@ -1,6 +1,33 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.After;
@@ -14,18 +41,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.logging.Logger;
 
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.Settings;
@@ -43,11 +58,6 @@ import world.bentobox.bentobox.managers.FlagsManager;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.PlaceholdersManager;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
 
 /**
  * @author tastybento
@@ -56,9 +66,37 @@ import static org.mockito.Mockito.*;
 @PrepareForTest({Bukkit.class, BentoBox.class, User.class, DatabaseSetup.class})
 public class StoneGeneratorAddonTest
 {
+    private StoneGeneratorAddon addon;
 
+    @Mock
+    private BentoBox plugin;
+
+    @Mock
+    private AddonsManager am;
+
+    @Mock
+    private Logger logger;
+
+    @Mock
+    private GameModeAddon gameMode;
+
+    @Mock
+    private PlaceholdersManager placeholdersManager;
+
+    @Mock
+    private FlagsManager flagsManager;
+
+    @Mock
+    private Settings pluginSettings;
+
+    @Mock
+    private IslandWorldManager iwm;
+
+    @Mock
+    private static AbstractDatabaseHandler<Object> handler;
+    
     /**
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception exception
      */
     @Before
     public void setUp() throws Exception
@@ -85,7 +123,7 @@ public class StoneGeneratorAddonTest
         File jFile = new File("addon.jar");
         List<String> lines = Arrays.asList("# MagicCobblestoneGenerator Addon Configuration", "uniqueId: config");
         Path path = Paths.get("config.yml");
-        Files.write(path, lines, Charset.forName("UTF-8"));
+        Files.write(path, lines, StandardCharsets.UTF_8);
         Path template = Paths.get("src/main/resources/generatorTemplate.yml");
         Path copyTo = Paths.get("generatorTemplate.yml");
         Files.copy(template, copyTo);
@@ -137,7 +175,7 @@ public class StoneGeneratorAddonTest
 
 
     /**
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception exception
      */
     @After
     public void tearDown() throws Exception
@@ -305,32 +343,5 @@ public class StoneGeneratorAddonTest
         when(dbSetup.getHandler(any())).thenReturn(handler);
     }
 
-    private StoneGeneratorAddon addon;
 
-    @Mock
-    private BentoBox plugin;
-
-    @Mock
-    private AddonsManager am;
-
-    @Mock
-    private Logger logger;
-
-    @Mock
-    private GameModeAddon gameMode;
-
-    @Mock
-    private PlaceholdersManager placeholdersManager;
-
-    @Mock
-    private FlagsManager flagsManager;
-
-    @Mock
-    private Settings pluginSettings;
-
-    @Mock
-    private IslandWorldManager iwm;
-
-    @Mock
-    private static AbstractDatabaseHandler<Object> handler;
 }

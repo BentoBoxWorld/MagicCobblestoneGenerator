@@ -203,7 +203,11 @@ stone-generator:
         name: "&f&l Return"
         description: |-
           &7 Return to previous menu
-          &7 or exit GUI
+      quit:
+        name: "&f&l Quit"
+        description: |-
+          &7 Exit the current menu
+      # Button that is used in multi-page GUIs which allows to return to previous page.
       # Button that is used in multi-page GUIs which allows to return to previous page.
       previous:
         name: "&f&l Previous Page"
@@ -522,6 +526,17 @@ stone-generator:
           &b Physics is &a enabled &b .
         disabled: |-
           &b Physics is &c disabled &b .
+      use_bank:
+        name: "&f&l Use Bank"
+        description: |-
+          &7 Using island bank account
+          &7 for all purchases and
+          &7 activations.
+          &7 Requires Bank Addon.
+        enabled: |-
+          &b Bank usage is &a enabled &b .
+        disabled: |-
+          &b Bank usage is &c disabled &b .
       working_range:
         name: "&f&l Default Working Range"
         description: |-
@@ -628,14 +643,14 @@ stone-generator:
         name: "&f&l [biome]"
       # This section contains names for filter biome groups.
       biome-groups:
-        lush:
-          name: "&f&l Lush"
+        temperate:
+          name: "&f&l Temperate"
           description: |-
-            &7 Show only lush biomes
-        dry:
-          name: "&f&l Dry"
+            &7 Show only temperate biomes
+        warm:
+          name: "&f&l Warm"
           description: |-
-            &7 Show only dry biomes
+            &7 Show only warm biomes
         cold:
           name: "&f&l Cold"
           description: |-
@@ -664,6 +679,10 @@ stone-generator:
           name: "&f&l Unused"
           description: |-
             &7 Show only unused biomes
+        cave:
+          name: "&f&l Cave"
+          description: |-
+            &7 Show only cave biomes
       # This section contains names and descriptions for generator type buttons.
       generator-types:
         cobblestone:
@@ -835,6 +854,8 @@ stone-generator:
       selected: "&e Selected"
       # Used to refer to players island.
       island-owner: "[player]'s island"
+      # Used to refer to spawn island.
+      spawn-island: "&e&l Spawn island"
       # Used to refer to unknown player.
       unknown: "unknown"
   # This section contains translations for different informative messages.
@@ -855,6 +876,8 @@ stone-generator:
     generator-not-purchased: "&c Generator &r '[generator]' &r&c is not purchased."
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
     no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "&c Your bank account has not enough credits to activate generator. Activation requires [number] credits."
     # Message that appears when activating the generator.
     generator-activated: "&e Generator &r '[generator]' &r&e is activated."
     # Message that appears when purchasing the generator.
@@ -867,6 +890,8 @@ stone-generator:
     missing-permission: "&c Generator &r '[generator]' &r&c requires permission `[permission]`."
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
     no-credits-buy: "&c Not enough credits to purchase generator. This generator cost [number] credits."
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "&c Your bank account has not enough credits. This generator cost [number] credits."
     # Message that appears after importing a file.
     import-count: "&e Imported [generator] new generators and [bundle] new bundles."
     # Message that appears after clicking on download button in web library.
@@ -893,6 +918,8 @@ stone-generator:
     generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
     # Error message that is displayed when user uses generator command in world without generators.
     no-generators-in-world: "&c There are no available generators for you in [world]"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "&c Something went wrong while withdrawing money."
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

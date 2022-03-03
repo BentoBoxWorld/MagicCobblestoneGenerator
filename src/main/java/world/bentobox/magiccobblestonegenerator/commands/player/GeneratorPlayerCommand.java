@@ -1,10 +1,11 @@
 package world.bentobox.magiccobblestonegenerator.commands.player;
 
 
-import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.bukkit.World;
 
 import world.bentobox.bentobox.api.commands.CompositeCommand;
 import world.bentobox.bentobox.api.user.User;
@@ -311,7 +312,7 @@ public class GeneratorPlayerCommand extends CompositeCommand
 
                 if (addonManager.canPurchaseGenerator(user, island, data, generator))
                 {
-                    addonManager.purchaseGenerator(user, data, generator);
+                    addonManager.purchaseGenerator(user, island, data, generator);
                     return true;
                 }
             }
@@ -429,7 +430,7 @@ public class GeneratorPlayerCommand extends CompositeCommand
                 if (activate)
                 {
                     // Check before activating.
-                    if (addonManager.canActivateGenerator(user, data, generator))
+                    if (addonManager.canActivateGenerator(user, island, data, generator))
                     {
                         addonManager.activateGenerator(user, island, data, generator);
                     }

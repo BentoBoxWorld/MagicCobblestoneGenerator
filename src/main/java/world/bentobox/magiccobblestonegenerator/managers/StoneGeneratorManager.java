@@ -1,6 +1,23 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -8,10 +25,12 @@ import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import net.milkbowl.vault.economy.EconomyResponse;
+import world.bentobox.bank.BankManager;
+import world.bentobox.bank.BankResponse;
+import world.bentobox.bank.data.Money;
+import world.bentobox.bank.data.TxType;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.events.addon.AddonEvent;
 import world.bentobox.bentobox.api.localization.TextVariables;
@@ -264,7 +283,7 @@ public class StoneGeneratorManager
      */
     public void wipeGameModeGenerators(Optional<GameModeAddon> optional)
     {
-        if (!optional.isPresent())
+        if (optional.isEmpty())
         {
             // Done.
             return;
@@ -311,7 +330,7 @@ public class StoneGeneratorManager
      */
     public void wipeIslandData(Optional<GameModeAddon> optional)
     {
-        if (!optional.isPresent())
+        if (optional.isEmpty())
         {
             // Done.
             return;
@@ -410,19 +429,19 @@ public class StoneGeneratorManager
         Location location,
         GeneratorTierObject.GeneratorType generatorType)
     {
-        if (island == null)
-        {
-            // No islands at given location, find and use default generator tier.
-            return this.findDefaultGeneratorTier(location.getWorld(), generatorType);
-        }
-
-        this.addIslandData(island);
-        GeneratorDataObject data = this.generatorDataCache.get(island.getUniqueId());
-
         // Gets biome from location.
         final Biome biome = location.getWorld().getBiome(location.getBlockX(),
             location.getBlockY(),
             location.getBlockZ());
+
+        if (island == null)
+        {
+            // No islands at given location, find and use default generator tier.
+            return this.findDefaultGeneratorTier(location.getWorld(), generatorType, biome);
+        }
+
+        this.addIslandData(island);
+        GeneratorDataObject data = this.generatorDataCache.get(island.getUniqueId());
 
         // TODO: It is necessary to reset user cache when import new generators are don.
         // I changed implementation for faster work, so it gets challenges on island data loading,
@@ -480,7 +499,7 @@ public class StoneGeneratorManager
                 });
 
         return optionalGenerator.orElse(
-            this.findDefaultGeneratorTier(location.getWorld(), generatorType));
+            this.findDefaultGeneratorTier(location.getWorld(), generatorType, biome));
     }
 
 
@@ -490,10 +509,12 @@ public class StoneGeneratorManager
      *
      * @param world of type World
      * @param generatorType of type GeneratorType
-     * @return GeneratorTierObject
+     * @param biome of the generator location.
+     * @return GeneratorTierObject generator tier object
      */
     private @Nullable GeneratorTierObject findDefaultGeneratorTier(World world,
-        GeneratorTierObject.GeneratorType generatorType)
+        GeneratorTierObject.GeneratorType generatorType,
+        Biome biome)
     {
         String gameMode = this.addon.getPlugin().getIWM().getAddon(world).map(
             gameModeAddon -> gameModeAddon.getDescription().getName()).orElse("");
@@ -508,16 +529,43 @@ public class StoneGeneratorManager
         // Filter all default generators
         // Filter generators with necessary type.
         // Filter generators that starts with name.
-        // Sort generators by priority, type and name in reversed order
+        // Get a generator that has largest priority and has required biome
         // Return return the generator tier with max value or null
         return this.generatorTierCache.values().stream().
-                filter(GeneratorTierObject::isDefaultGenerator).
-                filter(generator -> generator.getGeneratorType().includes(generatorType)).
-                filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
-                max(Comparator.comparingInt(GeneratorTierObject::getPriority).
-                    thenComparing(GeneratorTierObject::getGeneratorType).
-                    thenComparing(Comparator.comparing(GeneratorTierObject::getFriendlyName).reversed())).
-                orElse(null);
+            filter(GeneratorTierObject::isDefaultGenerator).
+            filter(generator -> generator.getGeneratorType().includes(generatorType)).
+            filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
+            filter(generator -> generator.getRequiredBiomes().isEmpty() ||
+                generator.getRequiredBiomes().contains(biome)).
+            max((o1, o2) ->
+            {
+                // If required biomes is empty, the it works in all biomes.
+                boolean o1HasBiome = o1.getRequiredBiomes().isEmpty() ||
+                    o1.getRequiredBiomes().contains(biome);
+                boolean o2HasBiome = o2.getRequiredBiomes().isEmpty() ||
+                    o2.getRequiredBiomes().contains(biome);
+
+                if (o1HasBiome != o2HasBiome)
+                {
+                    return Boolean.compare(o1HasBiome, o2HasBiome);
+                }
+                else if (o1.getPriority() != o2.getPriority())
+                {
+                    // Larger priority must be in the end.
+                    return Integer.compare(o1.getPriority(), o2.getPriority());
+                }
+                else if (o1.getGeneratorType() != o2.getGeneratorType())
+                {
+                    // Compare by type. Generators which are more specified should be first.
+                    return o1.getGeneratorType().compareTo(o2.getGeneratorType());
+                }
+                else
+                {
+                    // Compare by unique id.
+                    return o1.getUniqueId().compareTo(o2.getUniqueId());
+                }
+            }).
+            orElse(null);
     }
 
 
@@ -956,8 +1004,8 @@ public class StoneGeneratorManager
             // Filter out generators with larger minimal island level then current island level.
             filter(generator -> generator.getRequiredMinIslandLevel() <= islandLevel).
             // Filter out generators with missing permissions
-            filter(generator -> owner != null && owner.isPlayer() &&
-                Utils.matchAllPermissions(owner, generator.getRequiredPermissions())).
+            filter(generator -> generator.getRequiredPermissions().isEmpty() ||
+                owner != null && owner.isOnline() && Utils.matchAllPermissions(owner, generator.getRequiredPermissions())).
             // Now process each generator.
             forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
     }
@@ -1011,6 +1059,7 @@ public class StoneGeneratorManager
      * This method unlocks given generator for given island.
      *
      * @param dataObject DataObject where all data will be saved.
+     * @param user the user
      * @param island Island that unlocks generator.
      * @param generator Generator that must be unlocked.
      */
@@ -1124,11 +1173,13 @@ public class StoneGeneratorManager
      * assumed, that it is used as check before activating the generator tier.
      *
      * @param user User who will pay for activating.
+     * @param island the island
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be activated.
-     * @return {@code true} if can activate, {@false} if cannot activate.
+     * @return {@code true} if can activate, {@code false} if cannot activate.
      */
     public boolean canActivateGenerator(@NotNull User user,
+        @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
@@ -1168,19 +1219,36 @@ public class StoneGeneratorManager
         {
             if (this.addon.isVaultProvided() && generatorTier.getActivationCost() > 0)
             {
-                // Return true only if user has enough money and its removal was successful.
-                if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()) &&
-                    this.addon.getVaultHook().withdraw(user,
-                        generatorTier.getActivationCost()).transactionSuccess())
+                if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided())
                 {
-                    return true;
+                    // Return true only if user has enough money and its removal was successful.
+
+                    if (this.addon.getBankAddon().getBankManager().getBalance(island).getValue() >= generatorTier.getActivationCost())
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits-bank",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
+                        return false;
+                    }
                 }
                 else
                 {
-                    Utils.sendMessage(user,
-                        user.getTranslation(Constants.MESSAGES + "no-credits",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
-                    return false;
+                    // Return true only if user has enough money and its removal was successful.
+                    if (this.addon.getVaultHook().has(user, generatorTier.getActivationCost()))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getActivationCost())));
+                        return false;
+                    }
                 }
             }
             else
@@ -1193,17 +1261,69 @@ public class StoneGeneratorManager
 
 
     /**
-     * This is just a wrapper method that allows to activate generator.
+     * This is just a wrapper method that allows to activate generator with money withdraw.
      *
-     * @param user User who activates generator.
-     * @param generatorData Data which will be populated.
-     * @param generatorTier Generator that will be added.
+     * @param user the user
+     * @param island the island
+     * @param generatorData the generator data
+     * @param generatorTier the generator tier
      */
     public void activateGenerator(@NotNull User user,
         @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
+        this.activateGenerator(user, island, generatorData, generatorTier, false);
+    }
+
+
+    /**
+     * This is just a wrapper method that allows to activate generator.
+     *
+     * @param user User who activates generator.
+     * @param island the island
+     * @param generatorData Data which will be populated.
+     * @param generatorTier Generator that will be added.
+     * @param bypassCost the bypass cost
+     */
+    public void activateGenerator(@NotNull User user,
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier,
+        boolean bypassCost)
+    {
+        CompletableFuture<Boolean> activateGenerator = new CompletableFuture<>();
+        activateGenerator.thenAccept(runActivationTask ->
+        {
+            if (runActivationTask)
+            {
+                // Call event about generator activation.
+                GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
+                    user,
+                    island.getUniqueId(),
+                    true);
+                Bukkit.getPluginManager().callEvent(event);
+
+                if (!event.isCancelled())
+                {
+                    Utils.sendMessage(user,
+                        user.getTranslation(Constants.MESSAGES + "generator-activated",
+                            Constants.GENERATOR, generatorTier.getFriendlyName()));
+                    generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+
+                    // check and send message that generator is disabled
+                    if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
+                    {
+                        Utils.sendMessage(user, user.getTranslation(
+                            StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
+                    }
+
+                    // Save object.
+                    this.saveGeneratorData(generatorData);
+                }
+            }
+        });
+
         if (this.addon.getSettings().isOverwriteOnActive() &&
             generatorData.getActiveGeneratorCount() > 0 &&
             generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount())
@@ -1217,32 +1337,18 @@ public class StoneGeneratorManager
                 // If deactivation was not successful, send message about reached limit.
                 Utils.sendMessage(user,
                     user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
+                activateGenerator.complete(false);
             }
         }
 
-        // Call event about generator activation.
-        GeneratorActivationEvent event = new GeneratorActivationEvent(generatorTier,
-            user,
-            island.getUniqueId(),
-            true);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if (!event.isCancelled())
+        if (!activateGenerator.isDone() && this.addon.isVaultProvided() && !bypassCost)
         {
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-activated",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
-            generatorData.getActiveGeneratorList().add(generatorTier.getUniqueId());
+            this.withdrawMoney(activateGenerator, user, island, generatorTier.getActivationCost());
+        }
 
-            // check and send message that generator is disabled
-            if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
-            {
-                Utils.sendMessage(user, user.getTranslation(
-                    StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
-            }
-
-            // Save object.
-            this.saveGeneratorData(generatorData);
+        if (!activateGenerator.isDone())
+        {
+            activateGenerator.complete(true);
         }
     }
 
@@ -1255,7 +1361,7 @@ public class StoneGeneratorManager
      * @param island GeneratorData linked island.
      * @param generatorData Data that stores island generators.
      * @param generatorTier Generator tier that need to be purchased.
-     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     * @return {@code true} if can purchase, {@code false} if cannot purchase.
      */
     public boolean canPurchaseGenerator(@NotNull User user,
         @NotNull Island island,
@@ -1309,17 +1415,35 @@ public class StoneGeneratorManager
         {
             if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0)
             {
-                // Return true only if user has enough money and its removal was successful.
-                if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()))
+                if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided())
                 {
-                    return true;
+                    if (this.addon.getBankAddon().getBankManager().getBalance(island).getValue() >= generatorTier.getGeneratorTierCost())
+                    {
+                        // Return true only if user has enough money.
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits-buy-bank",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                        return false;
+                    }
                 }
                 else
                 {
-                    Utils.sendMessage(user,
-                        user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-                            TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
-                    return false;
+                    if (this.addon.getVaultHook().has(user, generatorTier.getGeneratorTierCost()))
+                    {
+                        // Return true only if user has enough money.
+                        return true;
+                    }
+                    else
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.MESSAGES + "no-credits-buy",
+                                TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                        return false;
+                    }
                 }
             }
             else
@@ -1332,47 +1456,105 @@ public class StoneGeneratorManager
 
 
     /**
-     * This method adds generator tier to purchased generators.
+     * his method adds generator tier to purchased generators without bypassing cost.
      *
-     * @param user User who will pays.
-     * @param generatorData Data that stores island generators.
-     * @param generatorTier Generator tier that need to be purchased.
-     * @return {@code true} if can purchase, {@false} if cannot purchase.
+     * @param user the user
+     * @param island the island
+     * @param generatorData the generator data
+     * @param generatorTier the generator tier
      */
     public void purchaseGenerator(@NotNull User user,
+        @NotNull Island island,
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        if (this.addon.isVaultProvided() && generatorTier.getGeneratorTierCost() > 0 &&
-            this.addon.getVaultHook().withdraw(user, generatorTier.getGeneratorTierCost()).transactionSuccess())
+        this.purchaseGenerator(user, island, generatorData, generatorTier, false);
+    }
+
+
+    /**
+     * This method adds generator tier to purchased generators.
+     *
+     * @param user User who will pays.
+     * @param island the island
+     * @param generatorData Data that stores island generators.
+     * @param generatorTier Generator tier that need to be purchased.
+     * @param bypassCost indicate if cost can be bypassed.
+     */
+    public void purchaseGenerator(@NotNull User user,
+        @NotNull Island island,
+        @NotNull GeneratorDataObject generatorData,
+        @NotNull GeneratorTierObject generatorTier,
+        boolean bypassCost)
+    {
+        CompletableFuture<Boolean> purchaseGenerator = new CompletableFuture<>();
+        purchaseGenerator.thenAccept(runActivationTask ->
         {
-            // TODO: Deprecated code. Use "GeneratorBuyEvent" class.
-            Map<String, Object> keyValues = new HashMap<>();
-            keyValues.put("eventName", "GeneratorBuyEvent");
-            keyValues.put("targetPlayer", user.getUniqueId());
-            keyValues.put("islandUUID", generatorTier.getUniqueId());
-            keyValues.put("generator", generatorTier.getFriendlyName());
+            if (runActivationTask)
+            {
+                // Call event about successful purchase
+                Bukkit.getPluginManager().callEvent(new GeneratorBuyEvent(generatorTier,
+                    user,
+                    generatorData.getUniqueId()));
 
-            new AddonEvent().builder().addon(addon).keyValues(keyValues).build();
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.MESSAGES + "generator-purchased",
+                        Constants.GENERATOR, generatorTier.getFriendlyName()));
+                generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
 
-            // Call event about successful purchase
-            Bukkit.getPluginManager().callEvent(new GeneratorBuyEvent(generatorTier,
-                user,
-                generatorData.getUniqueId()));
+                // Save object.
+                this.saveGeneratorData(generatorData);
+            }
+        });
 
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "generator-purchased",
-                    Constants.GENERATOR, generatorTier.getFriendlyName()));
-            generatorData.getPurchasedTiers().add(generatorTier.getUniqueId());
+        if (this.addon.isVaultProvided() && !bypassCost)
+        {
+            this.withdrawMoney(purchaseGenerator, user, island, generatorTier.getGeneratorTierCost());
+        }
 
-            // Save object.
-            this.saveGeneratorData(generatorData);
+        if (!purchaseGenerator.isDone())
+        {
+            purchaseGenerator.complete(true);
+        }
+    }
+
+
+    /**
+     * Withdraw money for activating/purchasing generator tier.
+     *
+     * @param withdrawStage the change biome stage
+     * @param user the user
+     * @param island the island
+     * @param money the money
+     */
+    private void withdrawMoney(CompletableFuture<Boolean> withdrawStage, User user, Island island, double money)
+    {
+        if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided())
+        {
+            BankManager bankManager = this.addon.getBankAddon().getBankManager();
+            bankManager.withdraw(user, island, new Money(money), TxType.WITHDRAW).
+                thenAccept(response -> {
+                    if (response != BankResponse.SUCCESS)
+                    {
+                        Utils.sendMessage(user,
+                            user.getTranslation(Constants.ERRORS + "could-not-remove-money"));
+                        withdrawStage.complete(false);
+                    }
+                });
         }
         else
         {
-            Utils.sendMessage(user,
-                user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-                    TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+            EconomyResponse withdraw = this.addon.getVaultHook().withdraw(user, money);
+
+            if (!withdraw.transactionSuccess())
+            {
+                // Something went wrong on withdraw.
+
+                Utils.sendMessage(user,
+                    user.getTranslation(Constants.ERRORS + "could-not-remove-money"));
+                this.addon.logError(withdraw.errorMessage);
+                withdrawStage.complete(false);
+            }
         }
     }
 

@@ -1,4 +1,7 @@
 # Generator template file for MagicCobblestoneGenerator add-on Version ${version}
+# This is just a template file. It is not used in game at any point. 
+# If you want to apply changes you made in this file, you need to import them into the game.
+# You can do it via Admin Panel: `/[admin_cmd] generator` 
 
 tiers:
   # generator ID

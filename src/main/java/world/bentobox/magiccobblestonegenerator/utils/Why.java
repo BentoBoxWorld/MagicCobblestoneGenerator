@@ -7,11 +7,12 @@
 package world.bentobox.magiccobblestonegenerator.utils;
 
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.metadata.MetadataValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import java.util.UUID;
 
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.Addon;

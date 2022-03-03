@@ -6,14 +6,14 @@
 package world.bentobox.magiccobblestonegenerator.listeners;
 
 
+import java.util.Optional;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFromToEvent;
-
-import java.util.Optional;
 
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
@@ -92,7 +92,7 @@ public class MagicGeneratorListener extends GeneratorListener
 
         Optional<Island> islandOptional = this.addon.getIslands().getIslandAt(eventSourceBlock.getLocation());
 
-        if (!islandOptional.isPresent())
+        if (islandOptional.isEmpty())
         {
             // If not operating in non-island regions.
             return;
@@ -213,34 +213,28 @@ public class MagicGeneratorListener extends GeneratorListener
      */
     private boolean canLavaGenerateCobblestone(Block airBlock, BlockFace flowDirection)
     {
-        switch (flowDirection)
-        {
-            case NORTH:
-            case EAST:
-            case SOUTH:
-            case WEST:
-                // Since waterlogged blocks, it is also necessary to check block above.
-                // Check if block in flow direction is water
-                // Check if block on the left side is water
-                // Check if block on the right side is water
+        return switch (flowDirection) {
+            case NORTH, EAST, SOUTH, WEST ->
+                    // Since waterlogged blocks, it is also necessary to check block above.
+                    // Check if block in flow direction is water
+                    // Check if block on the left side is water
+                    // Check if block on the right side is water
 
-                return MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.UP)) ||
-                    MagicGeneratorListener.containsWater(airBlock.getRelative(flowDirection)) ||
-                    MagicGeneratorListener.containsWater(airBlock
-                        .getRelative(MagicGeneratorListener.getClockwiseDirection(flowDirection))) ||
-                    MagicGeneratorListener.containsWater(airBlock
-                        .getRelative(MagicGeneratorListener.getCounterClockwiseDirection(flowDirection)));
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.UP)) ||
+                            MagicGeneratorListener.containsWater(airBlock.getRelative(flowDirection)) ||
+                            MagicGeneratorListener.containsWater(airBlock
+                                    .getRelative(MagicGeneratorListener.getClockwiseDirection(flowDirection))) ||
+                            MagicGeneratorListener.containsWater(airBlock
+                                    .getRelative(MagicGeneratorListener.getCounterClockwiseDirection(flowDirection)));
+            case DOWN ->
+                    // If lava flows down then we should search for water in horizontally adjacent blocks.
 
-            case DOWN:
-                // If lava flows down then we should search for water in horizontally adjacent blocks.
-
-                return MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
-                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
-                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
-                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.WEST));
-            default:
-                return false;
-        }
+                    MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.NORTH)) ||
+                            MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.EAST)) ||
+                            MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.SOUTH)) ||
+                            MagicGeneratorListener.containsWater(airBlock.getRelative(BlockFace.WEST));
+            default -> false;
+        };
     }
 
 
@@ -386,20 +380,15 @@ public class MagicGeneratorListener extends GeneratorListener
      */
     private static BlockFace getClockwiseDirection(BlockFace face)
     {
-        switch (face)
-        {
-            case NORTH:
-                return BlockFace.EAST;
-            case EAST:
-                return BlockFace.SOUTH;
-            case SOUTH:
-                return BlockFace.WEST;
-            case WEST:
-                return BlockFace.NORTH;
-            default:
-                // Not interested in other directions
-                return face;
-        }
+        return switch (face) {
+            case NORTH -> BlockFace.EAST;
+            case EAST -> BlockFace.SOUTH;
+            case SOUTH -> BlockFace.WEST;
+            case WEST -> BlockFace.NORTH;
+            default ->
+                    // Not interested in other directions
+                    face;
+        };
     }
 
 
@@ -412,19 +401,14 @@ public class MagicGeneratorListener extends GeneratorListener
      */
     private static BlockFace getCounterClockwiseDirection(BlockFace face)
     {
-        switch (face)
-        {
-            case NORTH:
-                return BlockFace.WEST;
-            case EAST:
-                return BlockFace.NORTH;
-            case SOUTH:
-                return BlockFace.EAST;
-            case WEST:
-                return BlockFace.SOUTH;
-            default:
-                // Not interested in other directions
-                return face;
-        }
+        return switch (face) {
+            case NORTH -> BlockFace.WEST;
+            case EAST -> BlockFace.NORTH;
+            case SOUTH -> BlockFace.EAST;
+            case WEST -> BlockFace.SOUTH;
+            default ->
+                    // Not interested in other directions
+                    face;
+        };
     }
 }

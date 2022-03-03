@@ -7,10 +7,11 @@
 package world.bentobox.magiccobblestonegenerator.events;
 
 
+import java.util.UUID;
+
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.Nullable;
-import java.util.UUID;
 
 import world.bentobox.bentobox.api.events.BentoBoxEvent;
 import world.bentobox.bentobox.api.user.User;

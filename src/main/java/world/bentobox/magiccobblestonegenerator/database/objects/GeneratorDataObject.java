@@ -7,11 +7,13 @@
 package world.bentobox.magiccobblestonegenerator.database.objects;
 
 
-import com.google.gson.annotations.Expose;
-import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import org.jetbrains.annotations.Nullable;
+
+import com.google.gson.annotations.Expose;
 
 import world.bentobox.bentobox.database.objects.DataObject;
 import world.bentobox.bentobox.database.objects.Table;

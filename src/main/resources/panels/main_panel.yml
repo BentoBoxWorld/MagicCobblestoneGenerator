@@ -1,0 +1,159 @@
+main_panel:
+  title: stone-generator.gui.titles.player-panel
+  type: INVENTORY
+  background:
+    icon: BLACK_STAINED_GLASS_PANE
+    title: "&b&r" # Empty text
+  border:
+    icon: BLACK_STAINED_GLASS_PANE
+    title: "&b&r"  # Empty text
+  force-shown: []
+  content:
+    1:
+      3:
+        icon: GREEN_STAINED_GLASS_PANE
+        title: stone-generator.gui.buttons.show_active.name
+        description: stone-generator.gui.buttons.show_active.description
+        data:
+          type: FILTER
+          filter: ACTIVE
+        actions:
+          enable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-enable
+          disable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-disable
+      5:
+        icon: COBBLESTONE
+        title: stone-generator.gui.buttons.show_cobblestone.name
+        description: stone-generator.gui.buttons.show_cobblestone.description
+        data:
+          type: FILTER
+          filter: COBBLESTONE
+        actions:
+          enable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-enable
+          disable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-disable
+      6:
+        icon: STONE
+        title: stone-generator.gui.buttons.show_stone.name
+        description: stone-generator.gui.buttons.show_stone.description
+        data:
+          type: FILTER
+          filter: STONE
+        actions:
+          enable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-enable
+          disable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-disable
+      7:
+        icon: BASALT
+        title: stone-generator.gui.buttons.show_basalt.name
+        description: stone-generator.gui.buttons.show_basalt.description
+        data:
+          type: FILTER
+          filter: BASALT
+        actions:
+          enable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-enable
+          disable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-disable
+      9:
+        icon: REDSTONE
+        title: stone-generator.gui.buttons.toggle_visibility.name
+        description: stone-generator.gui.buttons.toggle_visibility.description
+        data:
+          type: FILTER
+          filter: VISIBILITY
+        actions:
+          enable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-enable
+          disable:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-filter-disable
+    2:
+      2: generator_button
+      3: generator_button
+      4: generator_button
+      5: generator_button
+      6: generator_button
+      7: generator_button
+      8: generator_button
+    3:
+      1:
+        icon: TIPPED_ARROW:INSTANT_HEAL::::1
+        title: stone-generator.gui.buttons.previous.name
+        description: stone-generator.gui.buttons.previous.description
+        data:
+          type: PREVIOUS
+          indexing: true
+        actions:
+          previous:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-previous
+      2: generator_button
+      3: generator_button
+      4: generator_button
+      5: generator_button
+      6: generator_button
+      7: generator_button
+      8: generator_button
+      9:
+        icon: TIPPED_ARROW:JUMP::::1
+        title: stone-generator.gui.buttons.next.name
+        description: stone-generator.gui.buttons.next.description
+        data:
+          type: NEXT
+          indexing: true
+        action:
+          next:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-next
+    4:
+      2: generator_button
+      3: generator_button
+      4: generator_button
+      5: generator_button
+      6: generator_button
+      7: generator_button
+      8: generator_button
+    6:
+      9:
+        icon: OAK_DOOR
+        title: stone-generator.gui.buttons.quit.name
+        description: stone-generator.gui.buttons.quit.description
+        data:
+          type: RETURN
+        actions:
+          return:
+            click-type: unknown
+            tooltip: stone-generator.gui.tips.click-to-quit
+  reusable:
+    generator_button:
+      #icon: STONE
+      #title: stone-generator.gui.buttons.generator.name
+      #description: stone-generator.gui.buttons.generator.description
+      data:
+        type: GENERATOR
+      actions:
+        buy:
+          click-type: left
+          tooltip: stone-generator.gui.tips.left-click-to-purchase
+        activate:
+          click-type: left
+          tooltip: stone-generator.gui.tips.left-click-to-activate
+        deactivate:
+          click-type: left
+          tooltip: stone-generator.gui.tips.left-click-to-deactivate
+        view:
+          click-type: right
+          tooltip: stone-generator.gui.tips.right-click-to-view

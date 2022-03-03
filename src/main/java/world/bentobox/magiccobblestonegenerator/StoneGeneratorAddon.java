@@ -1,11 +1,13 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import java.util.Optional;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
-import java.util.Optional;
 
+import world.bentobox.bank.Bank;
 import world.bentobox.bentobox.api.addons.Addon;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.configuration.Config;
@@ -23,6 +25,8 @@ import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorImportManager;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
+import world.bentobox.magiccobblestonegenerator.request.ActiveGeneratorNamesRequestHandler;
+import world.bentobox.magiccobblestonegenerator.request.GeneratorDataRequestHandler;
 import world.bentobox.magiccobblestonegenerator.tasks.MagicGenerator;
 import world.bentobox.magiccobblestonegenerator.web.WebManager;
 
@@ -48,6 +52,20 @@ public class StoneGeneratorAddon extends Addon
         this.settings = new Config<>(this, Settings.class).loadConfigObject();
 
         StoneGeneratorAddon.instance = this;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveDefaultConfig()
+    {
+        super.saveDefaultConfig();
+
+        this.saveResource("panels/main_panel.yml", false);
+        this.saveResource("panels/view_panel.yml", false);
+        this.saveResource("generatorTemplate.yml", false);
     }
 
 
@@ -97,9 +115,6 @@ public class StoneGeneratorAddon extends Addon
     {
         this.generator = new MagicGenerator(this);
 
-        this.findLevel();
-        this.findVault();
-
         // Register the listener.
         this.registerListener(new VanillaGeneratorListener(this));
         // TODO: fix and implement
@@ -113,7 +128,8 @@ public class StoneGeneratorAddon extends Addon
         this.registerFlag(MAGIC_COBBLESTONE_GENERATOR_PERMISSION);
 
         // Register Request Handlers
-//			this.registerRequestHandler(REQUEST_HANDLER);
+        this.registerRequestHandler(new ActiveGeneratorNamesRequestHandler(this));
+        this.registerRequestHandler(new GeneratorDataRequestHandler(this));
     }
 
 
@@ -274,6 +290,20 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
+     * Run methods when everything is loaded.
+     */
+    @Override
+    public void allLoaded()
+    {
+        super.allLoaded();
+
+        this.findLevel();
+        this.findVault();
+        this.findBank();
+    }
+
+
+    /**
      * This is silly method that was introduced to reduce main method complexity, and just reports if economy is enabled
      * or not.
      */
@@ -283,13 +313,14 @@ public class StoneGeneratorAddon extends Addon
 
         Optional<VaultHook> vault = this.getPlugin().getVault();
 
-        if (!vault.isPresent())
+        if (vault.isEmpty())
         {
             this.vaultHook = null;
             this.logWarning("Vault plugin not found. Economy will not work!");
         }
         else
         {
+            this.log("MagicCobblestoneGenerator Addon hooked into Economy.");
             this.vaultHook = vault.get();
         }
     }
@@ -305,14 +336,36 @@ public class StoneGeneratorAddon extends Addon
 
         Optional<Addon> level = this.getAddonByName("Level");
 
-        if (!level.isPresent())
+        if (level.isEmpty())
         {
-            this.logWarning("Level add-on not found so Magic Cobblestone Generator, some parts may not work!");
             this.levelAddon = null;
         }
         else
         {
+            this.log("MagicCobblestoneGenerator Addon hooked into Level addon.");
             this.levelAddon = (Level) level.get();
+        }
+    }
+
+
+    /**
+     * This is silly method that was introduced to reduce main method complexity, and just reports if bank addon is
+     * enabled or not.
+     */
+    private void findBank()
+    {
+        // Try to find bank addon and if it does not exist, display a warning
+
+        Optional<Addon> addon = this.getAddonByName("Bank");
+
+        if (addon.isEmpty())
+        {
+            this.bankAddon = null;
+        }
+        else
+        {
+            this.log("MagicCobblestoneGenerator Addon hooked into Bank addon.");
+            this.bankAddon = (Bank) addon.get();
         }
     }
 
@@ -324,12 +377,6 @@ public class StoneGeneratorAddon extends Addon
     public void onDisable()
     {
         // Do some stuff...
-
-        if (this.hooked)
-        {
-            // Save database on disable.
-            this.getAddonManager().save();
-        }
     }
 
 
@@ -423,13 +470,35 @@ public class StoneGeneratorAddon extends Addon
 
 
     /**
-     * This method returns the levelProvided object.
+     * This method returns if the levelAddon object exist.
      *
-     * @return the levelProvided object.
+     * @return the levelAddon object exist.
      */
     public boolean isLevelProvided()
     {
         return levelAddon != null;
+    }
+
+
+    /**
+     * This method returns the bankAddon object.
+     *
+     * @return the bankAddon object.
+     */
+    public Bank getBankAddon()
+    {
+        return this.bankAddon;
+    }
+
+
+    /**
+     * This method returns if the bankAddon object exist.
+     *
+     * @return the bankAddon object exist.
+     */
+    public boolean isBankProvided()
+    {
+        return bankAddon != null;
     }
 
 
@@ -522,7 +591,12 @@ public class StoneGeneratorAddon extends Addon
     private Level levelAddon;
 
     /**
-     * Static addon isntance.
+     * Bank addon.
+     */
+    private Bank bankAddon;
+
+    /**
+     * Static addon instance.
      */
     private static StoneGeneratorAddon instance;
 

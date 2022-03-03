@@ -1,17 +1,25 @@
 package world.bentobox.magiccobblestonegenerator.panels;
 
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
-import java.util.stream.Collectors;
 
 import world.bentobox.bentobox.api.localization.TextVariables;
+import world.bentobox.bentobox.api.panels.PanelItem;
+import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
@@ -51,6 +59,18 @@ public abstract class CommonPanel
 
         // Apply formatting for each instance.
         this.applyFormatting();
+
+        this.returnButton = new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "quit.name")).
+            description(this.user.getTranslationOrNothing(Constants.BUTTON + "quit.description")).
+            description("").
+            description(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-quit")).
+            icon(Material.OAK_DOOR).
+            clickHandler((panel, user1, clickType, i) ->
+            {
+                this.user.closeInventory();
+                return true;
+            }).build();
     }
 
 
@@ -74,13 +94,34 @@ public abstract class CommonPanel
         this.thousandsFormat = parentPanel.thousandsFormat;
         this.tenThousandsFormat = parentPanel.tenThousandsFormat;
         this.hundredThousandsFormat = parentPanel.hundredThousandsFormat;
+
+        this.returnButton = new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "return.name")).
+            description(this.user.getTranslationOrNothing(Constants.BUTTON + "return.description")).
+            description("").
+            description(this.user.getTranslationOrNothing(Constants.TIPS + "click-to-return")).
+            icon(Material.OAK_DOOR).
+            clickHandler((panel, user1, clickType, i) ->
+            {
+                this.parentPanel.build();
+                return true;
+            }).build();
     }
 
 
     /**
      * This method allows to build panel.
      */
-    public abstract void build();
+    protected abstract void build();
+
+
+    /**
+     * Rebuilds this GUI.
+     */
+    public final void reopen()
+    {
+        this.build();
+    }
 
 
 // ---------------------------------------------------------------------
@@ -438,7 +479,7 @@ public abstract class CommonPanel
                 {
                     biomes.append("\n");
                     biomes.append(this.user.getTranslationOrNothing(reference + "biome",
-                        Constants.BIOME, Utils.prettifyObject(this.user, biome)));
+                        Constants.BIOME, Utils.prettifyObject(biome, this.user)));
                 });
         }
         else
@@ -614,9 +655,13 @@ public abstract class CommonPanel
     /**
      * This variable allows to create nested panel structure.
      */
-    protected @Nullable
-    final CommonPanel parentPanel;
+    @Nullable
+    protected final CommonPanel parentPanel;
 
+    /**
+     * This object holds PanelItem that allows to return to previous panel.
+     */
+    protected PanelItem returnButton;
 
 // ---------------------------------------------------------------------
 // Section: Formatting

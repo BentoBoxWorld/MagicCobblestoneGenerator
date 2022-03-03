@@ -1,20 +1,26 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+
+import lv.id.bonne.panelutils.PanelUtils;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
+import world.bentobox.magiccobblestonegenerator.panels.CommonPagedPanel;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.GuiUtils;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -22,7 +28,7 @@ import world.bentobox.magiccobblestonegenerator.utils.Utils;
 /**
  * This class opens GUI that allows to manage all generators for admin.
  */
-public class BundleManagePanel extends CommonPanel
+public class BundleManagePanel extends CommonPagedPanel<GeneratorBundleObject>
 {
     // ---------------------------------------------------------------------
     // Section: Internal Constructor
@@ -38,23 +44,20 @@ public class BundleManagePanel extends CommonPanel
     {
         super(parentPanel);
         // Store bundles in local list to avoid building it every time.
-        this.bundleList = this.manager.getAllGeneratorBundles(this.world);
-
-        // Stores how many elements will be in display.
-        this.updateRows();
+        this.elementList = this.manager.getAllGeneratorBundles(this.world);
 
         // Init set with selected bundles.
-        this.selectedBundles = new HashSet<>(this.bundleList.size());
+        this.selectedBundles = new HashSet<>(this.elementList.size());
     }
 
 
     /**
-     * This method updates row count for Panel.
+     * Update filters.
      */
-    private void updateRows()
+    @Override
+    protected void updateFilters()
     {
-        this.rowCount = this.bundleList.size() > 14 ? 3 : this.bundleList.size() > 7 ? 2 : 1;
-        this.maxPageIndex = (int) Math.ceil(1.0 * this.bundleList.size() / 7 * this.rowCount) - 1;
+        // There are no filters that should be updated.
     }
 
 
@@ -69,14 +72,15 @@ public class BundleManagePanel extends CommonPanel
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "manage-bundles"));
 
-        GuiUtils.fillBorder(panelBuilder, this.rowCount + 2, Material.MAGENTA_STAINED_GLASS_PANE);
+
+        PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
         panelBuilder.item(1, this.createButton(Action.CREATE_BUNDLE));
         panelBuilder.item(2, this.createButton(Action.DELETE_BUNDLE));
 
-        this.fillBundles(panelBuilder);
+        this.populateElements(panelBuilder, this.elementList);
 
-        panelBuilder.item((this.rowCount + 2) * 9 - 1, this.createButton(Action.RETURN));
+        panelBuilder.item(44, this.returnButton);
 
         // Build panel.
         panelBuilder.build();
@@ -106,78 +110,8 @@ public class BundleManagePanel extends CommonPanel
         Material icon = Material.PAPER;
         int count = 1;
 
-        switch (button)
-        {
-            case RETURN:
-            {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
-                description.add("");
-                if (this.parentPanel != null)
-                {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-return"));
-                }
-                else
-                {
-                    description.add(this.user.getTranslation(Constants.TIPS + "click-to-quit"));
-                }
-
-                clickHandler = (panel, user, clickType, i) -> {
-
-                    if (this.parentPanel != null)
-                    {
-                        this.parentPanel.build();
-                    }
-                    else
-                    {
-                        user.closeInventory();
-                    }
-                    return true;
-                };
-
-                icon = Material.OAK_DOOR;
-
-                break;
-            }
-            case PREVIOUS:
-            {
-                count = GuiUtils.getPreviousPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-previous"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex--;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
-            case NEXT:
-            {
-                count = GuiUtils.getNextPage(this.pageIndex, this.maxPageIndex);
-                description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.NUMBER, String.valueOf(count)));
-
-                // add empty line
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-next"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.pageIndex++;
-                    this.build();
-                    return true;
-                };
-
-                icon = Material.TIPPED_ARROW;
-                break;
-            }
-            case CREATE_BUNDLE:
-            {
+        switch (button) {
+            case CREATE_BUNDLE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-create"));
@@ -189,8 +123,7 @@ public class BundleManagePanel extends CommonPanel
                     // This consumer process new bundle creating with a name and id from given
                     // consumer value..
                     Consumer<String> bundleIdConsumer = value -> {
-                        if (value != null)
-                        {
+                        if (value != null) {
                             GeneratorBundleObject newBundle = new GeneratorBundleObject();
                             newBundle.setFriendlyName(value);
                             newBundle.setUniqueId(gameModePrefix + Utils.sanitizeInput(value));
@@ -203,14 +136,10 @@ public class BundleManagePanel extends CommonPanel
                             this.manager.loadGeneratorBundle(newBundle, false, this.user);
 
                             // Add new generator to generatorList.
-                            this.bundleList.add(newBundle);
-                            // Update row count
-                            this.updateRows();
+                            this.elementList.add(newBundle);
                             // Open bundle edit panel.
                             BundleEditPanel.open(this, newBundle);
-                        }
-                        else
-                        {
+                        } else {
                             // Operation is canceled. Open this panel again.
                             this.build();
                         }
@@ -218,35 +147,31 @@ public class BundleManagePanel extends CommonPanel
 
                     // This function checks if generator with a given ID already exist.
                     Function<String, Boolean> validationFunction = bundleId ->
-                        this.manager.getBundleById(gameModePrefix + Utils.sanitizeInput(bundleId)) == null;
+                            this.manager.getBundleById(gameModePrefix + Utils.sanitizeInput(bundleId)) == null;
 
                     // Call a conversation API to get input string.
                     ConversationUtils.createIDStringInput(bundleIdConsumer,
-                        validationFunction,
-                        this.user,
-                        this.user.getTranslation(Constants.CONVERSATIONS + "write-name"),
-                        this.user.getTranslation(Constants.CONVERSATIONS + "new-object-created",
-                            Constants.WORLD, world.getName()),
-                        Constants.ERRORS + "object-already-exists");
+                            validationFunction,
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "write-name"),
+                            this.user.getTranslation(Constants.CONVERSATIONS + "new-object-created",
+                                    Constants.WORLD, world.getName()),
+                            Constants.ERRORS + "object-already-exists");
 
                     return true;
                 };
-
-                break;
             }
-            case DELETE_BUNDLE:
-            {
+            case DELETE_BUNDLE -> {
                 icon = this.selectedBundles.isEmpty() ? Material.BARRIER : Material.LAVA_BUCKET;
                 glow = !this.selectedBundles.isEmpty();
 
                 description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-                if (!this.selectedBundles.isEmpty())
-                {
+                if (!this.selectedBundles.isEmpty()) {
                     description.add(this.user.getTranslation(reference + ".list"));
                     this.selectedBundles.forEach(bundle ->
-                        description.add(this.user.getTranslation(reference + ".value",
-                            Constants.BUNDLE, bundle.getFriendlyName())));
+                            description.add(this.user.getTranslation(reference + ".value",
+                                    Constants.BUNDLE, bundle.getFriendlyName())));
 
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "click-to-remove"));
@@ -255,15 +180,13 @@ public class BundleManagePanel extends CommonPanel
 
                         // Create consumer that accepts value from conversation.
                         Consumer<Boolean> consumer = value -> {
-                            if (value)
-                            {
+                            if (value) {
                                 this.selectedBundles.forEach(bundle -> {
                                     this.manager.wipeBundle(bundle);
-                                    this.bundleList.remove(bundle);
+                                    this.elementList.remove(bundle);
                                 });
 
                                 this.selectedBundles.clear();
-                                this.updateRows();
                             }
 
                             this.build();
@@ -271,52 +194,43 @@ public class BundleManagePanel extends CommonPanel
 
                         String generatorString;
 
-                        if (!this.selectedBundles.isEmpty())
-                        {
+                        if (!this.selectedBundles.isEmpty()) {
                             Iterator<GeneratorBundleObject> iterator = this.selectedBundles.iterator();
 
                             StringBuilder builder = new StringBuilder();
                             builder.append(iterator.next().getFriendlyName());
 
-                            while (iterator.hasNext())
-                            {
+                            while (iterator.hasNext()) {
                                 builder.append(", ").append(iterator.next().getFriendlyName());
                             }
 
                             generatorString = builder.toString();
-                        }
-                        else
-                        {
+                        } else {
                             generatorString = "";
                         }
 
                         // Create conversation that gets user acceptance to delete selected generator data.
                         ConversationUtils.createConfirmation(
-                            consumer,
-                            this.user,
-                            this.user.getTranslation(Constants.CONVERSATIONS + "confirm-deletion",
-                                TextVariables.NUMBER, String.valueOf(this.selectedBundles.size()),
-                                Constants.VALUE, generatorString),
-                            this.user.getTranslation(Constants.CONVERSATIONS + "data-removed",
-                                Constants.GAMEMODE, Utils.getGameMode(this.world)));
+                                consumer,
+                                this.user,
+                                this.user.getTranslation(Constants.CONVERSATIONS + "confirm-deletion",
+                                        TextVariables.NUMBER, String.valueOf(this.selectedBundles.size()),
+                                        Constants.VALUE, generatorString),
+                                this.user.getTranslation(Constants.CONVERSATIONS + "data-removed",
+                                        Constants.GAMEMODE, Utils.getGameMode(this.world)));
 
 
                         return true;
                     };
-                }
-                else
-                {
+                } else {
                     description.add("");
                     description.add(this.user.getTranslation(Constants.TIPS + "select-before"));
 
                     // Do nothing as no generators are selected.
                     clickHandler = (panel, user1, clickType, slot) -> true;
                 }
-
-                break;
             }
-            default:
-                clickHandler = (panel, user1, clickType, slot) -> true;
+            default -> clickHandler = (panel, user1, clickType, slot) -> true;
         }
 
         return new PanelItemBuilder().
@@ -331,64 +245,13 @@ public class BundleManagePanel extends CommonPanel
 
 
     /**
-     * This method fills panel builder empty spaces with bundles tiers and adds previous next buttons if necessary.
-     *
-     * @param panelBuilder PanelBuilder that is necessary to populate.
-     */
-    private void fillBundles(PanelBuilder panelBuilder)
-    {
-        int MAX_ELEMENTS = this.rowCount * 7;
-
-        final int correctPage;
-
-        if (this.pageIndex < 0)
-        {
-            correctPage = this.bundleList.size() / MAX_ELEMENTS;
-        }
-        else if (this.pageIndex > (this.bundleList.size() / MAX_ELEMENTS))
-        {
-            correctPage = 0;
-        }
-        else
-        {
-            correctPage = this.pageIndex;
-        }
-
-        if (this.bundleList.size() > MAX_ELEMENTS)
-        {
-            // Navigation buttons if necessary
-
-            panelBuilder.item(9, this.createButton(Action.PREVIOUS));
-            panelBuilder.item(17, this.createButton(Action.NEXT));
-        }
-
-        int bundleIndex = MAX_ELEMENTS * correctPage;
-
-        // I want first row to be only for navigation and return button.
-        int index = 10;
-
-        while (bundleIndex < ((correctPage + 1) * MAX_ELEMENTS) &&
-            bundleIndex < this.bundleList.size() &&
-            index < 36)
-        {
-            if (!panelBuilder.slotOccupied(index))
-            {
-                panelBuilder.item(index,
-                    this.createBundleButton(this.bundleList.get(bundleIndex++)));
-            }
-
-            index++;
-        }
-    }
-
-
-    /**
      * This method creates button for bundle tier.
      *
      * @param bundle Bundle which button must be created.
      * @return PanelItem for bundle.
      */
-    private PanelItem createBundleButton(GeneratorBundleObject bundle)
+    @Override
+    protected PanelItem createElementButton(GeneratorBundleObject bundle)
     {
         boolean glow = this.selectedBundles.contains(bundle);
 
@@ -486,18 +349,6 @@ public class BundleManagePanel extends CommonPanel
     private enum Action
     {
         /**
-         * Return button that exists GUI.
-         */
-        RETURN,
-        /**
-         * Allows to select previous bundles in multi-page situation.
-         */
-        PREVIOUS,
-        /**
-         * Allows to select next bundles in multi-page situation.
-         */
-        NEXT,
-        /**
          * Allows to add new bundles to the bundleList.
          */
         CREATE_BUNDLE,
@@ -515,25 +366,10 @@ public class BundleManagePanel extends CommonPanel
     /**
      * This variable stores all bundles in the given world.
      */
-    private final List<GeneratorBundleObject> bundleList;
+    private final List<GeneratorBundleObject> elementList;
 
     /**
      * This variable stores all selected bundles.
      */
     private final Set<GeneratorBundleObject> selectedBundles;
-
-    /**
-     * This variable holds current pageIndex for multi-page bundle choosing.
-     */
-    private int pageIndex;
-
-    /**
-     * Stores how many elements will be in display.
-     */
-    private int rowCount;
-
-    /**
-     * This variable holds max page index for multi-page bundle choosing.
-     */
-    private int maxPageIndex;
 }

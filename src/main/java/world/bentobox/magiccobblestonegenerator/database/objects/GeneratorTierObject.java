@@ -7,11 +7,18 @@
 package world.bentobox.magiccobblestonegenerator.database.objects;
 
 
-import com.google.gson.annotations.Expose;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
-import java.util.*;
+
+import com.google.gson.annotations.Expose;
 
 import world.bentobox.bentobox.database.objects.DataObject;
 import world.bentobox.bentobox.database.objects.Table;
@@ -497,9 +504,7 @@ public class GeneratorTierObject implements DataObject
 
         // Cloning must be done like this
         TreeMap<Double, ItemStack> cloneMap = new TreeMap<>();
-        this.treasureItemChanceMap.forEach((chance, item) -> {
-            cloneMap.put(chance, item.clone());
-        });
+        this.treasureItemChanceMap.forEach((chance, item) -> cloneMap.put(chance, item.clone()));
         clone.setTreasureItemChanceMap(cloneMap);
 
         clone.setTreasureChance(this.treasureChance);
