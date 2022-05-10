@@ -151,6 +151,7 @@ public class GeneratorEditPanel extends CommonPanel
     private void populateInfo(PanelBuilder panelBuilder)
     {
         panelBuilder.item(10, this.createButton(Button.NAME));
+        panelBuilder.item(11, this.createButton(Button.ID));
         panelBuilder.item(19, this.createButton(Button.ICON));
         panelBuilder.item(28, this.createButton(Button.DESCRIPTION));
 
@@ -369,6 +370,14 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+            }
+            case ID -> {
+                description.add(this.user.getTranslation(reference + ".value",
+                    Constants.ID, this.generatorTier.getUniqueId()));
+
+                itemStack = new ItemStack(Material.COMMAND_BLOCK);
+
+                clickHandler = (panel, user, clickType, i) -> true;
             }
             case ICON, LOCKED_ICON -> {
                 itemStack = button == Button.LOCKED_ICON ?
@@ -1560,6 +1569,10 @@ public class GeneratorEditPanel extends CommonPanel
          * Holds Name type that allows to interact with generator treasure chance.
          */
         TREASURE_CHANCE,
+        /**
+         * Holds ID of the generator ID.
+         */
+        ID,
     }
 
 

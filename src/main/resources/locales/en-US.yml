@@ -281,6 +281,11 @@ stone-generator:
         description: |-
           &7 Change the bundle name.
         value: "&b Name: &r [bundle]"
+      bundle_id:
+        name: "&f&l Bundle Id"
+        description: |-
+          &7 The current bundle ID.
+        value: "&b ID: &r [id]"
       bundle_icon:
         name: "&f&l Bundle Icon"
         description: |-
@@ -331,6 +336,11 @@ stone-generator:
           &7 Title for this generator.
           &7 Supports color codes.
         value: "&b Name: &r [generator]"
+      id:
+        name: "&f&l Generator Id"
+        description: |-
+          &7 The current generator ID.
+        value: "&b ID: &r [id]"
       icon:
         name: "&f&l Generator Icon"
         description: |-
