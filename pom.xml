@@ -33,8 +33,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <powermock.version>2.0.9</powermock.version>
-        <mockito.version>4.2.0</mockito.version>
         <!-- More visible way how to change dependency versions -->
         <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>1.20.0</bentobox.version>
@@ -107,7 +105,7 @@
     <repositories>
         <repository>
             <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>codemc-repo</id>
@@ -116,7 +114,7 @@
         <!--Vault Repo is down. -->
         <repository>
             <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <url>https://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -136,25 +134,6 @@
             <artifactId>plugin-annotations</artifactId>
             <version>1.2.3-SNAPSHOT</version>
             <scope>compile</scope>
-        </dependency>
-        <!-- Mockito (Unit testing) -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito2</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>world.bentobox</groupId>
@@ -352,33 +331,6 @@
                         <phase>deploy</phase>
                         <goals>
                             <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.3</version>
-                <configuration>
-                    <append>true</append>
-                    <excludes>
-                        <!-- This is required to prevent Jacoco from adding 
-                            synthetic fields to a JavaBean class (causes errors in testing) -->
-                        <exclude>**/*Names*</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <goals>
-                            <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
