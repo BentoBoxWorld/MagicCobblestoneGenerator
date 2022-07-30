@@ -114,7 +114,7 @@ main_panel:
         data:
           type: NEXT
           indexing: true
-        action:
+        actions:
           next:
             click-type: unknown
             tooltip: stone-generator.gui.tips.click-to-next
