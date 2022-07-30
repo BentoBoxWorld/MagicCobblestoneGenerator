@@ -1,6 +1,7 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.bukkit.Bukkit;
@@ -216,6 +217,7 @@ public class StoneGeneratorAddon extends Addon
 
                     object.getActiveGeneratorList().stream().
                         map(this.stoneGeneratorManager::getGeneratorByID).
+                        filter(Objects::nonNull).
                         forEach(generator -> stringBuilder.append(generator.getFriendlyName()).append(","));
 
                     if (stringBuilder.length() > 0)
@@ -244,6 +246,7 @@ public class StoneGeneratorAddon extends Addon
                     object.getUnlockedTiers().stream().
                         sorted().
                         map(this.stoneGeneratorManager::getGeneratorByID).
+                        filter(Objects::nonNull).
                         forEach(generator -> stringBuilder.append(generator.getFriendlyName()).append(","));
 
                     if (stringBuilder.length() > 0)
@@ -272,6 +275,7 @@ public class StoneGeneratorAddon extends Addon
                     object.getPurchasedTiers().stream().
                         sorted().
                         map(this.stoneGeneratorManager::getGeneratorByID).
+                        filter(Objects::nonNull).
                         forEach(generator -> stringBuilder.append(generator.getFriendlyName()).append(","));
 
                     if (stringBuilder.length() > 0)
