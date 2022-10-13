@@ -233,7 +233,7 @@ public class GeneratorAdminCommand extends CompositeCommand
             // Set meta data on player
             Island island = this.getAddon().getIslands().getIsland(this.getWorld(), targetUUID);
 
-            if (island == null || island.getOwner() == null)
+            if (island == null || island.getOwner() == null || !island.getOwner().equals(targetUUID))
             {
                 Utils.sendMessage(user,
                     user.getTranslation("general.errors.player-is-not-owner"));
