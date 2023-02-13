@@ -824,9 +824,12 @@ public class StoneGeneratorManager
             pd.setIslandBundle(null);
 
             // Update owner data.
-            this.updateOwnerBundle(island, pd);
-            this.updateOwnerGeneratorCount(island, pd);
-            this.updateOwnerWorkingRange(island, pd);
+            if (!island.isSpawn())
+            {
+                this.updateOwnerBundle(island, pd);
+                this.updateOwnerGeneratorCount(island, pd);
+                this.updateOwnerWorkingRange(island, pd);
+            }
 
             // Save data.
             this.saveGeneratorData(pd);
@@ -907,11 +910,16 @@ public class StoneGeneratorManager
      */
     private void updateOwnerWorkingRange(@NotNull Island island, @NotNull GeneratorDataObject dataObject)
     {
-        User owner = User.getInstance(island.getOwner());
-
         // Permission check can be done only to a player object.
-        if (owner != null && owner.isPlayer())
+        if (island.getOwner() != null)
         {
+            User owner = User.getInstance(island.getOwner());
+
+            if (!owner.isPlayer())
+            {
+                return;
+            }
+
             // Update max island generation range.
             int permissionRange = Utils.getPermissionValue(owner,
                 Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.max-range"),
@@ -929,11 +937,16 @@ public class StoneGeneratorManager
      */
     private void updateOwnerGeneratorCount(@NotNull Island island, @NotNull GeneratorDataObject dataObject)
     {
-        User owner = User.getInstance(island.getOwner());
-
         // Permission check can be done only to a player object.
-        if (owner != null && owner.isPlayer())
+        if (island.getOwner() != null)
         {
+            User owner = User.getInstance(island.getOwner());
+
+            if (!owner.isPlayer())
+            {
+                return;
+            }
+
             // Update max active generator count.
             int permissionSize = Utils.getPermissionValue(owner,
                 Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.active-generators"),
@@ -951,11 +964,16 @@ public class StoneGeneratorManager
      */
     private void updateOwnerBundle(@NotNull Island island, @NotNull GeneratorDataObject dataObject)
     {
-        User owner = User.getInstance(island.getOwner());
-
         // Permission check can be done only to a player object.
-        if (owner != null && owner.isPlayer())
+        if (island.getOwner() != null)
         {
+            User owner = User.getInstance(island.getOwner());
+
+            if (!owner.isPlayer())
+            {
+                return;
+            }
+
             // Update max island generation range.
             String permissionBundle = Utils.getPermissionValue(owner,
                 Utils.getPermissionString(island.getWorld(), "[gamemode].stone-generator.bundle"),
@@ -994,7 +1012,7 @@ public class StoneGeneratorManager
 
         // If level is null, check value from addon.
         final long islandLevel = level == null ? this.getIslandLevel(island) : level;
-        final User owner = User.getInstance(island.getOwner());
+        final User owner = island.isSpawn() ? null : User.getInstance(island.getOwner());
 
         this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
             // Filter out default generators. They are always unlocked and active.
@@ -1368,7 +1386,7 @@ public class StoneGeneratorManager
         @NotNull GeneratorDataObject generatorData,
         @NotNull GeneratorTierObject generatorTier)
     {
-        final User owner = User.getInstance(island.getOwner());
+        final User owner = island.isSpawn() ? null : User.getInstance(island.getOwner());
 
         if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId()))
         {

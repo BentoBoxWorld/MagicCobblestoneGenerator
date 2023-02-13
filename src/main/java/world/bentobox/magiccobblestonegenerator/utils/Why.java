@@ -30,17 +30,22 @@ public class Why
     public static void report(@NotNull Location location, String why)
     {
         BentoBox.getInstance().getIslands().getIslandAt(location).ifPresent(island -> {
-            User owner = User.getInstance(island.getOwner());
-
-            Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
+            if (island.getOwner() != null)
+            {
+                User owner = User.getInstance(island.getOwner());
+                Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
+            }
         });
     }
 
 
     public static void report(@NotNull Island island, Location location, String why)
     {
-        User owner = User.getInstance(island.getOwner());
-        Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
+        if (island.getOwner() != null)
+        {
+            User owner = User.getInstance(island.getOwner());
+            Why.report(StoneGeneratorAddon.getInstance(), owner, location, why);
+        }
     }
 
 
@@ -88,44 +93,5 @@ public class Why
                 }
             }
         }
-    }
-
-
-    /**
-     * This is a general Reason enum that contains all possible values for reporting an debug message.
-     */
-    public enum Reason
-    {
-        UNDEFINED("name", "value");
-
-
-        Reason(String key, String value)
-        {
-            this.key = key;
-            this.value = value;
-        }
-
-
-        public String getKey()
-        {
-            return key;
-        }
-
-
-        public String getValue()
-        {
-            return value;
-        }
-
-
-        /**
-         * This variable stores string text for key.
-         */
-        private String key;
-
-        /**
-         * This variable stores text.
-         */
-        private String value;
     }
 }

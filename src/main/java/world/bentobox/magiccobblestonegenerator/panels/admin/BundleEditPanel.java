@@ -143,6 +143,7 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
     {
         // Users should see only icon
         panelBuilder.item(13, this.createButton(Button.BUNDLE_NAME));
+        panelBuilder.item(22, this.createButton(Button.BUNDLE_ID));
         panelBuilder.item(11, this.createButton(Button.BUNDLE_ICON));
         panelBuilder.item(14, this.createButton(Button.BUNDLE_DESCRIPTION));
     }
@@ -227,6 +228,14 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
                         Constants.BUNDLE, this.bundle.getFriendlyName()));
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+            }
+            case BUNDLE_ID -> {
+                itemStack = new ItemStack(Material.COMMAND_BLOCK);
+
+                clickHandler = (panel, user, clickType, i) -> true;
+
+                description.add(this.user.getTranslation(reference + ".value",
+                        Constants.ID, this.bundle.getUniqueId()));
             }
             case BUNDLE_ICON -> {
                 itemStack = this.bundle.getGeneratorIcon();
@@ -641,6 +650,10 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
          * Holds Name type that allows to interact with bundle name.
          */
         BUNDLE_NAME,
+        /**
+         * Holds ID type.
+         */
+        BUNDLE_ID,
         /**
          * Holds Name type that allows to interact with bundle icon.
          */
