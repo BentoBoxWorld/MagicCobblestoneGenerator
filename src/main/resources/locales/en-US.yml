@@ -700,16 +700,30 @@ stone-generator:
           description: |-
             &7 Works only with cobblestone
             &7 generators.
+            
+            &6&o Hint:
+            &6&o Forms when a lava stream 
+            &6&o comes into contact with
+            &6&o water.
         stone:
           name: "&f&l Stone"
           description: |-
             &7 Works only with stone
             &7 generators.
+            
+            &6&o Hint:
+            &6&o Forms when lava flows
+            &6&o on top of water blocks.
         basalt:
           name: "&f&l Basalt"
           description: |-
             &7 Works only with basalt
             &7 generators.
+            
+            &6&o Hint:
+            &6&o Forms when lava flows
+            &6&o on top of soul soil and
+            &6&o is adjacent to blue ice.
         cobblestone_or_stone:
           name: "&f&l Cobblestone or Stone"
           description: |-
