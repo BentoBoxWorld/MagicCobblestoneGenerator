@@ -981,7 +981,7 @@ stone-generator:
     # Message that appears after admin clicks on database exporting button.
     exported-file-name: "&e Please enter a file name for the exported database file. (write 'cancel' to exit)"
     # Message that appears after successful database exporting to file.
-    database-export-completed: "&a Success, the database export for [world] is completed. File [file] generated."
+    database-export-completed: "&a Success, the database export for [world] is completed. File generated in addon directory."
     # Message that appears if input file name is already taken.
     file-name-exist: "&c File with name '[id]' exists. Cannot overwrite."
     # Message that appears after admin clicks on editing bundle name button.
