@@ -351,7 +351,7 @@ public class LibraryPanel extends CommonPagedPanel<LibraryEntry>
             this.user,
             this.user.getTranslation(Constants.CONVERSATIONS + "confirm-data-replacement",
                 Constants.GAMEMODE, Utils.getGameMode(this.world)),
-            this.user.getTranslation(Constants.CONVERSATIONS + "new-data-imported",
+            this.user.getTranslation(Constants.CONVERSATIONS + "new-generators-imported",
                 Constants.GAMEMODE, Utils.getGameMode(this.world)));
     }
 
