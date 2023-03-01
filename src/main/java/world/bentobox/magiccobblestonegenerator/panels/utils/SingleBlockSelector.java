@@ -153,7 +153,7 @@ public class SingleBlockSelector extends PagedSelector<Material>
 	 */
 	private PanelItem createButton()
 	{
-		final String reference = Constants.BUTTON + "cancel.";
+		final String reference = Constants.BUTTON + "return.";
 
 		final String name = this.user.getTranslation(reference + "name");
 		final List<String> description = new ArrayList<>(3);
@@ -186,7 +186,7 @@ public class SingleBlockSelector extends PagedSelector<Material>
 	@Override
 	protected PanelItem createElementButton(Material material)
 	{
-		final String reference = Constants.BUTTON + "material.";
+		final String reference = Constants.BUTTON + "material-icon.";
 
 		List<String> description = new ArrayList<>();
 
