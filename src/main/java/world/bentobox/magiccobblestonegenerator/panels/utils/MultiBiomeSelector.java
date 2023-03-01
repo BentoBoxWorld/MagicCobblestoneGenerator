@@ -231,7 +231,7 @@ public class MultiBiomeSelector extends PagedSelector<Biome>
     protected PanelItem createElementButton(Biome biome)
     {
         List<String> description = new ArrayList<>();
-        description.add(this.user.getTranslationOrNothing(Constants.MATERIALS + biome.name() + ".description"));
+        description.add(this.user.getTranslationOrNothing(Constants.BIOMES + biome.name() + ".description"));
 
         // Add empty line
         if (!description.get(0).isEmpty())
