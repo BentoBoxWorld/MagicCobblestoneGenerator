@@ -842,6 +842,7 @@ stone-generator:
     click-text-to-activate: "&e &r [jeneratör]&r&e'nin kilidini açtınız! Şimdi etkinleştirmek
       için buraya tıklayın."
   materials:
+    cobblestone: Kırıktaş
     stone:
       name: Taş
   biomes:
