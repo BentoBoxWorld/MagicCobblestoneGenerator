@@ -6,7 +6,7 @@ stone-generator:
         description: Magic Cobblestone Generator Yönetici Komutu
       import:
         description: Sihir üreteçlerini içe aktarır
-        confirmation: Bu, mevcut oluşturucuları [oyun modu]'ndan kaldıracak ve şablon
+        confirmation: Bu, mevcut oluşturucuları [gamemode]'ndan kaldıracak ve şablon
           dosyasından yeni oluşturucuları içe aktaracak - lütfen onaylayın
       why:
         parameters: "<oyuncu>"
@@ -16,8 +16,8 @@ stone-generator:
       import-database:
         parameters: "<dosya>"
         description: sihirli jeneratörler veritabanı dosyasını içe aktarır
-        confirmation: Bu, [oyun modu] için mevcut oluşturucuları kaldıracak ve oluşturucuları
-          veritabanı dosyasından içe aktaracaktır - lütfen onaylayın
+        confirmation: Bu, mevcut oluşturucuları [generator]'ndan kaldıracak ve şablon
+          dosyasından yeni oluşturucuları içe aktaracak - lütfen onaylayın
       export:
         parameters: "<dosya>"
         description: Sihir üreteçleri veritabanını Oyun Modundan dosyaya aktarın
@@ -36,13 +36,13 @@ stone-generator:
   gui:
     titles:
       player-panel: "&0&l Jeneratörler"
-      view-generator: "&0&l Oluşturucu: &r [oluşturucu]"
+      view-generator: "&0&l Oluşturucu: &r [generator]"
       admin-panel: "&0&l Yönetici Paneli"
       select-biome: "&0&l Biyomları Seçin"
       select-block: "&0&l Blok Seç"
       select-bundle: "&0&l Paket Seç"
       select-type: "&0&l Oluşturucu Türünü Seçin"
-      view-bundle: "&0&l Paketi: &r [paket]"
+      view-bundle: "&0&l Paketi: &r [bundle]"
       manage-bundles: "&0&l Paketleri Yönet"
       manage-generators: "&0&l Oluşturucuları Yönet"
       view-island: "&0&l Adası: [ada]"
@@ -64,20 +64,20 @@ stone-generator:
           &7 sayısı tercih edilirse
           &7 birden fazla bir uygulanabilir
           &7 aynı yere.
-        value: "&b Öncelik: &7 [sayı]"
+        value: "&b Öncelik: &7 [bundle]"
       type:
         name: "&f&l Jeneratör Tipi"
         description: |-
           &7 Hangi jeneratör tipini tanımlar
           &7 şu anki duruma uygulanacak
           &7 jeneratör.
-        value: "&b Tür: &7 [tür]"
+        value: "&b Tür: &7 [bundle]"
       required_min_level:
         name: "&f&l Minimum Ada Seviyesi"
         description: |-
           &7 Minimum ada seviyesi
           &7 bu jeneratörün kilidini aç.
-        value: "&b Gerekli Minimum Düzey: [sayı]"
+        value: "&b Gerekli Minimum Düzey: [number]"
       required_permissions:
         name: "&f&l Gerekli İzinler"
         description: |-
@@ -85,41 +85,41 @@ stone-generator:
           Kilidi açmak için &7 gereklidir
           &7 bu jeneratör.
         list: "&b Gerekli İzinler:"
-        value: "&b - [izin]"
+        value: "&b - [permission]"
         none: "&b - yok"
       purchase_cost:
         name: "&f&l Satın Alma Maliyeti"
         description: |-
           &7 Kredi gerekli
           &7 bu jeneratörü satın alın.
-        value: "&b Maliyet: [sayı]"
+        value: "&b Maliyet: [number]"
       activation_cost:
         name: "&f&l Aktivasyon Maliyeti"
         description: |-
           &7 Kredi gerekli
           &7 etkinleştir veya yeniden etkinleştir
           &7 bu jeneratör.
-        value: "&b Maliyet: [sayı]"
+        value: "&b Maliyet: [number]"
       biomes:
         name: "&f&l Operasyonel Biyomlar"
         description: |-
           &7 Bunun olduğu biyomların listesi
           &7 jeneratör çalışabilir.
         list: "&b Biyomları:"
-        value: "&b - [biyom]"
+        value: "&b - [biome]"
         any: "&b - herhangi biri"
       treasure_amount:
         name: "&f&l Hazine Miktarı"
         description: |-
           &7 Maksimum hazine miktarı
           &7 bir kerede bırakılabilir.
-        value: "&b Miktarı: [sayı]"
+        value: "&b Miktarı: [number]"
       treasure_chance:
         name: "&f&l Hazine Şansı"
         description: |-
           &7 Hazine olma şansı
           &7 nesilden nesile düştü.
-        value: "&b Şans: [sayı]"
+        value: "&b Şans: [number]"
       info:
         name: "&f&l Genel Bilgiler"
         description: |-
@@ -141,13 +141,13 @@ stone-generator:
           &7 Sürükle ve bırak özelliğini destekler
           &7 öğe boşlukları boşaltın.
       block-icon:
-        name: "&f&l [malzeme]"
+        name: "&f&l [material]"
         description: "&b Şans: [#.##]"
-        actual: "&b Veritabanı değeri: [sayı]"
+        actual: "&b Veritabanı değeri: [number]"
       treasure-icon:
-        name: "&f&l [malzeme]"
+        name: "&f&l [material]"
         description: "&b Şans: [#.####]"
-        actual: "&b Veritabanı değeri: [sayı]"
+        actual: "&b Veritabanı değeri: [number]"
       show_cobblestone:
         name: "&f&l Parke Taşı Jeneratörleri"
         description: |-
@@ -181,7 +181,7 @@ stone-generator:
         description: "&7 Geçerli menüden çık"
       previous:
         name: "&f&l Önceki Sayfa"
-        description: "&7 [sayı] sayfasına geç"
+        description: "&7 [number] sayfasına geç"
       next:
         name: "&f&l Sonraki Sayfa"
         description: "&7 [sayı] sayfasına geç"
@@ -243,7 +243,7 @@ stone-generator:
       bundle_name:
         name: "&f&l Paket Adı"
         description: "&7 Paket adını değiştirin."
-        value: "&b İsim: &r [paket]"
+        value: "&b İsim: &r [bundle]"
       bundle_id:
         name: "&f&l Paket Kimliği"
         description: "&7 Geçerli paket kimliği."
@@ -269,14 +269,14 @@ stone-generator:
           &7 Bir jeneratör atayın
           &7 bu pakete.
         list: "&b Seçilen Jeneratörler:"
-        value: "&b - [jeneratör]"
+        value: "&b - [generator]"
       remove_generator:
         name: "&f&l Jeneratörü Kaldır"
         description: |-
           &7 Jeneratörü kaldır
           Bu paketten &7.
         list: "&b Seçilen Jeneratörler:"
-        value: "&b - [jeneratör]"
+        value: "&b - [generator]"
       create_bundle:
         name: "&f&l Paket Oluştur"
         description: |-
@@ -288,17 +288,17 @@ stone-generator:
           &7 Şuradan bir paketi kaldır:
           &7 bu oyun modu tamamen.
         list: "&b Seçilen Paketler:"
-        value: "&b - [paket]"
+        value: "&b - [bundle]"
       name:
         name: "&f&l Oluşturucu Adı"
         description: |-
           &7 Bu oluşturucu için başlık.
           &7 Renk kodlarını destekler.
-        value: "&b İsim: &r [jeneratör]"
+        value: "&b İsim: &r [generator]"
       id:
         name: "&f&l Oluşturucu Kimliği"
         description: "&7 Geçerli üretici kimliği."
-        value: "&b Kimliği: &r [kimlik]"
+        value: "&b Kimliği: &r [id]"
       icon:
         name: "&f&l Oluşturucu Simgesi"
         description: |-
@@ -336,7 +336,7 @@ stone-generator:
           &7 Seçileni kaldır
           Listeden &7 malzeme.
         selected-materials: "&7 Seçilen Malzemeler:"
-        list-value: "&7 - [sayı] x [değer]"
+        list-value: "&7 - [number] x [value]"
       create_generator:
         name: "&f&l Jeneratör Oluştur"
         description: |-
@@ -349,16 +349,16 @@ stone-generator:
           &7 Jeneratörü kaldır
           &7 tamamen oyun modundan.
         list: "&b Seçilen Jeneratörler:"
-        value: "&b - [jeneratör]"
+        value: "&b - [generator]"
       island_name:
-        name: "&f&l [isim]"
+        name: "&f&l [name]"
         description: |-
-          &7 [sahip]
-          &b [üyeler]
-          &b Ada Kimliği: &7 [kimlik]
-        owner: "&b Sahip: [oyuncu]"
+          &7 [owner]
+          &b [members]
+          &b Ada Kimliği: &7 [id]
+        owner: "&b Sahip: [player]"
         list: "&b Üyeleri:"
-        value: "&b - [oyuncu]"
+        value: "&b - [player]"
       island_working_range:
         name: "&f&l Ada Çalışma Alanı"
         description: |-
@@ -366,7 +366,7 @@ stone-generator:
           &7 mevcut adada.
           &7 0 ve altı sınırsız demektir
           &7 aralığı.
-        value: "&b Aralık: [sayı]"
+        value: "&b Aralık: [number]"
         overwritten: |-
           &c Sahibin şu izni var:
           &c çalışma aralığının üzerine yazar.
@@ -380,9 +380,9 @@ stone-generator:
           &7 '-1', sahibin sahip olduğu anlamına gelir
           &7 sınırsız çalışma aralığı.
           "&7 Kullanıcının atama izni:"
-          "&7&o '[oyun modu].taş oluşturucu."
+          "&7&o '[gamemode].taş oluşturucu."
           "&7&o maksimum aralık.<sayı>'"
-        value: "&b Aralık: [sayı]"
+        value: "&b Aralık: [number]"
       island_max_generators:
         name: "&f&l Max Island Jeneratörleri"
         description: |-
@@ -392,7 +392,7 @@ stone-generator:
           Mevcut ada için &7.
           &7 0 ve aşağısı şu anlama gelir:
           &7 sınırsız.
-        value: "&b Maks Jeneratörler: [sayı]"
+        value: "&b Maks Jeneratörler: [number]"
         overwritten: |-
           &c Sahibin şu izni var:
           &c, oluşturucu sayısının üzerine yazar.
@@ -407,9 +407,9 @@ stone-generator:
           &7 '-1', sahibin sahip olduğu anlamına gelir
           &7 sınırsız jeneratör sayısı.
           "&7 Kullanıcının atama izni:"
-          "&7&o '[oyun modu].taş oluşturucu."
+          "&7&o '[gamemode].taş oluşturucu."
           "&7&o aktif oluşturucular.<sayı>'"
-        value: "&b Maks Jeneratörler: [sayı]"
+        value: "&b Maks Jeneratörler: [number]"
       island_bundle:
         name: "&f&l Ada Paketi"
         description: |-
@@ -418,7 +418,7 @@ stone-generator:
           &7 Yalnızca bundan üreteçler
           &7 paketi şu adreste kullanılabilir:
           &7 adası.
-        value: "&b Paketi: [paket]"
+        value: "&b Paketi: [bundle]"
         overwritten: |-
           &c Sahibin şu izni var:
           &c paketin üzerine yazar.
@@ -431,9 +431,9 @@ stone-generator:
           &7 paketi şu adreste kullanılabilir:
           &7 adası.
           "&7 Kullanıcının atama izni:"
-          "&7&o '[oyun modu].taş oluşturucu."
+          "&7&o '[gamemode].taş oluşturucu."
           "&7&o paketi.<paket kimliği>'"
-        value: "&b Paketi: [paket]"
+        value: "&b Paketi: [bundle]"
       island_info:
         name: "&f&l Genel Bilgiler"
         description: |-
@@ -464,7 +464,7 @@ stone-generator:
         description: |-
           &7 Belirli bir arama
           &7 adası.
-        search: "&b Değer: [değer]"
+        search: "&b Değer: [value]"
       offline_generation:
         name: "&f&l Çevrimdışı Oluşturma"
         description: |-
@@ -500,7 +500,7 @@ stone-generator:
           &7 0 ve altı sınırsız demektir.
           &7 Ayar, sunucu gerektirir
           &7 etkinleştirmek için yeniden başlatın.
-        value: "&b Aralık: [sayı]"
+        value: "&b Aralık: [number]"
       active_generators:
         name: "&f&l Varsayılan Etkin Oluşturucular"
         description: |-
@@ -508,7 +508,7 @@ stone-generator:
           &7 aktif jeneratör
           &7 aynı anda.
           &7 0 ve altı sınırsız demektir.
-        value: "&b Sayısı: [sayı]"
+        value: "&b Sayısı: [number]"
       show_filters:
         name: "&f&l Filtreleri Göster"
         description: |-
@@ -556,37 +556,37 @@ stone-generator:
         enabled: "&b Aktivasyonda devre dışı bırak &a etkin &b."
         disabled: "&b Aktivasyonda Devre Dışı Bırak, &c devre dışıdır &b."
       library:
-        name: "&f&l [isim]"
+        name: "&f&l [name]"
         description: |-
-          &7 [açıklama]
-          &7 Yazar: [yazar]
-          &7 [oyun modu] için düzenlendi
-          &7 Dil: [dil]
-          &7 Versiyon: [versiyon]
+          &7 [description]
+          &7 Yazar: [author]
+          &7 [gamemode] için düzenlendi
+          &7 Dil: [lang]
+          &7 Versiyon: [version]
       accept_blocks:
         name: "&f&l Engellemeleri kabul et"
         description: |-
           &7 Seçilen blokları kabul eder
           &7 ve döner.
         selected-blocks: "&7 Seçilen Bloklar:"
-        list-value: "&7 - [değer]"
+        list-value: "&7 - [value]"
       material-icon:
-        name: "&f&l [malzeme]"
+        name: "&f&l [material]"
       search_block:
         name: "&f&l Ara"
         description: |-
           &7 Belirli bir arama
           &7 blok.
-        search: "&b Değer: [değer]"
+        search: "&b Değer: [value]"
       accept_biome:
         name: "&f&l Biyomları kabul et"
         description: |-
           &7 Seçilen biyomları kabul eder
           &7 ve döner.
         selected-biomes: "&7 Seçilen Biyomlar:"
-        list-value: "&7 - [değer]"
+        list-value: "&7 - [value]"
       biome-icon:
-        name: "&f&l [biyom]"
+        name: "&f&l [biome]"
       biome-groups:
         temperate:
           name: "&f&l Ilıman"
@@ -707,35 +707,35 @@ stone-generator:
     descriptions:
       generator:
         lore: |-
-          [Tanım]
-          [bloklar]
-          [hazineler]
-          [tip]
-          [Gereksinimler]
-          [durum]
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [requirements]
+          [status]
         blocks:
           title: "&7&l Bloklar:"
-          value: "&8 [malzeme] - %[#.##]"
+          value: "&8 [material] - %[#.##]"
         treasures:
           title: "&7&l Hazine:"
-          value: "&8 [malzeme] - %[#.####]"
+          value: "&8 [material] - %[#.##]"
         requirements:
           description: |-
-            [biyomlar]
-            [seviye]
-            [eksik izinler]
-          level: "&c&l Gerekli Düzey: &r&c [sayı]"
+            [biomes]
+            [level]
+            [missing-permission]
+          level: "&c&l Gerekli Düzey: &r&c [number]"
           permission-title: "&c&l Eksik İzinler:"
-          permission: "&c -[izin]"
+          permission: "&c -[permission]"
           biome-title: "&7&l Şurada çalışır:"
-          biome: "&8 [biyom]"
+          biome: "&8 [biome]"
           any: "&7&l &e&o tüm &r&7&l biyomlarında çalışır"
         status:
           locked: "&c Kilitli!"
           undeployed: "&c Dağıtılmadı!"
           active: "&2 Aktif"
-          purchase-cost: "&e Satın Alma Maliyeti: $[sayı]"
-          activation-cost: "&e Etkinleştirme Maliyeti: $[sayı]"
+          purchase-cost: "&e Satın Alma Maliyeti: $[number]"
+          activation-cost: "&e Etkinleştirme Maliyeti: $[number]"
         type:
           title: "&7&l Destekler:"
           cobblestone: "&8 Parke Taşı Jeneratörü"
@@ -745,38 +745,39 @@ stone-generator:
       bundle-permission: |-
         &7 Olması gereken izin
         &7 oyuncuya atandı:
-        &7&o [oyun modu].stone-generator.bundle.[id]
+        &7&o [gamemode].stone-generator.bundle.[id]
       generators: "&7 Paket Üreticileri:"
-      generator-list: "&7 - [jeneratör]"
+      generator-list: "&7 - [generator]"
       selected: "&e Seçildi"
-      island-owner: "[oyuncunun] adası"
+      island-owner: "[player] adası"
       spawn-island: "&e&l Spawn adası"
       unknown: Bilinmeyen
   messages:
-    generator-loaded: "&a Jeneratör &r '[jeneratör]' &r&a yerel önbelleğe yüklendi."
-    bundle-loaded: "&a Paket &r '[paket]' &r&a yerel önbelleğe yüklenir."
-    generator-deactivated: "&e Jeneratör &r '[jeneratör]' &r&e devre dışı bırakıldı."
+    generator-loaded: "&a Jeneratör &r '[generator]' &r&a yerel önbelleğe yüklendi."
+    bundle-loaded: "&a Paket &r '[bundle]' &r&a yerel önbelleğe yüklenir."
+    generator-deactivated: "&e Jeneratör &r '[generator]' &r&e devre dışı bırakıldı."
     active-generators-reached: "&c Çok fazla jeneratör etkinleştirildi. Yenisini etkinleştirmeden
       önce bazılarını devre dışı bırakmayı deneyin."
-    generator-cannot-be-unlocked: "&c Jeneratör &r '[jeneratör]' &r&c kilidi açık
+    generator-cannot-be-unlocked: "&c Jeneratör &r '[generator]' &r&c kilidi açık
       değil."
-    generator-not-unlocked: "&c Jeneratör &r '[jeneratör]' &r&c kilidi açık değil."
-    generator-not-purchased: "&c Jeneratör &r '[jeneratör]' &r&c satın alınmadı."
+    generator-not-unlocked: "&c Jeneratör &r '[generator]' &r&c kilidi açık değil."
+    generator-not-purchased: "&c Jeneratör &r '[generator]' &r&c satın alınmadı."
     no-credits: "&c Jeneratörü etkinleştirmek için yeterli kredi yok. Etkinleştirme
       [sayı] kredi gerektirir."
     no-credits-bank: "&c Banka hesabınızda jeneratörü etkinleştirmek için yeterli
-      kredi yok. Etkinleştirme [sayı] kredi gerektirir."
-    generator-activated: "&e Jeneratör &r '[jeneratör]' &r&e etkinleştirildi."
+      kredi yok. Etkinleştirme [number] kredi gerektirir."
+    generator-activated: "&e Jeneratör &r '[generator]' &r&e etkinleştirildi."
     generator-purchased: "&e Generator &r '[generator]' &r&e satın alındı."
-    generator-already-purchased: "&c Jeneratör &r '[jeneratör]' &r&c zaten satın alındı."
-    island-level-not-reached: "&c Jeneratör &r '[jeneratör]' &r&c, [sayı] ada seviyesi
+    generator-already-purchased: "&c Jeneratör &r '[generator]' &r&c zaten satın alındı."
+    island-level-not-reached: "&c Jeneratör &r '[generator]' &r&c, [number] ada seviyesi
       gerektirir."
-    missing-permission: "&c Jeneratör &r '[jeneratör]' &r&c, ''[izin]' izni gerektiriyor."
+    missing-permission: "&c Jeneratör &r '[generator]' &r&c, ''[permission]' izni
+      gerektiriyor."
     no-credits-buy: "&c Jeneratör satın almak için yeterli kredi yok. Bu jeneratör
-      [sayı] krediye mal oldu."
-    no-credits-buy-bank: "&c Banka hesabınızda yeterli kredi yok. Bu jeneratör [sayı]
+      [number] krediye mal oldu."
+    no-credits-buy-bank: "&c Banka hesabınızda yeterli kredi yok. Bu jeneratör [number]
       krediye mal oldu."
-    import-count: "&e [generator] yeni oluşturucular ve [paket] yeni paketler içe
+    import-count: "&e [generator] yeni oluşturucular ve [bundle] yeni paketler içe
       aktarıldı."
     start-downloading: "&e Kitaplığı indirmeye başla."
   errors:
@@ -785,12 +786,12 @@ stone-generator:
     no-bundle-data: "&c Geçerli bir paket verisi bulunamadı"
     no-library-entries: "&c Herhangi bir kitaplık girişi bulunamadı!"
     no-file: "&c `[dosya]` dosyası bulunamadı. İçe aktarma gerçekleştirilemiyor."
-    no-load: '&c "[file]" dosyası yüklenemedi. Okunurken hata oluştu: [açıklama].'
+    no-load: '&c "[file]" dosyası yüklenemedi. Okunurken hata oluştu: [description].'
     not-a-gamemode-world: "&c World '[world]' bir Oyun Modu Eklentisi dünyası değildir."
-    file-exist: '&c "[dosya]" dosyası zaten var. Farklı bir isim seçin.'
+    file-exist: '&c "[file]" dosyası zaten var. Farklı bir isim seçin.'
     generator-tier-not-found: "&c '[generator]' kimliğine sahip Jeneratör &r&c [gamemode]'da
       bulunamadı."
-    no-generators-in-world: "&c [dünya] içinde sizin için uygun jeneratör yok"
+    no-generators-in-world: "&c [world] içinde sizin için uygun jeneratör yok"
     could-not-remove-money: "&c Para çekerken bir şeyler ters gitti."
   conversations:
     confirm-string: doğru, açık, evet, onayla, y, geçerli, doğru
@@ -799,23 +800,23 @@ stone-generator:
     exit-string: iptal etmek, çıkmak, çıkmak
     cancelled: "&c Görüşme iptal edildi!"
     prefix: "&l&6 [BentoBox]: &r"
-    numeric-only: "&c Verilen [değer] bir sayı değil!"
-    not-valid-value: "&c Verilen sayı [değer] geçerli değil. [min] değerinden büyük
-      ve [maks] değerinden küçük olmalıdır!"
+    numeric-only: "&c Verilen [value] bir sayı değil!"
+    not-valid-value: "&c Verilen sayı [value] geçerli değil. [min] değerinden büyük
+      ve [max] değerinden küçük olmalıdır!"
     new-description: "&a Yeni açıklama:"
     write-search: "&e Lütfen bir arama değeri yazın. (çıkmak için 'iptal' yazın)"
     search-updated: "&a Arama değeri güncellendi."
-    confirm-island-data-deletion: "&e [oyun modu] için tüm kullanıcı verilerini veritabanından
+    confirm-island-data-deletion: "&e [gamemode] için tüm kullanıcı verilerini veritabanından
       silmek istediğinizi onaylayın."
-    user-data-removed: "&a Başarılı, [oyun modu] için tüm kullanıcı verileri kaldırıldı!"
-    confirm-generator-data-deletion: "&e [oyun modu] için tüm oluşturucu verilerini
+    user-data-removed: "&a Başarılı, [gamemode] için tüm kullanıcı verileri kaldırıldı!"
+    confirm-generator-data-deletion: "&e [gamemode] için tüm oluşturucu verilerini
       veritabanından silmek istediğinizi onaylayın."
-    generator-data-removed: "&a Başarılı, [oyun modu] için tüm oluşturucu verileri
+    generator-data-removed: "&a Başarılı, [gamemode] için tüm oluşturucu verileri
       kaldırıldı!"
     exported-file-name: "&e Lütfen dışa aktarılan veritabanı dosyası için bir dosya
       adı girin. (çıkmak için 'iptal' yazın)"
-    database-export-completed: "&a Başarılı, [world] için veritabanı dışa aktarımı
-      tamamlandı. Dosya [dosya] oluşturuldu."
+    database-export-completed: "&a Başarılı, [world] için veri tabanı dışa aktarımı
+      tamamlandı. Dosya [file] oluşturuldu."
     file-name-exist: "&c Adı '[id]' olan dosya var. Üzerine yazılamaz."
     write-name: "&e Lütfen sohbette yeni bir ad girin."
     name-changed: "&a Başarılı, ad güncellendi."
@@ -825,7 +826,7 @@ stone-generator:
     new-object-created: "&a Başarılı, [world] içinde yeni nesne yaratıldı."
     object-already-exists: "&c `[id]` nesnesi zaten oyun modunda tanımlanmış. Farklı
       olanı seçin."
-    confirm-deletion: "&e [sayı] nesneyi silmek istediğinizi onaylayın: ([değer])"
+    confirm-deletion: "&e [number] nesneyi silmek istediğinizi onaylayın: ([value])"
     data-removed: "&a Başarılı, veriler kaldırıldı!"
     input-number: "&e Lütfen sohbette bir numara girin."
     write-permissions: "&e Lütfen sohbette her satıra bir tane olmak üzere gerekli
@@ -833,13 +834,13 @@ stone-generator:
     permissions-changed: "&a Başarılı, oluşturucu izinleri güncellendi."
     confirm-data-replacement: "&e Lütfen mevcut jeneratörlerinizi yenisiyle değiştirmek
       istediğinizi onaylayın."
-    new-generators-imported: "&a Başarılı, [oyun modu] için yeni oluşturucular içe
+    new-generators-imported: "&a Başarılı, [gamemode] için yeni oluşturucular içe
       aktarıldı."
-    click-text-to-purchase: "&e &r [jeneratör]&r&e'nin kilidini açtınız! Şimdi [sayı]
+    click-text-to-purchase: "&e &r [generator]&r&e'nin kilidini açtınız! Şimdi [number]
       için satın almak için buraya tıklayın."
-    click-text-to-activate-vault: "&e &r [jeneratör]&r&e'nin kilidini açtınız! [sayı]
+    click-text-to-activate-vault: "&e &r [generator]&r&e'nin kilidini açtınız! [number]
       için şimdi etkinleştirmek üzere buraya tıklayın."
-    click-text-to-activate: "&e &r [jeneratör]&r&e'nin kilidini açtınız! Şimdi etkinleştirmek
+    click-text-to-activate: "&e &r [generator]&r&e'nin kilidini açtınız! Şimdi etkinleştirmek
       için buraya tıklayın."
   materials:
     cobblestone: Kırıktaş
