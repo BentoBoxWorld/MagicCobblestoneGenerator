@@ -45,7 +45,7 @@ stone-generator:
       view-bundle: "&0&l Paketi: &r [bundle]"
       manage-bundles: "&0&l Paketleri Yönet"
       manage-generators: "&0&l Oluşturucuları Yönet"
-      view-island: "&0&l Adası: [ada]"
+      view-island: "&0&l Adası: [island]"
       manage-islands: "&0&l Ada Verilerini Yönet"
       library: "&0&l Kitaplık"
       settings: "&0&l Ayarları"
