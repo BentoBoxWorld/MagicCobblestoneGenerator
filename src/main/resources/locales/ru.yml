@@ -37,12 +37,15 @@ stone-generator:
   gui:
     titles:
       player-panel: "&0&l Генераторы"
+      view-generator: "&0&l Генератор: &r [generator]"
       admin-panel: "&0&l Панель администратора"
       select-biome: "&0&l Выбрать биомы"
       select-bundle: "&0&l Выбрать пакет"
       select-type: "&0&l Выбор типа генератора"
+      view-bundle: "&0&l Пакет: &r [bundle]"
       manage-bundles: "&0&l Управление пакетами"
       manage-generators: "&0&l Управление генераторами"
+      view-island: "&0&l Остров: [island]"
       manage-islands: "&0&l Управление данными острова"
       library: "&0&l Библиотека"
       settings: "&0&l Настройки"
@@ -58,52 +61,61 @@ stone-generator:
           &7 число будет предпочтительным, если
           &7 можно применить несколько
           &7 в то же место.
+        value: "&b Приоритет: &7 [number]"
       type:
         name: "&f&l Тип генератора"
         description: |-
           &7 Определяет, какой тип генератора
           &7 будет применяться к текущему
           &7 генератор.
+        value: "&b Тип: &7 [type]"
       required_min_level:
         name: "&f&l Минимальный уровень острова"
         description: |-
           &7 Минимальный уровень острова до
           &7 разблокировать этот генератор.
+        value: "&b Минимальный требуемый уровень: [number]"
       required_permissions:
         name: "&f&l Необходимые разрешения"
         description: |-
           &7 Список разрешений, которые
           &7 необходимы для разблокировки
           &7 этот генератор.
+        value: "&b - [permission]"
         none: "&б - нет"
       purchase_cost:
         name: "&f&l Стоимость покупки"
         description: |-
           &7 Кредиты, необходимые для
           &7 купить этот генератор.
+        value: "&b Стоимость: [number]"
       activation_cost:
         name: "&f&l Стоимость активации"
         description: |-
           &7 Кредиты, необходимые для
           &7 активировать или повторно активировать
           &7 этот генератор.
+        value: "&b Стоимость: [number]"
       biomes:
         name: "&f&l Операционные биомы"
         description: |-
           &7 Список биомов, в которых
           Генератор &7 может работать.
         list: "&b Биомы:"
+        value: "&b - [biome]"
         any: "&б - любой"
       treasure_amount:
         name: "&f&l Количество сокровищ"
         description: |-
           &7 Максимальное количество сокровищ
           &7, которые можно отбросить сразу.
+        value: "&b Сумма: [number]"
       treasure_chance:
         name: "&f&l Шанс сокровища"
         description: |-
           &7 Шанс найти сокровище
           &7 выпадает при генерации.
+        value: "&b Шанс: [number]"
       info:
         name: "&f&l Общая информация"
         description: |-
@@ -125,9 +137,13 @@ stone-generator:
           &7 Поддерживает перетаскивание
           &7 элементов на пустые места.
       block-icon:
+        name: "&f&l [material]"
         description: "&b Шанс: [#.##]"
+        actual: "&b Значение базы данных: [number]"
       treasure-icon:
+        name: "&f&l [material]"
         description: "&b Шанс: [#.####]"
+        actual: "&b Значение базы данных: [number]"
       show_cobblestone:
         name: "&f&l Генераторы булыжника"
         description: |-
@@ -160,8 +176,10 @@ stone-generator:
         description: "&7 Выйти из текущего меню"
       previous:
         name: "&f&l Предыдущая страница"
+        description: "&7 Перейти на [number] страницы"
       next:
         name: "&f&l Следующая страница"
+        description: "&7 Перейти на [number] страницы"
       manage_users:
         name: "&f&l Управление данными острова"
         description: |-
@@ -216,7 +234,11 @@ stone-generator:
       bundle_name:
         name: "&f&l Имя пакета"
         description: "&7 Измените имя пакета."
-      bundle_id: {}
+        value: "&b Имя: &r [bundle]"
+      bundle_id:
+        name: "&f&l Идентификатор пакета"
+        description: "&7 Текущий идентификатор пакета."
+        value: 'Идентификатор &b: &r [id]'
       bundle_icon:
         name: "&f&l Значок пакета"
         description: "&7 Измените значок пакета."
@@ -238,11 +260,13 @@ stone-generator:
           &7 Назначить генератор
           &7 в этот пакет.
         list: "&b Выбранные генераторы:"
+        value: "&b - [generator]"
       remove_generator:
         name: "&f&l Удалить генератор"
         description: |-
           &7 Удалить генератор
           &7 из этого набора.
+        value: "&b - [generator]"
       create_bundle:
         name: "&f&l Создать пакет"
         description: |-
@@ -254,9 +278,14 @@ stone-generator:
           &7 Удалить пакет из
           &7 этот игровой режим полностью.
         list: "&b Выбранные пакеты:"
+        value: "&b - [bundle]"
       name:
         name: "&f&l Имя генератора"
-      id: {}
+        value: "&b Имя: &r [generator]"
+      id:
+        name: "&f&l Идентификатор генератора"
+        description: "&7 Текущий идентификатор генератора."
+        value: 'Идентификатор &b: &r [id]'
       icon:
         name: Значок генератора &f&l
         description: |-
@@ -294,6 +323,7 @@ stone-generator:
           &7 Удалить выбранное
           &7 материалов из списка.
         selected-materials: "&7 Выбранные материалы:"
+        list-value: "&7 - [number] x [value]"
       create_generator:
         name: "&f&l Создать генератор"
         description: |-
@@ -306,8 +336,16 @@ stone-generator:
           &7 Удалить генератор
           &7 из игрового режима полностью.
         list: "&b Выбранные генераторы:"
+        value: "&b - [generator]"
       island_name:
+        name: "&f&l [name]"
+        description: |-
+          &7 [owner]
+          &b [members]
+          &b Идентификатор острова: &7 [id]
+        owner: "&b Владелец: [player]"
         list: "&b Члены:"
+        value: "&b - [player]"
       island_working_range:
         name: "&f&l Рабочий диапазон острова"
         description: |-
@@ -315,6 +353,7 @@ stone-generator:
           &7 на текущем острове.
           &7 0 и ниже означает неограниченное количество
           &7 диапазон.
+        value: "&b Диапазон: [number]"
         overwritten: |-
           &c Владелец имеет разрешение, которое
           &c перезаписывает рабочий диапазон.
@@ -330,6 +369,7 @@ stone-generator:
           "&7 Разрешение пользователя назначать:"
           "&7&o '[gamemode].stone-generator."
           "&7&o максимальный диапазон.<число>'"
+        value: "&b Диапазон: [number]"
       island_max_generators:
         name: "&f&l Генераторы Max Island"
         description: |-
@@ -339,6 +379,7 @@ stone-generator:
           &7 для текущего острова.
           &7 0 и ниже означает
           &7 неограниченно.
+        value: "&b Максимальное количество генераторов: [number]"
         overwritten: |-
           &c Владелец имеет разрешение, которое
           &c перезаписывает счетчик генератора.
@@ -355,6 +396,7 @@ stone-generator:
           "&7 Разрешение пользователя назначать:"
           "&7&o '[gamemode].stone-generator."
           "&7&o активных-генераторов.<число>'"
+        value: "&b Максимальное количество генераторов: [number]"
       island_bundle:
         name: Набор &f&l Остров
         description: |-
@@ -377,6 +419,7 @@ stone-generator:
           "&7 Разрешение пользователя назначать:"
           "&7&o '[gamemode].stone-generator."
           "&7&o комплект.<идентификатор-пакета>'"
+        value: "&b Комплект: [bundle]"
       island_info:
         name: "&f&l Общая информация"
         description: |-
@@ -407,6 +450,7 @@ stone-generator:
         description: |-
           &7 Поиск определенного
           &7 остров.
+        search: "&b Значение: [value]"
       offline_generation:
         name: "&f&l Автономная генерация"
         description: |-
@@ -442,6 +486,7 @@ stone-generator:
           &7 0 и ниже означает неограниченное количество.
           &7 Для настройки требуется сервер
           &7 перезапустить для активации.
+        value: "&b Диапазон: [number]"
       active_generators:
         name: "&f&l Активные генераторы по умолчанию"
         description: |-
@@ -449,6 +494,7 @@ stone-generator:
           &7 активных генераторов на
           &7 одновременно.
           &7 0 и ниже означает неограниченное количество.
+        value: "&b Счетчик: [number]"
       show_filters:
         description: |-
           &7 Фильтры находятся в верхней строке
@@ -475,6 +521,7 @@ stone-generator:
           &7 будет использовать имя блока.
           &7 Чтобы установить его как 1 пустое место,
           "&7 написать "пусто"".
+        value: "&b Имя: `&r[name]&r&b`"
       unlock_notify:
         name: "&f&l Уведомлять о разблокировке"
         description: |-
@@ -493,26 +540,38 @@ stone-generator:
           &7 допускается только один генератор.
         enabled: "&b Отключение при активации &a включено &b."
         disabled: "&b Отключить при активации &c отключено &b."
-      library: {}
+      library:
+        name: "&f&l [name]"
+        description: |-
+          &7 [description]
+          &7 Автор: [author]
+          &7 Создано для [gamemode]
+          &7 Язык: [lang]
+          &7 Версия: [version]
       accept_blocks:
         name: "&f&l Принять блоки"
         description: |-
           &7 Принимает выбранные блоки
           &7 и возвращается.
         selected-blocks: "&7 выбранных блоков:"
-      material-icon: {}
+        list-value: "&7 - [value]"
+      material-icon:
+        name: "&f&l [material]"
       search_block:
         name: "&f&l Поиск"
         description: |-
           &7 Поиск определенного
           &7 блок.
+        search: "&b Значение: [value]"
       accept_biome:
         name: "&f&l Принять биомы"
         description: |-
           &7 Принимает выбранные биомы
           &7 и возвращается.
         selected-biomes: "&7 выбранных биомов:"
-      biome-icon: {}
+        list-value: "&7 - [value]"
+      biome-icon:
+        name: "&f&l [biome]"
       biome-groups:
         temperate:
           name: "&f&l Умеренный климат"
@@ -627,18 +686,36 @@ stone-generator:
       shift-click-to-reset: "&e Shift Нажмите &7 для сброса."
     descriptions:
       generator:
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [requirements]
+          [status]
         blocks:
           title: "&7&l Блоки:"
+          value: "&8 [material] - [#.##]%"
         treasures:
           title: "&7&l Сокровище:"
+          value: "&8 [material] - [#.##]%"
         requirements:
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          level: "&c&l Требуемый уровень: &r&c [number]"
           permission-title: "&c&l Отсутствующие разрешения:"
+          permission: "&b - [permission]"
           biome-title: "&7&l Работает в:"
+          biome: "&8 [biome]"
           any: "&7&l Работает во всех &e&o биомах &r&7&l"
         status:
           locked: "&c Заблокировано!"
           undeployed: "&c Не развернуто!"
           active: "&2 Активный"
+          purchase-cost: "&e Стоимость покупки: $[number]"
+          activation-cost: "&e Стоимость активации: $[number]"
         type:
           title: "&7&l Поддерживает:"
           cobblestone: "&8 Генераторы булыжника"
@@ -650,13 +727,35 @@ stone-generator:
         &7 назначено игроку:
         &7&o [gamemode].stone-generator.bundle.[id]
       generators: "&7 Генераторы пакетов:"
+      generator-list: "&7 - [generator]"
       selected: "&e Выбрано"
+      island-owner: остров [player]
       spawn-island: "&e&l Остров возрождения"
       unknown: неизвестный
   messages:
+    generator-loaded: "&a Генератор &r '[generator]' &r&a загружается в локальный
+      кэш."
     bundle-loaded: "&a Bundle &r '[bundle]' &r&a загружается в локальный кэш."
+    generator-deactivated: "&e Генератор &r '[generator]' &r&e деактивирован."
     active-generators-reached: "&c Активировано слишком много генераторов. Попробуйте
       деактивировать некоторые, прежде чем активировать новый."
+    generator-cannot-be-unlocked: "&c Генератор &r '[generator]' &r&c не разблокирован."
+    generator-not-unlocked: "&c Генератор &r '[generator]' &r&c не разблокирован."
+    generator-not-purchased: "&c Генератор &r '[generator]' &r&c не куплен."
+    no-credits: "&c Недостаточно кредитов для активации генератора. Для активации
+      требуется [number] кредитов."
+    no-credits-bank: "&c На вашем банковском счете недостаточно кредитов для активации
+      генератора. Для активации требуется [number] кредитов."
+    generator-activated: "&e Генератор &r '[generator]' &r&e активирован."
+    generator-purchased: "&e Генератор &r '[generator]' &r&e куплен."
+    generator-already-purchased: "&c Генератор &r '[generator]' &r&c уже куплен."
+    island-level-not-reached: "&c Генератор &r '[generator]' &r&c требует [number]
+      уровня острова."
+    missing-permission: "&c Генератор &r '[generator]' &r&c требует разрешения `[permission]`."
+    no-credits-buy: "&c Недостаточно кредитов для покупки генератора. Этот генератор
+      стоит [number] кредитов."
+    no-credits-buy-bank: "&c На вашем банковском счете недостаточно кредитов. Этот
+      генератор стоит [number] кредитов."
     import-count: "&e Импортированы [generator] новые генераторы и [bundle] новые
       пакеты."
     start-downloading: "&e Начать загрузку библиотеки."
@@ -666,9 +765,13 @@ stone-generator:
     no-bundle-data: "&c Не удалось найти действительные данные пакета"
     no-library-entries: "&c Не удалось найти ни одной записи в библиотеке!"
     no-file: "&c `[file]` файл не найден. Не удается выполнить импорт."
+    no-load: "&c Не удалось загрузить файл `[file]`. Ошибка при чтении: [description]."
+    not-a-gamemode-world: "&c Мир '[world]' не является миром дополнения игрового
+      режима."
     file-exist: "&c Файл `[file]` уже существует. Выберите другое имя."
     generator-tier-not-found: "&c Генератор с идентификатором '[generator]' &r&c не
       найден в [gamemode]."
+    no-generators-in-world: "&c В [world] для вас нет доступных генераторов"
     could-not-remove-money: "&c Что-то пошло не так при выводе денег."
   conversations:
     confirm-string: true, on, да, подтвердить, y, действительный, правильный
@@ -677,6 +780,9 @@ stone-generator:
     exit-string: отменить, выйти, выйти
     cancelled: "&c Разговор отменен!"
     prefix: "&l&6 [BentoBox]: &r"
+    numeric-only: "&c Данное [value] не является числом!"
+    not-valid-value: "&c Заданное число [value] недействительно. Оно должно быть больше
+      [min] и меньше [max]!"
     new-description: "&a Новое описание:"
     write-search: "&e Введите значение для поиска. (напишите «отмена», чтобы выйти)"
     search-updated: "&a Значение поиска обновлено."
@@ -688,12 +794,15 @@ stone-generator:
     generator-data-removed: "&a Успех, все данные генератора для [gamemode] удалены!"
     exported-file-name: "&e Введите имя файла экспортируемой базы данных. (напишите
       «отмена», чтобы выйти)"
+    database-export-completed: "&a Успех, экспорт базы данных для [world] завершен.
+      Файл [file] создан."
     file-name-exist: "&c Файл с именем '[id]' существует. Невозможно перезаписать."
     write-name: "&e Пожалуйста, введите новое имя в чате."
     name-changed: "&a Успех, имя обновлено."
     write-description: "&e Пожалуйста, введите новое описание в чат и 'выйдите' на
       отдельной строке, чтобы закончить."
     description-changed: "&a Успех, описание обновлено."
+    new-object-created: "&a Успех, новый объект создан в [world]."
     object-already-exists: "&c Объект с `[id]` уже определен в игровом режиме. Выберите
       другой."
     data-removed: "&a Успех, данные удалены!"
@@ -703,6 +812,12 @@ stone-generator:
     permissions-changed: "&a Успех, права генератора обновлены."
     confirm-data-replacement: "&e Подтвердите, что хотите заменить существующие генераторы
       на новые."
+    click-text-to-purchase: "&e Вы разблокировали &r [generator]&r&e! Нажмите здесь,
+      чтобы купить сейчас за [number]."
+    click-text-to-activate-vault: "&e Вы разблокировали &r [generator]&r&e! Нажмите
+      здесь, чтобы активировать его сейчас для [number]."
+    click-text-to-activate: "&e Вы разблокировали &r [generator]&r&e! Нажмите здесь,
+      чтобы активировать его сейчас."
   materials:
     cobblestone: булыжник
     stone:
