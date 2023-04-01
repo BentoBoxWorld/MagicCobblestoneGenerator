@@ -40,6 +40,7 @@ stone-generator:
       view-generator: "&0&l Генератор: &r [generator]"
       admin-panel: "&0&l Панель администратора"
       select-biome: "&0&l Выбрать биомы"
+      select-block: "&0&l Выбрать блок"
       select-bundle: "&0&l Выбрать пакет"
       select-type: "&0&l Выбор типа генератора"
       view-bundle: "&0&l Пакет: &r [bundle]"
@@ -52,6 +53,9 @@ stone-generator:
     buttons:
       default:
         name: "&f&l Генератор по умолчанию"
+        description: |-
+          &7 Генераторы по умолчанию всегда
+          &7 активен.
         enabled: "&b Это генератор &b по умолчанию."
         disabled: "&b Это &c не генератор &b по умолчанию."
       priority:
@@ -81,6 +85,7 @@ stone-generator:
           &7 Список разрешений, которые
           &7 необходимы для разблокировки
           &7 этот генератор.
+        list: "&b Требуемые разрешения:"
         value: "&b - [permission]"
         none: "&б - нет"
       purchase_cost:
@@ -155,6 +160,7 @@ stone-generator:
           &7 Показать только камень
           &7 генераторов
       show_basalt:
+        name: "&f&l Базальтовые Генераторы"
         description: |-
           &7 Показать только базальт
           &7 генераторов
@@ -220,6 +226,10 @@ stone-generator:
           &7 каталог дополнений.
       import_to_database:
         name: "&f&l Импорт базы данных"
+        description: |-
+          &7 Импорт базы данных из
+          &7 файл, расположенный в аддоне
+          каталог &7.
       wipe_user_data:
         name: "&f&l Очистить базу данных пользователей"
         description: |-
@@ -266,6 +276,7 @@ stone-generator:
         description: |-
           &7 Удалить генератор
           &7 из этого набора.
+        list: "&b Выбранные генераторы:"
         value: "&b - [generator]"
       create_bundle:
         name: "&f&l Создать пакет"
@@ -281,6 +292,9 @@ stone-generator:
         value: "&b - [bundle]"
       name:
         name: "&f&l Имя генератора"
+        description: |-
+          &7 Название для этого генератора.
+          &7 Поддерживает цветовые коды.
         value: "&b Имя: &r [generator]"
       id:
         name: "&f&l Идентификатор генератора"
@@ -405,6 +419,7 @@ stone-generator:
           &7 Только генераторы из этого
           Комплект &7 можно использовать на
           &7 остров.
+        value: "&b Комплект: [bundle]"
         overwritten: |-
           &c Владелец имеет разрешение, которое
           &c перезаписывает пакет.
@@ -496,6 +511,7 @@ stone-generator:
           &7 0 и ниже означает неограниченное количество.
         value: "&b Счетчик: [number]"
       show_filters:
+        name: "&f&l Показать фильтры"
         description: |-
           &7 Фильтры находятся в верхней строке
           &7 Player GUI, который позволяет
@@ -596,6 +612,7 @@ stone-generator:
           description: "&7 Показать только конечные биомы"
         neutral:
           name: "&f&l Нейтральный"
+          description: "&7 Показать только нейтральные биомы"
         unused:
           name: "&f&l Не используется"
           description: "&7 Показать только неиспользуемые биомы"
@@ -605,6 +622,9 @@ stone-generator:
       generator-types:
         cobblestone:
           name: "&f&l Булыжник"
+          description: |-
+            &7 Работает только с булыжником
+            &7 генераторов.
         stone:
           name: "&f&l Камень"
           description: |-
@@ -635,6 +655,7 @@ stone-generator:
           description: "&7 Работает с любым генератором."
     tips:
       click-to-previous: "&e Нажмите &7, чтобы просмотреть предыдущую страницу."
+      click-to-next: "&e Нажмите &7 для просмотра следующей страницы."
       click-to-cancel: "&e Нажмите &7 для отмены."
       click-to-choose: "&e Нажмите &7, чтобы выбрать."
       click-to-select: "&e Нажмите &7, чтобы выбрать."
@@ -659,6 +680,7 @@ stone-generator:
         &7 инвентарь.
       click-to-view: "&e Нажмите &7 для просмотра."
       click-to-add: "&e Нажмите &7, чтобы добавить."
+      click-to-remove: "&e Нажмите &7, чтобы удалить."
       select-before: "&e Выберите &7, прежде чем продолжить."
       click-to-create: "&e Нажмите &7, чтобы создать."
       right-click-to-select: "&e Щелкните правой кнопкой мыши &7, чтобы выбрать."
@@ -805,6 +827,7 @@ stone-generator:
     new-object-created: "&a Успех, новый объект создан в [world]."
     object-already-exists: "&c Объект с `[id]` уже определен в игровом режиме. Выберите
       другой."
+    confirm-deletion: "&e Подтвердите, что вы хотите удалить [number] объектов: ([value])"
     data-removed: "&a Успех, данные удалены!"
     input-number: "&e Пожалуйста, введите номер в чат."
     write-permissions: '&e Пожалуйста, введите необходимые разрешения, по одному на
@@ -812,6 +835,7 @@ stone-generator:
     permissions-changed: "&a Успех, права генератора обновлены."
     confirm-data-replacement: "&e Подтвердите, что хотите заменить существующие генераторы
       на новые."
+    new-generators-imported: "&a Успех, импортированы новые генераторы для [gamemode]."
     click-text-to-purchase: "&e Вы разблокировали &r [generator]&r&e! Нажмите здесь,
       чтобы купить сейчас за [number]."
     click-text-to-activate-vault: "&e Вы разблокировали &r [generator]&r&e! Нажмите
