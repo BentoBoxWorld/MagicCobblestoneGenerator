@@ -700,16 +700,30 @@ stone-generator:
           description: |-
             &7 Works only with cobblestone
             &7 generators.
+            
+            &6&o Hint:
+            &6&o Forms when a lava stream 
+            &6&o comes into contact with
+            &6&o water.
         stone:
           name: "&f&l Stone"
           description: |-
             &7 Works only with stone
             &7 generators.
+            
+            &6&o Hint:
+            &6&o Forms when lava flows
+            &6&o on top of water blocks.
         basalt:
           name: "&f&l Basalt"
           description: |-
             &7 Works only with basalt
             &7 generators.
+            
+            &6&o Hint:
+            &6&o Forms when lava flows
+            &6&o on top of soul soil and
+            &6&o is adjacent to blue ice.
         cobblestone_or_stone:
           name: "&f&l Cobblestone or Stone"
           description: |-
@@ -967,7 +981,7 @@ stone-generator:
     # Message that appears after admin clicks on database exporting button.
     exported-file-name: "&e Please enter a file name for the exported database file. (write 'cancel' to exit)"
     # Message that appears after successful database exporting to file.
-    database-export-completed: "&a Success, the database export for [world] is completed. File [file] generated."
+    database-export-completed: "&a Success, the database export for [world] is completed. File generated in addon directory."
     # Message that appears if input file name is already taken.
     file-name-exist: "&c File with name '[id]' exists. Cannot overwrite."
     # Message that appears after admin clicks on editing bundle name button.

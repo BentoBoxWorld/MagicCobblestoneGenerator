@@ -1,0 +1,9 @@
+name: BentoBox-MagicCobblestoneGenerator
+main: world.bentobox.magiccobblestonegenerator.StoneGeneratorPladdon
+version: ${project.version}${build.number}
+api-version: "1.18"
+
+authors: [BONNe]
+contributors: ["The BentoBoxWorld Community"]
+website: https://bentobox.world
+description: ${project.description}
