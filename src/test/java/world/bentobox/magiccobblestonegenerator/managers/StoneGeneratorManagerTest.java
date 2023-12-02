@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
@@ -27,6 +29,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
@@ -98,6 +101,8 @@ public class StoneGeneratorManagerTest {
     private IslandsManager im;
     @Mock
     private IslandWorldManager iwm;
+    @Mock
+    private PluginManager pim;
 
     @SuppressWarnings("unchecked")
     @BeforeClass
@@ -179,10 +184,16 @@ public class StoneGeneratorManagerTest {
 	when(addon.getDescription()).thenReturn(desc);
 	when(gameModeAddon.getDescription()).thenReturn(desc);
 
+	// Island
+	when(island.getOwner()).thenReturn(uuid);
+
 	// Island manager
+	when(im.getIsland(world, uuid)).thenReturn(island);
 	when(addon.getIslands()).thenReturn(im);
 
 	// IWM
+	when(iwm.getAddon(world)).thenReturn(Optional.of(gameModeAddon));
+	when(iwm.getPermissionPrefix(any())).thenReturn("bskyblock.");
 	when(plugin.getIWM()).thenReturn(iwm);
 
 	// Location
@@ -191,6 +202,11 @@ public class StoneGeneratorManagerTest {
 	// RanksManager
 	RanksManager rm = new RanksManager();
 	when(plugin.getRanksManager()).thenReturn(rm);
+
+	// Bukkit
+	PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
+	when(Bukkit.getPlayer(uuid)).thenReturn(p);
+	when(Bukkit.getPluginManager()).thenReturn(pim);
 
 	sgm = new StoneGeneratorManager(addon);
 
@@ -350,7 +366,8 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testSaveGeneratorTier() {
-	sgm.saveGeneratorTier(generatorTier);
+	CompletableFuture<Boolean> cf = sgm.saveGeneratorTier(generatorTier);
+	assertTrue(cf.isDone());
     }
 
     /**
@@ -359,7 +376,8 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testSaveGeneratorBundle() {
-	sgm.saveGeneratorBundle(generatorBundle);
+	CompletableFuture<Boolean> cf = sgm.saveGeneratorBundle(generatorBundle);
+	assertTrue(cf.isDone());
     }
 
     /**
@@ -368,7 +386,8 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testSaveGeneratorData() {
-	sgm.saveGeneratorData(generatorData);
+	CompletableFuture<Boolean> cf = sgm.saveGeneratorData(generatorData);
+	assertTrue(cf.isDone());
     }
 
     /**
@@ -377,7 +396,8 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testSave() {
-	sgm.save();
+	CompletableFuture<Boolean> cf = sgm.save();
+	assertTrue(cf.isDone());
     }
 
     /**
@@ -387,6 +407,8 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testWipeGameModeGenerators() {
 	sgm.wipeGameModeGenerators(gameModeAddon);
+	verify(addon).log("All generators for magiccobblegenerator are removed!");
+	verify(addon).log("All bundles for magiccobblegenerator are removed!");
     }
 
     /**
@@ -396,6 +418,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testWipeIslandData() {
 	sgm.wipeIslandData(gameModeAddon);
+	verify(addon).log("All island data for MagicCobbleGenerator are removed!");
     }
 
     /**
@@ -405,6 +428,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testWipeGeneratorTier() {
 	sgm.wipeGeneratorTier(generatorTier);
+	// Does not seem testable...
     }
 
     /**
@@ -485,7 +509,9 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testWipeBundle() {
+	sgm.loadGeneratorBundle(generatorBundle, false, user);
 	sgm.wipeBundle(generatorBundle);
+	verify(h).deleteID(uuid.toString());
     }
 
     /**
@@ -494,7 +520,9 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testLoadUserIslands() {
+	sgm.addWorld(world);
 	sgm.loadUserIslands(uuid);
+	verify(island, times(18)).getOwner();
     }
 
     /**
@@ -503,7 +531,10 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testValidateIslandData() {
-	assertNull(sgm.validateIslandData(island));
+	sgm.addWorld(world);
+	@Nullable
+	GeneratorDataObject gdo = sgm.validateIslandData(island);
+	assertNotNull(gdo);
     }
 
     /**
@@ -513,6 +544,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testCheckGeneratorUnlockStatus() {
 	sgm.checkGeneratorUnlockStatus(island, user, 10L);
+	verify(island, times(2)).isSpawn();
     }
 
     /**
@@ -540,6 +572,8 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testUnlockGenerator() {
 	sgm.unlockGenerator(generatorData, user, island, generatorTier);
+	verify(user).sendMessage(
+		"stone-generator.conversations.prefixstone-generator.messages.generator-cannot-be-unlocked");
     }
 
     /**
@@ -548,7 +582,7 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testDeactivateGenerator() {
-	sgm.deactivateGenerator(user, generatorData, generatorTier);
+	assertFalse(sgm.deactivateGenerator(user, generatorData, generatorTier));
     }
 
     /**
@@ -567,6 +601,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
 	sgm.activateGenerator(user, island, generatorData, generatorTier);
+	// TODO: add a test
     }
 
     /**
@@ -575,16 +610,8 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
-	sgm.activateGenerator(user, island, generatorData, generatorTier, false);
-    }
-
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#activateGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean)}.
-     */
-    @Test
-    public void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBooleanBypass() {
 	sgm.activateGenerator(user, island, generatorData, generatorTier, true);
+	// TODO: add a test
     }
 
     /**
@@ -603,6 +630,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
 	sgm.purchaseGenerator(user, island, generatorData, generatorTier);
+	// TODO: add a test
     }
 
     /**
@@ -611,16 +639,8 @@ public class StoneGeneratorManagerTest {
      */
     @Test
     public void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
-	sgm.purchaseGenerator(user, island, generatorData, generatorTier, false);
-    }
-
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#purchaseGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean)}.
-     */
-    @Test
-    public void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBooleanBypass() {
 	sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
+	// TODO: add a test
     }
 
     /**
@@ -630,6 +650,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testWipeGeneratorDataString() {
 	sgm.wipeGeneratorData(uuid.toString());
+	// TODO: add a test
     }
 
     /**
@@ -639,6 +660,7 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testWipeGeneratorDataGeneratorDataObject() {
 	sgm.wipeGeneratorData(generatorData);
+	// TODO: add a test
     }
 
     /**

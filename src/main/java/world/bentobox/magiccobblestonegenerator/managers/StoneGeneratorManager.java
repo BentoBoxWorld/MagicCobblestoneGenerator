@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -203,36 +202,48 @@ public class StoneGeneratorManager {
      * This method allows to store single generatorTier object.
      *
      * @param generatorTier object that must be saved in database.
+     * @return CompletableFuture<Boolean> to indicate if it is done
      */
-    public void saveGeneratorTier(GeneratorTierObject generatorTier) {
-	this.generatorTierDatabase.saveObjectAsync(generatorTier);
+    public CompletableFuture<Boolean> saveGeneratorTier(GeneratorTierObject generatorTier) {
+	return this.generatorTierDatabase.saveObjectAsync(generatorTier);
     }
 
     /**
      * This method allows to store single generatorBundle object.
      *
      * @param generatorBundle object that must be saved in database.
+     * @return CompletableFuture<Boolean> to indicate if it is done
      */
-    public void saveGeneratorBundle(GeneratorBundleObject generatorBundle) {
-	this.generatorBundleDatabase.saveObjectAsync(generatorBundle);
+    public CompletableFuture<Boolean> saveGeneratorBundle(GeneratorBundleObject generatorBundle) {
+	return this.generatorBundleDatabase.saveObjectAsync(generatorBundle);
     }
 
     /**
      * This method allows to store single generatorData object.
      *
      * @param generatorData object that must be saved in database.
+     * @return CompletableFuture<Boolean> to indicate if it is done
      */
-    public void saveGeneratorData(GeneratorDataObject generatorData) {
-	this.generatorDataDatabase.saveObjectAsync(generatorData);
+    public CompletableFuture<Boolean> saveGeneratorData(GeneratorDataObject generatorData) {
+	return this.generatorDataDatabase.saveObjectAsync(generatorData);
     }
 
     /**
      * Save generator tiers from cache into database
+     * 
+     * @return CompletableFuture<Boolean> to indicate if it is done
      */
-    public void save() {
-	this.generatorTierCache.values().forEach(this::saveGeneratorTier);
-	this.generatorBundleCache.values().forEach(this::saveGeneratorBundle);
-	this.generatorDataCache.values().forEach(this::saveGeneratorData);
+    public CompletableFuture<Boolean> save() {
+	List<CompletableFuture<Boolean>> futures = this.generatorTierCache.values().stream()
+		.map(this::saveGeneratorTier).collect(Collectors.toList());
+	futures.addAll(this.generatorBundleCache.values().stream().map(this::saveGeneratorBundle)
+		.collect(Collectors.toList()));
+	futures.addAll(
+		this.generatorDataCache.values().stream().map(this::saveGeneratorData).collect(Collectors.toList()));
+
+	return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenApply(v ->
+	// Return true if all futures completed successfully
+	futures.stream().allMatch(CompletableFuture::join));
     }
 
     /**
@@ -242,7 +253,7 @@ public class StoneGeneratorManager {
      * @param gameMode GameMode addon which generators must be removed.
      */
     public void wipeGameModeGenerators(GameModeAddon gameMode) {
-	final String objectKey = gameMode.getDescription().getName().toLowerCase(Locale.ENGLISH);
+	final String objectKey = gameMode.getDescription().getName().toLowerCase();
 
 	// Collect all generators
 	List<String> keySet = new ArrayList<>(this.generatorTierCache.keySet());
@@ -842,7 +853,6 @@ public class StoneGeneratorManager {
 	// If level is null, check value from addon.
 	final long islandLevel = level == null ? this.getIslandLevel(island) : level;
 	final User owner = island.isSpawn() ? null : User.getInstance(island.getOwner());
-
 	this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream().
 	// Filter out default generators. They are always unlocked and active.
 		filter(generator -> !generator.isDefaultGenerator()).
@@ -914,7 +924,6 @@ public class StoneGeneratorManager {
 	    }
 	    return;
 	}
-
 	// Create and call bukkit event to check if unlocking should be cancelled.
 	GeneratorUnlockEvent event = new GeneratorUnlockEvent(generator, user, island);
 	Bukkit.getPluginManager().callEvent(event);
