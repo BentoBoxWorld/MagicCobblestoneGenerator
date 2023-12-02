@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -238,15 +239,10 @@ public class StoneGeneratorManager {
      * This method removes from cache and database every generator that is related
      * to given gamemode.
      *
-     * @param optional GameMode addon which generators must be removed.
+     * @param gameMode GameMode addon which generators must be removed.
      */
-    public void wipeGameModeGenerators(Optional<GameModeAddon> optional) {
-	if (optional.isEmpty()) {
-	    // Done.
-	    return;
-	}
-
-	final String objectKey = optional.get().getDescription().getName().toLowerCase();
+    public void wipeGameModeGenerators(GameModeAddon gameMode) {
+	final String objectKey = gameMode.getDescription().getName().toLowerCase(Locale.ENGLISH);
 
 	// Collect all generators
 	List<String> keySet = new ArrayList<>(this.generatorTierCache.keySet());
@@ -279,15 +275,11 @@ public class StoneGeneratorManager {
      * This method removes from cache and database every island data that is related
      * to given gamemode.
      *
-     * @param optional GameMode addon which generators must be removed.
+     * @param gameModeAddon GameMode addon which generators must be removed.
      */
-    public void wipeIslandData(Optional<GameModeAddon> optional) {
-	if (optional.isEmpty()) {
-	    // Done.
-	    return;
-	}
+    public void wipeIslandData(GameModeAddon gameModeAddon) {
 
-	final String objectKey = optional.get().getDescription().getName();
+	final String objectKey = gameModeAddon.getDescription().getName();
 
 	List<String> keySet = new ArrayList<>(this.generatorDataCache.keySet());
 
@@ -1198,7 +1190,7 @@ public class StoneGeneratorManager {
     }
 
     /**
-     * his method adds generator tier to purchased generators without bypassing
+     * This method adds generator tier to purchased generators without bypassing
      * cost.
      *
      * @param user          the user
