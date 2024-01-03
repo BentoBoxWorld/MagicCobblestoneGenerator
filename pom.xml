@@ -34,20 +34,20 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.20.2-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.20-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>2.0.0-SNAPSHOT</bentobox.version>
         <level.version>2.5.0</level.version>
         <bank.version>1.4.0</bank.version>
         <!-- Mocks -->
         <powermock.version>2.0.9</powermock.version>
         <!-- Panel Utils version -->
-        <panelutils.version>1.0.0</panelutils.version>
+        <panelutils.version>1.2.0</panelutils.version>
         <!-- Vault API version -->
         <vault.version>1.7</vault.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- This allows to change between versions and snapshots. -->
-        <build.version>2.6.0</build.version>
+        <build.version>2.5.2</build.version>
         <build.number>-LOCAL</build.number>
         <!-- Sonar Cloud -->
         <sonar.projectKey>BentoBoxWorld_MagicCobblestoneGenerator</sonar.projectKey>
@@ -125,11 +125,6 @@
     </repositories>
 
     <dependencies>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.12.0</version>
-		</dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
