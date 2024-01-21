@@ -35,6 +35,7 @@ import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.Database;
 import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.bentobox.managers.RanksManager;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
@@ -1149,7 +1150,7 @@ public class StoneGeneratorManager {
 	    return false;
 	} else if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR_PERMISSION)) {
 	    Utils.sendMessage(user, user.getTranslation("general.errors.insufficient-rank", TextVariables.RANK,
-		    user.getTranslation(this.addon.getPlugin().getRanksManager().getRank(island.getRank(user)))));
+                user.getTranslation(RanksManager.getInstance().getRank(island.getRank(user)))));
 	    return false;
 	} else if (generatorTier.getRequiredMinIslandLevel() > this.getIslandLevel(island)) {
 	    // Generator is not unlocked. Return false.

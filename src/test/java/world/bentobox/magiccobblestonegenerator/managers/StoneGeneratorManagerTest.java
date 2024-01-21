@@ -67,7 +67,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
  * @author tastybento
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ Bukkit.class, BentoBox.class, User.class, Config.class, DatabaseSetup.class })
+@PrepareForTest({ Bukkit.class, BentoBox.class, User.class, Config.class, DatabaseSetup.class, RanksManager.class })
 public class StoneGeneratorManagerTest {
 
     private static AbstractDatabaseHandler<Object> h;
@@ -103,6 +103,8 @@ public class StoneGeneratorManagerTest {
     private IslandWorldManager iwm;
     @Mock
     private PluginManager pim;
+    @Mock
+    private RanksManager rm;
 
     @SuppressWarnings("unchecked")
     @BeforeClass
@@ -143,6 +145,7 @@ public class StoneGeneratorManagerTest {
     public void setUp() throws Exception {
 	// Set up plugin
 	Whitebox.setInternalState(BentoBox.class, "instance", plugin);
+    Whitebox.setInternalState(RanksManager.class, "instance", rm);
 	when(plugin.getLogger()).thenReturn(Logger.getAnonymousLogger());
 	when(addon.getPlugin()).thenReturn(plugin);
 
@@ -198,10 +201,6 @@ public class StoneGeneratorManagerTest {
 
 	// Location
 	when(location.getWorld()).thenReturn(world);
-
-	// RanksManager
-	RanksManager rm = new RanksManager();
-	when(plugin.getRanksManager()).thenReturn(rm);
 
 	// Bukkit
 	PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
