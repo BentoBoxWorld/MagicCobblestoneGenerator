@@ -1,0 +1,256 @@
+---
+stone-generator:
+  commands:
+    admin:
+      main:
+        description: Lệnh quản trị viên của Máy Tái Tạo Khối
+      import:
+        description: Nhập Máy Tái Tạo Khối
+      why: {}
+      database: {}
+      import-database:
+        description: nhập tập tin cơ sở dữ liệu Máy Tái Tạo Khối
+      export:
+        description: Xuất cơ sở dữ liệu trình Máy Tái Tạo Khối từ Chế độ trò chơi
+          thành tệp
+    player:
+      main: {}
+      view: {}
+      buy:
+        description: Mua Máy Tái Tạo Khối được yêu cầu
+      activate: {}
+  gui:
+    titles:
+      view-generator: "&0&l Trình tạo: &r [generator]"
+      admin-panel: "&0&l Bảng điều khiển của quản trị viên"
+      select-block: "&0&l Chọn Khối"
+      view-island: "&0&l Đảo: [island]"
+    buttons:
+      default: {}
+      priority:
+        value: "&b Mức độ ưu tiên: &7 [number]"
+      type:
+        value: "&b Loại: &7 [type]"
+      required_min_level:
+        value: "&b Yêu cầu mức tối thiểu: [number]"
+      required_permissions:
+        value: "&b - [permission]"
+      purchase_cost:
+        value: "&b Chi phí: [number]"
+      activation_cost:
+        value: "&b Chi phí: [number]"
+      biomes:
+        value: "&b - [biome]"
+      treasure_amount:
+        value: "&b Số lượng: [number]"
+      treasure_chance:
+        value: "&b Cơ hội: [number]"
+      info: {}
+      blocks:
+        name: "&f&l Danh sách khối"
+      treasures: {}
+      block-icon:
+        name: "&f&l [material]"
+      treasure-icon:
+        name: "&f&l [material]"
+        actual: "&b Giá trị cơ sở dữ liệu: [number]"
+      show_cobblestone: {}
+      show_stone: {}
+      show_basalt: {}
+      toggle_visibility: {}
+      show_active: {}
+      return: {}
+      quit: {}
+      previous: {}
+      next:
+        description: "&7 Chuyển sang trang [number]"
+      manage_users: {}
+      manage_generator_tiers: {}
+      manage_generator_bundles: {}
+      settings: {}
+      import_template: {}
+      web_library:
+        name: "&f&l Thư viện web"
+      export_from_database: {}
+      import_to_database: {}
+      wipe_user_data: {}
+      wipe_generator_data: {}
+      bundle_name:
+        value: "&b Tên: &r [bundle]"
+      bundle_id: {}
+      bundle_icon: {}
+      bundle_description: {}
+      bundle_info: {}
+      bundle_generators: {}
+      add_generator:
+        value: "&b - [generator]"
+      remove_generator:
+        value: "&b - [generator]"
+      create_bundle: {}
+      delete_bundle:
+        value: "&b - [bundle]"
+      name:
+        value: "&b Tên: &r [generator]"
+      id: {}
+      icon:
+        name: "&f&l Biểu tượng Trình tạo"
+      locked_icon: {}
+      description: {}
+      deployed: {}
+      add_material: {}
+      remove_material:
+        list-value: "&7 - [number] x [value]"
+      create_generator: {}
+      delete_generator:
+        value: "&b - [generator]"
+      island_name:
+        name: "&f&l [name]"
+        description: |-
+          &7 [owner]
+          &b [members]
+          &b ID đảo: &7 [id]
+        owner: "&b Chủ sở hữu: [player]"
+        value: "&b - [player]"
+      island_working_range:
+        value: "&b Phạm vi: [number]"
+      owner_working_range:
+        value: "&b Phạm vi: [number]"
+      island_max_generators:
+        name: "&f&l Máy tạo đảo tối đa"
+        value: "&b Trình tạo tối đa: [number]"
+      owner_max_generators:
+        value: "&b Trình tạo tối đa: [number]"
+      island_bundle:
+        name: "&f&l Gói đảo"
+        value: "&b Gói: [bundle]"
+      owner_bundle:
+        name: "&f&l Gói chủ sở hữu"
+        value: "&b Gói: [bundle]"
+      island_info: {}
+      island_generators: {}
+      reset_to_default: {}
+      is_online: {}
+      all_islands: {}
+      search:
+        search: "&b Giá trị: [value]"
+      offline_generation: {}
+      use_physic: {}
+      use_bank: {}
+      working_range:
+        value: "&b Phạm vi: [number]"
+      active_generators:
+        value: "&b Đếm: [number]"
+      show_filters: {}
+      border_block: {}
+      border_block_name: {}
+      unlock_notify: {}
+      disable_on_activate: {}
+      library:
+        name: "&f&l [number]"
+        description: |-
+          &7 [description]
+          &7 Tác giả: [author]
+          &7 Được tạo cho [gamemode]
+          &7 Ngôn ngữ: [lang]
+          &7 Phiên bản: [version]
+      accept_blocks:
+        list-value: "&7 - [value]"
+      material-icon:
+        name: "&f&l [material]"
+      search_block:
+        search: "&b Giá trị: [value]"
+      accept_biome:
+        list-value: "&7 - [value]"
+      biome-icon:
+        name: "&f&l [biome]"
+      biome-groups:
+        temperate: {}
+        warm: {}
+        cold: {}
+        snowy: {}
+        ocean: {}
+        nether:
+          name: "&f&l Địa ngục"
+        the_end:
+          name: "&f&l The End"
+        neutral: {}
+        unused: {}
+        cave:
+          name: "&f&l hang"
+      generator-types:
+        cobblestone: {}
+        stone: {}
+        basalt: {}
+        cobblestone_or_stone: {}
+        basalt_or_cobblestone: {}
+        basalt_or_stone: {}
+        any: {}
+    tips: {}
+    descriptions:
+      generator:
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [requirements]
+          [status]
+        blocks:
+          value: "&8 [material] - [#.##]%"
+        treasures:
+          value: "&8 [material] - [#.####]%"
+        requirements:
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          level: "&c&l Cấp độ Yêu cầu: &r&c [number]"
+          permission: "&c -[permission]"
+          biome: "&8 [biome]"
+        status:
+          purchase-cost: "&e Chi phí mua hàng: $[number]"
+          activation-cost: "&e Chi phí kích hoạt: $[number]"
+        type: {}
+      generator-list: "&7 - [generator]"
+      island-owner: đảo của [player]
+  messages:
+    bundle-loaded: "&a Gói &r '[bundle]' &r&a được tải vào bộ đệm cục bộ."
+    no-credits: "&c Không đủ tín dụng để kích hoạt trình tạo. Kích hoạt yêu cầu [number]
+      tín dụng."
+    no-credits-bank: "&c Tài khoản ngân hàng của bạn không có đủ tín dụng để kích
+      hoạt trình tạo. Kích hoạt yêu cầu [number] tín dụng."
+    island-level-not-reached: "&c Trình tạo &r '[generator]' &r&c yêu cầu [number]
+      cấp độ đảo."
+    missing-permission: "&c Trình tạo &r '[generator]' &r&c yêu cầu quyền `[permission]`."
+    no-credits-buy: "&c Không đủ tín dụng để mua máy phát điện. Máy phát điện này
+      có giá [number] tín dụng."
+    no-credits-buy-bank: "&c Tài khoản ngân hàng của bạn không có đủ tín dụng. Máy
+      phát điện này có giá [number] tín dụng."
+    import-count: "&e Đã ​​nhập [generator] trình tạo mới và [bundle] gói mới."
+  errors:
+    no-load: "&c Không thể tải tệp `[file]`. Lỗi khi đọc: [description]."
+  conversations:
+    prefix: "&l&6 [BentoBox]: &r"
+    numeric-only: "&c [value] đã cho không phải là số!"
+    not-valid-value: "&c Số [value] đã cho không hợp lệ. Nó phải lớn hơn [min] và
+      nhỏ hơn [max]!"
+    write-search: "&e Vui lòng viết giá trị tìm kiếm. (viết 'cancel' để thoát)"
+    write-description: "&e Vui lòng nhập mô tả mới trong trò chuyện và tự 'quit' trên
+      một dòng để hoàn tất."
+    new-object-created: "&a Thành công, đối tượng mới được tạo trong [world]."
+    confirm-deletion: "&e Xác nhận rằng bạn muốn xóa [number] đối tượng: ([value])"
+  materials:
+    stone: {}
+  biomes:
+    flower_forest: {}
+protection:
+  flags:
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: Máy tái tạo khối
+      description: |-
+        &a Chuyển đổi để bật hoặc tắt
+        &a tất cả máy tái tạo
+        &a trên toàn đảo
+      hint: "&e Trình tạo máy tái tạo bị tắt trong cài đặt đảo"
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: Quyền tạo máy tái tạo
