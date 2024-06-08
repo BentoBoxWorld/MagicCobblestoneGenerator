@@ -248,6 +248,10 @@ stone-generator:
         name: "&f&l Bundle-Name"
         description: "&7 Paketnamen ändern."
         value: "&b Name: &r [bundle]"
+      bundle_id:
+        name: "&f&l Bundle-ID"
+        description: "&7 Die aktuelle Bundle-ID."
+        value: "&b ID: &r [id]"
       bundle_icon:
         name: "&f&l-Bundle-Symbol"
         description: "&7 Bündelsymbol ändern."
@@ -295,6 +299,10 @@ stone-generator:
           &7 Titel für diesen Generator.
           &7 Unterstützt Farbcodes.
         value: "&b Name: &r [generator]"
+      id:
+        name: "&f&l Generator-ID"
+        description: "&7 Die aktuelle Generator-ID."
+        value: "&b ID: &r [id]"
       icon:
         name: "&f&l Generator-Symbol"
         description: |-
@@ -618,18 +626,32 @@ stone-generator:
         cobblestone:
           name: "&f&l Kopfsteinpflaster"
           description: |-
-            &7 Funktioniert nur mit Kopfsteinpflaster
+            &7 Funktioniert nur mit Kopfsteinpflaster-
             &7 Generatoren.
+
+            &6&o Hinweis:
+            &6&o Bildet sich, wenn ein Lavastrom
+            &6&o in Kontakt mit
+            &6&o Wasser kommt.
         stone:
           name: "&v&l Stein"
           description: |-
-            &7 Funktioniert nur mit Stein
+            &7 Funktioniert nur mit Stein-
             &7 Generatoren.
+
+            &6&o Hinweis:
+            &6&o Bildet sich, wenn Lava
+            &6&o auf Wasserblöcke fließt.
         basalt:
           name: "&f&l Basalt"
           description: |-
-            &7 Funktioniert nur mit Basalt
+            &7 Funktioniert nur mit Basalt-
             &7 Generatoren.
+
+            &6&o Hinweis:
+            &6&o Bildet sich, wenn Lava auf
+            &6&o Seelenboden fließt und
+            &6&o an blaues Eis grenzt.
         cobblestone_or_stone:
           name: "&f&l Kopfsteinpflaster oder Stein"
           description: |-
@@ -816,7 +838,7 @@ stone-generator:
     exported-file-name: "&e Bitte geben Sie einen Dateinamen für die exportierte Datenbankdatei
       ein. (schreiben Sie 'cancel', um zu beenden)"
     database-export-completed: "&a Erfolgreich, der Datenbankexport für [world] ist
-      abgeschlossen. Datei [file] generiert."
+      abgeschlossen. Datei im Addon-Verzeichnis generiert."
     file-name-exist: "&c Datei mit dem Namen '[id]' existiert. Kann nicht überschrieben
       werden."
     write-name: "&e Bitte geben Sie im Chat einen neuen Namen ein."
