@@ -107,7 +107,7 @@
         </repository>
         <repository>
             <id>bentoboxworld</id>
-            <url>https://repo.codemc.io/repository/bentoboxoworld/</url>
+            <url>https://repo.codemc.io/repository/bentoboxworld/</url>
         </repository>
         <repository>
             <id>codemc-repo</id>
