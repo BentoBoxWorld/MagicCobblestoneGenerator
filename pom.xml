@@ -34,8 +34,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.20.4-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>2.0.0-SNAPSHOT</bentobox.version>
+        <spigot.version>1.21.3-R0.1-SNAPSHOT</spigot.version>
+        <bentobox.version>2.7.1-SNAPSHOT</bentobox.version>
         <level.version>2.5.0</level.version>
         <bank.version>1.4.0</bank.version>
         <!-- Mocks -->
@@ -47,7 +47,7 @@
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- This allows to change between versions and snapshots. -->
-        <build.version>2.5.2</build.version>
+        <build.version>2.6.0</build.version>
         <build.number>-LOCAL</build.number>
         <!-- Sonar Cloud -->
         <sonar.projectKey>BentoBoxWorld_MagicCobblestoneGenerator</sonar.projectKey>
@@ -87,13 +87,9 @@
     </profiles>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots</url>
-        </snapshotRepository>
         <repository>
-            <id>codemc-releases</id>
-            <url>https://repo.codemc.io/repository/maven-releases</url>
+            <id>bentoboxworld</id>
+            <url>https://repo.codemc.io/repository/bentoboxworld/</url>
         </repository>
     </distributionManagement>
 
@@ -110,14 +106,14 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
+            <id>bentoboxworld</id>
+            <url>https://repo.codemc.io/repository/bentoboxworld/</url>
+        </repository>
+        <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
-        <!--Vault Repo is down. -->
-        <repository>
-            <id>vault-repo</id>
-            <url>https://nexus.hc.to/content/repositories/pub_releases</url>
-        </repository>
+        <!--Vault Repo -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
