@@ -32,7 +32,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <!-- More visible way how to change dependency versions -->
         <spigot.version>1.21.3-R0.1-SNAPSHOT</spigot.version>
         <bentobox.version>2.7.1-SNAPSHOT</bentobox.version>
@@ -183,6 +183,14 @@
     </dependencies>
 
     <build>
+        <!-- By default ${revision} is ${build.version}-SNAPSHOT -->
+        <!-- If GIT_BRANCH variable is set to origin/master, then it will 
+            be only ${build.version}. -->
+
+        <!-- By default ${build.number} is -LOCAL. -->
+        <!-- If the BUILD_NUMBER variable is set, then it will be -b[number]. -->
+        <!-- If GIT_BRANCH variable is set to origin/master, then it will 
+            be the empty string. -->
         <finalName>${project.name}-${revision}${build.number}</finalName>
 
         <defaultGoal>clean package</defaultGoal>
@@ -195,9 +203,6 @@
                 <directory>src/main/resources/locales</directory>
                 <targetPath>./locales</targetPath>
                 <filtering>false</filtering>
-                <includes>
-                    <include>*.yml</include>
-                </includes>
             </resource>
         </resources>
         <plugins>
@@ -210,18 +215,14 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>blu</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <release>${java.version}</release>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -235,19 +236,26 @@
                         --add-opens java.base/java.math=ALL-UNNAMED
                         --add-opens java.base/java.io=ALL-UNNAMED
                         --add-opens java.base/java.util=ALL-UNNAMED
-                        --add-opens java.base/java.util.stream=ALL-UNNAMED
+                        --add-opens
+                        java.base/java.util.stream=ALL-UNNAMED
                         --add-opens java.base/java.text=ALL-UNNAMED
-                        --add-opens java.base/java.util.regex=ALL-UNNAMED
-                        --add-opens java.base/java.nio.channels.spi=ALL-UNNAMED
+                        --add-opens
+                        java.base/java.util.regex=ALL-UNNAMED
+                        --add-opens
+                        java.base/java.nio.channels.spi=ALL-UNNAMED
                         --add-opens java.base/sun.nio.ch=ALL-UNNAMED
                         --add-opens java.base/java.net=ALL-UNNAMED
-                        --add-opens java.base/java.util.concurrent=ALL-UNNAMED
+                        --add-opens
+                        java.base/java.util.concurrent=ALL-UNNAMED
                         --add-opens java.base/sun.nio.fs=ALL-UNNAMED
                         --add-opens java.base/sun.nio.cs=ALL-UNNAMED
                         --add-opens java.base/java.nio.file=ALL-UNNAMED
-                        --add-opens java.base/java.nio.charset=ALL-UNNAMED
-                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
-                        --add-opens java.logging/java.util.logging=ALL-UNNAMED
+                        --add-opens
+                        java.base/java.nio.charset=ALL-UNNAMED
+                        --add-opens
+                        java.base/java.lang.reflect=ALL-UNNAMED
+                        --add-opens
+                        java.logging/java.util.logging=ALL-UNNAMED
                         --add-opens java.base/java.lang.ref=ALL-UNNAMED
                         --add-opens java.base/java.util.jar=ALL-UNNAMED
                         --add-opens java.base/java.util.zip=ALL-UNNAMED
@@ -262,8 +270,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.0</version>
                 <configuration>
+                    <show>public</show>
                     <failOnError>false</failOnError>
                     <additionalJOption>-Xdoclint:none</additionalJOption>
                 </configuration>
@@ -292,14 +301,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>2.5.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>2.8.2</version>
             </plugin>
-            <plugin>
+             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
@@ -315,52 +324,25 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>pre-unit-test</id>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>post-unit-test</id>
+                        <id>report</id>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <formats>
+                                <format>XML</format>
+                            </formats>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.1-SNAPSHOT</version>
-                <configuration>
-                    <minimizeJar>true</minimizeJar>
-                    <artifactSet>
-                        <includes>
-                            <include>lv.id.bonne:panelutils:*</include>
-                        </includes>
-                    </artifactSet>
-                    <transformers>
-                        <!-- Add a transformer to exclude any other manifest files (possibly from dependencies). -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
-                            <resource>MANIFEST.MF</resource>
-                        </transformer>
-                        <!-- Add a transformer to include your custom manifest file. -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                            <resource>META-INF/MANIFEST.MF</resource>
-                            <file>src/main/resources/META-INF/MANIFEST.MF</file>
-                        </transformer>
-                    </transformers>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
         </plugins>
     </build>
-
 </project>
