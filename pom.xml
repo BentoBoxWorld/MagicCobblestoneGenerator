@@ -205,30 +205,29 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
-        <plugins>
+       <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.4.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.5.2</version>
                 <configuration>
                     <argLine>
                         ${argLine}
@@ -265,16 +264,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.11.1</version>
                 <configuration>
-                    <show>public</show>
+                    <doclint>none</doclint>  <!-- Turnoff all checks -->
                     <failOnError>false</failOnError>
-                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <source>17</source>
                 </configuration>
                 <executions>
                     <execution>
@@ -288,7 +288,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -301,14 +301,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
+                <version>3.1.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
+                <version>3.1.3</version>
             </plugin>
-             <plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
@@ -342,7 +342,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>
