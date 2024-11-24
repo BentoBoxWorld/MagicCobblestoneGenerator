@@ -16,9 +16,14 @@ import world.bentobox.bentobox.api.addons.Pladdon;
  */
 public class StoneGeneratorPladdon extends Pladdon
 {
+    private Addon addon;
+
     @Override
     public Addon getAddon()
     {
-        return new StoneGeneratorAddon();
+        if (addon == null) {
+            addon = new StoneGeneratorAddon();
+        }
+        return addon;
     }
 }

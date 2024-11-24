@@ -32,14 +32,16 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <!-- More visible way how to change dependency versions -->
-        <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
-        <bentobox.version>1.20.0</bentobox.version>
+        <spigot.version>1.21.3-R0.1-SNAPSHOT</spigot.version>
+        <bentobox.version>2.7.1-SNAPSHOT</bentobox.version>
         <level.version>2.5.0</level.version>
         <bank.version>1.4.0</bank.version>
+        <!-- Mocks -->
+        <powermock.version>2.0.9</powermock.version>
         <!-- Panel Utils version -->
-        <panelutils.version>1.0.0</panelutils.version>
+        <panelutils.version>1.2.0</panelutils.version>
         <!-- Vault API version -->
         <vault.version>1.7</vault.version>
         <!-- Revision variable removes warning about dynamic version -->
@@ -85,13 +87,9 @@
     </profiles>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots</url>
-        </snapshotRepository>
         <repository>
-            <id>codemc-releases</id>
-            <url>https://repo.codemc.io/repository/maven-releases</url>
+            <id>bentoboxworld</id>
+            <url>https://repo.codemc.io/repository/bentoboxworld/</url>
         </repository>
     </distributionManagement>
 
@@ -108,14 +106,14 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
+            <id>bentoboxworld</id>
+            <url>https://repo.codemc.io/repository/bentoboxworld/</url>
+        </repository>
+        <repository>
             <id>codemc-repo</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
-        <!--Vault Repo is down. -->
-        <repository>
-            <id>vault-repo</id>
-            <url>https://nexus.hc.to/content/repositories/pub_releases</url>
-        </repository>
+        <!--Vault Repo -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -163,9 +161,36 @@
             <artifactId>panelutils</artifactId>
             <version>${panelutils.version}</version>
         </dependency>
+        <!-- Mockito (Unit testing) -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.11.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <!-- By default ${revision} is ${build.version}-SNAPSHOT -->
+        <!-- If GIT_BRANCH variable is set to origin/master, then it will 
+            be only ${build.version}. -->
+
+        <!-- By default ${build.number} is -LOCAL. -->
+        <!-- If the BUILD_NUMBER variable is set, then it will be -b[number]. -->
+        <!-- If GIT_BRANCH variable is set to origin/master, then it will 
+            be the empty string. -->
         <finalName>${project.name}-${revision}${build.number}</finalName>
 
         <defaultGoal>clean package</defaultGoal>
@@ -178,34 +203,32 @@
                 <directory>src/main/resources/locales</directory>
                 <targetPath>./locales</targetPath>
                 <filtering>false</filtering>
-                <includes>
-                    <include>*.yml</include>
-                </includes>
             </resource>
         </resources>
-        <plugins>
+       <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.4.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.3.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                    <!-- <source>${java.version}</source> <target>${java.version}</target> -->
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.5.2</version>
                 <configuration>
                     <argLine>
                         ${argLine}
@@ -242,24 +265,21 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.4.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.11.1</version>
                 <configuration>
-                    <source>16</source>
-                    <show>private</show>
+                    <doclint>none</doclint>  <!-- Turnoff all checks -->
                     <failOnError>false</failOnError>
-                    <additionalJOption>-Xdoclint:none</additionalJOption>
-                    <!-- To compile with Java 11, this tag may be required -->
-                    <!-- <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable> -->
+                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <source>17</source>
                 </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>install</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -269,7 +289,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.3.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -281,65 +301,26 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.1-SNAPSHOT</version>
-                <configuration>
-                    <minimizeJar>true</minimizeJar>
-                    <artifactSet>
-                        <includes>
-                            <include>lv.id.bonne:panelutils:*</include>
-                        </includes>
-                    </artifactSet>
-                    <transformers>
-                        <!-- Add a transformer to exclude any other manifest files (possibly from dependencies). -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
-                            <resource>MANIFEST.MF</resource>
-                        </transformer>
-                        <!-- Add a transformer to include your custom manifest file. -->
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                            <resource>META-INF/MANIFEST.MF</resource>
-                            <file>src/main/resources/META-INF/MANIFEST.MF</file>
-                        </transformer>
-                    </transformers>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
+                <version>3.1.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.2</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.1.3</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.10</version>
                 <configuration>
                     <append>true</append>
                     <excludes>
                         <!-- This is required to prevent Jacoco from adding 
                             synthetic fields to a JavaBean class (causes errors in testing) -->
                         <exclude>**/*Names*</exclude>
+                        <!-- Prevents the Material is too large to mock error -->
+                        <exclude>org/bukkit/Material*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -364,5 +345,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

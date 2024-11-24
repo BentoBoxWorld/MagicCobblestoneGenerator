@@ -12,6 +12,7 @@ import world.bentobox.bentobox.api.panels.PanelItem;
 import world.bentobox.bentobox.api.panels.builders.PanelBuilder;
 import world.bentobox.bentobox.api.panels.builders.PanelItemBuilder;
 import world.bentobox.bentobox.api.user.User;
+import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -208,6 +209,7 @@ public class SingleBlockSelector extends PagedSelector<Material>
 			icon(PanelUtils.getMaterialItem(material)).
 			description(description).
 			clickHandler((panel, user1, clickType, slot) -> {
+				StoneGeneratorAddon.getInstance().log("Clicked Material: " + material.name());
 				this.consumer.accept(true, material);
 				return true;
 			}).

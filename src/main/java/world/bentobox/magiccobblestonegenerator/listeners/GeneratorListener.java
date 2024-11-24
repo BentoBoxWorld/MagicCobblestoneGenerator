@@ -136,7 +136,7 @@ public abstract class GeneratorListener implements Listener
             // This spawns 8 large smoke particles.
             for (int counter = 0; counter < 8; ++counter)
             {
-                block.getWorld().spawnParticle(Particle.SMOKE_LARGE,
+                block.getWorld().spawnParticle(Particle.SMOKE,
                     blockX + Math.random(),
                     blockY + 1 + Math.random(),
                     blockZ + Math.random(),

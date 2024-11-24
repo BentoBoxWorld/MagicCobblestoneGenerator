@@ -16,6 +16,7 @@ import world.bentobox.bentobox.api.events.island.IslandCreatedEvent;
 import world.bentobox.bentobox.api.events.island.IslandDeleteEvent;
 import world.bentobox.bentobox.api.events.island.IslandRegisteredEvent;
 import world.bentobox.bentobox.api.events.island.IslandResettedEvent;
+import world.bentobox.bentobox.api.events.team.TeamSetownerEvent;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 
 
@@ -77,6 +78,18 @@ public class JoinLeaveListener implements Listener
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onIslandCreated(IslandRegisteredEvent event)
+    {
+        this.addon.getAddonManager().validateIslandData(event.getIsland());
+    }
+
+
+    /**
+     * This method handles Team Owner Change event
+     *
+     * @param event Event that must be handled.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onTeamOwnerChange(TeamSetownerEvent event)
     {
         this.addon.getAddonManager().validateIslandData(event.getIsland());
     }

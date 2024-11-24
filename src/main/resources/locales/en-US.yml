@@ -635,6 +635,7 @@ stone-generator:
         list-value: "&7 - [value]"
       material-icon:
         name: "&f&l [material]"
+        description: "&7 Block ID: [id]"
       search_block:
         name: "&f&l Search"
         description: |-

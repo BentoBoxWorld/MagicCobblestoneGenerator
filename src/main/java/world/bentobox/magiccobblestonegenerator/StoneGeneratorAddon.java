@@ -122,7 +122,8 @@ public class StoneGeneratorAddon extends Addon
         //this.registerListener(new MagicGeneratorListener(this));
 
         this.registerListener(new JoinLeaveListener(this));
-        this.registerListener(new IslandLevelListener(this));
+        if(this.getAddonByName("Level").isPresent())
+            this.registerListener(new IslandLevelListener(this));
 
         // Register Flags
         this.registerFlag(MAGIC_COBBLESTONE_GENERATOR);

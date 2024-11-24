@@ -242,9 +242,10 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
-     * Method GeneratorTierObject#getBlockChanceMap returns the blockChanceMap of this object.
+     * Returns the blockChanceMap of this object.
      *
-     * @return the blockChanceMap (type Map<Double, Material>) of this object.
+     * @return a {@code TreeMap} where the keys are {@code Double} values representing chances,
+     *         and the values are {@code Material} objects.
      */
     public TreeMap<Double, Material> getBlockChanceMap()
     {
@@ -264,9 +265,10 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
-     * Method GeneratorTierObject#getTreasureChanceMap returns the treasureChanceMap of this object.
+     * Returns the treasureChanceMap of this object.
      *
-     * @return the treasureChanceMap (type Map<Double, Material>) of this object.
+     * @return a {@code TreeMap} where the keys are {@code Double} values representing chances,
+     *         and the values are {@code Material} objects.
      */
     public TreeMap<Double, Material> getTreasureChanceMap()
     {

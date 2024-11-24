@@ -9,7 +9,6 @@ package world.bentobox.magiccobblestonegenerator.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
@@ -295,18 +295,8 @@ public class Utils
      *
      * @return Map that contains relation from biome name to biome.
      */
-    public static Map<String, Biome> getBiomeNameMap()
-    {
-        Biome[] biomes = Biome.values();
-
-        Map<String, Biome> returnMap = new HashMap<>(biomes.length);
-
-        for (Biome biome : biomes)
-        {
-            returnMap.put(biome.name(), biome);
-        }
-
-        return returnMap;
+    public static Map<String, Biome> getBiomeNameMap() {
+        return Registry.BIOME.stream().collect(Collectors.toMap(biome -> biome.name(), biome -> biome));
     }
 
 
@@ -398,11 +388,8 @@ public class Utils
      */
     public static boolean isSnowyBiome(Biome biome)
     {
-        return switch (biome) {
-            //case SNOWY_SLOPES:
-            case SNOWY_PLAINS, SNOWY_TAIGA, ICE_SPIKES, FROZEN_RIVER, SNOWY_BEACH -> true;
-            default -> false;
-        };
+        return biome == Biome.SNOWY_PLAINS || biome == Biome.SNOWY_TAIGA || biome == Biome.ICE_SPIKES
+                || biome == Biome.FROZEN_RIVER || biome == Biome.SNOWY_BEACH;
     }
 
 
@@ -414,10 +401,9 @@ public class Utils
      */
     public static boolean isColdBiome(Biome biome)
     {
-        return switch (biome) {
-            case WINDSWEPT_HILLS, WINDSWEPT_GRAVELLY_HILLS, WINDSWEPT_FOREST, TAIGA, OLD_GROWTH_PINE_TAIGA, OLD_GROWTH_SPRUCE_TAIGA, STONY_SHORE -> true;
-            default -> false;
-        };
+        return biome == Biome.WINDSWEPT_HILLS || biome == Biome.WINDSWEPT_GRAVELLY_HILLS
+                || biome == Biome.WINDSWEPT_FOREST || biome == Biome.TAIGA || biome == Biome.OLD_GROWTH_PINE_TAIGA
+                || biome == Biome.OLD_GROWTH_SPRUCE_TAIGA || biome == Biome.STONY_SHORE;
     }
 
 
@@ -429,10 +415,11 @@ public class Utils
      */
     public static boolean isTemperateBiome(Biome biome)
     {
-        return switch (biome) {
-            case PLAINS, SUNFLOWER_PLAINS, FOREST, FLOWER_FOREST, BIRCH_FOREST, OLD_GROWTH_BIRCH_FOREST, DARK_FOREST, SWAMP, JUNGLE, SPARSE_JUNGLE, BAMBOO_JUNGLE, RIVER, BEACH, MUSHROOM_FIELDS -> true;
-            default -> false;
-        };
+        return biome == Biome.PLAINS || biome == Biome.SUNFLOWER_PLAINS || biome == Biome.FOREST
+                || biome == Biome.FLOWER_FOREST || biome == Biome.BIRCH_FOREST || biome == Biome.OLD_GROWTH_BIRCH_FOREST
+                || biome == Biome.DARK_FOREST || biome == Biome.SWAMP || biome == Biome.JUNGLE
+                || biome == Biome.SPARSE_JUNGLE || biome == Biome.BAMBOO_JUNGLE || biome == Biome.RIVER
+                || biome == Biome.BEACH || biome == Biome.MUSHROOM_FIELDS;
     }
 
 
@@ -444,12 +431,9 @@ public class Utils
      */
     public static boolean isWarmBiome(Biome biome)
     {
-        return switch (biome) {
-            case DESERT, SAVANNA, WINDSWEPT_SAVANNA, BADLANDS, ERODED_BADLANDS, WOODED_BADLANDS, SAVANNA_PLATEAU ->
-                // case BADLANDS_PLATEAU:
-                true;
-            default -> false;
-        };
+        return biome == Biome.DESERT || biome == Biome.SAVANNA || biome == Biome.WINDSWEPT_SAVANNA
+                || biome == Biome.BADLANDS || biome == Biome.ERODED_BADLANDS || biome == Biome.WOODED_BADLANDS
+                || biome == Biome.SAVANNA_PLATEAU;
     }
 
 
@@ -461,10 +445,9 @@ public class Utils
      */
     public static boolean isAquaticBiome(Biome biome)
     {
-        return switch (biome) {
-            case WARM_OCEAN, LUKEWARM_OCEAN, DEEP_LUKEWARM_OCEAN, OCEAN, DEEP_OCEAN, COLD_OCEAN, DEEP_COLD_OCEAN, FROZEN_OCEAN, DEEP_FROZEN_OCEAN -> true;
-            default -> false;
-        };
+        return biome == Biome.WARM_OCEAN || biome == Biome.LUKEWARM_OCEAN || biome == Biome.DEEP_LUKEWARM_OCEAN
+                || biome == Biome.OCEAN || biome == Biome.DEEP_OCEAN || biome == Biome.COLD_OCEAN
+                || biome == Biome.DEEP_COLD_OCEAN || biome == Biome.FROZEN_OCEAN || biome == Biome.DEEP_FROZEN_OCEAN;
     }
 
 
@@ -486,12 +469,8 @@ public class Utils
      * @param biome Biome that must be checked.
      * @return {@code true} if I think it is cave biome, {@code false} otherwise.
      */
-    public static boolean isCaveBiome(Biome biome)
-    {
-        return switch (biome) {
-            case LUSH_CAVES, DRIPSTONE_CAVES -> true;
-            default -> false;
-        };
+    public static boolean isCaveBiome(Biome biome) {
+        return biome == Biome.LUSH_CAVES || biome == Biome.DRIPSTONE_CAVES;
     }
 
 
@@ -501,12 +480,9 @@ public class Utils
      * @param biome Biome that must be checked.
      * @return {@code true} if I think it is nether biome, {@code false} otherwise.
      */
-    public static boolean isNetherBiome(Biome biome)
-    {
-        return switch (biome) {
-            case NETHER_WASTES, SOUL_SAND_VALLEY, CRIMSON_FOREST, WARPED_FOREST, BASALT_DELTAS -> true;
-            default -> false;
-        };
+    public static boolean isNetherBiome(Biome biome) {
+        return biome == Biome.NETHER_WASTES || biome == Biome.SOUL_SAND_VALLEY || biome == Biome.CRIMSON_FOREST
+                || biome == Biome.WARPED_FOREST || biome == Biome.BASALT_DELTAS;
     }
 
 
@@ -516,12 +492,9 @@ public class Utils
      * @param biome Biome that must be checked.
      * @return {@code true} if I think it is the end biome, {@code false} otherwise.
      */
-    public static boolean isTheEndBiome(Biome biome)
-    {
-        return switch (biome) {
-            case THE_END, SMALL_END_ISLANDS, END_MIDLANDS, END_HIGHLANDS, END_BARRENS -> true;
-            default -> false;
-        };
+    public static boolean isTheEndBiome(Biome biome) {
+        return biome == Biome.THE_END || biome == Biome.SMALL_END_ISLANDS || biome == Biome.END_MIDLANDS
+                || biome == Biome.END_HIGHLANDS || biome == Biome.END_BARRENS;
     }
 
 
@@ -633,7 +606,7 @@ public class Utils
         //   biomes:
         //     [biome]:
         //       name: [name]
-        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase() + ".name");
+        String translation = user.getTranslationOrNothing(Constants.BIOMES + biome.getKey().getKey() + ".name");
 
         if (!translation.isEmpty())
         {
@@ -646,7 +619,7 @@ public class Utils
         //   biomes:
         //     [biome]: [name]
 
-        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.name().toLowerCase());
+        translation = user.getTranslationOrNothing(Constants.BIOMES + biome.getKey().getKey());
 
         if (!translation.isEmpty())
         {
@@ -658,7 +631,7 @@ public class Utils
         // biomes:
         //   [biome]: [name]
 
-        translation = user.getTranslationOrNothing("biomes." + biome.name().toLowerCase());
+        translation = user.getTranslationOrNothing("biomes." + biome.getKey().getKey());
 
         if (!translation.isEmpty())
         {
@@ -667,7 +640,7 @@ public class Utils
         }
 
         // Nothing was found. Use just a prettify text function.
-        return Util.prettifyText(biome.name());
+        return Util.prettifyText(biome.getKey().getKey());
     }
 
 
