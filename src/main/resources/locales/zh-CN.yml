@@ -1,41 +1,37 @@
+---
 stone-generator:
-  # 本节为命令翻译
   commands:
-    # 本节为管理命令的翻译
     admin:
       main:
-        description: "魔法刷石机的管理命令"
+        description: 魔法刷石机的管理命令
       import:
-        description: "导入刷石机"
-        confirmation: "将从[gamemode]中删除现有刷石机，并从模板文件中导入新刷石机-请确认"
+        description: 导入刷石机
+        confirmation: 将从[gamemode]中删除现有刷石机，并从模板文件中导入新刷石机-请确认
       why:
         parameters: "<player>"
-        description: "开关调试信息"
+        description: 开关调试信息
       database:
-        description: "数据库操作命令"
+        description: 数据库操作命令
       import-database:
         parameters: "<file>"
-        description: "从文件导入刷石机数据"
-        confirmation: "将删除[gamemode]的现有刷石机，并从数据库文件中导入刷石机-请确认"
+        description: 从文件导入刷石机数据
+        confirmation: 将删除[gamemode]的现有刷石机，并从数据库文件中导入刷石机-请确认
       export:
         parameters: "<file>"
-        description: "将刷石机数据导出到文件"
-    # 本节为玩家命令的翻译
+        description: 将刷石机数据导出到文件
     player:
       main:
-        description: "打开刷石机控制面板"
+        description: 打开刷石机控制面板
       view:
-        description: "打开某个刷石机的详细面板"
+        description: 打开某个刷石机的详细面板
         parameters: "<generator-id>"
       buy:
-        description: "购买一个刷石机"
+        description: 购买一个刷石机
         parameters: "<generator-id>"
       activate:
-        description: "启用/禁用 某个刷石机"
+        description: 启用/禁用 某个刷石机
         parameters: "<generator-id> <true/false>"
-  # 本节包含GUI界面中项目的翻译。
   gui:
-    # 本节包含所有GUI标题的翻译。
     titles:
       player-panel: "&8&l刷石机"
       view-generator: "&r[generator]"
@@ -51,17 +47,12 @@ stone-generator:
       manage-islands: "&8&l管理岛屿刷石机"
       library: "&8&l刷石机库"
       settings: "&8&l插件设置"
-    # 本节包含GUI中所有按钮的翻译。
     buttons:
-      # 刷石机视图的按钮部分
       default:
         name: "&f&l默认刷石机"
-        description: |-
-          &7 默认刷石机总是被激活的。
-        enabled: |-
-          &b 这 &a是默认 &b刷石机。
-        disabled: |-
-          &b 这 &c不是默认 &b刷石机。
+        description: "&7 默认刷石机总是被激活的。"
+        enabled: "&b 这 &a是默认 &b刷石机。"
+        disabled: "&b 这 &c不是默认 &b刷石机。"
       priority:
         name: "&f&l刷石机优先级"
         description: |-
@@ -76,120 +67,90 @@ stone-generator:
         value: "&b类型: &7 [type]"
       required_min_level:
         name: "&f&l最低岛屿等级"
-        description: |-
-          &7岛屿等级达到该数值时才能解锁。
+        description: "&7岛屿等级达到该数值时才能解锁。"
         value: "&b最低等级要求: [number]"
       required_permissions:
         name: "&f&l权限要求"
-        description: |-
-          &7解锁此刷石机所需的权限列表。
+        description: "&7解锁此刷石机所需的权限列表。"
         list: "&b所需权限:"
         value: "&b - [permission]"
         none: "&b - 不需要"
       purchase_cost:
         name: "&f&l购买费用"
-        description: |-
-          &7购买此刷石机的费用。
+        description: "&7购买此刷石机的费用。"
         value: "&b价格: [number]"
       activation_cost:
         name: "&f&l激活费用"
-        description: |-
-          &7每次激活此刷石机的费用。
+        description: "&7每次激活此刷石机的费用。"
         value: "&b价格: [number]"
       biomes:
         name: "&f&l适用生物群系"
-        description: |-
-          &7此刷石机仅能在列出的生物群系中生效。
+        description: "&7此刷石机仅能在列出的生物群系中生效。"
         list: "&b生物群系:"
         value: "&b - [biome]"
         any: "&b - 所有"
       treasure_amount:
         name: "&f&l宝藏数量"
-        description: |-
-          &7宝藏一次掉落的数量。
+        description: "&7宝藏一次掉落的数量。"
         value: "&b数量: [number]"
       treasure_chance:
         name: "&f&l宝藏几率"
-        description: |-
-          &7宝藏掉落的几率。
+        description: "&7宝藏掉落的几率。"
         value: "&b掉落几率: [number]"
-      # 刷石机视图标题部分的按钮
       info:
         name: "&f&l一般信息"
-        description: |-
-          &7有关此刷石机的一般信息。
+        description: "&7有关此刷石机的一般信息。"
       blocks:
         name: "&f&l方块列表"
-        description: |-
-          &7可以生成的方块及几率。
+        description: "&7可以生成的方块及几率。"
       treasures:
         name: "&f&l宝藏列表"
-        description: |-
-          &7生成方块时掉落的宝藏列表及几率。
-        drag-and-drop: |-
-          &7支持将项目拖放到空白处。
-      # 刷石机视图中的方块和宝藏部分
+        description: "&7生成方块时掉落的宝藏列表及几率。"
+        drag-and-drop: "&7支持将项目拖放到空白处。"
       block-icon:
         name: "&f&l [material]"
-        # 支持 [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
         description: "&b生成几率： [#.##]"
         actual: "&b数据值: [number]"
       treasure-icon:
         name: "&f&l [material]"
-        # 格式支持 [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
         description: "&b掉落几率: [#.####]"
         actual: "&b数据值: [number]"
-      # 用户刷石机列表的按钮部分
       show_cobblestone:
         name: "&f&l圆石刷石机"
-        description: |-
-          &7仅显示圆石刷石机类型
+        description: "&7仅显示圆石刷石机类型"
       show_stone:
         name: "&f&l石头刷石机"
-        description: |-
-          &7仅显示石头刷石机类型
+        description: "&7仅显示石头刷石机类型"
       show_basalt:
         name: "&f&l玄武岩刷石机"
-        description: |-
-          &7仅显示玄武岩刷石机类型
+        description: "&7仅显示玄武岩刷石机类型"
       toggle_visibility:
         name: "&f&l已解锁的刷石机"
-        description: |-
-          &7仅显示已经解锁的刷石机
+        description: "&7仅显示已经解锁的刷石机"
       show_active:
         name: "&f&l激活的刷石机"
-        description: |-
-          &7仅显示已激活的刷石机
+        description: "&7仅显示已激活的刷石机"
       return:
         name: "&f&l返回"
-        description: |-
-          &7返回上级菜单或关闭面板
+        description: "&7返回上级菜单或关闭面板"
       previous:
         name: "&f&l上一页"
-        description: |-
-          &7切换到第 [number] 页
+        description: "&7切换到第 [number] 页"
       next:
         name: "&f&l下一页"
-        description: |-
-          &7切换到第 [number] 页
-      # 此处下面的所有按钮都用于刷石机管理器面板。
-      # 刷石机管理器主页的按钮
+        description: "&7切换到第 [number] 页"
       manage_users:
         name: "&f&l管理岛屿刷石机"
-        description: |-
-          &7管理当前游戏模式岛屿上的刷石机。
+        description: "&7管理当前游戏模式岛屿上的刷石机。"
       manage_generator_tiers:
         name: "&f&l管理刷石机"
-        description: |-
-          &7管理当前游戏模式中的刷石机。
+        description: "&7管理当前游戏模式中的刷石机。"
       manage_generator_bundles:
         name: "&f&l管理捆绑包"
-        description: |-
-          &7管理当前游戏模式中的捆绑包。
+        description: "&7管理当前游戏模式中的捆绑包。"
       settings:
         name: "&f&l插件设置"
-        description: |-
-          &7&7查看和调整刷石机插件设置。
+        description: "&7&7查看和调整刷石机插件设置。"
       import_template:
         name: "&f&l导入模板"
         description: |-
@@ -198,8 +159,7 @@ stone-generator:
           &7模板文件位于附加插件目录。
       web_library:
         name: "&f&l网络库"
-        description: |-
-          &7查看网络库中的共享刷石机。
+        description: "&7查看网络库中的共享刷石机。"
       export_from_database:
         name: "&f&l导出数据库"
         description: |-
@@ -218,101 +178,77 @@ stone-generator:
           &7石机将被清空。
       wipe_generator_data:
         name: "&f&l清除刷石机数据库"
-        description: |-
-          &7清除当前游戏模式中的刷石机和捆绑包数据。
-      # 绑定包编辑器中的按钮
+        description: "&7清除当前游戏模式中的刷石机和捆绑包数据。"
       bundle_name:
         name: "&f&l捆绑包名称"
-        description: |-
-          &7修改捆绑包名称。
+        description: "&7修改捆绑包名称。"
         value: "&b名称: &r [bundle]"
       bundle_icon:
         name: "&f&l捆绑包图标"
-        description: |-
-          &7修改捆绑包图标。
+        description: "&7修改捆绑包图标。"
       bundle_description:
         name: "&f&l捆绑包描述"
       bundle_info:
         name: "&f&l一般信息"
-        description: |-
-          &7显示捆绑包的一般信息。
+        description: "&7显示捆绑包的一般信息。"
       bundle_generators:
         name: "&f&l捆绑的刷石机"
-        description: |-
-          &7显示这个捆绑包绑定的刷石机。
+        description: "&7显示这个捆绑包绑定的刷石机。"
       add_generator:
         name: "&f&l添加刷石机"
-        description: |-
-          &7分配刷石机到这个捆绑包中。
+        description: "&7分配刷石机到这个捆绑包中。"
         list: "&b选定的刷石机:"
         value: "&b - [generator]"
       remove_generator:
         name: "&f&l删除刷石机"
-        description: |-
-          &7把刷石机从这个捆绑包里解绑。
+        description: "&7把刷石机从这个捆绑包里解绑。"
         list: "&b选定的刷石机:"
         value: "&b - [generator]"
-      # 绑定包管理器中的按钮
       create_bundle:
         name: "&f&l创建捆绑包"
-        description: |-
-          &7在当前游戏模式里创建一个新的捆绑包。
+        description: "&7在当前游戏模式里创建一个新的捆绑包。"
       delete_bundle:
         name: "&f&l删除捆绑包"
-        description: |-
-          &7从此游戏模式中完全删除捆绑包。
+        description: "&7从此游戏模式中完全删除捆绑包。"
         list: "&b选定的捆绑包:"
         value: "&b - [bundle]"
-      # 刷石机编辑器中的按钮
       name:
         name: "&f&l刷石机名称"
-        description: |-
-          &7刷石机的标题，支持彩色代码。
+        description: "&7刷石机的标题，支持彩色代码。"
         value: "&b名称: &r[generator]"
       icon:
         name: "&f&l刷石机图标"
-        description: |-
-          &7此刷石机在面板里显示的图标（物品）。
+        description: "&7此刷石机在面板里显示的图标（物品）。"
       locked_icon:
         name: "&f&l锁定图标"
-        description: |-
-          &7表示此刷石机已被锁定的图标（物品）。
+        description: "&7表示此刷石机已被锁定的图标（物品）。"
       description:
         name: "&f&l刷石机描述"
-        description: |-
-          &7描述文本将显示在标题下面。
+        description: "&7描述文本将显示在标题下面。"
         value: "&b描述:"
       deployed:
         name: "&f&l部署状态"
         description: |-
           &7已部署的刷石机可被玩家使用。
           &7未部署的刷石机不会工作。
-        enabled: |-
-          &b该刷石机 &a已部署
-        disabled: |-
-          &b该刷石机 &c未部署
+        enabled: "&b该刷石机 &a已部署"
+        disabled: "&b该刷石机 &c未部署"
       add_material:
         name: "&f&l添加材料"
-        description: |-
-          &7添加新材料到当前材料列表。
+        description: "&7添加新材料到当前材料列表。"
       remove_material:
         name: "&f&l删除材料"
-        description: |-
-          &7从当前材料列表里删除选定的材料。
+        description: "&7从当前材料列表里删除选定的材料。"
         selected-materials: "&7选定的材料:"
         list-value: "&7 - [number] x [value]"
-      # 绑定包编辑器中的按钮
       create_generator:
         name: "&f&l创建刷石机"
-        description: |-
-          &7为当前游戏模式创建新的刷石机。
+        description: "&7为当前游戏模式创建新的刷石机。"
       delete_generator:
         name: "&f&l删除刷石机"
-        description: |-
-          &7从当前游戏模式完全删除刷石机。
+        description: "&7从当前游戏模式完全删除刷石机。"
         list: "&b选定的刷石机:"
         value: "&b - [generator]"
-      # 岛屿数据编辑器中的按钮
       island_name:
         name: "&f&l [name]"
         description: |-
@@ -328,8 +264,7 @@ stone-generator:
           &7所选岛屿上刷石机的工作范围。
           &70或小于0表示无限范围。
         value: "&b范围: [number]"
-        overwritten: |-
-          &c为岛主设定的工作范围可以覆盖该值。
+        overwritten: "&c为岛主设定的工作范围可以覆盖该值。"
       owner_working_range:
         name: "&f&l工作范围-岛主"
         description: |-
@@ -346,8 +281,7 @@ stone-generator:
           &7当前岛屿允许同时激活的刷石机数量。
           &70或小于0表示无限激活数量。
         value: "&b最大激活数: [number]"
-        overwritten: |-
-          &c为岛主设定的激活数可以覆盖该值。
+        overwritten: "&c为岛主设定的激活数可以覆盖该值。"
       owner_max_generators:
         name: "&f&l最大激活数-岛主"
         description: |-
@@ -364,8 +298,7 @@ stone-generator:
           &7分配给当前岛屿的捆绑包。
           &7选定的岛屿只能使用此捆绑包中的刷石机。
         value: "&b捆绑包: [bundle]"
-        overwritten: |-
-          &c为岛主设定的捆绑包可以覆盖此内容。
+        overwritten: "&c为岛主设定的捆绑包可以覆盖此内容。"
       owner_bundle:
         name: "&f&l捆绑包-岛主"
         description: |-
@@ -377,35 +310,26 @@ stone-generator:
         value: "&b捆绑包: [bundle]"
       island_info:
         name: "&f&l一般信息"
-        description: |-
-          &7显示此岛屿的一般信息。
+        description: "&7显示此岛屿的一般信息。"
       island_generators:
         name: "&f&l岛屿刷石机"
-        description: |-
-          &7显示当前岛屿所有可用的刷石机。
+        description: "&7显示当前岛屿所有可用的刷石机。"
       reset_to_default:
         name: "&f&l重置为默认值"
-        description: |-
-          &7将此页所有值设置为默认值。
-      # 岛屿管理面板中的按钮
+        description: "&7将此页所有值设置为默认值。"
       is_online:
         name: "&f&l在线玩家"
-        description: |-
-          &7显示当前在线的玩家列表
+        description: "&7显示当前在线的玩家列表"
       all_islands:
         name: "&f&l所有岛屿"
-        description: |-
-          &7显示所有岛屿
+        description: "&7显示所有岛屿"
       search:
         name: "&f&l搜索"
-        description: |-
-          &7搜索特定的岛屿。
+        description: "&7搜索特定的岛屿。"
         search: "&b值: [value]"
-      # 插件设置面板中的按钮
       offline_generation:
         name: "&f&l离线刷石机"
-        description: |-
-          &7岛屿成员都离线时刷石机是否工作
+        description: "&7岛屿成员都离线时刷石机是否工作"
         enabled: |-
           &b离线刷石机 &a已启用 &b 。
           &7岛屿成员都离线后刷石机将&a继续工作&7。
@@ -417,10 +341,8 @@ stone-generator:
         description: |-
           &7在生成的方块上应用物理功能以便允许使
           &7用红石机器，但是会稍微降低服务器性能。
-        enabled: |-
-          &b物理功能 &a 已启用 &b 。
-        disabled: |-
-          &b物理功能 &c 已禁用 &b 。
+        enabled: "&b物理功能 &a 已启用 &b 。"
+        disabled: "&b物理功能 &c 已禁用 &b 。"
       working_range:
         name: "&f&l默认工作范围"
         description: |-
@@ -441,10 +363,8 @@ stone-generator:
           &7过滤器是玩家刷石机面板中的第一行，
           &7它可以按类型或状态显示刷石机。
           &7此设置可以禁用并隐藏过滤器。
-        enabled: |-
-          &b过滤器 &a 已启用 &b .
-        disabled: |-
-          &b过滤器 &c 已禁用 &b .
+        enabled: "&b过滤器 &a 已启用 &b ."
+        disabled: "&b过滤器 &c 已禁用 &b ."
       border_block:
         name: "&f&l边框图标"
         description: |-
@@ -459,23 +379,17 @@ stone-generator:
         value: "&b标题： `&r[name]&r&b`"
       unlock_notify:
         name: "&f&l解锁时通知"
-        description: |-
-          &7当可以解锁新的刷石机时，向用户发送一条消息。
-        enabled: |-
-          &b解锁通知 &a 已启用 &b。
-        disabled: |-
-          &b解锁通知 &c 已禁用 &b。
+        description: "&7当可以解锁新的刷石机时，向用户发送一条消息。"
+        enabled: "&b解锁通知 &a 已启用 &b。"
+        disabled: "&b解锁通知 &c 已禁用 &b。"
       disable_on_activate:
         name: "&f&l激活时禁用"
         description: |-
           &7如果用户激活新的刷石机，则禁用最早
           &7激活的刷石机。在仅允许单个刷石机的
           &7情况下很有用。
-        enabled: |-
-          &b激活时禁用 &a 已开启 &b。
-        disabled: |-
-          &b激活时禁用 &c 已关闭 &b。
-      # Buttons in Library GUI
+        enabled: "&b激活时禁用 &a 已开启 &b。"
+        disabled: "&b激活时禁用 &c 已关闭 &b。"
       library:
         name: "&f&l [name]"
         description: |-
@@ -484,98 +398,74 @@ stone-generator:
           &7 为 &f[gamemode] &7创建
           &7 语言: [lang]
           &7 版本: [version]
-      # GUI中的按钮，用于选择要生成的刷石机的块。
       accept_blocks:
         name: "&f&l接受方块"
-        description: |-
-          &7接受选定的方块并返回。
+        description: "&7接受选定的方块并返回。"
         selected-blocks: "&7选定的方块:"
         list-value: "&7 - [value]"
       material-icon:
         name: "&f&l [material]"
       search_block:
         name: "&f&l搜索"
-        description: |-
-          &7搜索特定的方块。
+        description: "&7搜索特定的方块。"
         search: "&b值: [value]"
-      # GUI中的按钮，允许选择刷石机的生物群落。
       accept_biome:
         name: "&f&l接受生物群系"
-        description: |-
-          &7接受选定的生物群系并返回。
+        description: "&7接受选定的生物群系并返回。"
         selected-biomes: "&7选定的生物群系:"
         list-value: "&7 - [value]"
       biome-icon:
         name: "&f&l [biome]"
-      # 本节包含生物群系过滤器的名称。
       biome-groups:
         lush:
           name: "&f&l茂密"
-          description: |-
-            &7只显示茂密生物群系
+          description: "&7只显示茂密生物群系"
         dry:
           name: "&f&l干燥"
-          description: |-
-            &7只显示干燥生物群系
+          description: "&7只显示干燥生物群系"
         cold:
           name: "&f&l寒冷"
-          description: |-
-            &7只显示寒冷生物群系
+          description: "&7只显示寒冷生物群系"
         snowy:
           name: "&f&l积雪"
-          description: |-
-            &7只显示积雪生物群系
+          description: "&7只显示积雪生物群系"
         ocean:
           name: "&f&l海洋"
-          description: |-
-            &7只显示海洋生物群系
+          description: "&7只显示海洋生物群系"
         nether:
           name: "&f&l下界"
-          description: |-
-            &7只显示下界生物群系
+          description: "&7只显示下界生物群系"
         the_end:
           name: "&f&l末地"
-          description: |-
-            &7只显示末地生物群系
+          description: "&7只显示末地生物群系"
         neutral:
           name: "&f&l中性"
-          description: |-
-            &7只显示中性生物群系
+          description: "&7只显示中性生物群系"
         unused:
           name: "&f&l未使用"
-          description: |-
-            &7只显示未使用的生物群系
-      # 本节包含刷石机类型按钮的名称和说明。
+          description: "&7只显示未使用的生物群系"
       generator-types:
         cobblestone:
           name: "&f&l圆石"
-          description: |-
-            &7仅适用于圆石刷石机。
+          description: "&7仅适用于圆石刷石机。"
         stone:
           name: "&f&l石头"
-          description: |-
-            &7仅适用于石头刷石机。
+          description: "&7仅适用于石头刷石机。"
         basalt:
           name: "&f&l玄武岩"
-          description: |-
-            &7仅适用于玄武岩刷石机。
+          description: "&7仅适用于玄武岩刷石机。"
         cobblestone_or_stone:
           name: "&f&l圆石 或 石头"
-          description: |-
-            &7适用于圆石和石头刷石机。
+          description: "&7适用于圆石和石头刷石机。"
         basalt_or_cobblestone:
           name: "&f&l玄武岩 或 圆石"
-          description: |-
-            &7适用于玄武岩和圆石刷石机。
+          description: "&7适用于玄武岩和圆石刷石机。"
         basalt_or_stone:
           name: "&f&l玄武岩 或 石头"
-          description: |-
-            &7适用于玄武岩和石头刷石机。
+          description: "&7适用于玄武岩和石头刷石机。"
         any:
           name: "&f&l任意"
-          description: |-
-            &7适用于任何类型的刷石机。
-    # 本节包含GUI按钮提示的翻译。
+          description: "&7适用于任何类型的刷石机。"
     tips:
       click-to-previous: "&e点击 &7浏览上一页"
       click-to-next: "&e点击 &7浏览下一页"
@@ -588,8 +478,7 @@ stone-generator:
       click-to-filter-disable: "&e点击 &c关闭过滤器"
       click-to-activate: "&e点击 &7激活"
       click-to-deactivate: "&e点击 &7禁用"
-      click-gold-to-purchase: |-
-        &e点击 &7金块来购买。
+      click-gold-to-purchase: "&e点击 &7金块来购买。"
       click-to-purchase: "&e点击 &7购买"
       click-to-return: "&e点击 &7返回"
       click-to-quit: "&e点击 &7退出"
@@ -597,8 +486,7 @@ stone-generator:
       click-to-open: "&e点击 &7打开"
       click-to-export: "&e点击 &7开始导出"
       click-to-change: "&e点击 &7更改"
-      click-on-item: |-
-        &e点击 &7以从你的背包里选择一个物品。
+      click-on-item: "&e点击 &7以从你的背包里选择一个物品。"
       click-to-view: "&e点击 &7查看"
       click-to-add: "&e点击 &7添加"
       click-to-remove: "&e点击 &7删除"
@@ -613,7 +501,6 @@ stone-generator:
       click-to-perform: "&e点击 &7执行"
       click-to-edit: "&e点击 &7编辑"
       right-click-to-clear: "&e右键点击 &7清除"
-      # 这些工具提示显示在用户gui中。
       left-click-to-view: "&e左键点击 &7查看"
       left-click-to-purchase: "&e左键点击 &7购买"
       left-click-to-activate: "&e左键点击 &7激活"
@@ -626,13 +513,9 @@ stone-generator:
       shift-click-to-purchase: "&eShift单击 &7购买"
       shift-click-to-activate: "&eShift单击 &7激活"
       shift-click-to-deactivate: "&eShift单击 &7禁用"
-    # 本节包含一些复杂的GUI描述的翻译。
+      shift-click-to-reset: "&e按住 Shift 键&7 单击以重置"
     descriptions:
-      # 刷石机描述生成器，描述中的所有元素都是根据以下部分生成的。
       generator:
-        # 主要描述元素的内容。如果您根本不想展示宝藏，只需删除[treasures]。
-        # [description] 来自各个刷石机。
-        # 这里不支持使用颜色代码。
         lore: |-
           [description]
           [blocks]
@@ -642,20 +525,20 @@ stone-generator:
           [status]
         blocks:
           title: "&7&l生成方块："
-          value: "&8 [material] - [#.##]%"
+          value: "&8 [材料] - [#.##]%"
         treasures:
           title: "&7&l掉落宝藏："
-          value: "&8 [material] - [#.####]%"
+          value: "&8 [材料] - [#.####]%"
         requirements:
           description: |-
-            [biomes]
-            [level]
-            [missing-permissions]
-          level: "&c&l需要岛屿等级： &r&c [number]"
+            [生物群系]
+            [等级]
+            [缺失权限]
+          level: "&c&l需要岛屿等级： &r&c [数量]"
           permission-title: "&c&l缺少权限："
-          permission: "&c  -[permission]"
+          permission: "&c  -[权限]"
           biome-title: "&7&l适用生物群系:"
-          biome: "&8 [biome]"
+          biome: "&8 [生物群系]"
           any: "&7&l适用于 &e&o所有 &r&7&l生物群系"
         status:
           locked: "&c未解锁！"
@@ -676,8 +559,7 @@ stone-generator:
       generator-list: "&7 - [generator]"
       selected: "&e已选定"
       island-owner: "[player]的岛屿"
-      unknown: "未知"
-  # 本节包含一些提示性消息的翻译。
+      unknown: 未知
   messages:
     generator-loaded: "&a刷石机 &r'[generator]&r' &r&a已加载到本地缓存。"
     bundle-loaded: "&a捆绑包 &r'[bundle]' &r&a已加载到本地缓存。"
@@ -695,7 +577,6 @@ stone-generator:
     no-credits-buy: "&c没有足够的费用来购买刷石机。需要 [number] 。"
     import-count: "&e导入了 [generator] 个刷石机和 [bundle] 个捆绑包。"
     start-downloading: "&e开始下载网络库。"
-  # 本节包含一些错误消息的翻译。
   errors:
     no-generator-data: "&c找不到有效的刷石机数据。"
     no-island-data: "&c没有找到岛屿数据。"
@@ -708,14 +589,10 @@ stone-generator:
     generator-tier-not-found: "&c刷石机ID '[generator]' &r&c在游戏模式 [gamemode] 里不存在。"
     no-generators-in-world: "&c在世界 [world] 中没有适合您的刷石机。"
   conversations:
-    # 用于对话中输入以确认的字符串列表。（以逗号分隔）
-    confirm-string: "true, on, yes, confirm, y, valid, correct, ok, 同意, 接受, 确定, 是"
-    # 用于对话中输入以拒绝的字符串列表。（以逗号分隔）
-    deny-string: "false, off, no, deny, n, invalid, incorrect, 拒绝, 否定, 否, 不"
-    # 用于对话中输入以取消对话的字符串。（只能是一个）
-    cancel-string: "cancel"
-    # 用于对话中输入以退出对话的字符串列表。（以逗号分隔）
-    exit-string: "cancel, exit, quit, 取消, 退出, 离开"
+    confirm-string: true, on, yes, confirm, y, valid, correct, ok, 同意, 接受, 确定, 是
+    deny-string: false, off, no, deny, n, invalid, incorrect, 拒绝, 否定, 否, 不
+    cancel-string: cancel
+    exit-string: cancel, exit, quit, 取消, 退出, 离开
     cancelled: "&c会话已取消！"
     prefix: "&l&6[BentoBox]: &r"
     numeric-only: "&c给定值 [value] 不是有效数字！"
@@ -746,36 +623,23 @@ stone-generator:
     click-text-to-purchase: "&e您已解锁 &r[generator]&r&e！点击此处立即花费 [number] 来购买。"
     click-text-to-activate-vault: "&e您已解锁 &r[generator]&r&e！点击此处立即花费 [number] 来激活。"
     click-text-to-activate: "&e您已解锁 &r[generator]&r&e！点击此处立即激活。"
-  # 此处为材料名称翻译，您可以在此处加入其它材料的名称翻译。
   materials:
-    # 原始名称（键）必须为小写.
-    cobblestone: "圆石"
-    # 还能支持描述
+    cobblestone: 圆石
     stone:
-      name: "石头"
-      description: "只是一块石头"
-  # 此处为生物群系的名称翻译，您可以在此处加入其它生物群系的名称翻译。
+      name: 石头
+      description: 只是一块石头
   biomes:
-    # 原始名称（键）必须为小写
-    plains: "平原"
-    # 还能支持描述
+    plains: 平原
     flower_forest:
-      name: "繁花森林"
-      description: ""
-# 当前插件中使用的保护标志（开关），这些内容显示在岛屿设置界面中。
+      name: 繁花森林
 protection:
   flags:
-    # 该标志允许在岛屿上启用或禁用魔法刷石机。
-    # 这个设定出现在岛屿设置的“通用”页面中。
     MAGIC_COBBLESTONE_GENERATOR:
-      name: "魔法刷石机"
+      name: 魔法刷石机
       description: |-
         &a启用或禁用岛屿上的所有魔法刷石机。
         &7设置同样影响下界岛屿和末地岛屿。
       hint: "&e已禁用魔法刷石机。"
-    # 该标志为魔法刷石机指定访问权限。
-    # 这个设定出现在岛屿设置的“保护”页面中。
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
-      name: "魔法刷石机权限"
-      description: |-
-        &a选择可以启用和停用魔法刷石机的对象。
+      name: 魔法刷石机权限
+      description: "&a选择可以启用和停用魔法刷石机的对象。"
