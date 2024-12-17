@@ -1259,8 +1259,8 @@ public class StoneGeneratorManager {
      * @param money         the money
      */
     private void withdrawMoney(CompletableFuture<Boolean> withdrawStage, User user, Island island, double money) {
-		if(money <= 0.0)
-			return;
+	if(money <= 0.0)
+		return;
 
 	if (this.addon.getSettings().isUseBankAccount() && this.addon.isBankProvided()) {
 	    BankManager bankManager = this.addon.getBankAddon().getBankManager();
