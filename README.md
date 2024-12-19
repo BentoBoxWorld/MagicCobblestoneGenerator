@@ -61,10 +61,6 @@ Magic Cobblestone Generator have 5 placeholders:
 - `[gamemode]_magiccobblestonegenerator_unlocked_generator_names` - Returns text that contains all unlocked generator names separated with `,`.
 - `[gamemode]_magiccobblestonegenerator_purchased_generator_names` - Returns text that contains all purchased generator names separated with `,`.
 
-## Compatibility
-
-- [x] BentoBox - 1.15 version
-
 ## Config.yml
 
 The config.yml has the following sections:
