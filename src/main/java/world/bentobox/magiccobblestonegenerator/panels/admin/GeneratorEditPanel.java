@@ -1,10 +1,12 @@
 package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -25,8 +27,8 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
-import world.bentobox.magiccobblestonegenerator.panels.utils.MultiBiomeSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.GeneratorTypeSelector;
+import world.bentobox.magiccobblestonegenerator.panels.utils.MultiBiomeSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Pair;
@@ -90,7 +92,7 @@ public class GeneratorEditPanel extends CommonPanel
 
         switch (this.activeTab) {
             case INFO -> {
-                this.populateInfo(panelBuilder);
+                this.populateInfo(panelBuilder, user.getLocale());
 
                 // Add listener that allows to change icons
                 panelBuilder.listener(new IconChanger());
@@ -147,54 +149,55 @@ public class GeneratorEditPanel extends CommonPanel
      * This method populates panel body with info blocks.
      *
      * @param panelBuilder PanelBuilder that must be created.
+     * @param locale 
      */
-    private void populateInfo(PanelBuilder panelBuilder)
+    private void populateInfo(PanelBuilder panelBuilder, Locale locale)
     {
-        panelBuilder.item(10, this.createButton(Button.NAME));
-        panelBuilder.item(11, this.createButton(Button.ID));
-        panelBuilder.item(19, this.createButton(Button.ICON));
-        panelBuilder.item(28, this.createButton(Button.DESCRIPTION));
+        panelBuilder.item(10, this.createButton(Button.NAME, locale));
+        panelBuilder.item(11, this.createButton(Button.ID, locale));
+        panelBuilder.item(19, this.createButton(Button.ICON, locale));
+        panelBuilder.item(28, this.createButton(Button.DESCRIPTION, locale));
 
         // Add locked icon
-        panelBuilder.item(20, this.createButton(Button.LOCKED_ICON));
+        panelBuilder.item(20, this.createButton(Button.LOCKED_ICON, locale));
 
         // Usefull information to know about generators.
-        panelBuilder.item(12, this.createButton(Button.DEFAULT));
-        panelBuilder.item(21, this.createButton(Button.PRIORITY));
-        panelBuilder.item(30, this.createButton(Button.TYPE));
+        panelBuilder.item(12, this.createButton(Button.DEFAULT, locale));
+        panelBuilder.item(21, this.createButton(Button.PRIORITY, locale));
+        panelBuilder.item(30, this.createButton(Button.TYPE, locale));
 
         // Default genertator do not have requirements.
         if (!this.generatorTier.isDefaultGenerator())
         {
             if (this.addon.isLevelProvided())
             {
-                panelBuilder.item(13, this.createButton(Button.REQUIRED_MIN_LEVEL));
+                panelBuilder.item(13, this.createButton(Button.REQUIRED_MIN_LEVEL, locale));
             }
 
             // Display only permissions if they are required.
-            panelBuilder.item(22, this.createButton(Button.REQUIRED_PERMISSIONS));
+            panelBuilder.item(22, this.createButton(Button.REQUIRED_PERMISSIONS, locale));
 
             if (this.addon.isVaultProvided())
             {
                 // Display cost only if there exist vault.
-                panelBuilder.item(31, this.createButton(Button.PURCHASE_COST));
+                panelBuilder.item(31, this.createButton(Button.PURCHASE_COST, locale));
             }
         }
 
         // If vault is disabled.
         if (this.addon.isVaultProvided())
         {
-            panelBuilder.item(15, this.createButton(Button.ACTIVATION_COST));
+            panelBuilder.item(15, this.createButton(Button.ACTIVATION_COST, locale));
         }
 
-        panelBuilder.item(24, this.createButton(Button.BIOMES));
+        panelBuilder.item(24, this.createButton(Button.BIOMES, locale));
 
         // deployed button.
-        panelBuilder.item(33, this.createButton(Button.DEPLOYED));
+        panelBuilder.item(33, this.createButton(Button.DEPLOYED, locale));
 
         // display treasures.
-        panelBuilder.item(25, this.createButton(Button.TREASURE_CHANCE));
-        panelBuilder.item(34, this.createButton(Button.TREASURE_AMOUNT));
+        panelBuilder.item(25, this.createButton(Button.TREASURE_CHANCE, locale));
+        panelBuilder.item(34, this.createButton(Button.TREASURE_AMOUNT, locale));
     }
 
 
@@ -323,9 +326,10 @@ public class GeneratorEditPanel extends CommonPanel
      * This method creates panel item for given button type.
      *
      * @param button Button type.
+     * @param locale locale of user requesting the button
      * @return Clickable PanelItem button.
      */
-    private PanelItem createButton(Button button)
+    private PanelItem createButton(Button button, Locale locale)
     {
         final String reference = Constants.BUTTON + button.name().toLowerCase();
         String name = this.user.getTranslation(reference + ".name");
@@ -623,10 +627,12 @@ public class GeneratorEditPanel extends CommonPanel
                 }
             }
             case PURCHASE_COST -> {
+                NumberFormat numberFormat = NumberFormat.getNumberInstance(locale);
+
                 itemStack = new ItemStack(Material.GOLD_BLOCK);
 
                 description.add(this.user.getTranslation(reference + ".value",
-                    Constants.NUMBER, String.valueOf(this.generatorTier.getGeneratorTierCost())));
+                        Constants.NUMBER, numberFormat.format(this.generatorTier.getGeneratorTierCost())));
 
                 clickHandler = (panel, user, clickType, i) ->
                 {
@@ -1317,7 +1323,7 @@ public class GeneratorEditPanel extends CommonPanel
                     GeneratorEditPanel.this.selectedButton = null;
                     // Rebuild icon
                     event.getInventory().setItem(19,
-                        GeneratorEditPanel.this.createButton(Button.ICON).getItem());
+                            GeneratorEditPanel.this.createButton(Button.ICON, user.getLocale()).getItem());
                 }
                 else
                 {
@@ -1327,7 +1333,7 @@ public class GeneratorEditPanel extends CommonPanel
                     GeneratorEditPanel.this.selectedButton = null;
                     // Rebuild icon
                     event.getInventory().setItem(20,
-                        GeneratorEditPanel.this.createButton(Button.LOCKED_ICON).getItem());
+                            GeneratorEditPanel.this.createButton(Button.LOCKED_ICON, user.getLocale()).getItem());
                 }
 
                 // save change
