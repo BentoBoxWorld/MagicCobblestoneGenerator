@@ -554,32 +554,33 @@ public abstract class CommonPanel
         final String reference = Constants.DESCRIPTIONS + "generator.status.";
 
         StringBuilder status = new StringBuilder();
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(user.getLocale());
 
         if (!isPurchased && this.addon.isVaultProvided() && generator.getGeneratorTierCost() > 0)
         {
             status.append(this.user.getTranslationOrNothing(reference + "purchase-cost",
-                Constants.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+                    Constants.NUMBER, numberFormat.format(generator.getGeneratorTierCost())));
         }
 
         if (!isActive && this.addon.isVaultProvided() && generator.getActivationCost() > 0)
         {
             status.append("\n");
             status.append(this.user.getTranslationOrNothing(reference + "activation-cost",
-                Constants.NUMBER, String.valueOf(generator.getActivationCost())));
+                    Constants.NUMBER, numberFormat.format(generator.getActivationCost())));
         }
 
         if (isActive)
         {
             status.append("\n");
             status.append(this.user.getTranslationOrNothing(reference + "active",
-                Constants.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+                    Constants.NUMBER, numberFormat.format(generator.getGeneratorTierCost())));
         }
 
         if (!isUnlocked)
         {
             status.append("\n");
             status.append(this.user.getTranslationOrNothing(reference + "locked",
-                Constants.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+                    Constants.NUMBER, numberFormat.format(generator.getGeneratorTierCost())));
         }
 
         if (!generator.isDeployed())

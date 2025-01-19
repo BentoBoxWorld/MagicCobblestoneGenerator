@@ -7,6 +7,7 @@
 package world.bentobox.magiccobblestonegenerator.utils;
 
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -808,7 +809,7 @@ public class Utils
         boolean available)
     {
         User user = User.getInstance(uuid);
-
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(user.getLocale());
         WorldSettings settings = addon.getPlugin().getIWM().getWorldSettings(island.getWorld());
 
         if (settings != null && user != null && user.isOnline())
@@ -826,7 +827,7 @@ public class Utils
             {
                 component = new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-purchase",
                     Constants.GENERATOR, generator.getFriendlyName(),
-                    Constants.NUMBER, String.valueOf(generator.getGeneratorTierCost())));
+                        Constants.NUMBER, numberFormat.format(generator.getGeneratorTierCost())));
 
                 commandBuilder.append(addon.getSettings().getPlayerBuyCommand().split(" ")[0]);
             }
@@ -837,7 +838,7 @@ public class Utils
                     component =
                         new TextComponent(user.getTranslation(Constants.CONVERSATIONS + "click-text-to-activate-vault",
                             Constants.GENERATOR, generator.getFriendlyName(),
-                            Constants.NUMBER, String.valueOf(generator.getActivationCost())));
+                                    Constants.NUMBER, numberFormat.format(generator.getActivationCost())));
                 }
                 else
                 {

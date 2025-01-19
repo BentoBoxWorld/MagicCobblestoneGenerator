@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -56,6 +57,7 @@ import world.bentobox.bentobox.database.DatabaseSetup.DatabaseType;
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.managers.IslandsManager;
+import world.bentobox.bentobox.managers.PlayersManager;
 import world.bentobox.bentobox.managers.RanksManager;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
@@ -105,6 +107,8 @@ public class StoneGeneratorManagerTest {
     private PluginManager pim;
     @Mock
     private RanksManager rm;
+    @Mock
+    private PlayersManager pm;
 
     @SuppressWarnings("unchecked")
     @BeforeClass
@@ -149,6 +153,10 @@ public class StoneGeneratorManagerTest {
 	when(plugin.getLogger()).thenReturn(Logger.getAnonymousLogger());
 	when(addon.getPlugin()).thenReturn(plugin);
 
+    // Players manager & locale
+    when(pm.getLocale(any())).thenReturn("en-US");
+    when(plugin.getPlayers()).thenReturn(pm);
+
 	// The database type has to be created one line before the thenReturn() to work!
 	DatabaseType value = DatabaseType.JSON;
 	when(plugin.getSettings()).thenReturn(settings);
@@ -161,6 +169,7 @@ public class StoneGeneratorManagerTest {
 	when(user.getUniqueId()).thenReturn(uuid);
 	when(user.getPlayer()).thenReturn(p);
 	when(user.getName()).thenReturn("tastybento");
+    when(user.getLocale()).thenReturn(Locale.ENGLISH);
 	User.setPlugin(plugin);
 
 	// Generator Tier
