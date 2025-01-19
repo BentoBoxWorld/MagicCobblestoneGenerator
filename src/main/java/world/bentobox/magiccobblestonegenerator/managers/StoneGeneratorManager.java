@@ -1,5 +1,6 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -1142,6 +1144,7 @@ public class StoneGeneratorManager {
 	    @NotNull GeneratorDataObject generatorData, @NotNull GeneratorTierObject generatorTier) {
 
 	final User owner = island.isSpawn() || island.getOwner() == null ? null : User.getInstance(island.getOwner());
+    NumberFormat numberFormat = NumberFormat.getNumberInstance(owner.getLocale());
 
 	if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId())) {
 	    // Generator is not unlocked. Return false.
@@ -1157,7 +1160,7 @@ public class StoneGeneratorManager {
 	    Utils.sendMessage(user,
 		    user.getTranslation(Constants.MESSAGES + "island-level-not-reached", Constants.GENERATOR,
 			    generatorTier.getFriendlyName(), TextVariables.NUMBER,
-			    String.valueOf(generatorTier.getRequiredMinIslandLevel())));
+                        numberFormat.format(generatorTier.getRequiredMinIslandLevel())));
 	    return false;
 	} else if (!generatorTier.getRequiredPermissions().isEmpty() && (owner == null || !owner.isPlayer()
 		|| !generatorTier.getRequiredPermissions().stream().allMatch(owner::hasPermission))) {
@@ -1178,8 +1181,9 @@ public class StoneGeneratorManager {
 			// Return true only if user has enough money.
 			return true;
 		    } else {
+		        
 			Utils.sendMessage(user, user.getTranslation(Constants.MESSAGES + "no-credits-buy-bank",
-				TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+				TextVariables.NUMBER, numberFormat.format(generatorTier.getGeneratorTierCost())));
 			return false;
 		    }
 		} else {
@@ -1188,7 +1192,7 @@ public class StoneGeneratorManager {
 			return true;
 		    } else {
 			Utils.sendMessage(user, user.getTranslation(Constants.MESSAGES + "no-credits-buy",
-				TextVariables.NUMBER, String.valueOf(generatorTier.getGeneratorTierCost())));
+                    TextVariables.NUMBER, numberFormat.format(generatorTier.getGeneratorTierCost())));
 			return false;
 		    }
 		}
