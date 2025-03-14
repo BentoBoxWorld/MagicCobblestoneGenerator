@@ -52,6 +52,12 @@ info_tab:
         data:
           type: INFO
           display: DEFAULT
+      4:
+        icon: LADDER
+        title: stone-generator.gui.buttons.height_range.name
+        #description: stone-generator.gui.buttons.height_range.description
+        data:
+          type: HEIGHT_RANGE
       5:
         icon: DIAMOND
         title: stone-generator.gui.buttons.required_min_level.name

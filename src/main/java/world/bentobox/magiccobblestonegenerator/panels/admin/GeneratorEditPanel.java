@@ -166,21 +166,25 @@ public class GeneratorEditPanel extends CommonPanel
         panelBuilder.item(21, this.createButton(Button.PRIORITY, locale));
         panelBuilder.item(30, this.createButton(Button.TYPE, locale));
 
+        // Height configuration
+        panelBuilder.item(22, this.createButton(Button.MIN_HEIGHT, locale));
+        panelBuilder.item(13, this.createButton(Button.MAX_HEIGHT, locale));
+
         // Default genertator do not have requirements.
         if (!this.generatorTier.isDefaultGenerator())
         {
             if (this.addon.isLevelProvided())
             {
-                panelBuilder.item(13, this.createButton(Button.REQUIRED_MIN_LEVEL, locale));
+                panelBuilder.item(14, this.createButton(Button.REQUIRED_MIN_LEVEL, locale));
             }
 
             // Display only permissions if they are required.
-            panelBuilder.item(22, this.createButton(Button.REQUIRED_PERMISSIONS, locale));
+            panelBuilder.item(23, this.createButton(Button.REQUIRED_PERMISSIONS, locale));
 
             if (this.addon.isVaultProvided())
             {
                 // Display cost only if there exist vault.
-                panelBuilder.item(31, this.createButton(Button.PURCHASE_COST, locale));
+                panelBuilder.item(32, this.createButton(Button.PURCHASE_COST, locale));
             }
         }
 
@@ -578,8 +582,8 @@ public class GeneratorEditPanel extends CommonPanel
 
                 description.add(this.user.getTranslation(reference + ".list"));
                 this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
-                    description.add(this.user.getTranslation(reference + ".value",
-                        Constants.PERMISSION, permission)));
+                description.add(this.user.getTranslation(reference + ".value",
+                    Constants.PERMISSION, permission)));
 
                 if (this.generatorTier.getRequiredPermissions().isEmpty())
                 {
@@ -810,6 +814,68 @@ public class GeneratorEditPanel extends CommonPanel
                         this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
                         0,
                         Double.MAX_VALUE);
+
+                    return true;
+                };
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+            }
+            case MIN_HEIGHT -> {
+                itemStack = new ItemStack(Material.BEDROCK);
+                description.add(this.user.getTranslation(reference + ".value",
+                    Constants.MIN_HEIGHT, String.valueOf(this.generatorTier.getMinHeight())));
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
+                            this.generatorTier.setMinHeight(number.intValue());
+                            this.save();
+                        }
+
+                        // reopen panel
+                        this.build();
+                    };
+
+                    ConversationUtils.createNumericInput(numberConsumer,
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        Integer.MIN_VALUE,
+                        Integer.MAX_VALUE);
+
+                    return true;
+                };
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+            }
+            case MAX_HEIGHT -> {
+                itemStack = new ItemStack(Material.GRASS_BLOCK);
+                description.add(this.user.getTranslation(reference + ".value",
+                    Constants.MAX_HEIGHT, String.valueOf(this.generatorTier.getMaxHeight())));
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
+                            this.generatorTier.setMaxHeight(number.intValue());
+                            this.save();
+                        }
+
+                        // reopen panel
+                        this.build();
+                    };
+
+                    ConversationUtils.createNumericInput(numberConsumer,
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        Integer.MIN_VALUE,
+                        Integer.MAX_VALUE);
 
                     return true;
                 };
@@ -1086,6 +1152,7 @@ public class GeneratorEditPanel extends CommonPanel
     {
         // Normalize value
         Double value = blockChanceEntry.getValue() / maxValue * 100.0;
+        Material material = blockChanceEntry.getKey();
 
         List<String> description = new ArrayList<>();
         description.add(this.user.getTranslation(Constants.BUTTON + "block-icon.description",
@@ -1098,6 +1165,18 @@ public class GeneratorEditPanel extends CommonPanel
         description.add(this.user.getTranslation(Constants.BUTTON + "block-icon.actual",
             TextVariables.NUMBER, String.valueOf(blockChanceEntry.getValue())));
 
+        // Add height range information if it exists for this material
+        int[] heightRange = this.generatorTier.getMaterialHeightRange(material);
+        if (heightRange != null) {
+            description.add("");
+            description.add(this.user.getTranslation(Constants.BUTTON + "block-icon.height-range",
+                Constants.MIN_HEIGHT, String.valueOf(heightRange[0]),
+                Constants.MAX_HEIGHT, String.valueOf(heightRange[1])));
+        } else {
+            description.add("");
+            description.add(this.user.getTranslation(Constants.BUTTON + "block-icon.no-height-range"));
+        }
+
         boolean glow = this.selectedMaterial.contains(blockChanceEntry);
 
         if (glow)
@@ -1107,6 +1186,7 @@ public class GeneratorEditPanel extends CommonPanel
 
         description.add("");
         description.add(this.user.getTranslation(Constants.TIPS + "left-click-to-edit"));
+        description.add(this.user.getTranslation(Constants.TIPS + "shift-left-click-to-set-height-range"));
 
         if (!glow)
         {
@@ -1127,7 +1207,12 @@ public class GeneratorEditPanel extends CommonPanel
 
                 this.build();
             }
-            else
+            else if (clickType.isLeftClick() && clickType.isShiftClick())
+            {
+                // Configure height range for this material
+                this.configureHeightRangeForMaterial(material);
+            }
+            else if (clickType.isLeftClick())
             {
                 Consumer<Number> numberConsumer = newValue -> {
                     if (newValue != null)
@@ -1461,6 +1546,134 @@ public class GeneratorEditPanel extends CommonPanel
     }
 
 
+    /**
+     * Configure height range for a specific material
+     * 
+     * @param material The material to configure height range for
+     */
+    private void configureHeightRangeForMaterial(Material material)
+    {
+        // Get current height range if it exists
+        int[] currentRange = this.generatorTier.getMaterialHeightRange(material);
+        int currentMinHeight = currentRange != null ? currentRange[0] : this.generatorTier.getMinHeight();
+        int currentMaxHeight = currentRange != null ? currentRange[1] : this.generatorTier.getMaxHeight();
+
+        // Create a new panel to configure height range
+        PanelBuilder panelBuilder = new PanelBuilder().
+            user(this.user).
+            name(this.user.getTranslation(Constants.TITLE + "height-range-config", 
+                Constants.BLOCK, Utils.prettifyObject(this.user, material))).
+            size(27);
+            PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
+        // Add min height button
+        panelBuilder.item(20, new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "min-height.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "min-height.description", 
+                Constants.MIN_HEIGHT, String.valueOf(currentMinHeight))).
+            icon(Material.BEDROCK).
+            clickHandler((panel, user, clickType, slot) -> {
+                Consumer<Number> numberConsumer = number -> {
+                    if (number != null) {
+                        int newMinHeight = number.intValue();
+                        
+                        // Ensure min height is not greater than max height
+                        if (newMinHeight > currentMaxHeight) {
+                            this.user.sendMessage("admin.errors.min-height-greater-than-max", 
+                                Constants.MIN, String.valueOf(newMinHeight),
+                                Constants.MAX, String.valueOf(currentMaxHeight));
+                            return;
+                            
+                        }
+                        
+                        // Set the new height range
+                        this.generatorTier.setMaterialHeightRange(material, newMinHeight, currentMaxHeight);
+                        this.save();
+                    }
+                    
+                    // Return to the main panel
+                    this.configureHeightRangeForMaterial(material);
+                };
+                
+                ConversationUtils.createNumericInput(numberConsumer,
+                    this.user,
+                    this.user.getTranslation(Constants.CONVERSATIONS + "input-min-height"),
+                    Integer.MIN_VALUE,
+                    320);
+                
+                return true;
+            }).
+            build());
+            
+        // Add max height button
+        panelBuilder.item(24, new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "max-height.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "max-height.description", 
+                Constants.MAX_HEIGHT, String.valueOf(currentMaxHeight))).
+            icon(Material.GRASS_BLOCK).
+            clickHandler((panel, user, clickType, slot) -> {
+                Consumer<Number> numberConsumer = number -> {
+                    if (number != null) {
+                        int newMaxHeight = number.intValue();
+                        
+                        // Ensure max height is not less than min height
+                        if (newMaxHeight < currentMinHeight) {
+                            this.user.sendMessage("admin.errors.max-height-less-than-min", 
+                                Constants.MIN, String.valueOf(currentMinHeight),
+                                Constants.MAX, String.valueOf(newMaxHeight));
+                            return;
+                        }
+                        
+                        // Set the new height range
+                        this.generatorTier.setMaterialHeightRange(material, currentMinHeight, newMaxHeight);
+                        this.save();
+                    }
+                    
+                    // Return to the main panel
+                    this.configureHeightRangeForMaterial(material);
+                };
+                
+                ConversationUtils.createNumericInput(numberConsumer,
+                    this.user,
+                    this.user.getTranslation(Constants.CONVERSATIONS + "input-max-height"),
+                    Integer.MIN_VALUE,
+                    320);
+                
+                return true;
+            }).
+            build());
+            
+        // Add clear height range button
+        panelBuilder.item(22, new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "clear-height-range.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "clear-height-range.description")).
+            icon(Material.BARRIER).
+            clickHandler((panel, user, clickType, slot) -> {
+                // Remove the height range for this material
+                this.generatorTier.getMaterialHeightMap().remove(material);
+                this.save();
+                
+                // Return to the main panel
+                this.configureHeightRangeForMaterial(material);
+                
+                return true;
+            }).
+            build());
+            
+        // Add return button
+        panelBuilder.item(40, new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "return.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "return.description")).
+            icon(Material.OAK_DOOR).
+            clickHandler((panel, user, clickType, slot) -> {
+                this.build();
+                return true;
+            }).
+            build());
+            
+        panelBuilder.build();
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Enums
     // ---------------------------------------------------------------------
@@ -1579,6 +1792,14 @@ public class GeneratorEditPanel extends CommonPanel
          * Holds ID of the generator ID.
          */
         ID,
+        /**
+         * Holds Name type that allows to interact with generator min height.
+         */
+        MIN_HEIGHT,
+        /**
+         * Holds Name type that allows to interact with generator max height.
+         */
+        MAX_HEIGHT,
     }
 
 
