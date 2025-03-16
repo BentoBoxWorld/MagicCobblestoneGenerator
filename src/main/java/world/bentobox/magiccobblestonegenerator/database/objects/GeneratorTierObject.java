@@ -9,8 +9,10 @@ package world.bentobox.magiccobblestonegenerator.database.objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -511,6 +513,9 @@ public class GeneratorTierObject implements DataObject
 
         clone.setTreasureChance(this.treasureChance);
         clone.setMaxTreasureAmount(this.maxTreasureAmount);
+        clone.setMinHeight(this.minHeight);
+        clone.setMaxHeight(this.maxHeight);
+        clone.setMaterialHeightMap(new TreeMap<>(this.materialHeightMap));
 
         return clone;
     }
@@ -682,5 +687,136 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private int maxTreasureAmount = 1;
-}
 
+    /**
+     * Minimum height at which this generator can operate.
+     */
+    @Expose
+    private int minHeight = -64;
+
+    /**
+     * Maximum height at which this generator can operate.
+     */
+    @Expose
+    private int maxHeight = 320;
+
+    /**
+     * Map that stores min and max heights for each material in the generator.
+     */
+    @Expose
+    private TreeMap<Material, int[]> materialHeightMap = new TreeMap<>();
+
+    /**
+     * Field to store block height ranges
+     */
+    @Expose
+    private Map<Material, int[]> blockHeightRanges = new HashMap<>();
+
+    /**
+     * Gets the height ranges for each block type
+     * @return Map of Material to height range array [min, max]
+     */
+    public Map<Material, int[]> getBlockHeightRanges()
+    {
+        return blockHeightRanges;
+    }
+
+    /**
+     * Sets the height ranges for each block type
+     * @param blockHeightRanges Map of Material to height range array [min, max]
+     */
+    public void setBlockHeightRanges(Map<Material, int[]> blockHeightRanges)
+    {
+        this.blockHeightRanges = blockHeightRanges;
+    }
+
+    /**
+     * Gets the minimum height at which this generator can operate.
+     *
+     * @return the minimum height
+     */
+    public int getMinHeight()
+    {
+        return this.minHeight;
+    }
+
+
+    /**
+     * Sets the minimum height at which this generator can operate.
+     *
+     * @param minHeight the minimum height
+     */
+    public void setMinHeight(int minHeight)
+    {
+        this.minHeight = minHeight;
+    }
+
+
+    /**
+     * Gets the maximum height at which this generator can operate.
+     *
+     * @return the maximum height
+     */
+    public int getMaxHeight()
+    {
+        return this.maxHeight;
+    }
+
+
+    /**
+     * Sets the maximum height at which this generator can operate.
+     *
+     * @param maxHeight the maximum height
+     */
+    public void setMaxHeight(int maxHeight)
+    {
+        this.maxHeight = maxHeight;
+    }
+
+
+    /**
+     * Gets the map of material-specific height ranges.
+     *
+     * @return the material height map
+     */
+    public TreeMap<Material, int[]> getMaterialHeightMap()
+    {
+        return this.materialHeightMap;
+    }
+
+
+    /**
+     * Sets the map of material-specific height ranges.
+     *
+     * @param materialHeightMap the material height map
+     */
+    public void setMaterialHeightMap(TreeMap<Material, int[]> materialHeightMap)
+    {
+        this.materialHeightMap = materialHeightMap;
+    }
+
+
+    /**
+     * Gets the height range for a specific material.
+     *
+     * @param material the material
+     * @return an array where index 0 is minHeight and index 1 is maxHeight, or null if not set
+     */
+    public int[] getMaterialHeightRange(Material material)
+    {
+        return this.materialHeightMap.get(material);
+    }
+
+
+    /**
+     * Sets the height range for a specific material.
+     *
+     * @param material the material
+     * @param minHeight the minimum height
+     * @param maxHeight the maximum height
+     */
+    public void setMaterialHeightRange(Material material, int minHeight, int maxHeight)
+    {
+        this.materialHeightMap.put(material, new int[]{minHeight, maxHeight});
+    }
+}

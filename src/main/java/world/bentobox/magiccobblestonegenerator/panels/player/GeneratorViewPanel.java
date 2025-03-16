@@ -117,6 +117,7 @@ public class GeneratorViewPanel extends CommonPanel
 
                 panelBuilder.registerTypeBuilder("GENERATOR", this::createGeneratorButton);
                 panelBuilder.registerTypeBuilder("INFO", this::createInfoButton);
+                panelBuilder.registerTypeBuilder("HEIGHT_RANGE", this::createHeightRangeButton);
             }
             case BLOCKS -> {
                 panelBuilder.template("block_tab", "view_panel", new File(this.addon.getDataFolder(), "panels"));
@@ -563,6 +564,24 @@ public class GeneratorViewPanel extends CommonPanel
                 Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value)));
         }
 
+        // Add height range information if available
+        int minHeight = this.generatorTier.getMinHeight();
+        int maxHeight = this.generatorTier.getMaxHeight();
+        
+        // Check if material has specific height range
+        int[] heightRange = this.generatorTier.getMaterialHeightRange(blockChanceEntry.getValue());
+        
+        if (heightRange != null)
+        {
+            minHeight = heightRange[0];
+            maxHeight = heightRange[1];
+        }
+        
+        builder.description("");
+        builder.description(this.user.getTranslation(Constants.BUTTON + "block-icon.height-range",
+            Constants.MIN_HEIGHT, String.valueOf(minHeight),
+            Constants.MAX_HEIGHT, String.valueOf(maxHeight)));
+
         return builder.build();
     }
 
@@ -922,6 +941,20 @@ public class GeneratorViewPanel extends CommonPanel
                     return null;
                 }
             }
+            case MIN_HEIGHT -> {
+                if (this.generatorTier.getMinHeight() <= 0)
+                {
+                    // If min height is set to 0 or smaller, then icon is not necessary.
+                    return null;
+                }
+            }
+            case MAX_HEIGHT -> {
+                if (this.generatorTier.getMaxHeight() <= 0)
+                {
+                    // If max height is set to 0 or smaller, then icon is not necessary.
+                    return null;
+                }
+            }
         }
 
         PanelItemBuilder builder = new PanelItemBuilder();
@@ -966,6 +999,8 @@ public class GeneratorViewPanel extends CommonPanel
                     builder.amount(this.generatorTier.getMaxTreasureAmount());
                 }
                 case TREASURE_CHANCE -> builder.icon(Material.PAPER);
+                case MIN_HEIGHT -> builder.icon(Material.STONE);
+                case MAX_HEIGHT -> builder.icon(Material.STONE);
             }
         }
 
@@ -1041,6 +1076,14 @@ public class GeneratorViewPanel extends CommonPanel
                 case TREASURE_CHANCE -> {
                     builder.description(this.user.getTranslation(reference + ".value",
                         Constants.NUMBER, String.valueOf(this.generatorTier.getTreasureChance())));
+                }
+                case MIN_HEIGHT -> {
+                    builder.description(this.user.getTranslation(reference + ".value",
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getMinHeight())));
+                }
+                case MAX_HEIGHT -> {
+                    builder.description(this.user.getTranslation(reference + ".value",
+                        Constants.NUMBER, String.valueOf(this.generatorTier.getMaxHeight())));
                 }
             }
         }
@@ -1139,6 +1182,53 @@ public class GeneratorViewPanel extends CommonPanel
             // Empty line and tooltips.
             builder.description("");
             builder.description(tooltips);
+        }
+
+        return builder.build();
+    }
+
+
+    /**
+     * Create height range button panel item.
+     *
+     * @param template the template
+     * @param slot the slot
+     * @return the panel item
+     */
+    @Nullable
+    private PanelItem createHeightRangeButton(ItemTemplateRecord template, TemplatedPanel.ItemSlot slot)
+    {
+        PanelItemBuilder builder = new PanelItemBuilder();
+
+        if (template.icon() != null)
+        {
+            builder.icon(template.icon().clone());
+        }
+        else
+        {
+            builder.icon(Material.LADDER);
+        }
+
+        if (template.title() != null)
+        {
+            builder.name(this.user.getTranslation(this.world, template.title()));
+        }
+
+        if (template.description() != null)
+        {
+            builder.description(this.user.getTranslation(this.world, template.description()));
+        }
+        else
+        {
+            String heightRangeName = this.user.getTranslation(Constants.BUTTON + "height_range.name");
+            String heightRangeDescription = this.user.getTranslation(Constants.BUTTON + "height_range.description");
+            
+            builder.description(heightRangeDescription);
+            builder.description("");
+            builder.description(this.user.getTranslation(Constants.BUTTON + "height_range.value",
+                Constants.MIN_HEIGHT, String.valueOf(this.generatorTier.getMinHeight()),
+                Constants.MAX_HEIGHT, String.valueOf(this.generatorTier.getMaxHeight())));
+            
         }
 
         return builder.build();
@@ -1256,6 +1346,14 @@ public class GeneratorViewPanel extends CommonPanel
          * Holds Name type that allows to interact with generator treasure chance.
          */
         TREASURE_CHANCE,
+        /**
+         * Holds Name type that displays the minimum height at which the generator can operate.
+         */
+        MIN_HEIGHT,
+        /**
+         * Holds Name type that displays the maximum height at which the generator can operate.
+         */
+        MAX_HEIGHT,
     }
 
 

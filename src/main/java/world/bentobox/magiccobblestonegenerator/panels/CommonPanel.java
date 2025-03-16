@@ -181,6 +181,8 @@ public abstract class CommonPanel
         String type = this.generateTypeDescription(generator);
         // Get status in single string
         String status = this.generateStatusDescription(generator, isActive, isUnlocked, isPurchased);
+        // Get height range in single string
+        String heightRange = this.generateHeightRangeDescription(generator);
 
         if (!description.replaceAll("(?m)^[ \\t]*\\r?\\n", "").isEmpty())
         {
@@ -189,7 +191,8 @@ public abstract class CommonPanel
                 "[treasures]", treasures,
                 "[requirements]", requirements,
                 "[type]", type,
-                "[status]", status);
+                "[status]", status,
+                "[height-range]", heightRange);
 
             // remove empty lines from the generated text.
             List<String> collect =
@@ -217,7 +220,8 @@ public abstract class CommonPanel
                 "[treasures]", treasures,
                 "[requirements]", requirements,
                 "[type]", type,
-                "[status]", status);
+                "[status]", status,
+                "[height-range]", heightRange);
 
             // Remove empty lines and returns as a list.
 
@@ -254,6 +258,8 @@ public abstract class CommonPanel
         String type = this.generateTypeDescription(generator);
         // Get status in single string
         String status = this.generateStatusDescription(generator, false, true, false);
+        // Get height range in single string
+        String heightRange = this.generateHeightRangeDescription(generator);
 
         if (!description.replaceAll("(?m)^[ \\t]*\\r?\\n", "").isEmpty())
         {
@@ -262,7 +268,8 @@ public abstract class CommonPanel
                 "[treasures]", treasures,
                 "[requirements]", requirements,
                 "[type]", type,
-                "[status]", status);
+                "[status]", status,
+                "[height-range]", heightRange);
 
             // remove empty lines from the generated text.
             List<String> collect =
@@ -290,7 +297,8 @@ public abstract class CommonPanel
                 "[treasures]", treasures,
                 "[requirements]", requirements,
                 "[type]", type,
-                "[status]", status);
+                "[status]", status,
+                "[height-range]", heightRange);
 
             // Remove empty lines and returns as a list.
 
@@ -298,6 +306,25 @@ public abstract class CommonPanel
                 split("\n")).
                 collect(Collectors.toList());
         }
+    }
+
+
+    /**
+     * This method generates height range description for a generator.
+     *
+     * @param generator GeneratorTier which height range must be generated.
+     * @return String that describes generator height range.
+     */
+    protected String generateHeightRangeDescription(GeneratorTierObject generator)
+    {
+        final String reference = Constants.DESCRIPTIONS + "generator.";
+
+        int minHeight = generator.getMinHeight();
+        int maxHeight = generator.getMaxHeight();
+
+        return this.user.getTranslation(reference + "height-range",
+            Constants.MIN_HEIGHT, String.valueOf(minHeight),
+            Constants.MAX_HEIGHT, String.valueOf(maxHeight));
     }
 
 
@@ -339,6 +366,17 @@ public abstract class CommonPanel
         {
             Double value = (entry.getKey() - previousValue) / maxValue * 100.0;
 
+            // Get height range for this material if it exists
+            int[] heightRange = generator.getMaterialHeightRange(entry.getValue());
+            String heightInfo = "";
+            
+            if (heightRange != null)
+            {
+                heightInfo = this.user.getTranslation(reference + "height-range",
+                    Constants.MIN_HEIGHT, String.valueOf(heightRange[0]),
+                    Constants.MAX_HEIGHT, String.valueOf(heightRange[1]));
+            }
+
             blocks.append(this.user.getTranslation(reference + "value",
                 Constants.BLOCK, Utils.prettifyObject(this.user, entry.getValue()),
                 TextVariables.NUMBER, String.valueOf(value),
@@ -346,7 +384,8 @@ public abstract class CommonPanel
                 Constants.HUNDREDS, this.hundredsFormat.format(value),
                 Constants.THOUSANDS, this.thousandsFormat.format(value),
                 Constants.TEN_THOUSANDS, this.tenThousandsFormat.format(value),
-                Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value)));
+                Constants.HUNDRED_THOUSANDS, this.hundredThousandsFormat.format(value),
+                Constants.HEIGHT_INFO, heightInfo));
 
             previousValue = entry.getKey();
 

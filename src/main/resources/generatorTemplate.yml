@@ -424,3 +424,155 @@ tiers:
       # Maximal amount of items dropped.
       # it will be from 1 till defined amount.
       amount: 1
+
+  overworld_generator:
+    # Generator that works in Overworld biomes
+    name: "&r&lCobblestone Generator II"
+    type: COBBLESTONE_OR_STONE
+    description: |-
+      &7 A generator that works 
+      &7 in all Overworld biomes
+    icon: "STONE:1"
+    requirements:
+      # Can define minimal island level for generator to work. Required Level Addon.
+      island-level: 100
+      # Cost for buying current generator.
+      purchase-cost: 5.0
+      # Limit biomes where it operates:
+      required-biomes:
+        - PLAINS
+        - FOREST
+        - BIRCH_FOREST
+        - DARK_FOREST
+        - DESERT
+        - SAVANNA
+        - SNOWY_PLAINS
+        - JUNGLE
+        - SWAMP
+        - BEACH
+        - RIVER
+        - OCEAN
+    height_range:
+      min: -64
+      max: 320
+    blocks:
+      STONE:
+        chance: 45
+        height_range:
+          min: 0
+          max: 64
+      DEEPSLATE:
+        chance: 35
+        height_range:
+          min: -64
+          max: 0
+      GRANITE:
+        chance: 10
+        height_range:
+          min: 0
+          max: 256
+      DIORITE:
+        chance: 5
+        height_range:
+          min: 0
+          max: 256
+      ANDESITE:
+        chance: 5
+        height_range:
+          min: 0
+          max: 256
+
+  nether_generator_biome:
+    # Generator that works in Nether biomes
+    name: "&r&lNether Generator II"
+    type: BASALT
+    description: |-
+      &7 A generator that works in all Nether biomes.
+      &7 Note: Height range is 0-256 in all dimensions
+    icon: "GILDED_BLACKSTONE:1"
+    requirements:
+        # Can define minimal island level for generator to work. Required Level Addon.
+        island-level: 100
+        # Cost for buying current generator.
+        purchase-cost: 5.0
+        # Limit biomes where it operates:
+        required-biomes:
+            - NETHER_WASTES
+            - SOUL_SAND_VALLEY
+            - CRIMSON_FOREST
+            - WARPED_FOREST
+            - BASALT_DELTAS
+    height_range:
+      min: 0
+      max: 256
+    blocks:
+      NETHERRACK:
+        chance: 45
+        height_range:
+          min: 0
+          max: 256
+      BASALT:
+        chance: 20
+        height_range:
+          min: 0
+          max: 128
+      BLACKSTONE:
+        chance: 20
+        height_range:
+          min: 0
+          max: 128
+      SOUL_SOIL:
+        chance: 10
+        height_range:
+          min: 0
+          max: 64
+      MAGMA_BLOCK:
+        chance: 5
+        height_range:
+          min: 0
+          max: 32
+
+  end_generator_biome:
+    # Generator that works in End biomes
+    name: "&r&lEnd Generator"
+    type: COBBLESTONE_OR_STONE
+    description: |-
+      &7 A generator that works in all End biomes.
+      &7 Note: Height range is 0-256 in all dimensions
+    icon: "END_STONE:1"
+    requirements:
+        # Can define minimal island level for generator to work. Required Level Addon.
+        island-level: 100
+        # Cost for buying current generator.
+        purchase-cost: 5.0
+        # Limit biomes where it operates:
+        required-biomes:
+            - THE_END
+            - SMALL_END_ISLANDS
+            - END_MIDLANDS
+            - END_HIGHLANDS
+            - END_BARRENS
+    height_range:
+      min: 0
+      max: 256
+    blocks:
+      END_STONE:
+        chance: 60
+        height_range:
+          min: 0
+          max: 256
+      OBSIDIAN:
+        chance: 20
+        height_range:
+          min: 0
+          max: 128
+      PURPUR_BLOCK:
+        chance: 15
+        height_range:
+          min: 64
+          max: 256
+      END_STONE_BRICKS:
+        chance: 5
+        height_range:
+          min: 32
+          max: 196
