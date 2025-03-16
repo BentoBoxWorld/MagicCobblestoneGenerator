@@ -46,6 +46,15 @@ public class MagicGenerator
             return null;
         }
 
+        // Check if the block is within the generator's global height range
+        int blockY = location.getBlockY();
+        if (blockY < generatorTier.getMinHeight() || blockY > generatorTier.getMaxHeight())
+        {
+            Why.report(location, "Block outside global height range: " + blockY + 
+                " (min: " + generatorTier.getMinHeight() + ", max: " + generatorTier.getMaxHeight() + ")");
+            return null;
+        }
+
         TreeMap<Double, Material> chanceMap = generatorTier.getBlockChanceMap();
 
         if (chanceMap.isEmpty())
@@ -64,6 +73,33 @@ public class MagicGenerator
 
             // Check if a material was found
             return null;
+        }
+
+        // Check if this material has specific height restrictions
+        int[] materialHeightRange = generatorTier.getMaterialHeightRange(newMaterial);
+        if (materialHeightRange != null)
+        {
+            int materialMinHeight = materialHeightRange[0];
+            int materialMaxHeight = materialHeightRange[1];
+            
+            if (blockY < materialMinHeight || blockY > materialMaxHeight)
+            {
+                Why.report(location, "Material " + newMaterial + " outside its specific height range: " + blockY + 
+                    " (min: " + materialMinHeight + ", max: " + materialMaxHeight + ")");
+                
+                // Try to find another material that can be generated at this height
+                Material alternativeMaterial = findMaterialForHeight(generatorTier, blockY);
+                if (alternativeMaterial != null)
+                {
+                    Why.report(location, "Using alternative material " + alternativeMaterial + " for height " + blockY);
+                    newMaterial = alternativeMaterial;
+                }
+                else
+                {
+                    // If no suitable material found, don't replace the block
+                    return null;
+                }
+            }
         }
 
         Why.report(location, "Replace with " + newMaterial + " by " + generatorTier.getUniqueId());
@@ -94,6 +130,37 @@ public class MagicGenerator
         }
 
         return newMaterial;
+    }
+
+    /**
+     * Finds a material from the generator's block chance map that can be generated at the specified height.
+     *
+     * @param generatorTier The generator tier object containing the material configurations
+     * @param blockY The Y coordinate to check against
+     * @return A material that can be generated at the specified height, or null if none found
+     */
+    private Material findMaterialForHeight(GeneratorTierObject generatorTier, int blockY)
+    {
+        TreeMap<Double, Material> chanceMap = generatorTier.getBlockChanceMap();
+        
+        for (Material material : chanceMap.values())
+        {
+            int[] heightRange = generatorTier.getMaterialHeightRange(material);
+            
+            // If this material has no specific height range, it can be generated anywhere within the generator's global range
+            if (heightRange == null)
+            {
+                return material;
+            }
+            
+            // Check if the block Y is within this material's height range
+            if (blockY >= heightRange[0] && blockY <= heightRange[1])
+            {
+                return material;
+            }
+        }
+        
+        return null;
     }
 
 

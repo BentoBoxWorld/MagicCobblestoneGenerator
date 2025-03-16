@@ -201,6 +201,13 @@ public class StoneGeneratorImportManager {
 		// Set activation cost
 		generatorTier.setActivationCost(details.getDouble("activation-cost", 0.0));
 
+		// Set global height range
+		ConfigurationSection heightRange = details.getConfigurationSection("height_range");
+		if (heightRange != null) {
+		    generatorTier.setMinHeight(heightRange.getInt("min", 0));
+		    generatorTier.setMaxHeight(heightRange.getInt("max", 256));
+		}
+
 		// Search and read requirements only if it is not default generator.
 		if (!generatorTier.isDefaultGenerator()) {
 		    this.populateRequirements(generatorTier, details.getConfigurationSection("requirements"), biomeMap);
@@ -305,23 +312,47 @@ public class StoneGeneratorImportManager {
      * @param materials     Config that contains data.
      */
     private void populateMaterials(GeneratorTierObject generatorTier, ConfigurationSection materials) {
-	if (materials != null) {
-	    TreeMap<Double, Material> blockChances = new TreeMap<>();
+        if (materials != null) {
+            TreeMap<Double, Material> blockChances = new TreeMap<>();
+            TreeMap<Material, int[]> materialHeightMap = new TreeMap<>();
 
-	    for (String materialKey : materials.getKeys(false)) {
-		try {
-		    Material material = Material.valueOf(materialKey.toUpperCase());
-		    double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-		    blockChances.put(lastEntry + materials.getDouble(materialKey, 0), material);
-		} catch (Exception e) {
-		    this.addon.logWarning(
-			    "Unknown material (" + materialKey + ") in generatorTemplate.yml blocks section for tier "
-				    + generatorTier.getUniqueId() + ". Skipping...");
-		}
-	    }
+            for (String materialKey : materials.getKeys(false)) {
+                try {
+                    Material material = Material.valueOf(materialKey.toUpperCase());
+                    
+                    // Support for both formats
+                    if (materials.isConfigurationSection(materialKey)) {
+                        // New format with chance and height_range
+                        ConfigurationSection materialSection = materials.getConfigurationSection(materialKey);
+                        double chance = materialSection.getDouble("chance", 0);
+                        double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                        blockChances.put(lastEntry + chance, material);
 
-	    generatorTier.setBlockChanceMap(blockChances);
-	}
+                        // Get height range if specified
+                        ConfigurationSection heightRange = materialSection.getConfigurationSection("height_range");
+                        if (heightRange != null) {
+                            int minHeight = heightRange.getInt("min", 0);
+                            int maxHeight = heightRange.getInt("max", 256);
+                            materialHeightMap.put(material, new int[]{minHeight, maxHeight});
+                        }
+                    } else {
+                        // Old format where the value is directly the probability
+                        double chance = materials.getDouble(materialKey, 0);
+                        double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                        blockChances.put(lastEntry + chance, material);
+                    }
+                } catch (Exception e) {
+                    this.addon.logWarning(
+                        "Unknown material (" + materialKey + ") in generatorTemplate.yml blocks section for tier "
+                            + generatorTier.getUniqueId() + ". Skipping...");
+                }
+            }
+
+            generatorTier.setBlockChanceMap(blockChances);
+            if (!materialHeightMap.isEmpty()) {
+                generatorTier.setMaterialHeightMap(materialHeightMap);
+            }
+        }
     }
 
     /**

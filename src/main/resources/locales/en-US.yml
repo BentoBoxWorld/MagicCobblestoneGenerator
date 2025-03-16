@@ -65,9 +65,31 @@ stone-generator:
       library: "&0&l Library"
       # Title for Settings GUI
       settings: "&0&l Settings"
+      # Title for Configure Material Height GUI
+      configure-material-height: "&0&l Configure Material Height"
+      # Title for Height Range Configuration GUI
+      height-range-config: "&0&l Height Range: [material]"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
+      min_height:
+        name: "&f&l Minimum Height"
+        description: |-
+          &7 Set the minimum height
+          &7 for this material.
+        value: "&7 Current value: &b [min_height]"
+      max_height:
+        name: "&f&l Maximum Height"
+        description: |-
+          &7 Set the maximum height
+          &7 for this material.
+        value: "&7 Current value: &b [max_height]"
+      height_range:
+        name: "&f&l Height Range"
+        description: |-
+          &7 The height range at which
+          &7 this generator operates.
+        value: "&b From &f[min_height] &bto &f[max_height]"
       default:
         name: "&f&l Default Generator"
         description: |-
@@ -167,6 +189,8 @@ stone-generator:
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
         description: "&b Chance: [#.##]"
         actual: "&b Database value: [number]"
+        height-range: "&7 Height range: &b[min_height] &7to &b[max_height]"
+        no-height-range: "&7 Uses generator default height range"
       treasure-icon:
         name: "&f&l [material]"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
@@ -652,6 +676,27 @@ stone-generator:
         list-value: "&7 - [value]"
       biome-icon:
         name: "&f&l [biome]"
+      min-height:
+        name: "&f&l Minimum Height"
+        description: |-
+          &7 Set the minimum height
+          &7 for this material.
+          &7 Current value: &b[min_height]
+        value: "&b [min_height]"
+      max-height:
+        name: "&f&l Maximum Height"
+        description: |-
+          &7 Set the maximum height
+          &7 for this material.
+          &7 Current value: &b[max_height]
+        value: "&b [max_height]"
+      clear-height-range:
+        name: "&f&l Clear Height Range"
+        description: |-
+          &7 Remove the specific height range
+          &7 for this material.
+          &7 It will use the generator's
+          &7 default height range instead.
       # This section contains names for filter biome groups.
       biome-groups:
         temperate:
@@ -798,6 +843,7 @@ stone-generator:
       shift-click-to-activate: "&e Shift Click &7 to activate."
       shift-click-to-deactivate: "&e Shift Click &7 to deactivate."
       shift-click-to-reset: "&e Shift Click &7 to reset."
+      shift-left-click-to-set-height-range: "&e Shift+Left Click &7 to configure height range."
     # This section contains translations for some different GUI descriptions.
     descriptions:
       # Generator lore message generator. All elements in generator lore is generated
@@ -812,6 +858,7 @@ stone-generator:
           [blocks]
           [treasures]
           [type]
+          [height-range]
           [requirements]
           [status]
         # Generates [blocks] section
@@ -866,6 +913,8 @@ stone-generator:
           stone: "&8 Stone Generators"
           basalt: "&8 Basalt Generators"
           any: "&7&l Supports &e&o all &r&7&l generators"
+        # Generates [height-range] section
+        height-range: "&7 Works at heights: &b[min_height] &7to &b[max_height]"
       # String that displays required permission that must be set for user to set bundle.
       bundle-permission: |-
         &7 Permission that must be
@@ -945,6 +994,7 @@ stone-generator:
     no-generators-in-world: "&c There are no available generators for you in [world]"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "&c Something went wrong while withdrawing money."
+    max-height-less-than-min: "&c Maximum height ([MAX]) cannot be less than minimum height ([MIN])!"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:
@@ -1015,6 +1065,10 @@ stone-generator:
     click-text-to-purchase: "&e You have unlocked &r [generator]&r&e! Click here to buy it now for [number]."
     click-text-to-activate-vault: "&e You have unlocked &r [generator]&r&e! Click here to activate it now for [number]."
     click-text-to-activate: "&e You have unlocked &r [generator]&r&e! Click here to activate it now."
+    input-min-height: "&f Enter the minimum height for this material (between -64
+      and 320):"
+    input-max-height: "&f Enter the maximum height for this material (between -64
+      and 320):"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

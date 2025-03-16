@@ -220,6 +220,11 @@ public class Constants
     public static final String HUNDRED_THOUSANDS = "[#.#####]";
 
     /**
+     * Reference to height info in translations.
+     */
+    public static final String HEIGHT_INFO = "[height_info]";
+
+    /**
      * Reference to island in translations.
      */
     public static final String ISLAND = "[island]";
@@ -228,6 +233,16 @@ public class Constants
      * Reference string to number parameter in translations.
      */
     public static final String NUMBER = "[number]";
+
+    /**
+     * Reference string to min parameter in translations.
+     */
+    public static final String MIN_HEIGHT = "[min_height]";
+
+    /**
+     * Reference string to max parameter in translations.
+     */
+    public static final String MAX_HEIGHT = "[max_height]";
 
     /**
      * Reference string to type parameter in translations.
