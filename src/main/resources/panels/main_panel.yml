@@ -90,7 +90,7 @@ main_panel:
       8: generator_button
     3:
       1:
-        icon: tipped_arrow{CustomPotionColor:11546150}
+        icon: tipped_arrow[potion_contents={custom_color:11546150}]
         title: stone-generator.gui.buttons.previous.name
         description: stone-generator.gui.buttons.previous.description
         data:
@@ -108,7 +108,7 @@ main_panel:
       7: generator_button
       8: generator_button
       9:
-        icon: tipped_arrow{CustomPotionColor:8439583}
+        icon: tipped_arrow[potion_contents={custom_color:8439583}]
         title: stone-generator.gui.buttons.next.name
         description: stone-generator.gui.buttons.next.description
         data:
