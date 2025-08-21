@@ -370,10 +370,10 @@ public class Utils
      */
     public static String sanitizeInput(String input)
     {
-        return ChatColor.stripColor(
+        return 
             Util.translateColorCodes(input.toLowerCase(Locale.ENGLISH).
                 replace(" ", "_").
-                replace("-", "_")));
+                replace("-", "_"));
     }
 
 
