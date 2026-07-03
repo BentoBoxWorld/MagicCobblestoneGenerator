@@ -25,7 +25,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
-import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
@@ -66,15 +65,14 @@ class StoneGeneratorImportManagerTest {
     private File dataFolder;
     private StoneGeneratorImportManager im;
 
-    private ServerMock server;
     private AutoCloseable closeable;
     private MockedStatic<ItemParser> mockItemParser;
     private MockedStatic<Utils> mockUtils;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         closeable = MockitoAnnotations.openMocks(this);
-        server = MockBukkit.mock();
+        MockBukkit.mock();
 
         // Inject BentoBox singleton
         WhiteBox.setInternalState(BentoBox.class, "instance", plugin);
@@ -106,7 +104,7 @@ class StoneGeneratorImportManagerTest {
     }
 
     @AfterEach
-    public void tearDown() throws IOException, Exception {
+    void tearDown() throws Exception {
         if (mockUtils != null) {
             mockUtils.closeOnDemand();
         }

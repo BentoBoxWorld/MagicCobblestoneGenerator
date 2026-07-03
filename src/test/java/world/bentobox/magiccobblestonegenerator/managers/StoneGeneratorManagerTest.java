@@ -1,5 +1,6 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -143,7 +144,7 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
 
     @Test
     void testAddWorld() {
-        sgm.addWorld(world);
+        assertDoesNotThrow(() -> sgm.addWorld(world));
     }
 
     @Test
@@ -253,8 +254,8 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
 
     @Test
     void testWipeGeneratorTier() {
-        sgm.wipeGeneratorTier(generatorTier);
-        // Does not seem testable...
+        // No observable side effect to verify; assert the call completes cleanly.
+        assertDoesNotThrow(() -> sgm.wipeGeneratorTier(generatorTier));
     }
 
     @Test
@@ -386,12 +387,12 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
 
     @Test
     void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
-        sgm.activateGenerator(user, island, generatorData, generatorTier);
+        assertDoesNotThrow(() -> sgm.activateGenerator(user, island, generatorData, generatorTier));
     }
 
     @Test
     void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
-        sgm.activateGenerator(user, island, generatorData, generatorTier, true);
+        assertDoesNotThrow(() -> sgm.activateGenerator(user, island, generatorData, generatorTier, true));
     }
 
     @Test
@@ -401,22 +402,22 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
 
     @Test
     void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
-        sgm.purchaseGenerator(user, island, generatorData, generatorTier);
+        assertDoesNotThrow(() -> sgm.purchaseGenerator(user, island, generatorData, generatorTier));
     }
 
     @Test
     void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
-        sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
+        assertDoesNotThrow(() -> sgm.purchaseGenerator(user, island, generatorData, generatorTier, true));
     }
 
     @Test
     void testWipeGeneratorDataString() {
-        sgm.wipeGeneratorData(uuid.toString());
+        assertDoesNotThrow(() -> sgm.wipeGeneratorData(uuid.toString()));
     }
 
     @Test
     void testWipeGeneratorDataGeneratorDataObject() {
-        sgm.wipeGeneratorData(generatorData);
+        assertDoesNotThrow(() -> sgm.wipeGeneratorData(generatorData));
     }
 
     @Test
