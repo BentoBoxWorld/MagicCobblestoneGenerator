@@ -210,6 +210,13 @@ public class StoneGeneratorImportManager {
 		    generatorTier.setMaxHeight(heightRange.getInt("max", 256));
 		}
 
+		// Set global height range
+		ConfigurationSection heightRange = details.getConfigurationSection("height_range");
+		if (heightRange != null) {
+		    generatorTier.setMinHeight(heightRange.getInt("min", 0));
+		    generatorTier.setMaxHeight(heightRange.getInt("max", 256));
+		}
+
 		// Search and read requirements only if it is not default generator.
 		if (!generatorTier.isDefaultGenerator()) {
 		    this.populateRequirements(generatorTier, details.getConfigurationSection("requirements"), biomeMap);
