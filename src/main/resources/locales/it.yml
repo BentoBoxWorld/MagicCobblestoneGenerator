@@ -1,0 +1,1109 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "Comando di Amministrazione per Magic Cobblestone Generator"
+      import:
+        description: "Importa generatori magici"
+        confirmation: "Questo rimuoverà i generatori esistenti da [gamemode] e importerà nuovi generatori dal file template - per favore conferma"
+      why:
+        parameters: "<player>"
+        description: "attiva/disattiva i messaggi di debug di Magic Cobblestone Generator"
+      database:
+        description: "Comando database principale"
+      import-database:
+        parameters: "<file>"
+        description: "importa il file database dei generatori magici"
+        confirmation: "Questo rimuoverà i generatori esistenti per [gamemode] e importerà generatori dal file database - per favore conferma"
+      export:
+        parameters: "<file>"
+        description: "Esporta generatori magici dal database della Game Mode in un file"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "apre la GUI di selezione generatori"
+      view:
+        description: "apre la GUI di dettagli generatore"
+        parameters: "<generator-id>"
+      buy:
+        description: "Acquista il generatore richiesto"
+        parameters: "<generator-id>"
+      activate:
+        description: "Attiva/disattiva il generatore richiesto"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>Generatori</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>Generatore: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>Pannello di Amministrazione</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>Seleziona Biomi</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>Seleziona Blocco</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>Seleziona Bundle</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>Seleziona Tipo di Generatore</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>Bundle: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>Gestisci Bundle</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>Gestisci Generatori</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>Isola: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>Gestisci Dati Isola</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>Libreria</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>Impostazioni</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>Configura Altezza Materiale</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>Intervallo di Altezza: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>Altezza Minima</bold></white>"
+        description: |-
+          <gray>Imposta l'altezza minima
+          </gray><gray>per questo materiale.</gray>
+        value: "<gray>Valore attuale: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>Altezza Massima</bold></white>"
+        description: |-
+          <gray>Imposta l'altezza massima
+          </gray><gray>per questo materiale.</gray>
+        value: "<gray>Valore attuale: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>Intervallo di Altezza</bold></white>"
+        description: |-
+          <gray>L'intervallo di altezza a cui
+          </gray><gray>questo generatore opera.</gray>
+        value: "<aqua>Da </aqua><white>[min_height] </white><aqua>a </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>Generatore Predefinito</bold></white>"
+        description: |-
+          <gray>I generatori predefiniti sono sempre
+          </gray><gray>attivi.</gray>
+        enabled: |-
+          <aqua>Questo è il </aqua><green>generatore predefinito </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Questo </aqua><red>non è il generatore predefinito </red><aqua>.</aqua>
+      priority:
+        name: "<white><bold>Priorità Generatore</bold></white>"
+        description: |-
+          <gray>Un numero di priorità maggiore
+          </gray><gray>sarà preferito se
+          </gray><gray>più di uno può essere applicato
+          </gray><gray>nello stesso luogo.</gray>
+        value: "<aqua>Priorità: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>Tipo di Generatore</bold></white>"
+        description: |-
+          <gray>Definisce quale tipo di generatore
+          </gray><gray>verrà applicato al generatore
+          </gray><gray>attuale.</gray>
+        value: "<aqua>Tipo: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>Livello Isola Minimo</bold></white>"
+        description: |-
+          <gray>Livello isola minimo per
+          </gray><gray>sbloccare questo generatore.</gray>
+        value: "<aqua>Livello Minimo Richiesto: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>Permessi Richiesti</bold></white>"
+        description: |-
+          <gray>Elenco di permessi che
+          </gray><gray>sono richiesti per sbloccare
+          </gray><gray>questo generatore.</gray>
+        list: "<aqua>Permessi Richiesti:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- nessuno</aqua>"
+      purchase_cost:
+        name: "<white><bold>Costo di Acquisto</bold></white>"
+        description: |-
+          <gray>Crediti richiesti per
+          </gray><gray>acquistare questo generatore.</gray>
+        value: "<aqua>Costo: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>Costo di Attivazione</bold></white>"
+        description: |-
+          <gray>Crediti richiesti per
+          </gray><gray>attivare o riattivare
+          </gray><gray>questo generatore.</gray>
+        value: "<aqua>Costo: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>Limite di Esaurimento</bold></white>"
+        description: |-
+          <gray>Numero massimo di blocchi che questo generatore
+          </gray><gray>può produrre per periodo prima di
+          </gray><gray>andare in pausa.</gray>
+        value: "<aqua>Limite: [number] </aqua><gray>per periodo</gray>"
+        default: "<aqua>Usa il valore predefinito globale: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Senza limite</aqua>"
+      biomes:
+        name: "<white><bold>Biomi Operativi</bold></white>"
+        description: |-
+          <gray>Elenco di biomi dove questo
+          </gray><gray>generatore può operare.</gray>
+        list: "<aqua>Biomi:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- qualsiasi</aqua>"
+      treasure_amount:
+        name: "<white><bold>Quantità di Tesoro</bold></white>"
+        description: |-
+          <gray>Quantità massima di tesoro
+          </gray><gray>che può essere lasciato cadere una volta.</gray>
+        value: "<aqua>Quantità: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>Probabilità di Tesoro</bold></white>"
+        description: |-
+          <gray>Probabilità che il tesoro venga
+          </gray><gray>lasciato cadere alla generazione.</gray>
+        value: "<aqua>Probabilità: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>Informazioni Generali</bold></white>"
+        description: |-
+          <gray>Mostra informazioni generali
+          </gray><gray>su questo generatore.</gray>
+      blocks:
+        name: "<white><bold>Elenco Blocchi</bold></white>"
+        description: |-
+          <gray>Mostra elenco di blocchi e
+          </gray><gray>le loro probabilità di essere generati.</gray>
+      treasures:
+        name: "<white><bold>Elenco Tesori</bold></white>"
+        description: |-
+          <gray>Mostra elenco di tesori e
+          </gray><gray>probabilità di rilascio.
+          </gray><gray>Il tesoro viene rilasciato
+          </gray><gray>quando i blocchi vengono generati.</gray>
+        drag-and-drop: |-
+          <gray>Supporta il trascinamento
+          </gray><gray>di elementi negli spazi vuoti.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Probabilità: [#.##]</aqua>"
+        actual: "<aqua>Valore database: [number]</aqua>"
+        height-range: "<gray>Intervallo di altezza: </gray><aqua>[min_height] </aqua><gray>a </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Usa l'intervallo di altezza predefinito del generatore</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Probabilità: [#.####]</aqua>"
+        actual: "<aqua>Valore database: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>Generatori di Pietrisco</bold></white>"
+        description: |-
+          <gray>Mostra solo i generatori
+          </gray><gray>di pietrisco</gray>
+      show_stone:
+        name: "<white><bold>Generatori di Pietra</bold></white>"
+        description: |-
+          <gray>Mostra solo i generatori
+          </gray><gray>di pietra</gray>
+      show_basalt:
+        name: "<white><bold>Generatori di Basalto</bold></white>"
+        description: |-
+          <gray>Mostra solo i generatori
+          </gray><gray>di basalto</gray>
+      toggle_visibility:
+        name: "<white><bold>Generatori Sbloccati</bold></white>"
+        description: |-
+          <gray>Mostra solo i generatori
+          </gray><gray>sbloccati</gray>
+      show_active:
+        name: "<white><bold>Generatori Attivi</bold></white>"
+        description: |-
+          <gray>Mostra solo i generatori
+          </gray><gray>attivi</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>Ritorna</bold></white>"
+        description: |-
+          <gray>Ritorna al menu precedente</gray>
+      quit:
+        name: "<white><bold>Esci</bold></white>"
+        description: |-
+          <gray>Esci dal menu attuale</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>Pagina Precedente</bold></white>"
+        description: |-
+          <gray>Passa alla pagina [number]</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>Pagina Successiva</bold></white>"
+        description: |-
+          <gray>Passa alla pagina [number]</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>Gestisci Dati Isola</bold></white>"
+        description: |-
+          <gray>Gestisci dati isola
+          </gray><gray>nella game mode attuale.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>Gestisci Generatori</bold></white>"
+        description: |-
+          <gray>Gestisci generatori
+          </gray><gray>nella game mode attuale.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>Gestisci Bundle</bold></white>"
+        description: |-
+          <gray>Gestisci bundle
+          </gray><gray>nella game mode attuale.</gray>
+      settings:
+        name: "<white><bold>Impostazioni</bold></white>"
+        description: |-
+          <gray>Controlla e cambia
+          </gray><gray>le impostazioni dell'addon.</gray>
+      import_template:
+        name: "<white><bold>Importa Template</bold></white>"
+        description: |-
+          <gray>Importa il file template
+          </gray><gray>situato nella directory
+          </gray><gray>dell'addon.</gray>
+      web_library:
+        name: "<white><bold>Libreria Web</bold></white>"
+        description: |-
+          <gray>Accedi alla libreria web
+          </gray><gray>che contiene
+          </gray><gray>generatori condivisi.</gray>
+      export_from_database:
+        name: "<white><bold>Esporta Database</bold></white>"
+        description: |-
+          <gray>Esporta il database
+          </gray><gray>in un singolo file situato
+          </gray><gray>nella directory dell'addon.</gray>
+      import_to_database:
+        name: "<white><bold>Importa Database</bold></white>"
+        description: |-
+          <gray>Importa un database da
+          </gray><gray>un file situato nella directory
+          </gray><gray>dell'addon.</gray>
+      wipe_user_data:
+        name: "<white><bold>Cancella Database Utente</bold></white>"
+        description: |-
+          <gray>Cancella i dati utente per
+          </gray><gray>ogni isola nella
+          </gray><gray>game mode attuale.</gray>
+      wipe_generator_data:
+        name: "<white><bold>Cancella Database Generatore</bold></white>"
+        description: |-
+          <gray>Cancella i dati di generatore e bundle
+          </gray><gray>nella game mode attuale.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>Nome Bundle</bold></white>"
+        description: |-
+          <gray>Cambia il nome del bundle.</gray>
+        value: "<aqua>Nome: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>ID Bundle</bold></white>"
+        description: |-
+          <gray>L'ID del bundle attuale.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>Icona Bundle</bold></white>"
+        description: |-
+          <gray>Cambia l'icona del bundle.</gray>
+      bundle_description:
+        name: "<white><bold>Descrizione Bundle</bold></white>"
+      bundle_info:
+        name: "<white><bold>Informazioni Generali</bold></white>"
+        description: |-
+          <gray>Mostra informazioni generali
+          </gray><gray>su questo bundle.</gray>
+      bundle_generators:
+        name: "<white><bold>Generatori</bold></white>"
+        description: |-
+          <gray>Mostra un elenco di generatori
+          </gray><gray>assegnati a questo bundle.</gray>
+      add_generator:
+        name: "<white><bold>Aggiungi Generatore</bold></white>"
+        description: |-
+          <gray>Assegna un generatore
+          </gray><gray>a questo bundle.</gray>
+        list: "<aqua>Generatori Selezionati:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>Rimuovi Generatore</bold></white>"
+        description: |-
+          <gray>Rimuovi un generatore
+          </gray><gray>da questo bundle.</gray>
+        list: "<aqua>Generatori Selezionati:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>Crea Bundle</bold></white>"
+        description: |-
+          <gray>Crea un nuovo bundle
+          </gray><gray>per questa game mode.</gray>
+      delete_bundle:
+        name: "<white><bold>Rimuovi Bundle</bold></white>"
+        description: |-
+          <gray>Rimuovi un bundle da
+          </gray><gray>questa game mode completamente.</gray>
+        list: "<aqua>Bundle Selezionati:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>Nome Generatore</bold></white>"
+        description: |-
+          <gray>Titolo per questo generatore.
+          </gray><gray>Supporta codici colore.</gray>
+        value: "<aqua>Nome: </aqua> [generator]"
+      id:
+        name: "<white><bold>ID Generatore</bold></white>"
+        description: |-
+          <gray>L'ID del generatore attuale.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>Icona Generatore</bold></white>"
+        description: |-
+          <gray>Elemento utilizzato per visualizzare questo
+          </gray><gray>generatore in tutte le GUI.</gray>
+      locked_icon:
+        name: "<white><bold>Icona Bloccata</bold></white>"
+        description: |-
+          <gray>Elemento utilizzato per visualizzare questo
+          </gray><gray>generatore in tutte le GUI se
+          </gray><gray>è bloccato.</gray>
+      description:
+        name: "<white><bold>Descrizione Generatore</bold></white>"
+        description: |-
+          <gray>Testo per il generatore che verrà
+          </gray><gray>scritto sotto il titolo.</gray>
+        value: "<aqua>Descrizione:</aqua>"
+      deployed:
+        name: "<white><bold>Distribuito</bold></white>"
+        description: |-
+          <gray>I generatori distribuiti sono visibili
+          </gray><gray>e accessibili dai giocatori.
+          </gray><gray>I generatori non distribuiti non
+          </gray><gray>genereranno blocchi.</gray>
+        enabled: |-
+          <aqua>Questo generatore è </aqua><green>distribuito.</green>
+        disabled: |-
+          <aqua>Questo generatore è </aqua><red>non distribuito.</red>
+      add_material:
+        name: "<white><bold>Aggiungi Materiale</bold></white>"
+        description: |-
+          <gray>Aggiungi nuovo materiale all'
+          </gray><gray>elenco materiali attuale.</gray>
+      remove_material:
+        name: "<white><bold>Rimuovi Materiali</bold></white>"
+        description: |-
+          <gray>Rimuovi i materiali
+          </gray><gray>selezionati dall'elenco.</gray>
+        selected-materials: "<gray>Materiali Selezionati:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>Crea Generatore</bold></white>"
+        description: |-
+          <gray>Crea un nuovo
+          </gray><gray>generatore per
+          </gray><gray>la game mode.</gray>
+      delete_generator:
+        name: "<white><bold>Rimuovi Generatore</bold></white>"
+        description: |-
+          <gray>Rimuovi il generatore
+          </gray><gray>dalla game mode completamente.</gray>
+        list: "<aqua>Generatori Selezionati:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>ID Isola: </aqua><gray>[id]</gray>
+        owner: "<aqua>Proprietario: [player]</aqua>"
+        list: "<aqua>Membri:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>Intervallo di Lavoro Isola</bold></white>"
+        description: |-
+          <gray>Intervallo di lavoro per i generatori
+          </gray><gray>sull'isola attuale.
+          </gray><gray>0 e inferiore significa intervallo
+          </gray><gray>illimitato.</gray>
+        value: "<aqua>Intervallo: [number]</aqua>"
+        overwritten: |-
+          <red>Il proprietario ha un permesso che
+          </red><red>sovrascrive l'intervallo di lavoro.</red>
+      owner_working_range:
+        name: "<white><bold>Intervallo di Lavoro Proprietario</bold></white>"
+        description: |-
+          <gray>Intervallo di lavoro per i generatori
+          </gray><gray>per il proprietario attuale.
+          </gray><gray>'0' significa che l'intervallo del proprietario è
+          </gray><gray>ignorato.
+          </gray><gray>'-1' significa che il proprietario ha
+          </gray><gray>intervallo di lavoro illimitato.
+          "</gray><gray> Permesso per l'utente per assegnare:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Intervallo: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>Max Generatori Isola</bold></white>"
+        description: |-
+          <gray>Numero massimo di livelli di
+          </gray><gray>generatori attivi consentiti
+          </gray><gray>contemporaneamente che
+          </gray><gray>per l'isola attuale.
+          </gray><gray>0 e inferiore significa 
+          </gray><gray>illimitato.</gray>
+        value: "<aqua>Max Generatori: [number]</aqua>"
+        overwritten: |-
+          <red>Il proprietario ha un permesso che
+          </red><red>sovrascrive il numero di generatori.</red>
+      owner_max_generators:
+        name: "<white><bold>Max Generatori Proprietario</bold></white>"
+        description: |-
+          <gray>Numero massimo di livelli di
+          </gray><gray>generatori attivi concorrenti che al
+          </gray><gray>proprietario dell'isola è consentito.
+          </gray><gray>'0' significa che l'importo del proprietario
+          </gray><gray>è ignorato.
+          </gray><gray>'-1' significa che il proprietario ha
+          </gray><gray>numero di generatori illimitato.
+          "</gray><gray> Permesso per l'utente per assegnare:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Max Generatori: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>Bundle Isola</bold></white>"
+        description: |-
+          <gray>Bundle che è assegnato
+          </gray><gray>all'isola attuale.
+          </gray><gray>Solo i generatori da questo 
+          </gray><gray>bundle possono essere utilizzati sull'
+          </gray><gray>isola.</gray>
+        value: "<aqua>Bundle: [bundle]</aqua>"
+        overwritten: |-
+          <red>Il proprietario ha un permesso che
+          </red><red>sovrascrive il bundle.</red>
+      owner_bundle:
+        name: "<white><bold>Bundle Proprietario</bold></white>"
+        description: |-
+          <gray>Bundle che è assegnato
+          </gray><gray>al proprietario dell'isola attuale.
+          </gray><gray>Solo i generatori da questo 
+          </gray><gray>bundle possono essere utilizzati sull'
+          </gray><gray>isola.
+          "</gray><gray> Permesso per l'utente per assegnare:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Bundle: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>Informazioni Generali</bold></white>"
+        description: |-
+          <gray>Mostra informazioni generali
+          </gray><gray>su questa isola.</gray>
+      island_generators:
+        name: "<white><bold>Generatori Isola</bold></white>"
+        description: |-
+          <gray>Mostra elenco di tutti i generatori
+          </gray><gray>che sono disponibili per
+          </gray><gray>l'isola attuale.</gray>
+      reset_to_default:
+        name: "<white><bold>Ripristina Predefiniti</bold></white>"
+        description: |-
+          <gray>Ripristina tutti i valori dell'isola
+          </gray><gray>ai valori predefiniti da
+          </gray><gray>le impostazioni.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>Giocatori Online</bold></white>"
+        description: |-
+          <gray>Elenco di isole di giocatori
+          </gray><gray>online.</gray>
+      all_islands:
+        name: "<white><bold>Tutte le Isole</bold></white>"
+        description: |-
+          <gray>Elenco di tutte le isole.</gray>
+      search:
+        name: "<white><bold>Cerca</bold></white>"
+        description: |-
+          <gray>Cerca un'isola
+          </gray><gray>specifica.</gray>
+        search: "<aqua>Valore: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>Generazione Offline</bold></white>"
+        description: |-
+          <gray>Previene la generazione di blocchi se tutti i
+          </gray><gray>membri dell'isola sono offline.</gray>
+        enabled: |-
+          <aqua>La generazione offline è </aqua><green>abilitata </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>La generazione offline è </aqua><red>disabilitata </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>Usa Fisica</bold></white>"
+        description: |-
+          <gray>L'utilizzo della fisica sulla generazione
+          </gray><gray>di blocchi consente l'utilizzo di
+          </gray><gray>macchine redstone, tuttavia riduce
+          </gray><gray>un poco le prestazioni del server.</gray>
+        enabled: |-
+          <aqua>La fisica è </aqua><green>abilitata </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>La fisica è </aqua><red>disabilitata </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Usa Banca</bold></white>"
+        description: |-
+          <gray>Usa il conto della banca dell'isola
+          </gray><gray>per tutti gli acquisti e
+          </gray><gray>le attivazioni.
+          </gray><gray>Richiede Bank Addon.</gray>
+        enabled: |-
+          <aqua>L'utilizzo della banca è </aqua><green>abilitato </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>L'utilizzo della banca è </aqua><red>disabilitato </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>Intervallo di Lavoro Predefinito</bold></white>"
+        description: |-
+          <gray>Distanza dai giocatori fino a quando
+          </gray><gray>la generazione di blocchi si fermerà.
+          </gray><gray>0 e inferiore significa illimitato.
+          </gray><gray>L'impostazione richiede il riavvio del
+          </gray><gray>server per attivarsi.</gray>
+        value: "<aqua>Intervallo: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>Generatori Attivi Predefiniti</bold></white>"
+        description: |-
+          <gray>Numero massimo predefinito di
+          </gray><gray>generatori attivi contemporaneamente.
+          </gray><gray>0 e inferiore significa illimitato.</gray>
+        value: "<aqua>Numero: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>Mostra Filtri</bold></white>"
+        description: |-
+          <gray>I filtri sono una riga superiore nella
+          </gray><gray>GUI del Giocatore, che consente
+          </gray><gray>di mostrare solo i generatori
+          </gray><gray>per tipo o stato.
+          </gray><gray>Questa impostazione li disabilita
+          </gray><gray>e li nasconde.</gray>
+        enabled: |-
+          <aqua>I filtri sono </aqua><green>abilitati </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>I filtri sono </aqua><red>disabilitati </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>Blocco Bordo</bold></white>"
+        description: |-
+          <gray>Il blocco bordo è un materiale
+          </gray><gray>che circonda la GUI dell'utente.
+          </gray><gray>Impostarlo su aria lo disabilita.</gray>
+      border_block_name:
+        name: "<white><bold>Nome Blocco Bordo</bold></white>"
+        description: |-
+          <gray>Nome visualizzato per un blocco
+          </gray><gray>bordo.
+          </gray><gray>Se è impostato su vuoto, allora
+          </gray><gray>utilizzerà il nome del blocco.
+          </gray><gray>Per impostarlo come 1 spazio vuoto,
+          "</gray><gray> scrivi 'vuoto'."</gray>
+        value: "<aqua>Nome: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>Notifica Sblocco</bold></white>"
+        description: |-
+          <gray>Un messaggio verrà inviato
+          </gray><gray>a un utente quando sblocca
+          </gray><gray>un nuovo generatore.</gray>
+        enabled: |-
+          <aqua>La notifica di sblocco è </aqua><green>abilitata </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>La notifica di sblocco è </aqua><red>disabilitata </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>Disabilita all'Attivazione</bold></white>"
+        description: |-
+          <gray>Disabilita il generatore attivo più vecchio
+          </gray><gray>se l'utente attiva un nuovo
+          </gray><gray>generatore.
+          </gray><gray>Utile per situazioni in cui
+          </gray><gray>è consentito solo un singolo generatore.</gray>
+        enabled: |-
+          <aqua>Disabilita all'attivazione è </aqua><green>abilitato </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Disabilita all'attivazione è </aqua><red>disabilitato </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>Autore: [author]
+          </gray><gray>Creato per [gamemode]
+          </gray><gray>Lingua: [lang]
+          </gray><gray>Versione: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>Accetta i blocchi</bold></white>"
+        description: |-
+          <gray>Accetta i blocchi selezionati
+          </gray><gray>e ritorna.</gray>
+        selected-blocks: "<gray>Blocchi Selezionati:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>ID Blocco: [id]</gray>"
+      search_block:
+        name: "<white><bold>Cerca</bold></white>"
+        description: |-
+          <gray>Cerca un blocco
+          </gray><gray>specifico.</gray>
+        search: "<aqua>Valore: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>Accetta i biomi</bold></white>"
+        description: |-
+          <gray>Accetta i biomi selezionati
+          </gray><gray>e ritorna.</gray>
+        selected-biomes: "<gray>Biomi Selezionati:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>Altezza Minima</bold></white>"
+        description: |-
+          <gray>Imposta l'altezza minima
+          </gray><gray>per questo materiale.
+          </gray><gray>Valore attuale: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>Altezza Massima</bold></white>"
+        description: |-
+          <gray>Imposta l'altezza massima
+          </gray><gray>per questo materiale.
+          </gray><gray>Valore attuale: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>Cancella Intervallo di Altezza</bold></white>"
+        description: |-
+          <gray>Rimuovi l'intervallo di altezza specifico
+          </gray><gray>per questo materiale.
+          </gray><gray>Utilizzerà l'intervallo di altezza
+          </gray><gray>predefinito del generatore.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>Temperato</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi temperati</gray>
+        warm:
+          name: "<white><bold>Caldo</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi caldi</gray>
+        cold:
+          name: "<white><bold>Freddo</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi freddi</gray>
+        snowy:
+          name: "<white><bold>Innevato</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi innevati</gray>
+        ocean:
+          name: "<white><bold>Oceano</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi oceanici</gray>
+        nether:
+          name: "<white><bold>Nether</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi del nether</gray>
+        the_end:
+          name: "<white><bold>L'End</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi dell'end</gray>
+        neutral:
+          name: "<white><bold>Neutrale</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi neutrali</gray>
+        unused:
+          name: "<white><bold>Inutilizzato</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi inutilizzati</gray>
+        cave:
+          name: "<white><bold>Caverna</bold></white>"
+          description: |-
+            <gray>Mostra solo i biomi delle caverne</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>Pietrisco</bold></white>"
+          description: |-
+            <gray>Funziona solo con generatori
+            </gray><gray>di pietrisco.
+
+            </gray><gold><italic>Suggerimento:
+            </italic></gold><italic><gold><italic>Si forma quando un flusso di lava 
+            </italic></gold></italic><italic><italic><gold><italic>entra in contatto con
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>acqua.</italic></gold></italic></italic></italic>
+        stone:
+          name: "<white><bold>Pietra</bold></white>"
+          description: |-
+            <gray>Funziona solo con generatori
+            </gray><gray>di pietra.
+
+            </gray><gold><italic>Suggerimento:
+            </italic></gold><italic><gold><italic>Si forma quando la lava scorre
+            </italic></gold></italic><italic><italic><gold><italic>sulla parte superiore di blocchi d'acqua.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>Basalto</bold></white>"
+          description: |-
+            <gray>Funziona solo con generatori
+            </gray><gray>di basalto.
+
+            </gray><gold><italic>Suggerimento:
+            </italic></gold><italic><gold><italic>Si forma quando la lava scorre
+            </italic></gold></italic><italic><italic><gold><italic>sulla parte superiore del terreno dell'anima e
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>è adiacente al ghiaccio blu.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>Pietrisco o Pietra</bold></white>"
+          description: |-
+            <gray>Funziona con generatori di
+            </gray><gray>pietrisco e pietra.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>Basalto o Pietrisco</bold></white>"
+          description: |-
+            <gray>Funziona con generatori di
+            </gray><gray>basalto e pietrisco.</gray>
+        basalt_or_stone:
+          name: "<white><bold>Basalto o Pietra</bold></white>"
+          description: |-
+            <gray>Funziona con generatori di
+            </gray><gray>basalto e pietra.</gray>
+        any:
+          name: "<white><bold>Qualsiasi</bold></white>"
+          description: |-
+            <gray>Funziona con qualsiasi generatore.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>Fai clic </yellow><gray>per visualizzare la pagina precedente.</gray>"
+      click-to-next: "<yellow>Fai clic </yellow><gray>per visualizzare la pagina successiva.</gray>"
+      click-to-cancel: "<yellow>Fai clic </yellow><gray>per annullare.</gray>"
+      click-to-choose: "<yellow>Fai clic </yellow><gray>per scegliere.</gray>"
+      click-to-select: "<yellow>Fai clic </yellow><gray>per selezionare.</gray>"
+      click-to-deselect: "<yellow>Fai clic </yellow><gray>per deselezionare.</gray>"
+      click-to-accept: "<yellow>Fai clic </yellow><gray>per accettare e ritornare.</gray>"
+      click-to-filter-enable: "<yellow>Fai clic </yellow><gray>per abilitare il filtro.</gray>"
+      click-to-filter-disable: "<yellow>Fai clic </yellow><gray>per disabilitare il filtro.</gray>"
+      click-to-activate: "<yellow>Fai clic </yellow><gray>per attivare.</gray>"
+      click-to-deactivate: "<yellow>Fai clic </yellow><gray>per disattivare.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>Fai clic </yellow><gray>sul blocco d'oro
+        </gray><gray>per acquistare.</gray>
+      click-to-purchase: "<yellow>Fai clic </yellow><gray>per acquistare.</gray>"
+      click-to-return: "<yellow>Fai clic </yellow><gray>per ritornare.</gray>"
+      click-to-quit: "<yellow>Fai clic </yellow><gray>per uscire.</gray>"
+      click-to-wipe: "<yellow>Fai clic </yellow><gray>per cancellare.</gray>"
+      click-to-open: "<yellow>Fai clic </yellow><gray>per aprire.</gray>"
+      click-to-export: "<yellow>Fai clic </yellow><gray>per iniziare l'esportazione.</gray>"
+      click-to-change: "<yellow>Fai clic </yellow><gray>per cambiare.</gray>"
+      click-on-item: |-
+        <yellow>Fai clic </yellow><gray>su un elemento dal tuo
+        </gray><gray>inventario.</gray>
+      click-to-view: "<yellow>Fai clic </yellow><gray>per visualizzare.</gray>"
+      click-to-add: "<yellow>Fai clic </yellow><gray>per aggiungere.</gray>"
+      click-to-remove: "<yellow>Fai clic </yellow><gray>per rimuovere.</gray>"
+      select-before: "<yellow>Seleziona </yellow><gray>prima di continuare.</gray>"
+      click-to-create: "<yellow>Fai clic </yellow><gray>per creare.</gray>"
+      right-click-to-select: "<yellow>Fai clic con il pulsante destro </yellow><gray>per selezionare.</gray>"
+      right-click-to-deselect: "<yellow>Fai clic con il pulsante destro </yellow><gray>per deselezionare.</gray>"
+      click-to-toggle: "<yellow>Fai clic </yellow><gray>per attivare/disattivare.</gray>"
+      left-click-to-edit: "<yellow>Fai clic con il pulsante sinistro </yellow><gray>per modificare.</gray>"
+      right-click-to-lock: "<yellow>Fai clic con il pulsante destro </yellow><gray>per bloccare.</gray>"
+      right-click-to-unlock: "<yellow>Fai clic con il pulsante destro </yellow><gray>per sbloccare.</gray>"
+      click-to-perform: "<yellow>Fai clic </yellow><gray>per eseguire.</gray>"
+      click-to-edit: "<yellow>Fai clic </yellow><gray>per modificare.</gray>"
+      right-click-to-clear: "<yellow>Fai clic con il pulsante destro </yellow><gray>per cancellare.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>Fai clic con il pulsante sinistro </yellow><gray>per visualizzare.</gray>"
+      left-click-to-purchase: "<yellow>Fai clic con il pulsante sinistro </yellow><gray>per acquistare.</gray>"
+      left-click-to-activate: "<yellow>Fai clic con il pulsante sinistro </yellow><gray>per attivare.</gray>"
+      left-click-to-deactivate: "<yellow>Fai clic con il pulsante sinistro </yellow><gray>per disattivare.</gray>"
+      right-click-to-view: "<yellow>Fai clic con il pulsante destro </yellow><gray>per visualizzare.</gray>"
+      right-click-to-purchase: "<yellow>Fai clic con il pulsante destro </yellow><gray>per acquistare.</gray>"
+      right-click-to-activate: "<yellow>Fai clic con il pulsante destro </yellow><gray>per attivare.</gray>"
+      right-click-to-deactivate: "<yellow>Fai clic con il pulsante destro </yellow><gray>per disattivare.</gray>"
+      shift-click-to-view: "<yellow>Shift+Clic </yellow><gray>per visualizzare.</gray>"
+      shift-click-to-purchase: "<yellow>Shift+Clic </yellow><gray>per acquistare.</gray>"
+      shift-click-to-activate: "<yellow>Shift+Clic </yellow><gray>per attivare.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift+Clic </yellow><gray>per disattivare.</gray>"
+      shift-click-to-reset: "<yellow>Shift+Clic </yellow><gray>per ripristinare.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Clic Sinistro </yellow><gray>per configurare l'intervallo di altezza.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Blocchi:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Tesoro:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>Livello Richiesto: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>Permessi Mancanti:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>Opera in:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>Opera in </bold></gray><bold><yellow><italic>tutti </italic></yellow></bold><gray><bold>i biomi</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>Bloccato!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>Non Distribuito!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>Attivo</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>Costo di Acquisto: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>Costo di Attivazione: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>Supporta:</bold></gray>"
+          cobblestone: "<dark_gray>Generatori di Pietrisco</dark_gray>"
+          stone: "<dark_gray>Generatori di Pietra</dark_gray>"
+          basalt: "<dark_gray>Generatori di Basalto</dark_gray>"
+          any: "<gray><bold>Supporta </bold></gray><bold><yellow><italic>tutti </italic></yellow></bold><gray><bold>i generatori</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>Funziona alle altezze: </gray><aqua>[min_height] </aqua><gray>a </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>Permesso che deve essere
+        </gray><gray>assegnato al giocatore:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>Generatori Bundle: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>Selezionato</yellow>"
+      # Used to refer to players island.
+      island-owner: "isola di [player]"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>Isola spawn</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "sconosciuto"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>Generatore </green> '[generator]' <green> è caricato nella cache locale.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>Bundle </green> '[bundle]' <green> è caricato nella cache locale.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>Generatore </yellow> '[generator]' <yellow>è disattivato.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>Troppi generatori sono attivati. Prova a disattivarne alcuni prima di attivarne uno nuovo.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>Generatore </red> '[generator]' <red>non può essere sbloccato.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>Generatore </red> '[generator]' <red>non è sbloccato.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>Generatore </red> '[generator]' <red>non è acquistato.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>Non hai abbastanza crediti per attivare il generatore. L'attivazione richiede [number] crediti.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>Il tuo conto bancario non ha abbastanza crediti per attivare il generatore. L'attivazione richiede [number] crediti.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>Generatore </yellow> '[generator]' <yellow>è attivato.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>Generatore </red> '[generator]' <red>ha raggiunto il suo limite di generazione ed è ora in pausa per [number] minuto(i).</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>Generatore </yellow> '[generator]' <yellow>è acquistato.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>Generatore </red> '[generator]' <red>è già acquistato.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>Generatore </red> '[generator]' <red>richiede il livello isola [number].</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>Generatore </red> '[generator]' <red>richiede il permesso `[permission]`.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>Non hai abbastanza crediti per acquistare il generatore. Questo generatore costa [number] crediti.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>Il tuo conto bancario non ha abbastanza crediti. Questo generatore costa [number] crediti.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>Importati [generator] nuovi generatori e [bundle] nuovi bundle.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>Inizio download della libreria.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>Non riesco a trovare dati di generatore validi</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>I dati dell'isola non sono stati trovati.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>Non riesco a trovare dati di bundle validi</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>Non riesco a trovare alcuna voce di libreria!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>Il file `[file]` non è stato trovato. Non è possibile eseguire l'importazione.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>Non riesco a caricare il file `[file]`. Errore durante la lettura: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>Il mondo '[world]' non è un mondo Game Mode Addon.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>Il file `[file]` esiste già. Scegli un nome diverso.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>Generatore con id '[generator]' </red><red>non trovato in [gamemode].</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>Non ci sono generatori disponibili per te in [world]</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>Qualcosa è andato storto durante il prelievo di denaro.</red>"
+    max-height-less-than-min: "<red>L'altezza massima ([MAX]) non può essere inferiore all'altezza minima ([MIN])!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "vero, su, sì, conferma, s, valido, corretto"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "falso, no, non, nega, n, invalido, scorretto"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "annulla"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "annulla, esci, abbandona"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>Conversazione annullata!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>Il valore [value] fornito non è un numero!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>Il numero [value] fornito non è valido. Deve essere maggiore di [min] e minore di [max]!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>Nuova descrizione:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>Per favore scrivi un valore di ricerca. (scrivi 'annulla' per uscire)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>Valore di ricerca aggiornato.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>Conferma che vuoi eliminare tutti i dati utente dal database per [gamemode].</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>Successo, tutti i dati utente per [gamemode] sono stati rimossi!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>Conferma che vuoi eliminare tutti i dati di generatore dal database per [gamemode].</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>Successo, tutti i dati di generatore per [gamemode] sono stati rimossi!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>Per favore inserisci un nome di file per il file database esportato. (scrivi 'annulla' per uscire)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>Successo, l'esportazione del database per [world] è completata. File generato nella directory dell'addon.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>Il file con nome '[id]' esiste. Non è possibile sovrascrivere.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>Per favore inserisci un nuovo nome nella chat.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>Successo, il nome è stato aggiornato.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>Per favore inserisci una nuova descrizione nella chat e 'abbandona' su una riga da sola per terminare.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>Successo, la descrizione è stata aggiornata.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>Successo, il nuovo oggetto è stato creato in [world].</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>L'oggetto con `[id]` è già definito nella game mode. Scegline uno diverso.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>Conferma che vuoi eliminare [number] oggetti: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>Successo, i dati sono stati rimossi!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>Per favore inserisci un numero nella chat.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>Per favore inserisci i permessi richiesti, uno per riga nella chat, e 'abbandona' su una riga da sola per terminare.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>Successo, i permessi del generatore sono stati aggiornati.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>Per favore conferma che vuoi sostituire i tuoi generatori attuali con quelli nuovi.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>Successo, nuovi generatori per [gamemode] sono stati importati.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>Hai sbloccato </yellow> [generator]<yellow>! Fai clic qui per acquistarlo ora per [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>Hai sbloccato </yellow> [generator]<yellow>! Fai clic qui per attivarlo ora per [number].</yellow>"
+    click-text-to-activate: "<yellow>Hai sbloccato </yellow> [generator]<yellow>! Fai clic qui per attivarlo ora.</yellow>"
+    input-min-height: "<white>Inserisci l'altezza minima per questo materiale (tra -64 e 320):</white>"
+    input-max-height: "<white>Inserisci l'altezza massima per questo materiale (tra -64 e 320):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "Pietrisco"
+    # Also supports descriptions.
+    stone:
+      name: "Pietra"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "Pianure"
+    # Also supports descriptions.
+    flower_forest:
+      name: "Foresta di Fiori"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Generatore Magico"
+      description: |-
+        <green>Attiva o disattiva
+        </green><green>tutti i Generatori Magici
+        </green><green>su tutta l'isola</green>
+      hint: "<yellow>I Generatori Magici sono disabilitati nelle impostazioni dell'isola</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Permessi Generatore Magico"
+      description: |-
+        <green>Seleziona chi può attivare
+        </green><green>e disattivare i generatori</green>

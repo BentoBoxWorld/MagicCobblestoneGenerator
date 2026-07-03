@@ -1,0 +1,1110 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "Naredba Magic Cobblestone Generatora za administratore"
+      import:
+        description: "Uvozi čarobne generatore"
+        confirmation: "Ovo će ukloniti postojeće generatore iz [gamemode] i uvesti nove generatore iz datoteke šablona - molimo da potvrdite"
+      why:
+        parameters: "<player>"
+        description: "uključuje/isključuje poruke za otklanjanje grešaka Magic Cobblestone Generatora"
+      database:
+        description: "Glavna naredba baze podataka"
+      import-database:
+        parameters: "<file>"
+        description: "uvozi datoteku baze podataka čarobnih generatora"
+        confirmation: "Ovo će ukloniti postojeće generatore za [gamemode] i uvesti generatore iz datoteke baze podataka - molimo da potvrdite"
+      export:
+        parameters: "<file>"
+        description: "Izvezi čarobne generatore baze podataka iz režima igre u datoteku"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "otvara GUI za izbor generatora"
+      view:
+        description: "otvara GUI s detaljima generatora"
+        parameters: "<generator-id>"
+      buy:
+        description: "Kupuje traženi generator"
+        parameters: "<generator-id>"
+      activate:
+        description: "Aktivira/deaktivira traženi generator"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>Generatori</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>Admin Panel</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>Odaberi Biome</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>Odaberi Blok</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>Odaberi Paket</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>Odaberi Tip Generatora</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>Paket: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>Upravljaj Paketima</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>Upravljaj Generatorima</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>Otok: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>Upravljaj Podacima Otoka</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>Biblioteka</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>Postavke</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>Konfiguriraj Visinu Materijala</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>Raspon Visine: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>Minimalna Visina</bold></white>"
+        description: |-
+          <gray>Postavi minimalnu visinu
+          </gray><gray>za ovaj materijal.</gray>
+        value: "<gray>Trenutna vrijednost: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>Maksimalna Visina</bold></white>"
+        description: |-
+          <gray>Postavi maksimalnu visinu
+          </gray><gray>za ovaj materijal.</gray>
+        value: "<gray>Trenutna vrijednost: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>Raspon Visine</bold></white>"
+        description: |-
+          <gray>Raspon visine na kojem
+          </gray><gray>ovaj generator radi.</gray>
+        value: "<aqua>Od </aqua><white>[min_height] </white><aqua>do </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>Zadani Generator</bold></white>"
+        description: |-
+          <gray>Zadani generatori su uvijek
+          </gray><gray>aktivni.</gray>
+        enabled: |-
+          <aqua>Ovo je </aqua><green>zadani </green><aqua>generator.</aqua>
+        disabled: |-
+          <aqua>Ovo </aqua><red>nije zadani </red><aqua>generator.</aqua>
+      priority:
+        name: "<white><bold>Prioritet Generatora</bold></white>"
+        description: |-
+          <gray>Veći broj prioriteta
+          </gray><gray>će biti preferiran ako
+          </gray><gray>se više može primijeniti
+          </gray><gray>na istu lokaciju.</gray>
+        value: "<aqua>Prioritet: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>Tip Generatora</bold></white>"
+        description: |-
+          <gray>Određuje koji tip generatora
+          </gray><gray>će se primijeniti na trenutni
+          </gray><gray>generator.</gray>
+        value: "<aqua>Tip: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>Minimalna Razina Otoka</bold></white>"
+        description: |-
+          <gray>Minimalna razina otoka za
+          </gray><gray>otključavanje ovog generatora.</gray>
+        value: "<aqua>Minimalna razina obavezna: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>Potrebne Dozvole</bold></white>"
+        description: |-
+          <gray>Popis dozvola koji je
+          </gray><gray>obavezan za otključavanje
+          </gray><gray>ovog generatora.</gray>
+        list: "<aqua>Potrebne dozvole:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- nema</aqua>"
+      purchase_cost:
+        name: "<white><bold>Cijena Kupnje</bold></white>"
+        description: |-
+          <gray>Krediti potrebni za
+          </gray><gray>kupnju ovog generatora.</gray>
+        value: "<aqua>Cijena: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>Cijena Aktivacije</bold></white>"
+        description: |-
+          <gray>Krediti potrebni za
+          </gray><gray>aktivaciju ili ponovno
+          </gray><gray>aktiviranje ovog generatora.</gray>
+        value: "<aqua>Cijena: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>Granica Iscrpljenosti</bold></white>"
+        description: |-
+          <gray>Maksimalan broj blokova koji
+          </gray><gray>ovaj generator može proizvesti
+          </gray><gray>po razdoblju prije nego što se
+          </gray><gray>stavi u hladnjak.</gray>
+        value: "<aqua>Granica: [number] </aqua><gray>po razdoblju</gray>"
+        default: "<aqua>Koristi globalnu zadanu: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Bez ograničenja</aqua>"
+      biomes:
+        name: "<white><bold>Operativni Biomi</bold></white>"
+        description: |-
+          <gray>Popis bioma gdje ovaj
+          </gray><gray>generator može raditi.</gray>
+        list: "<aqua>Biomi:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- bilo koji</aqua>"
+      treasure_amount:
+        name: "<white><bold>Količina Blaga</bold></white>"
+        description: |-
+          <gray>Maksimalna količina blaga
+          </gray><gray>koju se može ispustiti odjednom.</gray>
+        value: "<aqua>Količina: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>Šansa za Blagom</bold></white>"
+        description: |-
+          <gray>Šansa da se blago
+          </gray><gray>ispusti tijekom generiranja.</gray>
+        value: "<aqua>Šansa: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>Opće Informacije</bold></white>"
+        description: |-
+          <gray>Prikazuje opće informacije
+          </gray><gray>o ovom generatoru.</gray>
+      blocks:
+        name: "<white><bold>Popis Blokova</bold></white>"
+        description: |-
+          <gray>Prikazuje popis blokova i
+          </gray><gray>njihove šanse za generiranje.</gray>
+      treasures:
+        name: "<white><bold>Popis Blaga</bold></white>"
+        description: |-
+          <gray>Prikazuje popis blaga i
+          </gray><gray>šanse za ispuštanje.
+          </gray><gray>Blago se ispušta
+          </gray><gray>tijekom generiranja blokova.</gray>
+        drag-and-drop: |-
+          <gray>Podržava povlačenje i ispuštanje
+          </gray><gray>stavki u prazna mjesta.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Šansa: [#.##]</aqua>"
+        actual: "<aqua>Vrijednost baze podataka: [number]</aqua>"
+        height-range: "<gray>Raspon visine: </gray><aqua>[min_height] </aqua><gray>do </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Koristi zadanu raspon visine generatora</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Šansa: [#.####]</aqua>"
+        actual: "<aqua>Vrijednost baze podataka: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>Generatori Kamenjarke</bold></white>"
+        description: |-
+          <gray>Prikaži samo generatore
+          </gray><gray>kamenjarke</gray>
+      show_stone:
+        name: "<white><bold>Generatori Kamena</bold></white>"
+        description: |-
+          <gray>Prikaži samo generatore
+          </gray><gray>kamena</gray>
+      show_basalt:
+        name: "<white><bold>Generatori Bazalta</bold></white>"
+        description: |-
+          <gray>Prikaži samo generatore
+          </gray><gray>bazalta</gray>
+      toggle_visibility:
+        name: "<white><bold>Otključani Generatori</bold></white>"
+        description: |-
+          <gray>Prikaži samo otključane
+          </gray><gray>generatore</gray>
+      show_active:
+        name: "<white><bold>Aktivni Generatori</bold></white>"
+        description: |-
+          <gray>Prikaži samo aktivne
+          </gray><gray>generatore</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>Nazad</bold></white>"
+        description: |-
+          <gray>Vrati se na prethodni izbornik</gray>
+      quit:
+        name: "<white><bold>Izlaz</bold></white>"
+        description: |-
+          <gray>Napusti trenutni izbornik</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>Prethodna Stranica</bold></white>"
+        description: |-
+          <gray>Prebaci se na [number] stranicu</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>Sljedeća Stranica</bold></white>"
+        description: |-
+          <gray>Prebaci se na [number] stranicu</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>Upravljaj Podacima Otoka</bold></white>"
+        description: |-
+          <gray>Upravljaj podacima otoka
+          </gray><gray>u trenutnom režimu igre.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>Upravljaj Generatorima</bold></white>"
+        description: |-
+          <gray>Upravljaj generatorima
+          </gray><gray>u trenutnom režimu igre.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>Upravljaj Paketima</bold></white>"
+        description: |-
+          <gray>Upravljaj paketima
+          </gray><gray>u trenutnom režimu igre.</gray>
+      settings:
+        name: "<white><bold>Postavke</bold></white>"
+        description: |-
+          <gray>Provjeri i promijeni
+          </gray><gray>postavke dodatka.</gray>
+      import_template:
+        name: "<white><bold>Uvezi Šablon</bold></white>"
+        description: |-
+          <gray>Uvezi šablonsku
+          </gray><gray>datoteku smještenu u
+          </gray><gray>direktoriju dodatka.</gray>
+      web_library:
+        name: "<white><bold>Web Biblioteka</bold></white>"
+        description: |-
+          <gray>Pristup web
+          </gray><gray>biblioteci koja sadrži
+          </gray><gray>dijeljene generatore.</gray>
+      export_from_database:
+        name: "<white><bold>Izvezi Bazu Podataka</bold></white>"
+        description: |-
+          <gray>Izvezi bazu podataka
+          </gray><gray>u jednu datoteku smještenu u
+          </gray><gray>direktoriju dodatka.</gray>
+      import_to_database:
+        name: "<white><bold>Uvezi Bazu Podataka</bold></white>"
+        description: |-
+          <gray>Uvezi bazu podataka iz
+          </gray><gray>datoteke smještene u
+          </gray><gray>direktoriju dodatka.</gray>
+      wipe_user_data:
+        name: "<white><bold>Obriši Korisničku Bazu Podataka</bold></white>"
+        description: |-
+          <gray>Obriši korisničke podatke za
+          </gray><gray>svaki otok u
+          </gray><gray>trenutnom režimu igre.</gray>
+      wipe_generator_data:
+        name: "<white><bold>Obriši Bazu Podataka Generatora</bold></white>"
+        description: |-
+          <gray>Obriši podatke generatora i paketa
+          </gray><gray>u trenutnom režimu igre.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>Naziv Paketa</bold></white>"
+        description: |-
+          <gray>Promijeni naziv paketa.</gray>
+        value: "<aqua>Naziv: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>ID Paketa</bold></white>"
+        description: |-
+          <gray>Trenutni ID paketa.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>Ikona Paketa</bold></white>"
+        description: |-
+          <gray>Promijeni ikonu paketa.</gray>
+      bundle_description:
+        name: "<white><bold>Opis Paketa</bold></white>"
+      bundle_info:
+        name: "<white><bold>Opće Informacije</bold></white>"
+        description: |-
+          <gray>Prikaži opće informacije
+          </gray><gray>o ovom paketu.</gray>
+      bundle_generators:
+        name: "<white><bold>Generatori</bold></white>"
+        description: |-
+          <gray>Prikaži popis generatora
+          </gray><gray>dodijeljenih ovom paketu.</gray>
+      add_generator:
+        name: "<white><bold>Dodaj Generator</bold></white>"
+        description: |-
+          <gray>Dodijeli generator
+          </gray><gray>ovom paketu.</gray>
+        list: "<aqua>Odabrani Generatori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>Ukloni Generator</bold></white>"
+        description: |-
+          <gray>Ukloni generator
+          </gray><gray>iz ovog paketa.</gray>
+        list: "<aqua>Odabrani Generatori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>Kreiraj Paket</bold></white>"
+        description: |-
+          <gray>Kreiraj novi paket
+          </gray><gray>za ovaj režim igre.</gray>
+      delete_bundle:
+        name: "<white><bold>Ukloni Paket</bold></white>"
+        description: |-
+          <gray>Ukloni paket iz
+          </gray><gray>ovog režima igre potpuno.</gray>
+        list: "<aqua>Odabrani Paketi:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>Naziv Generatora</bold></white>"
+        description: |-
+          <gray>Naslov za ovaj generator.
+          </gray><gray>Podržava kodove boja.</gray>
+        value: "<aqua>Naziv: </aqua> [generator]"
+      id:
+        name: "<white><bold>ID Generatora</bold></white>"
+        description: |-
+          <gray>Trenutni ID generatora.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>Ikona Generatora</bold></white>"
+        description: |-
+          <gray>Stavka korištena za prikaz ovog
+          </gray><gray>generatora u svim GUI sučeljima.</gray>
+      locked_icon:
+        name: "<white><bold>Zaključana Ikona</bold></white>"
+        description: |-
+          <gray>Stavka korištena za prikaz ovog
+          </gray><gray>generatora u svim GUI sučeljima ako
+          </gray><gray>je zaključan.</gray>
+      description:
+        name: "<white><bold>Opis Generatora</bold></white>"
+        description: |-
+          <gray>Tekst za generator koji će
+          </gray><gray>biti napisan ispod naslova.</gray>
+        value: "<aqua>Opis:</aqua>"
+      deployed:
+        name: "<white><bold>Raspoređeno</bold></white>"
+        description: |-
+          <gray>Raspoređeni generatori su vidljivi
+          </gray><gray>i dostupni igračima.
+          </gray><gray>Neraspoređeni generatori neće
+          </gray><gray>generirati blokove.</gray>
+        enabled: |-
+          <aqua>Ovaj generator je </aqua><green>raspoređen.</green>
+        disabled: |-
+          <aqua>Ovaj generator </aqua><red>nije raspoređen.</red>
+      add_material:
+        name: "<white><bold>Dodaj Materijal</bold></white>"
+        description: |-
+          <gray>Dodaj novi materijal na
+          </gray><gray>trenutni popis materijala.</gray>
+      remove_material:
+        name: "<white><bold>Ukloni Materijale</bold></white>"
+        description: |-
+          <gray>Ukloni odabrane
+          </gray><gray>materijale sa popisa.</gray>
+        selected-materials: "<gray>Odabrani Materijali:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>Kreiraj Generator</bold></white>"
+        description: |-
+          <gray>Kreiraj novi
+          </gray><gray>generator za
+          </gray><gray>režim igre.</gray>
+      delete_generator:
+        name: "<white><bold>Ukloni Generator</bold></white>"
+        description: |-
+          <gray>Ukloni generator
+          </gray><gray>iz režima igre potpuno.</gray>
+        list: "<aqua>Odabrani Generatori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>ID otoka: </aqua><gray>[id]</gray>
+        owner: "<aqua>Vlasnik: [player]</aqua>"
+        list: "<aqua>Članovi:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>Raspon Rada Otoka</bold></white>"
+        description: |-
+          <gray>Raspon rada za generatore
+          </gray><gray>na trenutnom otoku.
+          </gray><gray>0 i manji znači neograničen
+          </gray><gray>raspon.</gray>
+        value: "<aqua>Raspon: [number]</aqua>"
+        overwritten: |-
+          <red>Vlasnik ima dozvolu koja
+          </red><red>nadjačava raspon rada.</red>
+      owner_working_range:
+        name: "<white><bold>Raspon Rada Vlasnika</bold></white>"
+        description: |-
+          <gray>Raspon rada za generatore
+          </gray><gray>za trenutnog vlasnika.
+          </gray><gray>'0' znači da se raspon vlasnika
+          </gray><gray>ignora.
+          </gray><gray>'-1' znači da vlasnik ima
+          </gray><gray>neograničen raspon rada.
+          "</gray><gray> Dozvola za korisnika za dodjelu:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Raspon: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>Maks. Generatori Otoka</bold></white>"
+        description: |-
+          <gray>Maksimalan broj aktivnih
+          </gray><gray>stupnjeva generatora dozvoljenih
+          </gray><gray>u isto vrijeme
+          </gray><gray>na trenutnom otoku.
+          </gray><gray>0 i manji znači
+          </gray><gray>neograničen.</gray>
+        value: "<aqua>Maks. Generatori: [number]</aqua>"
+        overwritten: |-
+          <red>Vlasnik ima dozvolu koja
+          </red><red>nadjačava broj generatora.</red>
+      owner_max_generators:
+        name: "<white><bold>Maks. Generatori Vlasnika</bold></white>"
+        description: |-
+          <gray>Maksimalan broj aktivnih
+          </gray><gray>stupnjeva generatora koje
+          </gray><gray>vlasnik otoka smije imati.
+          </gray><gray>'0' znači da se količina vlasnika
+          </gray><gray>ignora.
+          </gray><gray>'-1' znači da vlasnik ima
+          </gray><gray>neograničen broj generatora.
+          "</gray><gray> Dozvola za korisnika za dodjelu:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Maks. Generatori: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>Paket Otoka</bold></white>"
+        description: |-
+          <gray>Paket dodijeljen
+          </gray><gray>trenutnom otoku.
+          </gray><gray>Samo generatori iz ovog
+          </gray><gray>paketa mogu se koristiti na otoku.</gray>
+        value: "<aqua>Paket: [bundle]</aqua>"
+        overwritten: |-
+          <red>Vlasnik ima dozvolu koja
+          </red><red>nadjačava paket.</red>
+      owner_bundle:
+        name: "<white><bold>Paket Vlasnika</bold></white>"
+        description: |-
+          <gray>Paket dodijeljen
+          </gray><gray>trenutnom vlasniku otoka.
+          </gray><gray>Samo generatori iz ovog
+          </gray><gray>paketa mogu se koristiti na otoku.
+          "</gray><gray> Dozvola za korisnika za dodjelu:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Paket: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>Opće Informacije</bold></white>"
+        description: |-
+          <gray>Prikazuje opće informacije
+          </gray><gray>o ovom otoku.</gray>
+      island_generators:
+        name: "<white><bold>Generatori Otoka</bold></white>"
+        description: |-
+          <gray>Prikazuje popis svih generatora
+          </gray><gray>koji su dostupni za
+          </gray><gray>trenutni otok.</gray>
+      reset_to_default:
+        name: "<white><bold>Resetiraj na Zadane Vrijednosti</bold></white>"
+        description: |-
+          <gray>Resetira sve vrijednosti otoka
+          </gray><gray>na zadane vrijednosti iz
+          </gray><gray>postavki.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>Mrežni Igrači</bold></white>"
+        description: |-
+          <gray>Popis mrežnih igrača
+          </gray><gray>otoka.</gray>
+      all_islands:
+        name: "<white><bold>Svi Otoci</bold></white>"
+        description: |-
+          <gray>Popis svih otoka.</gray>
+      search:
+        name: "<white><bold>Pretraživanje</bold></white>"
+        description: |-
+          <gray>Pretraživanje određenog
+          </gray><gray>otoka.</gray>
+        search: "<aqua>Vrijednost: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>Stvaranje Izvan Mreže</bold></white>"
+        description: |-
+          <gray>Sprječava generiranje blokova ako su
+          </gray><gray>svi članovi otoka
+          </gray><gray>izvan mreže.</gray>
+        enabled: |-
+          <aqua>Stvaranje izvan mreže je </aqua><green>omogućeno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Stvaranje izvan mreže je </aqua><red>onemogućeno </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>Koristi Fiziku</bold></white>"
+        description: |-
+          <gray>Korištenje fizike na generiranju
+          </gray><gray>blokova omogućava
+          </gray><gray>korištenje redstone strojeva,
+          </gray><gray>ali smanjuje performanse
+          </gray><gray>poslužitelja malo.</gray>
+        enabled: |-
+          <aqua>Fizika je </aqua><green>omogućena </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Fizika je </aqua><red>onemogućena </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Koristi Bank</bold></white>"
+        description: |-
+          <gray>Korištenje računa banke otoka
+          </gray><gray>za sve kupnje i
+          </gray><gray>aktivacije.
+          </gray><gray>Zahtijeva Bank Addon.</gray>
+        enabled: |-
+          <aqua>Korištenje banke je </aqua><green>omogućeno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Korištenje banke je </aqua><red>onemogućeno </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>Zadani Raspon Rada</bold></white>"
+        description: |-
+          <gray>Udaljenost od igrača dok
+          </gray><gray>generiranje blokova neće stati.
+          </gray><gray>0 i manji znači neograničeno.
+          </gray><gray>Postavka zahtijeva restart
+          </gray><gray>poslužitelja da se aktivira.</gray>
+        value: "<aqua>Raspon: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>Zadani Aktivni Generatori</bold></white>"
+        description: |-
+          <gray>Zadana maksimalna količina
+          </gray><gray>aktivnih generatora u isto
+          </gray><gray>vrijeme.
+          </gray><gray>0 i manji znači neograničeno.</gray>
+        value: "<aqua>Broj: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>Prikaži Filtre</bold></white>"
+        description: |-
+          <gray>Filtri su gornji red u
+          </gray><gray>GUI igrača, što omogućava
+          </gray><gray>prikazivanje samo generatora
+          </gray><gray>po vrsti ili statusu.
+          </gray><gray>Ova postavka ih onemogućava
+          </gray><gray>i skriva.</gray>
+        enabled: |-
+          <aqua>Filtri su </aqua><green>omogućeni </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Filtri su </aqua><red>onemogućeni </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>Granični Blok</bold></white>"
+        description: |-
+          <gray>Granični blok je materijal
+          </gray><gray>koji okružuje korisničko sučelje.
+          </gray><gray>Postavljanje na zrak ga onemogućuje.</gray>
+      border_block_name:
+        name: "<white><bold>Naziv Graničnog Bloka</bold></white>"
+        description: |-
+          <gray>Prikazani naziv za granični
+          </gray><gray>blok.
+          </gray><gray>Ako je postavljeno na prazno, tada
+          </gray><gray>će koristiti naziv bloka.
+          </gray><gray>Postavi ga kao 1 prazan prostor,
+          "</gray><gray> napiši 'empty'."</gray>
+        value: "<aqua>Naziv: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>Obavijesti pri Otključavanju</bold></white>"
+        description: |-
+          <gray>Poruka će biti poslana
+          </gray><gray>korisniku kada otključa
+          </gray><gray>novi generator.</gray>
+        enabled: |-
+          <aqua>Obavijest pri otključavanju je </aqua><green>omogućena </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Obavijest pri otključavanju je </aqua><red>onemogućena </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>Onemogući pri Aktivaciji</bold></white>"
+        description: |-
+          <gray>Onemogući najstariji aktivni generator
+          </gray><gray>ako korisnik aktivira novi
+          </gray><gray>generator.
+          </gray><gray>Korisno za situacije gdje
+          </gray><gray>samo jedan generator je dozvoljen.</gray>
+        enabled: |-
+          <aqua>Onemogući pri aktivaciji je </aqua><green>omogućeno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Onemogući pri aktivaciji je </aqua><red>onemogućeno </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>Autor: [author]
+          </gray><gray>Kreirano za [gamemode]
+          </gray><gray>Jezik: [lang]
+          </gray><gray>Verzija: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>Prihvati Blokove</bold></white>"
+        description: |-
+          <gray>Prihvata odabrane blokove
+          </gray><gray>i vraća se.</gray>
+        selected-blocks: "<gray>Odabrani Blokovi:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>ID Bloka: [id]</gray>"
+      search_block:
+        name: "<white><bold>Pretraživanje</bold></white>"
+        description: |-
+          <gray>Pretraživanje određenog
+          </gray><gray>bloka.</gray>
+        search: "<aqua>Vrijednost: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>Prihvati Biome</bold></white>"
+        description: |-
+          <gray>Prihvata odabrane biome
+          </gray><gray>i vraća se.</gray>
+        selected-biomes: "<gray>Odabrani Biomi:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>Minimalna Visina</bold></white>"
+        description: |-
+          <gray>Postavi minimalnu visinu
+          </gray><gray>za ovaj materijal.
+          </gray><gray>Trenutna vrijednost: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>Maksimalna Visina</bold></white>"
+        description: |-
+          <gray>Postavi maksimalnu visinu
+          </gray><gray>za ovaj materijal.
+          </gray><gray>Trenutna vrijednost: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>Očisti Raspon Visine</bold></white>"
+        description: |-
+          <gray>Ukloni specifičan raspon visine
+          </gray><gray>za ovaj materijal.
+          </gray><gray>Koristit će zadanu raspon visine
+          </gray><gray>generatora umjesto toga.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>Umjerena</bold></white>"
+          description: |-
+            <gray>Prikaži samo umjerene biome</gray>
+        warm:
+          name: "<white><bold>Topla</bold></white>"
+          description: |-
+            <gray>Prikaži samo tople biome</gray>
+        cold:
+          name: "<white><bold>Hladna</bold></white>"
+          description: |-
+            <gray>Prikaži samo hladne biome</gray>
+        snowy:
+          name: "<white><bold>Snježna</bold></white>"
+          description: |-
+            <gray>Prikaži samo snježne biome</gray>
+        ocean:
+          name: "<white><bold>Ocean</bold></white>"
+          description: |-
+            <gray>Prikaži samo oceanske biome</gray>
+        nether:
+          name: "<white><bold>Nether</bold></white>"
+          description: |-
+            <gray>Prikaži samo Nether biome</gray>
+        the_end:
+          name: "<white><bold>Kraj</bold></white>"
+          description: |-
+            <gray>Prikaži samo biome Kraja</gray>
+        neutral:
+          name: "<white><bold>Neutralna</bold></white>"
+          description: |-
+            <gray>Prikaži samo neutralne biome</gray>
+        unused:
+          name: "<white><bold>Neiskorištena</bold></white>"
+          description: |-
+            <gray>Prikaži samo neiskorištene biome</gray>
+        cave:
+          name: "<white><bold>Špiljski</bold></white>"
+          description: |-
+            <gray>Prikaži samo špiljske biome</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>Kamenjarke</bold></white>"
+          description: |-
+            <gray>Radi samo s generatorima
+            </gray><gray>kamenjarke.
+
+            </gray><gold><italic>Savjet:
+            </italic></gold><italic><gold><italic>Nastaje kada lava
+            </italic></gold></italic><italic><italic><gold><italic>naiđe na vodu.</italic></gold></italic></italic>
+        stone:
+          name: "<white><bold>Kamen</bold></white>"
+          description: |-
+            <gray>Radi samo s generatorima
+            </gray><gray>kamena.
+
+            </gray><gold><italic>Savjet:
+            </italic></gold><italic><gold><italic>Nastaje kada lava teče
+            </italic></gold></italic><italic><italic><gold><italic>iznad vodenih blokova.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>Bazalt</bold></white>"
+          description: |-
+            <gray>Radi samo s generatorima
+            </gray><gray>bazalta.
+
+            </gray><gold><italic>Savjet:
+            </italic></gold><italic><gold><italic>Nastaje kada lava teče
+            </italic></gold></italic><italic><italic><gold><italic>preko duše zemlje i
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>je susjedna plavoj ledu.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>Kamenjarke ili Kamen</bold></white>"
+          description: |-
+            <gray>Radi s generatorima kamenjarka i
+            </gray><gray>kamena.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>Bazalt ili Kamenjarke</bold></white>"
+          description: |-
+            <gray>Radi s generatorima bazalta i
+            </gray><gray>kamenjarke.</gray>
+        basalt_or_stone:
+          name: "<white><bold>Bazalt ili Kamen</bold></white>"
+          description: |-
+            <gray>Radi s generatorima bazalta i
+            </gray><gray>kamena.</gray>
+        any:
+          name: "<white><bold>Bilo Koji</bold></white>"
+          description: |-
+            <gray>Radi s bilo kojim generatorom.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>Klikni </yellow><gray>da vidiš prethodnu stranicu.</gray>"
+      click-to-next: "<yellow>Klikni </yellow><gray>da vidiš sljedeću stranicu.</gray>"
+      click-to-cancel: "<yellow>Klikni </yellow><gray>za otkazivanje.</gray>"
+      click-to-choose: "<yellow>Klikni </yellow><gray>da odabereš.</gray>"
+      click-to-select: "<yellow>Klikni </yellow><gray>za odabir.</gray>"
+      click-to-deselect: "<yellow>Klikni </yellow><gray>za poništavanje odabira.</gray>"
+      click-to-accept: "<yellow>Klikni </yellow><gray>za prihvaćanje i vraćanje.</gray>"
+      click-to-filter-enable: "<yellow>Klikni </yellow><gray>za omogućavanje filtera.</gray>"
+      click-to-filter-disable: "<yellow>Klikni </yellow><gray>za onemogućavanje filtera.</gray>"
+      click-to-activate: "<yellow>Klikni </yellow><gray>za aktivaciju.</gray>"
+      click-to-deactivate: "<yellow>Klikni </yellow><gray>za deaktivaciju.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>Klikni </yellow><gray>na zlatni blok
+        </gray><gray>za kupnju.</gray>
+      click-to-purchase: "<yellow>Klikni </yellow><gray>za kupnju.</gray>"
+      click-to-return: "<yellow>Klikni </yellow><gray>za vraćanje.</gray>"
+      click-to-quit: "<yellow>Klikni </yellow><gray>za izlaz.</gray>"
+      click-to-wipe: "<yellow>Klikni </yellow><gray>za obrisavanje.</gray>"
+      click-to-open: "<yellow>Klikni </yellow><gray>za otvaranje.</gray>"
+      click-to-export: "<yellow>Klikni </yellow><gray>za početak izvoza.</gray>"
+      click-to-change: "<yellow>Klikni </yellow><gray>za promjenu.</gray>"
+      click-on-item: |-
+        <yellow>Klikni </yellow><gray>na stavku iz tvoje
+        </gray><gray>inventara.</gray>
+      click-to-view: "<yellow>Klikni </yellow><gray>za prikaz.</gray>"
+      click-to-add: "<yellow>Klikni </yellow><gray>za dodavanje.</gray>"
+      click-to-remove: "<yellow>Klikni </yellow><gray>za uklanjanje.</gray>"
+      select-before: "<yellow>Odaberi </yellow><gray>prije nego što nastaviš.</gray>"
+      click-to-create: "<yellow>Klikni </yellow><gray>za kreiranje.</gray>"
+      right-click-to-select: "<yellow>Desni Klik </yellow><gray>za odabir.</gray>"
+      right-click-to-deselect: "<yellow>Desni Klik </yellow><gray>za poništavanje odabira.</gray>"
+      click-to-toggle: "<yellow>Klikni </yellow><gray>za prebacivanje.</gray>"
+      left-click-to-edit: "<yellow>Lijevi Klik </yellow><gray>za uređivanje.</gray>"
+      right-click-to-lock: "<yellow>Desni Klik </yellow><gray>za zaključavanje.</gray>"
+      right-click-to-unlock: "<yellow>Desni Klik </yellow><gray>za otključavanje.</gray>"
+      click-to-perform: "<yellow>Klikni </yellow><gray>za izvršavanje.</gray>"
+      click-to-edit: "<yellow>Klikni </yellow><gray>za uređivanje.</gray>"
+      right-click-to-clear: "<yellow>Desni Klik </yellow><gray>za čišćenje.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>Lijevi Klik </yellow><gray>za prikaz.</gray>"
+      left-click-to-purchase: "<yellow>Lijevi Klik </yellow><gray>za kupnju.</gray>"
+      left-click-to-activate: "<yellow>Lijevi Klik </yellow><gray>za aktivaciju.</gray>"
+      left-click-to-deactivate: "<yellow>Lijevi Klik </yellow><gray>za deaktivaciju.</gray>"
+      right-click-to-view: "<yellow>Desni Klik </yellow><gray>za prikaz.</gray>"
+      right-click-to-purchase: "<yellow>Desni Klik </yellow><gray>za kupnju.</gray>"
+      right-click-to-activate: "<yellow>Desni Klik </yellow><gray>za aktivaciju.</gray>"
+      right-click-to-deactivate: "<yellow>Desni Klik </yellow><gray>za deaktivaciju.</gray>"
+      shift-click-to-view: "<yellow>Shift Klik </yellow><gray>za prikaz.</gray>"
+      shift-click-to-purchase: "<yellow>Shift Klik </yellow><gray>za kupnju.</gray>"
+      shift-click-to-activate: "<yellow>Shift Klik </yellow><gray>za aktivaciju.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift Klik </yellow><gray>za deaktivaciju.</gray>"
+      shift-click-to-reset: "<yellow>Shift Klik </yellow><gray>za resetiranje.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Lijevi Klik </yellow><gray>za konfiguriranje raspona visine.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Blokovi:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Blago:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>Obavezna Razina: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>Nedostaju Dozvole:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>Radi u:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>Radi u </bold></gray><bold><yellow><italic>svim </italic></yellow></bold><gray><bold>biomima</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>Zaključano!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>Nije Raspoređeno!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>Aktivno</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>Cijena Kupnje: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>Cijena Aktivacije: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>Podržava:</bold></gray>"
+          cobblestone: "<dark_gray>Generatori Kamenjarke</dark_gray>"
+          stone: "<dark_gray>Generatori Kamena</dark_gray>"
+          basalt: "<dark_gray>Generatori Bazalta</dark_gray>"
+          any: "<gray><bold>Podržava </bold></gray><bold><yellow><italic>sve </italic></yellow></bold><gray><bold>generatore</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>Radi na visinama: </gray><aqua>[min_height] </aqua><gray>do </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>Dozvola koja mora biti
+        </gray><gray>dodijeljena igraču:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>Generatori Paketa: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>Odabrano</yellow>"
+      # Used to refer to players island.
+      island-owner: "[player]'s otok"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>Otok Spawnanja</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "nepoznato"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>Generator </green> '[generator]' <green> je učitan u lokalnu predmemoriju.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>Paket </green> '[bundle]' <green> je učitan u lokalnu predmemoriju.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>Generator </yellow> '[generator]' <yellow>je deaktiviran.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>Previše generatora je aktivirano. Pokušaj deaktivirati neke prije nego što aktiviraj novi.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>Generator </red> '[generator]' <red>se ne može otključati.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>Generator </red> '[generator]' <red>nije otključan.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>Generator </red> '[generator]' <red>nije kupljen.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>Nema dovoljno kredita za aktivaciju generatora. Aktivacija zahtijeva [number] kredita.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>Tvoj račun banke nema dovoljno kredita za aktivaciju generatora. Aktivacija zahtijeva [number] kredita.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>Generator </yellow> '[generator]' <yellow>je aktiviran.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>Generator </red> '[generator]' <red>je dostigao svoju granicu generiranja i sada je u hladnjaku za još [number] minute.</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>je kupljen.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>Generator </red> '[generator]' <red>je već kupljen.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>Generator </red> '[generator]' <red>zahtijeva [number] razinu otoka.</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>Generator </red> '[generator]' <red>zahtijeva dozvolu `[permission]`.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>Nema dovoljno kredita za kupnju generatora. Ovaj generator košta [number] kredita.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>Tvoj račun banke nema dovoljno kredita. Ovaj generator košta [number] kredita.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>Uvezeni [generator] novi generatori i [bundle] novi paketi.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>Počinjem preuzimati biblioteku.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>Ne mogu pronaći valjane podatke generatora</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>Podaci otoka nisu pronađeni.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>Ne mogu pronaći valjane podatke paketa</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>Ne mogu pronaći nikakav unos biblioteke!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>`[file]` datoteka nije pronađena. Ne mogu izvršiti uvoz.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>Ne mogu učitati `[file]` datoteku. Greška tijekom čitanja: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>Svijet '[world]' nije svijet Game Mode Addona.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>Datoteka `[file]` već postoji. Odaberi različito ime.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>Generator s ID-om '[generator]' </red><red>nije pronađen u [gamemode].</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>Nema dostupnih generatora za tebe u [world]</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>Nešto je pošlo po zlu tijekom povlačenja novca.</red>"
+    max-height-less-than-min: "<red>Maksimalna visina ([MAX]) ne može biti manja od minimalne visine ([MIN])!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "true, on, yes, confirm, y, valid, correct, da, yes"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "false, off, no, deny, n, invalid, incorrect, ne, no"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "cancel, otkazi"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "cancel, exit, quit, otkazi, izlaz"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>Razgovor otkazan!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>Dana vrijednost [value] nije broj!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>Dani broj [value] nije valjan. Mora biti veći od [min] i manji od [max]!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>Novi opis:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>Molim napiši vrijednost pretraživanja. (napiši 'otkazi' za izlaz)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>Vrijednost pretraživanja ažurirana.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>Potvrdi da želiš obrisati sve korisničke podatke iz baze podataka za [gamemode].</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>Uspjeh, svi korisnički podaci za [gamemode] su obrisani!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>Potvrdi da želiš obrisati sve podatke generatora iz baze podataka za [gamemode].</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>Uspjeh, svi podaci generatora za [gamemode] su obrisani!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>Molim unesi naziv datoteke za izvezenu datoteku baze podataka. (napiši 'otkazi' za izlaz)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>Uspjeh, izvoz baze podataka za [world] je završen. Datoteka generirana u direktoriju dodatka.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>Datoteka s nazivom '[id]' postoji. Ne mogu je prebrisati.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>Molim unesi novo ime u chat.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>Uspjeh, ime je ažurirano.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>Molim unesi novi opis u chat i 'quit' na zasebnoj liniji da završiš.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>Uspjeh, opis je ažuriran.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>Uspjeh, novi objekt je kreiran u [world].</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>Objekt s `[id]` je već definiran u režimu igre. Odaberi drugačije.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>Potvrdi da želiš obrisati [number] objekata: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>Uspjeh, podaci su obrisani!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>Molim unesi broj u chat.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>Molim unesi potrebne dozvole, jednu po liniji u chat, i 'quit' na zasebnoj liniji da završiš.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>Uspjeh, dozvole generatora su ažurirane.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>Molim potvrdi da želiš zamijeniti tvoje trenutne generatore s novim.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>Uspjeh, novi generatori za [gamemode] su uvezeni.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>Otključao si </yellow> [generator]<yellow>! Klikni ovdje da ga sada kupiš za [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>Otključao si </yellow> [generator]<yellow>! Klikni ovdje da ga sada aktiviraš za [number].</yellow>"
+    click-text-to-activate: "<yellow>Otključao si </yellow> [generator]<yellow>! Klikni ovdje da ga sada aktiviraš.</yellow>"
+    input-min-height: "<white>Unesi minimalnu visinu za ovaj materijal (između -64 i 320):</white>"
+    input-max-height: "<white>Unesi maksimalnu visinu za ovaj materijal (između -64 i 320):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "Kamenjarke"
+    # Also supports descriptions.
+    stone:
+      name: "Kamen"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "Savana"
+    # Also supports descriptions.
+    flower_forest:
+      name: "Šumski Cvjetni Biom"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Čarobni Generator"
+      description: |-
+        <green>Prebacivanje za omogućavanje ili
+        </green><green>onemogućavanje svih Čarobnih Generatora
+        </green><green>na cijelom otoku</green>
+      hint: "<yellow>Čarobni Generatori su onemogućeni u postavkama otoka</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Dozvole Čarobnog Generatora"
+      description: |-
+        <green>Odaberi tko može aktivirati
+        </green><green>i deaktivirati generatore</green>
