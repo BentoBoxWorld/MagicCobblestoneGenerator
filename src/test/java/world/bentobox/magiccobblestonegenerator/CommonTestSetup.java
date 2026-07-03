@@ -104,8 +104,11 @@ public abstract class CommonTestSetup {
     @BeforeEach
     @SuppressWarnings("java:S1130")
     public void setUp() throws Exception {
-        closeable = MockitoAnnotations.openMocks(this);
+        // Start the MockBukkit server first: some database objects (e.g.
+        // GeneratorBundleObject) build an ItemStack in a static initializer, which must
+        // run against a live MockBukkit server rather than throwing during mock creation.
         server = MockBukkit.mock();
+        closeable = MockitoAnnotations.openMocks(this);
 
         // Inject BentoBox singleton
         WhiteBox.setInternalState(BentoBox.class, "instance", plugin);

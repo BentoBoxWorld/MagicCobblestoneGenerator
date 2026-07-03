@@ -1,8 +1,8 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -15,25 +15,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-import org.bukkit.Registry;
 import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.inventory.ItemStack;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.core.classloader.annotations.SuppressStaticInitializationFor;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.addons.AddonDescription;
@@ -41,7 +38,9 @@ import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.managers.IslandWorldManager;
 import world.bentobox.bentobox.util.ItemParser;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.WhiteBox;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 /**
  * Tests that the generator template importer reads the per-tier
@@ -49,10 +48,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
  *
  * @author tastybento
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ BentoBox.class, ItemParser.class, Registry.class })
-@SuppressStaticInitializationFor("org.bukkit.Registry")
-public class StoneGeneratorImportManagerTest {
+class StoneGeneratorImportManagerTest {
 
     @Mock
     private StoneGeneratorAddon addon;
@@ -70,8 +66,19 @@ public class StoneGeneratorImportManagerTest {
     private File dataFolder;
     private StoneGeneratorImportManager im;
 
-    @Before
+    private ServerMock server;
+    private AutoCloseable closeable;
+    private MockedStatic<ItemParser> mockItemParser;
+    private MockedStatic<Utils> mockUtils;
+
+    @BeforeEach
     public void setUp() throws Exception {
+        closeable = MockitoAnnotations.openMocks(this);
+        server = MockBukkit.mock();
+
+        // Inject BentoBox singleton
+        WhiteBox.setInternalState(BentoBox.class, "instance", plugin);
+
         // Temporary data folder for the addon.
         dataFolder = Files.createTempDirectory("mcg-import-test").toFile();
         when(addon.getDataFolder()).thenReturn(dataFolder);
@@ -87,20 +94,27 @@ public class StoneGeneratorImportManagerTest {
         when(addon.getAddonManager()).thenReturn(manager);
 
         // Icon parsing must not touch a real server.
-        PowerMockito.mockStatic(ItemParser.class);
-        when(ItemParser.parse(any())).thenReturn(mock(ItemStack.class));
+        mockItemParser = Mockito.mockStatic(ItemParser.class);
+        mockItemParser.when(() -> ItemParser.parse(any())).thenReturn(mock(ItemStack.class));
 
-        // getBiomeNameMap() streams Registry.BIOME - override it with an empty registry.
-        @SuppressWarnings("unchecked")
-        Registry<Biome> biomeRegistry = mock(Registry.class);
-        when(biomeRegistry.stream()).thenReturn(Stream.empty());
-        Whitebox.setInternalState(Registry.class, "BIOME", biomeRegistry);
+        // getBiomeNameMap() streams Registry.BIOME (a static final field) - stub the
+        // helper directly and let every other Utils method call through.
+        mockUtils = Mockito.mockStatic(Utils.class, Mockito.CALLS_REAL_METHODS);
+        mockUtils.when(Utils::getBiomeNameMap).thenReturn(new HashMap<>());
 
         im = new StoneGeneratorImportManager(addon);
     }
 
-    @After
-    public void tearDown() throws IOException {
+    @AfterEach
+    public void tearDown() throws IOException, Exception {
+        if (mockUtils != null) {
+            mockUtils.closeOnDemand();
+        }
+        if (mockItemParser != null) {
+            mockItemParser.closeOnDemand();
+        }
+        MockBukkit.unmock();
+        closeable.close();
         if (dataFolder != null && dataFolder.exists()) {
             Files.walk(dataFolder.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile)
                     .forEach(File::delete);
@@ -112,7 +126,7 @@ public class StoneGeneratorImportManagerTest {
      * on another, then asserts the parsed values (explicit override vs. the -1 default).
      */
     @Test
-    public void testImportExhaustionLimit() throws IOException {
+    void testImportExhaustionLimit() throws IOException {
         String yaml = "tiers:\n" +
                 "  capped_generator:\n" +
                 "    name: 'Capped Generator'\n" +
@@ -142,8 +156,8 @@ public class StoneGeneratorImportManagerTest {
         GeneratorTierObject def = tiers.stream()
                 .filter(t -> t.getUniqueId().endsWith("default_generator")).findFirst().orElse(null);
 
-        assertNotNull("Capped generator tier should have been imported", capped);
-        assertNotNull("Default generator tier should have been imported", def);
+        assertNotNull(capped, "Capped generator tier should have been imported");
+        assertNotNull(def, "Default generator tier should have been imported");
 
         // Explicit per-tier override is read from the template.
         assertEquals(500L, capped.getExhaustionLimit());
