@@ -546,7 +546,7 @@ public class Settings implements ConfigObject
     @ConfigComment("0 or less will mean that there is no limitation.")
     @ConfigComment("This value can be overwritten per generator tier.")
     @ConfigEntry(path = "exhaustion.limit")
-    private long generatorExhaustionLimit = 1000;
+    private long generatorExhaustionLimit = 0;
 
     @ConfigComment("")
     @ConfigComment("This indicates the length, in minutes, of the period during which the generated block count is")
