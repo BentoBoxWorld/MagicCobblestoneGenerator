@@ -109,6 +109,12 @@ tiers:
     # Cost for activating current generator tier. Requires Vault plugin.
     # Will be payed only on active switching between generators.
     activation-cost: 0.0
+    # Maximum number of blocks this tier may generate during one exhaustion
+    # period before it goes on cooldown (see the 'exhaustion' section in config.yml).
+    #   -1 = use the global default from config.yml (default)
+    #    0 or less = no limit for this tier
+    #    positive = per-tier cap, overriding the global default
+    exhaustion-limit: -1
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.

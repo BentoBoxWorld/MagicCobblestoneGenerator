@@ -142,6 +142,15 @@ stone-generator:
           &7 activate or reactivate
           &7 this generator.
         value: "&b Cost: [number]"
+      exhaustion_limit:
+        name: "&f&l Exhaustion Limit"
+        description: |-
+          &7 Maximum blocks this generator
+          &7 may produce per period before
+          &7 it goes on cooldown.
+        value: "&b Limit: [number] &7per period"
+        default: "&b Uses global default: &f[number]"
+        unlimited: "&b No limit"
       biomes:
         name: "&f&l Operational Biomes"
         description: |-
