@@ -82,13 +82,6 @@ public class WebManager
                     getContent("mcg/catalog.json").
                     getContent().replaceAll("\\n", "");
             }
-            catch (IllegalAccessException e)
-            {
-                if (this.plugin.getSettings().isLogGithubDownloadData())
-                {
-                    this.plugin.log("Could not connect to GitHub.");
-                }
-            }
             catch (Exception e)
             {
                 this.plugin.logError("An error occurred when downloading data from GitHub...");
@@ -148,13 +141,6 @@ public class WebManager
                     getContent("mcg/library/" + entry.repository() + ".json").
                     getContent().
                     replaceAll("\\n", "");
-            }
-            catch (IllegalAccessException e)
-            {
-                if (this.plugin.getSettings().isLogGithubDownloadData())
-                {
-                    this.plugin.log("Could not connect to GitHub.");
-                }
             }
             catch (Exception e)
             {
