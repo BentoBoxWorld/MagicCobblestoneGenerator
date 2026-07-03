@@ -56,7 +56,7 @@ stone-generator:
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Administrare Pachete</bold></black>"
       # Title for managing generators GUI.
-      manage-generators: "<black><bold>Manage Generatoare</bold></black>"
+      manage-generators: "<black><bold>Administrare Generatoare</bold></black>"
       # Title for editing island data.
       view-island: "<black><bold>Insulă: [island]</bold></black>"
       # Title for managing all island data.
@@ -207,27 +207,27 @@ stone-generator:
         actual: "<aqua>Valoare bază de date: [number]</aqua>"
       # Section of buttons for User Generator List
       show_cobblestone:
-        name: "<white><bold>Cobblestone Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Cobblestone</bold></white>"
         description: |-
           <gray>Display only cobblestone
           </gray><gray>generators</gray>
       show_stone:
-        name: "<white><bold>Stone Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Piatră</bold></white>"
         description: |-
           <gray>Display only stone
           </gray><gray>generators</gray>
       show_basalt:
-        name: "<white><bold>Basalt Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Bazalt</bold></white>"
         description: |-
           <gray>Display only basalt
           </gray><gray>generators</gray>
       toggle_visibility:
-        name: "<white><bold>Unlocked Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Deblochate</bold></white>"
         description: |-
           <gray>Show only unlocked
           </gray><gray>generators</gray>
       show_active:
-        name: "<white><bold>Active Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Activ</bold></white>"
         description: |-
           <gray>Show only active
           </gray><gray>generators</gray>
@@ -235,7 +235,7 @@ stone-generator:
       return:
         name: "<white><bold>Înapoi</bold></white>"
         description: |-
-          <gray>Return la previous menu</gray>
+          <gray>Întoarceți-vă la meniul anterior</gray>
       quit:
         name: "<white><bold>Ieșire</bold></white>"
         description: |-
@@ -245,12 +245,12 @@ stone-generator:
       previous:
         name: "<white><bold>Pagina Anterioară</bold></white>"
         description: |-
-          <gray>Switch la [number] page</gray>
+          <gray>Comutați la pagina [number]</gray>
       # Button that is used in multi-page GUIs which allows to go to next page.
       next:
         name: "<white><bold>Pagina Următoare</bold></white>"
         description: |-
-          <gray>Switch la [number] page</gray>
+          <gray>Comutați la pagina [number]</gray>
       # All buttons below here are used for Admin GUIs.
       # Buttons in main Admin GUI
       manage_users:
@@ -259,7 +259,7 @@ stone-generator:
           <gray>Manage island data
           </gray><gray>in the current gamemode.</gray>
       manage_generator_tiers:
-        name: "<white><bold>Manage Generatoare</bold></white>"
+        name: "<white><bold>Administrare Generatoare</bold></white>"
         description: |-
           <gray>Manage generators
           </gray><gray>in the current gamemode.</gray>
@@ -280,7 +280,7 @@ stone-generator:
           </gray><gray>file located inside the
           </gray><gray>addon directory.</gray>
       web_library:
-        name: "<white><bold>Web Bibliotecă</bold></white>"
+        name: "<white><bold>Bibliotecă Web</bold></white>"
         description: |-
           <gray>Access the web
           </gray><gray>library that contains
@@ -313,7 +313,7 @@ stone-generator:
         name: "<white><bold>Nume Pachet</bold></white>"
         description: |-
           <gray>Schimbați numele pachetului.</gray>
-        value: "<aqua>Nume: </aqua> [bundle]"
+        value: "<aqua>Name: </aqua> [bundle]"
       bundle_id:
         name: "<white><bold>ID Pachet</bold></white>"
         description: |-
@@ -340,14 +340,14 @@ stone-generator:
         description: |-
           <gray>Assign a generator
           </gray><gray>to this bundle.</gray>
-        list: "<aqua>Selected Generatoare:</aqua>"
+        list: "<aqua>Generatoare Selectate:</aqua>"
         value: "<aqua>- [generator]</aqua>"
       remove_generator:
         name: "<white><bold>Elimină Generator</bold></white>"
         description: |-
           <gray>Remove a generator
           </gray><gray>from this bundle.</gray>
-        list: "<aqua>Selected Generatoare:</aqua>"
+        list: "<aqua>Generatoare Selectate:</aqua>"
         value: "<aqua>- [generator]</aqua>"
       # Buttons in Bundle Management GUI
       create_bundle:
@@ -368,7 +368,7 @@ stone-generator:
         description: |-
           <gray>Title for this generator.
           </gray><gray>Supports color codes.</gray>
-        value: "<aqua>Nume: </aqua> [generator]"
+        value: "<aqua>Name: </aqua> [generator]"
       id:
         name: "<white><bold>ID Generator</bold></white>"
         description: |-
@@ -426,7 +426,7 @@ stone-generator:
         description: |-
           <gray>Remove generator
           </gray><gray>from gamemode completely.</gray>
-        list: "<aqua>Selected Generatoare:</aqua>"
+        list: "<aqua>Generatoare Selectate:</aqua>"
         value: "<aqua>- [generator]</aqua>"
       # Buttons in Island Data Edit GUI
       island_name:
@@ -463,7 +463,7 @@ stone-generator:
           "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
         value: "<aqua>Rază: [number]</aqua>"
       island_max_generators:
-        name: "<white><bold>Max Island Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Maxime Insulă</bold></white>"
         description: |-
           <gray>Maximum active
           </gray><gray>generator tiers allowed
@@ -471,12 +471,12 @@ stone-generator:
           </gray><gray>for current island.
           </gray><gray>0 and below means 
           </gray><gray>unlimited.</gray>
-        value: "<aqua>Max Generatoare: [number]</aqua>"
+        value: "<aqua>Generatoare Maxime: [number]</aqua>"
         overwritten: |-
           <red>Owner has a permission that
           </red><red>overwrites the generator count.</red>
       owner_max_generators:
-        name: "<white><bold>Max Owner Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Maxime Proprietar</bold></white>"
         description: |-
           <gray>Maximum active concurrent
           </gray><gray>generator tiers that the
@@ -488,7 +488,7 @@ stone-generator:
           "</gray><gray> Permission for user la assign:"
           "</gray><gray><italic>'[gamemode].stone-generator."
           "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
-        value: "<aqua>Max Generatoare: [number]</aqua>"
+        value: "<aqua>Generatoare Maxime: [number]</aqua>"
       island_bundle:
         name: "<white><bold>Pachet Insulă</bold></white>"
         description: |-
@@ -519,7 +519,7 @@ stone-generator:
           <gray>Shows general information
           </gray><gray>about this island.</gray>
       island_generators:
-        name: "<white><bold>Island Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Insulă</bold></white>"
         description: |-
           <gray>Shows list of all generators
           </gray><gray>that are available for the
@@ -590,7 +590,7 @@ stone-generator:
           </gray><gray>restart la activate.</gray>
         value: "<aqua>Rază: [number]</aqua>"
       active_generators:
-        name: "<white><bold>Default Active Generatoare</bold></white>"
+        name: "<white><bold>Generatoare Activ Implicite</bold></white>"
         description: |-
           <gray>Default maximum amount of
           </gray><gray>active generators at the
@@ -618,7 +618,7 @@ stone-generator:
           </gray><gray>Setting it la air disables
           </gray><gray>it.</gray>
       border_block_name:
-        name: "<white><bold>Bloc Margine Name</bold></white>"
+        name: "<white><bold>Nume Bloc Margine</bold></white>"
         description: |-
           <gray>Display name for a border
           </gray><gray>block.
@@ -668,7 +668,7 @@ stone-generator:
         list-value: "<gray>- [value]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
-        description: "<gray>Block ID: [id]</gray>"
+        description: "<gray>ID Bloc: [id]</gray>"
       search_block:
         name: "<white><bold>Căutare</bold></white>"
         description: |-
@@ -681,7 +681,7 @@ stone-generator:
         description: |-
           <gray>Accepts selected biomes
           </gray><gray>and returns.</gray>
-        selected-biomes: "<gray>Selected Biomuri:</gray>"
+        selected-biomes: "<gray>Biomuri Selectate:</gray>"
         list-value: "<gray>- [value]</gray>"
       biome-icon:
         name: "<white><bold>[biome]</bold></white>"
@@ -700,7 +700,7 @@ stone-generator:
           </gray><gray>Valoare actuală: </gray><aqua>[max_height]</aqua>
         value: "<aqua>[max_height]</aqua>"
       clear-height-range:
-        name: "<white><bold>Clear Interval Înălțime</bold></white>"
+        name: "<white><bold>Ștergeți Intervalul de Înălțime</bold></white>"
         description: |-
           <gray>Remove the specific height range
           </gray><gray>for this material.
@@ -780,17 +780,17 @@ stone-generator:
             </italic></gold></italic><italic><italic><gold><italic>on top of soul soil and
             </italic></gold></italic></italic><italic><italic><italic><gold><italic>is adjacent la blue ice.</italic></gold></italic></italic></italic>
         cobblestone_or_stone:
-          name: "<white><bold>Cobblestone or Stone</bold></white>"
+          name: "<white><bold>Cobblestone sau Piatră</bold></white>"
           description: |-
             <gray>Works with cobblestone and
             </gray><gray>stone generators.</gray>
         basalt_or_cobblestone:
-          name: "<white><bold>Basalt or Cobblestone</bold></white>"
+          name: "<white><bold>Bazalt sau Cobblestone</bold></white>"
           description: |-
             <gray>Works with basalt and
             </gray><gray>cobblestone generators.</gray>
         basalt_or_stone:
-          name: "<white><bold>Basalt or Piatră</bold></white>"
+          name: "<white><bold>Bazalt sau Piatră</bold></white>"
           description: |-
             <gray>Works with basalt and
             </gray><gray>stone generators.</gray>
@@ -908,7 +908,7 @@ stone-generator:
           # Message that is showed for Locked generators.
           locked: "<red>Blocat!</red>"
           # Message that is showed for generators that is not deployed.
-          undeployed: "<red>Not Implementat!</red>"
+          undeployed: "<red>Nu este implementat!</red>"
           # Message that is showed for Active generators.
           active: "<dark_green>Activ</dark_green>"
           # Message that is showed for generators that required purchasing.
@@ -918,9 +918,9 @@ stone-generator:
         # Generates [type] section
         type:
           title: "<gray><bold>Sprijin:</bold></gray>"
-          cobblestone: "<dark_gray>Cobblestone Generatoare</dark_gray>"
-          stone: "<dark_gray>Stone Generatoare</dark_gray>"
-          basalt: "<dark_gray>Basalt Generatoare</dark_gray>"
+          cobblestone: "<dark_gray>Generatoare Cobblestone</dark_gray>"
+          stone: "<dark_gray>Generatoare Piatră</dark_gray>"
+          basalt: "<dark_gray>Generatoare Bazalt</dark_gray>"
           any: "<gray><bold>Supports </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>generators</bold></gray>"
         # Generates [height-range] section
         height-range: "<gray>Funcționează la înălțimile: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
@@ -930,7 +930,7 @@ stone-generator:
         </gray><gray>assigned la player:
         </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
       # String that are before listing all generators assigned to bundle.
-      generators: "<gray>Bundle Generatoare: </gray>"
+      generators: "<gray>Generatoare Pachet: </gray>"
       # Each generator name in listing
       generator-list: "<gray>- [generator]</gray>"
       # Indicates that element is selected.
@@ -950,7 +950,7 @@ stone-generator:
     # Message that appears after deactivating generator.
     generator-deactivated: "<yellow>Generator </yellow> '[generator]' <yellow>is deactivated.</yellow>"
     # Message that appears when trying to activate too many generators.
-    active-generators-reached: "<red>Too many generators are activated. Try la deactivate some before activating a new one.</red>"
+    active-generators-reached: "<red>Prea multe generatoare sunt activate. Încercați să dezactivați unele înainte de a activa una nouă.</red>"
     # Message that appears when trying to unlock default or undeployed generator.
     generator-cannot-be-unlocked: "<red>Generator </red> '[generator]' <red>is not unlocked.</red>"
     # Message that appears when trying to activate locked generator.
@@ -958,9 +958,9 @@ stone-generator:
     # Message that appears when purchasing the generator.
     generator-not-purchased: "<red>Generator </red> '[generator]' <red>is not purchased.</red>"
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
-    no-credits: "<red>Not enough credits la activate generator. Activation requires [number] credits.</red>"
+    no-credits: "<red>Insuficiente credite pentru a activa generatorul. Activarea necesită [number] credite.</red>"
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
-    no-credits-bank: "<red>Your bank account has not enough credits la activate generator. Activation requires [number] credits.</red>"
+    no-credits-bank: "<red>Contul bancar nu are suficiente credite pentru a activa generatorul. Activarea necesită [number] credite.</red>"
     # Message that appears when activating the generator.
     generator-activated: "<yellow>Generator </yellow> '[generator]' <yellow>is activated.</yellow>"
     # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
@@ -974,7 +974,7 @@ stone-generator:
     # Message that appears when trying to buy generator without required permissions
     missing-permission: "<red>Generator </red> '[generator]' <red>requires permission `[permission]`.</red>"
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
-    no-credits-buy: "<red>Not enough credits la purchase generator. This generator cost [number] credits.</red>"
+    no-credits-buy: "<red>Insuficiente credite pentru a cumpăra generatorul. Acest generator costă [number] credite.</red>"
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
     no-credits-buy-bank: "<red>Contul bancar nu are suficiente credite. Acest generator costă [number] credite.</red>"
     # Message that appears after importing a file.
@@ -992,13 +992,13 @@ stone-generator:
     # Error message that is displayed when library does not have any data.
     no-library-entries: "<red>Nu s-a putut găsi nicio intrare în bibliotecă!</red>"
     # Error message that is displayed when trying to load file that does not exists.
-    no-file: "<red>`[file]` file not found. Cannot perform importing.</red>"
+    no-file: "<red>Fișierul `[file]` nu a fost găsit. Nu se poate efectua importarea.</red>"
     # Error message that is displayed when loading file lead to a crash.
-    no-load: "<red>Could not load `[file]` file. Error while reading: [description].</red>"
+    no-load: "<red>Nu s-a putut încărca fișierul `[file]`. Eroare la citire: [description].</red>"
     # Error message that is displayed when trying to import generators in non-gamemode-world.
     not-a-gamemode-world: "<red>Lumea '[world]' nu este o lume Game Mode Addon.</red>"
     # Error message that is displayed when saving file with the same name
-    file-exist: "<red>The file `[file]` already exist. Choose different name.</red>"
+    file-exist: "<red>Fișierul `[file]` există deja. Alegeți un nume diferit.</red>"
     # Error message that is displayed when trying to view generator that does not exist.
     generator-tier-not-found: "<red>Generator with id '[generator]' </red><red>not found in [gamemode].</red>"
     # Error message that is displayed when user uses generator command in world without generators.
@@ -1016,9 +1016,9 @@ stone-generator:
     # String that allows to cancel conversation. (can be only one)
     cancel-string: "anulare"
     # List of strings that allows to exit conversation. (separated with ,)
-    exit-string: "anulare, exit, quit"
+    exit-string: "anulare, ieșire, renunță"
     # Message that is send to user when conversation is cancelled.
-    cancelled: "<red>Conversation anulareled!</red>"
+    cancelled: "<red>Conversație anulată!</red>"
     # Prefix for messages that are send from server.
     prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
     # Error message that is showed if user input a value that is not a number.
@@ -1029,19 +1029,19 @@ stone-generator:
     new-description: "<green>Descriere nouă:</green>"
     # Below here starts messages and questions created by GUI.
     # Message that asks for search value input.
-    write-search: "<yellow>Please write a search value. (write 'cancel' la exit)</yellow>"
+    write-search: "<yellow>Vă rugăm scrieți o valoare de căutare. (scrieți 'anulare' pentru a ieși)</yellow>"
     # Message that appears after updating search value.
-    search-updated: "<green>Căutare value updated.</green>"
+    search-updated: "<green>Valoare de căutare actualizată.</green>"
     # Message that appears when admin clicks on island data deletion button.
-    confirm-island-data-deletion: "<yellow>Confirm that you want la delete all user data from the database for [gamemode].</yellow>"
+    confirm-island-data-deletion: "<yellow>Confirmați că doriți să ștergeți toate datele utilizatorului din baza de date pentru [gamemode].</yellow>"
     # Message that appears after successful user data removing.
     user-data-removed: "<green>Succes, toate datele utilizatorului pentru [gamemode] au fost eliminate!</green>"
     # Message that appears when admin clicks on generator data deletion button.
-    confirm-generator-data-deletion: "<yellow>Confirm that you want la delete all generator data from the database for [gamemode].</yellow>"
+    confirm-generator-data-deletion: "<yellow>Confirmați că doriți să ștergeți toate datele generator din baza de date pentru [gamemode].</yellow>"
     # Message that appears after successful generator data removing.
     generator-data-removed: "<green>Succes, toate datele generator pentru [gamemode] au fost eliminate!</green>"
     # Message that appears after admin clicks on database exporting button.
-    exported-file-name: "<yellow>Please enter a file name for the exported database file. (write 'cancel' la exit)</yellow>"
+    exported-file-name: "<yellow>Vă rugăm introduceți un nume de fișier pentru fișierul bază de date exportat. (scrieți 'anulare' pentru a ieși)</yellow>"
     # Message that appears after successful database exporting to file.
     database-export-completed: "<green>Succes, exportul bazei de date pentru [world] este finalizat. Fișier generat în directorul suplimentului.</green>"
     # Message that appears if input file name is already taken.
@@ -1051,25 +1051,25 @@ stone-generator:
     # Message that appears after successful name change.
     name-changed: "<green>Succes, numele a fost actualizat.</green>"
     # Message that appears after clicking
-    write-description: "<yellow>Please enter a new description in chat and 'quit' on a line by itself la finish.</yellow>"
+    write-description: "<yellow>Vă rugăm introduceți o nouă descriere în chat și 'quit' pe o linie separată pentru a termina.</yellow>"
     # Message that appears after successful description change.
     description-changed: "<green>Succes, descrierea a fost actualizată.</green>"
     # Message that appears after successful bundle or generator creation.
     new-object-created: "<green>Succes, obiect nou a fost creat în [world].</green>"
     # Message that appears if object already exist in the database.
-    object-already-exists: "<red>The object with `[id]` is already is defined in gamemode. Choose different one.</red>"
+    object-already-exists: "<red>Obiectul cu `[id]` este deja definit în modul de joc. Alegeți altul.</red>"
     # Message that appears after admin tries to delete selected objects.
-    confirm-deletion: "<yellow>Confirm that you want la delete [number] objects: ([value])</yellow>"
+    confirm-deletion: "<yellow>Confirmați că doriți să ștergeți [number] obiecte: ([value])</yellow>"
     # Message that appears after successful data removing.
     data-removed: "<green>Succes, datele au fost eliminate!</green>"
     # Message that appears when admin clicks on number editing button.
     input-number: "<yellow>Vă rugăm introduceți un număr în chat.</yellow>"
     # Message that appears when admin clicks on permission editing button.
-    write-permissions: "<yellow>Please enter the required permissions, one per line in chat, and 'quit' on a line by itself la finish.</yellow>"
+    write-permissions: "<yellow>Vă rugăm introduceți permisiunile necesare, una pe linie în chat, și 'quit' pe o linie separată pentru a termina.</yellow>"
     # Message that appears after successful permission updating.
     permissions-changed: "<green>Succes, permisiunile generator au fost actualizate.</green>"
     # Message that appears after importing library data into database.
-    confirm-data-replacement: "<yellow>Please confirm that you want la replace your current generators with new one.</yellow>"
+    confirm-data-replacement: "<yellow>Vă rugăm confirmați că doriți să înlocuiți generatoarele curente cu altul nou.</yellow>"
     # Message that appears after successful data importing
     new-generators-imported: "<green>Succes, generatoare noi pentru [gamemode] au fost importate.</green>"
     # Message that appears after unlocking a new generator.
@@ -1101,13 +1101,13 @@ protection:
     MAGIC_COBBLESTONE_GENERATOR:
       name: "Generator Magic"
       description: |-
-        <green>Toggle to enable or disable
-        </green><green>all Magic Generatoare
+        <green>Toggle la enable or disable
+        </green><green>all Generator Magics
         </green><green>on the whole island</green>
-      hint: "<yellow>Magic Generatoare are disabled in island settings</yellow>"
+      hint: "<yellow>Generatoarele Magic sunt dezactivate în setările insulei</yellow>"
     # This flag allows to switch which island member group can activate and deactivate generators.
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
-      name: "Generator Magic Permissions"
+      name: "Permisiuni Generator Magic"
       description: |-
         <green>Select who can activate
         </green><green>and deactivate generators</green>
