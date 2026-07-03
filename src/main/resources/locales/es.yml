@@ -47,6 +47,7 @@ stone-generator:
       library: "<black><bold>Biblioteca</bold></black>"
       settings: "<black><bold>Configuración</bold></black>"
       configure-material-height: "<black><bold>Configurar Altura del Material</bold></black>"
+      height-range-config: '<black><bold>Rango de altura: [material]</bold></black>'
     buttons:
       default:
         name: Generador predeterminado
@@ -563,6 +564,7 @@ stone-generator:
         list-value: "<gray>- [valor]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
+        description: '<gray>ID del bloque: [id]</gray>'
       search_block:
         name: "<white><bold>Buscar</bold></white>"
         description: |-
@@ -606,6 +608,15 @@ stone-generator:
         unused:
           name: "<white><bold>Sin usar</bold></white>"
           description: "<gray>Mostrar solo biomas no utilizados</gray>"
+        cave:
+          description: <gray>Mostrar solo biomas de cueva</gray>
+          name: <white><bold>Cueva</bold></white>
+        temperate:
+          description: <gray>Mostrar solo biomas templados</gray>
+          name: <white><bold>Templado</bold></white>
+        warm:
+          description: <gray>Mostrar solo biomas cálidos</gray>
+          name: <white><bold>Cálido</bold></white>
       generator-types:
         cobblestone:
           name: "<white><bold>Adoquines</bold></white>"
@@ -646,12 +657,14 @@ stone-generator:
           <gray>Establece la altura mínima
           </gray><gray>para este material.
           </gray><gray>Valor actual: </gray><aqua>[number]</aqua>
+        value: '<gray>Valor actual: </gray><aqua>[min_height]</aqua>'
       max_height:
         name: "<white><bold>Altura Máxima</bold></white>"
         description: |-
           <gray>Establece la altura máxima
           </gray><gray>para este material.
           </gray><gray>Valor actual: </gray><aqua>[number]</aqua>
+        value: '<gray>Valor actual: </gray><aqua>[max_height]</aqua>'
       clear_height_range:
         name: "<white><bold>Eliminar Rango de Altura</bold></white>"
         description: |-
@@ -659,6 +672,43 @@ stone-generator:
           </gray><gray>para este material.
           </gray><gray>Usará el rango de altura
           </gray><gray>predeterminado del generador.</gray>
+      bundle_id:
+        description: <gray>El ID del paquete actual.</gray>
+        name: <white><bold>ID del paquete</bold></white>
+        value: '<aqua>ID: </aqua> [id]'
+      clear-height-range:
+        description: "<gray>Elimina el rango de altura específico\n</gray><gray>para este material.\n</gray><gray>En su lugar usará el rango de altura\n</gray><gray>predeterminado del generador.</gray>"
+        name: <white><bold>Borrar rango de altura</bold></white>
+      exhaustion_limit:
+        default: '<aqua>Usa el valor global predeterminado: </aqua><white>[number]</white>'
+        description: "<gray>Máximo de bloques que este generador\n</gray><gray>puede producir por período antes\n</gray><gray>de entrar en enfriamiento.</gray>"
+        name: <white><bold>Límite de agotamiento</bold></white>
+        unlimited: <aqua>Sin límite</aqua>
+        value: '<aqua>Límite: [number] </aqua><gray>por período</gray>'
+      height_range:
+        description: "<gray>El rango de altura en el que\n</gray><gray>opera este generador.</gray>"
+        name: <white><bold>Rango de altura</bold></white>
+        value: <aqua>De </aqua><white>[min_height] </white><aqua>a </aqua><white>[max_height]</white>
+      id:
+        description: <gray>El ID del generador actual.</gray>
+        name: <white><bold>ID del generador</bold></white>
+        value: '<aqua>ID: </aqua> [id]'
+      max-height:
+        description: "<gray>Establece la altura máxima\n</gray><gray>para este material.\n</gray><gray>Valor actual: </gray><aqua>[max_height]</aqua>"
+        name: <white><bold>Altura máxima</bold></white>
+        value: <aqua>[max_height]</aqua>
+      min-height:
+        description: "<gray>Establece la altura mínima\n</gray><gray>para este material.\n</gray><gray>Valor actual: </gray><aqua>[min_height]</aqua>"
+        name: <white><bold>Altura mínima</bold></white>
+        value: <aqua>[min_height]</aqua>
+      quit:
+        description: <gray>Salir del menú actual</gray>
+        name: <white><bold>Salir</bold></white>
+      use_bank:
+        description: "<gray>Usando la cuenta bancaria de la isla\n</gray><gray>para todas las compras y\n</gray><gray>activaciones.\n</gray><gray>Requiere el Bank Addon.</gray>"
+        disabled: <aqua>El uso del banco está </aqua><red>desactivado </red><aqua>.</aqua>
+        enabled: <aqua>El uso del banco está </aqua><green>activado </green><aqua>.</aqua>
+        name: <white><bold>Usar banco</bold></white>
     tips:
       click-to-previous: "<yellow>Haga clic en </yellow><gray>para ver la página anterior.</gray>"
       click-to-next: "<yellow>Haga clic en </yellow><gray>para ver la página siguiente.</gray>"
@@ -750,6 +800,7 @@ stone-generator:
           stone: "<dark_gray>generadores de piedra</dark_gray>"
           basalt: "<dark_gray>generadores de basalto</dark_gray>"
           any: "<gray><bold>Soportes </bold></gray><bold><yellow><italic>all </italic></yellow></bold> <gray><bold>generadores</bold></gray>"
+        height-range: '<gray>Funciona a alturas: </gray><aqua>[min_height] </aqua><gray>a </gray><aqua>[max_height]</aqua>'
       bundle-permission: |-
         <gray>Permiso que debe ser
         </gray><gray>asignado al jugador:
@@ -759,6 +810,7 @@ stone-generator:
       selected: "<yellow>Seleccionado</yellow>"
       island-owner: la isla de [jugador]
       unknown: desconocido
+      spawn-island: <yellow><bold>Isla de aparición</bold></yellow>
   messages:
     generator-loaded: "<green>Generator </green> '[generator]'  <green>se carga en la caché local.</green>"
     bundle-loaded: "<green>Bundle </green> '[bundle]'  <green>se carga en la caché local.</green>"
@@ -776,6 +828,9 @@ stone-generator:
     no-credits-buy: "<red>No hay suficientes créditos para comprar el generador. Este generador cuesta [número] créditos.</red>"
     import-count: "<gold>Se importaron [número] nuevos niveles de generador.</gold>"
     start-downloading: "<yellow>Inicie la descarga de la biblioteca.</yellow>"
+    generator-exhausted: <red>El generador </red> '[generator]' <red>ha alcanzado su límite de generación y ahora está en enfriamiento durante [number] minuto(s) más.</red>
+    no-credits-bank: <red>Tu cuenta bancaria no tiene suficientes créditos para activar el generador. La activación requiere [number] créditos.</red>
+    no-credits-buy-bank: <red>Tu cuenta bancaria no tiene suficientes créditos. Este generador cuesta [number] créditos.</red>
   errors:
     no-generator-data: "<red>No se pudieron encontrar datos de generador válidos</red>"
     no-island-data: "<red>No se encuentran los datos de la isla.</red>"
@@ -788,6 +843,7 @@ stone-generator:
     generator-tier-not-found: "<red>Generador con id '[generador]' </red> <red>no encontrado en [modo de juego].</red>"
     no-generators-in-world: "<red>No se pudo encontrar ningún generador en [mundo]</red>"
     max-height-less-than-min: "<red>¡La altura máxima ([MAX]) no puede ser menor que la altura mínima ([MIN])!</red>"
+    could-not-remove-money: <red>Algo salió mal al retirar el dinero.</red>
   conversations:
     confirm-string: verdadero, encendido, sí, confirmar, y, válido, correcto
     deny-string: falso, desactivado, no, denegar, n, inválido, incorrecto
@@ -829,10 +885,12 @@ stone-generator:
     cobblestone: Guijarro
     stone:
       name: Piedra
+      description: ''
   biomes:
     plains: llanuras
     flower_forest:
       name: Bosque de flores
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:

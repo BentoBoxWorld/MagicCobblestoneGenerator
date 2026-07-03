@@ -46,6 +46,8 @@ stone-generator:
       manage-islands: "<black><bold>Gérer les données des îles</bold></black>"
       library: "<black><bold>Bibliothèque</bold></black>"
       settings: "<black><bold>Paramètres</bold></black>"
+      configure-material-height: <black><bold>Configurer la hauteur du matériau</bold></black>
+      height-range-config: '<black><bold>Plage de hauteur : [material]</bold></black>'
     buttons:
       default:
         name: Générateur par défaut
@@ -140,6 +142,8 @@ stone-generator:
         name: "[Matériel]"
         description: 'Possibilité de générer: [#. ##]'
         actual: "<aqua>Valeur de la base de données: [number]</aqua>"
+        height-range: '<gray>Plage de hauteur : </gray><aqua>[min_height] </aqua><gray>à </gray><aqua>[max_height]</aqua>'
+        no-height-range: <gray>Utilise la plage de hauteur par défaut du générateur</gray>
       treasure-icon:
         name: "[Matériel]"
         description: 'Chance de tomber: [#. ####]'
@@ -517,6 +521,7 @@ stone-generator:
         list-value: "& 7 - [valeur]"
       material-icon:
         name: "& f & l [matériau]"
+        description: '<gray>ID du bloc : [id]</gray>'
       search_block:
         name: "& f & l Recherche"
         description: |-
@@ -560,6 +565,15 @@ stone-generator:
         unused:
           name: "& f & l inutilisé"
           description: "& 7 Afficher uniquement les biomes inutilisés"
+        cave:
+          description: <gray>Afficher uniquement les biomes de grotte</gray>
+          name: <white><bold>Grotte</bold></white>
+        temperate:
+          description: <gray>Afficher uniquement les biomes tempérés</gray>
+          name: <white><bold>Tempéré</bold></white>
+        warm:
+          description: <gray>Afficher uniquement les biomes chauds</gray>
+          name: <white><bold>Chaud</bold></white>
       generator-types:
         cobblestone:
           name: "& f & l Pavé"
@@ -594,6 +608,51 @@ stone-generator:
         any:
           name: "& f & l Quelconque"
           description: "& 7 Fonctionne avec n'importe quel générateur."
+      bundle_id:
+        description: <gray>L'ID du lot actuel.</gray>
+        name: <white><bold>ID du lot</bold></white>
+        value: '<aqua>ID : </aqua> [id]'
+      clear-height-range:
+        description: "<gray>Supprimer la plage de hauteur spécifique\n</gray><gray>pour ce matériau.\n</gray><gray>Il utilisera la plage de hauteur\n</gray><gray>par défaut du générateur à la place.</gray>"
+        name: <white><bold>Effacer la plage de hauteur</bold></white>
+      exhaustion_limit:
+        default: '<aqua>Utilise la valeur globale par défaut : </aqua><white>[number]</white>'
+        description: "<gray>Nombre maximal de blocs que ce\n</gray><gray>générateur peut produire par période\n</gray><gray>avant de passer en recharge.</gray>"
+        name: <white><bold>Limite d'épuisement</bold></white>
+        unlimited: <aqua>Aucune limite</aqua>
+        value: '<aqua>Limite : [number] </aqua><gray>par période</gray>'
+      height_range:
+        description: "<gray>La plage de hauteur dans laquelle\n</gray><gray>ce générateur fonctionne.</gray>"
+        name: <white><bold>Plage de hauteur</bold></white>
+        value: <aqua>De </aqua><white>[min_height] </white><aqua>à </aqua><white>[max_height]</white>
+      id:
+        description: <gray>L'ID du générateur actuel.</gray>
+        name: <white><bold>ID du générateur</bold></white>
+        value: '<aqua>ID : </aqua> [id]'
+      max-height:
+        description: "<gray>Définir la hauteur maximale\n</gray><gray>pour ce matériau.\n</gray><gray>Valeur actuelle : </gray><aqua>[max_height]</aqua>"
+        name: <white><bold>Hauteur maximale</bold></white>
+        value: <aqua>[max_height]</aqua>
+      max_height:
+        description: "<gray>Définir la hauteur maximale\n</gray><gray>pour ce matériau.</gray>"
+        name: <white><bold>Hauteur maximale</bold></white>
+        value: '<gray>Valeur actuelle : </gray><aqua>[max_height]</aqua>'
+      min-height:
+        description: "<gray>Définir la hauteur minimale\n</gray><gray>pour ce matériau.\n</gray><gray>Valeur actuelle : </gray><aqua>[min_height]</aqua>"
+        name: <white><bold>Hauteur minimale</bold></white>
+        value: <aqua>[min_height]</aqua>
+      min_height:
+        description: "<gray>Définir la hauteur minimale\n</gray><gray>pour ce matériau.</gray>"
+        name: <white><bold>Hauteur minimale</bold></white>
+        value: '<gray>Valeur actuelle : </gray><aqua>[min_height]</aqua>'
+      quit:
+        description: <gray>Quitter le menu actuel</gray>
+        name: <white><bold>Quitter</bold></white>
+      use_bank:
+        description: "<gray>Utilise le compte bancaire de l'île\n</gray><gray>pour tous les achats et\n</gray><gray>activations.\n</gray><gray>Nécessite le Bank Addon.</gray>"
+        disabled: <aqua>L'utilisation de la banque est </aqua><red>désactivée </red><aqua>.</aqua>
+        enabled: <aqua>L'utilisation de la banque est </aqua><green>activée </green><aqua>.</aqua>
+        name: <white><bold>Utiliser la banque</bold></white>
     tips:
       click-to-previous: "& e Cliquez sur & 7 pour afficher la page précédente."
       click-to-next: "& e Cliquez sur & 7 pour afficher la page suivante."
@@ -646,6 +705,7 @@ stone-generator:
       shift-click-to-activate: "& e Shift Cliquez sur & 7 pour activer."
       shift-click-to-deactivate: "& e Shift Cliquez sur & 7 pour désactiver."
       shift-click-to-reset: "& e Shift Cliquez sur & 7 pour réinitialiser."
+      shift-left-click-to-set-height-range: <yellow>Maj+Clic gauche </yellow><gray>pour configurer la plage de hauteur.</gray>
     descriptions:
       generator:
         lore: |-
@@ -684,6 +744,7 @@ stone-generator:
           stone: "& 8 générateurs de pierre"
           basalt: "& 8 générateurs de basalte"
           any: "& 7 & l Supports & générateurs e & o all & r & 7 & l"
+        height-range: '<gray>Fonctionne aux hauteurs : </gray><aqua>[min_height] </aqua><gray>à </gray><aqua>[max_height]</aqua>'
       bundle-permission: |-
         & 7 Autorisation qui doit être
         & 7 attribué au joueur:
@@ -693,6 +754,7 @@ stone-generator:
       selected: "& e sélectionné"
       island-owner: l'île de [player]
       unknown: inconnu
+      spawn-island: <yellow><bold>Île de spawn</bold></yellow>
   messages:
     generator-loaded: "& a Generator & r '[generator]' & r & a est chargé dans le cache local."
     bundle-loaded: "& un Bundle & r '[bundle]' & r & a est chargé dans le cache local."
@@ -710,6 +772,9 @@ stone-generator:
     no-credits-buy: "& c Pas assez de crédits pour acheter un générateur. Ce générateur coûte [nombre] crédits."
     import-count: "<yellow>Importation de [generator] nouveaux générateurs et de [bundle] nouveaux bundle.</yellow>"
     start-downloading: "& e Démarrez le téléchargement de la bibliothèque."
+    generator-exhausted: <red>Le générateur </red> '[generator]' <red>a atteint sa limite de génération et est maintenant en recharge pendant [number] minute(s) supplémentaire(s).</red>
+    no-credits-bank: <red>Votre compte bancaire n'a pas assez de crédits pour activer le générateur. L'activation nécessite [number] crédits.</red>
+    no-credits-buy-bank: <red>Votre compte bancaire n'a pas assez de crédits. Ce générateur coûte [number] crédits.</red>
   errors:
     no-generator-data: "& c Impossible de trouver des données de générateur valides"
     no-island-data: "& c Les données de l'îlot sont introuvables."
@@ -721,6 +786,8 @@ stone-generator:
     file-exist: "& c Le fichier «[fichier]» existe déjà. Choisissez un autre nom."
     generator-tier-not-found: "& c Générateur avec l'ID '[generator]' & r & c introuvable dans [gamemode]."
     no-generators-in-world: "& c Impossible de trouver un générateur dans [monde]"
+    could-not-remove-money: <red>Une erreur est survenue lors du retrait de l'argent.</red>
+    max-height-less-than-min: <red>La hauteur maximale ([MAX]) ne peut pas être inférieure à la hauteur minimale ([MIN]) !</red>
   conversations:
     confirm-string: vrai, allumé, oui, confirmer, y, valide, correct
     deny-string: faux, désactivé, non, refuser, n, invalide, incorrect
@@ -756,14 +823,18 @@ stone-generator:
     click-text-to-purchase: "<yellow>Vous avez déverrouillé </yellow> [generator]<yellow>! Cliquez ici pour l'acheter maintenant pour [number].</yellow>"
     click-text-to-activate-vault: "<yellow>Vous avez déverrouillé </yellow> [generator]<yellow>! Cliquez ici pour l'activer maintenant pour [number].</yellow>"
     click-text-to-activate: "<yellow>Vous avez déverrouillé </yellow> [generator]<yellow>! Cliquez ici pour l'activer maintenant.</yellow>"
+    input-max-height: <white>Entrez la hauteur maximale pour ce matériau (entre -64 et 320) :</white>
+    input-min-height: <white>Entrez la hauteur minimale pour ce matériau (entre -64 et 320) :</white>
   materials:
     cobblestone: Cobblestone
     stone:
       name: Stone
+      description: ''
   biomes:
     plains: Plaines
     flower_forest:
       name: Forêt de fleurs
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:

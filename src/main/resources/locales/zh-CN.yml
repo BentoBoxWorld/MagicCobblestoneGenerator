@@ -46,6 +46,8 @@ stone-generator:
       manage-islands: "<dark_gray><bold>管理岛屿刷石机</bold></dark_gray>"
       library: "<dark_gray><bold>刷石机库</bold></dark_gray>"
       settings: "<dark_gray><bold>插件设置</bold></dark_gray>"
+      configure-material-height: <black><bold>配置材料高度</bold></black>
+      height-range-config: <black><bold>高度范围：[material]</bold></black>
     buttons:
       default:
         name: "<white><bold>默认刷石机</bold></white>"
@@ -110,6 +112,8 @@ stone-generator:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>生成几率： [#.##]</aqua>"
         actual: "<aqua>数据值: [number]</aqua>"
+        height-range: <gray>高度范围：</gray><aqua>[min_height] </aqua><gray>到 </gray><aqua>[max_height]</aqua>
+        no-height-range: <gray>使用生成器的默认高度范围</gray>
       treasure-icon:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>掉落几率: [#.####]</aqua>"
@@ -404,6 +408,7 @@ stone-generator:
         list-value: "<gray>- [value]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
+        description: <gray>方块 ID：[id]</gray>
       search_block:
         name: "<white><bold>搜索</bold></white>"
         description: "<gray>搜索特定的方块。</gray>"
@@ -443,6 +448,15 @@ stone-generator:
         unused:
           name: "<white><bold>未使用</bold></white>"
           description: "<gray>只显示未使用的生物群系</gray>"
+        cave:
+          description: <gray>仅显示洞穴生物群系</gray>
+          name: <white><bold>洞穴</bold></white>
+        temperate:
+          description: <gray>仅显示温带生物群系</gray>
+          name: <white><bold>温带</bold></white>
+        warm:
+          description: <gray>仅显示温暖生物群系</gray>
+          name: <white><bold>温暖</bold></white>
       generator-types:
         cobblestone:
           name: "<white><bold>圆石</bold></white>"
@@ -465,6 +479,51 @@ stone-generator:
         any:
           name: "<white><bold>任意</bold></white>"
           description: "<gray>适用于任何类型的刷石机。</gray>"
+      bundle_id:
+        description: <gray>当前捆绑包的 ID。</gray>
+        name: <white><bold>捆绑包 ID</bold></white>
+        value: <aqua>ID：</aqua> [id]
+      clear-height-range:
+        description: "<gray>移除此材料的\n</gray><gray>特定高度范围。\n</gray><gray>它将改用生成器的\n</gray><gray>默认高度范围。</gray>"
+        name: <white><bold>清除高度范围</bold></white>
+      exhaustion_limit:
+        default: <aqua>使用全局默认值：</aqua><white>[number]</white>
+        description: "<gray>此生成器在进入冷却前\n</gray><gray>每个周期可生成的\n</gray><gray>最大方块数量。</gray>"
+        name: <white><bold>耗尽上限</bold></white>
+        unlimited: <aqua>无限制</aqua>
+        value: <aqua>上限：[number] </aqua><gray>每个周期</gray>
+      height_range:
+        description: "<gray>此生成器运作的\n</gray><gray>高度范围。</gray>"
+        name: <white><bold>高度范围</bold></white>
+        value: <aqua>从 </aqua><white>[min_height] </white><aqua>到 </aqua><white>[max_height]</white>
+      id:
+        description: <gray>当前生成器的 ID。</gray>
+        name: <white><bold>生成器 ID</bold></white>
+        value: <aqua>ID：</aqua> [id]
+      max-height:
+        description: "<gray>设置此材料的\n</gray><gray>最大高度。\n</gray><gray>当前值：</gray><aqua>[max_height]</aqua>"
+        name: <white><bold>最大高度</bold></white>
+        value: <aqua>[max_height]</aqua>
+      max_height:
+        description: "<gray>设置此材料的\n</gray><gray>最大高度。</gray>"
+        name: <white><bold>最大高度</bold></white>
+        value: <gray>当前值：</gray><aqua>[max_height]</aqua>
+      min-height:
+        description: "<gray>设置此材料的\n</gray><gray>最小高度。\n</gray><gray>当前值：</gray><aqua>[min_height]</aqua>"
+        name: <white><bold>最小高度</bold></white>
+        value: <aqua>[min_height]</aqua>
+      min_height:
+        description: "<gray>设置此材料的\n</gray><gray>最小高度。</gray>"
+        name: <white><bold>最小高度</bold></white>
+        value: <gray>当前值：</gray><aqua>[min_height]</aqua>
+      quit:
+        description: <gray>退出当前菜单</gray>
+        name: <white><bold>退出</bold></white>
+      use_bank:
+        description: "<gray>使用岛屿银行账户\n</gray><gray>进行所有购买和\n</gray><gray>激活操作。\n</gray><gray>需要 Bank Addon。</gray>"
+        disabled: <aqua>银行使用已</aqua><red>禁用 </red><aqua>。</aqua>
+        enabled: <aqua>银行使用已</aqua><green>启用 </green><aqua>。</aqua>
+        name: <white><bold>使用银行</bold></white>
     tips:
       click-to-previous: "<yellow>点击 </yellow><gray>浏览上一页</gray>"
       click-to-next: "<yellow>点击 </yellow><gray>浏览下一页</gray>"
@@ -513,6 +572,7 @@ stone-generator:
       shift-click-to-activate: "<yellow>Shift单击 </yellow><gray>激活</gray>"
       shift-click-to-deactivate: "<yellow>Shift单击 </yellow><gray>禁用</gray>"
       shift-click-to-reset: "<yellow>按住 Shift 键</yellow><gray> 单击以重置</gray>"
+      shift-left-click-to-set-height-range: <yellow>Shift+左键 </yellow><gray>配置高度范围。</gray>
     descriptions:
       generator:
         lore: |-
@@ -551,6 +611,7 @@ stone-generator:
           stone: "<dark_gray>石头刷石机</dark_gray>"
           basalt: "<dark_gray>玄武岩刷石机</dark_gray>"
           any: "<gray><bold>支持 </bold></gray><bold><yellow><italic>所有类型的 </italic></yellow></bold><gray><bold>刷石机</bold></gray>"
+        height-range: <gray>工作高度：</gray><aqua>[min_height] </aqua><gray>到 </gray><aqua>[max_height]</aqua>
       bundle-permission: |-
         <gray>必须分配给玩家的权限：
         </gray><dark_aqua><italic>[gamemode].stone-generator.bundle.[id]</italic></dark_aqua>
@@ -559,6 +620,7 @@ stone-generator:
       selected: "<yellow>已选定</yellow>"
       island-owner: "[player]的岛屿"
       unknown: 未知
+      spawn-island: <yellow><bold>出生点岛屿</bold></yellow>
   messages:
     generator-loaded: "<green>刷石机 </green>'[generator]' <green>已加载到本地缓存。</green>"
     bundle-loaded: "<green>捆绑包 </green>'[bundle]' <green>已加载到本地缓存。</green>"
@@ -576,6 +638,9 @@ stone-generator:
     no-credits-buy: "<red>没有足够的费用来购买刷石机。需要 [number] 。</red>"
     import-count: "<yellow>导入了 [generator] 个刷石机和 [bundle] 个捆绑包。</yellow>"
     start-downloading: "<yellow>开始下载网络库。</yellow>"
+    generator-exhausted: <red>生成器 </red> '[generator]' <red>已达到生成上限，现在进入冷却，还需 [number] 分钟。</red>
+    no-credits-bank: <red>你的银行账户没有足够的点数来激活生成器。激活需要 [number] 点数。</red>
+    no-credits-buy-bank: <red>你的银行账户没有足够的点数。此生成器需要 [number] 点数。</red>
   errors:
     no-generator-data: "<red>找不到有效的刷石机数据。</red>"
     no-island-data: "<red>没有找到岛屿数据。</red>"
@@ -587,6 +652,8 @@ stone-generator:
     file-exist: "<red>文件`[file]`不存在，请指定一个有效的文件名。</red>"
     generator-tier-not-found: "<red>刷石机ID '[generator]' </red><red>在游戏模式 [gamemode] 里不存在。</red>"
     no-generators-in-world: "<red>在世界 [world] 中没有适合您的刷石机。</red>"
+    could-not-remove-money: <red>扣款时出现错误。</red>
+    max-height-less-than-min: <red>最大高度（[MAX]）不能小于最小高度（[MIN]）！</red>
   conversations:
     confirm-string: true, on, yes, confirm, y, valid, correct, ok, 同意, 接受, 确定, 是
     deny-string: false, off, no, deny, n, invalid, incorrect, 拒绝, 否定, 否, 不
@@ -622,6 +689,8 @@ stone-generator:
     click-text-to-purchase: "<yellow>您已解锁 </yellow>[generator]<yellow>！点击此处立即花费 [number] 来购买。</yellow>"
     click-text-to-activate-vault: "<yellow>您已解锁 </yellow>[generator]<yellow>！点击此处立即花费 [number] 来激活。</yellow>"
     click-text-to-activate: "<yellow>您已解锁 </yellow>[generator]<yellow>！点击此处立即激活。</yellow>"
+    input-max-height: <white>请输入此材料的最大高度（-64 到 320 之间）：</white>
+    input-min-height: <white>请输入此材料的最小高度（-64 到 320 之间）：</white>
   materials:
     cobblestone: 圆石
     stone:
@@ -631,6 +700,7 @@ stone-generator:
     plains: 平原
     flower_forest:
       name: 繁花森林
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:

@@ -46,6 +46,8 @@ stone-generator:
       manage-islands: "<black><bold>管理島嶼資料</bold></black>"
       library: "<black><bold>知識庫</bold></black>"
       settings: "<black><bold>設定</bold></black>"
+      configure-material-height: <black><bold>設定材料高度</bold></black>
+      height-range-config: <black><bold>高度範圍：[material]</bold></black>
     buttons:
       default:
         name: "<white><bold>預設產生器</bold></white>"
@@ -115,6 +117,8 @@ stone-generator:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>機率：[#.##]</aqua>"
         actual: "<aqua>資料庫中的數值：[number]</aqua>"
+        height-range: <gray>高度範圍：</gray><aqua>[min_height] </aqua><gray>到 </gray><aqua>[max_height]</aqua>
+        no-height-range: <gray>使用產生器的預設高度範圍</gray>
       treasure-icon:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>機率：[#.####]</aqua>"
@@ -407,6 +411,7 @@ stone-generator:
         list-value: "<gray>- [value]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
+        description: <gray>方塊 ID：[id]</gray>
       search_block:
         name: "<white><bold>搜尋</bold></white>"
         description: "<gray>搜尋特定的方塊</gray>"
@@ -448,6 +453,15 @@ stone-generator:
         unused:
           name: "<white><bold>尚未使用</bold></white>"
           description: "<gray>只顯示尚未使用的生態域</gray>"
+        cave:
+          description: <gray>僅顯示洞穴生物群系</gray>
+          name: <white><bold>洞穴</bold></white>
+        temperate:
+          description: <gray>僅顯示溫帶生物群系</gray>
+          name: <white><bold>溫帶</bold></white>
+        warm:
+          description: <gray>僅顯示溫暖生物群系</gray>
+          name: <white><bold>溫暖</bold></white>
       generator-types:
         cobblestone:
           name: "<white><bold>鵝卵石</bold></white>"
@@ -470,6 +484,51 @@ stone-generator:
         any:
           name: "<white><bold>任意</bold></white>"
           description: "<gray>任意生產器皆可生成。</gray>"
+      bundle_id:
+        description: <gray>目前組合包的 ID。</gray>
+        name: <white><bold>組合包 ID</bold></white>
+        value: <aqua>ID：</aqua> [id]
+      clear-height-range:
+        description: "<gray>移除此材料的\n</gray><gray>特定高度範圍。\n</gray><gray>它將改用產生器的\n</gray><gray>預設高度範圍。</gray>"
+        name: <white><bold>清除高度範圍</bold></white>
+      exhaustion_limit:
+        default: <aqua>使用全域預設值：</aqua><white>[number]</white>
+        description: "<gray>此產生器在進入冷卻前\n</gray><gray>每個週期可產生的\n</gray><gray>最大方塊數量。</gray>"
+        name: <white><bold>耗盡上限</bold></white>
+        unlimited: <aqua>無限制</aqua>
+        value: <aqua>上限：[number] </aqua><gray>每個週期</gray>
+      height_range:
+        description: "<gray>此產生器運作的\n</gray><gray>高度範圍。</gray>"
+        name: <white><bold>高度範圍</bold></white>
+        value: <aqua>從 </aqua><white>[min_height] </white><aqua>到 </aqua><white>[max_height]</white>
+      id:
+        description: <gray>目前產生器的 ID。</gray>
+        name: <white><bold>產生器 ID</bold></white>
+        value: <aqua>ID：</aqua> [id]
+      max-height:
+        description: "<gray>設定此材料的\n</gray><gray>最大高度。\n</gray><gray>目前值：</gray><aqua>[max_height]</aqua>"
+        name: <white><bold>最大高度</bold></white>
+        value: <aqua>[max_height]</aqua>
+      max_height:
+        description: "<gray>設定此材料的\n</gray><gray>最大高度。</gray>"
+        name: <white><bold>最大高度</bold></white>
+        value: <gray>目前值：</gray><aqua>[max_height]</aqua>
+      min-height:
+        description: "<gray>設定此材料的\n</gray><gray>最小高度。\n</gray><gray>目前值：</gray><aqua>[min_height]</aqua>"
+        name: <white><bold>最小高度</bold></white>
+        value: <aqua>[min_height]</aqua>
+      min_height:
+        description: "<gray>設定此材料的\n</gray><gray>最小高度。</gray>"
+        name: <white><bold>最小高度</bold></white>
+        value: <gray>目前值：</gray><aqua>[min_height]</aqua>
+      quit:
+        description: <gray>離開目前選單</gray>
+        name: <white><bold>離開</bold></white>
+      use_bank:
+        description: "<gray>使用島嶼銀行帳戶\n</gray><gray>進行所有購買和\n</gray><gray>啟用操作。\n</gray><gray>需要 Bank Addon。</gray>"
+        disabled: <aqua>銀行使用已</aqua><red>停用 </red><aqua>。</aqua>
+        enabled: <aqua>銀行使用已</aqua><green>啟用 </green><aqua>。</aqua>
+        name: <white><bold>使用銀行</bold></white>
     tips:
       click-to-previous: "<yellow>點擊 </yellow><gray>顯示前一頁。</gray>"
       click-to-next: "<yellow>點擊 </yellow><gray>顯示下一頁。</gray>"
@@ -518,6 +577,7 @@ stone-generator:
       shift-click-to-activate: "<yellow>按住 Shift </yellow><gray>開啟。</gray>"
       shift-click-to-deactivate: "<yellow>按住 Shift </yellow><gray>關閉。</gray>"
       shift-click-to-reset: "<yellow>按住Shift點擊 </yellow><gray>重置。</gray>"
+      shift-left-click-to-set-height-range: <yellow>Shift+左鍵 </yellow><gray>設定高度範圍。</gray>
     descriptions:
       generator:
         lore: |-
@@ -556,6 +616,7 @@ stone-generator:
           stone: "<dark_gray>石頭產生器</dark_gray>"
           basalt: "<dark_gray>玄武岩產生器</dark_gray>"
           any: "<yellow><italic>與所有的 </italic></yellow><gray><bold>產生器 </bold></gray><bold><gray><bold>相容</bold></gray></bold>"
+        height-range: <gray>工作高度：</gray><aqua>[min_height] </aqua><gray>到 </gray><aqua>[max_height]</aqua>
       bundle-permission: |-
         <gray>玩家需擁有的權限：
         </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
@@ -564,6 +625,7 @@ stone-generator:
       selected: "<yellow>已選擇</yellow>"
       island-owner: "[player] 的島嶼"
       unknown: 不明的
+      spawn-island: <yellow><bold>出生點島嶼</bold></yellow>
   messages:
     generator-loaded: "<green>產生器 </green> '[generator]' <green> 已讀入本機快取。</green>"
     bundle-loaded: "<green>組合 </green> '[generator]' <green> 已讀入本機快取。</green>"
@@ -581,6 +643,9 @@ stone-generator:
     no-credits-buy: "<red>金額不足，購買此產生器需要 [number] 元。</red>"
     import-count: "<yellow>已導入新的 [generator] 產生器與新的 [bundle] 組合。</yellow>"
     start-downloading: "<yellow>開始下載知識庫。</yellow>"
+    generator-exhausted: <red>產生器 </red> '[generator]' <red>已達到產生上限，現在進入冷卻，還需 [number] 分鐘。</red>
+    no-credits-bank: <red>你的銀行帳戶沒有足夠的點數來啟用產生器。啟用需要 [number] 點數。</red>
+    no-credits-buy-bank: <red>你的銀行帳戶沒有足夠的點數。此產生器需要 [number] 點數。</red>
   errors:
     no-generator-data: "<red>無法找到格式正確的產生器資料</red>"
     no-island-data: "<red>找不到島嶼資料。</red>"
@@ -592,6 +657,8 @@ stone-generator:
     file-exist: "<red>檔案 `[file]` 已經存在，請選擇另一個名字。</red>"
     generator-tier-not-found: " <red>在遊戲模式 [gamemode] </red><red>找不到名稱叫做 '[generator]' 的產生器.</red>"
     no-generators-in-world: "<red>你所在得世界 [world] 沒有神奇的鵝卵石產生器</red>"
+    could-not-remove-money: <red>扣款時發生錯誤。</red>
+    max-height-less-than-min: <red>最大高度（[MAX]）不能小於最小高度（[MIN]）！</red>
   conversations:
     confirm-string: 是, true, on, yes, confirm, y, valid, correct
     deny-string: 否, false, off, no, deny, n, invalid, incorrect
@@ -627,14 +694,18 @@ stone-generator:
     click-text-to-purchase: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡以 [number] 元購買。</yellow>"
     click-text-to-activate-vault: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡以 [number] 元啟動。</yellow>"
     click-text-to-activate: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡啟動。</yellow>"
+    input-max-height: <white>請輸入此材料的最大高度（-64 到 320 之間）：</white>
+    input-min-height: <white>請輸入此材料的最小高度（-64 到 320 之間）：</white>
   materials:
     cobblestone: 鵝卵石
     stone:
       name: 石頭
+      description: ''
   biomes:
     plains: 平原
     flower_forest:
       name: 繁花森林
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:

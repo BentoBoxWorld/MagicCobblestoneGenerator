@@ -46,6 +46,8 @@ stone-generator:
       manage-islands: "<black><bold>Ada Verilerini Yönet</bold></black>"
       library: "<black><bold>Kitaplık</bold></black>"
       settings: "<black><bold>Ayarları</bold></black>"
+      configure-material-height: <black><bold>Materyal Yüksekliğini Yapılandır</bold></black>
+      height-range-config: '<black><bold>Yükseklik Aralığı: [material]</bold></black>'
     buttons:
       default:
         name: "<white><bold>Varsayılan Oluşturucu</bold></white>"
@@ -141,6 +143,8 @@ stone-generator:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>Şans: [#.##]</aqua>"
         actual: "<aqua>Veritabanı değeri: [number]</aqua>"
+        height-range: '<gray>Yükseklik aralığı: </gray><aqua>[min_height] </aqua><gray>ile </gray><aqua>[max_height]</aqua>'
+        no-height-range: <gray>Jeneratörün varsayılan yükseklik aralığını kullanır</gray>
       treasure-icon:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>Şans: [#.####]</aqua>"
@@ -569,6 +573,7 @@ stone-generator:
         list-value: "<gray>- [value]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
+        description: '<gray>Blok ID: [id]</gray>'
       search_block:
         name: "<white><bold>Ara</bold></white>"
         description: |-
@@ -649,6 +654,35 @@ stone-generator:
         any:
           name: "<white><bold>Herhangi</bold></white>"
           description: "<gray>Herhangi bir jeneratörle çalışır.</gray>"
+      clear-height-range:
+        description: "<gray>Bu materyal için belirli\n</gray><gray>yükseklik aralığını kaldır.\n</gray><gray>Bunun yerine jeneratörün varsayılan\n</gray><gray>yükseklik aralığını kullanacak.</gray>"
+        name: <white><bold>Yükseklik Aralığını Temizle</bold></white>
+      exhaustion_limit:
+        default: '<aqua>Genel varsayılanı kullanır: </aqua><white>[number]</white>'
+        description: "<gray>Bu jeneratörün bekleme süresine\n</gray><gray>geçmeden önce her periyotta\n</gray><gray>üretebileceği maksimum blok sayısı.</gray>"
+        name: <white><bold>Tükenme Limiti</bold></white>
+        unlimited: <aqua>Limit yok</aqua>
+        value: '<aqua>Limit: [number] </aqua><gray>periyot başına</gray>'
+      height_range:
+        description: "<gray>Bu jeneratörün çalıştığı\n</gray><gray>yükseklik aralığı.</gray>"
+        name: <white><bold>Yükseklik Aralığı</bold></white>
+        value: <aqua>Şuradan </aqua><white>[min_height] </white><aqua>şuraya </aqua><white>[max_height]</white>
+      max-height:
+        description: "<gray>Bu materyal için maksimum\n</gray><gray>yüksekliği ayarla.\n</gray><gray>Geçerli değer: </gray><aqua>[max_height]</aqua>"
+        name: <white><bold>Maksimum Yükseklik</bold></white>
+        value: <aqua>[max_height]</aqua>
+      max_height:
+        description: "<gray>Bu materyal için maksimum\n</gray><gray>yüksekliği ayarla.</gray>"
+        name: <white><bold>Maksimum Yükseklik</bold></white>
+        value: '<gray>Geçerli değer: </gray><aqua>[max_height]</aqua>'
+      min-height:
+        description: "<gray>Bu materyal için minimum\n</gray><gray>yüksekliği ayarla.\n</gray><gray>Geçerli değer: </gray><aqua>[min_height]</aqua>"
+        name: <white><bold>Minimum Yükseklik</bold></white>
+        value: <aqua>[min_height]</aqua>
+      min_height:
+        description: "<gray>Bu materyal için minimum\n</gray><gray>yüksekliği ayarla.</gray>"
+        name: <white><bold>Minimum Yükseklik</bold></white>
+        value: '<gray>Geçerli değer: </gray><aqua>[min_height]</aqua>'
     tips:
       click-to-previous: "<yellow>Önceki sayfayı görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
       click-to-next: "<yellow>Sonraki sayfayı görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
@@ -701,6 +735,7 @@ stone-generator:
       shift-click-to-activate: "<yellow>Shift Etkinleştirmek için </yellow><gray>'ye tıklayın.</gray>"
       shift-click-to-deactivate: "<yellow>Shift Devre dışı bırakmak için </yellow><gray>'ye tıklayın.</gray>"
       shift-click-to-reset: "<yellow>Shift Sıfırlamak için </yellow><gray>'ye tıklayın.</gray>"
+      shift-left-click-to-set-height-range: <yellow>Shift+Sol Tık </yellow><gray>ile yükseklik aralığını yapılandır.</gray>
     descriptions:
       generator:
         lore: |-
@@ -739,6 +774,7 @@ stone-generator:
           stone: "<dark_gray>Taş Jeneratörü</dark_gray>"
           basalt: "<dark_gray>Bazalt Jeneratörü</dark_gray>"
           any: "<gray><bold></bold></gray><bold><yellow><italic>'nun tüm </italic></yellow></bold><gray><bold>jeneratörlerini destekler</bold></gray>"
+        height-range: '<gray>Şu yüksekliklerde çalışır: </gray><aqua>[min_height] </aqua><gray>ile </gray><aqua>[max_height]</aqua>'
       bundle-permission: |-
         <gray>Olması gereken izin
         </gray><gray>oyuncuya atandı:
@@ -768,6 +804,7 @@ stone-generator:
     no-credits-buy-bank: "<red>Banka hesabınızda yeterli kredi yok. Bu jeneratör [number] krediye mal oldu.</red>"
     import-count: "<yellow>[generator] yeni oluşturucular ve [bundle] yeni paketler içe aktarıldı.</yellow>"
     start-downloading: "<yellow>Kitaplığı indirmeye başla.</yellow>"
+    generator-exhausted: <red>Jeneratör </red> '[generator]' <red>üretim limitine ulaştı ve şimdi [number] dakika daha bekleme süresinde.</red>
   errors:
     no-generator-data: "<red>Geçerli bir oluşturucu verisi bulunamadı</red>"
     no-island-data: "<red>Ada Verisi bulunamadı.</red>"
@@ -780,6 +817,7 @@ stone-generator:
     generator-tier-not-found: "<red>'[generator]' kimliğine sahip Jeneratör </red><red>[gamemode]'da bulunamadı.</red>"
     no-generators-in-world: "<red>[world] içinde sizin için uygun jeneratör yok</red>"
     could-not-remove-money: "<red>Para çekerken bir şeyler ters gitti.</red>"
+    max-height-less-than-min: <red>Maksimum yükseklik ([MAX]), minimum yükseklikten ([MIN]) küçük olamaz!</red>
   conversations:
     confirm-string: doğru, açık, evet, onayla, y, geçerli, doğru
     deny-string: yanlış, kapalı, hayır, reddet, n, geçersiz, yanlış
@@ -815,14 +853,18 @@ stone-generator:
     click-text-to-purchase: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! Şimdi [number] için satın almak için buraya tıklayın.</yellow>"
     click-text-to-activate-vault: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! [number] için şimdi etkinleştirmek üzere buraya tıklayın.</yellow>"
     click-text-to-activate: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! Şimdi etkinleştirmek için buraya tıklayın.</yellow>"
+    input-max-height: <white>Bu materyal için maksimum yüksekliği girin (-64 ile 320 arasında):</white>
+    input-min-height: <white>Bu materyal için minimum yüksekliği girin (-64 ile 320 arasında):</white>
   materials:
     cobblestone: Kırıktaş
     stone:
       name: Taş
+      description: ''
   biomes:
     plains: Ovalar
     flower_forest:
       name: Çiçek Ormanı
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:

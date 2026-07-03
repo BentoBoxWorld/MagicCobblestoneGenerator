@@ -46,6 +46,8 @@ stone-generator:
       manage-islands: "<black><bold>Управление данными острова</bold></black>"
       library: "<black><bold>Библиотека</bold></black>"
       settings: "<black><bold>Настройки</bold></black>"
+      configure-material-height: <black><bold>Настройка высоты материала</bold></black>
+      height-range-config: '<black><bold>Диапазон высот: [material]</bold></black>'
     buttons:
       default:
         name: "<white><bold>Генератор по умолчанию</bold></white>"
@@ -141,6 +143,8 @@ stone-generator:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>Шанс: [#.##]</aqua>"
         actual: "<aqua>Значение базы данных: [number]</aqua>"
+        height-range: '<gray>Диапазон высот: </gray><aqua>[min_height] </aqua><gray>до </gray><aqua>[max_height]</aqua>'
+        no-height-range: <gray>Использует диапазон высот генератора по умолчанию</gray>
       treasure-icon:
         name: "<white><bold>[material]</bold></white>"
         description: "<aqua>Шанс: [#.####]</aqua>"
@@ -569,6 +573,7 @@ stone-generator:
         list-value: "<gray>- [value]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
+        description: '<gray>ID блока: [id]</gray>'
       search_block:
         name: "<white><bold>Поиск</bold></white>"
         description: |-
@@ -663,6 +668,35 @@ stone-generator:
         any:
           name: "<white><bold>Любой</bold></white>"
           description: "<gray>Работает с любым генератором.</gray>"
+      clear-height-range:
+        description: "<gray>Убрать заданный диапазон высот\n</gray><gray>для этого материала.\n</gray><gray>Вместо него будет использован\n</gray><gray>диапазон высот генератора по умолчанию.</gray>"
+        name: <white><bold>Сбросить диапазон высот</bold></white>
+      exhaustion_limit:
+        default: '<aqua>Использует глобальное значение по умолчанию: </aqua><white>[number]</white>'
+        description: "<gray>Максимальное число блоков, которое этот\n</gray><gray>генератор может произвести за период,\n</gray><gray>прежде чем уйдёт на перезарядку.</gray>"
+        name: <white><bold>Лимит истощения</bold></white>
+        unlimited: <aqua>Без ограничения</aqua>
+        value: '<aqua>Лимит: [number] </aqua><gray>за период</gray>'
+      height_range:
+        description: "<gray>Диапазон высот, в котором\n</gray><gray>работает этот генератор.</gray>"
+        name: <white><bold>Диапазон высот</bold></white>
+        value: <aqua>От </aqua><white>[min_height] </white><aqua>до </aqua><white>[max_height]</white>
+      max-height:
+        description: "<gray>Задать максимальную высоту\n</gray><gray>для этого материала.\n</gray><gray>Текущее значение: </gray><aqua>[max_height]</aqua>"
+        name: <white><bold>Максимальная высота</bold></white>
+        value: <aqua>[max_height]</aqua>
+      max_height:
+        description: "<gray>Задать максимальную высоту\n</gray><gray>для этого материала.</gray>"
+        name: <white><bold>Максимальная высота</bold></white>
+        value: '<gray>Текущее значение: </gray><aqua>[max_height]</aqua>'
+      min-height:
+        description: "<gray>Задать минимальную высоту\n</gray><gray>для этого материала.\n</gray><gray>Текущее значение: </gray><aqua>[min_height]</aqua>"
+        name: <white><bold>Минимальная высота</bold></white>
+        value: <aqua>[min_height]</aqua>
+      min_height:
+        description: "<gray>Задать минимальную высоту\n</gray><gray>для этого материала.</gray>"
+        name: <white><bold>Минимальная высота</bold></white>
+        value: '<gray>Текущее значение: </gray><aqua>[min_height]</aqua>'
     tips:
       click-to-previous: "<yellow>Нажмите </yellow><gray>, чтобы просмотреть предыдущую страницу.</gray>"
       click-to-next: "<yellow>Нажмите </yellow><gray>для просмотра следующей страницы.</gray>"
@@ -715,6 +749,7 @@ stone-generator:
       shift-click-to-activate: "<yellow>Shift Нажмите </yellow><gray>для активации.</gray>"
       shift-click-to-deactivate: "<yellow>Shift Нажмите </yellow><gray>, чтобы деактивировать.</gray>"
       shift-click-to-reset: "<yellow>Shift Нажмите </yellow><gray>для сброса.</gray>"
+      shift-left-click-to-set-height-range: <yellow>Shift+ЛКМ </yellow><gray>чтобы настроить диапазон высот.</gray>
     descriptions:
       generator:
         lore: |-
@@ -753,6 +788,7 @@ stone-generator:
           stone: "<dark_gray>каменных генераторов</dark_gray>"
           basalt: "<dark_gray>базальтовых генераторов</dark_gray>"
           any: "<gray><bold>Поддерживает </bold></gray><bold><yellow><italic>все генераторы </italic></yellow></bold><gray><bold></bold></gray>"
+        height-range: '<gray>Работает на высотах: </gray><aqua>[min_height] </aqua><gray>до </gray><aqua>[max_height]</aqua>'
       bundle-permission: |-
         <gray>Разрешение, которое должно быть
         </gray><gray>назначено игроку:
@@ -782,6 +818,7 @@ stone-generator:
     no-credits-buy-bank: "<red>На вашем банковском счете недостаточно кредитов. Этот генератор стоит [number] кредитов.</red>"
     import-count: "<yellow>Импортированы [generator] новые генераторы и [bundle] новые пакеты.</yellow>"
     start-downloading: "<yellow>Начать загрузку библиотеки.</yellow>"
+    generator-exhausted: <red>Генератор </red> '[generator]' <red>достиг лимита генерации и теперь на перезарядке ещё [number] минут(ы).</red>
   errors:
     no-generator-data: "<red>Не удалось найти допустимые данные генератора</red>"
     no-island-data: "<red>Данные острова не найдены.</red>"
@@ -794,6 +831,7 @@ stone-generator:
     generator-tier-not-found: "<red>Генератор с идентификатором '[generator]' </red><red>не найден в [gamemode].</red>"
     no-generators-in-world: "<red>В [world] для вас нет доступных генераторов</red>"
     could-not-remove-money: "<red>Что-то пошло не так при выводе денег.</red>"
+    max-height-less-than-min: <red>Максимальная высота ([MAX]) не может быть меньше минимальной высоты ([MIN])!</red>
   conversations:
     confirm-string: true, on, да, подтвердить, y, действительный, правильный
     deny-string: false, выключено, нет, отрицать, n, недопустимо, неправильно
@@ -829,14 +867,18 @@ stone-generator:
     click-text-to-purchase: "<yellow>Вы разблокировали </yellow> [generator]<yellow>! Нажмите здесь, чтобы купить сейчас за [number].</yellow>"
     click-text-to-activate-vault: "<yellow>Вы разблокировали </yellow> [generator]<yellow>! Нажмите здесь, чтобы активировать его сейчас для [number].</yellow>"
     click-text-to-activate: "<yellow>Вы разблокировали </yellow> [generator]<yellow>! Нажмите здесь, чтобы активировать его сейчас.</yellow>"
+    input-max-height: <white>Введите максимальную высоту для этого материала (от -64 до 320):</white>
+    input-min-height: <white>Введите минимальную высоту для этого материала (от -64 до 320):</white>
   materials:
     cobblestone: булыжник
     stone:
       name: Камень
+      description: ''
   biomes:
     plains: Равнины
     flower_forest:
       name: Цветочный лес
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:
