@@ -4,34 +4,34 @@ stone-generator:
     # This section contains only admin commands translations.
     admin:
       main:
-        description: "Magic Cobblestone Generator Admin Command"
+        description: "Magic Cobblestone Generator Admin Commando"
       import:
-        description: "Imports magic generators"
+        description: "Importeert magic generators"
         confirmation: "This will remove existing generators from [gamemode] and import new generators from the template file - please confirm"
       why:
         parameters: "<player>"
-        description: "toggles Magic Cobblestone Generator debug messages"
+        description: "schakelt Magic Cobblestone Generator debug berichten in/uit"
       database:
-        description: "Main database command"
+        description: "Hoofd databasecommando"
       import-database:
         parameters: "<file>"
-        description: "imports magic generators database file"
+        description: "importeert magic generators databasebestand"
         confirmation: "This will remove existing generators for [gamemode] and import generators from the database file - please confirm"
       export:
         parameters: "<file>"
-        description: "Export magic generators database from Game Mode into file"
+        description: "Exporteert magic generators database van Game Mode naar bestand"
     # This section contains only player commands translations.
     player:
       main:
-        description: "opens generator selection GUI"
+        description: "opent generator selectie GUI"
       view:
-        description: "opens generator details GUI"
+        description: "opent generator details GUI"
         parameters: "<generator-id>"
       buy:
-        description: "Purchases the requested generator"
+        description: "Koopt de gevraagde generator"
         parameters: "<generator-id>"
       activate:
-        description: "Activate/deactivate the requested generator"
+        description: "Activeert/deactiveert de gevraagde generator"
         parameters: "<generator-id> <true/false>"
   # This section contains translations for items inside GUI interfaces.
   gui:
@@ -44,289 +44,289 @@ stone-generator:
       # Title for admin panel.
       admin-panel: "<black><bold>Admin Panel</bold></black>"
       # Title for GUI that allows to select biomes for generator.
-      select-biome: "<black><bold>Select Biomes</bold></black>"
+      select-biome: "<black><bold>Selecteer Biomen</bold></black>"
       # Title for GUI that allows to select a block generator.
-      select-block: "<black><bold>Select Block</bold></black>"
+      select-block: "<black><bold>Selecteer Blok</bold></black>"
       # Title for GUI that allows to select a bundle for island.
-      select-bundle: "<black><bold>Select Bundle</bold></black>"
+      select-bundle: "<black><bold>Selecteer Bundel</bold></black>"
       # Title for GUI that allows to choose generator type.
-      select-type: "<black><bold>Select Generator Type</bold></black>"
+      select-type: "<black><bold>Selecteer Generatortype</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Bundle: </bold></black> [bundle]"
+      view-bundle: "<black><bold>Bundel: </bold></black> [bundle]"
       # Title for managing bundles GUI.
-      manage-bundles: "<black><bold>Manage Bundles</bold></black>"
+      manage-bundles: "<black><bold>Bundels Beheren</bold></black>"
       # Title for managing generators GUI.
-      manage-generators: "<black><bold>Manage Generators</bold></black>"
+      manage-generators: "<black><bold>Generators Beheren</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Island: [island]</bold></black>"
+      view-island: "<black><bold>Eiland: [island]</bold></black>"
       # Title for managing all island data.
-      manage-islands: "<black><bold>Manage Island Data</bold></black>"
+      manage-islands: "<black><bold>Eilandgegevens Beheren</bold></black>"
       # Title for Library GUI
-      library: "<black><bold>Library</bold></black>"
+      library: "<black><bold>Bibliotheek</bold></black>"
       # Title for Settings GUI
-      settings: "<black><bold>Settings</bold></black>"
+      settings: "<black><bold>Instellingen</bold></black>"
       # Title for Configure Material Height GUI
-      configure-material-height: "<black><bold>Configure Material Height</bold></black>"
+      configure-material-height: "<black><bold>Materiaalhougte Configureren</bold></black>"
       # Title for Height Range Configuration GUI
-      height-range-config: "<black><bold>Height Range: [material]</bold></black>"
+      height-range-config: "<black><bold>Hoogtebereik: [material]</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
       min_height:
-        name: "<white><bold>Minimum Height</bold></white>"
+        name: "<white><bold>Minimale Hoogte</bold></white>"
         description: |-
           <gray>Set the minimum height
           </gray><gray>for this material.</gray>
-        value: "<gray>Current value: </gray><aqua>[min_height]</aqua>"
+        value: "<gray>Huidige waarde: </gray><aqua>[min_height]</aqua>"
       max_height:
-        name: "<white><bold>Maximum Height</bold></white>"
+        name: "<white><bold>Maximale Hoogte</bold></white>"
         description: |-
           <gray>Set the maximum height
           </gray><gray>for this material.</gray>
-        value: "<gray>Current value: </gray><aqua>[max_height]</aqua>"
+        value: "<gray>Huidige waarde: </gray><aqua>[max_height]</aqua>"
       height_range:
-        name: "<white><bold>Height Range</bold></white>"
+        name: "<white><bold>Hoogtebereik</bold></white>"
         description: |-
           <gray>The height range at which
           </gray><gray>this generator operates.</gray>
-        value: "<aqua>From </aqua><white>[min_height] </white><aqua>to </aqua><white>[max_height]</white>"
+        value: "<aqua>Van </aqua><white>[min_height] </white><aqua>to </aqua><white>[max_height]</white>"
       default:
-        name: "<white><bold>Default Generator</bold></white>"
+        name: "<white><bold>Standaard Generator</bold></white>"
         description: |-
           <gray>Default generators are always
           </gray><gray>active.</gray>
         enabled: |-
-          <aqua>This is the </aqua><green>default </green><aqua>generator.</aqua>
+          <aqua>Dit is de </aqua><green>default </green><aqua>generator.</aqua>
         disabled: |-
-          <aqua>This is </aqua><red>not the default </red><aqua>generator.</aqua>
+          <aqua>Dit is </aqua><red>niet de standaard </red><aqua>generator.</aqua>
       priority:
-        name: "<white><bold>Generator Priority</bold></white>"
+        name: "<white><bold>Generator Prioriteit</bold></white>"
         description: |-
           <gray>A larger priority
           </gray><gray>number will be preferred if
           </gray><gray>multiple one can be applied
           </gray><gray>to the same location.</gray>
-        value: "<aqua>Priority: </aqua><gray>[number]</gray>"
+        value: "<aqua>Prioriteit: </aqua><gray>[number]</gray>"
       type:
-        name: "<white><bold>Generator Type</bold></white>"
+        name: "<white><bold>Generatortype</bold></white>"
         description: |-
           <gray>Defines which generator type
-          </gray><gray>will be applied to the current
+          </gray><gray>will be applied tot the current
           </gray><gray>generator.</gray>
         value: "<aqua>Type: </aqua><gray>[type]</gray>"
       required_min_level:
-        name: "<white><bold>Minimum Island Level</bold></white>"
+        name: "<white><bold>Minimumeiiandniveau</bold></white>"
         description: |-
           <gray>Minimum island level to
           </gray><gray>unlock this generator.</gray>
-        value: "<aqua>Minimum Level Required: [number]</aqua>"
+        value: "<aqua>Minimuumniveau Vereist: [number]</aqua>"
       required_permissions:
-        name: "<white><bold>Required Permissions</bold></white>"
+        name: "<white><bold>Vereiste Machtigingen</bold></white>"
         description: |-
           <gray>List of permissions that
-          </gray><gray>are required to unlock
+          </gray><gray>are required tot unlock
           </gray><gray>this generator.</gray>
-        list: "<aqua>Required Permissions:</aqua>"
+        list: "<aqua>Vereiste Machtigingen:</aqua>"
         value: "<aqua>- [permission]</aqua>"
-        none: "<aqua>- none</aqua>"
+        none: "<aqua>- geen</aqua>"
       purchase_cost:
-        name: "<white><bold>Purchase Cost</bold></white>"
+        name: "<white><bold>Aankoopkosten</bold></white>"
         description: |-
           <gray>Credits required to
           </gray><gray>purchase this generator.</gray>
-        value: "<aqua>Cost: [number]</aqua>"
+        value: "<aqua>Kosten: [number]</aqua>"
       activation_cost:
-        name: "<white><bold>Activation Cost</bold></white>"
+        name: "<white><bold>Activeringskosten</bold></white>"
         description: |-
           <gray>Credits required to
           </gray><gray>activate or reactivate
           </gray><gray>this generator.</gray>
-        value: "<aqua>Cost: [number]</aqua>"
+        value: "<aqua>Kosten: [number]</aqua>"
       exhaustion_limit:
-        name: "<white><bold>Exhaustion Limit</bold></white>"
+        name: "<white><bold>Uitputtingslimiet</bold></white>"
         description: |-
           <gray>Maximum blocks this generator
-          </gray><gray>may produce per period before
+          </gray><gray>may produce per periode before
           </gray><gray>it goes on cooldown.</gray>
-        value: "<aqua>Limit: [number] </aqua><gray>per period</gray>"
-        default: "<aqua>Uses global default: </aqua><white>[number]</white>"
-        unlimited: "<aqua>No limit</aqua>"
+        value: "<aqua>Limiet: [number] </aqua><gray>per period</gray>"
+        default: "<aqua>Gebruikt globale standaard: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Geen limiet</aqua>"
       biomes:
-        name: "<white><bold>Operational Biomes</bold></white>"
+        name: "<white><bold>Operationele Biomen</bold></white>"
         description: |-
           <gray>List of biomes where this
           </gray><gray>generator can operate.</gray>
-        list: "<aqua>Biomes:</aqua>"
+        list: "<aqua>Biomen:</aqua>"
         value: "<aqua>- [biome]</aqua>"
-        any: "<aqua>- any</aqua>"
+        any: "<aqua>- willekeurig</aqua>"
       treasure_amount:
-        name: "<white><bold>Treasure Amount</bold></white>"
+        name: "<white><bold>Schat Hoeveelheid</bold></white>"
         description: |-
           <gray>Maximum amount of treasure
           </gray><gray>that can be dropped at once.</gray>
-        value: "<aqua>Amount: [number]</aqua>"
+        value: "<aqua>Hoeveelheid: [number]</aqua>"
       treasure_chance:
-        name: "<white><bold>Treasure Chance</bold></white>"
+        name: "<white><bold>Schatkans</bold></white>"
         description: |-
-          <gray>Chance for treasure to be
+          <gray>Chance for treasure tot be
           </gray><gray>dropped upon generation.</gray>
-        value: "<aqua>Chance: [number]</aqua>"
+        value: "<aqua>Kans: [number]</aqua>"
       # Section of buttons for Generator View GUI title.
       info:
-        name: "<white><bold>General Information</bold></white>"
+        name: "<white><bold>Algemene Informatie</bold></white>"
         description: |-
           <gray>Shows general information
           </gray><gray>about this generator.</gray>
       blocks:
-        name: "<white><bold>Block List</bold></white>"
+        name: "<white><bold>Blokkenlijst</bold></white>"
         description: |-
           <gray>Shows list of blocks and
-          </gray><gray>their chances to be generated.</gray>
+          </gray><gray>their chances tot be generated.</gray>
       treasures:
-        name: "<white><bold>Treasure List</bold></white>"
+        name: "<white><bold>Schatlijst</bold></white>"
         description: |-
           <gray>Shows list of treasure and
           </gray><gray>drop chances.
           </gray><gray>Treasure is dropped
           </gray><gray>when blocks generate.</gray>
         drag-and-drop: |-
-          <gray>Supports drag and drop
-          </gray><gray>items to empty spaces.</gray>
+          <gray>Ondersteunt drag and drop
+          </gray><gray>items tot empty spaces.</gray>
       # Section for blocks and treasures icons in Generator View GUI.
       block-icon:
         name: "<white><bold>[material]</bold></white>"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
-        description: "<aqua>Chance: [#.##]</aqua>"
-        actual: "<aqua>Database value: [number]</aqua>"
-        height-range: "<gray>Height range: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
-        no-height-range: "<gray>Uses generator default height range</gray>"
+        description: "<aqua>Kans: [#.##]</aqua>"
+        actual: "<aqua>Databasewaarde: [number]</aqua>"
+        height-range: "<gray>Hoogtebereik: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Gebruikt standaard hoogtebereik van generator</gray>"
       treasure-icon:
         name: "<white><bold>[material]</bold></white>"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
-        description: "<aqua>Chance: [#.####]</aqua>"
-        actual: "<aqua>Database value: [number]</aqua>"
+        description: "<aqua>Kans: [#.####]</aqua>"
+        actual: "<aqua>Databasewaarde: [number]</aqua>"
       # Section of buttons for User Generator List
       show_cobblestone:
-        name: "<white><bold>Cobblestone Generators</bold></white>"
+        name: "<white><bold>Cobblestone Generatoren</bold></white>"
         description: |-
           <gray>Display only cobblestone
           </gray><gray>generators</gray>
       show_stone:
-        name: "<white><bold>Stone Generators</bold></white>"
+        name: "<white><bold>Steengeneratoren</bold></white>"
         description: |-
           <gray>Display only stone
           </gray><gray>generators</gray>
       show_basalt:
-        name: "<white><bold>Basalt Generators</bold></white>"
+        name: "<white><bold>Basalt Generatoren</bold></white>"
         description: |-
           <gray>Display only basalt
           </gray><gray>generators</gray>
       toggle_visibility:
-        name: "<white><bold>Unlocked Generators</bold></white>"
+        name: "<white><bold>Ontgrendelde Generatoren</bold></white>"
         description: |-
           <gray>Show only unlocked
           </gray><gray>generators</gray>
       show_active:
-        name: "<white><bold>Active Generators</bold></white>"
+        name: "<white><bold>Actieve Generatoren</bold></white>"
         description: |-
           <gray>Show only active
           </gray><gray>generators</gray>
       # Button that is used to return to previous GUI or exit it completely.
       return:
-        name: "<white><bold>Return</bold></white>"
+        name: "<white><bold>Terug</bold></white>"
         description: |-
-          <gray>Return to previous menu</gray>
+          <gray>Terug tot previous menu</gray>
       quit:
-        name: "<white><bold>Quit</bold></white>"
+        name: "<white><bold>Afsluiten</bold></white>"
         description: |-
-          <gray>Exit the current menu</gray>
+          <gray>Verlaat het huidige menu</gray>
       # Button that is used in multi-page GUIs which allows to return to previous page.
       # Button that is used in multi-page GUIs which allows to return to previous page.
       previous:
-        name: "<white><bold>Previous Page</bold></white>"
+        name: "<white><bold>Vorige Pagina</bold></white>"
         description: |-
-          <gray>Switch to [number] page</gray>
+          <gray>Switch tot [number] pagina</gray>
       # Button that is used in multi-page GUIs which allows to go to next page.
       next:
-        name: "<white><bold>Next Page</bold></white>"
+        name: "<white><bold>Volgende Pagina</bold></white>"
         description: |-
-          <gray>Switch to [number] page</gray>
+          <gray>Switch tot [number] pagina</gray>
       # All buttons below here are used for Admin GUIs.
       # Buttons in main Admin GUI
       manage_users:
-        name: "<white><bold>Manage Island Data</bold></white>"
+        name: "<white><bold>Eilandgegevens Beheren</bold></white>"
         description: |-
           <gray>Manage island data
           </gray><gray>in the current gamemode.</gray>
       manage_generator_tiers:
-        name: "<white><bold>Manage Generators</bold></white>"
+        name: "<white><bold>Generators Beheren</bold></white>"
         description: |-
           <gray>Manage generators
           </gray><gray>in the current gamemode.</gray>
       manage_generator_bundles:
-        name: "<white><bold>Manage Bundles</bold></white>"
+        name: "<white><bold>Bundels Beheren</bold></white>"
         description: |-
           <gray>Manage bundles
           </gray><gray>in the current gamemode.</gray>
       settings:
-        name: "<white><bold>Settings</bold></white>"
+        name: "<white><bold>Instellingen</bold></white>"
         description: |-
           <gray>Check and change
           </gray><gray>addon settings.</gray>
       import_template:
-        name: "<white><bold>Import Template</bold></white>"
+        name: "<white><bold>Sjabloon Importeren</bold></white>"
         description: |-
           <gray>Import template
           </gray><gray>file located inside the
           </gray><gray>addon directory.</gray>
       web_library:
-        name: "<white><bold>Web Library</bold></white>"
+        name: "<white><bold>Web Bibliotheek</bold></white>"
         description: |-
           <gray>Access the web
           </gray><gray>library that contains
           </gray><gray>shared generators.</gray>
       export_from_database:
-        name: "<white><bold>Export Database</bold></white>"
+        name: "<white><bold>Database Exporteren</bold></white>"
         description: |-
           <gray>Export the database
           </gray><gray>into a single file located in
           </gray><gray>the addon directory.</gray>
       import_to_database:
-        name: "<white><bold>Import Database</bold></white>"
+        name: "<white><bold>Database Importeren</bold></white>"
         description: |-
           <gray>Import a database from
           </gray><gray>a file located in the addon
           </gray><gray>directory.</gray>
       wipe_user_data:
-        name: "<white><bold>Clear User Database</bold></white>"
+        name: "<white><bold>Gebruikersdatabase Wissen</bold></white>"
         description: |-
           <gray>Clear user data for
           </gray><gray>each island in the
           </gray><gray>current gamemode.</gray>
       wipe_generator_data:
-        name: "<white><bold>Clear Generator Database</bold></white>"
+        name: "<white><bold>Generatordatabase Wissen</bold></white>"
         description: |-
           <gray>Clear generator and bundle
           </gray><gray>data in the current gamemode.</gray>
       # Buttons in Bundle Edit GUI
       bundle_name:
-        name: "<white><bold>Bundle Name</bold></white>"
+        name: "<white><bold>Bundelnaam</bold></white>"
         description: |-
-          <gray>Change the bundle name.</gray>
-        value: "<aqua>Name: </aqua> [bundle]"
+          <gray>Wijzig de bundelnaam.</gray>
+        value: "<aqua>Naam: </aqua> [bundle]"
       bundle_id:
-        name: "<white><bold>Bundle Id</bold></white>"
+        name: "<white><bold>Bundel-ID</bold></white>"
         description: |-
-          <gray>The current bundle ID.</gray>
+          <gray>De huidige bundel-ID.</gray>
         value: "<aqua>ID: </aqua> [id]"
       bundle_icon:
-        name: "<white><bold>Bundle Icon</bold></white>"
+        name: "<white><bold>Bundelpictogram</bold></white>"
         description: |-
-          <gray>Change the bundle icon.</gray>
+          <gray>Wijzig het bundelpictogram.</gray>
       bundle_description:
-        name: "<white><bold>Bundle Description</bold></white>"
+        name: "<white><bold>Bundelbeschrijving</bold></white>"
       bundle_info:
-        name: "<white><bold>General Information</bold></white>"
+        name: "<white><bold>Algemene Informatie</bold></white>"
         description: |-
           <gray>Show general information
           </gray><gray>about this bundle.</gray>
@@ -334,99 +334,99 @@ stone-generator:
         name: "<white><bold>Generators</bold></white>"
         description: |-
           <gray>Show a list of generators
-          </gray><gray>assigned to this bundle.</gray>
+          </gray><gray>assigned tot this bundle.</gray>
       add_generator:
-        name: "<white><bold>Add Generator</bold></white>"
+        name: "<white><bold>Generator Toevoegen</bold></white>"
         description: |-
           <gray>Assign a generator
           </gray><gray>to this bundle.</gray>
-        list: "<aqua>Selected Generators:</aqua>"
+        list: "<aqua>Geselecteerde Generators:</aqua>"
         value: "<aqua>- [generator]</aqua>"
       remove_generator:
-        name: "<white><bold>Remove Generator</bold></white>"
+        name: "<white><bold>Generator Verwijderen</bold></white>"
         description: |-
           <gray>Remove a generator
           </gray><gray>from this bundle.</gray>
-        list: "<aqua>Selected Generators:</aqua>"
+        list: "<aqua>Geselecteerde Generators:</aqua>"
         value: "<aqua>- [generator]</aqua>"
       # Buttons in Bundle Management GUI
       create_bundle:
-        name: "<white><bold>Create Bundle</bold></white>"
+        name: "<white><bold>Bundel Maken</bold></white>"
         description: |-
           <gray>Create a new bundle
           </gray><gray>for this gamemode.</gray>
       delete_bundle:
-        name: "<white><bold>Remove Bundle</bold></white>"
+        name: "<white><bold>Bundel Verwijderen</bold></white>"
         description: |-
           <gray>Remove a bundle from
           </gray><gray>this gamemode completely.</gray>
-        list: "<aqua>Selected Bundles:</aqua>"
+        list: "<aqua>Geselecteerde Bundels:</aqua>"
         value: "<aqua>- [bundle]</aqua>"
       # Buttons in Generator Edit Panel
       name:
-        name: "<white><bold>Generator Name</bold></white>"
+        name: "<white><bold>Generator Naam</bold></white>"
         description: |-
           <gray>Title for this generator.
-          </gray><gray>Supports color codes.</gray>
-        value: "<aqua>Name: </aqua> [generator]"
+          </gray><gray>Ondersteunt color codes.</gray>
+        value: "<aqua>Naam: </aqua> [generator]"
       id:
-        name: "<white><bold>Generator Id</bold></white>"
+        name: "<white><bold>Generator-ID</bold></white>"
         description: |-
-          <gray>The current generator ID.</gray>
+          <gray>De huidige generator-ID.</gray>
         value: "<aqua>ID: </aqua> [id]"
       icon:
-        name: "<white><bold>Generator Icon</bold></white>"
+        name: "<white><bold>Generator Pictogram</bold></white>"
         description: |-
-          <gray>Item used to display this
+          <gray>Item used tot display this
           </gray><gray>generator in all GUIs.</gray>
       locked_icon:
-        name: "<white><bold>Locked Icon</bold></white>"
+        name: "<white><bold>Vergrendeld Pictogram</bold></white>"
         description: |-
-          <gray>Item used to display this
+          <gray>Item used tot display this
           </gray><gray>generator in all GUIs if
           </gray><gray>it is locked.</gray>
       description:
-        name: "<white><bold>Generator Description</bold></white>"
+        name: "<white><bold>Generator Beschrijving</bold></white>"
         description: |-
           <gray>Text for generator that will
           </gray><gray>be written under title.</gray>
-        value: "<aqua>Description:</aqua>"
+        value: "<aqua>Beschrijving:</aqua>"
       deployed:
-        name: "<white><bold>Deployed</bold></white>"
+        name: "<white><bold>Ingezet</bold></white>"
         description: |-
-          <gray>Deployed generators are visible
+          <gray>Ingezet generators are visible
           </gray><gray>to and accessible by players.
           </gray><gray>Undeployed generators will not
           </gray><gray>generate blocks.</gray>
         enabled: |-
-          <aqua>This generator is </aqua><green>deployed.</green>
+          <aqua>Deze generator is </aqua><green>ingezet.</green>
         disabled: |-
-          <aqua>This generator is </aqua><red>not deployed.</red>
+          <aqua>Deze generator is </aqua><red>not ingezet.</red>
       add_material:
-        name: "<white><bold>Add Material</bold></white>"
+        name: "<white><bold>Materiaal Toevoegen</bold></white>"
         description: |-
-          <gray>Add new material to the
+          <gray>Add new material tot the
           </gray><gray>current material list.</gray>
       remove_material:
-        name: "<white><bold>Remove Materials</bold></white>"
+        name: "<white><bold>Materialen Verwijderen</bold></white>"
         description: |-
           <gray>Remove selected
           </gray><gray>materials from the list.</gray>
-        selected-materials: "<gray>Selected Materials:</gray>"
+        selected-materials: "<gray>Geselecteerde Materialen:</gray>"
         list-value: "<gray>- [number] x [value]</gray>"
       # Buttons in Bundle Management GUI
       create_generator:
-        name: "<white><bold>Create Generator</bold></white>"
+        name: "<white><bold>Generator Maken</bold></white>"
         description: |-
           <gray>Create a new
           </gray><gray>generator for
           </gray><gray>the gamemode.</gray>
       delete_generator:
-        name: "<white><bold>Remove Generator</bold></white>"
+        name: "<white><bold>Generator Verwijderen</bold></white>"
         description: |-
           <gray>Remove generator
           </gray><gray>from gamemode completely.</gray>
-        list: "<aqua>Selected Generators:</aqua>"
+        list: "<aqua>Geselecteerde Generators:</aqua>"
         value: "<aqua>- [generator]</aqua>"
       # Buttons in Island Data Edit GUI
       island_name:
@@ -435,22 +435,22 @@ stone-generator:
           <gray>[owner]
           </gray><aqua>[members]
           </aqua><aqua>Island ID: </aqua><gray>[id]</gray>
-        owner: "<aqua>Owner: [player]</aqua>"
-        list: "<aqua>Members:</aqua>"
+        owner: "<aqua>Eigenaar: [player]</aqua>"
+        list: "<aqua>Leden:</aqua>"
         value: "<aqua>- [player]</aqua>"
       island_working_range:
-        name: "<white><bold>Island Working Range</bold></white>"
+        name: "<white><bold>Eiland Werkbereik</bold></white>"
         description: |-
           <gray>Working range for generators
           </gray><gray>on current island.
           </gray><gray>0 and below means unlimited
           </gray><gray>range.</gray>
-        value: "<aqua>Range: [number]</aqua>"
+        value: "<aqua>Bereik: [number]</aqua>"
         overwritten: |-
           <red>Owner has a permission that
           </red><red>overwrites working range.</red>
       owner_working_range:
-        name: "<white><bold>Owner Working Range</bold></white>"
+        name: "<white><bold>Eigenaar Werkbereik</bold></white>"
         description: |-
           <gray>Working range for generators
           </gray><gray>for the current owner.
@@ -458,12 +458,12 @@ stone-generator:
           </gray><gray>ignored.
           </gray><gray>'-1' means that owner has
           </gray><gray>unlimitated working range.
-          "</gray><gray> Permission for user to assign:"
+          "</gray><gray> Permission for user tot assign:"
           "</gray><gray><italic>'[gamemode].stone-generator."
           "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
-        value: "<aqua>Range: [number]</aqua>"
+        value: "<aqua>Bereik: [number]</aqua>"
       island_max_generators:
-        name: "<white><bold>Max Island Generators</bold></white>"
+        name: "<white><bold>Max Eilandgenerators</bold></white>"
         description: |-
           <gray>Maximum active
           </gray><gray>generator tiers allowed
@@ -476,7 +476,7 @@ stone-generator:
           <red>Owner has a permission that
           </red><red>overwrites the generator count.</red>
       owner_max_generators:
-        name: "<white><bold>Max Owner Generators</bold></white>"
+        name: "<white><bold>Max Eigenaar Generators</bold></white>"
         description: |-
           <gray>Maximum active concurrent
           </gray><gray>generator tiers that the
@@ -485,80 +485,80 @@ stone-generator:
           </gray><gray>is ignored.
           </gray><gray>'-1' means that owner has
           </gray><gray>unlimitated generator count.
-          "</gray><gray> Permission for user to assign:"
+          "</gray><gray> Permission for user tot assign:"
           "</gray><gray><italic>'[gamemode].stone-generator."
           "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
         value: "<aqua>Max Generators: [number]</aqua>"
       island_bundle:
-        name: "<white><bold>Island Bundle</bold></white>"
+        name: "<white><bold>Eiland Bundel</bold></white>"
         description: |-
-          <gray>Bundle that is assigned to
+          <gray>Bundel that is assigned to
           </gray><gray>the current island.
           </gray><gray>Only generators from this 
           </gray><gray>bundle can be used on the
           </gray><gray>island.</gray>
-        value: "<aqua>Bundle: [bundle]</aqua>"
+        value: "<aqua>Bundel: [bundle]</aqua>"
         overwritten: |-
           <red>Owner has a permission that
           </red><red>overwrites bundle.</red>
       owner_bundle:
-        name: "<white><bold>Owner Bundle</bold></white>"
+        name: "<white><bold>Eigenaar Bundel</bold></white>"
         description: |-
-          <gray>Bundle that is assigned to
+          <gray>Bundel that is assigned to
           </gray><gray>the current island owner.
           </gray><gray>Only generators from this 
           </gray><gray>bundle can be used on the
           </gray><gray>island.
-          "</gray><gray> Permission for user to assign:"
+          "</gray><gray> Permission for user tot assign:"
           "</gray><gray><italic>'[gamemode].stone-generator."
           "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
-        value: "<aqua>Bundle: [bundle]</aqua>"
+        value: "<aqua>Bundel: [bundle]</aqua>"
       island_info:
-        name: "<white><bold>General Information</bold></white>"
+        name: "<white><bold>Algemene Informatie</bold></white>"
         description: |-
           <gray>Shows general information
           </gray><gray>about this island.</gray>
       island_generators:
-        name: "<white><bold>Island Generators</bold></white>"
+        name: "<white><bold>Eilandgenerators</bold></white>"
         description: |-
-          <gray>Shows list of all generators
+          <gray>Shows list of alle generators
           </gray><gray>that are available for the
           </gray><gray>current island.</gray>
       reset_to_default:
-        name: "<white><bold>Reset To Defaults</bold></white>"
+        name: "<white><bold>Terug naar Standaard</bold></white>"
         description: |-
           <gray>Resets all island values
           </gray><gray>to the default values from
           </gray><gray>the settings.</gray>
       # Buttons in Island Management GUI
       is_online:
-        name: "<white><bold>Online Players</bold></white>"
+        name: "<white><bold>Online Spelers</bold></white>"
         description: |-
           <gray>List of online player
           </gray><gray>islands.</gray>
       all_islands:
-        name: "<white><bold>All Islands</bold></white>"
+        name: "<white><bold>Alle Eilanden</bold></white>"
         description: |-
-          <gray>List of all islands.</gray>
+          <gray>Lijst van alle eilanden.</gray>
       search:
-        name: "<white><bold>Search</bold></white>"
+        name: "<white><bold>Zoeken</bold></white>"
         description: |-
-          <gray>Search for a specific
+          <gray>Zoeken for a specific
           </gray><gray>island.</gray>
-        search: "<aqua>Value: [value]</aqua>"
+        search: "<aqua>Waarde: [value]</aqua>"
       # Buttons in Settings GUI
       offline_generation:
-        name: "<white><bold>Offline Generation</bold></white>"
+        name: "<white><bold>Offline Generatie</bold></white>"
         description: |-
           <gray>Prevents blocks from being
           </gray><gray>generated if all island
           </gray><gray>members are offline.</gray>
         enabled: |-
-          <aqua>Offline generation is </aqua><green>enabled </green><aqua>.</aqua>
+          <aqua>Offline generatie is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          <aqua>Offline generation is </aqua><red>disabled </red><aqua>.</aqua>
+          <aqua>Offline generatie is </aqua><red>disabled </red><aqua>.</aqua>
       use_physic:
-        name: "<white><bold>Use Physics</bold></white>"
+        name: "<white><bold>Gebruik Fysica</bold></white>"
         description: |-
           <gray>Using physics on block
           </gray><gray>generation allows the
@@ -566,79 +566,79 @@ stone-generator:
           </gray><gray>however it reduces server
           </gray><gray>performance a little.</gray>
         enabled: |-
-          <aqua>Physics is </aqua><green>enabled </green><aqua>.</aqua>
+          <aqua>Fysica is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          <aqua>Physics is </aqua><red>disabled </red><aqua>.</aqua>
+          <aqua>Fysica is </aqua><red>disabled </red><aqua>.</aqua>
       use_bank:
-        name: "<white><bold>Use Bank</bold></white>"
+        name: "<white><bold>Gebruik Bank</bold></white>"
         description: |-
           <gray>Using island bank account
           </gray><gray>for all purchases and
           </gray><gray>activations.
           </gray><gray>Requires Bank Addon.</gray>
         enabled: |-
-          <aqua>Bank usage is </aqua><green>enabled </green><aqua>.</aqua>
+          <aqua>Bankgebruik is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          <aqua>Bank usage is </aqua><red>disabled </red><aqua>.</aqua>
+          <aqua>Bankgebruik is </aqua><red>disabled </red><aqua>.</aqua>
       working_range:
-        name: "<white><bold>Default Working Range</bold></white>"
+        name: "<white><bold>Standaard Werkbereik</bold></white>"
         description: |-
           <gray>Distance from players until
           </gray><gray>block generation will stop.
           </gray><gray>0 and below means unlimited.
-          </gray><gray>Setting requires server
-          </gray><gray>restart to activate.</gray>
-        value: "<aqua>Range: [number]</aqua>"
+          </gray><gray>Setting vereist server
+          </gray><gray>restart tot activate.</gray>
+        value: "<aqua>Bereik: [number]</aqua>"
       active_generators:
-        name: "<white><bold>Default Active Generators</bold></white>"
+        name: "<white><bold>Default Actieve Generatoren</bold></white>"
         description: |-
           <gray>Default maximum amount of
           </gray><gray>active generators at the
           </gray><gray>same time.
           </gray><gray>0 and below means unlimited.</gray>
-        value: "<aqua>Count: [number]</aqua>"
+        value: "<aqua>Aantal: [number]</aqua>"
       show_filters:
-        name: "<white><bold>Show Filters</bold></white>"
+        name: "<white><bold>Filters Weergeven</bold></white>"
         description: |-
-          <gray>Filters are a top row in
+          <gray>Filters zijn a top row in
           </gray><gray>Player GUI, which allows
           </gray><gray>to show only generators
           </gray><gray>by type or status.
           </gray><gray>This setting disables
           </gray><gray>and hides them.</gray>
         enabled: |-
-          <aqua>Filters are </aqua><green>enabled </green><aqua>.</aqua>
+          <aqua>Filters zijn </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          <aqua>Filters are </aqua><red>disabled </red><aqua>.</aqua>
+          <aqua>Filters zijn </aqua><red>disabled </red><aqua>.</aqua>
       border_block:
-        name: "<white><bold>Border Block</bold></white>"
+        name: "<white><bold>Grensblokkade</bold></white>"
         description: |-
           <gray>Border block is a material
           </gray><gray>which surrounds the user GUI.
-          </gray><gray>Setting it to air disables
+          </gray><gray>Setting it tot air disables
           </gray><gray>it.</gray>
       border_block_name:
-        name: "<white><bold>Border Block Name</bold></white>"
+        name: "<white><bold>Grensblokkade Name</bold></white>"
         description: |-
           <gray>Display name for a border
           </gray><gray>block.
-          </gray><gray>If it is set to empty, then
+          </gray><gray>If it is set tot empty, then
           </gray><gray>it will use the block name.
           </gray><gray>To set it as 1 empty space,
           "</gray><gray> write 'empty'."</gray>
-        value: "<aqua>Name: `</aqua>[name]<aqua>`</aqua>"
+        value: "<aqua>Naam: `</aqua>[name]<aqua>`</aqua>"
       unlock_notify:
-        name: "<white><bold>Notify On Unlock</bold></white>"
+        name: "<white><bold>Melden bij Ontgrendeling</bold></white>"
         description: |-
           <gray>A message will be sent
           </gray><gray>to a user when she unlocks
           </gray><gray>a new generator.</gray>
         enabled: |-
-          <aqua>Notify on unlock is </aqua><green>enabled </green><aqua>.</aqua>
+          <aqua>Melden bij ontgrendeling is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          <aqua>Notify on unlock is </aqua><red>disabled </red><aqua>.</aqua>
+          <aqua>Melden bij ontgrendeling is </aqua><red>disabled </red><aqua>.</aqua>
       disable_on_activate:
-        name: "<white><bold>Disable on Activation</bold></white>"
+        name: "<white><bold>Uitschakelen bij Activering</bold></white>"
         description: |-
           <gray>Disable oldest active generator
           </gray><gray>if user activates a new
@@ -646,9 +646,9 @@ stone-generator:
           </gray><gray>Useful for situations where
           </gray><gray>only a single generator is allowed.</gray>
         enabled: |-
-          <aqua>Disable on activation is </aqua><green>enabled </green><aqua>.</aqua>
+          <aqua>Uitschakelen bij activering is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          <aqua>Disable on activation is </aqua><red>disabled </red><aqua>.</aqua>
+          <aqua>Uitschakelen bij activering is </aqua><red>disabled </red><aqua>.</aqua>
       # Buttons in Library GUI
       library:
         name: "<white><bold>[name]</bold></white>"
@@ -660,47 +660,47 @@ stone-generator:
           </gray><gray>Version: [version]</gray>
       # Button in GUI that allows to choose blocks for generators to be generated.
       accept_blocks:
-        name: "<white><bold>Accept the blocks</bold></white>"
+        name: "<white><bold>Accepteer de blokken</bold></white>"
         description: |-
           <gray>Accepts selected blocks
           </gray><gray>and returns.</gray>
-        selected-blocks: "<gray>Selected Blocks:</gray>"
+        selected-blocks: "<gray>Geselecteerde Blokken:</gray>"
         list-value: "<gray>- [value]</gray>"
       material-icon:
         name: "<white><bold>[material]</bold></white>"
-        description: "<gray>Block ID: [id]</gray>"
+        description: "<gray>Blok-ID: [id]</gray>"
       search_block:
-        name: "<white><bold>Search</bold></white>"
+        name: "<white><bold>Zoeken</bold></white>"
         description: |-
-          <gray>Search for a specific
+          <gray>Zoeken for a specific
           </gray><gray>block.</gray>
-        search: "<aqua>Value: [value]</aqua>"
+        search: "<aqua>Waarde: [value]</aqua>"
       # Button in GUI that allows to choose biomes for generator.
       accept_biome:
-        name: "<white><bold>Accept the biomes</bold></white>"
+        name: "<white><bold>Accepteer de biomen</bold></white>"
         description: |-
           <gray>Accepts selected biomes
           </gray><gray>and returns.</gray>
-        selected-biomes: "<gray>Selected Biomes:</gray>"
+        selected-biomes: "<gray>Geselecteerd Biomen:</gray>"
         list-value: "<gray>- [value]</gray>"
       biome-icon:
         name: "<white><bold>[biome]</bold></white>"
       min-height:
-        name: "<white><bold>Minimum Height</bold></white>"
+        name: "<white><bold>Minimale Hoogte</bold></white>"
         description: |-
           <gray>Set the minimum height
           </gray><gray>for this material.
-          </gray><gray>Current value: </gray><aqua>[min_height]</aqua>
+          </gray><gray>Huidige waarde: </gray><aqua>[min_height]</aqua>
         value: "<aqua>[min_height]</aqua>"
       max-height:
-        name: "<white><bold>Maximum Height</bold></white>"
+        name: "<white><bold>Maximale Hoogte</bold></white>"
         description: |-
           <gray>Set the maximum height
           </gray><gray>for this material.
-          </gray><gray>Current value: </gray><aqua>[max_height]</aqua>
+          </gray><gray>Huidige waarde: </gray><aqua>[max_height]</aqua>
         value: "<aqua>[max_height]</aqua>"
       clear-height-range:
-        name: "<white><bold>Clear Height Range</bold></white>"
+        name: "<white><bold>Clear Hoogtebereik</bold></white>"
         description: |-
           <gray>Remove the specific height range
           </gray><gray>for this material.
@@ -709,45 +709,45 @@ stone-generator:
       # This section contains names for filter biome groups.
       biome-groups:
         temperate:
-          name: "<white><bold>Temperate</bold></white>"
+          name: "<white><bold>Gematigd</bold></white>"
           description: |-
-            <gray>Show only temperate biomes</gray>
+            <gray>Toon alleen gematigde biomen</gray>
         warm:
           name: "<white><bold>Warm</bold></white>"
           description: |-
-            <gray>Show only warm biomes</gray>
+            <gray>Toon alleen warme biomen</gray>
         cold:
-          name: "<white><bold>Cold</bold></white>"
+          name: "<white><bold>Koud</bold></white>"
           description: |-
-            <gray>Show only cold biomes</gray>
+            <gray>Toon alleen koude biomen</gray>
         snowy:
-          name: "<white><bold>Snowy</bold></white>"
+          name: "<white><bold>Sneeuw</bold></white>"
           description: |-
-            <gray>Show only snowy biomes</gray>
+            <gray>Toon alleen sneeuwbiomen</gray>
         ocean:
-          name: "<white><bold>Ocean</bold></white>"
+          name: "<white><bold>Oceaan</bold></white>"
           description: |-
-            <gray>Show only ocean biomes</gray>
+            <gray>Toon alleen oceaanbiomen</gray>
         nether:
           name: "<white><bold>Nether</bold></white>"
           description: |-
-            <gray>Show only nether biomes</gray>
+            <gray>Toon alleen nether-biomen</gray>
         the_end:
-          name: "<white><bold>The End</bold></white>"
+          name: "<white><bold>Het Einde</bold></white>"
           description: |-
-            <gray>Show only the end biomes</gray>
+            <gray>Toon alleen de eindbiomen</gray>
         neutral:
-          name: "<white><bold>Neutral</bold></white>"
+          name: "<white><bold>Neutraal</bold></white>"
           description: |-
-            <gray>Show only neutral biomes</gray>
+            <gray>Toon alleen neutrale biomen</gray>
         unused:
-          name: "<white><bold>Unused</bold></white>"
+          name: "<white><bold>Ongebruikt</bold></white>"
           description: |-
-            <gray>Show only unused biomes</gray>
+            <gray>Toon alleen ongebruikte biomen</gray>
         cave:
-          name: "<white><bold>Cave</bold></white>"
+          name: "<white><bold>Grot</bold></white>"
           description: |-
-            <gray>Show only cave biomes</gray>
+            <gray>Toon alleen grotbiomen</gray>
       # This section contains names and descriptions for generator type buttons.
       generator-types:
         cobblestone:
@@ -761,7 +761,7 @@ stone-generator:
             </italic></gold></italic><italic><italic><gold><italic>comes into contact with
             </italic></gold></italic></italic><italic><italic><italic><gold><italic>water.</italic></gold></italic></italic></italic>
         stone:
-          name: "<white><bold>Stone</bold></white>"
+          name: "<white><bold>Steen</bold></white>"
           description: |-
             <gray>Works only with stone
             </gray><gray>generators.
@@ -778,81 +778,81 @@ stone-generator:
             </gray><gold><italic>Hint:
             </italic></gold><italic><gold><italic>Forms when lava flows
             </italic></gold></italic><italic><italic><gold><italic>on top of soul soil and
-            </italic></gold></italic></italic><italic><italic><italic><gold><italic>is adjacent to blue ice.</italic></gold></italic></italic></italic>
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>is adjacent tot blue ice.</italic></gold></italic></italic></italic>
         cobblestone_or_stone:
-          name: "<white><bold>Cobblestone or Stone</bold></white>"
+          name: "<white><bold>Cobblestone or Steen</bold></white>"
           description: |-
             <gray>Works with cobblestone and
             </gray><gray>stone generators.</gray>
         basalt_or_cobblestone:
-          name: "<white><bold>Basalt or Cobblestone</bold></white>"
+          name: "<white><bold>Basalt of Cobblestone</bold></white>"
           description: |-
             <gray>Works with basalt and
             </gray><gray>cobblestone generators.</gray>
         basalt_or_stone:
-          name: "<white><bold>Basalt or Stone</bold></white>"
+          name: "<white><bold>Basalt or Steen</bold></white>"
           description: |-
             <gray>Works with basalt and
             </gray><gray>stone generators.</gray>
         any:
-          name: "<white><bold>Any</bold></white>"
+          name: "<white><bold>Alle</bold></white>"
           description: |-
-            <gray>Works with any generator.</gray>
+            <gray>Werkt met elke generator.</gray>
     # This section contains translations for GUI button tips.
     tips:
-      click-to-previous: "<yellow>Click </yellow><gray>to view previous page.</gray>"
-      click-to-next: "<yellow>Click </yellow><gray>to view next page.</gray>"
-      click-to-cancel: "<yellow>Click </yellow><gray>to cancel.</gray>"
-      click-to-choose: "<yellow>Click </yellow><gray>to choose.</gray>"
-      click-to-select: "<yellow>Click </yellow><gray>to select.</gray>"
-      click-to-deselect: "<yellow>Click </yellow><gray>to deselect.</gray>"
-      click-to-accept: "<yellow>Click </yellow><gray>to accept and return.</gray>"
-      click-to-filter-enable: "<yellow>Click </yellow><gray>to enable filter.</gray>"
-      click-to-filter-disable: "<yellow>Click </yellow><gray>to disable filter.</gray>"
-      click-to-activate: "<yellow>Click </yellow><gray>to activate.</gray>"
-      click-to-deactivate: "<yellow>Click </yellow><gray>to deactivate.</gray>"
+      click-to-previous: "<yellow>Klik </yellow><gray>to view previous pagina.</gray>"
+      click-to-next: "<yellow>Klik </yellow><gray>to view next pagina.</gray>"
+      click-to-cancel: "<yellow>Klik </yellow><gray>om te annuleren.</gray>"
+      click-to-choose: "<yellow>Klik </yellow><gray>om te kiezen.</gray>"
+      click-to-select: "<yellow>Klik </yellow><gray>om te selecteren.</gray>"
+      click-to-deselect: "<yellow>Klik </yellow><gray>om te deselecteren.</gray>"
+      click-to-accept: "<yellow>Klik </yellow><gray>om te accepteren en terug te keren.</gray>"
+      click-to-filter-enable: "<yellow>Klik </yellow><gray>om filter in te schakelen.</gray>"
+      click-to-filter-disable: "<yellow>Klik </yellow><gray>om filter uit te schakelen.</gray>"
+      click-to-activate: "<yellow>Klik </yellow><gray>om in te schakelen.</gray>"
+      click-to-deactivate: "<yellow>Klik </yellow><gray>om uit te schakelen.</gray>"
       click-gold-to-purchase: |-
-        <yellow>Click </yellow><gray>on gold block
-        </gray><gray>to purchase.</gray>
-      click-to-purchase: "<yellow>Click </yellow><gray>to purchase.</gray>"
-      click-to-return: "<yellow>Click </yellow><gray>to return.</gray>"
-      click-to-quit: "<yellow>Click </yellow><gray>to quit.</gray>"
-      click-to-wipe: "<yellow>Click </yellow><gray>to wipe.</gray>"
-      click-to-open: "<yellow>Click </yellow><gray>to open.</gray>"
-      click-to-export: "<yellow>Click </yellow><gray>to start exporting.</gray>"
-      click-to-change: "<yellow>Click </yellow><gray>to change.</gray>"
+        <yellow>Klik </yellow><gray>on gold block
+        </gray><gray>om aan te kopen.</gray>
+      click-to-purchase: "<yellow>Klik </yellow><gray>om aan te kopen.</gray>"
+      click-to-return: "<yellow>Klik </yellow><gray>om terug te keren.</gray>"
+      click-to-quit: "<yellow>Klik </yellow><gray>om af te sluiten.</gray>"
+      click-to-wipe: "<yellow>Klik </yellow><gray>om te wissen.</gray>"
+      click-to-open: "<yellow>Klik </yellow><gray>om te openen.</gray>"
+      click-to-export: "<yellow>Klik </yellow><gray>om te beginnen met exporteren.</gray>"
+      click-to-change: "<yellow>Klik </yellow><gray>om te wijzigen.</gray>"
       click-on-item: |-
-        <yellow>Click </yellow><gray>on item from your
+        <yellow>Klik </yellow><gray>on item from your
         </gray><gray>inventory.</gray>
-      click-to-view: "<yellow>Click </yellow><gray>to view.</gray>"
-      click-to-add: "<yellow>Click </yellow><gray>to add.</gray>"
-      click-to-remove: "<yellow>Click </yellow><gray>to remove.</gray>"
-      select-before: "<yellow>Select </yellow><gray>before continue.</gray>"
-      click-to-create: "<yellow>Click </yellow><gray>to create.</gray>"
-      right-click-to-select: "<yellow>Right Click </yellow><gray>to select.</gray>"
-      right-click-to-deselect: "<yellow>Right Click </yellow><gray>to deselect.</gray>"
-      click-to-toggle: "<yellow>Click </yellow><gray>to toggle.</gray>"
-      left-click-to-edit: "<yellow>Left Click </yellow><gray>to edit.</gray>"
-      right-click-to-lock: "<yellow>Right Click </yellow><gray>to lock.</gray>"
-      right-click-to-unlock: "<yellow>Right Click </yellow><gray>to unlock.</gray>"
-      click-to-perform: "<yellow>Click </yellow><gray>to perform.</gray>"
-      click-to-edit: "<yellow>Click </yellow><gray>to edit.</gray>"
-      right-click-to-clear: "<yellow>Right Click </yellow><gray>to clear.</gray>"
+      click-to-view: "<yellow>Klik </yellow><gray>om weer te geven.</gray>"
+      click-to-add: "<yellow>Klik </yellow><gray>om toe te voegen.</gray>"
+      click-to-remove: "<yellow>Klik </yellow><gray>om te verwijderen.</gray>"
+      select-before: "<yellow>Selecteer </yellow><gray>voordat verder gaat.</gray>"
+      click-to-create: "<yellow>Klik </yellow><gray>om te maken.</gray>"
+      right-click-to-select: "<yellow>Right Klik </yellow><gray>om te selecteren.</gray>"
+      right-click-to-deselect: "<yellow>Right Klik </yellow><gray>om te deselecteren.</gray>"
+      click-to-toggle: "<yellow>Klik </yellow><gray>to toggle.</gray>"
+      left-click-to-edit: "<yellow>Left Klik </yellow><gray>om te bewerken.</gray>"
+      right-click-to-lock: "<yellow>Right Klik </yellow><gray>om te vergrendelen.</gray>"
+      right-click-to-unlock: "<yellow>Right Klik </yellow><gray>om te ontgrendelen.</gray>"
+      click-to-perform: "<yellow>Klik </yellow><gray>om uit te voeren.</gray>"
+      click-to-edit: "<yellow>Klik </yellow><gray>om te bewerken.</gray>"
+      right-click-to-clear: "<yellow>Right Klik </yellow><gray>om te wissen.</gray>"
       # These tooltips are showed in user gui.
-      left-click-to-view: "<yellow>Left Click </yellow><gray>to view.</gray>"
-      left-click-to-purchase: "<yellow>Left Click </yellow><gray>to buy.</gray>"
-      left-click-to-activate: "<yellow>Left Click </yellow><gray>to activate.</gray>"
-      left-click-to-deactivate: "<yellow>Left Click </yellow><gray>to deactivate.</gray>"
-      right-click-to-view: "<yellow>Right Click </yellow><gray>to view.</gray>"
-      right-click-to-purchase: "<yellow>Right Click </yellow><gray>to buy.</gray>"
-      right-click-to-activate: "<yellow>Right Click </yellow><gray>to activate.</gray>"
-      right-click-to-deactivate: "<yellow>Right Click </yellow><gray>to deactivate.</gray>"
-      shift-click-to-view: "<yellow>Shift Click </yellow><gray>to view.</gray>"
-      shift-click-to-purchase: "<yellow>Shift Click </yellow><gray>to buy.</gray>"
-      shift-click-to-activate: "<yellow>Shift Click </yellow><gray>to activate.</gray>"
-      shift-click-to-deactivate: "<yellow>Shift Click </yellow><gray>to deactivate.</gray>"
-      shift-click-to-reset: "<yellow>Shift Click </yellow><gray>to reset.</gray>"
-      shift-left-click-to-set-height-range: "<yellow>Shift+Left Click </yellow><gray>to configure height range.</gray>"
+      left-click-to-view: "<yellow>Left Klik </yellow><gray>om weer te geven.</gray>"
+      left-click-to-purchase: "<yellow>Left Klik </yellow><gray>om te kopen.</gray>"
+      left-click-to-activate: "<yellow>Left Klik </yellow><gray>om in te schakelen.</gray>"
+      left-click-to-deactivate: "<yellow>Left Klik </yellow><gray>om uit te schakelen.</gray>"
+      right-click-to-view: "<yellow>Right Klik </yellow><gray>om weer te geven.</gray>"
+      right-click-to-purchase: "<yellow>Right Klik </yellow><gray>om te kopen.</gray>"
+      right-click-to-activate: "<yellow>Right Klik </yellow><gray>om in te schakelen.</gray>"
+      right-click-to-deactivate: "<yellow>Right Klik </yellow><gray>om uit te schakelen.</gray>"
+      shift-click-to-view: "<yellow>Shift Klik </yellow><gray>om weer te geven.</gray>"
+      shift-click-to-purchase: "<yellow>Shift Klik </yellow><gray>om te kopen.</gray>"
+      shift-click-to-activate: "<yellow>Shift Klik </yellow><gray>om in te schakelen.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift Klik </yellow><gray>om uit te schakelen.</gray>"
+      shift-click-to-reset: "<yellow>Shift Klik </yellow><gray>om opnieuw in te stellen.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Left Klik </yellow><gray>om hoogtebereik in te stellen.</gray>"
     # This section contains translations for some different GUI descriptions.
     descriptions:
       # Generator lore message generator. All elements in generator lore is generated
@@ -873,14 +873,14 @@ stone-generator:
         # Generates [blocks] section
         blocks:
           # First line in blocks section. Empty line will not be displayed.
-          title: "<gray><bold>Blocks:</bold></gray>"
+          title: "<gray><bold>Blokken:</bold></gray>"
           # Each block and its value under title. Cannot be empty.
           # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
           value: "<dark_gray>[material] - [#.##]%</dark_gray>"
         # Generates [treasures] section
         treasures:
           # First line in blocks section. Empty line will not be displayed.
-          title: "<gray><bold>Treasure:</bold></gray>"
+          title: "<gray><bold>Schat:</bold></gray>"
           # Each treasure and its value under title. Cannot be empty.
           # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
           value: "<dark_gray>[material] - [#.####]%</dark_gray>"
@@ -892,207 +892,207 @@ stone-generator:
             [level]
             [missing-permissions]
           # Generates [level] message.
-          level: "<red><bold>Required Level: </bold></red><red>[number]</red>"
+          level: "<red><bold>Vereist Niveau: </bold></red><red>[number]</red>"
           # Generates [missing-permission] message title.
-          permission-title: "<red><bold>Missing Permissions:</bold></red>"
+          permission-title: "<red><bold>Ontbrekende Machtigingen:</bold></red>"
           # Generates [missing-permission] message values.
           permission: "<red> -[permission]</red>"
           # Generates [biomes] message title.
-          biome-title: "<gray><bold>Operates in:</bold></gray>"
+          biome-title: "<gray><bold>Werkt in:</bold></gray>"
           # Generates [biomes] message values.
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
-          any: "<gray><bold>Operates in </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>biomes</bold></gray>"
+          any: "<gray><bold>Werkt in </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>biomes</bold></gray>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
-          locked: "<red>Locked!</red>"
+          locked: "<red>Vergrendeld!</red>"
           # Message that is showed for generators that is not deployed.
-          undeployed: "<red>Not Deployed!</red>"
+          undeployed: "<red>Not Ingezet!</red>"
           # Message that is showed for Active generators.
-          active: "<dark_green>Active</dark_green>"
+          active: "<dark_green>Actief</dark_green>"
           # Message that is showed for generators that required purchasing.
-          purchase-cost: "<yellow>Purchase Cost: $[number]</yellow>"
+          purchase-cost: "<yellow>Aankoopkosten: $[number]</yellow>"
           # Message that is showed for generators that has activation cost.
-          activation-cost: "<yellow>Activation Cost: $[number]</yellow>"
+          activation-cost: "<yellow>Activation Kosten: $[number]</yellow>"
         # Generates [type] section
         type:
-          title: "<gray><bold>Supports:</bold></gray>"
-          cobblestone: "<dark_gray>Cobblestone Generators</dark_gray>"
-          stone: "<dark_gray>Stone Generators</dark_gray>"
-          basalt: "<dark_gray>Basalt Generators</dark_gray>"
-          any: "<gray><bold>Supports </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>generators</bold></gray>"
+          title: "<gray><bold>Ondersteunt:</bold></gray>"
+          cobblestone: "<dark_gray>Cobblestone Generatoren</dark_gray>"
+          stone: "<dark_gray>Steengeneratoren</dark_gray>"
+          basalt: "<dark_gray>Basalt Generatoren</dark_gray>"
+          any: "<gray><bold>Ondersteunt </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>generators</bold></gray>"
         # Generates [height-range] section
-        height-range: "<gray>Works at heights: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
+        height-range: "<gray>Werkt op hoogte: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
       # String that displays required permission that must be set for user to set bundle.
       bundle-permission: |-
         <gray>Permission that must be
-        </gray><gray>assigned to player:
+        </gray><gray>assigned tot player:
         </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
       # String that are before listing all generators assigned to bundle.
-      generators: "<gray>Bundle Generators: </gray>"
+      generators: "<gray>Bundel Generators: </gray>"
       # Each generator name in listing
       generator-list: "<gray>- [generator]</gray>"
       # Indicates that element is selected.
-      selected: "<yellow>Selected</yellow>"
+      selected: "<yellow>Geselecteerd</yellow>"
       # Used to refer to players island.
-      island-owner: "[player]'s island"
+      island-owner: "[player]'s eiland"
       # Used to refer to spawn island.
-      spawn-island: "<yellow><bold>Spawn island</bold></yellow>"
+      spawn-island: "<yellow><bold>Spawn eiland</bold></yellow>"
       # Used to refer to unknown player.
-      unknown: "unknown"
+      unknown: "onbekend"
   # This section contains translations for different informative messages.
   messages:
     # Message that appears after loading generator in local cache.
-    generator-loaded: "<green>Generator </green> '[generator]' <green> is loaded into local cache.</green>"
+    generator-loaded: "<green>Generator </green> '[generator]' <green> is in lokale cache geladen.</green>"
     # Message that appears after loading bundle in local cache.
-    bundle-loaded: "<green>Bundle </green> '[bundle]' <green> is loaded into local cache.</green>"
+    bundle-loaded: "<green>Bundel </green> '[bundle]' <green> is in lokale cache geladen.</green>"
     # Message that appears after deactivating generator.
-    generator-deactivated: "<yellow>Generator </yellow> '[generator]' <yellow>is deactivated.</yellow>"
+    generator-deactivated: "<yellow>Generator </yellow> '[generator]' <yellow>is gedeactiveerd.</yellow>"
     # Message that appears when trying to activate too many generators.
-    active-generators-reached: "<red>Too many generators are activated. Try to deactivate some before activating a new one.</red>"
+    active-generators-reached: "<red>Too many generators are activated. Try tot deactivate some before activating a new one.</red>"
     # Message that appears when trying to unlock default or undeployed generator.
-    generator-cannot-be-unlocked: "<red>Generator </red> '[generator]' <red>is not unlocked.</red>"
+    generator-cannot-be-unlocked: "<red>Generator </red> '[generator]' <red>is niet ontgrendeld.</red>"
     # Message that appears when trying to activate locked generator.
-    generator-not-unlocked: "<red>Generator </red> '[generator]' <red>is not unlocked.</red>"
+    generator-not-unlocked: "<red>Generator </red> '[generator]' <red>is niet ontgrendeld.</red>"
     # Message that appears when purchasing the generator.
-    generator-not-purchased: "<red>Generator </red> '[generator]' <red>is not purchased.</red>"
+    generator-not-purchased: "<red>Generator </red> '[generator]' <red>is niet aangeschaft.</red>"
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
-    no-credits: "<red>Not enough credits to activate generator. Activation requires [number] credits.</red>"
+    no-credits: "<red>Not enough credits tot activate generator. Activation vereist [number] credits.</red>"
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
-    no-credits-bank: "<red>Your bank account has not enough credits to activate generator. Activation requires [number] credits.</red>"
+    no-credits-bank: "<red>Your bank account has not enough credits tot activate generator. Activation vereist [number] credits.</red>"
     # Message that appears when activating the generator.
-    generator-activated: "<yellow>Generator </yellow> '[generator]' <yellow>is activated.</yellow>"
+    generator-activated: "<yellow>Generator </yellow> '[generator]' <yellow>is geactiveerd.</yellow>"
     # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
-    generator-exhausted: "<red>Generator </red> '[generator]' <red>has reached its generation limit and is now on cooldown for [number] more minute(s).</red>"
+    generator-exhausted: "<red>Generator </red> '[generator]' <red>heeft zijn generatielimiet bereikt en is nu in afkoeling voor [number] meer minuut(en).</red>"
     # Message that appears when purchasing the generator.
-    generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>is purchased.</yellow>"
+    generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>is aangeschaft.</yellow>"
     # Message that appears when trying to buy already purchased generator.
-    generator-already-purchased: "<red>Generator </red> '[generator]' <red>is already purchased.</red>"
+    generator-already-purchased: "<red>Generator </red> '[generator]' <red>is al aangeschaft.</red>"
     # Message that appears when trying to buy generator without required island level
-    island-level-not-reached: "<red>Generator </red> '[generator]' <red>requires [number] island level.</red>"
+    island-level-not-reached: "<red>Generator </red> '[generator]' <red>vereist [number] eilandniveau.</red>"
     # Message that appears when trying to buy generator without required permissions
-    missing-permission: "<red>Generator </red> '[generator]' <red>requires permission `[permission]`.</red>"
+    missing-permission: "<red>Generator </red> '[generator]' <red>vereist permission `[permission]`.</red>"
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
-    no-credits-buy: "<red>Not enough credits to purchase generator. This generator cost [number] credits.</red>"
+    no-credits-buy: "<red>Not enough credits tot purchase generator. This generator cost [number] credits.</red>"
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
-    no-credits-buy-bank: "<red>Your bank account has not enough credits. This generator cost [number] credits.</red>"
+    no-credits-buy-bank: "<red>Uw bankrekeninghet heeft niet genoeg credits. Deze generator kost [number] credits.</red>"
     # Message that appears after importing a file.
-    import-count: "<yellow>Imported [generator] new generators and [bundle] new bundles.</yellow>"
+    import-count: "<yellow>Ingevoerd [generator] nieuwe generators en [bundle] nieuwe bundels.</yellow>"
     # Message that appears after clicking on download button in web library.
-    start-downloading: "<yellow>Start downloading library.</yellow>"
+    start-downloading: "<yellow>Begin met downloaden van bibliotheek.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
-    no-generator-data: "<red>Could not find a valid generator data</red>"
+    no-generator-data: "<red>Kan geen geldige generatorgegevens vinden</red>"
     # Error message that is displayed when island data is not found for island in management panel.
-    no-island-data: "<red>Island Data is not found.</red>"
+    no-island-data: "<red>Eilandgegevens niet gevonden.</red>"
     # Error message that is displayed when bundle data is not find.
-    no-bundle-data: "<red>Could not find a valid bundle data</red>"
+    no-bundle-data: "<red>Kan geen geldige bundelgegevens vinden</red>"
     # Error message that is displayed when library does not have any data.
-    no-library-entries: "<red>Could not find any library entry!</red>"
+    no-library-entries: "<red>Kan geen bibliotheekpost vinden!</red>"
     # Error message that is displayed when trying to load file that does not exists.
-    no-file: "<red>`[file]` file not found. Cannot perform importing.</red>"
+    no-file: "<red>`[file]` bestand niet gevonden. Kan niet importeren.</red>"
     # Error message that is displayed when loading file lead to a crash.
-    no-load: "<red>Could not load `[file]` file. Error while reading: [description].</red>"
+    no-load: "<red>Kan niet laden `[file]` bestand. Fout bij lezen: [description].</red>"
     # Error message that is displayed when trying to import generators in non-gamemode-world.
-    not-a-gamemode-world: "<red>World '[world]' is not a Game Mode Addon world.</red>"
+    not-a-gamemode-world: "<red>Wereld '[world]' is niet een Game Mode Addon wereld.</red>"
     # Error message that is displayed when saving file with the same name
-    file-exist: "<red>The file `[file]` already exist. Choose different name.</red>"
+    file-exist: "<red>Het bestand `[file]` bestaat al. Kies een andere naam.</red>"
     # Error message that is displayed when trying to view generator that does not exist.
-    generator-tier-not-found: "<red>Generator with id '[generator]' </red><red>not found in [gamemode].</red>"
+    generator-tier-not-found: "<red>Generator met ID '[generator]' </red><red>not found in [gamemode].</red>"
     # Error message that is displayed when user uses generator command in world without generators.
-    no-generators-in-world: "<red>There are no available generators for you in [world]</red>"
+    no-generators-in-world: "<red>Er zijn geen beschikbare generators voor u in [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
-    could-not-remove-money: "<red>Something went wrong while withdrawing money.</red>"
-    max-height-less-than-min: "<red>Maximum height ([MAX]) cannot be less than minimum height ([MIN])!</red>"
+    could-not-remove-money: "<red>Er is iets misgegaan bij het storten van geld.</red>"
+    max-height-less-than-min: "<red>Maximale hoogte ([MAX]) kan niet minder zijn dan minimale hoogte ([MIN])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:
     # List of strings that are valid for confirming input. (separated with ,)
-    confirm-string: "true, on, yes, confirm, y, valid, correct"
+    confirm-string: "waar, aan, ja, bevestigen, j, geldig, juist"
     # List of strings that are valid for denying input. (separated with ,)
-    deny-string: "false, off, no, deny, n, invalid, incorrect"
+    deny-string: "onwaar, uit, nee, weigeren, n, ongeldig, onjuist"
     # String that allows to cancel conversation. (can be only one)
-    cancel-string: "cancel"
+    cancel-string: "annuleren"
     # List of strings that allows to exit conversation. (separated with ,)
-    exit-string: "cancel, exit, quit"
+    exit-string: "annuleren, exit, quit"
     # Message that is send to user when conversation is cancelled.
-    cancelled: "<red>Conversation cancelled!</red>"
+    cancelled: "<red>Conversation annulerenled!</red>"
     # Prefix for messages that are send from server.
     prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
     # Error message that is showed if user input a value that is not a number.
-    numeric-only: "<red>The given [value] is not a number!</red>"
+    numeric-only: "<red>Het gegeven [value] is geen getal!</red>"
     # Error message that is showed if user input a number that is smaller or larger that allowed.
-    not-valid-value: "<red>The given number [value] is not valid. It must be larger than [min] and smaller than [max]!</red>"
+    not-valid-value: "<red>Het gegeven number [value] is niet geldig. Het moet groter zijn dan [min] en kleiner dan [max]!</red>"
     # Message that displays new description by each line.
-    new-description: "<green>New description:</green>"
+    new-description: "<green>Nieuwe beschrijving:</green>"
     # Below here starts messages and questions created by GUI.
     # Message that asks for search value input.
-    write-search: "<yellow>Please write a search value. (write 'cancel' to exit)</yellow>"
+    write-search: "<yellow>Please write a search value. (write 'annuleren' tot exit)</yellow>"
     # Message that appears after updating search value.
-    search-updated: "<green>Search value updated.</green>"
+    search-updated: "<green>Zoeken value updated.</green>"
     # Message that appears when admin clicks on island data deletion button.
-    confirm-island-data-deletion: "<yellow>Confirm that you want to delete all user data from the database for [gamemode].</yellow>"
+    confirm-island-data-deletion: "<yellow>Confirm that you want tot delete all user data from the database for [gamemode].</yellow>"
     # Message that appears after successful user data removing.
-    user-data-removed: "<green>Success, all user data for [gamemode] was removed!</green>"
+    user-data-removed: "<green>Succes, alle gebruikersgegevens voor [gamemode] was verwijderd!</green>"
     # Message that appears when admin clicks on generator data deletion button.
-    confirm-generator-data-deletion: "<yellow>Confirm that you want to delete all generator data from the database for [gamemode].</yellow>"
+    confirm-generator-data-deletion: "<yellow>Confirm that you want tot delete all generator data from the database for [gamemode].</yellow>"
     # Message that appears after successful generator data removing.
-    generator-data-removed: "<green>Success, all generator data for [gamemode] was removed!</green>"
+    generator-data-removed: "<green>Succes, alle generatorgegevens voor [gamemode] was verwijderd!</green>"
     # Message that appears after admin clicks on database exporting button.
-    exported-file-name: "<yellow>Please enter a file name for the exported database file. (write 'cancel' to exit)</yellow>"
+    exported-file-name: "<yellow>Please enter a file name for the exported database file. (write 'annuleren' tot exit)</yellow>"
     # Message that appears after successful database exporting to file.
-    database-export-completed: "<green>Success, the database export for [world] is completed. File generated in addon directory.</green>"
+    database-export-completed: "<green>Succes, de databaseexport voor [world] is voltooid. Bestand gegenereerd in addon-directory.</green>"
     # Message that appears if input file name is already taken.
-    file-name-exist: "<red>File with name '[id]' exists. Cannot overwrite.</red>"
+    file-name-exist: "<red>Bestand met naam '[id]' bestaat. Kan niet overschrijven.</red>"
     # Message that appears after admin clicks on editing bundle name button.
-    write-name: "<yellow>Please enter a new name in chat.</yellow>"
+    write-name: "<yellow>Voer een nieuwe naam in de chat in.</yellow>"
     # Message that appears after successful name change.
-    name-changed: "<green>Success, the name was updated.</green>"
+    name-changed: "<green>Succes, de naam is bijgewerkt.</green>"
     # Message that appears after clicking
-    write-description: "<yellow>Please enter a new description in chat and 'quit' on a line by itself to finish.</yellow>"
+    write-description: "<yellow>Please enter a new description in chat and 'quit' on a line by itself tot finish.</yellow>"
     # Message that appears after successful description change.
-    description-changed: "<green>Success, the description was updated.</green>"
+    description-changed: "<green>Succes, de beschrijving is bijgewerkt.</green>"
     # Message that appears after successful bundle or generator creation.
-    new-object-created: "<green>Success, new object is created in [world].</green>"
+    new-object-created: "<green>Succes, nieuw object is gemaakt in [world].</green>"
     # Message that appears if object already exist in the database.
-    object-already-exists: "<red>The object with `[id]` is already is defined in gamemode. Choose different one.</red>"
+    object-already-exists: "<red>Het object met `[id]` is al gedefinieerd in gamemode. Kies een ander.</red>"
     # Message that appears after admin tries to delete selected objects.
-    confirm-deletion: "<yellow>Confirm that you want to delete [number] objects: ([value])</yellow>"
+    confirm-deletion: "<yellow>Confirm that you want tot delete [number] objecten: ([value])</yellow>"
     # Message that appears after successful data removing.
-    data-removed: "<green>Success, the data was removed!</green>"
+    data-removed: "<green>Success, the data was verwijderd!</green>"
     # Message that appears when admin clicks on number editing button.
-    input-number: "<yellow>Please enter a number in chat.</yellow>"
+    input-number: "<yellow>Voer een getal in de chat in.</yellow>"
     # Message that appears when admin clicks on permission editing button.
-    write-permissions: "<yellow>Please enter the required permissions, one per line in chat, and 'quit' on a line by itself to finish.</yellow>"
+    write-permissions: "<yellow>Please enter the required permissions, one per line in chat, and 'quit' on a line by itself tot finish.</yellow>"
     # Message that appears after successful permission updating.
-    permissions-changed: "<green>Success, generator permissions were updated.</green>"
+    permissions-changed: "<green>Succes, generatorrechten zijn bijgewerkt.</green>"
     # Message that appears after importing library data into database.
-    confirm-data-replacement: "<yellow>Please confirm that you want to replace your current generators with new one.</yellow>"
+    confirm-data-replacement: "<yellow>Please confirm that you want tot replace your current generators with new one.</yellow>"
     # Message that appears after successful data importing
-    new-generators-imported: "<green>Success, new generators for [gamemode] were imported.</green>"
+    new-generators-imported: "<green>Succes, nieuwe generators voor [gamemode] zijn ingevoerd.</green>"
     # Message that appears after unlocking a new generator.
-    click-text-to-purchase: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to buy it now for [number].</yellow>"
-    click-text-to-activate-vault: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to activate it now for [number].</yellow>"
-    click-text-to-activate: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to activate it now.</yellow>"
-    input-min-height: "<white>Enter the minimum height for this material (between -64 and 320):</white>"
-    input-max-height: "<white>Enter the maximum height for this material (between -64 and 320):</white>"
+    click-text-to-purchase: "<yellow>U hebt ontgrendeld </yellow> [generator]<yellow>! Klik here tot buy it now for [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>U hebt ontgrendeld </yellow> [generator]<yellow>! Klik here tot activate it now for [number].</yellow>"
+    click-text-to-activate: "<yellow>U hebt ontgrendeld </yellow> [generator]<yellow>! Klik here tot activate it now.</yellow>"
+    input-min-height: "<white>Voer de minimale hoogte voor dit materiaal in (tussen -64 en 320):</white>"
+    input-max-height: "<white>Voer de maximale hoogte voor dit materiaal in (tussen -64 en 320):</white>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.
     cobblestone: "Cobblestone"
     # Also supports descriptions.
     stone:
-      name: "Stone"
+      name: "Steen"
       description: ""
   # Showcase for manual biome translation
   biomes:
     # Names should be lowercase.
-    plains: "Plains"
+    plains: "Vlakten"
     # Also supports descriptions.
     flower_forest:
-      name: "Flower Forest"
+      name: "Bloemenbos"
       description: ""
 # Protection flags that are used in current addon.
 protection:
@@ -1101,13 +1101,13 @@ protection:
     MAGIC_COBBLESTONE_GENERATOR:
       name: "Magic Generator"
       description: |-
-        <green>Toggle to enable or disable
+        <green>Toggle tot enable or disable
         </green><green>all Magic Generators
         </green><green>on the whole island</green>
-      hint: "<yellow>Magic Generators are disabled in island settings</yellow>"
+      hint: "<yellow>Magic Generators zijn uitgeschakeld in eilandinstellingen</yellow>"
     # This flag allows to switch which island member group can activate and deactivate generators.
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
-      name: "Magic Generator Permissions"
+      name: "Magic Generator Rechten"
       description: |-
-        <green>Select who can activate
+        <green>Selecteer who can activate
         </green><green>and deactivate generators</green>

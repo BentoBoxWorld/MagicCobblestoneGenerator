@@ -1,0 +1,1112 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "Příkaz správce Generátoru kouzelného dlhého kamene"
+      import:
+        description: "Importuje kouzelné generátory"
+        confirmation: "Tímto se odeberou stávající generátory z [gamemode] a importují se nové generátory ze souboru šablony - prosím potvrďte"
+      why:
+        parameters: "<player>"
+        description: "přepíná ladicí zprávy Generátoru kouzelného dlhého kamene"
+      database:
+        description: "Hlavní příkaz databáze"
+      import-database:
+        parameters: "<file>"
+        description: "importuje soubor databáze kouzelných generátorů"
+        confirmation: "Tímto se odeberou stávající generátory pro [gamemode] a importují se generátory ze souboru databáze - prosím potvrďte"
+      export:
+        parameters: "<file>"
+        description: "Exportovat databázi kouzelných generátorů z herního režimu do souboru"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "otevírá GUI pro výběr generátoru"
+      view:
+        description: "otevírá GUI s detaily generátoru"
+        parameters: "<generator-id>"
+      buy:
+        description: "Koupi požadovaný generátor"
+        parameters: "<generator-id>"
+      activate:
+        description: "Aktivovat/deaktivovat požadovaný generátor"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>Generátory</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>Generátor: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>Panel správce</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>Vybrat biomy</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>Vybrat blok</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>Vybrat balíček</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>Vybrat typ generátoru</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>Balíček: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>Spravovat balíčky</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>Spravovat generátory</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>Ostrov: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>Spravovat data ostrova</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>Knihovna</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>Nastavení</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>Konfigurovat výšku materiálu</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>Rozsah výšky: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>Minimální výška</bold></white>"
+        description: |-
+          <gray>Nastavte minimální výšku
+          </gray><gray>for this material.</gray>
+        value: "<gray>Aktuální hodnota: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>Maximální výška</bold></white>"
+        description: |-
+          <gray>Nastavte maximální výšku
+          </gray><gray>for this material.</gray>
+        value: "<gray>Aktuální hodnota: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>Rozsah výšky</bold></white>"
+        description: |-
+          <gray>Rozsah výšky, ve kterém
+          </gray><gray>tento generátor funguje.</gray>
+        value: "<aqua>Od </aqua><white>[min_height] </white><aqua>do </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>Výchozí generátor</bold></white>"
+        description: |-
+          <gray>Výchozí generátory jsou vždy
+          </gray><gray>aktivní.</gray>
+        enabled: |-
+          <aqua>Toto je </aqua><green>výchozí </green><aqua>generátor.</aqua>
+        disabled: |-
+          <aqua>Toto není </aqua><red>není výchozí </red><aqua>generátor.</aqua>
+      priority:
+        name: "<white><bold>Priorita generátoru</bold></white>"
+        description: |-
+          <gray>Větší číslo priorita
+          </gray><gray>bude preferováno, pokud
+          </gray><gray>může být použito více
+          </gray><gray>na stejném místě.</gray>
+        value: "<aqua>Priorita: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>Typ generátoru</bold></white>"
+        description: |-
+          <gray>Definuje, který typ generátoru
+          </gray><gray>bude aplikován na aktuální
+          </gray><gray>generátor.</gray>
+        value: "<aqua>Typ: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>Minimální úroveň ostrova</bold></white>"
+        description: |-
+          <gray>Minimální úroveň ostrova pro
+          </gray><gray>odemknutí tohoto generátoru.</gray>
+        value: "<aqua>Požadovaná minimální úroveň: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>Požadovaná oprávnění</bold></white>"
+        description: |-
+          <gray>Seznam oprávnění, která
+          </gray><gray>jsou vyžadována pro
+          </gray><gray>tento generátor.</gray>
+        list: "<aqua>Požadovaná oprávnění:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- žádné</aqua>"
+      purchase_cost:
+        name: "<white><bold>Cena nákupu</bold></white>"
+        description: |-
+          <gray>Kredity vyžadované pro
+          </gray><gray>nákup tohoto generátoru.</gray>
+        value: "<aqua>Cena: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>Cena aktivace</bold></white>"
+        description: |-
+          <gray>Kredity vyžadované pro
+          </gray><gray>aktivaci nebo reaktivaci
+          </gray><gray>tento generátor.</gray>
+        value: "<aqua>Cena: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>Limit vyčerpání</bold></white>"
+        description: |-
+          <gray>Maximální počet bloků, které
+          </gray><gray>může vyrobit za období předtím, než
+          </gray><gray>přejde na odměření.</gray>
+        value: "<aqua>Limit: [number] </aqua><gray>za období</gray>"
+        default: "<aqua>Používá globální výchozí: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Žádný limit</aqua>"
+      biomes:
+        name: "<white><bold>Operační biomy</bold></white>"
+        description: |-
+          <gray>Seznam biomů, kde
+          </gray><gray>generátor funguje.</gray>
+        list: "<aqua>Biomy:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- jakýkoliv</aqua>"
+      treasure_amount:
+        name: "<white><bold>Množství pokladu</bold></white>"
+        description: |-
+          <gray>Maximální množství pokladu
+          </gray><gray>která lze upustit najednou.</gray>
+        value: "<aqua>Množství: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>Šance na poklad</bold></white>"
+        description: |-
+          <gray>Šance na upuštění pokladu
+          </gray><gray>při generování.</gray>
+        value: "<aqua>Šance: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>Obecné informace</bold></white>"
+        description: |-
+          <gray>Zobrazuje obecné informace
+          </gray><gray>o tomto generátoru.</gray>
+      blocks:
+        name: "<white><bold>Seznam bloků</bold></white>"
+        description: |-
+          <gray>Zobrazuje seznam bloků a
+          </gray><gray>jejich šance na generování.</gray>
+      treasures:
+        name: "<white><bold>Seznam pokladů</bold></white>"
+        description: |-
+          <gray>Zobrazuje seznam pokladů a
+          </gray><gray>šancí upuštění.
+          </gray><gray>Poklad je upuštěn
+          </gray><gray>když se blok generuje.</gray>
+        drag-and-drop: |-
+          <gray>Podporuje přetahování
+          </gray><gray>předmětů do prázdných prostor.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Šance: [#.##]</aqua>"
+        actual: "<aqua>Hodnota databáze: [number]</aqua>"
+        height-range: "<gray>Rozsah výšky: </gray><aqua>[min_height] </aqua><gray>do </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Používá výchozí rozsah výšky generátoru</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Šance: [#.####]</aqua>"
+        actual: "<aqua>Hodnota databáze: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>Generátory dlhého kamene</bold></white>"
+        description: |-
+          <gray>Zobrazit pouze generátory
+          </gray><gray>generátory</gray>
+      show_stone:
+        name: "<white><bold>Generátory kamene</bold></white>"
+        description: |-
+          <gray>Zobrazit pouze generátory
+          </gray><gray>generátory</gray>
+      show_basalt:
+        name: "<white><bold>Generátory čediče</bold></white>"
+        description: |-
+          <gray>Zobrazit pouze generátory
+          </gray><gray>generátory</gray>
+      toggle_visibility:
+        name: "<white><bold>Odemknuté generátory</bold></white>"
+        description: |-
+          <gray>Zobrazit pouze odemknuté
+          </gray><gray>generátory</gray>
+      show_active:
+        name: "<white><bold>Aktivní generátory</bold></white>"
+        description: |-
+          <gray>Zobrazit pouze aktivní
+          </gray><gray>generátory</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>Zpět</bold></white>"
+        description: |-
+          <gray>Návrat do předchozí nabídky</gray>
+      quit:
+        name: "<white><bold>Ukončit</bold></white>"
+        description: |-
+          <gray>Opustit aktuální nabídku</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>Předchozí stránka</bold></white>"
+        description: |-
+          <gray>Přepnout na [number] stránka</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>Další stránka</bold></white>"
+        description: |-
+          <gray>Přepnout na [number] stránka</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>Spravovat data ostrova</bold></white>"
+        description: |-
+          <gray>Spravovat data ostrova
+          </gray><gray>v aktuálním herním režimu.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>Spravovat generátory</bold></white>"
+        description: |-
+          <gray>Spravovat generátory
+          </gray><gray>v aktuálním herním režimu.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>Spravovat balíčky</bold></white>"
+        description: |-
+          <gray>Spravovat balíčky
+          </gray><gray>v aktuálním herním režimu.</gray>
+      settings:
+        name: "<white><bold>Nastavení</bold></white>"
+        description: |-
+          <gray>Zkontrolujte a změňte
+          </gray><gray>nastavení doplňku.</gray>
+      import_template:
+        name: "<white><bold>Importovat šablonu</bold></white>"
+        description: |-
+          <gray>Importovat soubor šablony
+          </gray><gray>umístěný uvnitř
+          </gray><gray>adresáři doplňku.</gray>
+      web_library:
+        name: "<white><bold>Web knihovna</bold></white>"
+        description: |-
+          <gray>Přístup k webové
+          </gray><gray>knihově, která obsahuje
+          </gray><gray>sdílené generátory.</gray>
+      export_from_database:
+        name: "<white><bold>Exportovat databázi</bold></white>"
+        description: |-
+          <gray>Exportovat databázi
+          </gray><gray>do jednoho souboru umístěného v
+          </gray><gray>adresáři doplňku.</gray>
+      import_to_database:
+        name: "<white><bold>Importovat databázi</bold></white>"
+        description: |-
+          <gray>Importovat databázi ze
+          </gray><gray>souboru umístěného v adresáři
+          </gray><gray>adresář.</gray>
+      wipe_user_data:
+        name: "<white><bold>Vymazat uživatelskou databázi</bold></white>"
+        description: |-
+          <gray>Vymazat uživatelská data pro
+          </gray><gray>každý ostrov v
+          </gray><gray>aktuálním herním režimu.</gray>
+      wipe_generator_data:
+        name: "<white><bold>Vymazat databázi generátorů</bold></white>"
+        description: |-
+          <gray>Vymazat generátor a balíček
+          </gray><gray>data v aktuálním herním režimu.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>Název balíčku</bold></white>"
+        description: |-
+          <gray>Změňte název balíčku.</gray>
+        value: "<aqua>Název: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>ID balíčku</bold></white>"
+        description: |-
+          <gray>Aktuální ID balíčku.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>Ikona balíčku</bold></white>"
+        description: |-
+          <gray>Změňte ikonu balíčku.</gray>
+      bundle_description:
+        name: "<white><bold>Popis balíčku</bold></white>"
+      bundle_info:
+        name: "<white><bold>Obecné informace</bold></white>"
+        description: |-
+          <gray>Zobrazuje obecné informace
+          </gray><gray>o tomto balíčku.</gray>
+      bundle_generators:
+        name: "<white><bold>Generátory</bold></white>"
+        description: |-
+          <gray>Zobrazuje seznam generátorů
+          </gray><gray>přiřazených k tomuto balíčku.</gray>
+      add_generator:
+        name: "<white><bold>Přidat generátor</bold></white>"
+        description: |-
+          <gray>Přiřadit generátor
+          </gray><gray>k tomuto balíčku.</gray>
+        list: "<aqua>Vybrané generátory:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>Odebrat generátor</bold></white>"
+        description: |-
+          <gray>Odebrat generátor
+          </gray><gray>z tohoto balíčku.</gray>
+        list: "<aqua>Vybrané generátory:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>Vytvořit balíček</bold></white>"
+        description: |-
+          <gray>Vytvořit nový balíček
+          </gray><gray>pro tento herní režim.</gray>
+      delete_bundle:
+        name: "<white><bold>Odebrat balíček</bold></white>"
+        description: |-
+          <gray>Zcela odebrat balíček
+          </gray><gray>z tohoto herního režimu.</gray>
+        list: "<aqua>Vybrané balíčky:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>Název generátoru</bold></white>"
+        description: |-
+          <gray>Název pro tento generátor.
+          </gray><gray>Podporuje barevné kódy.</gray>
+        value: "<aqua>Název: </aqua> [generator]"
+      id:
+        name: "<white><bold>ID generátoru</bold></white>"
+        description: |-
+          <gray>Aktuální ID generátoru.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>Ikona generátoru</bold></white>"
+        description: |-
+          <gray>Položka použitá k zobrazení
+          </gray><gray>generátoru ve všech GUI.</gray>
+      locked_icon:
+        name: "<white><bold>Zamčená ikona</bold></white>"
+        description: |-
+          <gray>Položka použitá k zobrazení
+          </gray><gray>generátoru ve všech GUI, pokud
+          </gray><gray>je uzamčen.</gray>
+      description:
+        name: "<white><bold>Popis generátoru</bold></white>"
+        description: |-
+          <gray>Text pro generátor, který bude
+          </gray><gray>napsán pod názvem.</gray>
+        value: "<aqua>Popis:</aqua>"
+      deployed:
+        name: "<white><bold>Nasazeno</bold></white>"
+        description: |-
+          <gray>Nasazené generátory jsou viditelné
+          </gray><gray>a přístupné hráčům.
+          </gray><gray>Nenasazené generátory
+          </gray><gray>nebudou generovat bloky.</gray>
+        enabled: |-
+          <aqua>Tento generátor je </aqua><green>nasazen.</green>
+        disabled: |-
+          <aqua>Tento generátor je </aqua><red>není nasazen.</red>
+      add_material:
+        name: "<white><bold>Přidat materiál</bold></white>"
+        description: |-
+          <gray>Přidejte nový materiál do
+          </gray><gray>aktuálního seznamu materiálů.</gray>
+      remove_material:
+        name: "<white><bold>Odebrat materiály</bold></white>"
+        description: |-
+          <gray>Odebrat vybrané
+          </gray><gray>materiály ze seznamu.</gray>
+        selected-materials: "<gray>Vybrané materiály:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>Vytvořit generátor</bold></white>"
+        description: |-
+          <gray>Vytvořit nový
+          </gray><gray>generátor pro
+          </gray><gray>herní režimu.</gray>
+      delete_generator:
+        name: "<white><bold>Odebrat generátor</bold></white>"
+        description: |-
+          <gray>Zcela odebrat generátor
+          </gray><gray>z herního režimu.</gray>
+        list: "<aqua>Vybrané generátory:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>Island ID: </aqua><gray>[id]</gray>
+        owner: "<aqua>Majitel: [player]</aqua>"
+        list: "<aqua>Členové:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>Pracovní dosah ostrova</bold></white>"
+        description: |-
+          <gray>Pracovní dosah pro generátory
+          </gray><gray>na aktuálním ostrově.
+          </gray><gray>0 a níže znamená neomezeno
+          </gray><gray>dosah.</gray>
+        value: "<aqua>Dosah: [number]</aqua>"
+        overwritten: |-
+          <red>Majitel má oprávnění, které
+          </red><red>přepisuje pracovní dosah.</red>
+      owner_working_range:
+        name: "<white><bold>Pracovní dosah majitele</bold></white>"
+        description: |-
+          <gray>Pracovní dosah pro generátory
+          </gray><gray>pro aktuálního majitele.
+          </gray><gray>'0' znamená, že dosah majitele
+          </gray><gray>ignorován.
+          </gray><gray>'-1' znamená, že majitel má
+          </gray><gray>neomezený pracovní dosah.
+          "</gray><gray> Oprávnění pro přiřazení uživateli:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Dosah: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>Max. generátory ostrova</bold></white>"
+        description: |-
+          <gray>Maximální aktivní
+          </gray><gray>úrovně generátorů povolené
+          </gray><gray>ve stejnou dobu
+          </gray><gray>pro aktuální ostrov.
+          </gray><gray>0 a níže znamená
+          </gray><gray>neomezeno.</gray>
+        value: "<aqua>Max. generátory: [number]</aqua>"
+        overwritten: |-
+          <red>Majitel má oprávnění, které
+          </red><red>přepisuje počet generátorů.</red>
+      owner_max_generators:
+        name: "<white><bold>Max. generátory majitele</bold></white>"
+        description: |-
+          <gray>Maximální aktivní souběžné
+          </gray><gray>úrovně generátorů, které
+          </gray><gray>může majitel ostrova mít.
+          </gray><gray>'0' znamená, že množství majitele
+          </gray><gray>je ignorován.
+          </gray><gray>'-1' znamená, že majitel má
+          </gray><gray>neomezený počet generátorů.
+          "</gray><gray> Oprávnění pro přiřazení uživateli:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Max. generátory: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>Balíček ostrova</bold></white>"
+        description: |-
+          <gray>Balíček přiřazený k
+          </gray><gray>aktuálnímu ostrovu.
+          </gray><gray>Z tohoto balíčku
+          </gray><gray>lze používat pouze generátory
+          </gray><gray>ostrov.</gray>
+        value: "<aqua>Balíček: [bundle]</aqua>"
+        overwritten: |-
+          <red>Majitel má oprávnění, které
+          </red><red>přepisuje balíček.</red>
+      owner_bundle:
+        name: "<white><bold>Balíček majitele</bold></white>"
+        description: |-
+          <gray>Balíček přiřazený k
+          </gray><gray>aktuálnímu majiteli ostrova.
+          </gray><gray>Z tohoto balíčku
+          </gray><gray>lze používat pouze generátory
+          </gray><gray>ostrov.
+          "</gray><gray> Oprávnění pro přiřazení uživateli:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>balíček.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Balíček: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>Obecné informace</bold></white>"
+        description: |-
+          <gray>Zobrazuje obecné informace
+          </gray><gray>o tomto ostrově.</gray>
+      island_generators:
+        name: "<white><bold>Generátory ostrova</bold></white>"
+        description: |-
+          <gray>Zobrazuje seznam všech generátorů
+          </gray><gray>které jsou k dispozici pro
+          </gray><gray>aktuálnímu ostrovu.</gray>
+      reset_to_default:
+        name: "<white><bold>Obnovit výchozí nastavení</bold></white>"
+        description: |-
+          <gray>Resetuje všechny hodnoty
+          </gray><gray>na výchozí hodnoty z
+          </gray><gray>nastavení.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>Online hráči</bold></white>"
+        description: |-
+          <gray>Seznam online ostrovy
+          </gray><gray>ostrovy.</gray>
+      all_islands:
+        name: "<white><bold>Všechny ostrovy</bold></white>"
+        description: |-
+          <gray>Seznam všech ostrovů.</gray>
+      search:
+        name: "<white><bold>Hledání</bold></white>"
+        description: |-
+          <gray>Vyhledejte konkrétní
+          </gray><gray>ostrov.</gray>
+        search: "<aqua>Hodnota: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>Offline generování</bold></white>"
+        description: |-
+          <gray>Zabrání generování bloků,
+          </gray><gray>if jsou všichni</gray><gray>členové ostrova offline.</gray>
+        enabled: |-
+          <aqua>Offline generování je </aqua><green>povoleno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Offline generování je </aqua><red>zakázáno </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>Použít fyziku</bold></white>"
+        description: |-
+          <gray>Použití fyziky při
+          </gray><gray>generování bloků umožňuje
+          </gray><gray>použití strojů ze sedimentu,
+          </gray><gray>ale mírně snižuje
+          </gray><gray>výkon serveru.</gray>
+        enabled: |-
+          <aqua>Fyzika je </aqua><green>povoleno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Fyzika je </aqua><red>zakázáno </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Použít banku</bold></white>"
+        description: |-
+          <gray>Použití bankovního účtu ostrova
+          </gray><gray>pro všechny nákupy a
+          </gray><gray>aktivace.
+          </gray><gray>Vyžaduje Bank Addon.</gray>
+        enabled: |-
+          <aqua>Používání banky je </aqua><green>povoleno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Používání banky je </aqua><red>zakázáno </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>Výchozí pracovní dosah</bold></white>"
+        description: |-
+          <gray>Vzdálenost od hráčů, dokud
+          </gray><gray>se generování bloku nezastaví.
+          </gray><gray>0 a níže znamená neomezeno.
+          </gray><gray>Nastavení vyžaduje
+          </gray><gray>restartování serveru, aby se aktivovalo.</gray>
+        value: "<aqua>Dosah: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>Výchozí aktivní generátory</bold></white>"
+        description: |-
+          <gray>Výchozí maximální počet
+          </gray><gray>aktivních generátorů ve
+          </gray><gray>stejnou dobu.
+          </gray><gray>0 a níže znamená neomezeno.</gray>
+        value: "<aqua>Počet: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>Zobrazit filtry</bold></white>"
+        description: |-
+          <gray>Filtry jsou horním řádkem
+          </gray><gray>v GUI hráče, která umožňuje
+          </gray><gray>zobraziť pouze generátory
+          </gray><gray>podle typu nebo stavu.
+          </gray><gray>Toto nastavení je
+          </gray><gray>a skryje je.</gray>
+        enabled: |-
+          <aqua>Filtry jsou </aqua><green>povoleno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Filtry jsou </aqua><red>zakázáno </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>Hraniční blok</bold></white>"
+        description: |-
+          <gray>Hraniční blok je materiál,
+          </gray><gray>která obklopuje GUI uživatele.
+          </gray><gray>Nastavením na vzduch jej
+          </gray><gray>to.</gray>
+      border_block_name:
+        name: "<white><bold>Název hraničního bloku</bold></white>"
+        description: |-
+          <gray>Zobrazovaný název pro
+          </gray><gray>blok.
+          </gray><gray>Pokud je nastaven na prázdno,
+          </gray><gray>použije název bloku.
+          </gray><gray>Chcete-li jej nastavit jako 1 prázdné místo,
+          "</gray><gray> napište 'empty'."</gray>
+        value: "<aqua>Název: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>Upozornit při odemknutí</bold></white>"
+        description: |-
+          <gray>Zpráva bude poslána
+          </gray><gray>uživateli, když odemkne
+          </gray><gray>nový generátor.</gray>
+        enabled: |-
+          <aqua>Upozornění při odemknutí je </aqua><green>povoleno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Upozornění při odemknutí je </aqua><red>zakázáno </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>Zakázat při aktivaci</bold></white>"
+        description: |-
+          <gray>Zakázat nejstarší aktivní generátor
+          </gray><gray>když uživatel aktivuje
+          </gray><gray>generátor.
+          </gray><gray>Useful pro situace, kdy
+          </gray><gray>je povolen pouze jeden generátor.</gray>
+        enabled: |-
+          <aqua>Zakázání při aktivaci je </aqua><green>povoleno </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Zakázání při aktivaci je </aqua><red>zakázáno </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>Autor: [author]
+          </gray><gray>Vytvořeno pro [gamemode]
+          </gray><gray>Jazyk: [lang]
+          </gray><gray>Verze: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>Přijmout bloky</bold></white>"
+        description: |-
+          <gray>Přijímá vybrané bloky
+          </gray><gray>a vrací se.</gray>
+        selected-blocks: "<gray>Vybrané bloky:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>ID bloku: [id]</gray>"
+      search_block:
+        name: "<white><bold>Hledání</bold></white>"
+        description: |-
+          <gray>Vyhledejte konkrétní
+          </gray><gray>blok.</gray>
+        search: "<aqua>Hodnota: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>Přijmout biomy</bold></white>"
+        description: |-
+          <gray>Přijímá vybrané biomy
+          </gray><gray>a vrací se.</gray>
+        selected-biomes: "<gray>Vybrané biomy:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>Minimální výška</bold></white>"
+        description: |-
+          <gray>Nastavte minimální výšku
+          </gray><gray>pro tento materiál.
+          </gray><gray>Aktuální hodnota: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>Maximální výška</bold></white>"
+        description: |-
+          <gray>Nastavte maximální výšku
+          </gray><gray>pro tento materiál.
+          </gray><gray>Aktuální hodnota: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>Vymazat rozsah výšky</bold></white>"
+        description: |-
+          <gray>Odebrat konkrétní rozsah výšky
+          </gray><gray>pro tento materiál.
+          </gray><gray>Místo toho bude používat
+          </gray><gray>výchozí rozsah výšky místo toho.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>Mírný</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze mírné biomy</gray>
+        warm:
+          name: "<white><bold>Teplý</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze teplé biomy</gray>
+        cold:
+          name: "<white><bold>Studený</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze studené biomy</gray>
+        snowy:
+          name: "<white><bold>Sněhový</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze sněhové biomy</gray>
+        ocean:
+          name: "<white><bold>Oceán</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze oceánské biomy</gray>
+        nether:
+          name: "<white><bold>Nether</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze biomy Netheru</gray>
+        the_end:
+          name: "<white><bold>The End</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze biomy The End</gray>
+        neutral:
+          name: "<white><bold>Neutrální</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze neutrální biomy</gray>
+        unused:
+          name: "<white><bold>Nepoužívané</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze nepoužívané biomy</gray>
+        cave:
+          name: "<white><bold>Jeskyně</bold></white>"
+          description: |-
+            <gray>Zobrazit pouze biomy jeskyní</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>Dlhý kámen</bold></white>"
+          description: |-
+            <gray>Funguje pouze s generátory
+            </gray><gray>generátory.
+
+            </gray><gold><italic>Nápověda:
+            </italic></gold><italic><gold><italic>Tvoří se, když proud lávy
+            </italic></gold></italic><italic><italic><gold><italic>přichází do styku s
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>voda.</italic></gold></italic></italic></italic>
+        stone:
+          name: "<white><bold>Kámen</bold></white>"
+          description: |-
+            <gray>Funguje pouze s generátory
+            </gray><gray>generátory.
+
+            </gray><gold><italic>Nápověda:
+            </italic></gold><italic><gold><italic>Tvoří se, když láva teče
+            </italic></gold></italic><italic><italic><gold><italic>na vrchu bloků vody.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>Čedič</bold></white>"
+          description: |-
+            <gray>Funguje pouze s generátory
+            </gray><gray>generátory.
+
+            </gray><gold><italic>Nápověda:
+            </italic></gold><italic><gold><italic>Tvoří se, když láva teče
+            </italic></gold></italic><italic><italic><gold><italic>na vrchu duševní půdy a
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>je vedle modrého ledu.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>Dlhý kámen nebo Kámen</bold></white>"
+          description: |-
+            <gray>Funguje s generátory dlhého
+            </gray><gray>generátory kamene.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>Čedič nebo Dlhý kámen</bold></white>"
+          description: |-
+            <gray>Funguje s generátory čediče a
+            </gray><gray>dlhého kamene.</gray>
+        basalt_or_stone:
+          name: "<white><bold>Čedič nebo Kámen</bold></white>"
+          description: |-
+            <gray>Funguje s generátory čediče a
+            </gray><gray>generátory kamene.</gray>
+        any:
+          name: "<white><bold>Jakýkoliv</bold></white>"
+          description: |-
+            <gray>Funguje s jakýmkoliv generátorem.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>Klikněte </yellow><gray>pro zobrazení předchozí stránky.</gray>"
+      click-to-next: "<yellow>Klikněte </yellow><gray>pro zobrazení další stránky.</gray>"
+      click-to-cancel: "<yellow>Klikněte </yellow><gray>pro zrušení.</gray>"
+      click-to-choose: "<yellow>Klikněte </yellow><gray>pro výběr.</gray>"
+      click-to-select: "<yellow>Klikněte </yellow><gray>pro výběr.</gray>"
+      click-to-deselect: "<yellow>Klikněte </yellow><gray>pro zrušení výběru.</gray>"
+      click-to-accept: "<yellow>Klikněte </yellow><gray>pro přijetí a návrat.</gray>"
+      click-to-filter-enable: "<yellow>Klikněte </yellow><gray>pro povolení filtru.</gray>"
+      click-to-filter-disable: "<yellow>Klikněte </yellow><gray>pro zakázání filtru.</gray>"
+      click-to-activate: "<yellow>Klikněte </yellow><gray>pro aktivaci.</gray>"
+      click-to-deactivate: "<yellow>Klikněte </yellow><gray>pro deaktivaci.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>Klikněte </yellow><gray>na zlatý blok
+        </gray><gray>pro nákup.</gray>
+      click-to-purchase: "<yellow>Klikněte </yellow><gray>pro nákup.</gray>"
+      click-to-return: "<yellow>Klikněte </yellow><gray>pro návrat.</gray>"
+      click-to-quit: "<yellow>Klikněte </yellow><gray>pro ukončení.</gray>"
+      click-to-wipe: "<yellow>Klikněte </yellow><gray>pro smazání.</gray>"
+      click-to-open: "<yellow>Klikněte </yellow><gray>pro otevření.</gray>"
+      click-to-export: "<yellow>Klikněte </yellow><gray>pro spuštění exportu.</gray>"
+      click-to-change: "<yellow>Klikněte </yellow><gray>pro změnu.</gray>"
+      click-on-item: |-
+        <yellow>Klikněte </yellow><gray>na položku z vaší
+        </gray><gray>inventář.</gray>
+      click-to-view: "<yellow>Klikněte </yellow><gray>pro zobrazení.</gray>"
+      click-to-add: "<yellow>Klikněte </yellow><gray>pro přidání.</gray>"
+      click-to-remove: "<yellow>Klikněte </yellow><gray>pro odebrání.</gray>"
+      select-before: "<yellow>Vyberte </yellow><gray>před pokračováním.</gray>"
+      click-to-create: "<yellow>Klikněte </yellow><gray>pro vytvoření.</gray>"
+      right-click-to-select: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro výběr.</gray>"
+      right-click-to-deselect: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro zrušení výběru.</gray>"
+      click-to-toggle: "<yellow>Klikněte </yellow><gray>pro přepnutí.</gray>"
+      left-click-to-edit: "<yellow>Klikněte levým tlačítkem </yellow><gray>pro úpravu.</gray>"
+      right-click-to-lock: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro uzamčení.</gray>"
+      right-click-to-unlock: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro odemčení.</gray>"
+      click-to-perform: "<yellow>Klikněte </yellow><gray>pro provedení.</gray>"
+      click-to-edit: "<yellow>Klikněte </yellow><gray>pro úpravu.</gray>"
+      right-click-to-clear: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro vymazání.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>Klikněte levým tlačítkem </yellow><gray>pro zobrazení.</gray>"
+      left-click-to-purchase: "<yellow>Klikněte levým tlačítkem </yellow><gray>pro nákup.</gray>"
+      left-click-to-activate: "<yellow>Klikněte levým tlačítkem </yellow><gray>pro aktivaci.</gray>"
+      left-click-to-deactivate: "<yellow>Klikněte levým tlačítkem </yellow><gray>pro deaktivaci.</gray>"
+      right-click-to-view: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro zobrazení.</gray>"
+      right-click-to-purchase: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro nákup.</gray>"
+      right-click-to-activate: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro aktivaci.</gray>"
+      right-click-to-deactivate: "<yellow>Klikněte pravým tlačítkem </yellow><gray>pro deaktivaci.</gray>"
+      shift-click-to-view: "<yellow>Shift klik </yellow><gray>pro zobrazení.</gray>"
+      shift-click-to-purchase: "<yellow>Shift klik </yellow><gray>pro nákup.</gray>"
+      shift-click-to-activate: "<yellow>Shift klik </yellow><gray>pro aktivaci.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift klik </yellow><gray>pro deaktivaci.</gray>"
+      shift-click-to-reset: "<yellow>Shift klik </yellow><gray>pro reset.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Levý klik </yellow><gray>pro konfiguraci rozsahu výšky.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Bloky:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Poklad:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>Požadovaná úroveň: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>Chybějící oprávnění:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>Funguje v:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>Funguje v </bold></gray><bold><yellow><italic>všechny </italic></yellow></bold><gray><bold>biomy</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>Uzamčeno!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>Není nasazeno!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>Aktivní</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>Cena nákupu: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>Cena aktivace: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>Podporuje:</bold></gray>"
+          cobblestone: "<dark_gray>Generátory dlhého kamene</dark_gray>"
+          stone: "<dark_gray>Generátory kamene</dark_gray>"
+          basalt: "<dark_gray>Generátory čediče</dark_gray>"
+          any: "<gray><bold>Podporuje </bold></gray><bold><yellow><italic>všechny </italic></yellow></bold><gray><bold>generátory</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>Funguje ve výškách: </gray><aqua>[min_height] </aqua><gray>do </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>Oprávnění, které musí být
+        </gray><gray>přiřazeno hráči:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>Generátory balíčku: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>Vybráno</yellow>"
+      # Used to refer to players island.
+      island-owner: "[player]ostrov"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>Spawn ostrov</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "neznámý"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>Generátor </green> '[generator]' <green> je načten do místní mezipaměti.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>Balíček </green> '[bundle]' <green> je načten do místní mezipaměti.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>Generátor </yellow> '[generator]' <yellow>je deaktivován.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>Příliš mnoho generátorů je aktivováno. Pokuste se deaktivovat nějaké před aktivací nového.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>Generátor </red> '[generator]' <red>není odemknut.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>Generátor </red> '[generator]' <red>není odemknut.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>Generátor </red> '[generator]' <red>není zakoupen.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>Nedostatek kreditů pro aktivaci generátoru. Aktivace vyžaduje [number] kreditů.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>Váš bankovní účet nemá dostatek kreditů pro aktivaci generátoru. Aktivace vyžaduje [number] kreditů.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>Generátor </yellow> '[generator]' <yellow>je aktivován.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>Generátor </red> '[generator]' <red>dosáhl svého limitu generování a je nyní na odměření po dobu[number] minut.</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>Generátor </yellow> '[generator]' <yellow>je zakoupen.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>Generátor </red> '[generator]' <red>je již zakoupen.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>Generátor </red> '[generator]' <red>vyžaduje [number] úroveň ostrova.</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>Generátor </red> '[generator]' <red>vyžaduje oprávnění `[permission]`.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>Nedostatek kreditů pro nákup generátoru. Tento generátor stojí [number] kreditů.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>Váš bankovní účet nemá dostatek kreditů. Tento generátor stojí [number] kreditů.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>Importováno [generator] nových generátorů a [bundle] nových balíčků.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>Začněte stahovat knihovnu.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>Nelze najít platná data generátoru</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>Data ostrova nebyla nalezena.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>Nelze najít platná data balíčku</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>Nelze najít žádnou položku knihovny!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>`[file]` soubor nebyl nalezen. Nelze provést import.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>Nelze načíst `[file]` soubor. Chyba při čtení: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>Svět '[world]' není svět doplňku Game Mode.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>Soubor `[file]` již existuje. Zvolte jiný název.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>Generátor s id '[generator]' </red><red>nebyl nalezen v [gamemode].</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>V nejsou k dispozici žádné generátory pro vás[world]</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>Při stahování peněz se něco pokazilo.</red>"
+    max-height-less-than-min: "<red>Maximální výška ([MAX]) nemůže být menší než minimální výška ([MIN])!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "true, on, yes, confirm, y, valid, correct"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "false, off, no, deny, n, invalid, incorrect"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "cancel"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "cancel, exit, quit"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>Konverzace zrušena!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>Daná [value] není číslo!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>Dané číslo [value] není platné. Musí být větší než [min] a menší než [max]!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>Nový popis:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>Prosím napište vyhledávací hodnotu. (napište 'cancel' pro výstup)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>Hodnota vyhledávání aktualizována.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>Potvrďte, že chcete odstranit všechna uživatelská data z databáze pro [gamemode].</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>Úspěch, všechna uživatelská data pro [gamemode] byla odstraněna!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>Potvrďte, že chcete odstranit všechna data generátoru z databáze pro [gamemode].</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>Úspěch, všechna data generátoru pro [gamemode] byla odstraněna!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>Prosím zadejte název souboru pro exportovaný soubor databáze. (napište 'cancel' pro výstup)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>Úspěch, export databáze pro [world] je dokončen. Soubor vygenerován v adresáři doplňku.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>Soubor s názvem '[id]' existuje. Nelze přepsat.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>Prosím zadejte nový název do chatu.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>Úspěch, jméno bylo aktualizováno.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>Prosím zadejte nový popis do chatu a 'quit' na řádek sám o sobě na dokončení.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>Úspěch, popis byl aktualizován.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>Úspěch, nový objekt je vytvořen v [world].</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>Objekt s `[id]` je již definován v herním režimu. Zvolte jiný.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>Potvrďte, že chcete odstranit [number] objektů: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>Úspěch, data byla odstraněna!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>Prosím zadejte číslo do chatu.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>Prosím zadejte požadovaná oprávnění, jedno na řádek do chatu, a 'quit' na řádek sám o sobě na dokončení.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>Úspěch, oprávnění generátoru byla aktualizována.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>Prosím potvrďte, že chcete nahradit aktuální generátory novými.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>Úspěch, nové generátory pro [gamemode] byly importovány.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>Odemkli jste </yellow> [generator]<yellow>! Klikněte zde a kupte si to nyní za [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>Odemkli jste </yellow> [generator]<yellow>! Klikněte zde a aktivujte to nyní za [number].</yellow>"
+    click-text-to-activate: "<yellow>Odemkli jste </yellow> [generator]<yellow>! Klikněte zde a aktivujte to nyní.</yellow>"
+    input-min-height: "<white>Zadejte minimální výšku pro tento materiál (mezi -64 a 320):</white>"
+    input-max-height: "<white>Zadejte maximální výšku pro tento materiál (mezi -64 a 320):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "Dlhý kámen"
+    # Also supports descriptions.
+    stone:
+      name: "Kámen"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "Plainy"
+    # Also supports descriptions.
+    flower_forest:
+      name: "Les s květinami"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Kouzelný generátor"
+      description: |-
+        <green>Přepněte pro povolení nebo zakázání
+        </green><green>všech kouzelných generátorů
+        </green><green>na celém ostrově</green>
+      hint: "<yellow>Kouzelné generátory jsou v nastavení ostrova zakázány</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Oprávnění kouzelného generátoru"
+      description: |-
+        <green>Vyberte, kdo může aktivovat
+        </green><green>a deaktivovat generátory</green>

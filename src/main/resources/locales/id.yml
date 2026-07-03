@@ -1,0 +1,1113 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "Perintah Admin Magic Cobblestone Generator"
+      import:
+        description: "Mengimpor magic generators"
+        confirmation: "Ini akan menghapus generator yang ada dari [gamemode] dan mengimpor generator baru dari file template - harap konfirmasi"
+      why:
+        parameters: "<player>"
+        description: "mengaktifkan/menonaktifkan pesan debug Magic Cobblestone Generator"
+      database:
+        description: "Perintah database utama"
+      import-database:
+        parameters: "<file>"
+        description: "mengimpor file database magic generators"
+        confirmation: "Ini akan menghapus generator yang ada untuk [gamemode] dan mengimpor generator dari file database - harap konfirmasi"
+      export:
+        parameters: "<file>"
+        description: "Ekspor magic generators database dari Game Mode ke file"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "membuka GUI pemilihan generator"
+      view:
+        description: "membuka GUI detail generator"
+        parameters: "<generator-id>"
+      buy:
+        description: "Membeli generator yang diminta"
+        parameters: "<generator-id>"
+      activate:
+        description: "Mengaktifkan/menonaktifkan generator yang diminta"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>Generator</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>Panel Admin</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>Pilih Biome</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>Pilih Blok</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>Pilih Paket</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>Pilih Tipe Generator</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>Paket: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>Kelola Paket</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>Kelola Generator</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>Pulau: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>Kelola Data Pulau</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>Pustaka</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>Pengaturan</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>Konfigurasi Tinggi Material</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>Rentang Tinggi: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>Tinggi Minimum</bold></white>"
+        description: |-
+          <gray>Atur tinggi minimum
+          </gray><gray>untuk material ini.</gray>
+        value: "<gray>Nilai saat ini: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>Tinggi Maksimum</bold></white>"
+        description: |-
+          <gray>Atur tinggi maksimum
+          </gray><gray>untuk material ini.</gray>
+        value: "<gray>Nilai saat ini: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>Rentang Tinggi</bold></white>"
+        description: |-
+          <gray>Rentang tinggi di mana
+          </gray><gray>generator ini beroperasi.</gray>
+        value: "<aqua>Dari </aqua><white>[min_height] </white><aqua>hingga </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>Generator Default</bold></white>"
+        description: |-
+          <gray>Generator default selalu
+          </gray><gray>aktif.</gray>
+        enabled: |-
+          <aqua>Ini adalah generator </aqua><green>default</green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Ini </aqua><red>bukan generator default</red><aqua>.</aqua>
+      priority:
+        name: "<white><bold>Prioritas Generator</bold></white>"
+        description: |-
+          <gray>Angka prioritas lebih besar
+          </gray><gray>akan lebih disukai jika
+          </gray><gray>beberapa dapat diterapkan
+          </gray><gray>ke lokasi yang sama.</gray>
+        value: "<aqua>Prioritas: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>Tipe Generator</bold></white>"
+        description: |-
+          <gray>Menentukan tipe generator
+          </gray><gray>yang akan diterapkan ke
+          </gray><gray>generator saat ini.</gray>
+        value: "<aqua>Tipe: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>Level Pulau Minimum</bold></white>"
+        description: |-
+          <gray>Level pulau minimum untuk
+          </gray><gray>membuka generator ini.</gray>
+        value: "<aqua>Level Minimum Diperlukan: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>Izin yang Diperlukan</bold></white>"
+        description: |-
+          <gray>Daftar izin yang
+          </gray><gray>diperlukan untuk membuka
+          </gray><gray>generator ini.</gray>
+        list: "<aqua>Izin yang Diperlukan:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- tidak ada</aqua>"
+      purchase_cost:
+        name: "<white><bold>Biaya Pembelian</bold></white>"
+        description: |-
+          <gray>Kredit yang diperlukan untuk
+          </gray><gray>membeli generator ini.</gray>
+        value: "<aqua>Biaya: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>Biaya Aktivasi</bold></white>"
+        description: |-
+          <gray>Kredit yang diperlukan untuk
+          </gray><gray>mengaktifkan atau mengaktifkan kembali
+          </gray><gray>generator ini.</gray>
+        value: "<aqua>Biaya: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>Batas Kelelahan</bold></white>"
+        description: |-
+          <gray>Blok maksimal yang dapat dihasilkan
+          </gray><gray>generator ini per periode sebelum
+          </gray><gray>masuk cooldown.</gray>
+        value: "<aqua>Batas: [number] </aqua><gray>per periode</gray>"
+        default: "<aqua>Menggunakan default global: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Tanpa batas</aqua>"
+      biomes:
+        name: "<white><bold>Biome Operasional</bold></white>"
+        description: |-
+          <gray>Daftar biome tempat generator
+          </gray><gray>ini dapat beroperasi.</gray>
+        list: "<aqua>Biome:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- semua</aqua>"
+      treasure_amount:
+        name: "<white><bold>Jumlah Harta</bold></white>"
+        description: |-
+          <gray>Jumlah harta maksimal
+          </gray><gray>yang dapat dijatuhkan sekaligus.</gray>
+        value: "<aqua>Jumlah: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>Peluang Harta</bold></white>"
+        description: |-
+          <gray>Peluang harta dijatuhkan
+          </gray><gray>saat pembuatan.</gray>
+        value: "<aqua>Peluang: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>Informasi Umum</bold></white>"
+        description: |-
+          <gray>Menampilkan informasi umum
+          </gray><gray>tentang generator ini.</gray>
+      blocks:
+        name: "<white><bold>Daftar Blok</bold></white>"
+        description: |-
+          <gray>Menampilkan daftar blok dan
+          </gray><gray>peluang mereka untuk dihasilkan.</gray>
+      treasures:
+        name: "<white><bold>Daftar Harta</bold></white>"
+        description: |-
+          <gray>Menampilkan daftar harta dan
+          </gray><gray>peluang jatuh.
+          </gray><gray>Harta dijatuhkan
+          </gray><gray>saat blok dihasilkan.</gray>
+        drag-and-drop: |-
+          <gray>Mendukung drag and drop
+          </gray><gray>item ke ruang kosong.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Peluang: [#.##]</aqua>"
+        actual: "<aqua>Nilai database: [number]</aqua>"
+        height-range: "<gray>Rentang tinggi: </gray><aqua>[min_height] </aqua><gray>hingga </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Menggunakan rentang tinggi default generator</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Peluang: [#.####]</aqua>"
+        actual: "<aqua>Nilai database: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>Generator Batu Bulat</bold></white>"
+        description: |-
+          <gray>Hanya tampilkan
+          </gray><gray>generator batu bulat</gray>
+      show_stone:
+        name: "<white><bold>Generator Batu</bold></white>"
+        description: |-
+          <gray>Hanya tampilkan
+          </gray><gray>generator batu</gray>
+      show_basalt:
+        name: "<white><bold>Generator Basalt</bold></white>"
+        description: |-
+          <gray>Hanya tampilkan
+          </gray><gray>generator basalt</gray>
+      toggle_visibility:
+        name: "<white><bold>Generator Terbuka</bold></white>"
+        description: |-
+          <gray>Tampilkan hanya
+          </gray><gray>generator yang terbuka</gray>
+      show_active:
+        name: "<white><bold>Generator Aktif</bold></white>"
+        description: |-
+          <gray>Tampilkan hanya
+          </gray><gray>generator aktif</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>Kembali</bold></white>"
+        description: |-
+          <gray>Kembali ke menu sebelumnya</gray>
+      quit:
+        name: "<white><bold>Keluar</bold></white>"
+        description: |-
+          <gray>Keluar dari menu saat ini</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>Halaman Sebelumnya</bold></white>"
+        description: |-
+          <gray>Beralih ke halaman [number]</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>Halaman Berikutnya</bold></white>"
+        description: |-
+          <gray>Beralih ke halaman [number]</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>Kelola Data Pulau</bold></white>"
+        description: |-
+          <gray>Kelola data pulau
+          </gray><gray>di game mode saat ini.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>Kelola Generator</bold></white>"
+        description: |-
+          <gray>Kelola generator
+          </gray><gray>di game mode saat ini.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>Kelola Paket</bold></white>"
+        description: |-
+          <gray>Kelola paket
+          </gray><gray>di game mode saat ini.</gray>
+      settings:
+        name: "<white><bold>Pengaturan</bold></white>"
+        description: |-
+          <gray>Periksa dan ubah
+          </gray><gray>pengaturan addon.</gray>
+      import_template:
+        name: "<white><bold>Impor Template</bold></white>"
+        description: |-
+          <gray>Impor file template
+          </gray><gray>yang terletak di dalam
+          </gray><gray>direktori addon.</gray>
+      web_library:
+        name: "<white><bold>Pustaka Web</bold></white>"
+        description: |-
+          <gray>Akses pustaka web
+          </gray><gray>yang berisi
+          </gray><gray>generator bersama.</gray>
+      export_from_database:
+        name: "<white><bold>Ekspor Database</bold></white>"
+        description: |-
+          <gray>Ekspor database
+          </gray><gray>ke file tunggal yang terletak di
+          </gray><gray>direktori addon.</gray>
+      import_to_database:
+        name: "<white><bold>Impor Database</bold></white>"
+        description: |-
+          <gray>Impor database dari
+          </gray><gray>file yang terletak di direktori
+          </gray><gray>addon.</gray>
+      wipe_user_data:
+        name: "<white><bold>Hapus Database Pengguna</bold></white>"
+        description: |-
+          <gray>Hapus data pengguna untuk
+          </gray><gray>setiap pulau di
+          </gray><gray>game mode saat ini.</gray>
+      wipe_generator_data:
+        name: "<white><bold>Hapus Database Generator</bold></white>"
+        description: |-
+          <gray>Hapus data generator dan paket
+          </gray><gray>di game mode saat ini.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>Nama Paket</bold></white>"
+        description: |-
+          <gray>Ubah nama paket.</gray>
+        value: "<aqua>Nama: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>ID Paket</bold></white>"
+        description: |-
+          <gray>ID paket saat ini.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>Ikon Paket</bold></white>"
+        description: |-
+          <gray>Ubah ikon paket.</gray>
+      bundle_description:
+        name: "<white><bold>Deskripsi Paket</bold></white>"
+      bundle_info:
+        name: "<white><bold>Informasi Umum</bold></white>"
+        description: |-
+          <gray>Tampilkan informasi umum
+          </gray><gray>tentang paket ini.</gray>
+      bundle_generators:
+        name: "<white><bold>Generator</bold></white>"
+        description: |-
+          <gray>Tampilkan daftar generator
+          </gray><gray>yang ditugaskan ke paket ini.</gray>
+      add_generator:
+        name: "<white><bold>Tambah Generator</bold></white>"
+        description: |-
+          <gray>Tugaskan generator
+          </gray><gray>ke paket ini.</gray>
+        list: "<aqua>Generator Terpilih:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>Hapus Generator</bold></white>"
+        description: |-
+          <gray>Hapus generator
+          </gray><gray>dari paket ini.</gray>
+        list: "<aqua>Generator Terpilih:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>Buat Paket</bold></white>"
+        description: |-
+          <gray>Buat paket baru
+          </gray><gray>untuk game mode ini.</gray>
+      delete_bundle:
+        name: "<white><bold>Hapus Paket</bold></white>"
+        description: |-
+          <gray>Hapus paket dari
+          </gray><gray>game mode ini sepenuhnya.</gray>
+        list: "<aqua>Paket Terpilih:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>Nama Generator</bold></white>"
+        description: |-
+          <gray>Judul untuk generator ini.
+          </gray><gray>Mendukung kode warna.</gray>
+        value: "<aqua>Nama: </aqua> [generator]"
+      id:
+        name: "<white><bold>ID Generator</bold></white>"
+        description: |-
+          <gray>ID generator saat ini.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>Ikon Generator</bold></white>"
+        description: |-
+          <gray>Item yang digunakan untuk menampilkan
+          </gray><gray>generator ini di semua GUI.</gray>
+      locked_icon:
+        name: "<white><bold>Ikon Terkunci</bold></white>"
+        description: |-
+          <gray>Item yang digunakan untuk menampilkan
+          </gray><gray>generator ini di semua GUI jika
+          </gray><gray>terkunci.</gray>
+      description:
+        name: "<white><bold>Deskripsi Generator</bold></white>"
+        description: |-
+          <gray>Teks untuk generator yang akan
+          </gray><gray>ditulis di bawah judul.</gray>
+        value: "<aqua>Deskripsi:</aqua>"
+      deployed:
+        name: "<white><bold>Diterapkan</bold></white>"
+        description: |-
+          <gray>Generator yang diterapkan terlihat
+          </gray><gray>dan dapat diakses oleh pemain.
+          </gray><gray>Generator yang tidak diterapkan tidak akan
+          </gray><gray>menghasilkan blok.</gray>
+        enabled: |-
+          <aqua>Generator ini </aqua><green>diterapkan.</green>
+        disabled: |-
+          <aqua>Generator ini </aqua><red>tidak diterapkan.</red>
+      add_material:
+        name: "<white><bold>Tambah Material</bold></white>"
+        description: |-
+          <gray>Tambah material baru ke
+          </gray><gray>daftar material saat ini.</gray>
+      remove_material:
+        name: "<white><bold>Hapus Material</bold></white>"
+        description: |-
+          <gray>Hapus material
+          </gray><gray>yang dipilih dari daftar.</gray>
+        selected-materials: "<gray>Material Terpilih:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>Buat Generator</bold></white>"
+        description: |-
+          <gray>Buat generator
+          </gray><gray>baru untuk
+          </gray><gray>game mode.</gray>
+      delete_generator:
+        name: "<white><bold>Hapus Generator</bold></white>"
+        description: |-
+          <gray>Hapus generator
+          </gray><gray>dari game mode sepenuhnya.</gray>
+        list: "<aqua>Generator Terpilih:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>ID Pulau: </aqua><gray>[id]</gray>
+        owner: "<aqua>Pemilik: [player]</aqua>"
+        list: "<aqua>Anggota:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>Jangkauan Kerja Pulau</bold></white>"
+        description: |-
+          <gray>Jangkauan kerja untuk generator
+          </gray><gray>di pulau saat ini.
+          </gray><gray>0 dan di bawahnya berarti jangkauan
+          </gray><gray>tidak terbatas.</gray>
+        value: "<aqua>Jangkauan: [number]</aqua>"
+        overwritten: |-
+          <red>Pemilik memiliki izin yang
+          </red><red>menimpa jangkauan kerja.</red>
+      owner_working_range:
+        name: "<white><bold>Jangkauan Kerja Pemilik</bold></white>"
+        description: |-
+          <gray>Jangkauan kerja untuk generator
+          </gray><gray>untuk pemilik saat ini.
+          </gray><gray>'0' berarti jangkauan pemilik
+          </gray><gray>diabaikan.
+          </gray><gray>'-1' berarti pemilik memiliki
+          </gray><gray>jangkauan kerja tidak terbatas.
+          "</gray><gray> Izin untuk pengguna menetapkan:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Jangkauan: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>Generator Pulau Maksimal</bold></white>"
+        description: |-
+          <gray>Tingkat generator aktif
+          </gray><gray>maksimal yang diizinkan
+          </gray><gray>pada waktu yang sama untuk
+          </gray><gray>pulau saat ini.
+          </gray><gray>0 dan di bawahnya berarti 
+          </gray><gray>tidak terbatas.</gray>
+        value: "<aqua>Generator Maks: [number]</aqua>"
+        overwritten: |-
+          <red>Pemilik memiliki izin yang
+          </red><red>menimpa jumlah generator.</red>
+      owner_max_generators:
+        name: "<white><bold>Generator Pemilik Maksimal</bold></white>"
+        description: |-
+          <gray>Tingkat generator aktif bersamaan
+          </gray><gray>maksimal yang diizinkan untuk
+          </gray><gray>pemilik pulau.
+          </gray><gray>'0' berarti jumlah pemilik
+          </gray><gray>diabaikan.
+          </gray><gray>'-1' berarti pemilik memiliki
+          </gray><gray>jumlah generator tidak terbatas.
+          "</gray><gray> Izin untuk pengguna menetapkan:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Generator Maks: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>Paket Pulau</bold></white>"
+        description: |-
+          <gray>Paket yang ditugaskan ke
+          </gray><gray>pulau saat ini.
+          </gray><gray>Hanya generator dari paket ini
+          </gray><gray>yang dapat digunakan di
+          </gray><gray>pulau.</gray>
+        value: "<aqua>Paket: [bundle]</aqua>"
+        overwritten: |-
+          <red>Pemilik memiliki izin yang
+          </red><red>menimpa paket.</red>
+      owner_bundle:
+        name: "<white><bold>Paket Pemilik</bold></white>"
+        description: |-
+          <gray>Paket yang ditugaskan ke
+          </gray><gray>pemilik pulau saat ini.
+          </gray><gray>Hanya generator dari paket ini
+          </gray><gray>yang dapat digunakan di
+          </gray><gray>pulau.
+          "</gray><gray> Izin untuk pengguna menetapkan:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Paket: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>Informasi Umum</bold></white>"
+        description: |-
+          <gray>Menampilkan informasi umum
+          </gray><gray>tentang pulau ini.</gray>
+      island_generators:
+        name: "<white><bold>Generator Pulau</bold></white>"
+        description: |-
+          <gray>Menampilkan daftar semua generator
+          </gray><gray>yang tersedia untuk
+          </gray><gray>pulau saat ini.</gray>
+      reset_to_default:
+        name: "<white><bold>Setel Ulang ke Default</bold></white>"
+        description: |-
+          <gray>Setel ulang semua nilai pulau
+          </gray><gray>ke nilai default dari
+          </gray><gray>pengaturan.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>Pemain Online</bold></white>"
+        description: |-
+          <gray>Daftar pulau pemain
+          </gray><gray>online.</gray>
+      all_islands:
+        name: "<white><bold>Semua Pulau</bold></white>"
+        description: |-
+          <gray>Daftar semua pulau.</gray>
+      search:
+        name: "<white><bold>Cari</bold></white>"
+        description: |-
+          <gray>Cari pulau
+          </gray><gray>tertentu.</gray>
+        search: "<aqua>Nilai: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>Pembuatan Offline</bold></white>"
+        description: |-
+          <gray>Mencegah blok dihasilkan jika semua
+          </gray><gray>anggota pulau
+          </gray><gray>offline.</gray>
+        enabled: |-
+          <aqua>Pembuatan offline </aqua><green>diaktifkan </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Pembuatan offline </aqua><red>dinonaktifkan </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>Gunakan Fisika</bold></white>"
+        description: |-
+          <gray>Menggunakan fisika pada pembuatan
+          </gray><gray>blok memungkinkan penggunaan
+          </gray><gray>mesin redstone,
+          </gray><gray>namun mengurangi performa
+          </gray><gray>server sedikit.</gray>
+        enabled: |-
+          <aqua>Fisika </aqua><green>diaktifkan </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Fisika </aqua><red>dinonaktifkan </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Gunakan Bank</bold></white>"
+        description: |-
+          <gray>Menggunakan rekening bank pulau
+          </gray><gray>untuk semua pembelian dan
+          </gray><gray>aktivasi.
+          </gray><gray>Memerlukan Bank Addon.</gray>
+        enabled: |-
+          <aqua>Penggunaan Bank </aqua><green>diaktifkan </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Penggunaan Bank </aqua><red>dinonaktifkan </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>Jangkauan Kerja Default</bold></white>"
+        description: |-
+          <gray>Jarak dari pemain sampai pembuatan
+          </gray><gray>blok akan berhenti.
+          </gray><gray>0 dan di bawahnya berarti tidak terbatas.
+          </gray><gray>Pengaturan memerlukan restart
+          </gray><gray>server untuk diaktifkan.</gray>
+        value: "<aqua>Jangkauan: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>Generator Aktif Default</bold></white>"
+        description: |-
+          <gray>Jumlah maksimal generator aktif
+          </gray><gray>pada waktu yang sama secara
+          </gray><gray>default.
+          </gray><gray>0 dan di bawahnya berarti tidak terbatas.</gray>
+        value: "<aqua>Jumlah: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>Tampilkan Filter</bold></white>"
+        description: |-
+          <gray>Filter adalah baris teratas di
+          </gray><gray>GUI Pemain, yang memungkinkan
+          </gray><gray>untuk menampilkan hanya generator
+          </gray><gray>berdasarkan tipe atau status.
+          </gray><gray>Pengaturan ini menonaktifkan
+          </gray><gray>dan menyembunyikan mereka.</gray>
+        enabled: |-
+          <aqua>Filter </aqua><green>diaktifkan </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Filter </aqua><red>dinonaktifkan </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>Blok Perbatasan</bold></white>"
+        description: |-
+          <gray>Blok perbatasan adalah material
+          </gray><gray>yang mengelilingi GUI pengguna.
+          </gray><gray>Menetapkannya ke air menonaktifkan
+          </gray><gray>itu.</gray>
+      border_block_name:
+        name: "<white><bold>Nama Blok Perbatasan</bold></white>"
+        description: |-
+          <gray>Nama tampilan untuk blok
+          </gray><gray>perbatasan.
+          </gray><gray>Jika disetel ke kosong, maka
+          </gray><gray>akan menggunakan nama blok.
+          </gray><gray>Untuk menetapkannya sebagai 1 spasi kosong,
+          "</gray><gray> tulis 'empty'."</gray>
+        value: "<aqua>Nama: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>Beri Tahu Saat Membuka</bold></white>"
+        description: |-
+          <gray>Pesan akan dikirim
+          </gray><gray>kepada pengguna saat dia membuka
+          </gray><gray>generator baru.</gray>
+        enabled: |-
+          <aqua>Beri tahu saat membuka </aqua><green>diaktifkan </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Beri tahu saat membuka </aqua><red>dinonaktifkan </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>Nonaktifkan saat Aktivasi</bold></white>"
+        description: |-
+          <gray>Nonaktifkan generator aktif tertua
+          </gray><gray>jika pengguna mengaktifkan
+          </gray><gray>generator baru.
+          </gray><gray>Berguna untuk situasi di mana
+          </gray><gray>hanya satu generator yang diizinkan.</gray>
+        enabled: |-
+          <aqua>Nonaktifkan saat aktivasi </aqua><green>diaktifkan </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Nonaktifkan saat aktivasi </aqua><red>dinonaktifkan </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>Penulis: [author]
+          </gray><gray>Dibuat untuk [gamemode]
+          </gray><gray>Bahasa: [lang]
+          </gray><gray>Versi: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>Terima blok</bold></white>"
+        description: |-
+          <gray>Terima blok yang dipilih
+          </gray><gray>dan kembali.</gray>
+        selected-blocks: "<gray>Blok Terpilih:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>ID Blok: [id]</gray>"
+      search_block:
+        name: "<white><bold>Cari</bold></white>"
+        description: |-
+          <gray>Cari blok
+          </gray><gray>tertentu.</gray>
+        search: "<aqua>Nilai: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>Terima biome</bold></white>"
+        description: |-
+          <gray>Terima biome yang dipilih
+          </gray><gray>dan kembali.</gray>
+        selected-biomes: "<gray>Biome Terpilih:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>Tinggi Minimum</bold></white>"
+        description: |-
+          <gray>Atur tinggi minimum
+          </gray><gray>untuk material ini.
+          </gray><gray>Nilai saat ini: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>Tinggi Maksimum</bold></white>"
+        description: |-
+          <gray>Atur tinggi maksimum
+          </gray><gray>untuk material ini.
+          </gray><gray>Nilai saat ini: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>Hapus Rentang Tinggi</bold></white>"
+        description: |-
+          <gray>Hapus rentang tinggi spesifik
+          </gray><gray>untuk material ini.
+          </gray><gray>Akan menggunakan rentang tinggi
+          </gray><gray>default generator sebagai gantinya.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>Sedang</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome sedang</gray>
+        warm:
+          name: "<white><bold>Hangat</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome hangat</gray>
+        cold:
+          name: "<white><bold>Dingin</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome dingin</gray>
+        snowy:
+          name: "<white><bold>Bersalju</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome bersalju</gray>
+        ocean:
+          name: "<white><bold>Samudra</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome samudra</gray>
+        nether:
+          name: "<white><bold>Nether</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome nether</gray>
+        the_end:
+          name: "<white><bold>The End</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome the end</gray>
+        neutral:
+          name: "<white><bold>Netral</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome netral</gray>
+        unused:
+          name: "<white><bold>Tidak Digunakan</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome yang tidak digunakan</gray>
+        cave:
+          name: "<white><bold>Gua</bold></white>"
+          description: |-
+            <gray>Tampilkan hanya biome gua</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>Batu Bulat</bold></white>"
+          description: |-
+            <gray>Hanya bekerja dengan generator
+            </gray><gray>batu bulat.
+
+            </gray><gold><italic>Petunjuk:
+            </italic></gold><italic><gold><italic>Terbentuk saat aliran lava
+            </italic></gold></italic><italic><italic><gold><italic>kontak dengan
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>air.</italic></gold></italic></italic></italic>
+        stone:
+          name: "<white><bold>Batu</bold></white>"
+          description: |-
+            <gray>Hanya bekerja dengan generator
+            </gray><gray>batu.
+
+            </gray><gold><italic>Petunjuk:
+            </italic></gold><italic><gold><italic>Terbentuk saat lava mengalir
+            </italic></gold></italic><italic><italic><gold><italic>di atas blok air.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>Basalt</bold></white>"
+          description: |-
+            <gray>Hanya bekerja dengan generator
+            </gray><gray>basalt.
+
+            </gray><gold><italic>Petunjuk:
+            </italic></gold><italic><gold><italic>Terbentuk saat lava mengalir
+            </italic></gold></italic><italic><italic><gold><italic>di atas soul soil dan
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>berdekatan dengan blue ice.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>Batu Bulat atau Batu</bold></white>"
+          description: |-
+            <gray>Bekerja dengan generator
+            </gray><gray>batu bulat dan batu.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>Basalt atau Batu Bulat</bold></white>"
+          description: |-
+            <gray>Bekerja dengan generator
+            </gray><gray>basalt dan batu bulat.</gray>
+        basalt_or_stone:
+          name: "<white><bold>Basalt atau Batu</bold></white>"
+          description: |-
+            <gray>Bekerja dengan generator
+            </gray><gray>basalt dan batu.</gray>
+        any:
+          name: "<white><bold>Apa Pun</bold></white>"
+          description: |-
+            <gray>Bekerja dengan generator apa pun.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>Klik </yellow><gray>untuk melihat halaman sebelumnya.</gray>"
+      click-to-next: "<yellow>Klik </yellow><gray>untuk melihat halaman berikutnya.</gray>"
+      click-to-cancel: "<yellow>Klik </yellow><gray>untuk membatalkan.</gray>"
+      click-to-choose: "<yellow>Klik </yellow><gray>untuk memilih.</gray>"
+      click-to-select: "<yellow>Klik </yellow><gray>untuk memilih.</gray>"
+      click-to-deselect: "<yellow>Klik </yellow><gray>untuk membatalkan pilihan.</gray>"
+      click-to-accept: "<yellow>Klik </yellow><gray>untuk menerima dan kembali.</gray>"
+      click-to-filter-enable: "<yellow>Klik </yellow><gray>untuk mengaktifkan filter.</gray>"
+      click-to-filter-disable: "<yellow>Klik </yellow><gray>untuk menonaktifkan filter.</gray>"
+      click-to-activate: "<yellow>Klik </yellow><gray>untuk mengaktifkan.</gray>"
+      click-to-deactivate: "<yellow>Klik </yellow><gray>untuk menonaktifkan.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>Klik </yellow><gray>pada blok emas
+        </gray><gray>untuk membeli.</gray>
+      click-to-purchase: "<yellow>Klik </yellow><gray>untuk membeli.</gray>"
+      click-to-return: "<yellow>Klik </yellow><gray>untuk kembali.</gray>"
+      click-to-quit: "<yellow>Klik </yellow><gray>untuk keluar.</gray>"
+      click-to-wipe: "<yellow>Klik </yellow><gray>untuk menghapus.</gray>"
+      click-to-open: "<yellow>Klik </yellow><gray>untuk membuka.</gray>"
+      click-to-export: "<yellow>Klik </yellow><gray>untuk mulai mengekspor.</gray>"
+      click-to-change: "<yellow>Klik </yellow><gray>untuk mengubah.</gray>"
+      click-on-item: |-
+        <yellow>Klik </yellow><gray>pada item dari
+        </gray><gray>inventori Anda.</gray>
+      click-to-view: "<yellow>Klik </yellow><gray>untuk melihat.</gray>"
+      click-to-add: "<yellow>Klik </yellow><gray>untuk menambah.</gray>"
+      click-to-remove: "<yellow>Klik </yellow><gray>untuk menghapus.</gray>"
+      select-before: "<yellow>Pilih </yellow><gray>sebelum melanjutkan.</gray>"
+      click-to-create: "<yellow>Klik </yellow><gray>untuk membuat.</gray>"
+      right-click-to-select: "<yellow>Klik Kanan </yellow><gray>untuk memilih.</gray>"
+      right-click-to-deselect: "<yellow>Klik Kanan </yellow><gray>untuk membatalkan pilihan.</gray>"
+      click-to-toggle: "<yellow>Klik </yellow><gray>untuk mengaktifkan/menonaktifkan.</gray>"
+      left-click-to-edit: "<yellow>Klik Kiri </yellow><gray>untuk mengedit.</gray>"
+      right-click-to-lock: "<yellow>Klik Kanan </yellow><gray>untuk mengunci.</gray>"
+      right-click-to-unlock: "<yellow>Klik Kanan </yellow><gray>untuk membuka kunci.</gray>"
+      click-to-perform: "<yellow>Klik </yellow><gray>untuk melakukan.</gray>"
+      click-to-edit: "<yellow>Klik </yellow><gray>untuk mengedit.</gray>"
+      right-click-to-clear: "<yellow>Klik Kanan </yellow><gray>untuk menghapus.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>Klik Kiri </yellow><gray>untuk melihat.</gray>"
+      left-click-to-purchase: "<yellow>Klik Kiri </yellow><gray>untuk membeli.</gray>"
+      left-click-to-activate: "<yellow>Klik Kiri </yellow><gray>untuk mengaktifkan.</gray>"
+      left-click-to-deactivate: "<yellow>Klik Kiri </yellow><gray>untuk menonaktifkan.</gray>"
+      right-click-to-view: "<yellow>Klik Kanan </yellow><gray>untuk melihat.</gray>"
+      right-click-to-purchase: "<yellow>Klik Kanan </yellow><gray>untuk membeli.</gray>"
+      right-click-to-activate: "<yellow>Klik Kanan </yellow><gray>untuk mengaktifkan.</gray>"
+      right-click-to-deactivate: "<yellow>Klik Kanan </yellow><gray>untuk menonaktifkan.</gray>"
+      shift-click-to-view: "<yellow>Shift+Klik </yellow><gray>untuk melihat.</gray>"
+      shift-click-to-purchase: "<yellow>Shift+Klik </yellow><gray>untuk membeli.</gray>"
+      shift-click-to-activate: "<yellow>Shift+Klik </yellow><gray>untuk mengaktifkan.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift+Klik </yellow><gray>untuk menonaktifkan.</gray>"
+      shift-click-to-reset: "<yellow>Shift+Klik </yellow><gray>untuk mengatur ulang.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Klik Kiri </yellow><gray>untuk mengonfigurasi rentang tinggi.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Blok:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Harta:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>Level Diperlukan: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>Izin Hilang:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>Beroperasi di:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>Beroperasi di </bold></gray><bold><yellow><italic>semua </italic></yellow></bold><gray><bold>biome</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>Terkunci!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>Tidak Diterapkan!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>Aktif</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>Biaya Pembelian: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>Biaya Aktivasi: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>Mendukung:</bold></gray>"
+          cobblestone: "<dark_gray>Generator Batu Bulat</dark_gray>"
+          stone: "<dark_gray>Generator Batu</dark_gray>"
+          basalt: "<dark_gray>Generator Basalt</dark_gray>"
+          any: "<gray><bold>Mendukung </bold></gray><bold><yellow><italic>semua </italic></yellow></bold><gray><bold>generator</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>Bekerja di ketinggian: </gray><aqua>[min_height] </aqua><gray>hingga </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>Izin yang harus
+        </gray><gray>diberikan kepada pemain:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>Generator Paket: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>Terpilih</yellow>"
+      # Used to refer to players island.
+      island-owner: "pulau [player]"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>Pulau spawn</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "tidak diketahui"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>Generator </green> '[generator]' <green> dimuat ke cache lokal.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>Paket </green> '[bundle]' <green> dimuat ke cache lokal.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>Generator </yellow> '[generator]' <yellow>dinonaktifkan.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>Terlalu banyak generator diaktifkan. Coba nonaktifkan beberapa sebelum mengaktifkan yang baru.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>Generator </red> '[generator]' <red>tidak dapat dibuka.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>Generator </red> '[generator]' <red>tidak terbuka.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>Generator </red> '[generator]' <red>tidak dibeli.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>Kredit tidak cukup untuk mengaktifkan generator. Aktivasi memerlukan [number] kredit.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>Rekening bank Anda tidak memiliki kredit yang cukup untuk mengaktifkan generator. Aktivasi memerlukan [number] kredit.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>Generator </yellow> '[generator]' <yellow>diaktifkan.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>Generator </red> '[generator]' <red>telah mencapai batas generasi dan sekarang dalam cooldown selama [number] menit lagi.</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>dibeli.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>Generator </red> '[generator]' <red>sudah dibeli.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>Generator </red> '[generator]' <red>memerlukan level pulau [number].</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>Generator </red> '[generator]' <red>memerlukan izin `[permission]`.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>Kredit tidak cukup untuk membeli generator. Generator ini biaya [number] kredit.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>Rekening bank Anda tidak memiliki kredit yang cukup. Generator ini biaya [number] kredit.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>Diimpor [generator] generator baru dan [bundle] paket baru.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>Mulai mengunduh pustaka.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>Tidak dapat menemukan data generator yang valid</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>Data Pulau tidak ditemukan.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>Tidak dapat menemukan data paket yang valid</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>Tidak dapat menemukan entri pustaka apa pun!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>File `[file]` tidak ditemukan. Tidak dapat melakukan impor.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>Tidak dapat memuat file `[file]`. Kesalahan saat membaca: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>Dunia '[world]' bukan dunia Game Mode Addon.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>File `[file]` sudah ada. Pilih nama yang berbeda.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>Generator dengan id '[generator]' </red><red>tidak ditemukan di [gamemode].</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>Tidak ada generator yang tersedia untuk Anda di [world]</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>Sesuatu salah saat menarik uang.</red>"
+    max-height-less-than-min: "<red>Tinggi maksimum ([MAX]) tidak dapat kurang dari tinggi minimum ([MIN])!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "true, on, yes, confirm, y, valid, correct"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "false, off, no, deny, n, invalid, incorrect"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "cancel"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "cancel, exit, quit"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>Percakapan dibatalkan!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>[value] yang diberikan bukan angka!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>Angka [value] yang diberikan tidak valid. Harus lebih besar dari [min] dan lebih kecil dari [max]!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>Deskripsi baru:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>Harap tulis nilai pencarian. (tulis 'cancel' untuk keluar)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>Nilai pencarian diperbarui.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>Konfirmasi bahwa Anda ingin menghapus semua data pengguna dari database untuk [gamemode].</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>Berhasil, semua data pengguna untuk [gamemode] telah dihapus!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>Konfirmasi bahwa Anda ingin menghapus semua data generator dari database untuk [gamemode].</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>Berhasil, semua data generator untuk [gamemode] telah dihapus!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>Harap masukkan nama file untuk file database yang diekspor. (tulis 'cancel' untuk keluar)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>Berhasil, ekspor database untuk [world] selesai. File dihasilkan di direktori addon.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>File dengan nama '[id]' ada. Tidak dapat menimpa.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>Harap masukkan nama baru di chat.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>Berhasil, nama telah diperbarui.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>Harap masukkan deskripsi baru di chat dan 'quit' pada baris terpisah untuk menyelesaikan.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>Berhasil, deskripsi telah diperbarui.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>Berhasil, objek baru dibuat di [world].</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>Objek dengan `[id]` sudah ditentukan di game mode. Pilih yang berbeda.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>Konfirmasi bahwa Anda ingin menghapus [number] objek: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>Berhasil, data telah dihapus!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>Harap masukkan angka di chat.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>Harap masukkan izin yang diperlukan, satu per baris di chat, dan 'quit' pada baris terpisah untuk menyelesaikan.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>Berhasil, izin generator telah diperbarui.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>Harap konfirmasi bahwa Anda ingin mengganti generator saat ini dengan yang baru.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>Berhasil, generator baru untuk [gamemode] telah diimpor.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>Anda telah membuka </yellow> [generator]<yellow>! Klik di sini untuk membelinya sekarang dengan harga [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>Anda telah membuka </yellow> [generator]<yellow>! Klik di sini untuk mengaktifkannya sekarang dengan harga [number].</yellow>"
+    click-text-to-activate: "<yellow>Anda telah membuka </yellow> [generator]<yellow>! Klik di sini untuk mengaktifkannya sekarang.</yellow>"
+    input-min-height: "<white>Masukkan tinggi minimum untuk material ini (antara -64 dan 320):</white>"
+    input-max-height: "<white>Masukkan tinggi maksimum untuk material ini (antara -64 dan 320):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "Batu Bulat"
+    # Also supports descriptions.
+    stone:
+      name: "Batu"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "Padang Rumput"
+    # Also supports descriptions.
+    flower_forest:
+      name: "Hutan Bunga"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Magic Generator"
+      description: |-
+        <green>Alihkan untuk mengaktifkan atau menonaktifkan
+        </green><green>semua Magic Generator
+        </green><green>di seluruh pulau</green>
+      hint: "<yellow>Magic Generator dinonaktifkan di pengaturan pulau</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Izin Magic Generator"
+      description: |-
+        <green>Pilih siapa yang dapat mengaktifkan
+        </green><green>dan menonaktifkan generator</green>

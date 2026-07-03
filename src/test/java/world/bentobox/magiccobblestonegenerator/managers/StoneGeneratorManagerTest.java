@@ -1,10 +1,11 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
@@ -13,54 +14,25 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.beans.IntrospectionException;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.jetbrains.annotations.Nullable;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.eclipse.jdt.annotation.Nullable;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
-import com.google.common.collect.ImmutableSet;
-
-import world.bentobox.bentobox.BentoBox;
-import world.bentobox.bentobox.Settings;
 import world.bentobox.bentobox.api.addons.AddonDescription;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
-import world.bentobox.bentobox.api.configuration.Config;
 import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.database.AbstractDatabaseHandler;
 import world.bentobox.bentobox.database.DatabaseSetup;
-import world.bentobox.bentobox.database.DatabaseSetup.DatabaseType;
-import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.managers.IslandWorldManager;
-import world.bentobox.bentobox.managers.IslandsManager;
-import world.bentobox.bentobox.managers.PlayersManager;
-import world.bentobox.bentobox.managers.RanksManager;
+import world.bentobox.magiccobblestonegenerator.CommonTestSetup;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
@@ -70,696 +42,402 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
 /**
  * @author tastybento
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Bukkit.class, BentoBox.class, User.class, Config.class, DatabaseSetup.class, RanksManager.class })
-public class StoneGeneratorManagerTest {
+class StoneGeneratorManagerTest extends CommonTestSetup {
 
-    private static AbstractDatabaseHandler<Object> h;
-    @Mock
-    private BentoBox plugin;
-    @Mock
-    private Settings settings;
     @Mock
     private StoneGeneratorAddon addon;
     // DUT
     private StoneGeneratorManager sgm;
     @Mock
-    private @Nullable World world;
-    @Mock
     private GeneratorTierObject generatorTier;
     @Mock
     private User user;
-    private UUID uuid;
     @Mock
     private GeneratorBundleObject generatorBundle;
     @Mock
     private GeneratorDataObject generatorData;
     @Mock
     private GameModeAddon gameModeAddon;
-    @Mock
-    private Location location;
-    @Mock
-    private @Nullable Island island;
+
     private world.bentobox.magiccobblestonegenerator.config.Settings s;
-    @Mock
-    private IslandsManager im;
-    @Mock
-    private IslandWorldManager iwm;
-    @Mock
-    private PluginManager pim;
-    @Mock
-    private RanksManager rm;
-    @Mock
-    private PlayersManager pm;
 
+    private MockedStatic<DatabaseSetup> mockDb;
+    private AbstractDatabaseHandler<Object> h;
+
+    @Override
+    @BeforeEach
     @SuppressWarnings("unchecked")
-    @BeforeClass
-    public static void beforeClass() throws IllegalAccessException, InvocationTargetException, IntrospectionException {
-	// This has to be done beforeClass otherwise the tests will interfere with each
-	// other
-	h = mock(AbstractDatabaseHandler.class);
-	// Database
-	PowerMockito.mockStatic(DatabaseSetup.class);
-	DatabaseSetup dbSetup = mock(DatabaseSetup.class);
-	when(DatabaseSetup.getDatabase()).thenReturn(dbSetup);
-	when(dbSetup.getHandler(any())).thenReturn(h);
-	when(h.saveObject(any())).thenReturn(CompletableFuture.completedFuture(true));
-    }
-
-    @After
-    public void tearDown() throws IOException {
-	User.clearUsers();
-	Mockito.framework().clearInlineMocks();
-	deleteAll(new File("database"));
-	deleteAll(new File("database_backup"));
-	new File("config.yml").delete();
-	deleteAll(new File("addons"));
-	deleteAll(new File("panels"));
-    }
-
-    private void deleteAll(File file) throws IOException {
-	if (file.exists()) {
-	    Files.walk(file.toPath()).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-	}
-
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
     public void setUp() throws Exception {
-	// Set up plugin
-	Whitebox.setInternalState(BentoBox.class, "instance", plugin);
-    Whitebox.setInternalState(RanksManager.class, "instance", rm);
-	when(plugin.getLogger()).thenReturn(Logger.getAnonymousLogger());
-	when(addon.getPlugin()).thenReturn(plugin);
+        super.setUp();
 
-    // Players manager & locale
-    when(pm.getLocale(any())).thenReturn("en-US");
-    when(plugin.getPlayers()).thenReturn(pm);
+        // Database
+        h = mock(AbstractDatabaseHandler.class);
+        mockDb = Mockito.mockStatic(DatabaseSetup.class);
+        DatabaseSetup dbSetup = mock(DatabaseSetup.class);
+        mockDb.when(DatabaseSetup::getDatabase).thenReturn(dbSetup);
+        when(dbSetup.getHandler(any())).thenReturn(h);
+        when(h.saveObject(any())).thenReturn(CompletableFuture.completedFuture(true));
 
-	// The database type has to be created one line before the thenReturn() to work!
-	DatabaseType value = DatabaseType.JSON;
-	when(plugin.getSettings()).thenReturn(settings);
-	when(settings.getDatabaseType()).thenReturn(value);
-	// Player
-	Player p = mock(Player.class);
-	// Sometimes use Mockito.withSettings().verboseLogging()
-	when(user.isOp()).thenReturn(false);
-	uuid = UUID.randomUUID();
-	when(user.getUniqueId()).thenReturn(uuid);
-	when(user.getPlayer()).thenReturn(p);
-	when(user.getName()).thenReturn("tastybento");
-    when(user.getLocale()).thenReturn(Locale.ENGLISH);
-	User.setPlugin(plugin);
+        when(addon.getPlugin()).thenReturn(plugin);
 
-	// Generator Tier
-	when(this.generatorTier.getFriendlyName()).thenReturn("Basic Tier");
-	when(this.generatorTier.getUniqueId()).thenReturn(uuid.toString());
-	when(this.generatorTier.getExhaustionLimit()).thenReturn(-1L);
+        // Player / user
+        when(user.isOp()).thenReturn(false);
+        when(user.getUniqueId()).thenReturn(uuid);
+        when(user.getPlayer()).thenReturn(mockPlayer);
+        when(user.getName()).thenReturn("tastybento");
+        when(user.getLocale()).thenReturn(Locale.ENGLISH);
+        User.setPlugin(plugin);
 
-	// Generator Bundle
-	when(this.generatorBundle.getFriendlyName()).thenReturn("Basic Bundle");
-	when(this.generatorBundle.getUniqueId()).thenReturn(uuid.toString());
+        // Generator Tier
+        when(this.generatorTier.getFriendlyName()).thenReturn("Basic Tier");
+        when(this.generatorTier.getUniqueId()).thenReturn(uuid.toString());
+        when(this.generatorTier.getExhaustionLimit()).thenReturn(-1L);
 
-	// Locales
-	// Return the reference (USE THIS IN THE FUTURE)
-	when(user.getTranslation(anyString()))
-		.thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
-	when(user.getTranslation(anyString(), anyString(), anyString()))
-		.thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
+        // Generator Bundle
+        when(this.generatorBundle.getFriendlyName()).thenReturn("Basic Bundle");
+        when(this.generatorBundle.getUniqueId()).thenReturn(uuid.toString());
 
-	// Settings
-	s = new world.bentobox.magiccobblestonegenerator.config.Settings();
-	when(addon.getSettings()).thenReturn(s);
+        // Locales
+        when(user.getTranslation(anyString()))
+                .thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
+        when(user.getTranslation(anyString(), anyString(), anyString()))
+                .thenAnswer((Answer<String>) invocation -> invocation.getArgument(0, String.class));
 
-	// Addon Description
-	AddonDescription desc = new AddonDescription.Builder("", "MagicCobbleGenerator", "1.2.3").build();
-	when(addon.getDescription()).thenReturn(desc);
-	when(gameModeAddon.getDescription()).thenReturn(desc);
+        // Settings
+        s = new world.bentobox.magiccobblestonegenerator.config.Settings();
+        when(addon.getSettings()).thenReturn(s);
 
-	// Island
-	when(island.getOwner()).thenReturn(uuid);
-	when(island.getMemberSet()).thenReturn(ImmutableSet.of(uuid));
+        // Addon Description
+        AddonDescription desc = new AddonDescription.Builder("", "MagicCobbleGenerator", "1.2.3").build();
+        when(addon.getDescription()).thenReturn(desc);
+        when(gameModeAddon.getDescription()).thenReturn(desc);
 
-	// Island manager
-	when(im.getIsland(world, uuid)).thenReturn(island);
-	when(addon.getIslands()).thenReturn(im);
+        // Island manager
+        when(im.getIsland(world, uuid)).thenReturn(island);
+        when(addon.getIslands()).thenReturn(im);
 
-	// IWM
-	when(iwm.getAddon(world)).thenReturn(Optional.of(gameModeAddon));
-	when(iwm.getPermissionPrefix(any())).thenReturn("bskyblock.");
-	when(plugin.getIWM()).thenReturn(iwm);
+        // IWM
+        when(iwm.getAddon(world)).thenReturn(Optional.of(gameModeAddon));
 
-	// Location
-	when(location.getWorld()).thenReturn(world);
+        sgm = new StoneGeneratorManager(addon);
 
-	// Bukkit
-	PowerMockito.mockStatic(Bukkit.class, Mockito.RETURNS_MOCKS);
-	when(Bukkit.getPlayer(uuid)).thenReturn(p);
-	when(Bukkit.getPluginManager()).thenReturn(pim);
-
-	sgm = new StoneGeneratorManager(addon);
-
-	// Addon Manager
-	when(addon.getAddonManager()).thenReturn(sgm);
+        // Addon Manager
+        when(addon.getAddonManager()).thenReturn(sgm);
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#StoneGeneratorManager(world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon)}.
-     */
-    @Test
-    public void testStoneGeneratorManager() {
-	assertNotNull(sgm);
+    @Override
+    @AfterEach
+    public void tearDown() throws Exception {
+        if (mockDb != null) {
+            mockDb.closeOnDemand();
+        }
+        super.tearDown();
+        deleteAll(new java.io.File("addons"));
+        deleteAll(new java.io.File("panels"));
+        new java.io.File("config.yml").delete();
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#addWorld(org.bukkit.World)}.
-     */
     @Test
-    public void testAddWorld() {
-	sgm.addWorld(world);
+    void testStoneGeneratorManager() {
+        assertNotNull(sgm);
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#reload()}.
-     * 
-     * @throws IntrospectionException
-     * @throws NoSuchMethodException
-     * @throws ClassNotFoundException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     */
     @Test
-    public void testReload() throws InstantiationException, IllegalAccessException, InvocationTargetException,
-	    ClassNotFoundException, NoSuchMethodException, IntrospectionException {
-	sgm.reload();
-	verify(addon).log("Loading generator tiers from database...");
-	verify(h, atLeast(1)).loadObjects();
-	verify(addon).log("Done");
+    void testAddWorld() {
+        assertDoesNotThrow(() -> sgm.addWorld(world));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#load()}.
-     * 
-     * @throws IntrospectionException
-     * @throws NoSuchMethodException
-     * @throws ClassNotFoundException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     */
     @Test
-    public void testLoad() throws InstantiationException, IllegalAccessException, InvocationTargetException,
-	    ClassNotFoundException, NoSuchMethodException, IntrospectionException {
-	sgm.load();
-	verify(addon).log("Loading generator tiers from database...");
-	verify(h, atLeast(1)).loadObjects();
-	verify(addon).log("Done");
+    void testReload() throws Exception {
+        sgm.reload();
+        verify(addon).log("Loading generator tiers from database...");
+        verify(h, atLeast(1)).loadObjects();
+        verify(addon).log("Done");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorTier(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorTier() {
-	assertTrue(sgm.loadGeneratorTier(generatorTier, false, user));
-	verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.generator-loaded");
+    void testLoad() throws Exception {
+        sgm.load();
+        verify(addon).log("Loading generator tiers from database...");
+        verify(h, atLeast(1)).loadObjects();
+        verify(addon).log("Done");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorTier(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorTierOverwrite() {
-	assertTrue(sgm.loadGeneratorTier(generatorTier, true, user));
-	verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.generator-loaded");
+    void testLoadGeneratorTier() {
+        assertTrue(sgm.loadGeneratorTier(generatorTier, false, user));
+        verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.generator-loaded");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorTier(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorTierOverwriteFail() {
-	assertTrue(sgm.loadGeneratorTier(generatorTier, false, user));
-	// Second time, it should fail because it is in the cache now, and overwrite is
-	// false
-	assertFalse(sgm.loadGeneratorTier(generatorTier, false, user));
+    void testLoadGeneratorTierOverwrite() {
+        assertTrue(sgm.loadGeneratorTier(generatorTier, true, user));
+        verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.generator-loaded");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorTier(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorTierOverwritePass() {
-	assertTrue(sgm.loadGeneratorTier(generatorTier, false, user));
-	// Second time, it should pass because it is in the cache, but overwrite is
-	// true
-	assertTrue(sgm.loadGeneratorTier(generatorTier, true, user));
+    void testLoadGeneratorTierOverwriteFail() {
+        assertTrue(sgm.loadGeneratorTier(generatorTier, false, user));
+        // Second time, it should fail because it is in the cache now, and overwrite is false
+        assertFalse(sgm.loadGeneratorTier(generatorTier, false, user));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorBundle(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorBundle() {
-	sgm.loadGeneratorBundle(generatorBundle, false, user);
-	verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.bundle-loaded");
+    void testLoadGeneratorTierOverwritePass() {
+        assertTrue(sgm.loadGeneratorTier(generatorTier, false, user));
+        // Second time, it should pass because it is in the cache, but overwrite is true
+        assertTrue(sgm.loadGeneratorTier(generatorTier, true, user));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorBundle(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorBundleOverwrite() {
-	sgm.loadGeneratorBundle(generatorBundle, true, user);
-	verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.bundle-loaded");
+    void testLoadGeneratorBundle() {
+        sgm.loadGeneratorBundle(generatorBundle, false, user);
+        verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.bundle-loaded");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorBundle(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorBundleOverwriteFail() {
-	assertTrue(sgm.loadGeneratorBundle(generatorBundle, false, user));
-	// Second time, it should fail because it is in the cache now, and overwrite is
-	// false
-	assertFalse(sgm.loadGeneratorBundle(generatorBundle, false, user));
+    void testLoadGeneratorBundleOverwrite() {
+        sgm.loadGeneratorBundle(generatorBundle, true, user);
+        verify(user).sendMessage("stone-generator.conversations.prefixstone-generator.messages.bundle-loaded");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadGeneratorBundle(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject, boolean, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testLoadGeneratorBundleOverwritePass() {
-	assertTrue(sgm.loadGeneratorBundle(generatorBundle, false, user));
-	// Second time, it should pass because it is in the cache, but overwrite is
-	// true
-	assertTrue(sgm.loadGeneratorBundle(generatorBundle, true, user));
+    void testLoadGeneratorBundleOverwriteFail() {
+        assertTrue(sgm.loadGeneratorBundle(generatorBundle, false, user));
+        // Second time, it should fail because it is in the cache now, and overwrite is false
+        assertFalse(sgm.loadGeneratorBundle(generatorBundle, false, user));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#saveGeneratorTier(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testSaveGeneratorTier() {
-	CompletableFuture<Boolean> cf = sgm.saveGeneratorTier(generatorTier);
-	assertTrue(cf.isDone());
+    void testLoadGeneratorBundleOverwritePass() {
+        assertTrue(sgm.loadGeneratorBundle(generatorBundle, false, user));
+        // Second time, it should pass because it is in the cache, but overwrite is true
+        assertTrue(sgm.loadGeneratorBundle(generatorBundle, true, user));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#saveGeneratorBundle(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject)}.
-     */
     @Test
-    public void testSaveGeneratorBundle() {
-	CompletableFuture<Boolean> cf = sgm.saveGeneratorBundle(generatorBundle);
-	assertTrue(cf.isDone());
+    void testSaveGeneratorTier() {
+        CompletableFuture<Boolean> cf = sgm.saveGeneratorTier(generatorTier);
+        assertTrue(cf.isDone());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#saveGeneratorData(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject)}.
-     */
     @Test
-    public void testSaveGeneratorData() {
-	CompletableFuture<Boolean> cf = sgm.saveGeneratorData(generatorData);
-	assertTrue(cf.isDone());
+    void testSaveGeneratorBundle() {
+        CompletableFuture<Boolean> cf = sgm.saveGeneratorBundle(generatorBundle);
+        assertTrue(cf.isDone());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#save()}.
-     */
     @Test
-    public void testSave() {
-	CompletableFuture<Boolean> cf = sgm.save();
-	assertTrue(cf.isDone());
+    void testSaveGeneratorData() {
+        CompletableFuture<Boolean> cf = sgm.saveGeneratorData(generatorData);
+        assertTrue(cf.isDone());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#wipeGameModeGenerators()}.
-     */
     @Test
-    public void testWipeGameModeGenerators() {
-	sgm.wipeGameModeGenerators(gameModeAddon);
-	verify(addon).log("All generators for magiccobblegenerator are removed!");
-	verify(addon).log("All bundles for magiccobblegenerator are removed!");
+    void testSave() {
+        CompletableFuture<Boolean> cf = sgm.save();
+        assertTrue(cf.isDone());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#wipeIslandData(java.util.Optional)}.
-     */
     @Test
-    public void testWipeIslandData() {
-	sgm.wipeIslandData(gameModeAddon);
-	verify(addon).log("All island data for MagicCobbleGenerator are removed!");
+    void testWipeGameModeGenerators() {
+        sgm.wipeGameModeGenerators(gameModeAddon);
+        verify(addon).log("All generators for magiccobblegenerator are removed!");
+        verify(addon).log("All bundles for magiccobblegenerator are removed!");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#wipeGeneratorTier(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testWipeGeneratorTier() {
-	sgm.wipeGeneratorTier(generatorTier);
-	// Does not seem testable...
+    void testWipeIslandData() {
+        sgm.wipeIslandData(gameModeAddon);
+        verify(addon).log("All island data for MagicCobbleGenerator are removed!");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getGeneratorByID(java.lang.String)}.
-     */
     @Test
-    public void testGetGeneratorByID() {
-	assertNull(sgm.getGeneratorByID(uuid.toString()));
+    void testWipeGeneratorTier() {
+        // No observable side effect to verify; assert the call completes cleanly.
+        assertDoesNotThrow(() -> sgm.wipeGeneratorTier(generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getGeneratorTier(world.bentobox.bentobox.database.objects.Island, org.bukkit.Location, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject.GeneratorType)}.
-     */
     @Test
-    public void testGetGeneratorTier() {
-	assertNull(sgm.getGeneratorTier(island, location, GeneratorType.ANY));
+    void testGetGeneratorByID() {
+        assertNull(sgm.getGeneratorByID(uuid.toString()));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getAllGeneratorTiers(org.bukkit.World)}.
-     */
     @Test
-    public void testGetAllGeneratorTiers() {
-	assertTrue(sgm.getAllGeneratorTiers(world).isEmpty());
+    void testGetGeneratorTier() {
+        assertNull(sgm.getGeneratorTier(island, location, GeneratorType.ANY));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getIslandGeneratorTiers(org.bukkit.World, world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testGetIslandGeneratorTiersWorldUser() {
-	assertTrue(sgm.getIslandGeneratorTiers(world, user).isEmpty());
+    void testGetAllGeneratorTiers() {
+        assertTrue(sgm.getAllGeneratorTiers(world).isEmpty());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getIslandGeneratorTiers(org.bukkit.World, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject)}.
-     */
     @Test
-    public void testGetIslandGeneratorTiersWorldGeneratorDataObject() {
-	assertTrue(sgm.getIslandGeneratorTiers(world, generatorData).isEmpty());
+    void testGetIslandGeneratorTiersWorldUser() {
+        assertTrue(sgm.getIslandGeneratorTiers(world, user).isEmpty());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#findDefaultGeneratorList(org.bukkit.World)}.
-     */
     @Test
-    public void testFindDefaultGeneratorList() {
-	assertTrue(sgm.findDefaultGeneratorList(world).isEmpty());
+    void testGetIslandGeneratorTiersWorldGeneratorDataObject() {
+        assertTrue(sgm.getIslandGeneratorTiers(world, generatorData).isEmpty());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getAllGeneratorBundles(org.bukkit.World)}.
-     */
     @Test
-    public void testGetAllGeneratorBundles() {
-	assertTrue(sgm.getAllGeneratorBundles(world).isEmpty());
+    void testFindDefaultGeneratorList() {
+        assertTrue(sgm.findDefaultGeneratorList(world).isEmpty());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getBundleById(java.lang.String)}.
-     */
     @Test
-    public void testGetBundleById() {
-	assertNull(sgm.getBundleById(uuid.toString()));
+    void testGetAllGeneratorBundles() {
+        assertTrue(sgm.getAllGeneratorBundles(world).isEmpty());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#wipeBundle(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject)}.
-     */
     @Test
-    public void testWipeBundle() {
-	sgm.loadGeneratorBundle(generatorBundle, false, user);
-	sgm.wipeBundle(generatorBundle);
-	verify(h).deleteID(uuid.toString());
+    void testGetBundleById() {
+        assertNull(sgm.getBundleById(uuid.toString()));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#loadUserIslands(java.util.UUID)}.
-     */
     @Test
-    public void testLoadUserIslands() {
-	sgm.addWorld(world);
-	sgm.loadUserIslands(uuid);
-	verify(island, times(18)).getOwner();
+    void testWipeBundle() {
+        sgm.loadGeneratorBundle(generatorBundle, false, user);
+        sgm.wipeBundle(generatorBundle);
+        verify(h).deleteID(uuid.toString());
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#validateIslandData(world.bentobox.bentobox.database.objects.Island)}.
-     */
     @Test
-    public void testValidateIslandData() {
-	sgm.addWorld(world);
-	@Nullable
-	GeneratorDataObject gdo = sgm.validateIslandData(island);
-	assertNotNull(gdo);
+    void testLoadUserIslands() {
+        sgm.addWorld(world);
+        sgm.loadUserIslands(uuid);
+        verify(island, times(18)).getOwner();
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#checkGeneratorUnlockStatus(world.bentobox.bentobox.database.objects.Island, world.bentobox.bentobox.api.user.User, java.lang.Long)}.
-     */
     @Test
-    public void testCheckGeneratorUnlockStatus() {
-	sgm.checkGeneratorUnlockStatus(island, user, 10L);
-	verify(island, times(2)).isSpawn();
+    void testValidateIslandData() {
+        sgm.addWorld(world);
+        @Nullable
+        GeneratorDataObject gdo = sgm.validateIslandData(island);
+        assertNotNull(gdo);
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getGeneratorData(world.bentobox.bentobox.database.objects.Island)}.
-     */
     @Test
-    public void testGetGeneratorDataIsland() {
-	assertNotNull(sgm.getGeneratorData(island));
+    void testCheckGeneratorUnlockStatus() {
+        sgm.checkGeneratorUnlockStatus(island, user, 10L);
+        verify(island, times(2)).isSpawn();
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getGeneratorData(world.bentobox.bentobox.api.user.User, org.bukkit.World)}.
-     */
     @Test
-    public void testGetGeneratorDataUserWorld() {
-	assertNull(sgm.getGeneratorData(user, world));
+    void testGetGeneratorDataIsland() {
+        assertNotNull(sgm.getGeneratorData(island));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testCanGenerateBlockNoLimit() {
-	s.setGeneratorExhaustionLimit(0);
-	assertTrue(sgm.canGenerateBlock(island, generatorTier));
-	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+    void testGetGeneratorDataUserWorld() {
+        assertNull(sgm.getGeneratorData(user, world));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testCanGenerateBlockUnderLimit() {
-	s.setGeneratorExhaustionLimit(2);
-
-	assertTrue(sgm.canGenerateBlock(island, generatorTier));
-	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+    void testCanGenerateBlockNoLimit() {
+        s.setGeneratorExhaustionLimit(0);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testCanGenerateBlockExhausted() {
-	s.setGeneratorExhaustionLimit(1);
-	s.setGeneratorExhaustionCooldown(60);
-
-	assertTrue(sgm.canGenerateBlock(island, generatorTier));
-	// Limit is now reached, next call should be blocked and generator put on cooldown.
-	assertFalse(sgm.canGenerateBlock(island, generatorTier));
-	assertFalse(sgm.canGenerateBlock(island, generatorTier));
+    void testCanGenerateBlockUnderLimit() {
+        s.setGeneratorExhaustionLimit(2);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testCanGenerateBlockTierOverridesLimit() {
-	s.setGeneratorExhaustionLimit(1000);
-	when(this.generatorTier.getExhaustionLimit()).thenReturn(1L);
-
-	assertTrue(sgm.canGenerateBlock(island, generatorTier));
-	assertFalse(sgm.canGenerateBlock(island, generatorTier));
+    void testCanGenerateBlockExhausted() {
+        s.setGeneratorExhaustionLimit(1);
+        s.setGeneratorExhaustionCooldown(60);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        // Limit is now reached, next call should be blocked and generator put on cooldown.
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#unlockGenerator(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testUnlockGenerator() {
-	sgm.unlockGenerator(generatorData, user, island, generatorTier);
-	verify(user).sendMessage(
-		"stone-generator.conversations.prefixstone-generator.messages.generator-cannot-be-unlocked");
+    void testCanGenerateBlockTierOverridesLimit() {
+        s.setGeneratorExhaustionLimit(1000);
+        when(this.generatorTier.getExhaustionLimit()).thenReturn(1L);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#deactivateGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testDeactivateGenerator() {
-	assertFalse(sgm.deactivateGenerator(user, generatorData, generatorTier));
+    void testUnlockGenerator() {
+        sgm.unlockGenerator(generatorData, user, island, generatorTier);
+        verify(user).sendMessage(
+                "stone-generator.conversations.prefixstone-generator.messages.generator-cannot-be-unlocked");
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canActivateGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testCanActivateGenerator() {
-	assertFalse(sgm.canActivateGenerator(user, island, generatorData, generatorTier));
+    void testDeactivateGenerator() {
+        assertFalse(sgm.deactivateGenerator(user, generatorData, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#activateGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
-	sgm.activateGenerator(user, island, generatorData, generatorTier);
-	// TODO: add a test
+    void testCanActivateGenerator() {
+        assertFalse(sgm.canActivateGenerator(user, island, generatorData, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#activateGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean)}.
-     */
     @Test
-    public void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
-	sgm.activateGenerator(user, island, generatorData, generatorTier, true);
-	// TODO: add a test
+    void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
+        assertDoesNotThrow(() -> sgm.activateGenerator(user, island, generatorData, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canPurchaseGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testCanPurchaseGenerator() {
-	assertFalse(sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
+    void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
+        assertDoesNotThrow(() -> sgm.activateGenerator(user, island, generatorData, generatorTier, true));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#purchaseGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
-     */
     @Test
-    public void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
-	sgm.purchaseGenerator(user, island, generatorData, generatorTier);
-	// TODO: add a test
+    void testCanPurchaseGenerator() {
+        assertFalse(sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#purchaseGenerator(world.bentobox.bentobox.api.user.User, world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject, boolean)}.
-     */
     @Test
-    public void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
-	sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
-	// TODO: add a test
+    void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
+        assertDoesNotThrow(() -> sgm.purchaseGenerator(user, island, generatorData, generatorTier));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#wipeGeneratorData(java.lang.String)}.
-     */
     @Test
-    public void testWipeGeneratorDataString() {
-	sgm.wipeGeneratorData(uuid.toString());
-	// TODO: add a test
+    void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
+        assertDoesNotThrow(() -> sgm.purchaseGenerator(user, island, generatorData, generatorTier, true));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#wipeGeneratorData(world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject)}.
-     */
     @Test
-    public void testWipeGeneratorDataGeneratorDataObject() {
-	sgm.wipeGeneratorData(generatorData);
-	// TODO: add a test
+    void testWipeGeneratorDataString() {
+        assertDoesNotThrow(() -> sgm.wipeGeneratorData(uuid.toString()));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canOperateInWorld(org.bukkit.World)}.
-     */
     @Test
-    public void testCanOperateInWorld() {
-	assertFalse(sgm.canOperateInWorld(world));
+    void testWipeGeneratorDataGeneratorDataObject() {
+        assertDoesNotThrow(() -> sgm.wipeGeneratorData(generatorData));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#isMembersOnline(org.bukkit.Location)}.
-     */
     @Test
-    public void testIsMembersOnline() {
-	assertFalse(sgm.isMembersOnline(location));
+    void testCanOperateInWorld() {
+        assertFalse(sgm.canOperateInWorld(world));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getIslandLevel(world.bentobox.bentobox.database.objects.Island)}.
-     */
     @Test
-    public void testGetIslandLevelIsland() {
-	assertEquals(Long.MAX_VALUE, sgm.getIslandLevel(island));
+    void testIsMembersOnline() {
+        assertFalse(sgm.isMembersOnline(location));
     }
 
-    /**
-     * Test method for
-     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#getIslandLevel(world.bentobox.bentobox.api.user.User)}.
-     */
     @Test
-    public void testGetIslandLevelUser() {
-	assertEquals(Long.MAX_VALUE, sgm.getIslandLevel(user));
+    void testGetIslandLevelIsland() {
+        assertEquals(Long.MAX_VALUE, sgm.getIslandLevel(island));
+    }
+
+    @Test
+    void testGetIslandLevelUser() {
+        assertEquals(Long.MAX_VALUE, sgm.getIslandLevel(user));
     }
 
 }
