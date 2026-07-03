@@ -1,4 +1,3 @@
----
 stone-generator:
   commands:
     admin:
@@ -33,492 +32,492 @@ stone-generator:
         parameters: "<generator-id> <true/false>"
   gui:
     titles:
-      player-panel: "&0&l 神奇的鵝卵石產生器"
-      view-generator: "&0&l 產生器：&r [generator]"
-      admin-panel: "&0&l 管理員面板"
-      select-biome: "&0&l 選擇生態系"
-      select-block: "&0&l 選擇方塊"
-      select-bundle: "&0&l 選擇組合"
-      select-type: "&0&l 選擇產生器的類型"
-      view-bundle: "&0&l 組合：&r [bundle]"
-      manage-bundles: "&0&l 管理組合"
-      manage-generators: "&0&l 管理產生器"
-      view-island: "&0&l 島嶼：[island]"
-      manage-islands: "&0&l 管理島嶼資料"
-      library: "&0&l 知識庫"
-      settings: "&0&l 設定"
+      player-panel: "<black><bold>神奇的鵝卵石產生器</bold></black>"
+      view-generator: "<black><bold>產生器：</bold></black> [generator]"
+      admin-panel: "<black><bold>管理員面板</bold></black>"
+      select-biome: "<black><bold>選擇生態系</bold></black>"
+      select-block: "<black><bold>選擇方塊</bold></black>"
+      select-bundle: "<black><bold>選擇組合</bold></black>"
+      select-type: "<black><bold>選擇產生器的類型</bold></black>"
+      view-bundle: "<black><bold>組合：</bold></black> [bundle]"
+      manage-bundles: "<black><bold>管理組合</bold></black>"
+      manage-generators: "<black><bold>管理產生器</bold></black>"
+      view-island: "<black><bold>島嶼：[island]</bold></black>"
+      manage-islands: "<black><bold>管理島嶼資料</bold></black>"
+      library: "<black><bold>知識庫</bold></black>"
+      settings: "<black><bold>設定</bold></black>"
     buttons:
       default:
-        name: "&f&l 預設產生器"
-        description: "&7 預設的產生器永遠都是啟動的"
-        enabled: "&b 這是一個 &a 預設的 &b 產生器。"
-        disabled: "&b 這個 &c 不是預設的 &b 產生器。"
+        name: "<white><bold>預設產生器</bold></white>"
+        description: "<gray>預設的產生器永遠都是啟動的</gray>"
+        enabled: "<aqua>這是一個 </aqua><green>預設的 </green><aqua>產生器。</aqua>"
+        disabled: "<aqua>這個 </aqua><red>不是預設的 </red><aqua>產生器。</aqua>"
       priority:
-        name: "&f&l 產生器優先順序"
+        name: "<white><bold>產生器優先順序</bold></white>"
         description: |-
-          &7 較大的優先度（數字越小）顯示在越前面
-          &7 如果有多個優先度一樣的產生器
-          &7 會顯示在一樣的位置
-        value: "&b 優先度：&7 [number]"
+          <gray>較大的優先度（數字越小）顯示在越前面
+          </gray><gray>如果有多個優先度一樣的產生器
+          </gray><gray>會顯示在一樣的位置</gray>
+        value: "<aqua>優先度：</aqua><gray> [number]</gray>"
       type:
-        name: "&f&l 產生器類別"
+        name: "<white><bold>產生器類別</bold></white>"
         description: |-
-          &7 決定要使用哪種產生器類型
-          &7 將會套用至島嶼上的產生器
-        value: "&b 類型：&7 [type]"
+          <gray>決定要使用哪種產生器類型
+          </gray><gray>將會套用至島嶼上的產生器</gray>
+        value: "<aqua>類型：</aqua><gray> [type]</gray>"
       required_min_level:
-        name: "&f&l 最小所需島嶼等級"
+        name: "<white><bold>最小所需島嶼等級</bold></white>"
         description: |-
-          &7 最小所需島嶼等級
-          &7 來解鎖這個產生器
-        value: "&b 最小所需島嶼等級 [number]"
+          <gray>最小所需島嶼等級
+          </gray><gray>來解鎖這個產生器</gray>
+        value: "<aqua>最小所需島嶼等級 [number]</aqua>"
       required_permissions:
-        name: "&f&l 需要的權限"
-        description: "&7 下列是解鎖這個產生器所需的權限。"
-        list: "&b 所需的權限:"
-        value: "&b - [permission]"
-        none: "&b - 無"
+        name: "<white><bold>需要的權限</bold></white>"
+        description: "<gray>下列是解鎖這個產生器所需的權限。</gray>"
+        list: "<aqua>所需的權限:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- 無</aqua>"
       purchase_cost:
-        name: "&f&l 花費"
-        description: "&7 購買這個產生器所需花費"
-        value: "&b 花費：[number]"
+        name: "<white><bold>花費</bold></white>"
+        description: "<gray>購買這個產生器所需花費</gray>"
+        value: "<aqua>花費：[number]</aqua>"
       activation_cost:
-        name: "&f&l 啟動花費"
-        description: "&7 啟動或是重新啟動這個產生器所需花費"
-        value: "&b 花費：[number]"
+        name: "<white><bold>啟動花費</bold></white>"
+        description: "<gray>啟動或是重新啟動這個產生器所需花費</gray>"
+        value: "<aqua>花費：[number]</aqua>"
       biomes:
-        name: "&f&l 使產生器可運作的生態系"
-        description: "&7 以下是能使這個產生器運作的生態系"
-        list: "&b 生態系："
-        value: "&b - [biome]"
-        any: "&b - 任意"
+        name: "<white><bold>使產生器可運作的生態系</bold></white>"
+        description: "<gray>以下是能使這個產生器運作的生態系</gray>"
+        list: "<aqua>生態系：</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- 任意</aqua>"
       treasure_amount:
-        name: "&f&l 寶藏數量"
-        description: "&7 一次可獲得至多多少個寶藏"
-        value: "&b 數量：[number]"
+        name: "<white><bold>寶藏數量</bold></white>"
+        description: "<gray>一次可獲得至多多少個寶藏</gray>"
+        value: "<aqua>數量：[number]</aqua>"
       treasure_chance:
-        name: "&f&l 寶藏機率"
-        description: "&7 產生器產生時，有多少機率會產生寶藏"
-        value: "&b 機率：[number]"
+        name: "<white><bold>寶藏機率</bold></white>"
+        description: "<gray>產生器產生時，有多少機率會產生寶藏</gray>"
+        value: "<aqua>機率：[number]</aqua>"
       info:
-        name: "&f&l 敘述"
-        description: "&7 顯示關於這個產生器的描述"
+        name: "<white><bold>敘述</bold></white>"
+        description: "<gray>顯示關於這個產生器的描述</gray>"
       blocks:
-        name: "&f&l 禁止方塊清單"
-        description: "&7 列出產生器可以獲得的方塊和機率"
+        name: "<white><bold>禁止方塊清單</bold></white>"
+        description: "<gray>列出產生器可以獲得的方塊和機率</gray>"
       treasures:
-        name: "&f&l 寶藏清單"
+        name: "<white><bold>寶藏清單</bold></white>"
         description: |-
-          &7 列出可獲得寶藏和產生機率
-          &7 當發現寶藏時，會直接替換產生的方塊
-        drag-and-drop: "&7 支援使用拖曳的方式將空格設為該物。"
+          <gray>列出可獲得寶藏和產生機率
+          </gray><gray>當發現寶藏時，會直接替換產生的方塊</gray>
+        drag-and-drop: "<gray>支援使用拖曳的方式將空格設為該物。</gray>"
       block-icon:
-        name: "&f&l [material]"
-        description: "&b 機率：[#.##]"
-        actual: "&b 資料庫中的數值：[number]"
+        name: "<white><bold>[material]</bold></white>"
+        description: "<aqua>機率：[#.##]</aqua>"
+        actual: "<aqua>資料庫中的數值：[number]</aqua>"
       treasure-icon:
-        name: "&f&l [material]"
-        description: "&b 機率：[#.####]"
-        actual: "&b 資料庫中的數值：[number]"
+        name: "<white><bold>[material]</bold></white>"
+        description: "<aqua>機率：[#.####]</aqua>"
+        actual: "<aqua>資料庫中的數值：[number]</aqua>"
       show_cobblestone:
-        name: "&f&l 鵝卵石產生器"
-        description: "&7 只顯示鵝卵石產生器"
+        name: "<white><bold>鵝卵石產生器</bold></white>"
+        description: "<gray>只顯示鵝卵石產生器</gray>"
       show_stone:
-        name: "&f&l 石頭產生器"
-        description: "&7 只顯示石頭產生器"
+        name: "<white><bold>石頭產生器</bold></white>"
+        description: "<gray>只顯示石頭產生器</gray>"
       show_basalt:
-        name: "&f&l 玄武岩產生器"
-        description: "&7 只顯示玄武岩產生器"
+        name: "<white><bold>玄武岩產生器</bold></white>"
+        description: "<gray>只顯示玄武岩產生器</gray>"
       toggle_visibility:
-        name: "&f&l 已解鎖的產生器"
-        description: "&7 只顯示已解鎖的產生器"
+        name: "<white><bold>已解鎖的產生器</bold></white>"
+        description: "<gray>只顯示已解鎖的產生器</gray>"
       show_active:
-        name: "&f&l 目前啟動的產生器"
-        description: "&7 只顯示目前啟動的產生器"
+        name: "<white><bold>目前啟動的產生器</bold></white>"
+        description: "<gray>只顯示目前啟動的產生器</gray>"
       return:
-        name: "&f&l 返回"
+        name: "<white><bold>返回</bold></white>"
         description: |-
-          &7 返回上一頁
-          &7 或退出
+          <gray>返回上一頁
+          </gray><gray>或退出</gray>
       previous:
-        name: "&f&l 前一頁"
-        description: "&7 切換至 [number] 頁面"
+        name: "<white><bold>前一頁</bold></white>"
+        description: "<gray>切換至 [number] 頁面</gray>"
       next:
-        name: "&f&l 下一頁"
-        description: "&7 切換至 [number] 頁面\n"
+        name: "<white><bold>下一頁</bold></white>"
+        description: "<gray>切換至 [number] 頁面\n</gray>"
       manage_users:
-        name: "&f&l 管理島嶼資料"
-        description: "&7 管理所在的遊戲模式的島嶼資料"
+        name: "<white><bold>管理島嶼資料</bold></white>"
+        description: "<gray>管理所在的遊戲模式的島嶼資料</gray>"
       manage_generator_tiers:
-        name: "&f&l 管理產生器"
-        description: "&7 管理所在的遊戲模式的產生器"
+        name: "<white><bold>管理產生器</bold></white>"
+        description: "<gray>管理所在的遊戲模式的產生器</gray>"
       manage_generator_bundles:
-        name: "&f&l 管理組合"
-        description: "&7 管理所在的遊戲模式的組合"
+        name: "<white><bold>管理組合</bold></white>"
+        description: "<gray>管理所在的遊戲模式的組合</gray>"
       settings:
-        name: "&f&l 設定"
-        description: "&7 勾選以變更擴空套件的設定。"
+        name: "<white><bold>設定</bold></white>"
+        description: "<gray>勾選以變更擴空套件的設定。</gray>"
       import_template:
-        name: "&f&l 導入模板"
-        description: "&7 導入位於擴充套件資料夾的模板"
+        name: "<white><bold>導入模板</bold></white>"
+        description: "<gray>導入位於擴充套件資料夾的模板</gray>"
       web_library:
-        name: "&f&l 網路知識庫"
-        description: "&7 存取其他人分享在網路上的產生器。"
+        name: "<white><bold>網路知識庫</bold></white>"
+        description: "<gray>存取其他人分享在網路上的產生器。</gray>"
       export_from_database:
-        name: "&f&l 導出資料庫"
-        description: "&7 導出資料庫至擴充套件資料夾。"
+        name: "<white><bold>導出資料庫</bold></white>"
+        description: "<gray>導出資料庫至擴充套件資料夾。</gray>"
       import_to_database:
-        name: "&f&l 導入資料庫"
-        description: "&7 將位於在擴充套件資料夾的資料庫導入"
+        name: "<white><bold>導入資料庫</bold></white>"
+        description: "<gray>將位於在擴充套件資料夾的資料庫導入</gray>"
       wipe_user_data:
-        name: "&f&l 清除玩家的資料庫"
+        name: "<white><bold>清除玩家的資料庫</bold></white>"
         description: |-
-          &7 將現在這個遊戲模式的
-          &7 每位玩家的每座島嶼的產生器資料清除。
+          <gray>將現在這個遊戲模式的
+          </gray><gray>每位玩家的每座島嶼的產生器資料清除。</gray>
       wipe_generator_data:
-        name: "&f&l 清除產生器的資料庫"
-        description: "&7 清除所在的遊戲模式的所有產生器與組合。"
+        name: "<white><bold>清除產生器的資料庫</bold></white>"
+        description: "<gray>清除所在的遊戲模式的所有產生器與組合。</gray>"
       bundle_name:
-        name: "&f&l 組合名稱"
-        description: "&7 變更組合名稱。"
-        value: "&b 名稱：&r [bundle]"
+        name: "<white><bold>組合名稱</bold></white>"
+        description: "<gray>變更組合名稱。</gray>"
+        value: "<aqua>名稱：</aqua> [bundle]"
       bundle_icon:
-        name: "&f&l 組合圖示"
-        description: "&7 變更組合圖示。"
+        name: "<white><bold>組合圖示</bold></white>"
+        description: "<gray>變更組合圖示。</gray>"
       bundle_description:
-        name: "&f&l 組合敘述"
+        name: "<white><bold>組合敘述</bold></white>"
       bundle_info:
-        name: "&f&l 描述"
-        description: "&7 顯示關於這個組合的描述"
+        name: "<white><bold>描述</bold></white>"
+        description: "<gray>顯示關於這個組合的描述</gray>"
       bundle_generators:
-        name: "&f&l 產生器"
-        description: "&7 顯示所有被包含在這個組合內的產生器"
+        name: "<white><bold>產生器</bold></white>"
+        description: "<gray>顯示所有被包含在這個組合內的產生器</gray>"
       add_generator:
-        name: "&f&l 添加產生器"
-        description: "&7 將選定的產生器添加至此組合。"
-        list: "&b 選定的產生器："
-        value: "&b - [generator]"
+        name: "<white><bold>添加產生器</bold></white>"
+        description: "<gray>將選定的產生器添加至此組合。</gray>"
+        list: "<aqua>選定的產生器：</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       remove_generator:
-        name: "&f&l 移除產生器"
-        description: "&7 從這個組合移除產生器"
-        list: "&b 選定的產生器："
-        value: "&b - [generator]"
+        name: "<white><bold>移除產生器</bold></white>"
+        description: "<gray>從這個組合移除產生器</gray>"
+        list: "<aqua>選定的產生器：</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       create_bundle:
-        name: "&f&l 新增組合"
-        description: "&7 新增一個新的組合至這個遊戲模式"
+        name: "<white><bold>新增組合</bold></white>"
+        description: "<gray>新增一個新的組合至這個遊戲模式</gray>"
       delete_bundle:
-        name: "&f&l 移除組合"
-        description: "&7 從這個遊戲模式完全地移除一個組合"
-        list: "&b 選定的組合："
-        value: "&b - [bundle]"
+        name: "<white><bold>移除組合</bold></white>"
+        description: "<gray>從這個遊戲模式完全地移除一個組合</gray>"
+        list: "<aqua>選定的組合：</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
       name:
-        name: "&f&l 產生器名稱"
+        name: "<white><bold>產生器名稱</bold></white>"
         description: |-
-          &7 適合這個產生器的名稱。
-          &7 支援色碼。
-        value: "&b名稱：&r [generator]"
+          <gray>適合這個產生器的名稱。
+          </gray><gray>支援色碼。</gray>
+        value: "<aqua>名稱：</aqua> [generator]"
       icon:
-        name: "&f&l 產生器圖示"
-        description: "&7 用來在所有的產生器介面作為產生器圖示的物品"
+        name: "<white><bold>產生器圖示</bold></white>"
+        description: "<gray>用來在所有的產生器介面作為產生器圖示的物品</gray>"
       locked_icon:
-        name: "&f&l 鎖定圖示"
-        description: "&7 用來在所有的產生器介面作為產生器未解鎖圖示的物品"
+        name: "<white><bold>鎖定圖示</bold></white>"
+        description: "<gray>用來在所有的產生器介面作為產生器未解鎖圖示的物品</gray>"
       description:
-        name: "&f&l 產生器描述"
-        description: "&7 會在產生器名稱底下出現的文字敘述"
-        value: "&b 敘述："
+        name: "<white><bold>產生器描述</bold></white>"
+        description: "<gray>會在產生器名稱底下出現的文字敘述</gray>"
+        value: "<aqua>敘述：</aqua>"
       deployed:
-        name: "&f&l 已部署"
+        name: "<white><bold>已部署</bold></white>"
         description: |-
-          &7 已部署的產生器將可被其他玩家 看見/使用
-          &7 未部署的產生器為玩家來說沒有任何功能
-        enabled: "&b 這個產生器 &a 已部署。"
-        disabled: "&b 這個產生器 is &c 未部署。"
+          <gray>已部署的產生器將可被其他玩家 看見/使用
+          </gray><gray>未部署的產生器為玩家來說沒有任何功能</gray>
+        enabled: "<aqua>這個產生器 </aqua><green>已部署。</green>"
+        disabled: "<aqua>這個產生器 is </aqua><red>未部署。</red>"
       add_material:
-        name: "&f&l 添加材料"
-        description: "&7 添加材料至目前的材料清單"
+        name: "<white><bold>添加材料</bold></white>"
+        description: "<gray>添加材料至目前的材料清單</gray>"
       remove_material:
-        name: "&f&l 移除材料"
-        description: "&7 從清單移除所選擇的材料"
-        selected-materials: "&7 所選的材料："
-        list-value: "&7 - [number] ✕ [value]"
+        name: "<white><bold>移除材料</bold></white>"
+        description: "<gray>從清單移除所選擇的材料</gray>"
+        selected-materials: "<gray>所選的材料：</gray>"
+        list-value: "<gray>- [number] ✕ [value]</gray>"
       create_generator:
-        name: "&f&l 新建產生器"
-        description: "&7 新建新的產生棄至該遊戲模式"
+        name: "<white><bold>新建產生器</bold></white>"
+        description: "<gray>新建新的產生棄至該遊戲模式</gray>"
       delete_generator:
-        name: "&f&l 移除產生器"
-        description: "&7 從該遊戲完全地移除產生器。"
-        list: "&b 所選的產生器："
-        value: "&b - [generator]"
+        name: "<white><bold>移除產生器</bold></white>"
+        description: "<gray>從該遊戲完全地移除產生器。</gray>"
+        list: "<aqua>所選的產生器：</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       island_name:
-        name: "&f&l [name]"
+        name: "<white><bold>[name]</bold></white>"
         description: |-
-          &7 [owner]
-          &b [members]
-          &b 島嶼 ID：&7 [id]
-        owner: "&b 擁有者：[player]"
-        list: "&b 島嶼成員："
-        value: "&b - [player]"
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>島嶼 ID：</aqua><gray> [id]</gray>
+        owner: "<aqua>擁有者：[player]</aqua>"
+        list: "<aqua>島嶼成員：</aqua>"
+        value: "<aqua>- [player]</aqua>"
       island_working_range:
-        name: "&f&l 島嶼工作範圍"
+        name: "<white><bold>島嶼工作範圍</bold></white>"
         description: |-
-          &7 在現在所在的這座島上的產生器工作範圍。
-          &7 設為 0 或是設置成比 0 小的數字
-          &7 代表工作範圍無限大。
-        value: "&b 範圍：[number]"
-        overwritten: "&c 擁有者擁有權限可以覆寫所設定的工作範圍。"
+          <gray>在現在所在的這座島上的產生器工作範圍。
+          </gray><gray>設為 0 或是設置成比 0 小的數字
+          </gray><gray>代表工作範圍無限大。</gray>
+        value: "<aqua>範圍：[number]</aqua>"
+        overwritten: "<red>擁有者擁有權限可以覆寫所設定的工作範圍。</red>"
       owner_working_range:
-        name: "&f&l 擁有者設定的工作範圍"
+        name: "<white><bold>擁有者設定的工作範圍</bold></white>"
         description: |-
-          &7 擁有者設定的產生器工作範圍。
-          &7 '0' 代表忽略擁有者設定的工作範圍。
-          &7 '-1' 代表沒有限制工作範圍。
-          "&7 針對個別使用者的權限設定"
-          "&7&o '[gamemode].stone-generator."
-          "&7&o max-range.<number>'"
-        value: "&b 範圍：[number]"
+          <gray>擁有者設定的產生器工作範圍。
+          </gray><gray>'0' 代表忽略擁有者設定的工作範圍。
+          </gray><gray>'-1' 代表沒有限制工作範圍。
+          "</gray><gray> 針對個別使用者的權限設定"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>範圍：[number]</aqua>"
       island_max_generators:
-        name: "&f&l 島嶼產生器上限"
+        name: "<white><bold>島嶼產生器上限</bold></white>"
         description: |-
-          &7 當前島嶼最多可同時使用幾個產生器。
-          &7 設為 0 或比 0 小的數字代表沒有限制。
-        value: "&b 產生器上限：[number]"
-        overwritten: "&c 擁有者擁有權限可以複寫產生器數量。"
+          <gray>當前島嶼最多可同時使用幾個產生器。
+          </gray><gray>設為 0 或比 0 小的數字代表沒有限制。</gray>
+        value: "<aqua>產生器上限：[number]</aqua>"
+        overwritten: "<red>擁有者擁有權限可以複寫產生器數量。</red>"
       owner_max_generators:
-        name: "&f&l 擁有者的產生器上限"
+        name: "<white><bold>擁有者的產生器上限</bold></white>"
         description: |-
-          &7 島嶼與有者最大可同時運作的產生器數量。
-          &7 '0' 代表忽略擁有者的產生器設定。
-          &7 '-1' 代表擁有者可以擁有無限的產生器。
-          "&7 針對個別使用者的權限設定："
-          "&7&o '[gamemode].stone-generator."
-          "&7&o active-generators.<number>'"
-        value: "&b 產生器上限：[number]"
+          <gray>島嶼與有者最大可同時運作的產生器數量。
+          </gray><gray>'0' 代表忽略擁有者的產生器設定。
+          </gray><gray>'-1' 代表擁有者可以擁有無限的產生器。
+          "</gray><gray> 針對個別使用者的權限設定："
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>產生器上限：[number]</aqua>"
       island_bundle:
-        name: "&f&l 島嶼組合"
+        name: "<white><bold>島嶼組合</bold></white>"
         description: |-
-          &7 套用至現在這個島嶼的組合。
-          &7 在這個島嶼上，只允許使用這個組合裡面的產生器。
-        value: "&b 組合：[bundle]"
-        overwritten: "&c 擁有者擁有權限可以覆寫組合。"
+          <gray>套用至現在這個島嶼的組合。
+          </gray><gray>在這個島嶼上，只允許使用這個組合裡面的產生器。</gray>
+        value: "<aqua>組合：[bundle]</aqua>"
+        overwritten: "<red>擁有者擁有權限可以覆寫組合。</red>"
       owner_bundle:
-        name: "&f&l 擁有者組合"
+        name: "<white><bold>擁有者組合</bold></white>"
         description: |-
-          &7 套用至這個島嶼擁有者的組合。
-          &7 只有在這個組合內的產生器允許在此島嶼上使用。
-          "&7 針對個別使用者設定的權限："
-          "&7&o '[gamemode].stone-generator."
-          "&7&o bundle.<bundle-id>'"
-        value: "&b 組合：[bundle]"
+          <gray>套用至這個島嶼擁有者的組合。
+          </gray><gray>只有在這個組合內的產生器允許在此島嶼上使用。
+          "</gray><gray> 針對個別使用者設定的權限："
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>組合：[bundle]</aqua>"
       island_info:
-        name: "&f&l 描述"
-        description: "&7 顯示關於這個島嶼的描述。"
+        name: "<white><bold>描述</bold></white>"
+        description: "<gray>顯示關於這個島嶼的描述。</gray>"
       island_generators:
-        name: "&f&l 島嶼的產生器"
-        description: "&7 顯示這個島嶼上可用的產生器。"
+        name: "<white><bold>島嶼的產生器</bold></white>"
+        description: "<gray>顯示這個島嶼上可用的產生器。</gray>"
       reset_to_default:
-        name: "&f&l 重設設定"
-        description: "&7 重設所有島嶼的設定值至預設值。"
+        name: "<white><bold>重設設定</bold></white>"
+        description: "<gray>重設所有島嶼的設定值至預設值。</gray>"
       is_online:
-        name: "&f&l 在線上的玩家"
-        description: "&7 在線玩家的島嶼清單"
+        name: "<white><bold>在線上的玩家</bold></white>"
+        description: "<gray>在線玩家的島嶼清單</gray>"
       all_islands:
-        name: "&f&l 所有島嶼"
-        description: "&7 所有島嶼清單"
+        name: "<white><bold>所有島嶼</bold></white>"
+        description: "<gray>所有島嶼清單</gray>"
       search:
-        name: "&f&l 搜尋"
-        description: "&7 搜尋特定的島嶼"
-        search: "&b 名稱：[value]"
+        name: "<white><bold>搜尋</bold></white>"
+        description: "<gray>搜尋特定的島嶼</gray>"
+        search: "<aqua>名稱：[value]</aqua>"
       offline_generation:
-        name: "&f&l 離線生成"
-        description: "&7 當島嶼成員都不在線上時，防止產生器繼續產生方塊。"
-        enabled: "&b 離線生成 &a 已開啟 &b。"
-        disabled: "&b 離線生成 &c 已關閉 &b。"
+        name: "<white><bold>離線生成</bold></white>"
+        description: "<gray>當島嶼成員都不在線上時，防止產生器繼續產生方塊。</gray>"
+        enabled: "<aqua>離線生成 </aqua><green>已開啟 </green><aqua>。</aqua>"
+        disabled: "<aqua>離線生成 </aqua><red>已關閉 </red><aqua>。</aqua>"
       use_physic:
-        name: "&f&l 使用物理\n"
+        name: "<white><bold>使用物理\n</bold></white>"
         description: |-
-          &7 允許紅石機器應用物理套用產生器，
-          &7 這會使伺服器的效能變低一點。
-        enabled: "&b 物理已 &a 啟動 &b。"
-        disabled: "&b 物理已 &c 關閉 &b。"
+          <gray>允許紅石機器應用物理套用產生器，
+          </gray><gray>這會使伺服器的效能變低一點。</gray>
+        enabled: "<aqua>物理已 </aqua><green>啟動 </green><aqua>。</aqua>"
+        disabled: "<aqua>物理已 </aqua><red>關閉 </red><aqua>。</aqua>"
       working_range:
-        name: "&f&l 預設工作範圍"
+        name: "<white><bold>預設工作範圍</bold></white>"
         description: |-
-          &7 玩家與產生器的距離，
-          &7 超過這個距離即停止運作。
-          &7 設為 0 或比 0 小的數字代表無限制。
-          &7 變更的設定需要重新啟動伺服器才能套用。
-        value: "&b 範圍：[number]"
+          <gray>玩家與產生器的距離，
+          </gray><gray>超過這個距離即停止運作。
+          </gray><gray>設為 0 或比 0 小的數字代表無限制。
+          </gray><gray>變更的設定需要重新啟動伺服器才能套用。</gray>
+        value: "<aqua>範圍：[number]</aqua>"
       active_generators:
-        name: "&f&l 預設啟動的產生器"
+        name: "<white><bold>預設啟動的產生器</bold></white>"
         description: |-
-          &7 預設最大可同時運作的產生器數量。
-          &7 設為 0 或比 0 小的數字代表無限制。
-        value: "&b 數量：[number]"
+          <gray>預設最大可同時運作的產生器數量。
+          </gray><gray>設為 0 或比 0 小的數字代表無限制。</gray>
+        value: "<aqua>數量：[number]</aqua>"
       show_filters:
-        name: "&f&l 顯示篩選器"
+        name: "<white><bold>顯示篩選器</bold></white>"
         description: |-
-          &7 篩選器在玩家介面的最上面一列，&7 可以依類型或狀態篩選產生器
-          &7 這個設定可以關閉和隱藏它們。
-        enabled: "&b 篩選器已 &a 開啟 &b。"
-        disabled: "&b 篩選器已 &c 關閉 &b。"
+          <gray>篩選器在玩家介面的最上面一列，</gray><gray> 可以依類型或狀態篩選產生器
+          </gray><gray>這個設定可以關閉和隱藏它們。</gray>
+        enabled: "<aqua>篩選器已 </aqua><green>開啟 </green><aqua>。</aqua>"
+        disabled: "<aqua>篩選器已 </aqua><red>關閉 </red><aqua>。</aqua>"
       border_block:
-        name: "&f&l 邊框方塊"
+        name: "<white><bold>邊框方塊</bold></white>"
         description: |-
-          &7 邊框方塊為圍繞在使用者介面
-          &7 的方塊。
-          &7 將它設為空氣將關閉這個功能。
+          <gray>邊框方塊為圍繞在使用者介面
+          </gray><gray>的方塊。
+          </gray><gray>將它設為空氣將關閉這個功能。</gray>
       border_block_name:
-        name: "&f&l 邊框方塊名稱"
+        name: "<white><bold>邊框方塊名稱</bold></white>"
         description: |-
-          &7 邊框方塊所顯示的名稱。
-          &7 如果設為空，將以方塊名稱代替邊框方塊的名稱。
-          &7 如果要命名為 1 格空白大小
-          &7（預設值），輸入「empty」。
-        value: "&b 名稱：`&r[name]&r&b`"
+          <gray>邊框方塊所顯示的名稱。
+          </gray><gray>如果設為空，將以方塊名稱代替邊框方塊的名稱。
+          </gray><gray>如果要命名為 1 格空白大小
+          </gray><gray>（預設值），輸入「empty」。</gray>
+        value: "<aqua>名稱：`</aqua>[name]<aqua>`</aqua>"
       unlock_notify:
-        name: "&f&l 解鎖時通知"
-        description: "&7 當一名使用者解鎖了一個新的生產器，會傳送訊息通知。"
-        enabled: "&b 解鎖時通知已 &a 啟動 &b。"
-        disabled: "&b 解鎖時通知已 &c 關閉 &b。"
+        name: "<white><bold>解鎖時通知</bold></white>"
+        description: "<gray>當一名使用者解鎖了一個新的生產器，會傳送訊息通知。</gray>"
+        enabled: "<aqua>解鎖時通知已 </aqua><green>啟動 </green><aqua>。</aqua>"
+        disabled: "<aqua>解鎖時通知已 </aqua><red>關閉 </red><aqua>。</aqua>"
       disable_on_activate:
-        name: "&f&l 啟動的同時關閉"
+        name: "<white><bold>啟動的同時關閉</bold></white>"
         description: |-
-          &7 啟動新的生產器的同時，
-          &7 在已啟動的生產器內，
-          &7 關閉最古老的生產器。
-          &7 此設定在當你同時可運作的
-          &7 生產器上限為1時很有用。
-        enabled: "&b 啟動的同時關閉已 &a 啟動 &b。"
-        disabled: "&b 啟動的同時關閉已 &c 關閉 &b。"
+          <gray>啟動新的生產器的同時，
+          </gray><gray>在已啟動的生產器內，
+          </gray><gray>關閉最古老的生產器。
+          </gray><gray>此設定在當你同時可運作的
+          </gray><gray>生產器上限為1時很有用。</gray>
+        enabled: "<aqua>啟動的同時關閉已 </aqua><green>啟動 </green><aqua>。</aqua>"
+        disabled: "<aqua>啟動的同時關閉已 </aqua><red>關閉 </red><aqua>。</aqua>"
       library:
-        name: "&f&l [name]"
+        name: "<white><bold>[name]</bold></white>"
         description: |-
-          &7 [description]
-          &7 作者：[author]
-          &7 為了 [gamemode] 遊戲模式製作
-          &7 語言：[lang]
-          &7 版本：[version]
+          <gray>[description]
+          </gray><gray>作者：[author]
+          </gray><gray>為了 [gamemode] 遊戲模式製作
+          </gray><gray>語言：[lang]
+          </gray><gray>版本：[version]</gray>
       accept_blocks:
-        name: "&f&l 需要的方塊"
+        name: "<white><bold>需要的方塊</bold></white>"
         description: |-
-          &7 點擊選擇需要的方塊後
-          &7 按中間的返回儲存。
-        selected-blocks: "&7 已選擇的方塊："
-        list-value: "&7 - [value]"
+          <gray>點擊選擇需要的方塊後
+          </gray><gray>按中間的返回儲存。</gray>
+        selected-blocks: "<gray>已選擇的方塊：</gray>"
+        list-value: "<gray>- [value]</gray>"
       material-icon:
-        name: "&f&l [material]"
+        name: "<white><bold>[material]</bold></white>"
       search_block:
-        name: "&f&l 搜尋"
-        description: "&7 搜尋特定的方塊"
-        search: "&b 名稱：[value]"
+        name: "<white><bold>搜尋</bold></white>"
+        description: "<gray>搜尋特定的方塊</gray>"
+        search: "<aqua>名稱：[value]</aqua>"
       accept_biome:
-        name: "&f&l 可運作的生態系"
+        name: "<white><bold>可運作的生態系</bold></white>"
         description: |-
-          &7 點擊選擇可運作的生態系後
-          &7 按中間的返回儲存。
-        selected-biomes: "&7 已選擇的生態系："
-        list-value: "&7 - [value]"
+          <gray>點擊選擇可運作的生態系後
+          </gray><gray>按中間的返回儲存。</gray>
+        selected-biomes: "<gray>已選擇的生態系：</gray>"
+        list-value: "<gray>- [value]</gray>"
       biome-icon:
-        name: "&f&l [biome]"
+        name: "<white><bold>[biome]</bold></white>"
       biome-groups:
         lush:
-          name: "&f&l 繁茂"
-          description: "&7 只顯示繁茂生態域"
+          name: "<white><bold>繁茂</bold></white>"
+          description: "<gray>只顯示繁茂生態域</gray>"
         dry:
-          name: "&f&l 乾燥"
-          description: "&7 只顯示乾燥生域"
+          name: "<white><bold>乾燥</bold></white>"
+          description: "<gray>只顯示乾燥生域</gray>"
         cold:
-          name: "&f&l 寒冷"
-          description: "&7 只顯示寒冷生態域"
+          name: "<white><bold>寒冷</bold></white>"
+          description: "<gray>只顯示寒冷生態域</gray>"
         snowy:
-          name: "&f&l 積雪"
-          description: "&7 只顯示積雪生態域"
+          name: "<white><bold>積雪</bold></white>"
+          description: "<gray>只顯示積雪生態域</gray>"
         ocean:
-          name: "&f&l 海洋"
-          description: "&7 只顯示海洋生態域"
+          name: "<white><bold>海洋</bold></white>"
+          description: "<gray>只顯示海洋生態域</gray>"
         nether:
-          name: "&f&l 地獄"
-          description: "&7 只顯示地獄生態域"
+          name: "<white><bold>地獄</bold></white>"
+          description: "<gray>只顯示地獄生態域</gray>"
         the_end:
-          name: "&f&l 終界"
-          description: "&7 只顯示終界生態域"
+          name: "<white><bold>終界</bold></white>"
+          description: "<gray>只顯示終界生態域</gray>"
         neutral:
-          name: "&f&l 中性"
-          description: "&7 只顯示中性生態域"
+          name: "<white><bold>中性</bold></white>"
+          description: "<gray>只顯示中性生態域</gray>"
         unused:
-          name: "&f&l 尚未使用"
-          description: "&7 只顯示尚未使用的生態域"
+          name: "<white><bold>尚未使用</bold></white>"
+          description: "<gray>只顯示尚未使用的生態域</gray>"
       generator-types:
         cobblestone:
-          name: "&f&l 鵝卵石"
-          description: "&7 只會由鵝卵石產生器生成。"
+          name: "<white><bold>鵝卵石</bold></white>"
+          description: "<gray>只會由鵝卵石產生器生成。</gray>"
         stone:
-          name: "&f&l 石頭"
-          description: "&7 只會由石頭生產器生成"
+          name: "<white><bold>石頭</bold></white>"
+          description: "<gray>只會由石頭生產器生成</gray>"
         basalt:
-          name: "&f&l 玄武岩"
-          description: "&7 只會由玄武岩產生器生成。"
+          name: "<white><bold>玄武岩</bold></white>"
+          description: "<gray>只會由玄武岩產生器生成。</gray>"
         cobblestone_or_stone:
-          name: "&f&l 鵝卵石或石頭"
-          description: "&7 只會由鵝卵石、石頭生產器生成。"
+          name: "<white><bold>鵝卵石或石頭</bold></white>"
+          description: "<gray>只會由鵝卵石、石頭生產器生成。</gray>"
         basalt_or_cobblestone:
-          name: "&f&l 玄武岩或石頭"
-          description: "&7 只會由玄武岩、石頭生產器生成。"
+          name: "<white><bold>玄武岩或石頭</bold></white>"
+          description: "<gray>只會由玄武岩、石頭生產器生成。</gray>"
         basalt_or_stone:
-          name: "&f&l 玄武岩或石頭"
-          description: "&7 只會由玄武岩、石頭生產器生成。"
+          name: "<white><bold>玄武岩或石頭</bold></white>"
+          description: "<gray>只會由玄武岩、石頭生產器生成。</gray>"
         any:
-          name: "&f&l 任意"
-          description: "&7 任意生產器皆可生成。"
+          name: "<white><bold>任意</bold></white>"
+          description: "<gray>任意生產器皆可生成。</gray>"
     tips:
-      click-to-previous: "&e 點擊 &7 顯示前一頁。"
-      click-to-next: "&e 點擊 &7 顯示下一頁。"
-      click-to-cancel: "&e 點擊 &7 取消。"
-      click-to-choose: "&e 點擊 &7 選擇。"
-      click-to-select: "&e 點擊 &7 選擇。"
-      click-to-deselect: "&e 點擊 &7 取消選擇。"
-      click-to-accept: "&e 點擊 &7 確認後返回。"
-      click-to-filter-enable: "&e 點擊 &7 開啟篩選器。"
-      click-to-filter-disable: "&e 點擊 &7 關閉篩選器。"
-      click-to-activate: "&e 點擊 &7 啟動。"
-      click-to-deactivate: "&e 點擊 &7 關閉。"
-      click-gold-to-purchase: "&e 點擊 &7 金磚以付款。"
-      click-to-purchase: "&e 點擊 &7 付款。"
-      click-to-return: "&e 點擊 &7 返回。"
-      click-to-quit: "&e 點擊 &7 退出。"
-      click-to-wipe: "&e 點擊 &7 清除。"
-      click-to-open: "&e 點擊 &7 開啟。"
-      click-to-export: "&e 點擊 &7 開始匯出。"
-      click-to-change: "&e 點擊 &7 變更。"
-      click-on-item: "&e 點擊 &7 您背包內的物品。"
-      click-to-view: "&e 點擊 &7 預覽。"
-      click-to-add: "&e 點擊 &7 新建。"
-      click-to-remove: "&e 點擊 &7 移除。"
-      select-before: " &7 在繼續之前 &e 選擇"
-      click-to-create: "&e 點擊 &7 新建。"
-      right-click-to-select: "&e 點擊右鍵 &7 選擇。"
-      right-click-to-deselect: "&e 點擊右鍵 &7 取消選擇。"
-      click-to-toggle: "&e 點擊 &7 切換開關。"
-      left-click-to-edit: "&e 點擊左鍵 &7 編輯。"
-      right-click-to-lock: "&e 點擊右鍵 &7 鎖定。"
-      right-click-to-unlock: "&e 點擊右鍵 &7 解除鎖定。"
-      click-to-perform: "&e 點擊 &7 預覽。"
-      click-to-edit: "&e 點擊 &7 編輯。"
-      right-click-to-clear: "&e 點擊右鍵 &7 清除。"
-      left-click-to-view: "&e 點擊左鍵 &7 預覽。"
-      left-click-to-purchase: "&e 點擊左鍵 &7 購買。"
-      left-click-to-activate: "&e 點擊左鍵 &7 開啟。"
-      left-click-to-deactivate: "&e 點擊左鍵 &7 關閉。"
-      right-click-to-view: "&e 點擊右鍵 &7 預覽。"
-      right-click-to-purchase: "&e 點擊右鍵 &7 購買。"
-      right-click-to-activate: "&e 點擊右鍵 &7 開啟。"
-      right-click-to-deactivate: "&e 點擊右鍵 &7 關閉。"
-      shift-click-to-view: "&e 按住 Shift &7 預覽。"
-      shift-click-to-purchase: "&e 按住 Shift &7 購買。"
-      shift-click-to-activate: "&e 按住 Shift &7 開啟。"
-      shift-click-to-deactivate: "&e 按住 Shift &7 關閉。"
-      shift-click-to-reset: "&e 按住Shift點擊 &7 重置。"
+      click-to-previous: "<yellow>點擊 </yellow><gray>顯示前一頁。</gray>"
+      click-to-next: "<yellow>點擊 </yellow><gray>顯示下一頁。</gray>"
+      click-to-cancel: "<yellow>點擊 </yellow><gray>取消。</gray>"
+      click-to-choose: "<yellow>點擊 </yellow><gray>選擇。</gray>"
+      click-to-select: "<yellow>點擊 </yellow><gray>選擇。</gray>"
+      click-to-deselect: "<yellow>點擊 </yellow><gray>取消選擇。</gray>"
+      click-to-accept: "<yellow>點擊 </yellow><gray>確認後返回。</gray>"
+      click-to-filter-enable: "<yellow>點擊 </yellow><gray>開啟篩選器。</gray>"
+      click-to-filter-disable: "<yellow>點擊 </yellow><gray>關閉篩選器。</gray>"
+      click-to-activate: "<yellow>點擊 </yellow><gray>啟動。</gray>"
+      click-to-deactivate: "<yellow>點擊 </yellow><gray>關閉。</gray>"
+      click-gold-to-purchase: "<yellow>點擊 </yellow><gray>金磚以付款。</gray>"
+      click-to-purchase: "<yellow>點擊 </yellow><gray>付款。</gray>"
+      click-to-return: "<yellow>點擊 </yellow><gray>返回。</gray>"
+      click-to-quit: "<yellow>點擊 </yellow><gray>退出。</gray>"
+      click-to-wipe: "<yellow>點擊 </yellow><gray>清除。</gray>"
+      click-to-open: "<yellow>點擊 </yellow><gray>開啟。</gray>"
+      click-to-export: "<yellow>點擊 </yellow><gray>開始匯出。</gray>"
+      click-to-change: "<yellow>點擊 </yellow><gray>變更。</gray>"
+      click-on-item: "<yellow>點擊 </yellow><gray>您背包內的物品。</gray>"
+      click-to-view: "<yellow>點擊 </yellow><gray>預覽。</gray>"
+      click-to-add: "<yellow>點擊 </yellow><gray>新建。</gray>"
+      click-to-remove: "<yellow>點擊 </yellow><gray>移除。</gray>"
+      select-before: " <gray>在繼續之前 </gray><yellow>選擇</yellow>"
+      click-to-create: "<yellow>點擊 </yellow><gray>新建。</gray>"
+      right-click-to-select: "<yellow>點擊右鍵 </yellow><gray>選擇。</gray>"
+      right-click-to-deselect: "<yellow>點擊右鍵 </yellow><gray>取消選擇。</gray>"
+      click-to-toggle: "<yellow>點擊 </yellow><gray>切換開關。</gray>"
+      left-click-to-edit: "<yellow>點擊左鍵 </yellow><gray>編輯。</gray>"
+      right-click-to-lock: "<yellow>點擊右鍵 </yellow><gray>鎖定。</gray>"
+      right-click-to-unlock: "<yellow>點擊右鍵 </yellow><gray>解除鎖定。</gray>"
+      click-to-perform: "<yellow>點擊 </yellow><gray>預覽。</gray>"
+      click-to-edit: "<yellow>點擊 </yellow><gray>編輯。</gray>"
+      right-click-to-clear: "<yellow>點擊右鍵 </yellow><gray>清除。</gray>"
+      left-click-to-view: "<yellow>點擊左鍵 </yellow><gray>預覽。</gray>"
+      left-click-to-purchase: "<yellow>點擊左鍵 </yellow><gray>購買。</gray>"
+      left-click-to-activate: "<yellow>點擊左鍵 </yellow><gray>開啟。</gray>"
+      left-click-to-deactivate: "<yellow>點擊左鍵 </yellow><gray>關閉。</gray>"
+      right-click-to-view: "<yellow>點擊右鍵 </yellow><gray>預覽。</gray>"
+      right-click-to-purchase: "<yellow>點擊右鍵 </yellow><gray>購買。</gray>"
+      right-click-to-activate: "<yellow>點擊右鍵 </yellow><gray>開啟。</gray>"
+      right-click-to-deactivate: "<yellow>點擊右鍵 </yellow><gray>關閉。</gray>"
+      shift-click-to-view: "<yellow>按住 Shift </yellow><gray>預覽。</gray>"
+      shift-click-to-purchase: "<yellow>按住 Shift </yellow><gray>購買。</gray>"
+      shift-click-to-activate: "<yellow>按住 Shift </yellow><gray>開啟。</gray>"
+      shift-click-to-deactivate: "<yellow>按住 Shift </yellow><gray>關閉。</gray>"
+      shift-click-to-reset: "<yellow>按住Shift點擊 </yellow><gray>重置。</gray>"
     descriptions:
       generator:
         lore: |-
@@ -529,105 +528,105 @@ stone-generator:
           [requirements]
           [status]
         blocks:
-          title: "&7&l 方塊："
-          value: "&8 [material] - [#.##]%"
+          title: "<gray><bold>方塊：</bold></gray>"
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
         treasures:
-          title: "&7&l 寶物："
-          value: "&8 [material] - [#.####]%"
+          title: "<gray><bold>寶物：</bold></gray>"
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
         requirements:
           description: |-
             [biomes]
             [level]
             [missing-permissions]
-          level: "&c&l 所需等級：&r&c [number]"
-          permission-title: "&c&l 缺少的權限："
-          permission: "&c  - [permission]"
-          biome-title: "&7&l 可運作在："
-          biome: "&8 [biome]"
-          any: "&7&l 可在 &e&o 所有的 &r&7&l 生態系 &7&l 運作"
+          level: "<red><bold>所需等級：</bold></red><red>[number]</red>"
+          permission-title: "<red><bold>缺少的權限：</bold></red>"
+          permission: "<red> - [permission]</red>"
+          biome-title: "<gray><bold>可運作在：</bold></gray>"
+          biome: "<dark_gray>[biome]</dark_gray>"
+          any: "<gray><bold>可在 </bold></gray><bold><yellow><italic>所有的 </italic></yellow></bold><gray><bold>生態系 </bold></gray><bold><gray><bold>運作</bold></gray></bold>"
         status:
-          locked: "&c 尚未解鎖。"
-          undeployed: "&c 尚未部署！"
-          active: "&2 開啟"
-          purchase-cost: "&e 購買需花費：$[number]"
-          activation-cost: "&e 啟動需花費：$[number]"
+          locked: "<red>尚未解鎖。</red>"
+          undeployed: "<red>尚未部署！</red>"
+          active: "<dark_green>開啟</dark_green>"
+          purchase-cost: "<yellow>購買需花費：$[number]</yellow>"
+          activation-cost: "<yellow>啟動需花費：$[number]</yellow>"
         type:
-          title: "&7&l 相容的產生器："
-          cobblestone: "&8 鵝卵石產生器"
-          stone: "&8 石頭產生器"
-          basalt: "&8 玄武岩產生器"
-          any: "&e&o 與所有的 &r&7&l 產生器 &7&l 相容"
+          title: "<gray><bold>相容的產生器：</bold></gray>"
+          cobblestone: "<dark_gray>鵝卵石產生器</dark_gray>"
+          stone: "<dark_gray>石頭產生器</dark_gray>"
+          basalt: "<dark_gray>玄武岩產生器</dark_gray>"
+          any: "<yellow><italic>與所有的 </italic></yellow><gray><bold>產生器 </bold></gray><bold><gray><bold>相容</bold></gray></bold>"
       bundle-permission: |-
-        &7 玩家需擁有的權限：
-        &7&o [gamemode].stone-generator.bundle.[id]
-      generators: "&7 組合的產生器："
-      generator-list: "&7 - [generator]"
-      selected: "&e 已選擇"
+        <gray>玩家需擁有的權限：
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      generators: "<gray>組合的產生器：</gray>"
+      generator-list: "<gray>- [generator]</gray>"
+      selected: "<yellow>已選擇</yellow>"
       island-owner: "[player] 的島嶼"
       unknown: 不明的
   messages:
-    generator-loaded: "&a 產生器 &r '[generator]' &r&a  已讀入本機快取。"
-    bundle-loaded: "&a 組合 &r '[generator]' &r&a  已讀入本機快取。"
-    generator-deactivated: "&e 產生器 &r '[generator]' &r&e 已關閉。"
-    active-generators-reached: "&c 有太多的產生器同時啟動了，請先把一些產生器關掉後重新嘗試。"
-    generator-cannot-be-unlocked: "&c 產生器 &r '[generator]' &r&c 尚未解鎖。"
-    generator-not-unlocked: "&c 產生器 &r '[generator]' &r&c 尚未解鎖。"
-    generator-not-purchased: "&c 產生器 &r '[generator]' &r&c 尚未購買。"
-    no-credits: "&c 金額不足，啟動此產生器需要 [number] 元。"
-    generator-activated: "&e 產生器 &r '[generator]' &r&e 已啟動。"
-    generator-purchased: "&e 產生器 &r '[generator]' &r&e 已購買。"
-    generator-already-purchased: "&c 產生器 &r '[generator]' &r&c 成功購買。"
-    island-level-not-reached: "&c 產生器 &r '[generator]' &r&c 需要 [number] 島嶼等級。"
-    missing-permission: "&c 產生器 &r '[generator]' &r&c 需要權限 `[permission]`。"
-    no-credits-buy: "&c 金額不足，購買此產生器需要 [number] 元。"
-    import-count: "&e 已導入新的 [generator] 產生器與新的 [bundle] 組合。"
-    start-downloading: "&e 開始下載知識庫。"
+    generator-loaded: "<green>產生器 </green> '[generator]' <green> 已讀入本機快取。</green>"
+    bundle-loaded: "<green>組合 </green> '[generator]' <green> 已讀入本機快取。</green>"
+    generator-deactivated: "<yellow>產生器 </yellow> '[generator]' <yellow>已關閉。</yellow>"
+    active-generators-reached: "<red>有太多的產生器同時啟動了，請先把一些產生器關掉後重新嘗試。</red>"
+    generator-cannot-be-unlocked: "<red>產生器 </red> '[generator]' <red>尚未解鎖。</red>"
+    generator-not-unlocked: "<red>產生器 </red> '[generator]' <red>尚未解鎖。</red>"
+    generator-not-purchased: "<red>產生器 </red> '[generator]' <red>尚未購買。</red>"
+    no-credits: "<red>金額不足，啟動此產生器需要 [number] 元。</red>"
+    generator-activated: "<yellow>產生器 </yellow> '[generator]' <yellow>已啟動。</yellow>"
+    generator-purchased: "<yellow>產生器 </yellow> '[generator]' <yellow>已購買。</yellow>"
+    generator-already-purchased: "<red>產生器 </red> '[generator]' <red>成功購買。</red>"
+    island-level-not-reached: "<red>產生器 </red> '[generator]' <red>需要 [number] 島嶼等級。</red>"
+    missing-permission: "<red>產生器 </red> '[generator]' <red>需要權限 `[permission]`。</red>"
+    no-credits-buy: "<red>金額不足，購買此產生器需要 [number] 元。</red>"
+    import-count: "<yellow>已導入新的 [generator] 產生器與新的 [bundle] 組合。</yellow>"
+    start-downloading: "<yellow>開始下載知識庫。</yellow>"
   errors:
-    no-generator-data: "&c 無法找到格式正確的產生器資料"
-    no-island-data: "&c 找不到島嶼資料。"
-    no-bundle-data: "&c 找不到格式正確的組合資料。"
-    no-library-entries: "&c 找不到任何知識庫！"
-    no-file: "&c 找不到檔案名稱為 `[file]` 的檔案，停止導入。"
-    no-load: "&c 沒有辦法讀取檔案名稱為 `[file]` 的檔案。錯誤：[description]。"
-    not-a-gamemode-world: "&c 世界 '[world]' 為非 BentoBox 插件產生的世界。"
-    file-exist: "&c 檔案 `[file]` 已經存在，請選擇另一個名字。"
-    generator-tier-not-found: " &r&c 在遊戲模式 [gamemode] &c 找不到名稱叫做 '[generator]' 的產生器."
-    no-generators-in-world: "&c 你所在得世界 [world] 沒有神奇的鵝卵石產生器"
+    no-generator-data: "<red>無法找到格式正確的產生器資料</red>"
+    no-island-data: "<red>找不到島嶼資料。</red>"
+    no-bundle-data: "<red>找不到格式正確的組合資料。</red>"
+    no-library-entries: "<red>找不到任何知識庫！</red>"
+    no-file: "<red>找不到檔案名稱為 `[file]` 的檔案，停止導入。</red>"
+    no-load: "<red>沒有辦法讀取檔案名稱為 `[file]` 的檔案。錯誤：[description]。</red>"
+    not-a-gamemode-world: "<red>世界 '[world]' 為非 BentoBox 插件產生的世界。</red>"
+    file-exist: "<red>檔案 `[file]` 已經存在，請選擇另一個名字。</red>"
+    generator-tier-not-found: " <red>在遊戲模式 [gamemode] </red><red>找不到名稱叫做 '[generator]' 的產生器.</red>"
+    no-generators-in-world: "<red>你所在得世界 [world] 沒有神奇的鵝卵石產生器</red>"
   conversations:
     confirm-string: 是, true, on, yes, confirm, y, valid, correct
     deny-string: 否, false, off, no, deny, n, invalid, incorrect
     cancel-string: 取消, cancel
     exit-string: EOF, cancel, exit, quit
-    cancelled: "&c 中止動作。"
-    prefix: "&l&6 [BentoBox]: &r"
-    numeric-only: "&c 您所輸入的值 [value] 不屬於數字！"
-    not-valid-value: "&c 你所輸入的值 [value] 不正確。輸入的值必須介於 [min] 與 [max] 之間！"
-    new-description: "&a 新的敘述："
-    write-search: "&e 請輸入搜尋的字串（輸入「取消」、「cancel」中止）"
-    search-updated: "&a 已更新搜尋的字串"
-    confirm-island-data-deletion: "&e 輸入「是」/「confirm」刪除所有使用者在 [gamemode] 遊戲模式的資料。"
-    user-data-removed: "&a 成功！所有在 [gamemode] 遊戲模式的使用者資料已刪除！"
-    confirm-generator-data-deletion: "&e 輸入「是」/「confirm」刪除所有在 [gamemode] 遊戲模式的產生器資料庫。"
-    generator-data-removed: "&a 成功！所有在 [gamemode] 遊戲模式的產生器資料已刪除！"
-    exported-file-name: "&e 請輸入資料庫匯出的檔案名稱。（輸入「取消」、「cancel」中止）"
-    database-export-completed: "&a 成功！於世界 [world] 的產生器已匯出完成。檔案 [file] 已產生。"
-    file-name-exist: "&c 檔案名稱 '[id]' 已存在，且無法被覆蓋。"
-    write-name: "&e 請於聊天室輸入新的名字。"
-    name-changed: "&a 成功！已更新為新的名字。"
-    write-description: "&e 請在聊天室中輸入新的敘述，完成時在新的一行輸入「EOF」/「quit」結束。"
-    description-changed: "&a 成功！新的敘述已更新。"
-    new-object-created: "&a 成功！新的物件已在 [world] 生成。"
-    object-already-exists: "&c 叫做 `[id]` 的物件已經於遊戲模式中存在，請選擇另一個名字。"
-    confirm-deletion: "&e 輸入「是」/「confirm」確認刪除 [number] 個物件 ([value])。"
-    data-removed: "&a 成功！資料已刪除。"
-    input-number: "&e 請在聊天室中輸入數字。"
-    write-permissions: "&e 請在聊天室輸入所需的權限（一個權限一條），完成時在新的一行輸入「EOF」/「quit」結束。"
-    permissions-changed: "&a 成功！產生器所需權限已更新。"
-    confirm-data-replacement: "&e 輸入「是」/「confirm」確認以新的產生器取代。"
-    new-generators-imported: "&a 成功！於 [gamemode] 遊戲模式已導入新的產生器。"
-    click-text-to-purchase: "&e 您已解鎖 &r [generator]&r&e! 點擊這裡以 [number] 元購買。"
-    click-text-to-activate-vault: "&e 您已解鎖 &r [generator]&r&e! 點擊這裡以 [number] 元啟動。"
-    click-text-to-activate: "&e 您已解鎖 &r [generator]&r&e! 點擊這裡啟動。"
+    cancelled: "<red>中止動作。</red>"
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    numeric-only: "<red>您所輸入的值 [value] 不屬於數字！</red>"
+    not-valid-value: "<red>你所輸入的值 [value] 不正確。輸入的值必須介於 [min] 與 [max] 之間！</red>"
+    new-description: "<green>新的敘述：</green>"
+    write-search: "<yellow>請輸入搜尋的字串（輸入「取消」、「cancel」中止）</yellow>"
+    search-updated: "<green>已更新搜尋的字串</green>"
+    confirm-island-data-deletion: "<yellow>輸入「是」/「confirm」刪除所有使用者在 [gamemode] 遊戲模式的資料。</yellow>"
+    user-data-removed: "<green>成功！所有在 [gamemode] 遊戲模式的使用者資料已刪除！</green>"
+    confirm-generator-data-deletion: "<yellow>輸入「是」/「confirm」刪除所有在 [gamemode] 遊戲模式的產生器資料庫。</yellow>"
+    generator-data-removed: "<green>成功！所有在 [gamemode] 遊戲模式的產生器資料已刪除！</green>"
+    exported-file-name: "<yellow>請輸入資料庫匯出的檔案名稱。（輸入「取消」、「cancel」中止）</yellow>"
+    database-export-completed: "<green>成功！於世界 [world] 的產生器已匯出完成。檔案 [file] 已產生。</green>"
+    file-name-exist: "<red>檔案名稱 '[id]' 已存在，且無法被覆蓋。</red>"
+    write-name: "<yellow>請於聊天室輸入新的名字。</yellow>"
+    name-changed: "<green>成功！已更新為新的名字。</green>"
+    write-description: "<yellow>請在聊天室中輸入新的敘述，完成時在新的一行輸入「EOF」/「quit」結束。</yellow>"
+    description-changed: "<green>成功！新的敘述已更新。</green>"
+    new-object-created: "<green>成功！新的物件已在 [world] 生成。</green>"
+    object-already-exists: "<red>叫做 `[id]` 的物件已經於遊戲模式中存在，請選擇另一個名字。</red>"
+    confirm-deletion: "<yellow>輸入「是」/「confirm」確認刪除 [number] 個物件 ([value])。</yellow>"
+    data-removed: "<green>成功！資料已刪除。</green>"
+    input-number: "<yellow>請在聊天室中輸入數字。</yellow>"
+    write-permissions: "<yellow>請在聊天室輸入所需的權限（一個權限一條），完成時在新的一行輸入「EOF」/「quit」結束。</yellow>"
+    permissions-changed: "<green>成功！產生器所需權限已更新。</green>"
+    confirm-data-replacement: "<yellow>輸入「是」/「confirm」確認以新的產生器取代。</yellow>"
+    new-generators-imported: "<green>成功！於 [gamemode] 遊戲模式已導入新的產生器。</green>"
+    click-text-to-purchase: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡以 [number] 元購買。</yellow>"
+    click-text-to-activate-vault: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡以 [number] 元啟動。</yellow>"
+    click-text-to-activate: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡啟動。</yellow>"
   materials:
     cobblestone: 鵝卵石
     stone:
@@ -640,8 +639,8 @@ protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:
       name: 神奇的鵝卵石產生器
-      description: "&a 點擊開啟或關閉在全世界的鵝卵石產生器"
-      hint: "&e 神奇的鵝卵石產生器已在島嶼設定中被關閉"
+      description: "<green>點擊開啟或關閉在全世界的鵝卵石產生器</green>"
+      hint: "<yellow>神奇的鵝卵石產生器已在島嶼設定中被關閉</yellow>"
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
       name: 神奇的鵝卵石產生器權限
-      description: "&a 決定誰可以啟動和關閉產生器"
+      description: "<green>決定誰可以啟動和關閉產生器</green>"

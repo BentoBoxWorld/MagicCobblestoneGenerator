@@ -38,821 +38,821 @@ stone-generator:
     # This section contains translations for all GUI titles.
     titles:
       # Title for listing all generators.
-      player-panel: "&0&l Generators"
+      player-panel: "<black><bold>Generators</bold></black>"
       # Title for detailed generator view.
-      view-generator: "&0&l Generator: &r [generator]"
+      view-generator: "<black><bold>Generator: </bold></black> [generator]"
       # Title for admin panel.
-      admin-panel: "&0&l Admin Panel"
+      admin-panel: "<black><bold>Admin Panel</bold></black>"
       # Title for GUI that allows to select biomes for generator.
-      select-biome: "&0&l Select Biomes"
+      select-biome: "<black><bold>Select Biomes</bold></black>"
       # Title for GUI that allows to select a block generator.
-      select-block: "&0&l Select Block"
+      select-block: "<black><bold>Select Block</bold></black>"
       # Title for GUI that allows to select a bundle for island.
-      select-bundle: "&0&l Select Bundle"
+      select-bundle: "<black><bold>Select Bundle</bold></black>"
       # Title for GUI that allows to choose generator type.
-      select-type: "&0&l Select Generator Type"
+      select-type: "<black><bold>Select Generator Type</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "&0&l Bundle: &r [bundle]"
+      view-bundle: "<black><bold>Bundle: </bold></black> [bundle]"
       # Title for managing bundles GUI.
-      manage-bundles: "&0&l Manage Bundles"
+      manage-bundles: "<black><bold>Manage Bundles</bold></black>"
       # Title for managing generators GUI.
-      manage-generators: "&0&l Manage Generators"
+      manage-generators: "<black><bold>Manage Generators</bold></black>"
       # Title for editing island data.
-      view-island: "&0&l Island: [island]"
+      view-island: "<black><bold>Island: [island]</bold></black>"
       # Title for managing all island data.
-      manage-islands: "&0&l Manage Island Data"
+      manage-islands: "<black><bold>Manage Island Data</bold></black>"
       # Title for Library GUI
-      library: "&0&l Library"
+      library: "<black><bold>Library</bold></black>"
       # Title for Settings GUI
-      settings: "&0&l Settings"
+      settings: "<black><bold>Settings</bold></black>"
       # Title for Configure Material Height GUI
-      configure-material-height: "&0&l Configure Material Height"
+      configure-material-height: "<black><bold>Configure Material Height</bold></black>"
       # Title for Height Range Configuration GUI
-      height-range-config: "&0&l Height Range: [material]"
+      height-range-config: "<black><bold>Height Range: [material]</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
       min_height:
-        name: "&f&l Minimum Height"
+        name: "<white><bold>Minimum Height</bold></white>"
         description: |-
-          &7 Set the minimum height
-          &7 for this material.
-        value: "&7 Current value: &b [min_height]"
+          <gray>Set the minimum height
+          </gray><gray>for this material.</gray>
+        value: "<gray>Current value: </gray><aqua>[min_height]</aqua>"
       max_height:
-        name: "&f&l Maximum Height"
+        name: "<white><bold>Maximum Height</bold></white>"
         description: |-
-          &7 Set the maximum height
-          &7 for this material.
-        value: "&7 Current value: &b [max_height]"
+          <gray>Set the maximum height
+          </gray><gray>for this material.</gray>
+        value: "<gray>Current value: </gray><aqua>[max_height]</aqua>"
       height_range:
-        name: "&f&l Height Range"
+        name: "<white><bold>Height Range</bold></white>"
         description: |-
-          &7 The height range at which
-          &7 this generator operates.
-        value: "&b From &f[min_height] &bto &f[max_height]"
+          <gray>The height range at which
+          </gray><gray>this generator operates.</gray>
+        value: "<aqua>From </aqua><white>[min_height] </white><aqua>to </aqua><white>[max_height]</white>"
       default:
-        name: "&f&l Default Generator"
+        name: "<white><bold>Default Generator</bold></white>"
         description: |-
-          &7 Default generators are always
-          &7 active.
+          <gray>Default generators are always
+          </gray><gray>active.</gray>
         enabled: |-
-          &b This is the &a default &b generator.
+          <aqua>This is the </aqua><green>default </green><aqua>generator.</aqua>
         disabled: |-
-          &b This is &c not the default &b generator.
+          <aqua>This is </aqua><red>not the default </red><aqua>generator.</aqua>
       priority:
-        name: "&f&l Generator Priority"
+        name: "<white><bold>Generator Priority</bold></white>"
         description: |-
-          &7 A larger priority
-          &7 number will be preferred if
-          &7 multiple one can be applied
-          &7 to the same location.
-        value: "&b Priority: &7 [number]"
+          <gray>A larger priority
+          </gray><gray>number will be preferred if
+          </gray><gray>multiple one can be applied
+          </gray><gray>to the same location.</gray>
+        value: "<aqua>Priority: </aqua><gray>[number]</gray>"
       type:
-        name: "&f&l Generator Type"
+        name: "<white><bold>Generator Type</bold></white>"
         description: |-
-          &7 Defines which generator type
-          &7 will be applied to the current
-          &7 generator.
-        value: "&b Type: &7 [type]"
+          <gray>Defines which generator type
+          </gray><gray>will be applied to the current
+          </gray><gray>generator.</gray>
+        value: "<aqua>Type: </aqua><gray>[type]</gray>"
       required_min_level:
-        name: "&f&l Minimum Island Level"
+        name: "<white><bold>Minimum Island Level</bold></white>"
         description: |-
-          &7 Minimum island level to
-          &7 unlock this generator.
-        value: "&b Minimum Level Required: [number]"
+          <gray>Minimum island level to
+          </gray><gray>unlock this generator.</gray>
+        value: "<aqua>Minimum Level Required: [number]</aqua>"
       required_permissions:
-        name: "&f&l Required Permissions"
+        name: "<white><bold>Required Permissions</bold></white>"
         description: |-
-          &7 List of permissions that
-          &7 are required to unlock
-          &7 this generator.
-        list: "&b Required Permissions:"
-        value: "&b - [permission]"
-        none: "&b - none"
+          <gray>List of permissions that
+          </gray><gray>are required to unlock
+          </gray><gray>this generator.</gray>
+        list: "<aqua>Required Permissions:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- none</aqua>"
       purchase_cost:
-        name: "&f&l Purchase Cost"
+        name: "<white><bold>Purchase Cost</bold></white>"
         description: |-
-          &7 Credits required to
-          &7 purchase this generator.
-        value: "&b Cost: [number]"
+          <gray>Credits required to
+          </gray><gray>purchase this generator.</gray>
+        value: "<aqua>Cost: [number]</aqua>"
       activation_cost:
-        name: "&f&l Activation Cost"
+        name: "<white><bold>Activation Cost</bold></white>"
         description: |-
-          &7 Credits required to
-          &7 activate or reactivate
-          &7 this generator.
-        value: "&b Cost: [number]"
+          <gray>Credits required to
+          </gray><gray>activate or reactivate
+          </gray><gray>this generator.</gray>
+        value: "<aqua>Cost: [number]</aqua>"
       exhaustion_limit:
-        name: "&f&l Exhaustion Limit"
+        name: "<white><bold>Exhaustion Limit</bold></white>"
         description: |-
-          &7 Maximum blocks this generator
-          &7 may produce per period before
-          &7 it goes on cooldown.
-        value: "&b Limit: [number] &7per period"
-        default: "&b Uses global default: &f[number]"
-        unlimited: "&b No limit"
+          <gray>Maximum blocks this generator
+          </gray><gray>may produce per period before
+          </gray><gray>it goes on cooldown.</gray>
+        value: "<aqua>Limit: [number] </aqua><gray>per period</gray>"
+        default: "<aqua>Uses global default: </aqua><white>[number]</white>"
+        unlimited: "<aqua>No limit</aqua>"
       biomes:
-        name: "&f&l Operational Biomes"
+        name: "<white><bold>Operational Biomes</bold></white>"
         description: |-
-          &7 List of biomes where this
-          &7 generator can operate.
-        list: "&b Biomes:"
-        value: "&b - [biome]"
-        any: "&b - any"
+          <gray>List of biomes where this
+          </gray><gray>generator can operate.</gray>
+        list: "<aqua>Biomes:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- any</aqua>"
       treasure_amount:
-        name: "&f&l Treasure Amount"
+        name: "<white><bold>Treasure Amount</bold></white>"
         description: |-
-          &7 Maximum amount of treasure
-          &7 that can be dropped at once.
-        value: "&b Amount: [number]"
+          <gray>Maximum amount of treasure
+          </gray><gray>that can be dropped at once.</gray>
+        value: "<aqua>Amount: [number]</aqua>"
       treasure_chance:
-        name: "&f&l Treasure Chance"
+        name: "<white><bold>Treasure Chance</bold></white>"
         description: |-
-          &7 Chance for treasure to be
-          &7 dropped upon generation.
-        value: "&b Chance: [number]"
+          <gray>Chance for treasure to be
+          </gray><gray>dropped upon generation.</gray>
+        value: "<aqua>Chance: [number]</aqua>"
       # Section of buttons for Generator View GUI title.
       info:
-        name: "&f&l General Information"
+        name: "<white><bold>General Information</bold></white>"
         description: |-
-          &7 Shows general information
-          &7 about this generator.
+          <gray>Shows general information
+          </gray><gray>about this generator.</gray>
       blocks:
-        name: "&f&l Block List"
+        name: "<white><bold>Block List</bold></white>"
         description: |-
-          &7 Shows list of blocks and
-          &7 their chances to be generated.
+          <gray>Shows list of blocks and
+          </gray><gray>their chances to be generated.</gray>
       treasures:
-        name: "&f&l Treasure List"
+        name: "<white><bold>Treasure List</bold></white>"
         description: |-
-          &7 Shows list of treasure and
-          &7 drop chances.
-          &7 Treasure is dropped
-          &7 when blocks generate.
+          <gray>Shows list of treasure and
+          </gray><gray>drop chances.
+          </gray><gray>Treasure is dropped
+          </gray><gray>when blocks generate.</gray>
         drag-and-drop: |-
-          &7 Supports drag and drop
-          &7 items to empty spaces.
+          <gray>Supports drag and drop
+          </gray><gray>items to empty spaces.</gray>
       # Section for blocks and treasures icons in Generator View GUI.
       block-icon:
-        name: "&f&l [material]"
+        name: "<white><bold>[material]</bold></white>"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
-        description: "&b Chance: [#.##]"
-        actual: "&b Database value: [number]"
-        height-range: "&7 Height range: &b[min_height] &7to &b[max_height]"
-        no-height-range: "&7 Uses generator default height range"
+        description: "<aqua>Chance: [#.##]</aqua>"
+        actual: "<aqua>Database value: [number]</aqua>"
+        height-range: "<gray>Height range: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Uses generator default height range</gray>"
       treasure-icon:
-        name: "&f&l [material]"
+        name: "<white><bold>[material]</bold></white>"
         # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
-        description: "&b Chance: [#.####]"
-        actual: "&b Database value: [number]"
+        description: "<aqua>Chance: [#.####]</aqua>"
+        actual: "<aqua>Database value: [number]</aqua>"
       # Section of buttons for User Generator List
       show_cobblestone:
-        name: "&f&l Cobblestone Generators"
+        name: "<white><bold>Cobblestone Generators</bold></white>"
         description: |-
-          &7 Display only cobblestone
-          &7 generators
+          <gray>Display only cobblestone
+          </gray><gray>generators</gray>
       show_stone:
-        name: "&f&l Stone Generators"
+        name: "<white><bold>Stone Generators</bold></white>"
         description: |-
-          &7 Display only stone
-          &7 generators
+          <gray>Display only stone
+          </gray><gray>generators</gray>
       show_basalt:
-        name: "&f&l Basalt Generators"
+        name: "<white><bold>Basalt Generators</bold></white>"
         description: |-
-          &7 Display only basalt
-          &7 generators
+          <gray>Display only basalt
+          </gray><gray>generators</gray>
       toggle_visibility:
-        name: "&f&l Unlocked Generators"
+        name: "<white><bold>Unlocked Generators</bold></white>"
         description: |-
-          &7 Show only unlocked
-          &7 generators
+          <gray>Show only unlocked
+          </gray><gray>generators</gray>
       show_active:
-        name: "&f&l Active Generators"
+        name: "<white><bold>Active Generators</bold></white>"
         description: |-
-          &7 Show only active
-          &7 generators
+          <gray>Show only active
+          </gray><gray>generators</gray>
       # Button that is used to return to previous GUI or exit it completely.
       return:
-        name: "&f&l Return"
+        name: "<white><bold>Return</bold></white>"
         description: |-
-          &7 Return to previous menu
+          <gray>Return to previous menu</gray>
       quit:
-        name: "&f&l Quit"
+        name: "<white><bold>Quit</bold></white>"
         description: |-
-          &7 Exit the current menu
+          <gray>Exit the current menu</gray>
       # Button that is used in multi-page GUIs which allows to return to previous page.
       # Button that is used in multi-page GUIs which allows to return to previous page.
       previous:
-        name: "&f&l Previous Page"
+        name: "<white><bold>Previous Page</bold></white>"
         description: |-
-          &7 Switch to [number] page
+          <gray>Switch to [number] page</gray>
       # Button that is used in multi-page GUIs which allows to go to next page.
       next:
-        name: "&f&l Next Page"
+        name: "<white><bold>Next Page</bold></white>"
         description: |-
-          &7 Switch to [number] page
+          <gray>Switch to [number] page</gray>
       # All buttons below here are used for Admin GUIs.
       # Buttons in main Admin GUI
       manage_users:
-        name: "&f&l Manage Island Data"
+        name: "<white><bold>Manage Island Data</bold></white>"
         description: |-
-          &7 Manage island data
-          &7 in the current gamemode.
+          <gray>Manage island data
+          </gray><gray>in the current gamemode.</gray>
       manage_generator_tiers:
-        name: "&f&l Manage Generators"
+        name: "<white><bold>Manage Generators</bold></white>"
         description: |-
-          &7 Manage generators
-          &7 in the current gamemode.
+          <gray>Manage generators
+          </gray><gray>in the current gamemode.</gray>
       manage_generator_bundles:
-        name: "&f&l Manage Bundles"
+        name: "<white><bold>Manage Bundles</bold></white>"
         description: |-
-          &7 Manage bundles
-          &7 in the current gamemode.
+          <gray>Manage bundles
+          </gray><gray>in the current gamemode.</gray>
       settings:
-        name: "&f&l Settings"
+        name: "<white><bold>Settings</bold></white>"
         description: |-
-          &7 Check and change
-          &7 addon settings.
+          <gray>Check and change
+          </gray><gray>addon settings.</gray>
       import_template:
-        name: "&f&l Import Template"
+        name: "<white><bold>Import Template</bold></white>"
         description: |-
-          &7 Import template
-          &7 file located inside the
-          &7 addon directory.
+          <gray>Import template
+          </gray><gray>file located inside the
+          </gray><gray>addon directory.</gray>
       web_library:
-        name: "&f&l Web Library"
+        name: "<white><bold>Web Library</bold></white>"
         description: |-
-          &7 Access the web
-          &7 library that contains
-          &7 shared generators.
+          <gray>Access the web
+          </gray><gray>library that contains
+          </gray><gray>shared generators.</gray>
       export_from_database:
-        name: "&f&l Export Database"
+        name: "<white><bold>Export Database</bold></white>"
         description: |-
-          &7 Export the database
-          &7 into a single file located in
-          &7 the addon directory.
+          <gray>Export the database
+          </gray><gray>into a single file located in
+          </gray><gray>the addon directory.</gray>
       import_to_database:
-        name: "&f&l Import Database"
+        name: "<white><bold>Import Database</bold></white>"
         description: |-
-          &7 Import a database from
-          &7 a file located in the addon
-          &7 directory.
+          <gray>Import a database from
+          </gray><gray>a file located in the addon
+          </gray><gray>directory.</gray>
       wipe_user_data:
-        name: "&f&l Clear User Database"
+        name: "<white><bold>Clear User Database</bold></white>"
         description: |-
-          &7 Clear user data for
-          &7 each island in the
-          &7 current gamemode.
+          <gray>Clear user data for
+          </gray><gray>each island in the
+          </gray><gray>current gamemode.</gray>
       wipe_generator_data:
-        name: "&f&l Clear Generator Database"
+        name: "<white><bold>Clear Generator Database</bold></white>"
         description: |-
-          &7 Clear generator and bundle
-          &7 data in the current gamemode.
+          <gray>Clear generator and bundle
+          </gray><gray>data in the current gamemode.</gray>
       # Buttons in Bundle Edit GUI
       bundle_name:
-        name: "&f&l Bundle Name"
+        name: "<white><bold>Bundle Name</bold></white>"
         description: |-
-          &7 Change the bundle name.
-        value: "&b Name: &r [bundle]"
+          <gray>Change the bundle name.</gray>
+        value: "<aqua>Name: </aqua> [bundle]"
       bundle_id:
-        name: "&f&l Bundle Id"
+        name: "<white><bold>Bundle Id</bold></white>"
         description: |-
-          &7 The current bundle ID.
-        value: "&b ID: &r [id]"
+          <gray>The current bundle ID.</gray>
+        value: "<aqua>ID: </aqua> [id]"
       bundle_icon:
-        name: "&f&l Bundle Icon"
+        name: "<white><bold>Bundle Icon</bold></white>"
         description: |-
-          &7 Change the bundle icon.
+          <gray>Change the bundle icon.</gray>
       bundle_description:
-        name: "&f&l Bundle Description"
+        name: "<white><bold>Bundle Description</bold></white>"
       bundle_info:
-        name: "&f&l General Information"
+        name: "<white><bold>General Information</bold></white>"
         description: |-
-          &7 Show general information
-          &7 about this bundle.
+          <gray>Show general information
+          </gray><gray>about this bundle.</gray>
       bundle_generators:
-        name: "&f&l Generators"
+        name: "<white><bold>Generators</bold></white>"
         description: |-
-          &7 Show a list of generators
-          &7 assigned to this bundle.
+          <gray>Show a list of generators
+          </gray><gray>assigned to this bundle.</gray>
       add_generator:
-        name: "&f&l Add Generator"
+        name: "<white><bold>Add Generator</bold></white>"
         description: |-
-          &7 Assign a generator
-          &7 to this bundle.
-        list: "&b Selected Generators:"
-        value: "&b - [generator]"
+          <gray>Assign a generator
+          </gray><gray>to this bundle.</gray>
+        list: "<aqua>Selected Generators:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       remove_generator:
-        name: "&f&l Remove Generator"
+        name: "<white><bold>Remove Generator</bold></white>"
         description: |-
-          &7 Remove a generator
-          &7 from this bundle.
-        list: "&b Selected Generators:"
-        value: "&b - [generator]"
+          <gray>Remove a generator
+          </gray><gray>from this bundle.</gray>
+        list: "<aqua>Selected Generators:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       # Buttons in Bundle Management GUI
       create_bundle:
-        name: "&f&l Create Bundle"
+        name: "<white><bold>Create Bundle</bold></white>"
         description: |-
-          &7 Create a new bundle
-          &7 for this gamemode.
+          <gray>Create a new bundle
+          </gray><gray>for this gamemode.</gray>
       delete_bundle:
-        name: "&f&l Remove Bundle"
+        name: "<white><bold>Remove Bundle</bold></white>"
         description: |-
-          &7 Remove a bundle from
-          &7 this gamemode completely.
-        list: "&b Selected Bundles:"
-        value: "&b - [bundle]"
+          <gray>Remove a bundle from
+          </gray><gray>this gamemode completely.</gray>
+        list: "<aqua>Selected Bundles:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
       # Buttons in Generator Edit Panel
       name:
-        name: "&f&l Generator Name"
+        name: "<white><bold>Generator Name</bold></white>"
         description: |-
-          &7 Title for this generator.
-          &7 Supports color codes.
-        value: "&b Name: &r [generator]"
+          <gray>Title for this generator.
+          </gray><gray>Supports color codes.</gray>
+        value: "<aqua>Name: </aqua> [generator]"
       id:
-        name: "&f&l Generator Id"
+        name: "<white><bold>Generator Id</bold></white>"
         description: |-
-          &7 The current generator ID.
-        value: "&b ID: &r [id]"
+          <gray>The current generator ID.</gray>
+        value: "<aqua>ID: </aqua> [id]"
       icon:
-        name: "&f&l Generator Icon"
+        name: "<white><bold>Generator Icon</bold></white>"
         description: |-
-          &7 Item used to display this
-          &7 generator in all GUIs.
+          <gray>Item used to display this
+          </gray><gray>generator in all GUIs.</gray>
       locked_icon:
-        name: "&f&l Locked Icon"
+        name: "<white><bold>Locked Icon</bold></white>"
         description: |-
-          &7 Item used to display this
-          &7 generator in all GUIs if
-          &7 it is locked.
+          <gray>Item used to display this
+          </gray><gray>generator in all GUIs if
+          </gray><gray>it is locked.</gray>
       description:
-        name: "&f&l Generator Description"
+        name: "<white><bold>Generator Description</bold></white>"
         description: |-
-          &7 Text for generator that will
-          &7 be written under title.
-        value: "&b Description:"
+          <gray>Text for generator that will
+          </gray><gray>be written under title.</gray>
+        value: "<aqua>Description:</aqua>"
       deployed:
-        name: "&f&l Deployed"
+        name: "<white><bold>Deployed</bold></white>"
         description: |-
-          &7 Deployed generators are visible
-          &7 to and accessible by players.
-          &7 Undeployed generators will not
-          &7 generate blocks.
+          <gray>Deployed generators are visible
+          </gray><gray>to and accessible by players.
+          </gray><gray>Undeployed generators will not
+          </gray><gray>generate blocks.</gray>
         enabled: |-
-          &b This generator is &a deployed.
+          <aqua>This generator is </aqua><green>deployed.</green>
         disabled: |-
-          &b This generator is &c not deployed.
+          <aqua>This generator is </aqua><red>not deployed.</red>
       add_material:
-        name: "&f&l Add Material"
+        name: "<white><bold>Add Material</bold></white>"
         description: |-
-          &7 Add new material to the
-          &7 current material list.
+          <gray>Add new material to the
+          </gray><gray>current material list.</gray>
       remove_material:
-        name: "&f&l Remove Materials"
+        name: "<white><bold>Remove Materials</bold></white>"
         description: |-
-          &7 Remove selected
-          &7 materials from the list.
-        selected-materials: "&7 Selected Materials:"
-        list-value: "&7 - [number] x [value]"
+          <gray>Remove selected
+          </gray><gray>materials from the list.</gray>
+        selected-materials: "<gray>Selected Materials:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
       # Buttons in Bundle Management GUI
       create_generator:
-        name: "&f&l Create Generator"
+        name: "<white><bold>Create Generator</bold></white>"
         description: |-
-          &7 Create a new
-          &7 generator for
-          &7 the gamemode.
+          <gray>Create a new
+          </gray><gray>generator for
+          </gray><gray>the gamemode.</gray>
       delete_generator:
-        name: "&f&l Remove Generator"
+        name: "<white><bold>Remove Generator</bold></white>"
         description: |-
-          &7 Remove generator
-          &7 from gamemode completely.
-        list: "&b Selected Generators:"
-        value: "&b - [generator]"
+          <gray>Remove generator
+          </gray><gray>from gamemode completely.</gray>
+        list: "<aqua>Selected Generators:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       # Buttons in Island Data Edit GUI
       island_name:
-        name: "&f&l [name]"
+        name: "<white><bold>[name]</bold></white>"
         description: |-
-          &7 [owner]
-          &b [members]
-          &b Island ID: &7 [id]
-        owner: "&b Owner: [player]"
-        list: "&b Members:"
-        value: "&b - [player]"
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>Island ID: </aqua><gray>[id]</gray>
+        owner: "<aqua>Owner: [player]</aqua>"
+        list: "<aqua>Members:</aqua>"
+        value: "<aqua>- [player]</aqua>"
       island_working_range:
-        name: "&f&l Island Working Range"
+        name: "<white><bold>Island Working Range</bold></white>"
         description: |-
-          &7 Working range for generators
-          &7 on current island.
-          &7 0 and below means unlimited
-          &7 range.
-        value: "&b Range: [number]"
+          <gray>Working range for generators
+          </gray><gray>on current island.
+          </gray><gray>0 and below means unlimited
+          </gray><gray>range.</gray>
+        value: "<aqua>Range: [number]</aqua>"
         overwritten: |-
-          &c Owner has a permission that
-          &c overwrites working range.
+          <red>Owner has a permission that
+          </red><red>overwrites working range.</red>
       owner_working_range:
-        name: "&f&l Owner Working Range"
+        name: "<white><bold>Owner Working Range</bold></white>"
         description: |-
-          &7 Working range for generators
-          &7 for the current owner.
-          &7 '0' means that owner range is
-          &7 ignored.
-          &7 '-1' means that owner has
-          &7 unlimitated working range.
-          "&7 Permission for user to assign:"
-          "&7&o '[gamemode].stone-generator."
-          "&7&o max-range.<number>'"
-        value: "&b Range: [number]"
+          <gray>Working range for generators
+          </gray><gray>for the current owner.
+          </gray><gray>'0' means that owner range is
+          </gray><gray>ignored.
+          </gray><gray>'-1' means that owner has
+          </gray><gray>unlimitated working range.
+          "</gray><gray> Permission for user to assign:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Range: [number]</aqua>"
       island_max_generators:
-        name: "&f&l Max Island Generators"
+        name: "<white><bold>Max Island Generators</bold></white>"
         description: |-
-          &7 Maximum active
-          &7 generator tiers allowed
-          &7 at the same time that
-          &7 for current island.
-          &7 0 and below means 
-          &7 unlimited.
-        value: "&b Max Generators: [number]"
+          <gray>Maximum active
+          </gray><gray>generator tiers allowed
+          </gray><gray>at the same time that
+          </gray><gray>for current island.
+          </gray><gray>0 and below means 
+          </gray><gray>unlimited.</gray>
+        value: "<aqua>Max Generators: [number]</aqua>"
         overwritten: |-
-          &c Owner has a permission that
-          &c overwrites the generator count.
+          <red>Owner has a permission that
+          </red><red>overwrites the generator count.</red>
       owner_max_generators:
-        name: "&f&l Max Owner Generators"
+        name: "<white><bold>Max Owner Generators</bold></white>"
         description: |-
-          &7 Maximum active concurrent
-          &7 generator tiers that the
-          &7 island owner is allowed.
-          &7 '0' means that owner amount
-          &7 is ignored.
-          &7 '-1' means that owner has
-          &7 unlimitated generator count.
-          "&7 Permission for user to assign:"
-          "&7&o '[gamemode].stone-generator."
-          "&7&o active-generators.<number>'"
-        value: "&b Max Generators: [number]"
+          <gray>Maximum active concurrent
+          </gray><gray>generator tiers that the
+          </gray><gray>island owner is allowed.
+          </gray><gray>'0' means that owner amount
+          </gray><gray>is ignored.
+          </gray><gray>'-1' means that owner has
+          </gray><gray>unlimitated generator count.
+          "</gray><gray> Permission for user to assign:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Max Generators: [number]</aqua>"
       island_bundle:
-        name: "&f&l Island Bundle"
+        name: "<white><bold>Island Bundle</bold></white>"
         description: |-
-          &7 Bundle that is assigned to
-          &7 the current island.
-          &7 Only generators from this 
-          &7 bundle can be used on the
-          &7 island.
-        value: "&b Bundle: [bundle]"
+          <gray>Bundle that is assigned to
+          </gray><gray>the current island.
+          </gray><gray>Only generators from this 
+          </gray><gray>bundle can be used on the
+          </gray><gray>island.</gray>
+        value: "<aqua>Bundle: [bundle]</aqua>"
         overwritten: |-
-          &c Owner has a permission that
-          &c overwrites bundle.
+          <red>Owner has a permission that
+          </red><red>overwrites bundle.</red>
       owner_bundle:
-        name: "&f&l Owner Bundle"
+        name: "<white><bold>Owner Bundle</bold></white>"
         description: |-
-          &7 Bundle that is assigned to
-          &7 the current island owner.
-          &7 Only generators from this 
-          &7 bundle can be used on the
-          &7 island.
-          "&7 Permission for user to assign:"
-          "&7&o '[gamemode].stone-generator."
-          "&7&o bundle.<bundle-id>'"
-        value: "&b Bundle: [bundle]"
+          <gray>Bundle that is assigned to
+          </gray><gray>the current island owner.
+          </gray><gray>Only generators from this 
+          </gray><gray>bundle can be used on the
+          </gray><gray>island.
+          "</gray><gray> Permission for user to assign:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Bundle: [bundle]</aqua>"
       island_info:
-        name: "&f&l General Information"
+        name: "<white><bold>General Information</bold></white>"
         description: |-
-          &7 Shows general information
-          &7 about this island.
+          <gray>Shows general information
+          </gray><gray>about this island.</gray>
       island_generators:
-        name: "&f&l Island Generators"
+        name: "<white><bold>Island Generators</bold></white>"
         description: |-
-          &7 Shows list of all generators
-          &7 that are available for the
-          &7 current island.
+          <gray>Shows list of all generators
+          </gray><gray>that are available for the
+          </gray><gray>current island.</gray>
       reset_to_default:
-        name: "&f&l Reset To Defaults"
+        name: "<white><bold>Reset To Defaults</bold></white>"
         description: |-
-          &7 Resets all island values
-          &7 to the default values from
-          &7 the settings.
+          <gray>Resets all island values
+          </gray><gray>to the default values from
+          </gray><gray>the settings.</gray>
       # Buttons in Island Management GUI
       is_online:
-        name: "&f&l Online Players"
+        name: "<white><bold>Online Players</bold></white>"
         description: |-
-          &7 List of online player
-          &7 islands.
+          <gray>List of online player
+          </gray><gray>islands.</gray>
       all_islands:
-        name: "&f&l All Islands"
+        name: "<white><bold>All Islands</bold></white>"
         description: |-
-          &7 List of all islands.
+          <gray>List of all islands.</gray>
       search:
-        name: "&f&l Search"
+        name: "<white><bold>Search</bold></white>"
         description: |-
-          &7 Search for a specific
-          &7 island.
-        search: "&b Value: [value]"
+          <gray>Search for a specific
+          </gray><gray>island.</gray>
+        search: "<aqua>Value: [value]</aqua>"
       # Buttons in Settings GUI
       offline_generation:
-        name: "&f&l Offline Generation"
+        name: "<white><bold>Offline Generation</bold></white>"
         description: |-
-          &7 Prevents blocks from being
-          &7 generated if all island
-          &7 members are offline.
+          <gray>Prevents blocks from being
+          </gray><gray>generated if all island
+          </gray><gray>members are offline.</gray>
         enabled: |-
-          &b Offline generation is &a enabled &b .
+          <aqua>Offline generation is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          &b Offline generation is &c disabled &b .
+          <aqua>Offline generation is </aqua><red>disabled </red><aqua>.</aqua>
       use_physic:
-        name: "&f&l Use Physics"
+        name: "<white><bold>Use Physics</bold></white>"
         description: |-
-          &7 Using physics on block
-          &7 generation allows the
-          &7 use of redstone machines,
-          &7 however it reduces server
-          &7 performance a little.
+          <gray>Using physics on block
+          </gray><gray>generation allows the
+          </gray><gray>use of redstone machines,
+          </gray><gray>however it reduces server
+          </gray><gray>performance a little.</gray>
         enabled: |-
-          &b Physics is &a enabled &b .
+          <aqua>Physics is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          &b Physics is &c disabled &b .
+          <aqua>Physics is </aqua><red>disabled </red><aqua>.</aqua>
       use_bank:
-        name: "&f&l Use Bank"
+        name: "<white><bold>Use Bank</bold></white>"
         description: |-
-          &7 Using island bank account
-          &7 for all purchases and
-          &7 activations.
-          &7 Requires Bank Addon.
+          <gray>Using island bank account
+          </gray><gray>for all purchases and
+          </gray><gray>activations.
+          </gray><gray>Requires Bank Addon.</gray>
         enabled: |-
-          &b Bank usage is &a enabled &b .
+          <aqua>Bank usage is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          &b Bank usage is &c disabled &b .
+          <aqua>Bank usage is </aqua><red>disabled </red><aqua>.</aqua>
       working_range:
-        name: "&f&l Default Working Range"
+        name: "<white><bold>Default Working Range</bold></white>"
         description: |-
-          &7 Distance from players until
-          &7 block generation will stop.
-          &7 0 and below means unlimited.
-          &7 Setting requires server
-          &7 restart to activate.
-        value: "&b Range: [number]"
+          <gray>Distance from players until
+          </gray><gray>block generation will stop.
+          </gray><gray>0 and below means unlimited.
+          </gray><gray>Setting requires server
+          </gray><gray>restart to activate.</gray>
+        value: "<aqua>Range: [number]</aqua>"
       active_generators:
-        name: "&f&l Default Active Generators"
+        name: "<white><bold>Default Active Generators</bold></white>"
         description: |-
-          &7 Default maximum amount of
-          &7 active generators at the
-          &7 same time.
-          &7 0 and below means unlimited.
-        value: "&b Count: [number]"
+          <gray>Default maximum amount of
+          </gray><gray>active generators at the
+          </gray><gray>same time.
+          </gray><gray>0 and below means unlimited.</gray>
+        value: "<aqua>Count: [number]</aqua>"
       show_filters:
-        name: "&f&l Show Filters"
+        name: "<white><bold>Show Filters</bold></white>"
         description: |-
-          &7 Filters are a top row in
-          &7 Player GUI, which allows
-          &7 to show only generators
-          &7 by type or status.
-          &7 This setting disables
-          &7 and hides them.
+          <gray>Filters are a top row in
+          </gray><gray>Player GUI, which allows
+          </gray><gray>to show only generators
+          </gray><gray>by type or status.
+          </gray><gray>This setting disables
+          </gray><gray>and hides them.</gray>
         enabled: |-
-          &b Filters are &a enabled &b .
+          <aqua>Filters are </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          &b Filters are &c disabled &b .
+          <aqua>Filters are </aqua><red>disabled </red><aqua>.</aqua>
       border_block:
-        name: "&f&l Border Block"
+        name: "<white><bold>Border Block</bold></white>"
         description: |-
-          &7 Border block is a material
-          &7 which surrounds the user GUI.
-          &7 Setting it to air disables
-          &7 it.
+          <gray>Border block is a material
+          </gray><gray>which surrounds the user GUI.
+          </gray><gray>Setting it to air disables
+          </gray><gray>it.</gray>
       border_block_name:
-        name: "&f&l Border Block Name"
+        name: "<white><bold>Border Block Name</bold></white>"
         description: |-
-          &7 Display name for a border
-          &7 block.
-          &7 If it is set to empty, then
-          &7 it will use the block name.
-          &7 To set it as 1 empty space,
-          "&7 write 'empty'."
-        value: "&b Name: `&r[name]&r&b`"
+          <gray>Display name for a border
+          </gray><gray>block.
+          </gray><gray>If it is set to empty, then
+          </gray><gray>it will use the block name.
+          </gray><gray>To set it as 1 empty space,
+          "</gray><gray> write 'empty'."</gray>
+        value: "<aqua>Name: `</aqua>[name]<aqua>`</aqua>"
       unlock_notify:
-        name: "&f&l Notify On Unlock"
+        name: "<white><bold>Notify On Unlock</bold></white>"
         description: |-
-          &7 A message will be sent
-          &7 to a user when she unlocks
-          &7 a new generator.
+          <gray>A message will be sent
+          </gray><gray>to a user when she unlocks
+          </gray><gray>a new generator.</gray>
         enabled: |-
-          &b Notify on unlock is &a enabled &b.
+          <aqua>Notify on unlock is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          &b Notify on unlock is &c disabled &b.
+          <aqua>Notify on unlock is </aqua><red>disabled </red><aqua>.</aqua>
       disable_on_activate:
-        name: "&f&l Disable on Activation"
+        name: "<white><bold>Disable on Activation</bold></white>"
         description: |-
-          &7 Disable oldest active generator
-          &7 if user activates a new
-          &7 generator.
-          &7 Useful for situations where
-          &7 only a single generator is allowed.
+          <gray>Disable oldest active generator
+          </gray><gray>if user activates a new
+          </gray><gray>generator.
+          </gray><gray>Useful for situations where
+          </gray><gray>only a single generator is allowed.</gray>
         enabled: |-
-          &b Disable on activation is &a enabled &b.
+          <aqua>Disable on activation is </aqua><green>enabled </green><aqua>.</aqua>
         disabled: |-
-          &b Disable on activation is &c disabled &b.
+          <aqua>Disable on activation is </aqua><red>disabled </red><aqua>.</aqua>
       # Buttons in Library GUI
       library:
-        name: "&f&l [name]"
+        name: "<white><bold>[name]</bold></white>"
         description: |-
-          &7 [description]
-          &7 Author: [author]
-          &7 Created for [gamemode]
-          &7 Language: [lang]
-          &7 Version: [version]
+          <gray>[description]
+          </gray><gray>Author: [author]
+          </gray><gray>Created for [gamemode]
+          </gray><gray>Language: [lang]
+          </gray><gray>Version: [version]</gray>
       # Button in GUI that allows to choose blocks for generators to be generated.
       accept_blocks:
-        name: "&f&l Accept the blocks"
+        name: "<white><bold>Accept the blocks</bold></white>"
         description: |-
-          &7 Accepts selected blocks
-          &7 and returns.
-        selected-blocks: "&7 Selected Blocks:"
-        list-value: "&7 - [value]"
+          <gray>Accepts selected blocks
+          </gray><gray>and returns.</gray>
+        selected-blocks: "<gray>Selected Blocks:</gray>"
+        list-value: "<gray>- [value]</gray>"
       material-icon:
-        name: "&f&l [material]"
-        description: "&7 Block ID: [id]"
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>Block ID: [id]</gray>"
       search_block:
-        name: "&f&l Search"
+        name: "<white><bold>Search</bold></white>"
         description: |-
-          &7 Search for a specific
-          &7 block.
-        search: "&b Value: [value]"
+          <gray>Search for a specific
+          </gray><gray>block.</gray>
+        search: "<aqua>Value: [value]</aqua>"
       # Button in GUI that allows to choose biomes for generator.
       accept_biome:
-        name: "&f&l Accept the biomes"
+        name: "<white><bold>Accept the biomes</bold></white>"
         description: |-
-          &7 Accepts selected biomes
-          &7 and returns.
-        selected-biomes: "&7 Selected Biomes:"
-        list-value: "&7 - [value]"
+          <gray>Accepts selected biomes
+          </gray><gray>and returns.</gray>
+        selected-biomes: "<gray>Selected Biomes:</gray>"
+        list-value: "<gray>- [value]</gray>"
       biome-icon:
-        name: "&f&l [biome]"
+        name: "<white><bold>[biome]</bold></white>"
       min-height:
-        name: "&f&l Minimum Height"
+        name: "<white><bold>Minimum Height</bold></white>"
         description: |-
-          &7 Set the minimum height
-          &7 for this material.
-          &7 Current value: &b[min_height]
-        value: "&b [min_height]"
+          <gray>Set the minimum height
+          </gray><gray>for this material.
+          </gray><gray>Current value: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
       max-height:
-        name: "&f&l Maximum Height"
+        name: "<white><bold>Maximum Height</bold></white>"
         description: |-
-          &7 Set the maximum height
-          &7 for this material.
-          &7 Current value: &b[max_height]
-        value: "&b [max_height]"
+          <gray>Set the maximum height
+          </gray><gray>for this material.
+          </gray><gray>Current value: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
       clear-height-range:
-        name: "&f&l Clear Height Range"
+        name: "<white><bold>Clear Height Range</bold></white>"
         description: |-
-          &7 Remove the specific height range
-          &7 for this material.
-          &7 It will use the generator's
-          &7 default height range instead.
+          <gray>Remove the specific height range
+          </gray><gray>for this material.
+          </gray><gray>It will use the generator's
+          </gray><gray>default height range instead.</gray>
       # This section contains names for filter biome groups.
       biome-groups:
         temperate:
-          name: "&f&l Temperate"
+          name: "<white><bold>Temperate</bold></white>"
           description: |-
-            &7 Show only temperate biomes
+            <gray>Show only temperate biomes</gray>
         warm:
-          name: "&f&l Warm"
+          name: "<white><bold>Warm</bold></white>"
           description: |-
-            &7 Show only warm biomes
+            <gray>Show only warm biomes</gray>
         cold:
-          name: "&f&l Cold"
+          name: "<white><bold>Cold</bold></white>"
           description: |-
-            &7 Show only cold biomes
+            <gray>Show only cold biomes</gray>
         snowy:
-          name: "&f&l Snowy"
+          name: "<white><bold>Snowy</bold></white>"
           description: |-
-            &7 Show only snowy biomes
+            <gray>Show only snowy biomes</gray>
         ocean:
-          name: "&f&l Ocean"
+          name: "<white><bold>Ocean</bold></white>"
           description: |-
-            &7 Show only ocean biomes
+            <gray>Show only ocean biomes</gray>
         nether:
-          name: "&f&l Nether"
+          name: "<white><bold>Nether</bold></white>"
           description: |-
-            &7 Show only nether biomes
+            <gray>Show only nether biomes</gray>
         the_end:
-          name: "&f&l The End"
+          name: "<white><bold>The End</bold></white>"
           description: |-
-            &7 Show only the end biomes
+            <gray>Show only the end biomes</gray>
         neutral:
-          name: "&f&l Neutral"
+          name: "<white><bold>Neutral</bold></white>"
           description: |-
-            &7 Show only neutral biomes
+            <gray>Show only neutral biomes</gray>
         unused:
-          name: "&f&l Unused"
+          name: "<white><bold>Unused</bold></white>"
           description: |-
-            &7 Show only unused biomes
+            <gray>Show only unused biomes</gray>
         cave:
-          name: "&f&l Cave"
+          name: "<white><bold>Cave</bold></white>"
           description: |-
-            &7 Show only cave biomes
+            <gray>Show only cave biomes</gray>
       # This section contains names and descriptions for generator type buttons.
       generator-types:
         cobblestone:
-          name: "&f&l Cobblestone"
+          name: "<white><bold>Cobblestone</bold></white>"
           description: |-
-            &7 Works only with cobblestone
-            &7 generators.
-            
-            &6&o Hint:
-            &6&o Forms when a lava stream 
-            &6&o comes into contact with
-            &6&o water.
+            <gray>Works only with cobblestone
+            </gray><gray>generators.
+
+            </gray><gold><italic>Hint:
+            </italic></gold><italic><gold><italic>Forms when a lava stream 
+            </italic></gold></italic><italic><italic><gold><italic>comes into contact with
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>water.</italic></gold></italic></italic></italic>
         stone:
-          name: "&f&l Stone"
+          name: "<white><bold>Stone</bold></white>"
           description: |-
-            &7 Works only with stone
-            &7 generators.
-            
-            &6&o Hint:
-            &6&o Forms when lava flows
-            &6&o on top of water blocks.
+            <gray>Works only with stone
+            </gray><gray>generators.
+
+            </gray><gold><italic>Hint:
+            </italic></gold><italic><gold><italic>Forms when lava flows
+            </italic></gold></italic><italic><italic><gold><italic>on top of water blocks.</italic></gold></italic></italic>
         basalt:
-          name: "&f&l Basalt"
+          name: "<white><bold>Basalt</bold></white>"
           description: |-
-            &7 Works only with basalt
-            &7 generators.
-            
-            &6&o Hint:
-            &6&o Forms when lava flows
-            &6&o on top of soul soil and
-            &6&o is adjacent to blue ice.
+            <gray>Works only with basalt
+            </gray><gray>generators.
+
+            </gray><gold><italic>Hint:
+            </italic></gold><italic><gold><italic>Forms when lava flows
+            </italic></gold></italic><italic><italic><gold><italic>on top of soul soil and
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>is adjacent to blue ice.</italic></gold></italic></italic></italic>
         cobblestone_or_stone:
-          name: "&f&l Cobblestone or Stone"
+          name: "<white><bold>Cobblestone or Stone</bold></white>"
           description: |-
-            &7 Works with cobblestone and
-            &7 stone generators.
+            <gray>Works with cobblestone and
+            </gray><gray>stone generators.</gray>
         basalt_or_cobblestone:
-          name: "&f&l Basalt or Cobblestone"
+          name: "<white><bold>Basalt or Cobblestone</bold></white>"
           description: |-
-            &7 Works with basalt and
-            &7 cobblestone generators.
+            <gray>Works with basalt and
+            </gray><gray>cobblestone generators.</gray>
         basalt_or_stone:
-          name: "&f&l Basalt or Stone"
+          name: "<white><bold>Basalt or Stone</bold></white>"
           description: |-
-            &7 Works with basalt and
-            &7 stone generators.
+            <gray>Works with basalt and
+            </gray><gray>stone generators.</gray>
         any:
-          name: "&f&l Any"
+          name: "<white><bold>Any</bold></white>"
           description: |-
-            &7 Works with any generator.
+            <gray>Works with any generator.</gray>
     # This section contains translations for GUI button tips.
     tips:
-      click-to-previous: "&e Click &7 to view previous page."
-      click-to-next: "&e Click &7 to view next page."
-      click-to-cancel: "&e Click &7 to cancel."
-      click-to-choose: "&e Click &7 to choose."
-      click-to-select: "&e Click &7 to select."
-      click-to-deselect: "&e Click &7 to deselect."
-      click-to-accept: "&e Click &7 to accept and return."
-      click-to-filter-enable: "&e Click &7 to enable filter."
-      click-to-filter-disable: "&e Click &7 to disable filter."
-      click-to-activate: "&e Click &7 to activate."
-      click-to-deactivate: "&e Click &7 to deactivate."
+      click-to-previous: "<yellow>Click </yellow><gray>to view previous page.</gray>"
+      click-to-next: "<yellow>Click </yellow><gray>to view next page.</gray>"
+      click-to-cancel: "<yellow>Click </yellow><gray>to cancel.</gray>"
+      click-to-choose: "<yellow>Click </yellow><gray>to choose.</gray>"
+      click-to-select: "<yellow>Click </yellow><gray>to select.</gray>"
+      click-to-deselect: "<yellow>Click </yellow><gray>to deselect.</gray>"
+      click-to-accept: "<yellow>Click </yellow><gray>to accept and return.</gray>"
+      click-to-filter-enable: "<yellow>Click </yellow><gray>to enable filter.</gray>"
+      click-to-filter-disable: "<yellow>Click </yellow><gray>to disable filter.</gray>"
+      click-to-activate: "<yellow>Click </yellow><gray>to activate.</gray>"
+      click-to-deactivate: "<yellow>Click </yellow><gray>to deactivate.</gray>"
       click-gold-to-purchase: |-
-        &e Click &7 on gold block
-        &7 to purchase.
-      click-to-purchase: "&e Click &7 to purchase."
-      click-to-return: "&e Click &7 to return."
-      click-to-quit: "&e Click &7 to quit."
-      click-to-wipe: "&e Click &7 to wipe."
-      click-to-open: "&e Click &7 to open."
-      click-to-export: "&e Click &7 to start exporting."
-      click-to-change: "&e Click &7 to change."
+        <yellow>Click </yellow><gray>on gold block
+        </gray><gray>to purchase.</gray>
+      click-to-purchase: "<yellow>Click </yellow><gray>to purchase.</gray>"
+      click-to-return: "<yellow>Click </yellow><gray>to return.</gray>"
+      click-to-quit: "<yellow>Click </yellow><gray>to quit.</gray>"
+      click-to-wipe: "<yellow>Click </yellow><gray>to wipe.</gray>"
+      click-to-open: "<yellow>Click </yellow><gray>to open.</gray>"
+      click-to-export: "<yellow>Click </yellow><gray>to start exporting.</gray>"
+      click-to-change: "<yellow>Click </yellow><gray>to change.</gray>"
       click-on-item: |-
-        &e Click &7 on item from your
-        &7 inventory.
-      click-to-view: "&e Click &7 to view."
-      click-to-add: "&e Click &7 to add."
-      click-to-remove: "&e Click &7 to remove."
-      select-before: "&e Select &7 before continue."
-      click-to-create: "&e Click &7 to create."
-      right-click-to-select: "&e Right Click &7 to select."
-      right-click-to-deselect: "&e Right Click &7 to deselect."
-      click-to-toggle: "&e Click &7 to toggle."
-      left-click-to-edit: "&e Left Click &7 to edit."
-      right-click-to-lock: "&e Right Click &7 to lock."
-      right-click-to-unlock: "&e Right Click &7 to unlock."
-      click-to-perform: "&e Click &7 to perform."
-      click-to-edit: "&e Click &7 to edit."
-      right-click-to-clear: "&e Right Click &7 to clear."
+        <yellow>Click </yellow><gray>on item from your
+        </gray><gray>inventory.</gray>
+      click-to-view: "<yellow>Click </yellow><gray>to view.</gray>"
+      click-to-add: "<yellow>Click </yellow><gray>to add.</gray>"
+      click-to-remove: "<yellow>Click </yellow><gray>to remove.</gray>"
+      select-before: "<yellow>Select </yellow><gray>before continue.</gray>"
+      click-to-create: "<yellow>Click </yellow><gray>to create.</gray>"
+      right-click-to-select: "<yellow>Right Click </yellow><gray>to select.</gray>"
+      right-click-to-deselect: "<yellow>Right Click </yellow><gray>to deselect.</gray>"
+      click-to-toggle: "<yellow>Click </yellow><gray>to toggle.</gray>"
+      left-click-to-edit: "<yellow>Left Click </yellow><gray>to edit.</gray>"
+      right-click-to-lock: "<yellow>Right Click </yellow><gray>to lock.</gray>"
+      right-click-to-unlock: "<yellow>Right Click </yellow><gray>to unlock.</gray>"
+      click-to-perform: "<yellow>Click </yellow><gray>to perform.</gray>"
+      click-to-edit: "<yellow>Click </yellow><gray>to edit.</gray>"
+      right-click-to-clear: "<yellow>Right Click </yellow><gray>to clear.</gray>"
       # These tooltips are showed in user gui.
-      left-click-to-view: "&e Left Click &7 to view."
-      left-click-to-purchase: "&e Left Click &7 to buy."
-      left-click-to-activate: "&e Left Click &7 to activate."
-      left-click-to-deactivate: "&e Left Click &7 to deactivate."
-      right-click-to-view: "&e Right Click &7 to view."
-      right-click-to-purchase: "&e Right Click &7 to buy."
-      right-click-to-activate: "&e Right Click &7 to activate."
-      right-click-to-deactivate: "&e Right Click &7 to deactivate."
-      shift-click-to-view: "&e Shift Click &7 to view."
-      shift-click-to-purchase: "&e Shift Click &7 to buy."
-      shift-click-to-activate: "&e Shift Click &7 to activate."
-      shift-click-to-deactivate: "&e Shift Click &7 to deactivate."
-      shift-click-to-reset: "&e Shift Click &7 to reset."
-      shift-left-click-to-set-height-range: "&e Shift+Left Click &7 to configure height range."
+      left-click-to-view: "<yellow>Left Click </yellow><gray>to view.</gray>"
+      left-click-to-purchase: "<yellow>Left Click </yellow><gray>to buy.</gray>"
+      left-click-to-activate: "<yellow>Left Click </yellow><gray>to activate.</gray>"
+      left-click-to-deactivate: "<yellow>Left Click </yellow><gray>to deactivate.</gray>"
+      right-click-to-view: "<yellow>Right Click </yellow><gray>to view.</gray>"
+      right-click-to-purchase: "<yellow>Right Click </yellow><gray>to buy.</gray>"
+      right-click-to-activate: "<yellow>Right Click </yellow><gray>to activate.</gray>"
+      right-click-to-deactivate: "<yellow>Right Click </yellow><gray>to deactivate.</gray>"
+      shift-click-to-view: "<yellow>Shift Click </yellow><gray>to view.</gray>"
+      shift-click-to-purchase: "<yellow>Shift Click </yellow><gray>to buy.</gray>"
+      shift-click-to-activate: "<yellow>Shift Click </yellow><gray>to activate.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift Click </yellow><gray>to deactivate.</gray>"
+      shift-click-to-reset: "<yellow>Shift Click </yellow><gray>to reset.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Left Click </yellow><gray>to configure height range.</gray>"
     # This section contains translations for some different GUI descriptions.
     descriptions:
       # Generator lore message generator. All elements in generator lore is generated
@@ -873,17 +873,17 @@ stone-generator:
         # Generates [blocks] section
         blocks:
           # First line in blocks section. Empty line will not be displayed.
-          title: "&7&l Blocks:"
+          title: "<gray><bold>Blocks:</bold></gray>"
           # Each block and its value under title. Cannot be empty.
           # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
-          value: "&8 [material] - [#.##]%"
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
         # Generates [treasures] section
         treasures:
           # First line in blocks section. Empty line will not be displayed.
-          title: "&7&l Treasure:"
+          title: "<gray><bold>Treasure:</bold></gray>"
           # Each treasure and its value under title. Cannot be empty.
           # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
-          value: "&8 [material] - [#.####]%"
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
         # Generates [requirements] section
         requirements:
           # Allows to change order and content of requirements message.
@@ -892,120 +892,120 @@ stone-generator:
             [level]
             [missing-permissions]
           # Generates [level] message.
-          level: "&c&l Required Level: &r&c [number]"
+          level: "<red><bold>Required Level: </bold></red><red>[number]</red>"
           # Generates [missing-permission] message title.
-          permission-title: "&c&l Missing Permissions:"
+          permission-title: "<red><bold>Missing Permissions:</bold></red>"
           # Generates [missing-permission] message values.
-          permission: "&c  -[permission]"
+          permission: "<red> -[permission]</red>"
           # Generates [biomes] message title.
-          biome-title: "&7&l Operates in:"
+          biome-title: "<gray><bold>Operates in:</bold></gray>"
           # Generates [biomes] message values.
-          biome: "&8 [biome]"
+          biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
-          any: "&7&l Operates in &e&o all &r&7&l biomes"
+          any: "<gray><bold>Operates in </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>biomes</bold></gray>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
-          locked: "&c Locked!"
+          locked: "<red>Locked!</red>"
           # Message that is showed for generators that is not deployed.
-          undeployed: "&c Not Deployed!"
+          undeployed: "<red>Not Deployed!</red>"
           # Message that is showed for Active generators.
-          active: "&2 Active"
+          active: "<dark_green>Active</dark_green>"
           # Message that is showed for generators that required purchasing.
-          purchase-cost: "&e Purchase Cost: $[number]"
+          purchase-cost: "<yellow>Purchase Cost: $[number]</yellow>"
           # Message that is showed for generators that has activation cost.
-          activation-cost: "&e Activation Cost: $[number]"
+          activation-cost: "<yellow>Activation Cost: $[number]</yellow>"
         # Generates [type] section
         type:
-          title: "&7&l Supports:"
-          cobblestone: "&8 Cobblestone Generators"
-          stone: "&8 Stone Generators"
-          basalt: "&8 Basalt Generators"
-          any: "&7&l Supports &e&o all &r&7&l generators"
+          title: "<gray><bold>Supports:</bold></gray>"
+          cobblestone: "<dark_gray>Cobblestone Generators</dark_gray>"
+          stone: "<dark_gray>Stone Generators</dark_gray>"
+          basalt: "<dark_gray>Basalt Generators</dark_gray>"
+          any: "<gray><bold>Supports </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>generators</bold></gray>"
         # Generates [height-range] section
-        height-range: "&7 Works at heights: &b[min_height] &7to &b[max_height]"
+        height-range: "<gray>Works at heights: </gray><aqua>[min_height] </aqua><gray>to </gray><aqua>[max_height]</aqua>"
       # String that displays required permission that must be set for user to set bundle.
       bundle-permission: |-
-        &7 Permission that must be
-        &7 assigned to player:
-        &7&o [gamemode].stone-generator.bundle.[id]
+        <gray>Permission that must be
+        </gray><gray>assigned to player:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
       # String that are before listing all generators assigned to bundle.
-      generators: "&7 Bundle Generators: "
+      generators: "<gray>Bundle Generators: </gray>"
       # Each generator name in listing
-      generator-list: "&7 - [generator]"
+      generator-list: "<gray>- [generator]</gray>"
       # Indicates that element is selected.
-      selected: "&e Selected"
+      selected: "<yellow>Selected</yellow>"
       # Used to refer to players island.
       island-owner: "[player]'s island"
       # Used to refer to spawn island.
-      spawn-island: "&e&l Spawn island"
+      spawn-island: "<yellow><bold>Spawn island</bold></yellow>"
       # Used to refer to unknown player.
       unknown: "unknown"
   # This section contains translations for different informative messages.
   messages:
     # Message that appears after loading generator in local cache.
-    generator-loaded: "&a Generator &r '[generator]' &r&a  is loaded into local cache."
+    generator-loaded: "<green>Generator </green> '[generator]' <green> is loaded into local cache.</green>"
     # Message that appears after loading bundle in local cache.
-    bundle-loaded: "&a Bundle &r '[bundle]' &r&a  is loaded into local cache."
+    bundle-loaded: "<green>Bundle </green> '[bundle]' <green> is loaded into local cache.</green>"
     # Message that appears after deactivating generator.
-    generator-deactivated: "&e Generator &r '[generator]' &r&e is deactivated."
+    generator-deactivated: "<yellow>Generator </yellow> '[generator]' <yellow>is deactivated.</yellow>"
     # Message that appears when trying to activate too many generators.
-    active-generators-reached: "&c Too many generators are activated. Try to deactivate some before activating a new one."
+    active-generators-reached: "<red>Too many generators are activated. Try to deactivate some before activating a new one.</red>"
     # Message that appears when trying to unlock default or undeployed generator.
-    generator-cannot-be-unlocked: "&c Generator &r '[generator]' &r&c is not unlocked."
+    generator-cannot-be-unlocked: "<red>Generator </red> '[generator]' <red>is not unlocked.</red>"
     # Message that appears when trying to activate locked generator.
-    generator-not-unlocked: "&c Generator &r '[generator]' &r&c is not unlocked."
+    generator-not-unlocked: "<red>Generator </red> '[generator]' <red>is not unlocked.</red>"
     # Message that appears when purchasing the generator.
-    generator-not-purchased: "&c Generator &r '[generator]' &r&c is not purchased."
+    generator-not-purchased: "<red>Generator </red> '[generator]' <red>is not purchased.</red>"
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
-    no-credits: "&c Not enough credits to activate generator. Activation requires [number] credits."
+    no-credits: "<red>Not enough credits to activate generator. Activation requires [number] credits.</red>"
     # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
-    no-credits-bank: "&c Your bank account has not enough credits to activate generator. Activation requires [number] credits."
+    no-credits-bank: "<red>Your bank account has not enough credits to activate generator. Activation requires [number] credits.</red>"
     # Message that appears when activating the generator.
-    generator-activated: "&e Generator &r '[generator]' &r&e is activated."
+    generator-activated: "<yellow>Generator </yellow> '[generator]' <yellow>is activated.</yellow>"
     # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
-    generator-exhausted: "&c Generator &r '[generator]' &r&c has reached its generation limit and is now on cooldown for [number] more minute(s)."
+    generator-exhausted: "<red>Generator </red> '[generator]' <red>has reached its generation limit and is now on cooldown for [number] more minute(s).</red>"
     # Message that appears when purchasing the generator.
-    generator-purchased: "&e Generator &r '[generator]' &r&e is purchased."
+    generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>is purchased.</yellow>"
     # Message that appears when trying to buy already purchased generator.
-    generator-already-purchased: "&c Generator &r '[generator]' &r&c is already purchased."
+    generator-already-purchased: "<red>Generator </red> '[generator]' <red>is already purchased.</red>"
     # Message that appears when trying to buy generator without required island level
-    island-level-not-reached: "&c Generator &r '[generator]' &r&c requires [number] island level."
+    island-level-not-reached: "<red>Generator </red> '[generator]' <red>requires [number] island level.</red>"
     # Message that appears when trying to buy generator without required permissions
-    missing-permission: "&c Generator &r '[generator]' &r&c requires permission `[permission]`."
+    missing-permission: "<red>Generator </red> '[generator]' <red>requires permission `[permission]`.</red>"
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
-    no-credits-buy: "&c Not enough credits to purchase generator. This generator cost [number] credits."
+    no-credits-buy: "<red>Not enough credits to purchase generator. This generator cost [number] credits.</red>"
     # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
-    no-credits-buy-bank: "&c Your bank account has not enough credits. This generator cost [number] credits."
+    no-credits-buy-bank: "<red>Your bank account has not enough credits. This generator cost [number] credits.</red>"
     # Message that appears after importing a file.
-    import-count: "&e Imported [generator] new generators and [bundle] new bundles."
+    import-count: "<yellow>Imported [generator] new generators and [bundle] new bundles.</yellow>"
     # Message that appears after clicking on download button in web library.
-    start-downloading: "&e Start downloading library."
+    start-downloading: "<yellow>Start downloading library.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
-    no-generator-data: "&c Could not find a valid generator data"
+    no-generator-data: "<red>Could not find a valid generator data</red>"
     # Error message that is displayed when island data is not found for island in management panel.
-    no-island-data: "&c Island Data is not found."
+    no-island-data: "<red>Island Data is not found.</red>"
     # Error message that is displayed when bundle data is not find.
-    no-bundle-data: "&c Could not find a valid bundle data"
+    no-bundle-data: "<red>Could not find a valid bundle data</red>"
     # Error message that is displayed when library does not have any data.
-    no-library-entries: "&c Could not find any library entry!"
+    no-library-entries: "<red>Could not find any library entry!</red>"
     # Error message that is displayed when trying to load file that does not exists.
-    no-file: "&c `[file]` file not found. Cannot perform importing."
+    no-file: "<red>`[file]` file not found. Cannot perform importing.</red>"
     # Error message that is displayed when loading file lead to a crash.
-    no-load: "&c Could not load `[file]` file. Error while reading: [description]."
+    no-load: "<red>Could not load `[file]` file. Error while reading: [description].</red>"
     # Error message that is displayed when trying to import generators in non-gamemode-world.
-    not-a-gamemode-world: "&c World '[world]' is not a Game Mode Addon world."
+    not-a-gamemode-world: "<red>World '[world]' is not a Game Mode Addon world.</red>"
     # Error message that is displayed when saving file with the same name
-    file-exist: "&c The file `[file]` already exist. Choose different name."
+    file-exist: "<red>The file `[file]` already exist. Choose different name.</red>"
     # Error message that is displayed when trying to view generator that does not exist.
-    generator-tier-not-found: "&c Generator with id '[generator]' &r&c not found in [gamemode]."
+    generator-tier-not-found: "<red>Generator with id '[generator]' </red><red>not found in [gamemode].</red>"
     # Error message that is displayed when user uses generator command in world without generators.
-    no-generators-in-world: "&c There are no available generators for you in [world]"
+    no-generators-in-world: "<red>There are no available generators for you in [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
-    could-not-remove-money: "&c Something went wrong while withdrawing money."
-    max-height-less-than-min: "&c Maximum height ([MAX]) cannot be less than minimum height ([MIN])!"
+    could-not-remove-money: "<red>Something went wrong while withdrawing money.</red>"
+    max-height-less-than-min: "<red>Maximum height ([MAX]) cannot be less than minimum height ([MIN])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:
@@ -1018,68 +1018,66 @@ stone-generator:
     # List of strings that allows to exit conversation. (separated with ,)
     exit-string: "cancel, exit, quit"
     # Message that is send to user when conversation is cancelled.
-    cancelled: "&c Conversation cancelled!"
+    cancelled: "<red>Conversation cancelled!</red>"
     # Prefix for messages that are send from server.
-    prefix: "&l&6 [BentoBox]: &r"
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
     # Error message that is showed if user input a value that is not a number.
-    numeric-only: "&c The given [value] is not a number!"
+    numeric-only: "<red>The given [value] is not a number!</red>"
     # Error message that is showed if user input a number that is smaller or larger that allowed.
-    not-valid-value: "&c The given number [value] is not valid. It must be larger than [min] and smaller than [max]!"
+    not-valid-value: "<red>The given number [value] is not valid. It must be larger than [min] and smaller than [max]!</red>"
     # Message that displays new description by each line.
-    new-description: "&a New description:"
+    new-description: "<green>New description:</green>"
     # Below here starts messages and questions created by GUI.
     # Message that asks for search value input.
-    write-search: "&e Please write a search value. (write 'cancel' to exit)"
+    write-search: "<yellow>Please write a search value. (write 'cancel' to exit)</yellow>"
     # Message that appears after updating search value.
-    search-updated: "&a Search value updated."
+    search-updated: "<green>Search value updated.</green>"
     # Message that appears when admin clicks on island data deletion button.
-    confirm-island-data-deletion: "&e Confirm that you want to delete all user data from the database for [gamemode]."
+    confirm-island-data-deletion: "<yellow>Confirm that you want to delete all user data from the database for [gamemode].</yellow>"
     # Message that appears after successful user data removing.
-    user-data-removed: "&a Success, all user data for [gamemode] was removed!"
+    user-data-removed: "<green>Success, all user data for [gamemode] was removed!</green>"
     # Message that appears when admin clicks on generator data deletion button.
-    confirm-generator-data-deletion: "&e Confirm that you want to delete all generator data from the database for [gamemode]."
+    confirm-generator-data-deletion: "<yellow>Confirm that you want to delete all generator data from the database for [gamemode].</yellow>"
     # Message that appears after successful generator data removing.
-    generator-data-removed: "&a Success, all generator data for [gamemode] was removed!"
+    generator-data-removed: "<green>Success, all generator data for [gamemode] was removed!</green>"
     # Message that appears after admin clicks on database exporting button.
-    exported-file-name: "&e Please enter a file name for the exported database file. (write 'cancel' to exit)"
+    exported-file-name: "<yellow>Please enter a file name for the exported database file. (write 'cancel' to exit)</yellow>"
     # Message that appears after successful database exporting to file.
-    database-export-completed: "&a Success, the database export for [world] is completed. File generated in addon directory."
+    database-export-completed: "<green>Success, the database export for [world] is completed. File generated in addon directory.</green>"
     # Message that appears if input file name is already taken.
-    file-name-exist: "&c File with name '[id]' exists. Cannot overwrite."
+    file-name-exist: "<red>File with name '[id]' exists. Cannot overwrite.</red>"
     # Message that appears after admin clicks on editing bundle name button.
-    write-name: "&e Please enter a new name in chat."
+    write-name: "<yellow>Please enter a new name in chat.</yellow>"
     # Message that appears after successful name change.
-    name-changed: "&a Success, the name was updated."
+    name-changed: "<green>Success, the name was updated.</green>"
     # Message that appears after clicking
-    write-description: "&e Please enter a new description in chat and 'quit' on a line by itself to finish."
+    write-description: "<yellow>Please enter a new description in chat and 'quit' on a line by itself to finish.</yellow>"
     # Message that appears after successful description change.
-    description-changed: "&a Success, the description was updated."
+    description-changed: "<green>Success, the description was updated.</green>"
     # Message that appears after successful bundle or generator creation.
-    new-object-created: "&a Success, new object is created in [world]."
+    new-object-created: "<green>Success, new object is created in [world].</green>"
     # Message that appears if object already exist in the database.
-    object-already-exists: "&c The object with `[id]` is already is defined in gamemode. Choose different one."
+    object-already-exists: "<red>The object with `[id]` is already is defined in gamemode. Choose different one.</red>"
     # Message that appears after admin tries to delete selected objects.
-    confirm-deletion: "&e Confirm that you want to delete [number] objects: ([value])"
+    confirm-deletion: "<yellow>Confirm that you want to delete [number] objects: ([value])</yellow>"
     # Message that appears after successful data removing.
-    data-removed: "&a Success, the data was removed!"
+    data-removed: "<green>Success, the data was removed!</green>"
     # Message that appears when admin clicks on number editing button.
-    input-number: "&e Please enter a number in chat."
+    input-number: "<yellow>Please enter a number in chat.</yellow>"
     # Message that appears when admin clicks on permission editing button.
-    write-permissions: "&e Please enter the required permissions, one per line in chat, and 'quit' on a line by itself to finish."
+    write-permissions: "<yellow>Please enter the required permissions, one per line in chat, and 'quit' on a line by itself to finish.</yellow>"
     # Message that appears after successful permission updating.
-    permissions-changed: "&a Success, generator permissions were updated."
+    permissions-changed: "<green>Success, generator permissions were updated.</green>"
     # Message that appears after importing library data into database.
-    confirm-data-replacement: "&e Please confirm that you want to replace your current generators with new one."
+    confirm-data-replacement: "<yellow>Please confirm that you want to replace your current generators with new one.</yellow>"
     # Message that appears after successful data importing
-    new-generators-imported: "&a Success, new generators for [gamemode] were imported."
+    new-generators-imported: "<green>Success, new generators for [gamemode] were imported.</green>"
     # Message that appears after unlocking a new generator.
-    click-text-to-purchase: "&e You have unlocked &r [generator]&r&e! Click here to buy it now for [number]."
-    click-text-to-activate-vault: "&e You have unlocked &r [generator]&r&e! Click here to activate it now for [number]."
-    click-text-to-activate: "&e You have unlocked &r [generator]&r&e! Click here to activate it now."
-    input-min-height: "&f Enter the minimum height for this material (between -64
-      and 320):"
-    input-max-height: "&f Enter the maximum height for this material (between -64
-      and 320):"
+    click-text-to-purchase: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to buy it now for [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to activate it now for [number].</yellow>"
+    click-text-to-activate: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to activate it now.</yellow>"
+    input-min-height: "<white>Enter the minimum height for this material (between -64 and 320):</white>"
+    input-max-height: "<white>Enter the maximum height for this material (between -64 and 320):</white>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.
@@ -1103,13 +1101,13 @@ protection:
     MAGIC_COBBLESTONE_GENERATOR:
       name: "Magic Generator"
       description: |-
-        &a Toggle to enable or disable
-        &a all Magic Generators
-        &a on the whole island
-      hint: "&e Magic Generators are disabled in island settings"
+        <green>Toggle to enable or disable
+        </green><green>all Magic Generators
+        </green><green>on the whole island</green>
+      hint: "<yellow>Magic Generators are disabled in island settings</yellow>"
     # This flag allows to switch which island member group can activate and deactivate generators.
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
       name: "Magic Generator Permissions"
       description: |-
-        &a Select who can activate
-        &a and deactivate generators
+        <green>Select who can activate
+        </green><green>and deactivate generators</green>
