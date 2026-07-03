@@ -7,8 +7,10 @@
 package world.bentobox.magiccobblestonegenerator.database.objects;
 
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
@@ -257,6 +259,28 @@ public class GeneratorDataObject implements DataObject
     }
 
 
+    /**
+     * Gets exhaustion data map. It maps generator tier unique id to its exhaustion tracking data for this island.
+     *
+     * @return the exhaustion data map.
+     */
+    public Map<String, GeneratorExhaustionData> getExhaustionData()
+    {
+        return exhaustionData;
+    }
+
+
+    /**
+     * Sets exhaustion data map.
+     *
+     * @param exhaustionData the exhaustion data map.
+     */
+    public void setExhaustionData(Map<String, GeneratorExhaustionData> exhaustionData)
+    {
+        this.exhaustionData = exhaustionData;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Processing Methods
 // ---------------------------------------------------------------------
@@ -363,4 +387,10 @@ public class GeneratorDataObject implements DataObject
      */
     @Expose
     private @Nullable String islandBundle = null;
+
+    /**
+     * Stores exhaustion tracking data per generator tier unique id.
+     */
+    @Expose
+    private Map<String, GeneratorExhaustionData> exhaustionData = new HashMap<>();
 }

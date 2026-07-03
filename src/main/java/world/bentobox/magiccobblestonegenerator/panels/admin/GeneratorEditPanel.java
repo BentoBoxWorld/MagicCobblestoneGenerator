@@ -194,6 +194,9 @@ public class GeneratorEditPanel extends CommonPanel
             panelBuilder.item(15, this.createButton(Button.ACTIVATION_COST, locale));
         }
 
+        // Exhaustion limit override for this generator tier.
+        panelBuilder.item(16, this.createButton(Button.EXHAUSTION_LIMIT, locale));
+
         panelBuilder.item(24, this.createButton(Button.BIOMES, locale));
 
         // deployed button.
@@ -688,6 +691,54 @@ public class GeneratorEditPanel extends CommonPanel
                         this.user,
                         this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
                         0,
+                        Double.MAX_VALUE);
+
+                    return true;
+                };
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+            }
+            case EXHAUSTION_LIMIT -> {
+                itemStack = new ItemStack(Material.CLOCK);
+
+                long exhaustionLimit = this.generatorTier.getExhaustionLimit();
+
+                if (exhaustionLimit < 0)
+                {
+                    // Negative value means the global default from config.yml is used.
+                    description.add(this.user.getTranslation(reference + ".default",
+                        Constants.NUMBER, String.valueOf(this.addon.getSettings().getGeneratorExhaustionLimit())));
+                }
+                else if (exhaustionLimit == 0)
+                {
+                    // Zero means no limit for this tier.
+                    description.add(this.user.getTranslation(reference + ".unlimited"));
+                }
+                else
+                {
+                    description.add(this.user.getTranslation(reference + ".value",
+                        Constants.NUMBER, String.valueOf(exhaustionLimit)));
+                }
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    Consumer<Number> numberConsumer = number ->
+                    {
+                        if (number != null)
+                        {
+                            this.generatorTier.setExhaustionLimit(number.longValue());
+                            this.save();
+                        }
+
+                        // reopen panel
+                        this.build();
+                    };
+
+                    ConversationUtils.createNumericInput(numberConsumer,
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                        -1,
                         Double.MAX_VALUE);
 
                     return true;
@@ -1800,6 +1851,10 @@ public class GeneratorEditPanel extends CommonPanel
          * Holds Name type that allows to interact with generator max height.
          */
         MAX_HEIGHT,
+        /**
+         * Holds Name type that allows to interact with generator exhaustion limit.
+         */
+        EXHAUSTION_LIMIT,
     }
 
 

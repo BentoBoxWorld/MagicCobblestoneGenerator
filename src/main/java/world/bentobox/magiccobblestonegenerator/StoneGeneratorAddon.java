@@ -1,6 +1,10 @@
 package world.bentobox.magiccobblestonegenerator;
 
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,6 +25,8 @@ import world.bentobox.magiccobblestonegenerator.commands.admin.GeneratorAdminCom
 import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorExhaustionData;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.listeners.IslandLevelListener;
 import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
@@ -291,6 +297,104 @@ public class StoneGeneratorAddon extends Addon
                     return "";
                 }
             });
+
+        // Placeholder returns exhaustion status (generated count / limit) for every active generator
+        // (and the island's default generators), separated with ','.
+        // F.e. "Cobblestone Generator:120/1000,Stone Generator:1000/1000"
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_generator_exhaustion_status",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object == null)
+                {
+                    return "";
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                this.getExhaustionTrackedTiers(object, world).forEach(generatorTier -> {
+                    long limit = generatorTier.getExhaustionLimit() >= 0 ?
+                        generatorTier.getExhaustionLimit() :
+                        this.settings.getGeneratorExhaustionLimit();
+
+                    GeneratorExhaustionData exhaustionData =
+                        object.getExhaustionData().get(generatorTier.getUniqueId());
+
+                    long generatedCount = exhaustionData != null ? exhaustionData.getGeneratedCount() : 0;
+
+                    stringBuilder.append(generatorTier.getFriendlyName()).
+                        append(':').
+                        append(generatedCount).
+                        append('/').
+                        append(limit <= 0 ? "∞" : String.valueOf(limit)).
+                        append(',');
+                });
+
+                if (stringBuilder.length() > 0)
+                {
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                }
+
+                return stringBuilder.toString();
+            });
+
+        // Placeholder returns names of generators that are currently on cooldown, separated with ','
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_exhausted_generator_names",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object == null)
+                {
+                    return "";
+                }
+
+                long now = System.currentTimeMillis();
+                StringBuilder stringBuilder = new StringBuilder();
+
+                this.getExhaustionTrackedTiers(object, world).stream().
+                    filter(generatorTier -> {
+                        GeneratorExhaustionData exhaustionData =
+                            object.getExhaustionData().get(generatorTier.getUniqueId());
+                        return exhaustionData != null && exhaustionData.getCooldownUntil() > now;
+                    }).
+                    forEach(generatorTier -> stringBuilder.append(generatorTier.getFriendlyName()).append(","));
+
+                if (stringBuilder.length() > 0)
+                {
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                }
+
+                return stringBuilder.toString();
+            });
+    }
+
+
+    /**
+     * Returns the generator tiers whose exhaustion should be reported for the given island: the island's active
+     * (player-selected) generators plus the world's default generators, which act as a fallback and are not
+     * necessarily present in the active list. Duplicates (a default that is also active) are collapsed.
+     *
+     * @param object Island generator data.
+     * @param world  World used to resolve the default generators.
+     * @return De-duplicated list of relevant generator tiers.
+     */
+    private List<GeneratorTierObject> getExhaustionTrackedTiers(GeneratorDataObject object, World world)
+    {
+        Map<String, GeneratorTierObject> tiers = new LinkedHashMap<>();
+
+        // Active (player-selected) generators first, so they keep their order.
+        object.getActiveGeneratorList().stream().
+            map(this.stoneGeneratorManager::getGeneratorByID).
+            filter(Objects::nonNull).
+            forEach(tier -> tiers.put(tier.getUniqueId(), tier));
+
+        // Default generators are used as a fallback and may not be in the active list.
+        this.stoneGeneratorManager.findDefaultGeneratorList(world).
+            forEach(tier -> tiers.putIfAbsent(tier.getUniqueId(), tier));
+
+        return new ArrayList<>(tiers.values());
     }
 
 

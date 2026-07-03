@@ -466,6 +466,32 @@ public class GeneratorTierObject implements DataObject
     }
 
 
+    /**
+     * Gets the maximum number of blocks this generator tier is allowed to generate during a single exhaustion
+     * period, before it is exhausted and goes on cooldown.
+     *
+     * @return -1 if the default value from the addon settings should be used, 0 or less if there is no limit for
+     * this generator tier, otherwise the maximum number of blocks per exhaustion period.
+     */
+    public long getExhaustionLimit()
+    {
+        return exhaustionLimit;
+    }
+
+
+    /**
+     * Sets the maximum number of blocks this generator tier is allowed to generate during a single exhaustion
+     * period, before it is exhausted and goes on cooldown.
+     *
+     * @param exhaustionLimit -1 to use the default value from the addon settings, 0 or less to disable the limit
+     * for this generator tier, otherwise the maximum number of blocks per exhaustion period.
+     */
+    public void setExhaustionLimit(long exhaustionLimit)
+    {
+        this.exhaustionLimit = exhaustionLimit;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Methods
 // ---------------------------------------------------------------------
@@ -516,6 +542,7 @@ public class GeneratorTierObject implements DataObject
         clone.setMinHeight(this.minHeight);
         clone.setMaxHeight(this.maxHeight);
         clone.setMaterialHeightMap(new TreeMap<>(this.materialHeightMap));
+        clone.setExhaustionLimit(this.exhaustionLimit);
 
         return clone;
     }
@@ -705,6 +732,13 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private TreeMap<Material, int[]> materialHeightMap = new TreeMap<>();
+
+    /**
+     * Maximum number of blocks this generator tier is allowed to generate during a single exhaustion period.
+     * -1 means the default value from the addon settings should be used, 0 or less disables the limit.
+     */
+    @Expose
+    private long exhaustionLimit = -1;
 
     /**
      * Field to store block height ranges

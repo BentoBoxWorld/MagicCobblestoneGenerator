@@ -45,6 +45,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import com.google.common.collect.ImmutableSet;
+
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.Settings;
 import world.bentobox.bentobox.api.addons.AddonDescription;
@@ -175,6 +177,7 @@ public class StoneGeneratorManagerTest {
 	// Generator Tier
 	when(this.generatorTier.getFriendlyName()).thenReturn("Basic Tier");
 	when(this.generatorTier.getUniqueId()).thenReturn(uuid.toString());
+	when(this.generatorTier.getExhaustionLimit()).thenReturn(-1L);
 
 	// Generator Bundle
 	when(this.generatorBundle.getFriendlyName()).thenReturn("Basic Bundle");
@@ -198,6 +201,7 @@ public class StoneGeneratorManagerTest {
 
 	// Island
 	when(island.getOwner()).thenReturn(uuid);
+	when(island.getMemberSet()).thenReturn(ImmutableSet.of(uuid));
 
 	// Island manager
 	when(im.getIsland(world, uuid)).thenReturn(island);
@@ -571,6 +575,57 @@ public class StoneGeneratorManagerTest {
     @Test
     public void testGetGeneratorDataUserWorld() {
 	assertNull(sgm.getGeneratorData(user, world));
+    }
+
+    /**
+     * Test method for
+     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
+     */
+    @Test
+    public void testCanGenerateBlockNoLimit() {
+	s.setGeneratorExhaustionLimit(0);
+	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+    }
+
+    /**
+     * Test method for
+     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
+     */
+    @Test
+    public void testCanGenerateBlockUnderLimit() {
+	s.setGeneratorExhaustionLimit(2);
+
+	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+    }
+
+    /**
+     * Test method for
+     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
+     */
+    @Test
+    public void testCanGenerateBlockExhausted() {
+	s.setGeneratorExhaustionLimit(1);
+	s.setGeneratorExhaustionCooldown(60);
+
+	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+	// Limit is now reached, next call should be blocked and generator put on cooldown.
+	assertFalse(sgm.canGenerateBlock(island, generatorTier));
+	assertFalse(sgm.canGenerateBlock(island, generatorTier));
+    }
+
+    /**
+     * Test method for
+     * {@link world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager#canGenerateBlock(world.bentobox.bentobox.database.objects.Island, world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject)}.
+     */
+    @Test
+    public void testCanGenerateBlockTierOverridesLimit() {
+	s.setGeneratorExhaustionLimit(1000);
+	when(this.generatorTier.getExhaustionLimit()).thenReturn(1L);
+
+	assertTrue(sgm.canGenerateBlock(island, generatorTier));
+	assertFalse(sgm.canGenerateBlock(island, generatorTier));
     }
 
     /**

@@ -328,6 +328,98 @@ public class Settings implements ConfigObject
     }
 
 
+    /**
+     * Gets the default number of blocks a generator is allowed to generate during a single exhaustion period.
+     *
+     * @return the default generator exhaustion limit. 0 or less disables the limitation.
+     */
+    public long getGeneratorExhaustionLimit()
+    {
+        return generatorExhaustionLimit;
+    }
+
+
+    /**
+     * Sets the default number of blocks a generator is allowed to generate during a single exhaustion period.
+     *
+     * @param generatorExhaustionLimit the default generator exhaustion limit.
+     */
+    public void setGeneratorExhaustionLimit(long generatorExhaustionLimit)
+    {
+        this.generatorExhaustionLimit = generatorExhaustionLimit;
+    }
+
+
+    /**
+     * Gets the length, in minutes, of the period during which the generated block count is accumulated before it
+     * refreshes back to 0.
+     *
+     * @return the generator exhaustion period length in minutes.
+     */
+    public long getGeneratorExhaustionPeriod()
+    {
+        return generatorExhaustionPeriod;
+    }
+
+
+    /**
+     * Sets the length, in minutes, of the period during which the generated block count is accumulated before it
+     * refreshes back to 0.
+     *
+     * @param generatorExhaustionPeriod the generator exhaustion period length in minutes.
+     */
+    public void setGeneratorExhaustionPeriod(long generatorExhaustionPeriod)
+    {
+        this.generatorExhaustionPeriod = generatorExhaustionPeriod;
+    }
+
+
+    /**
+     * Gets the length, in minutes, that a generator will remain on cooldown after reaching its exhaustion limit.
+     *
+     * @return the generator exhaustion cooldown length in minutes.
+     */
+    public long getGeneratorExhaustionCooldown()
+    {
+        return generatorExhaustionCooldown;
+    }
+
+
+    /**
+     * Sets the length, in minutes, that a generator will remain on cooldown after reaching its exhaustion limit.
+     *
+     * @param generatorExhaustionCooldown the generator exhaustion cooldown length in minutes.
+     */
+    public void setGeneratorExhaustionCooldown(long generatorExhaustionCooldown)
+    {
+        this.generatorExhaustionCooldown = generatorExhaustionCooldown;
+    }
+
+
+    /**
+     * Gets the minimal amount of time, in seconds, that must pass between two exhaustion warning messages that are
+     * sent to the same island.
+     *
+     * @return the generator exhaustion notification cooldown in seconds.
+     */
+    public long getGeneratorExhaustionNotificationCooldown()
+    {
+        return generatorExhaustionNotificationCooldown;
+    }
+
+
+    /**
+     * Sets the minimal amount of time, in seconds, that must pass between two exhaustion warning messages that are
+     * sent to the same island.
+     *
+     * @param generatorExhaustionNotificationCooldown the generator exhaustion notification cooldown in seconds.
+     */
+    public void setGeneratorExhaustionNotificationCooldown(long generatorExhaustionNotificationCooldown)
+    {
+        this.generatorExhaustionNotificationCooldown = generatorExhaustionNotificationCooldown;
+    }
+
+
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
@@ -446,4 +538,31 @@ public class Settings implements ConfigObject
     @ConfigComment("Each alias must be separated with an empty space.")
     @ConfigEntry(path = "commands.admin.main", needsRestart = true)
     private String adminMainCommand = "generator";
+
+    @ConfigComment("")
+    @ConfigComment("This indicates the default maximum number of blocks a generator can generate during a single")
+    @ConfigComment("exhaustion period (see 'exhaustion-period' below), before it gets exhausted and stops generating")
+    @ConfigComment("new blocks until the cooldown expires (see 'exhaustion-cooldown' below).")
+    @ConfigComment("0 or less will mean that there is no limitation.")
+    @ConfigComment("This value can be overwritten per generator tier.")
+    @ConfigEntry(path = "exhaustion.limit")
+    private long generatorExhaustionLimit = 0;
+
+    @ConfigComment("")
+    @ConfigComment("This indicates the length, in minutes, of the period during which the generated block count is")
+    @ConfigComment("accumulated. Once this period passes, the generated block count is reset back to 0.")
+    @ConfigEntry(path = "exhaustion.period")
+    private long generatorExhaustionPeriod = 60;
+
+    @ConfigComment("")
+    @ConfigComment("This indicates the length, in minutes, that a generator will remain on a cooldown, once it")
+    @ConfigComment("reaches its exhaustion limit. While on cooldown, the generator will not generate any new blocks.")
+    @ConfigEntry(path = "exhaustion.cooldown")
+    private long generatorExhaustionCooldown = 1440;
+
+    @ConfigComment("")
+    @ConfigComment("This indicates the minimal amount of time, in seconds, that must pass between two exhaustion")
+    @ConfigComment("warning messages that are sent to the same island. This is used to avoid chat spam.")
+    @ConfigEntry(path = "exhaustion.notification-cooldown")
+    private long generatorExhaustionNotificationCooldown = 60;
 }
