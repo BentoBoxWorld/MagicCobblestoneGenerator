@@ -164,6 +164,12 @@ public abstract class GeneratorListener implements Listener
             location,
             GeneratorTierObject.GeneratorType.COBBLESTONE);
 
+        if (island != null && generatorTier != null && !this.addon.getAddonManager().canGenerateBlock(island, generatorTier))
+        {
+            // Generator tier is exhausted and is currently on cooldown.
+            return null;
+        }
+
         return this.addon.getGenerator().processBlockReplacement(generatorTier, location);
     }
 
@@ -182,6 +188,12 @@ public abstract class GeneratorListener implements Listener
             location,
             GeneratorTierObject.GeneratorType.STONE);
 
+        if (island != null && generatorTier != null && !this.addon.getAddonManager().canGenerateBlock(island, generatorTier))
+        {
+            // Generator tier is exhausted and is currently on cooldown.
+            return null;
+        }
+
         return this.addon.getGenerator().processBlockReplacement(generatorTier, location);
     }
 
@@ -199,6 +211,12 @@ public abstract class GeneratorListener implements Listener
             island,
             location,
             GeneratorTierObject.GeneratorType.BASALT);
+
+        if (island != null && generatorTier != null && !this.addon.getAddonManager().canGenerateBlock(island, generatorTier))
+        {
+            // Generator tier is exhausted and is currently on cooldown.
+            return null;
+        }
 
         return this.addon.getGenerator().processBlockReplacement(generatorTier, location);
     }

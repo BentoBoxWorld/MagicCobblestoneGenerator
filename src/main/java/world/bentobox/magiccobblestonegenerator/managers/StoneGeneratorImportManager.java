@@ -200,6 +200,8 @@ public class StoneGeneratorImportManager {
 		generatorTier.setPriority(details.getInt("priority", 1));
 		// Set activation cost
 		generatorTier.setActivationCost(details.getDouble("activation-cost", 0.0));
+		// Set exhaustion limit (-1 = use global default, 0 or less = unlimited, positive = per-tier cap)
+		generatorTier.setExhaustionLimit(details.getLong("exhaustion-limit", -1));
 
 		// Set global height range
 		ConfigurationSection heightRange = details.getConfigurationSection("height_range");

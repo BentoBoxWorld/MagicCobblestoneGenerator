@@ -1,0 +1,1103 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "魔法のコブルストーン生成機 管理者コマンド"
+      import:
+        description: "魔法生成機をインポート"
+        confirmation: "これは [gamemode] の既存の生成機を削除し、テンプレートファイルから新しい生成機をインポートします - 確認してください"
+      why:
+        parameters: "<player>"
+        description: "魔法のコブルストーン生成機のデバッグメッセージを切り替え"
+      database:
+        description: "メインデータベースコマンド"
+      import-database:
+        parameters: "<file>"
+        description: "魔法生成機データベースファイルをインポート"
+        confirmation: "これは [gamemode] の既存の生成機を削除し、データベースファイルから生成機をインポートします - 確認してください"
+      export:
+        parameters: "<file>"
+        description: "魔法生成機データベースをゲームモードからファイルにエクスポート"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "生成機選択GUIを開く"
+      view:
+        description: "生成機の詳細GUIを開く"
+        parameters: "<generator-id>"
+      buy:
+        description: "要求された生成機を購入"
+        parameters: "<generator-id>"
+      activate:
+        description: "要求された生成機をアクティベート/非アクティベート"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>生成機</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>生成機: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>管理者パネル</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>バイオームを選択</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>ブロックを選択</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>バンドルを選択</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>生成機タイプを選択</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>バンドル: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>バンドルを管理</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>生成機を管理</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>島: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>島のデータを管理</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>ライブラリ</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>設定</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>マテリアルの高さを設定</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>高さの範囲: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>最小高さ</bold></white>"
+        description: |-
+          <gray>このマテリアルの
+          </gray><gray>最小高さを設定。</gray>
+        value: "<gray>現在の値: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>最大高さ</bold></white>"
+        description: |-
+          <gray>このマテリアルの
+          </gray><gray>最大高さを設定。</gray>
+        value: "<gray>現在の値: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>高さの範囲</bold></white>"
+        description: |-
+          <gray>この生成機が動作する
+          </gray><gray>高さの範囲。</gray>
+        value: "<aqua>から </aqua><white>[min_height] </white><aqua>まで </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>デフォルト生成機</bold></white>"
+        description: |-
+          <gray>デフォルト生成機は常に
+          </gray><gray>アクティブです。</gray>
+        enabled: |-
+          <aqua>これは </aqua><green>デフォルト </green><aqua>生成機です。</aqua>
+        disabled: |-
+          <aqua>これは </aqua><red>デフォルトではない </red><aqua>生成機です。</aqua>
+      priority:
+        name: "<white><bold>生成機の優先度</bold></white>"
+        description: |-
+          <gray>優先度がより大きいと
+          </gray><gray>複数が適用できる場合に
+          </gray><gray>優先されます
+          </gray><gray>。</gray>
+        value: "<aqua>優先度: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>生成機タイプ</bold></white>"
+        description: |-
+          <gray>現在の生成機に
+          </gray><gray>適用される生成機タイプを
+          </gray><gray>定義します。</gray>
+        value: "<aqua>タイプ: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>最小島レベル</bold></white>"
+        description: |-
+          <gray>この生成機を
+          </gray><gray>アンロックするのに必要な最小島レベル。</gray>
+        value: "<aqua>必要な最小レベル: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>必要なパーミッション</bold></white>"
+        description: |-
+          <gray>この生成機を
+          </gray><gray>アンロックするために
+          </gray><gray>必要なパーミッションのリスト。</gray>
+        list: "<aqua>必要なパーミッション:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- なし</aqua>"
+      purchase_cost:
+        name: "<white><bold>購入コスト</bold></white>"
+        description: |-
+          <gray>この生成機を
+          </gray><gray>購入するのに必要なクレジット。</gray>
+        value: "<aqua>コスト: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>アクティベーションコスト</bold></white>"
+        description: |-
+          <gray>この生成機をアクティベート
+          </gray><gray>または再アクティベートするのに
+          </gray><gray>必要なクレジット。</gray>
+        value: "<aqua>コスト: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>消耗限界</bold></white>"
+        description: |-
+          <gray>この生成機がクールダウンに
+          </gray><gray>なる前に、1周期あたりに
+          </gray><gray>生成できる最大ブロック数。</gray>
+        value: "<aqua>限界: [number] </aqua><gray>1周期あたり</gray>"
+        default: "<aqua>グローバルデフォルトを使用: </aqua><white>[number]</white>"
+        unlimited: "<aqua>制限なし</aqua>"
+      biomes:
+        name: "<white><bold>動作バイオーム</bold></white>"
+        description: |-
+          <gray>この生成機が
+          </gray><gray>動作できるバイオームのリスト。</gray>
+        list: "<aqua>バイオーム:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- すべて</aqua>"
+      treasure_amount:
+        name: "<white><bold>トレジャー数</bold></white>"
+        description: |-
+          <gray>一度にドロップできる
+          </gray><gray>トレジャーの最大数。</gray>
+        value: "<aqua>数: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>トレジャーチャンス</bold></white>"
+        description: |-
+          <gray>生成時にトレジャーが
+          </gray><gray>ドロップされる確率。</gray>
+        value: "<aqua>確率: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>一般情報</bold></white>"
+        description: |-
+          <gray>この生成機に関する
+          </gray><gray>一般情報を表示。</gray>
+      blocks:
+        name: "<white><bold>ブロックリスト</bold></white>"
+        description: |-
+          <gray>ブロックのリストと
+          </gray><gray>生成される確率を表示。</gray>
+      treasures:
+        name: "<white><bold>トレジャーリスト</bold></white>"
+        description: |-
+          <gray>トレジャーのリストと
+          </gray><gray>ドロップ確率を表示。
+          </gray><gray>トレジャーはブロック生成時に
+          </gray><gray>ドロップされます。</gray>
+        drag-and-drop: |-
+          <gray>空のスペースにアイテムを
+          </gray><gray>ドラッグアンドドロップできます。</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>確率: [#.##]</aqua>"
+        actual: "<aqua>データベースの値: [number]</aqua>"
+        height-range: "<gray>高さの範囲: </gray><aqua>[min_height] </aqua><gray>から </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>生成機のデフォルト高さの範囲を使用</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>確率: [#.####]</aqua>"
+        actual: "<aqua>データベースの値: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>コブルストーン生成機</bold></white>"
+        description: |-
+          <gray>コブルストーン生成機のみを
+          </gray><gray>表示</gray>
+      show_stone:
+        name: "<white><bold>石生成機</bold></white>"
+        description: |-
+          <gray>石生成機のみを
+          </gray><gray>表示</gray>
+      show_basalt:
+        name: "<white><bold>玄武岩生成機</bold></white>"
+        description: |-
+          <gray>玄武岩生成機のみを
+          </gray><gray>表示</gray>
+      toggle_visibility:
+        name: "<white><bold>アンロック済み生成機</bold></white>"
+        description: |-
+          <gray>アンロック済みの生成機のみを
+          </gray><gray>表示</gray>
+      show_active:
+        name: "<white><bold>アクティブな生成機</bold></white>"
+        description: |-
+          <gray>アクティブな生成機のみを
+          </gray><gray>表示</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>戻る</bold></white>"
+        description: |-
+          <gray>前のメニューに戻る</gray>
+      quit:
+        name: "<white><bold>終了</bold></white>"
+        description: |-
+          <gray>現在のメニューを終了</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>前のページ</bold></white>"
+        description: |-
+          <gray>[number] ページに切り替え</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>次のページ</bold></white>"
+        description: |-
+          <gray>[number] ページに切り替え</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>島のデータを管理</bold></white>"
+        description: |-
+          <gray>現在のゲームモード内の
+          </gray><gray>島のデータを管理。</gray>
+      manage_generator_tiers:
+        name: "<white><bold>生成機を管理</bold></white>"
+        description: |-
+          <gray>現在のゲームモード内の
+          </gray><gray>生成機を管理。</gray>
+      manage_generator_bundles:
+        name: "<white><bold>バンドルを管理</bold></white>"
+        description: |-
+          <gray>現在のゲームモード内の
+          </gray><gray>バンドルを管理。</gray>
+      settings:
+        name: "<white><bold>設定</bold></white>"
+        description: |-
+          <gray>アドオンの設定を
+          </gray><gray>確認および変更。</gray>
+      import_template:
+        name: "<white><bold>テンプレートをインポート</bold></white>"
+        description: |-
+          <gray>アドオンディレクトリ内にある
+          </gray><gray>テンプレートファイルから
+          </gray><gray>インポート。</gray>
+      web_library:
+        name: "<white><bold>Webライブラリ</bold></white>"
+        description: |-
+          <gray>共有生成機を含むWebライブラリに
+          </gray><gray>アクセス。</gray>
+      export_from_database:
+        name: "<white><bold>データベースをエクスポート</bold></white>"
+        description: |-
+          <gray>データベースをアドオンディレクトリ内の
+          </gray><gray>単一ファイルにエクスポート。</gray>
+      import_to_database:
+        name: "<white><bold>データベースをインポート</bold></white>"
+        description: |-
+          <gray>アドオンディレクトリ内のファイルから
+          </gray><gray>データベースをインポート。</gray>
+      wipe_user_data:
+        name: "<white><bold>ユーザーデータベースをクリア</bold></white>"
+        description: |-
+          <gray>現在のゲームモード内の
+          </gray><gray>各島のユーザーデータをクリア。</gray>
+      wipe_generator_data:
+        name: "<white><bold>生成機データベースをクリア</bold></white>"
+        description: |-
+          <gray>現在のゲームモード内の
+          </gray><gray>生成機とバンドルのデータをクリア。</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>バンドル名</bold></white>"
+        description: |-
+          <gray>バンドル名を変更。</gray>
+        value: "<aqua>名前: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>バンドルID</bold></white>"
+        description: |-
+          <gray>現在のバンドルID。</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>バンドルアイコン</bold></white>"
+        description: |-
+          <gray>バンドルのアイコンを変更。</gray>
+      bundle_description:
+        name: "<white><bold>バンドルの説明</bold></white>"
+      bundle_info:
+        name: "<white><bold>一般情報</bold></white>"
+        description: |-
+          <gray>このバンドルに関する
+          </gray><gray>一般情報を表示。</gray>
+      bundle_generators:
+        name: "<white><bold>生成機</bold></white>"
+        description: |-
+          <gray>このバンドルに割り当てられた
+          </gray><gray>生成機のリストを表示。</gray>
+      add_generator:
+        name: "<white><bold>生成機を追加</bold></white>"
+        description: |-
+          <gray>このバンドルに
+          </gray><gray>生成機を割り当て。</gray>
+        list: "<aqua>選択された生成機:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>生成機を削除</bold></white>"
+        description: |-
+          <gray>このバンドルから
+          </gray><gray>生成機を削除。</gray>
+        list: "<aqua>選択された生成機:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>バンドルを作成</bold></white>"
+        description: |-
+          <gray>このゲームモード用に
+          </gray><gray>新しいバンドルを作成。</gray>
+      delete_bundle:
+        name: "<white><bold>バンドルを削除</bold></white>"
+        description: |-
+          <gray>このゲームモードから
+          </gray><gray>バンドルを完全に削除。</gray>
+        list: "<aqua>選択されたバンドル:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>生成機名</bold></white>"
+        description: |-
+          <gray>この生成機のタイトル。
+          </gray><gray>カラーコードに対応。</gray>
+        value: "<aqua>名前: </aqua> [generator]"
+      id:
+        name: "<white><bold>生成機ID</bold></white>"
+        description: |-
+          <gray>現在の生成機ID。</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>生成機アイコン</bold></white>"
+        description: |-
+          <gray>すべてのGUIでこの
+          </gray><gray>生成機を表示するのに使用されるアイテム。</gray>
+      locked_icon:
+        name: "<white><bold>ロックアイコン</bold></white>"
+        description: |-
+          <gray>生成機がロックされている場合に
+          </gray><gray>すべてのGUIで表示される
+          </gray><gray>アイテム。</gray>
+      description:
+        name: "<white><bold>生成機の説明</bold></white>"
+        description: |-
+          <gray>生成機のタイトルの下に
+          </gray><gray>表示されるテキスト。</gray>
+        value: "<aqua>説明:</aqua>"
+      deployed:
+        name: "<white><bold>展開済み</bold></white>"
+        description: |-
+          <gray>展開された生成機はプレイヤーに
+          </gray><gray>表示され、アクセス可能です。
+          </gray><gray>展開されていない生成機は
+          </gray><gray>ブロックを生成しません。</gray>
+        enabled: |-
+          <aqua>この生成機は </aqua><green>展開されています。</green>
+        disabled: |-
+          <aqua>この生成機は </aqua><red>展開されていません。</red>
+      add_material:
+        name: "<white><bold>マテリアルを追加</bold></white>"
+        description: |-
+          <gray>現在のマテリアルリストに
+          </gray><gray>新しいマテリアルを追加。</gray>
+      remove_material:
+        name: "<white><bold>マテリアルを削除</bold></white>"
+        description: |-
+          <gray>リストから選択された
+          </gray><gray>マテリアルを削除。</gray>
+        selected-materials: "<gray>選択されたマテリアル:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>生成機を作成</bold></white>"
+        description: |-
+          <gray>ゲームモード用に
+          </gray><gray>新しい生成機を
+          </gray><gray>作成。</gray>
+      delete_generator:
+        name: "<white><bold>生成機を削除</bold></white>"
+        description: |-
+          <gray>ゲームモードから
+          </gray><gray>生成機を完全に削除。</gray>
+        list: "<aqua>選択された生成機:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>島ID: </aqua><gray>[id]</gray>
+        owner: "<aqua>オーナー: [player]</aqua>"
+        list: "<aqua>メンバー:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>島の作業範囲</bold></white>"
+        description: |-
+          <gray>現在の島の生成機の
+          </gray><gray>作業範囲。
+          </gray><gray>0以下は無制限
+          </gray><gray>範囲を意味します。</gray>
+        value: "<aqua>範囲: [number]</aqua>"
+        overwritten: |-
+          <red>オーナーは作業範囲を
+          </red><red>上書きするパーミッションを持っています。</red>
+      owner_working_range:
+        name: "<white><bold>オーナー作業範囲</bold></white>"
+        description: |-
+          <gray>現在のオーナーの生成機の
+          </gray><gray>作業範囲。
+          </gray><gray>'0' はオーナー範囲が
+          </gray><gray>無視されることを意味します。
+          </gray><gray>'-1' はオーナーが
+          </gray><gray>無制限の作業範囲を持つことを意味します。
+          "</gray><gray> ユーザーに割り当てるパーミッション:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>範囲: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>最大島生成機</bold></white>"
+        description: |-
+          <gray>現在の島で同時に
+          </gray><gray>アクティブにできる
+          </gray><gray>最大生成機ティア数。
+          </gray><gray>0以下は
+          </gray><gray>無制限を意味します。</gray>
+        value: "<aqua>最大生成機: [number]</aqua>"
+        overwritten: |-
+          <red>オーナーは生成機数を
+          </red><red>上書きするパーミッションを持っています。</red>
+      owner_max_generators:
+        name: "<white><bold>最大オーナー生成機</bold></white>"
+        description: |-
+          <gray>島のオーナーが許可された
+          </gray><gray>最大アクティブな同時
+          </gray><gray>生成機ティア数。
+          </gray><gray>'0' はオーナー数が
+          </gray><gray>無視されることを意味します。
+          </gray><gray>'-1' はオーナーが
+          </gray><gray>無制限の生成機数を持つことを意味します。
+          "</gray><gray> ユーザーに割り当てるパーミッション:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>最大生成機: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>島のバンドル</bold></white>"
+        description: |-
+          <gray>現在の島に割り当てられた
+          </gray><gray>バンドル。
+          </gray><gray>このバンドルの生成機のみが
+          </gray><gray>島で使用できます。</gray>
+        value: "<aqua>バンドル: [bundle]</aqua>"
+        overwritten: |-
+          <red>オーナーはバンドルを
+          </red><red>上書きするパーミッションを持っています。</red>
+      owner_bundle:
+        name: "<white><bold>オーナーバンドル</bold></white>"
+        description: |-
+          <gray>現在の島のオーナーに
+          </gray><gray>割り当てられたバンドル。
+          </gray><gray>このバンドルの生成機のみが
+          </gray><gray>島で使用できます。
+          "</gray><gray> ユーザーに割り当てるパーミッション:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>バンドル: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>一般情報</bold></white>"
+        description: |-
+          <gray>この島に関する
+          </gray><gray>一般情報を表示。</gray>
+      island_generators:
+        name: "<white><bold>島の生成機</bold></white>"
+        description: |-
+          <gray>現在の島で利用可能な
+          </gray><gray>すべての生成機のリストを表示。</gray>
+      reset_to_default:
+        name: "<white><bold>デフォルトにリセット</bold></white>"
+        description: |-
+          <gray>すべての島の値を
+          </gray><gray>設定のデフォルト値に
+          </gray><gray>リセット。</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>オンラインプレイヤー</bold></white>"
+        description: |-
+          <gray>オンラインプレイヤーの
+          </gray><gray>島のリスト。</gray>
+      all_islands:
+        name: "<white><bold>すべての島</bold></white>"
+        description: |-
+          <gray>すべての島のリスト。</gray>
+      search:
+        name: "<white><bold>検索</bold></white>"
+        description: |-
+          <gray>特定の島を
+          </gray><gray>検索。</gray>
+        search: "<aqua>値: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>オフライン生成</bold></white>"
+        description: |-
+          <gray>すべての島メンバーがオフラインの場合に
+          </gray><gray>ブロックが生成されるのを防止。</gray>
+        enabled: |-
+          <aqua>オフライン生成は </aqua><green>有効 </green><aqua>です。</aqua>
+        disabled: |-
+          <aqua>オフライン生成は </aqua><red>無効 </red><aqua>です。</aqua>
+      use_physic:
+        name: "<white><bold>物理演算を使用</bold></white>"
+        description: |-
+          <gray>ブロック生成時に
+          </gray><gray>物理演算を使用すると
+          </gray><gray>redstoneマシンを
+          </gray><gray>使用できますが、
+          </gray><gray>サーバーのパフォーマンスが
+          </gray><gray>少し低下します。</gray>
+        enabled: |-
+          <aqua>物理演算は </aqua><green>有効 </green><aqua>です。</aqua>
+        disabled: |-
+          <aqua>物理演算は </aqua><red>無効 </red><aqua>です。</aqua>
+      use_bank:
+        name: "<white><bold>Bankを使用</bold></white>"
+        description: |-
+          <gray>すべての購入と
+          </gray><gray>アクティベーションに
+          </gray><gray>島のバンクアカウントを使用。
+          </gray><gray>Bank Addonが必要。</gray>
+        enabled: |-
+          <aqua>Bank使用は </aqua><green>有効 </green><aqua>です。</aqua>
+        disabled: |-
+          <aqua>Bank使用は </aqua><red>無効 </red><aqua>です。</aqua>
+      working_range:
+        name: "<white><bold>デフォルト作業範囲</bold></white>"
+        description: |-
+          <gray>プレイヤーからの距離は
+          </gray><gray>ブロック生成が停止します。
+          </gray><gray>0以下は無制限を意味します。
+          </gray><gray>設定を有効にするには
+          </gray><gray>サーバー再起動が必要。</gray>
+        value: "<aqua>範囲: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>デフォルトアクティブ生成機</bold></white>"
+        description: |-
+          <gray>デフォルトの最大
+          </gray><gray>アクティブな生成機数
+          </gray><gray>（同時）。
+          </gray><gray>0以下は無制限を意味します。</gray>
+        value: "<aqua>数: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>フィルターを表示</bold></white>"
+        description: |-
+          <gray>フィルターはプレイヤーGUIの
+          </gray><gray>最上部にあり、
+          </gray><gray>タイプまたはステータスで
+          </gray><gray>生成機のみを表示できます。
+          </gray><gray>この設定はそれらを
+          </gray><gray>無効化して非表示にします。</gray>
+        enabled: |-
+          <aqua>フィルターは </aqua><green>有効 </green><aqua>です。</aqua>
+        disabled: |-
+          <aqua>フィルターは </aqua><red>無効 </red><aqua>です。</aqua>
+      border_block:
+        name: "<white><bold>ボーダーブロック</bold></white>"
+        description: |-
+          <gray>ボーダーブロックはユーザーGUIを
+          </gray><gray>囲むマテリアルです。
+          </gray><gray>空気に設定すると
+          </gray><gray>無効化されます。</gray>
+      border_block_name:
+        name: "<white><bold>ボーダーブロック名</bold></white>"
+        description: |-
+          <gray>ボーダーブロックの
+          </gray><gray>表示名。
+          </gray><gray>空に設定されている場合は
+          </gray><gray>ブロック名を使用します。
+          </gray><gray>1つの空のスペースとして設定するには
+          "</gray><gray> 'empty' と入力してください。"</gray>
+        value: "<aqua>名前: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>アンロック時に通知</bold></white>"
+        description: |-
+          <gray>新しい生成機をアンロックすると
+          </gray><gray>ユーザーにメッセージが送信されます。</gray>
+        enabled: |-
+          <aqua>アンロック時通知は </aqua><green>有効 </green><aqua>です。</aqua>
+        disabled: |-
+          <aqua>アンロック時通知は </aqua><red>無効 </red><aqua>です。</aqua>
+      disable_on_activate:
+        name: "<white><bold>アクティベーション時に無効化</bold></white>"
+        description: |-
+          <gray>ユーザーが新しい生成機をアクティベートすると
+          </gray><gray>最も古いアクティブな生成機を無効化。
+          </gray><gray>1つの生成機のみが許可されている
+          </gray><gray>状況に便利。</gray>
+        enabled: |-
+          <aqua>アクティベーション時無効化は </aqua><green>有効 </green><aqua>です。</aqua>
+        disabled: |-
+          <aqua>アクティベーション時無効化は </aqua><red>無効 </red><aqua>です。</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>著者: [author]
+          </gray><gray>[gamemode] 用に作成
+          </gray><gray>言語: [lang]
+          </gray><gray>バージョン: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>ブロックを承認</bold></white>"
+        description: |-
+          <gray>選択されたブロックを
+          </gray><gray>承認して戻る。</gray>
+        selected-blocks: "<gray>選択されたブロック:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>ブロックID: [id]</gray>"
+      search_block:
+        name: "<white><bold>検索</bold></white>"
+        description: |-
+          <gray>特定のブロックを
+          </gray><gray>検索。</gray>
+        search: "<aqua>値: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>バイオームを承認</bold></white>"
+        description: |-
+          <gray>選択されたバイオームを
+          </gray><gray>承認して戻る。</gray>
+        selected-biomes: "<gray>選択されたバイオーム:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>最小高さ</bold></white>"
+        description: |-
+          <gray>このマテリアルの
+          </gray><gray>最小高さを設定。
+          </gray><gray>現在の値: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>最大高さ</bold></white>"
+        description: |-
+          <gray>このマテリアルの
+          </gray><gray>最大高さを設定。
+          </gray><gray>現在の値: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>高さ範囲をクリア</bold></white>"
+        description: |-
+          <gray>このマテリアルの特定の高さ範囲を削除。
+          </gray><gray>生成機の
+          </gray><gray>デフォルト高さ範囲を使用します。</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>温帯</bold></white>"
+          description: |-
+            <gray>温帯バイオームのみを表示</gray>
+        warm:
+          name: "<white><bold>暖かい</bold></white>"
+          description: |-
+            <gray>暖かいバイオームのみを表示</gray>
+        cold:
+          name: "<white><bold>寒冷</bold></white>"
+          description: |-
+            <gray>寒冷バイオームのみを表示</gray>
+        snowy:
+          name: "<white><bold>雪</bold></white>"
+          description: |-
+            <gray>雪のバイオームのみを表示</gray>
+        ocean:
+          name: "<white><bold>海洋</bold></white>"
+          description: |-
+            <gray>海洋バイオームのみを表示</gray>
+        nether:
+          name: "<white><bold>ネザー</bold></white>"
+          description: |-
+            <gray>ネザーのバイオームのみを表示</gray>
+        the_end:
+          name: "<white><bold>エンド</bold></white>"
+          description: |-
+            <gray>エンドのバイオームのみを表示</gray>
+        neutral:
+          name: "<white><bold>ニュートラル</bold></white>"
+          description: |-
+            <gray>ニュートラルなバイオームのみを表示</gray>
+        unused:
+          name: "<white><bold>未使用</bold></white>"
+          description: |-
+            <gray>未使用のバイオームのみを表示</gray>
+        cave:
+          name: "<white><bold>洞窟</bold></white>"
+          description: |-
+            <gray>洞窟のバイオームのみを表示</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>コブルストーン</bold></white>"
+          description: |-
+            <gray>コブルストーン生成機のみで
+            </gray><gray>動作します。
+
+            </gray><gold><italic>ヒント:
+            </italic></gold><italic><gold><italic>溶岩の流れが
+            </italic></gold></italic><italic><italic><gold><italic>水に接触すると形成されます。</italic></gold></italic></italic>
+        stone:
+          name: "<white><bold>石</bold></white>"
+          description: |-
+            <gray>石生成機のみで
+            </gray><gray>動作します。
+
+            </gray><gold><italic>ヒント:
+            </italic></gold><italic><gold><italic>溶岩が水ブロックの上に
+            </italic></gold></italic><italic><italic><gold><italic>流れるときに形成されます。</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>玄武岩</bold></white>"
+          description: |-
+            <gray>玄武岩生成機のみで
+            </gray><gray>動作します。
+
+            </gray><gold><italic>ヒント:
+            </italic></gold><italic><gold><italic>溶岩が魂の土の上を流れて
+            </italic></gold></italic><italic><italic><gold><italic>青い氷に隣接している場合に
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>形成されます。</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>コブルストーンまたは石</bold></white>"
+          description: |-
+            <gray>コブルストーンと
+            </gray><gray>石生成機で動作します。</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>玄武岩またはコブルストーン</bold></white>"
+          description: |-
+            <gray>玄武岩と
+            </gray><gray>コブルストーン生成機で動作します。</gray>
+        basalt_or_stone:
+          name: "<white><bold>玄武岩または石</bold></white>"
+          description: |-
+            <gray>玄武岩と
+            </gray><gray>石生成機で動作します。</gray>
+        any:
+          name: "<white><bold>任意</bold></white>"
+          description: |-
+            <gray>すべての生成機で動作します。</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>クリック </yellow><gray>して前のページを表示。</gray>"
+      click-to-next: "<yellow>クリック </yellow><gray>して次のページを表示。</gray>"
+      click-to-cancel: "<yellow>クリック </yellow><gray>してキャンセル。</gray>"
+      click-to-choose: "<yellow>クリック </yellow><gray>して選択。</gray>"
+      click-to-select: "<yellow>クリック </yellow><gray>して選択。</gray>"
+      click-to-deselect: "<yellow>クリック </yellow><gray>して選択解除。</gray>"
+      click-to-accept: "<yellow>クリック </yellow><gray>して承認して戻る。</gray>"
+      click-to-filter-enable: "<yellow>クリック </yellow><gray>してフィルターを有効化。</gray>"
+      click-to-filter-disable: "<yellow>クリック </yellow><gray>してフィルターを無効化。</gray>"
+      click-to-activate: "<yellow>クリック </yellow><gray>してアクティベート。</gray>"
+      click-to-deactivate: "<yellow>クリック </yellow><gray>して非アクティベート。</gray>"
+      click-gold-to-purchase: |-
+        <yellow>クリック </yellow><gray>金ブロックで
+        </gray><gray>購入。</gray>
+      click-to-purchase: "<yellow>クリック </yellow><gray>して購入。</gray>"
+      click-to-return: "<yellow>クリック </yellow><gray>して戻る。</gray>"
+      click-to-quit: "<yellow>クリック </yellow><gray>して終了。</gray>"
+      click-to-wipe: "<yellow>クリック </yellow><gray>してワイプ。</gray>"
+      click-to-open: "<yellow>クリック </yellow><gray>して開く。</gray>"
+      click-to-export: "<yellow>クリック </yellow><gray>してエクスポートを開始。</gray>"
+      click-to-change: "<yellow>クリック </yellow><gray>して変更。</gray>"
+      click-on-item: |-
+        <yellow>クリック </yellow><gray>してインベントリ内の
+        </gray><gray>アイテムをクリック。</gray>
+      click-to-view: "<yellow>クリック </yellow><gray>して表示。</gray>"
+      click-to-add: "<yellow>クリック </yellow><gray>して追加。</gray>"
+      click-to-remove: "<yellow>クリック </yellow><gray>して削除。</gray>"
+      select-before: "<yellow>続行する前に選択 </yellow><gray>してください。</gray>"
+      click-to-create: "<yellow>クリック </yellow><gray>して作成。</gray>"
+      right-click-to-select: "<yellow>右クリック </yellow><gray>して選択。</gray>"
+      right-click-to-deselect: "<yellow>右クリック </yellow><gray>して選択解除。</gray>"
+      click-to-toggle: "<yellow>クリック </yellow><gray>して切り替え。</gray>"
+      left-click-to-edit: "<yellow>左クリック </yellow><gray>して編集。</gray>"
+      right-click-to-lock: "<yellow>右クリック </yellow><gray>してロック。</gray>"
+      right-click-to-unlock: "<yellow>右クリック </yellow><gray>してアンロック。</gray>"
+      click-to-perform: "<yellow>クリック </yellow><gray>して実行。</gray>"
+      click-to-edit: "<yellow>クリック </yellow><gray>して編集。</gray>"
+      right-click-to-clear: "<yellow>右クリック </yellow><gray>してクリア。</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>左クリック </yellow><gray>して表示。</gray>"
+      left-click-to-purchase: "<yellow>左クリック </yellow><gray>して購入。</gray>"
+      left-click-to-activate: "<yellow>左クリック </yellow><gray>してアクティベート。</gray>"
+      left-click-to-deactivate: "<yellow>左クリック </yellow><gray>して非アクティベート。</gray>"
+      right-click-to-view: "<yellow>右クリック </yellow><gray>して表示。</gray>"
+      right-click-to-purchase: "<yellow>右クリック </yellow><gray>して購入。</gray>"
+      right-click-to-activate: "<yellow>右クリック </yellow><gray>してアクティベート。</gray>"
+      right-click-to-deactivate: "<yellow>右クリック </yellow><gray>して非アクティベート。</gray>"
+      shift-click-to-view: "<yellow>Shift+クリック </yellow><gray>して表示。</gray>"
+      shift-click-to-purchase: "<yellow>Shift+クリック </yellow><gray>して購入。</gray>"
+      shift-click-to-activate: "<yellow>Shift+クリック </yellow><gray>してアクティベート。</gray>"
+      shift-click-to-deactivate: "<yellow>Shift+クリック </yellow><gray>して非アクティベート。</gray>"
+      shift-click-to-reset: "<yellow>Shift+クリック </yellow><gray>してリセット。</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+左クリック </yellow><gray>して高さの範囲を設定。</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>ブロック:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>トレジャー:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>必要なレベル: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>不足しているパーミッション:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>動作場所:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>すべての </bold></gray><bold><yellow><italic></italic></yellow></bold><gray><bold>バイオームで動作</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>ロック済み!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>非展開!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>アクティブ</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>購入コスト: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>アクティベーションコスト: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>サポート:</bold></gray>"
+          cobblestone: "<dark_gray>コブルストーン生成機</dark_gray>"
+          stone: "<dark_gray>石生成機</dark_gray>"
+          basalt: "<dark_gray>玄武岩生成機</dark_gray>"
+          any: "<gray><bold>すべての </bold></gray><bold><yellow><italic></italic></yellow></bold><gray><bold>生成機をサポート</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>動作高さ: </gray><aqua>[min_height] </aqua><gray>から </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>プレイヤーに割り当てる必要がある
+        </gray><gray>パーミッション:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>バンドル生成機: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>選択済み</yellow>"
+      # Used to refer to players island.
+      island-owner: "[player] の島"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>スポーン島</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "不明"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>生成機 </green> '[generator]' <green> はローカルキャッシュに読み込まれています。</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>バンドル </green> '[bundle]' <green> はローカルキャッシュに読み込まれています。</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>生成機 </yellow> '[generator]' <yellow> は非アクティベートされています。</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>多くの生成機がアクティベートされています。新しい生成機をアクティベートする前にいくつかの生成機を非アクティベートしてみてください。</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>生成機 </red> '[generator]' <red> はアンロックできません。</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>生成機 </red> '[generator]' <red> はアンロックされていません。</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>生成機 </red> '[generator]' <red> は購入されていません。</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>生成機をアクティベートするのに十分なクレジットがありません。アクティベーションには [number] クレジットが必要です。</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>バンクアカウントに生成機をアクティベートするのに十分なクレジットがありません。アクティベーションには [number] クレジットが必要です。</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>生成機 </yellow> '[generator]' <yellow> はアクティベートされています。</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>生成機 </red> '[generator]' <red> は生成限界に達し、[number] 分間クールダウン中です。</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>生成機 </yellow> '[generator]' <yellow> は購入されています。</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>生成機 </red> '[generator]' <red> はすでに購入されています。</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>生成機 </red> '[generator]' <red> は [number] 島レベルが必要です。</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>生成機 </red> '[generator]' <red> はパーミッション `[permission]` が必要です。</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>生成機を購入するのに十分なクレジットがありません。この生成機は [number] クレジット必要です。</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>バンクアカウントに十分なクレジットがありません。この生成機は [number] クレジット必要です。</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>[generator] 個の新しい生成機と [bundle] 個の新しいバンドルをインポート。</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>ライブラリのダウンロードを開始。</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>有効な生成機データが見つかりません</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>島のデータが見つかりません。</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>有効なバンドルデータが見つかりません</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>ライブラリエントリが見つかりません!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>`[file]` ファイルが見つかりません。インポートを実行できません。</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>`[file]` ファイルを読み込めません。読み込み中にエラーが発生: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>ワールド '[world]' はゲームモードアドオンのワールドではありません。</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>ファイル `[file]` はすでに存在します。別の名前を選択してください。</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>ID '[generator]' の生成機は </red><red> [gamemode] に見つかりません。</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red> [world] に利用可能な生成機がありません</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>お金を引き出す際に問題が発生しました。</red>"
+    max-height-less-than-min: "<red>最大高さ ([MAX]) は最小高さ ([MIN]) より小さくすることはできません!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "true, on, yes, confirm, y, valid, correct"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "false, off, no, deny, n, invalid, incorrect"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "cancel"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "cancel, exit, quit"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>会話がキャンセルされました!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>指定された [value] は数字ではありません!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>指定された数 [value] は無効です。[min] より大きく [max] より小さい必要があります!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>新しい説明:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>検索値を入力してください。('cancel' で終了)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>検索値が更新されました。</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>[gamemode] のデータベースからすべてのユーザーデータを削除することを確認してください。</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>成功、[gamemode] のすべてのユーザーデータが削除されました!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>[gamemode] のデータベースからすべての生成機データを削除することを確認してください。</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>成功、[gamemode] のすべての生成機データが削除されました!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>エクスポートされたデータベースファイルのファイル名を入力してください。('cancel' で終了)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>成功、[world] のデータベースエクスポートが完了しました。アドオンディレクトリでファイルが生成されました。</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>名前 '[id]' のファイルが存在します。上書きできません。</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>チャットで新しい名前を入力してください。</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>成功、名前が更新されました。</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>チャットで新しい説明を入力し、完了するために独立した行で 'quit' を入力してください。</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>成功、説明が更新されました。</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>成功、新しいオブジェクトが [world] に作成されました。</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>ID が `[id]` のオブジェクトはゲームモードで既に定義されています。別のものを選択してください。</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>[number] 個のオブジェクトを削除することを確認してください: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>成功、データが削除されました!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>チャットで数字を入力してください。</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>チャットで必要なパーミッションを1行に1つ入力し、完了するために独立した行で 'quit' を入力してください。</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>成功、生成機のパーミッションが更新されました。</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>現在の生成機を新しい生成機に置き換えることを確認してください。</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>成功、[gamemode] の新しい生成機がインポートされました。</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>アンロック済み </yellow> [generator]<yellow>! ここをクリックして今すぐ [number] で購入。</yellow>"
+    click-text-to-activate-vault: "<yellow>アンロック済み </yellow> [generator]<yellow>! ここをクリックして今すぐ [number] でアクティベート。</yellow>"
+    click-text-to-activate: "<yellow>アンロック済み </yellow> [generator]<yellow>! ここをクリックして今すぐアクティベート。</yellow>"
+    input-min-height: "<white>このマテリアルの最小高さを入力してください (-64 から 320 の間):</white>"
+    input-max-height: "<white>このマテリアルの最大高さを入力してください (-64 から 320 の間):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "コブルストーン"
+    # Also supports descriptions.
+    stone:
+      name: "石"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "草原"
+    # Also supports descriptions.
+    flower_forest:
+      name: "花の森"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "魔法生成機"
+      description: |-
+        <green>すべての魔法生成機を
+        </green><green>有効/無効
+        </green><green>にすることができます
+        </green><green>島全体で</green>
+      hint: "<yellow>島の設定では魔法生成機が無効化されています</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "魔法生成機のパーミッション"
+      description: |-
+        <green>生成機を
+        </green><green>アクティベート/非アクティベート
+        </green><green>できるユーザーを選択</green>

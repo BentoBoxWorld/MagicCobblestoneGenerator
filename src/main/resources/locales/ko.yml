@@ -1,0 +1,1097 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "매직 조약돌 생성기 관리자 명령어"
+      import:
+        description: "매직 생성기 가져오기"
+        confirmation: "이 작업은 [gamemode]의 기존 생성기를 제거하고 템플릿 파일에서 새로운 생성기를 가져옵니다 - 확인해주세요"
+      why:
+        parameters: "<player>"
+        description: "매직 조약돌 생성기 디버그 메시지 토글"
+      database:
+        description: "주요 데이터베이스 명령어"
+      import-database:
+        parameters: "<file>"
+        description: "매직 생성기 데이터베이스 파일 가져오기"
+        confirmation: "이 작업은 [gamemode]의 기존 생성기를 제거하고 데이터베이스 파일에서 생성기를 가져옵니다 - 확인해주세요"
+      export:
+        parameters: "<file>"
+        description: "게임 모드에서 매직 생성기 데이터베이스 내보내기"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "생성기 선택 GUI 열기"
+      view:
+        description: "생성기 세부정보 GUI 열기"
+        parameters: "<generator-id>"
+      buy:
+        description: "요청한 생성기 구매"
+        parameters: "<generator-id>"
+      activate:
+        description: "요청한 생성기 활성화/비활성화"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>생성기</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>생성기: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>관리자 패널</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>바이옴 선택</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>블록 선택</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>번들 선택</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>생성기 유형 선택</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>번들: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>번들 관리</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>생성기 관리</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>섬: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>섬 데이터 관리</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>라이브러리</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>설정</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>재료 높이 설정</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>높이 범위: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>최소 높이</bold></white>"
+        description: |-
+          <gray>이 재료의
+          </gray><gray>최소 높이를 설정하세요.</gray>
+        value: "<gray>현재값: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>최대 높이</bold></white>"
+        description: |-
+          <gray>이 재료의
+          </gray><gray>최대 높이를 설정하세요.</gray>
+        value: "<gray>현재값: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>높이 범위</bold></white>"
+        description: |-
+          <gray>이 생성기가
+          </gray><gray>작동하는 높이 범위입니다.</gray>
+        value: "<aqua>범위: </aqua><white>[min_height] </white><aqua>~</aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>기본 생성기</bold></white>"
+        description: |-
+          <gray>기본 생성기는 항상
+          </gray><gray>활성화되어 있습니다.</gray>
+        enabled: |-
+          <aqua>이는 </aqua><green>기본 </green><aqua>생성기입니다.</aqua>
+        disabled: |-
+          <aqua>이는 </aqua><red>기본이 아닌 </red><aqua>생성기입니다.</aqua>
+      priority:
+        name: "<white><bold>생성기 우선순위</bold></white>"
+        description: |-
+          <gray>우선순위가 높을수록
+          </gray><gray>같은 위치에서 여러 개가 적용될 때
+          </gray><gray>더 많이 사용됩니다
+          </gray><gray></gray>
+        value: "<aqua>우선순위: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>생성기 유형</bold></white>"
+        description: |-
+          <gray>현재 생성기에
+          </gray><gray>적용될 생성기 유형을
+          </gray><gray>정의합니다.</gray>
+        value: "<aqua>유형: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>최소 섬 레벨</bold></white>"
+        description: |-
+          <gray>이 생성기를
+          </gray><gray>잠금해제하기 위한 최소 섬 레벨입니다.</gray>
+        value: "<aqua>필요 최소 레벨: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>필요 권한</bold></white>"
+        description: |-
+          <gray>이 생성기를
+          </gray><gray>잠금해제하기 위해
+          </gray><gray>필요한 권한 목록입니다.</gray>
+        list: "<aqua>필요 권한:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- 없음</aqua>"
+      purchase_cost:
+        name: "<white><bold>구매 비용</bold></white>"
+        description: |-
+          <gray>이 생성기를
+          </gray><gray>구매하는 데 필요한 크레딧입니다.</gray>
+        value: "<aqua>비용: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>활성화 비용</bold></white>"
+        description: |-
+          <gray>이 생성기를
+          </gray><gray>활성화 또는 재활성화하는 데
+          </gray><gray>필요한 크레딧입니다.</gray>
+        value: "<aqua>비용: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>소진 한계</bold></white>"
+        description: |-
+          <gray>이 생성기가 냉각 전에
+          </gray><gray>기간당 생성할 수 있는 최대 블록 수입니다.</gray>
+        value: "<aqua>한계: [number] </aqua><gray>기간당</gray>"
+        default: "<aqua>전역 기본값 사용: </aqua><white>[number]</white>"
+        unlimited: "<aqua>제한 없음</aqua>"
+      biomes:
+        name: "<white><bold>작동 바이옴</bold></white>"
+        description: |-
+          <gray>이 생성기가 작동할 수 있는
+          </gray><gray>바이옴 목록입니다.</gray>
+        list: "<aqua>바이옴:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- 모두</aqua>"
+      treasure_amount:
+        name: "<white><bold>보물 개수</bold></white>"
+        description: |-
+          <gray>한 번에 떨어질 수 있는
+          </gray><gray>최대 보물 개수입니다.</gray>
+        value: "<aqua>개수: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>보물 확률</bold></white>"
+        description: |-
+          <gray>생성 시 보물이
+          </gray><gray>떨어질 확률입니다.</gray>
+        value: "<aqua>확률: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>일반 정보</bold></white>"
+        description: |-
+          <gray>이 생성기에 대한
+          </gray><gray>일반 정보를 표시합니다.</gray>
+      blocks:
+        name: "<white><bold>블록 목록</bold></white>"
+        description: |-
+          <gray>블록 목록과
+          </gray><gray>생성될 확률을 표시합니다.</gray>
+      treasures:
+        name: "<white><bold>보물 목록</bold></white>"
+        description: |-
+          <gray>보물 목록과
+          </gray><gray>드롭 확률을 표시합니다.
+          </gray><gray>보물은 블록이 생성될 때
+          </gray><gray>떨어집니다.</gray>
+        drag-and-drop: |-
+          <gray>빈 공간에 항목을
+          </gray><gray>드래그 앤 드롭할 수 있습니다.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>확률: [#.##]</aqua>"
+        actual: "<aqua>데이터베이스값: [number]</aqua>"
+        height-range: "<gray>높이 범위: </gray><aqua>[min_height] </aqua><gray>~</gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>생성기 기본 높이 범위 사용</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>확률: [#.####]</aqua>"
+        actual: "<aqua>데이터베이스값: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>조약돌 생성기</bold></white>"
+        description: |-
+          <gray>조약돌
+          </gray><gray>생성기만 표시</gray>
+      show_stone:
+        name: "<white><bold>돌 생성기</bold></white>"
+        description: |-
+          <gray>돌
+          </gray><gray>생성기만 표시</gray>
+      show_basalt:
+        name: "<white><bold>현무암 생성기</bold></white>"
+        description: |-
+          <gray>현무암
+          </gray><gray>생성기만 표시</gray>
+      toggle_visibility:
+        name: "<white><bold>잠금해제된 생성기</bold></white>"
+        description: |-
+          <gray>잠금해제된
+          </gray><gray>생성기만 표시</gray>
+      show_active:
+        name: "<white><bold>활성화된 생성기</bold></white>"
+        description: |-
+          <gray>활성화된
+          </gray><gray>생성기만 표시</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>돌아가기</bold></white>"
+        description: |-
+          <gray>이전 메뉴로 돌아갑니다</gray>
+      quit:
+        name: "<white><bold>나가기</bold></white>"
+        description: |-
+          <gray>현재 메뉴를 종료합니다</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>이전 페이지</bold></white>"
+        description: |-
+          <gray>[number] 페이지로 전환</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>다음 페이지</bold></white>"
+        description: |-
+          <gray>[number] 페이지로 전환</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>섬 데이터 관리</bold></white>"
+        description: |-
+          <gray>현재 게임 모드에서
+          </gray><gray>섬 데이터를 관리합니다.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>생성기 관리</bold></white>"
+        description: |-
+          <gray>현재 게임 모드에서
+          </gray><gray>생성기를 관리합니다.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>번들 관리</bold></white>"
+        description: |-
+          <gray>현재 게임 모드에서
+          </gray><gray>번들을 관리합니다.</gray>
+      settings:
+        name: "<white><bold>설정</bold></white>"
+        description: |-
+          <gray>애드온 설정을
+          </gray><gray>확인하고 변경합니다.</gray>
+      import_template:
+        name: "<white><bold>템플릿 가져오기</bold></white>"
+        description: |-
+          <gray>애드온 디렉토리 내의
+          </gray><gray>템플릿 파일을
+          </gray><gray>가져옵니다.</gray>
+      web_library:
+        name: "<white><bold>웹 라이브러리</bold></white>"
+        description: |-
+          <gray>공유되는 생성기가 포함된
+          </gray><gray>웹 라이브러리에
+          </gray><gray>액세스합니다.</gray>
+      export_from_database:
+        name: "<white><bold>데이터베이스 내보내기</bold></white>"
+        description: |-
+          <gray>데이터베이스를
+          </gray><gray>애드온 디렉토리의 단일 파일로
+          </gray><gray>내보냅니다.</gray>
+      import_to_database:
+        name: "<white><bold>데이터베이스 가져오기</bold></white>"
+        description: |-
+          <gray>애드온 디렉토리의 파일에서
+          </gray><gray>데이터베이스를
+          </gray><gray>가져옵니다.</gray>
+      wipe_user_data:
+        name: "<white><bold>사용자 데이터베이스 삭제</bold></white>"
+        description: |-
+          <gray>현재 게임 모드의
+          </gray><gray>각 섬에서
+          </gray><gray>사용자 데이터를 삭제합니다.</gray>
+      wipe_generator_data:
+        name: "<white><bold>생성기 데이터베이스 삭제</bold></white>"
+        description: |-
+          <gray>현재 게임 모드의
+          </gray><gray>생성기 및 번들 데이터를 삭제합니다.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>번들 이름</bold></white>"
+        description: |-
+          <gray>번들 이름을 변경합니다.</gray>
+        value: "<aqua>이름: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>번들 ID</bold></white>"
+        description: |-
+          <gray>현재 번들 ID입니다.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>번들 아이콘</bold></white>"
+        description: |-
+          <gray>번들 아이콘을 변경합니다.</gray>
+      bundle_description:
+        name: "<white><bold>번들 설명</bold></white>"
+      bundle_info:
+        name: "<white><bold>일반 정보</bold></white>"
+        description: |-
+          <gray>이 번들에 대한
+          </gray><gray>일반 정보를 표시합니다.</gray>
+      bundle_generators:
+        name: "<white><bold>생성기</bold></white>"
+        description: |-
+          <gray>이 번들에 할당된
+          </gray><gray>생성기 목록을 표시합니다.</gray>
+      add_generator:
+        name: "<white><bold>생성기 추가</bold></white>"
+        description: |-
+          <gray>이 번들에
+          </gray><gray>생성기를 할당합니다.</gray>
+        list: "<aqua>선택된 생성기:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>생성기 제거</bold></white>"
+        description: |-
+          <gray>이 번들에서
+          </gray><gray>생성기를 제거합니다.</gray>
+        list: "<aqua>선택된 생성기:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>번들 생성</bold></white>"
+        description: |-
+          <gray>이 게임 모드를 위한
+          </gray><gray>새로운 번들을 생성합니다.</gray>
+      delete_bundle:
+        name: "<white><bold>번들 제거</bold></white>"
+        description: |-
+          <gray>이 게임 모드에서
+          </gray><gray>번들을 완전히 제거합니다.</gray>
+        list: "<aqua>선택된 번들:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>생성기 이름</bold></white>"
+        description: |-
+          <gray>이 생성기의 제목입니다.
+          </gray><gray>색상 코드를 지원합니다.</gray>
+        value: "<aqua>이름: </aqua> [generator]"
+      id:
+        name: "<white><bold>생성기 ID</bold></white>"
+        description: |-
+          <gray>현재 생성기 ID입니다.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>생성기 아이콘</bold></white>"
+        description: |-
+          <gray>모든 GUI에서 이
+          </gray><gray>생성기를 표시하는 데 사용되는 항목입니다.</gray>
+      locked_icon:
+        name: "<white><bold>잠금 아이콘</bold></white>"
+        description: |-
+          <gray>이 생성기가 잠금 상태일 때
+          </gray><gray>모든 GUI에서 이를 표시하는 데
+          </gray><gray>사용되는 항목입니다.</gray>
+      description:
+        name: "<white><bold>생성기 설명</bold></white>"
+        description: |-
+          <gray>생성기 제목 아래에
+          </gray><gray>작성될 텍스트입니다.</gray>
+        value: "<aqua>설명:</aqua>"
+      deployed:
+        name: "<white><bold>배포됨</bold></white>"
+        description: |-
+          <gray>배포된 생성기는 플레이어에게
+          </gray><gray>표시되고 액세스할 수 있습니다.
+          </gray><gray>배포되지 않은 생성기는 블록을
+          </gray><gray>생성하지 않습니다.</gray>
+        enabled: |-
+          <aqua>이 생성기는 </aqua><green>배포됨.</green>
+        disabled: |-
+          <aqua>이 생성기는 </aqua><red>배포되지 않음.</red>
+      add_material:
+        name: "<white><bold>재료 추가</bold></white>"
+        description: |-
+          <gray>현재 재료 목록에
+          </gray><gray>새로운 재료를 추가합니다.</gray>
+      remove_material:
+        name: "<white><bold>재료 제거</bold></white>"
+        description: |-
+          <gray>선택된 재료를
+          </gray><gray>목록에서 제거합니다.</gray>
+        selected-materials: "<gray>선택된 재료:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>생성기 생성</bold></white>"
+        description: |-
+          <gray>게임 모드를 위한
+          </gray><gray>새로운
+          </gray><gray>생성기를 생성합니다.</gray>
+      delete_generator:
+        name: "<white><bold>생성기 제거</bold></white>"
+        description: |-
+          <gray>게임 모드에서
+          </gray><gray>생성기를 완전히 제거합니다.</gray>
+        list: "<aqua>선택된 생성기:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>섬 ID: </aqua><gray>[id]</gray>
+        owner: "<aqua>소유자: [player]</aqua>"
+        list: "<aqua>멤버:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>섬 작동 범위</bold></white>"
+        description: |-
+          <gray>현재 섬의 생성기
+          </gray><gray>작동 범위입니다.
+          </gray><gray>0 이하는 무제한을
+          </gray><gray>의미합니다.</gray>
+        value: "<aqua>범위: [number]</aqua>"
+        overwritten: |-
+          <red>소유자가 작동 범위를
+          </red><red>덮어쓰는 권한을 가지고 있습니다.</red>
+      owner_working_range:
+        name: "<white><bold>소유자 작동 범위</bold></white>"
+        description: |-
+          <gray>현재 소유자의 생성기
+          </gray><gray>작동 범위입니다.
+          </gray><gray>'0'은 소유자 범위가
+          </gray><gray>무시됨을 의미합니다.
+          </gray><gray>'-1'은 소유자가
+          </gray><gray>무제한 작동 범위를 가짐을 의미합니다.
+          "</gray><gray> 사용자에게 할당할 권한:"</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>범위: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>최대 섬 생성기</bold></white>"
+        description: |-
+          <gray>현재 섬에서
+          </gray><gray>동시에 활성화할 수 있는
+          </gray><gray>최대 생성기 개수입니다.
+          </gray><gray>0 이하는 무제한을
+          </gray><gray>의미합니다.</gray>
+        value: "<aqua>최대 생성기: [number]</aqua>"
+        overwritten: |-
+          <red>소유자가 생성기 개수를
+          </red><red>덮어쓰는 권한을 가지고 있습니다.</red>
+      owner_max_generators:
+        name: "<white><bold>최대 소유자 생성기</bold></white>"
+        description: |-
+          <gray>섬 소유자가 허용되는
+          </gray><gray>최대 활성 동시
+          </gray><gray>생성기 개수입니다.
+          </gray><gray>'0'은 소유자 개수가
+          </gray><gray>무시됨을 의미합니다.
+          </gray><gray>'-1'은 소유자가
+          </gray><gray>무제한 생성기 개수를 가짐을 의미합니다.
+          "</gray><gray> 사용자에게 할당할 권한:"</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>최대 생성기: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>섬 번들</bold></white>"
+        description: |-
+          <gray>현재 섬에 할당된
+          </gray><gray>번들입니다.
+          </gray><gray>이 번들의 생성기만
+          </gray><gray>섬에서 사용할 수 있습니다.</gray>
+        value: "<aqua>번들: [bundle]</aqua>"
+        overwritten: |-
+          <red>소유자가 번들을
+          </red><red>덮어쓰는 권한을 가지고 있습니다.</red>
+      owner_bundle:
+        name: "<white><bold>소유자 번들</bold></white>"
+        description: |-
+          <gray>현재 섬 소유자에게 할당된
+          </gray><gray>번들입니다.
+          </gray><gray>이 번들의 생성기만
+          </gray><gray>섬에서 사용할 수 있습니다.
+          "</gray><gray> 사용자에게 할당할 권한:"</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>번들: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>일반 정보</bold></white>"
+        description: |-
+          <gray>이 섬에 대한
+          </gray><gray>일반 정보를 표시합니다.</gray>
+      island_generators:
+        name: "<white><bold>섬 생성기</bold></white>"
+        description: |-
+          <gray>현재 섬에서
+          </gray><gray>사용 가능한 모든 생성기의 목록을 표시합니다.</gray>
+      reset_to_default:
+        name: "<white><bold>기본값으로 재설정</bold></white>"
+        description: |-
+          <gray>모든 섬 값을
+          </gray><gray>설정의 기본값으로
+          </gray><gray>재설정합니다.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>온라인 플레이어</bold></white>"
+        description: |-
+          <gray>온라인 플레이어
+          </gray><gray>섬 목록입니다.</gray>
+      all_islands:
+        name: "<white><bold>모든 섬</bold></white>"
+        description: |-
+          <gray>모든 섬 목록입니다.</gray>
+      search:
+        name: "<white><bold>검색</bold></white>"
+        description: |-
+          <gray>특정 섬을
+          </gray><gray>검색합니다.</gray>
+        search: "<aqua>값: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>오프라인 생성</bold></white>"
+        description: |-
+          <gray>모든 섬 멤버가 오프라인일 때
+          </gray><gray>블록이 생성되는 것을
+          </gray><gray>방지합니다.</gray>
+        enabled: |-
+          <aqua>오프라인 생성이 </aqua><green>활성화됨 </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>오프라인 생성이 </aqua><red>비활성화됨 </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>물리 사용</bold></white>"
+        description: |-
+          <gray>블록 생성에 물리를 사용하면
+          </gray><gray>redstone 기계를 사용할 수 있지만
+          </gray><gray>서버 성능이 약간
+          </gray><gray>감소합니다.</gray>
+        enabled: |-
+          <aqua>물리가 </aqua><green>활성화됨 </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>물리가 </aqua><red>비활성화됨 </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Bank Addon 사용</bold></white>"
+        description: |-
+          <gray>모든 구매 및
+          </gray><gray>활성화에 섬 은행 계좌를 사용합니다.
+          </gray><gray>Bank Addon이 필요합니다.</gray>
+        enabled: |-
+          <aqua>Bank 사용이 </aqua><green>활성화됨 </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Bank 사용이 </aqua><red>비활성화됨 </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>기본 작동 범위</bold></white>"
+        description: |-
+          <gray>플레이어로부터의 거리로
+          </gray><gray>블록 생성이 중지될 때까지입니다.
+          </gray><gray>0 이하는 무제한을 의미합니다.
+          </gray><gray>설정을 활성화하려면 서버
+          </gray><gray>재시작이 필요합니다.</gray>
+        value: "<aqua>범위: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>기본 활성화된 생성기</bold></white>"
+        description: |-
+          <gray>동시에 활성화할 기본
+          </gray><gray>최대 생성기 개수입니다.
+          </gray><gray>0 이하는 무제한을 의미합니다.</gray>
+        value: "<aqua>개수: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>필터 표시</bold></white>"
+        description: |-
+          <gray>필터는 플레이어 GUI의 상단 행으로
+          </gray><gray>유형 또는 상태별로만 생성기를
+          </gray><gray>표시하도록 합니다.
+          </gray><gray>이 설정은 필터를 비활성화하고
+          </gray><gray>숨깁니다.</gray>
+        enabled: |-
+          <aqua>필터가 </aqua><green>활성화됨 </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>필터가 </aqua><red>비활성화됨 </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>테두리 블록</bold></white>"
+        description: |-
+          <gray>테두리 블록은 사용자 GUI를
+          </gray><gray>둘러싼 재료입니다.
+          </gray><gray>공기로 설정하면
+          </gray><gray>비활성화됩니다.</gray>
+      border_block_name:
+        name: "<white><bold>테두리 블록 이름</bold></white>"
+        description: |-
+          <gray>테두리 블록의 표시 이름입니다.
+          </gray><gray>비어 있으면 블록 이름을 사용합니다.
+          </gray><gray>1개의 빈 공간으로 설정하려면
+          "</gray><gray> 'empty'를 작성하세요."</gray>
+        value: "<aqua>이름: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>잠금해제 시 알림</bold></white>"
+        description: |-
+          <gray>사용자가 새로운 생성기를
+          </gray><gray>잠금해제할 때 메시지가
+          </gray><gray>전송됩니다.</gray>
+        enabled: |-
+          <aqua>잠금해제 알림이 </aqua><green>활성화됨 </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>잠금해제 알림이 </aqua><red>비활성화됨 </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>활성화 시 비활성화</bold></white>"
+        description: |-
+          <gray>사용자가 새로운 생성기를 활성화하면
+          </gray><gray>가장 오래된 활성화된 생성기를
+          </gray><gray>비활성화합니다.
+          </gray><gray>단일 생성기만 허용되는 상황에 유용합니다.</gray>
+        enabled: |-
+          <aqua>활성화 시 비활성화가 </aqua><green>활성화됨 </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>활성화 시 비활성화가 </aqua><red>비활성화됨 </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>작성자: [author]
+          </gray><gray>[gamemode]용으로 생성됨
+          </gray><gray>언어: [lang]
+          </gray><gray>버전: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>블록 수락</bold></white>"
+        description: |-
+          <gray>선택된 블록을 수락하고
+          </gray><gray>돌아갑니다.</gray>
+        selected-blocks: "<gray>선택된 블록:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>블록 ID: [id]</gray>"
+      search_block:
+        name: "<white><bold>검색</bold></white>"
+        description: |-
+          <gray>특정 블록을
+          </gray><gray>검색합니다.</gray>
+        search: "<aqua>값: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>바이옴 수락</bold></white>"
+        description: |-
+          <gray>선택된 바이옴을 수락하고
+          </gray><gray>돌아갑니다.</gray>
+        selected-biomes: "<gray>선택된 바이옴:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>최소 높이</bold></white>"
+        description: |-
+          <gray>이 재료의 최소 높이를 설정하세요.
+          </gray><gray>현재값: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>최대 높이</bold></white>"
+        description: |-
+          <gray>이 재료의 최대 높이를 설정하세요.
+          </gray><gray>현재값: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>높이 범위 제거</bold></white>"
+        description: |-
+          <gray>이 재료의 특정 높이 범위를
+          </gray><gray>제거합니다.
+          </gray><gray>생성기의
+          </gray><gray>기본 높이 범위를 대신 사용합니다.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>온대</bold></white>"
+          description: |-
+            <gray>온대 바이옴만 표시</gray>
+        warm:
+          name: "<white><bold>따뜻함</bold></white>"
+          description: |-
+            <gray>따뜻한 바이옴만 표시</gray>
+        cold:
+          name: "<white><bold>추움</bold></white>"
+          description: |-
+            <gray>추운 바이옴만 표시</gray>
+        snowy:
+          name: "<white><bold>눈 내림</bold></white>"
+          description: |-
+            <gray>눈 내리는 바이옴만 표시</gray>
+        ocean:
+          name: "<white><bold>바다</bold></white>"
+          description: |-
+            <gray>바다 바이옴만 표시</gray>
+        nether:
+          name: "<white><bold>네더</bold></white>"
+          description: |-
+            <gray>네더 바이옴만 표시</gray>
+        the_end:
+          name: "<white><bold>엔드</bold></white>"
+          description: |-
+            <gray>엔드 바이옴만 표시</gray>
+        neutral:
+          name: "<white><bold>중립</bold></white>"
+          description: |-
+            <gray>중립 바이옴만 표시</gray>
+        unused:
+          name: "<white><bold>사용하지 않음</bold></white>"
+          description: |-
+            <gray>사용하지 않는 바이옴만 표시</gray>
+        cave:
+          name: "<white><bold>동굴</bold></white>"
+          description: |-
+            <gray>동굴 바이옴만 표시</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>조약돌</bold></white>"
+          description: |-
+            <gray>조약돌
+            </gray><gray>생성기에서만 작동합니다.
+
+            </gray><gold><italic>팁:
+            </italic></gold><italic><gold><italic>용암 흐름이 물과
+            </italic></gold></italic><italic><italic><gold><italic>접촉할 때 형성됩니다.
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic></italic></gold></italic></italic>
+        stone:
+          name: "<white><bold>돌</bold></white>"
+          description: |-
+            <gray>돌
+            </gray><gray>생성기에서만 작동합니다.
+
+            </gray><gold><italic>팁:
+            </italic></gold><italic><gold><italic>용암이 물 블록
+            </italic></gold></italic><italic><italic><gold><italic>위를 흐를 때 형성됩니다.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>현무암</bold></white>"
+          description: |-
+            <gray>현무암
+            </gray><gray>생성기에서만 작동합니다.
+
+            </gray><gold><italic>팁:
+            </italic></gold><italic><gold><italic>용암이 영혼 흙 위를
+            </italic></gold></italic><italic><italic><gold><italic>흐르고 파란색 얼음에
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>인접할 때 형성됩니다.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>조약돌 또는 돌</bold></white>"
+          description: |-
+            <gray>조약돌 및
+            </gray><gray>돌 생성기에서 작동합니다.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>현무암 또는 조약돌</bold></white>"
+          description: |-
+            <gray>현무암 및
+            </gray><gray>조약돌 생성기에서 작동합니다.</gray>
+        basalt_or_stone:
+          name: "<white><bold>현무암 또는 돌</bold></white>"
+          description: |-
+            <gray>현무암 및
+            </gray><gray>돌 생성기에서 작동합니다.</gray>
+        any:
+          name: "<white><bold>모두</bold></white>"
+          description: |-
+            <gray>모든 생성기에서 작동합니다.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>클릭 </yellow><gray>이전 페이지를 봅니다.</gray>"
+      click-to-next: "<yellow>클릭 </yellow><gray>다음 페이지를 봅니다.</gray>"
+      click-to-cancel: "<yellow>클릭 </yellow><gray>취소합니다.</gray>"
+      click-to-choose: "<yellow>클릭 </yellow><gray>선택합니다.</gray>"
+      click-to-select: "<yellow>클릭 </yellow><gray>선택합니다.</gray>"
+      click-to-deselect: "<yellow>클릭 </yellow><gray>선택해제합니다.</gray>"
+      click-to-accept: "<yellow>클릭 </yellow><gray>수락하고 돌아갑니다.</gray>"
+      click-to-filter-enable: "<yellow>클릭 </yellow><gray>필터를 활성화합니다.</gray>"
+      click-to-filter-disable: "<yellow>클릭 </yellow><gray>필터를 비활성화합니다.</gray>"
+      click-to-activate: "<yellow>클릭 </yellow><gray>활성화합니다.</gray>"
+      click-to-deactivate: "<yellow>클릭 </yellow><gray>비활성화합니다.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>금 블록을
+        </yellow><gray>클릭하여
+        </gray><gray>구매합니다.</gray>
+      click-to-purchase: "<yellow>클릭 </yellow><gray>구매합니다.</gray>"
+      click-to-return: "<yellow>클릭 </yellow><gray>돌아갑니다.</gray>"
+      click-to-quit: "<yellow>클릭 </yellow><gray>나갑니다.</gray>"
+      click-to-wipe: "<yellow>클릭 </yellow><gray>삭제합니다.</gray>"
+      click-to-open: "<yellow>클릭 </yellow><gray>엽니다.</gray>"
+      click-to-export: "<yellow>클릭 </yellow><gray>내보내기를 시작합니다.</gray>"
+      click-to-change: "<yellow>클릭 </yellow><gray>변경합니다.</gray>"
+      click-on-item: |-
+        <yellow>인벤토리의 항목을
+        </yellow><gray>클릭</gray><gray>합니다.</gray>
+      click-to-view: "<yellow>클릭 </yellow><gray>봅니다.</gray>"
+      click-to-add: "<yellow>클릭 </yellow><gray>추가합니다.</gray>"
+      click-to-remove: "<yellow>클릭 </yellow><gray>제거합니다.</gray>"
+      select-before: "<yellow>계속하기 전에\n</yellow><gray>선택하세요.</gray>"
+      click-to-create: "<yellow>클릭 </yellow><gray>생성합니다.</gray>"
+      right-click-to-select: "<yellow>우클릭 </yellow><gray>선택합니다.</gray>"
+      right-click-to-deselect: "<yellow>우클릭 </yellow><gray>선택해제합니다.</gray>"
+      click-to-toggle: "<yellow>클릭 </yellow><gray>토글합니다.</gray>"
+      left-click-to-edit: "<yellow>좌클릭 </yellow><gray>편집합니다.</gray>"
+      right-click-to-lock: "<yellow>우클릭 </yellow><gray>잠금합니다.</gray>"
+      right-click-to-unlock: "<yellow>우클릭 </yellow><gray>잠금해제합니다.</gray>"
+      click-to-perform: "<yellow>클릭 </yellow><gray>수행합니다.</gray>"
+      click-to-edit: "<yellow>클릭 </yellow><gray>편집합니다.</gray>"
+      right-click-to-clear: "<yellow>우클릭 </yellow><gray>삭제합니다.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>좌클릭 </yellow><gray>봅니다.</gray>"
+      left-click-to-purchase: "<yellow>좌클릭 </yellow><gray>구매합니다.</gray>"
+      left-click-to-activate: "<yellow>좌클릭 </yellow><gray>활성화합니다.</gray>"
+      left-click-to-deactivate: "<yellow>좌클릭 </yellow><gray>비활성화합니다.</gray>"
+      right-click-to-view: "<yellow>우클릭 </yellow><gray>봅니다.</gray>"
+      right-click-to-purchase: "<yellow>우클릭 </yellow><gray>구매합니다.</gray>"
+      right-click-to-activate: "<yellow>우클릭 </yellow><gray>활성화합니다.</gray>"
+      right-click-to-deactivate: "<yellow>우클릭 </yellow><gray>비활성화합니다.</gray>"
+      shift-click-to-view: "<yellow>Shift클릭 </yellow><gray>봅니다.</gray>"
+      shift-click-to-purchase: "<yellow>Shift클릭 </yellow><gray>구매합니다.</gray>"
+      shift-click-to-activate: "<yellow>Shift클릭 </yellow><gray>활성화합니다.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift클릭 </yellow><gray>비활성화합니다.</gray>"
+      shift-click-to-reset: "<yellow>Shift클릭 </yellow><gray>재설정합니다.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+좌클릭 </yellow><gray>높이 범위를 설정합니다.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>블록:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>보물:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>필수 레벨: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>누락된 권한:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>작동 위치:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>모든 </bold></gray><bold><yellow><italic></italic></yellow></bold><gray><bold>바이옴에서 작동</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>잠김!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>배포되지 않음!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>활성화됨</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>구매 비용: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>활성화 비용: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>지원:</bold></gray>"
+          cobblestone: "<dark_gray>조약돌 생성기</dark_gray>"
+          stone: "<dark_gray>돌 생성기</dark_gray>"
+          basalt: "<dark_gray>현무암 생성기</dark_gray>"
+          any: "<gray><bold>모든 </bold></gray><bold><yellow><italic></italic></yellow></bold><gray><bold>생성기를 지원</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>작동 높이: </gray><aqua>[min_height] </aqua><gray>~</gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>플레이어에게 할당되어야 할
+        </gray><gray>권한:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>번들 생성기: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>선택됨</yellow>"
+      # Used to refer to players island.
+      island-owner: "[player]의 섬"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>스폰 섬</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "미알려짐"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>생성기 </green> '[generator]' <green> 로컬 캐시에 로드되었습니다.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>번들 </green> '[bundle]' <green> 로컬 캐시에 로드되었습니다.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>생성기 </yellow> '[generator]' <yellow>비활성화되었습니다.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>활성화된 생성기가 너무 많습니다. 새로운 생성기를 활성화하기 전에 일부를 비활성화하세요.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>생성기 </red> '[generator]' <red>는 잠금해제할 수 없습니다.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>생성기 </red> '[generator]' <red>는 잠금해제되지 않았습니다.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>생성기 </red> '[generator]' <red>는 구매되지 않았습니다.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>생성기를 활성화할 크레딧이 부족합니다. 활성화에는 [number] 크레딧이 필요합니다.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>은행 계좌에 생성기를 활성화할 크레딧이 부족합니다. 활성화에는 [number] 크레딧이 필요합니다.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>생성기 </yellow> '[generator]' <yellow>활성화되었습니다.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>생성기 </red> '[generator]' <red>생성 한계에 도달했으며 이제 [number]분 더 냉각 중입니다.</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>생성기 </yellow> '[generator]' <yellow>구매되었습니다.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>생성기 </red> '[generator]' <red>는 이미 구매되었습니다.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>생성기 </red> '[generator]' <red>[number] 섬 레벨이 필요합니다.</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>생성기 </red> '[generator]' <red>`[permission]` 권한이 필요합니다.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>생성기를 구매할 크레딧이 부족합니다. 이 생성기는 [number] 크레딧입니다.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>은행 계좌에 크레딧이 부족합니다. 이 생성기는 [number] 크레딧입니다.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>[generator]개의 새로운 생성기와 [bundle]개의 새로운 번들을 가져왔습니다.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>라이브러리 다운로드를 시작합니다.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>유효한 생성기 데이터를 찾을 수 없습니다</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>섬 데이터를 찾을 수 없습니다.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>유효한 번들 데이터를 찾을 수 없습니다</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>라이브러리 항목을 찾을 수 없습니다!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>`[file]` 파일을 찾을 수 없습니다. 가져오기를 수행할 수 없습니다.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>`[file]` 파일을 로드할 수 없습니다. 읽기 오류: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>세계 '[world]'는 게임 모드 애드온 세계가 아닙니다.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>`[file]` 파일이 이미 존재합니다. 다른 이름을 선택하세요.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>ID '[generator]'인 생성기는 </red><red>[gamemode]에서 찾을 수 없습니다.</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>[world]에서 사용 가능한 생성기가 없습니다</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>돈을 인출하는 중 문제가 발생했습니다.</red>"
+    max-height-less-than-min: "<red>최대 높이([MAX])는 최소 높이([MIN])보다 작을 수 없습니다!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "true, on, yes, confirm, y, valid, correct"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "false, off, no, deny, n, invalid, incorrect"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "cancel"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "cancel, exit, quit"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>대화가 취소되었습니다!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>주어진 [value]는 숫자가 아닙니다!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>주어진 숫자 [value]는 유효하지 않습니다. [min]보다 크고 [max]보다 작아야 합니다!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>새 설명:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>검색 값을 입력하세요. ('cancel'을 입력하여 종료)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>검색 값이 업데이트되었습니다.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>[gamemode]의 데이터베이스에서 모든 사용자 데이터를 삭제하려는 것을 확인하세요.</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>성공, [gamemode]의 모든 사용자 데이터가 제거되었습니다!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>[gamemode]의 데이터베이스에서 모든 생성기 데이터를 삭제하려는 것을 확인하세요.</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>성공, [gamemode]의 모든 생성기 데이터가 제거되었습니다!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>내보낸 데이터베이스 파일의 파일 이름을 입력하세요. ('cancel'을 입력하여 종료)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>성공, [world]의 데이터베이스 내보내기가 완료되었습니다. 애드온 디렉토리에서 파일이 생성되었습니다.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>이름 '[id]'인 파일이 존재합니다. 덮어쓸 수 없습니다.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>채팅에서 새 이름을 입력하세요.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>성공, 이름이 업데이트되었습니다.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>채팅에서 새 설명을 입력하고 완료하려면 'quit'을 별도의 줄에 입력하세요.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>성공, 설명이 업데이트되었습니다.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>성공, 새 객체가 [world]에 생성되었습니다.</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>ID `[id]`인 객체는 이미 게임 모드에 정의되어 있습니다. 다른 이름을 선택하세요.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>[number]개 객체 삭제 확인: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>성공, 데이터가 제거되었습니다!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>채팅에서 숫자를 입력하세요.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>채팅에서 필요한 권한을 한 줄에 하나씩 입력하고 완료하려면 'quit'을 별도의 줄에 입력하세요.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>성공, 생성기 권한이 업데이트되었습니다.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>현재 생성기를 새로운 생성기로 교체하려는 것을 확인하세요.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>성공, [gamemode]의 새로운 생성기를 가져왔습니다.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>잠금이 해제되었습니다 </yellow> [generator]<yellow>! 지금 [number]에 구매하려면 여기를 클릭하세요.</yellow>"
+    click-text-to-activate-vault: "<yellow>잠금이 해제되었습니다 </yellow> [generator]<yellow>! 지금 [number]에 활성화하려면 여기를 클릭하세요.</yellow>"
+    click-text-to-activate: "<yellow>잠금이 해제되었습니다 </yellow> [generator]<yellow>! 지금 활성화하려면 여기를 클릭하세요.</yellow>"
+    input-min-height: "<white>이 재료의 최소 높이를 입력하세요 (-64에서 320 사이):</white>"
+    input-max-height: "<white>이 재료의 최대 높이를 입력하세요 (-64에서 320 사이):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "조약돌"
+    # Also supports descriptions.
+    stone:
+      name: "돌"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "평원"
+    # Also supports descriptions.
+    flower_forest:
+      name: "꽃 숲"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "매직 생성기"
+      description: |-
+        <green>전체 섬의
+        </green><green>모든 매직 생성기를
+        </green><green>활성화 또는 비활성화할 수 있습니다</green>
+      hint: "<yellow>섬 설정에서 매직 생성기가 비활성화되었습니다</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "매직 생성기 권한"
+      description: |-
+        <green>생성기를 활성화하고
+        </green><green>비활성화할 수 있는 사람을 선택합니다</green>

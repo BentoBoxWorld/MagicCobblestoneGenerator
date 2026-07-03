@@ -1,0 +1,1117 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "Burvju Bruģakmeņa Ģeneratora Administratora Komanda"
+      import:
+        description: "Importē burvju ģeneratorus"
+        confirmation: "Tas noņems esošos ģeneratorus no [gamemode] un importēs jaunus ģeneratorus no veidnes faila - lūdzu apstipriniet"
+      why:
+        parameters: "<player>"
+        description: "pārslēdz Burvju Bruģakmeņa Ģeneratora atkļūdošanas ziņas"
+      database:
+        description: "Galvenā datu bāzes komanda"
+      import-database:
+        parameters: "<file>"
+        description: "importē burvju ģeneratoru datu bāzes failu"
+        confirmation: "Tas noņems esošos ģeneratorus [gamemode] un importēs ģeneratorus no datu bāzes faila - lūdzu apstipriniet"
+      export:
+        parameters: "<file>"
+        description: "Eksportē burvju ģeneratorus no Spēles režīma faila"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "atver ģeneratora atlases GUI"
+      view:
+        description: "atver ģeneratora detaļu GUI"
+        parameters: "<generator-id>"
+      buy:
+        description: "Pērk pieprasīto ģeneratoru"
+        parameters: "<generator-id>"
+      activate:
+        description: "Aktivizē/deaktivizē pieprasīto ģeneratoru"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>Ģeneratori</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>Ģenerators: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>Administratora Panelis</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>Izvēlieties Bioumus</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>Izvēlieties Bloku</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>Izvēlieties Komplektu</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>Izvēlieties Ģeneratora Veidu</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>Komplekts: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>Pārvaldīt Komplektus</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>Pārvaldīt Ģeneratorus</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>Sala: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>Pārvaldīt Salas Datus</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>Bibliotēka</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>Iestatījumi</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>Konfigurēt Materiāla Augstumu</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>Augstuma Diapazons: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>Minimālais Augstums</bold></white>"
+        description: |-
+          <gray>Iestatiet minimālo augstumu
+          </gray><gray>šim materiālam.</gray>
+        value: "<gray>Pašreizējā vērtība: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>Maksimālais Augstums</bold></white>"
+        description: |-
+          <gray>Iestatiet maksimālo augstumu
+          </gray><gray>šim materiālam.</gray>
+        value: "<gray>Pašreizējā vērtība: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>Augstuma Diapazons</bold></white>"
+        description: |-
+          <gray>Augstuma diapazons, kurā
+          </gray><gray>darbojas šis ģenerators.</gray>
+        value: "<aqua>No </aqua><white>[min_height] </white><aqua>līdz </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>Noklusējuma Ģenerators</bold></white>"
+        description: |-
+          <gray>Noklusējuma ģeneratori ir vienmēr
+          </gray><gray>aktīvi.</gray>
+        enabled: |-
+          <aqua>Šis ir </aqua><green>noklusējuma </green><aqua>ģenerators.</aqua>
+        disabled: |-
+          <aqua>Šis </aqua><red>nav noklusējuma </red><aqua>ģenerators.</aqua>
+      priority:
+        name: "<white><bold>Ģeneratora Prioritāte</bold></white>"
+        description: |-
+          <gray>Lielāks prioritātes
+          </gray><gray>numurs tiks doti priekšroku, ja
+          </gray><gray>vairāki var tikt pielietoti
+          </gray><gray>vienai vietai.</gray>
+        value: "<aqua>Prioritāte: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>Ģeneratora Veids</bold></white>"
+        description: |-
+          <gray>Nosaka, kurš ģeneratora veids
+          </gray><gray>tiks pielietots pašreizējam
+          </gray><gray>ģeneratoram.</gray>
+        value: "<aqua>Veids: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>Minimālais Salas Līmenis</bold></white>"
+        description: |-
+          <gray>Minimālais salas līmenis, lai
+          </gray><gray>atbloķētu šo ģeneratoru.</gray>
+        value: "<aqua>Nepieciešamais Minimālais Līmenis: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>Nepieciešamās Atļaujas</bold></white>"
+        description: |-
+          <gray>Atļauju saraksts, kas
+          </gray><gray>ir nepieciešams atbloķēt
+          </gray><gray>šo ģeneratoru.</gray>
+        list: "<aqua>Nepieciešamās Atļaujas:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- nav</aqua>"
+      purchase_cost:
+        name: "<white><bold>Pirkšanas Cena</bold></white>"
+        description: |-
+          <gray>Kredīti, kas nepieciešami
+          </gray><gray>šī ģeneratora pirkšanai.</gray>
+        value: "<aqua>Cena: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>Aktivizēšanas Cena</bold></white>"
+        description: |-
+          <gray>Kredīti, kas nepieciešami
+          </gray><gray>šī ģeneratora aktivizēšanai
+          </gray><gray>vai atkārtotai aktivizēšanai.</gray>
+        value: "<aqua>Cena: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>Izsīkuma Limits</bold></white>"
+        description: |-
+          <gray>Maksimālais bloku skaits, ko
+          </gray><gray>šis ģenerators var radīt per
+          </gray><gray>periodu, pirms tas nonāk
+          </gray><gray>atjaunošanas režīmā.</gray>
+        value: "<aqua>Limits: [number] </aqua><gray>per periodu</gray>"
+        default: "<aqua>Izmanto globālo noklusējumu: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Bez ierobežojuma</aqua>"
+      biomes:
+        name: "<white><bold>Operacionālie Biomi</bold></white>"
+        description: |-
+          <gray>Biomu saraksts, kur šis
+          </gray><gray>ģenerators var darbināties.</gray>
+        list: "<aqua>Biomi:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- jebkurš</aqua>"
+      treasure_amount:
+        name: "<white><bold>Dārgumu Daudzums</bold></white>"
+        description: |-
+          <gray>Maksimālais dārgumu daudzums,
+          </gray><gray>ko var izlaist vienā reizē.</gray>
+        value: "<aqua>Daudzums: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>Dārgumu Iespēja</bold></white>"
+        description: |-
+          <gray>Iespēja, ka dārgumi tiks
+          </gray><gray>izlaisti pēc ģenerēšanas.</gray>
+        value: "<aqua>Iespēja: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>Vispārējā Informācija</bold></white>"
+        description: |-
+          <gray>Parāda vispārējo informāciju
+          </gray><gray>par šo ģeneratoru.</gray>
+      blocks:
+        name: "<white><bold>Bloku Saraksts</bold></white>"
+        description: |-
+          <gray>Parāda bloku sarakstu un
+          </gray><gray>to ģenerēšanas iespējas.</gray>
+      treasures:
+        name: "<white><bold>Dārgumu Saraksts</bold></white>"
+        description: |-
+          <gray>Parāda dārgumu sarakstu un
+          </gray><gray>izsviešanas iespējas.
+          </gray><gray>Dārgumi tiek izlaisti
+          </gray><gray>kad bloki ģenerējas.</gray>
+        drag-and-drop: |-
+          <gray>Atbalsta vilkšanu un nomešanu
+          </gray><gray>uz tukšām vietām.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Iespēja: [#.##]</aqua>"
+        actual: "<aqua>Datu bāzes vērtība: [number]</aqua>"
+        height-range: "<gray>Augstuma diapazons: </gray><aqua>[min_height] </aqua><gray>līdz </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Izmanto ģeneratora noklusējuma augstuma diapazona</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Iespēja: [#.####]</aqua>"
+        actual: "<aqua>Datu bāzes vērtība: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>Bruģakmeņa Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parāda tikai bruģakmeņa
+          </gray><gray>ģeneratorus</gray>
+      show_stone:
+        name: "<white><bold>Akmeņa Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parāda tikai akmeņa
+          </gray><gray>ģeneratorus</gray>
+      show_basalt:
+        name: "<white><bold>Bazalta Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parāda tikai bazalta
+          </gray><gray>ģeneratorus</gray>
+      toggle_visibility:
+        name: "<white><bold>Atbloķētie Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parāda tikai atbloķētos
+          </gray><gray>ģeneratorus</gray>
+      show_active:
+        name: "<white><bold>Aktīvie Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parāda tikai aktīvos
+          </gray><gray>ģeneratorus</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>Atgriezties</bold></white>"
+        description: |-
+          <gray>Atgriezties uz iepriekšējo izvēlni</gray>
+      quit:
+        name: "<white><bold>Iziet</bold></white>"
+        description: |-
+          <gray>Aiziet no pašreizējās izvēlnes</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>Iepriekšējā Lapa</bold></white>"
+        description: |-
+          <gray>Pāriet uz [number] lapu</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>Nākamā Lapa</bold></white>"
+        description: |-
+          <gray>Pāriet uz [number] lapu</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>Pārvaldīt Salas Datus</bold></white>"
+        description: |-
+          <gray>Pārvaldīt salas datus
+          </gray><gray>pašreizējā spēles režīmā.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>Pārvaldīt Ģeneratorus</bold></white>"
+        description: |-
+          <gray>Pārvaldīt ģeneratorus
+          </gray><gray>pašreizējā spēles režīmā.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>Pārvaldīt Komplektus</bold></white>"
+        description: |-
+          <gray>Pārvaldīt komplektus
+          </gray><gray>pašreizējā spēles režīmā.</gray>
+      settings:
+        name: "<white><bold>Iestatījumi</bold></white>"
+        description: |-
+          <gray>Pārbaudīt un mainīt
+          </gray><gray>pievienojuma iestatījumus.</gray>
+      import_template:
+        name: "<white><bold>Importēt Veidni</bold></white>"
+        description: |-
+          <gray>Importēt veidni failu,
+          </gray><gray>kas atrodas pievienojuma
+          </gray><gray>direktorijā.</gray>
+      web_library:
+        name: "<white><bold>Tīmekļa Bibliotēka</bold></white>"
+        description: |-
+          <gray>Piekļūt tīmekļa
+          </gray><gray>bibliotēkai, kas satur
+          </gray><gray>kopīgos ģeneratorus.</gray>
+      export_from_database:
+        name: "<white><bold>Eksportēt Datu Bāzi</bold></white>"
+        description: |-
+          <gray>Eksportēt datu bāzi
+          </gray><gray>vienā failā, kas atrodas
+          </gray><gray>pievienojuma direktorijā.</gray>
+      import_to_database:
+        name: "<white><bold>Importēt Datu Bāzi</bold></white>"
+        description: |-
+          <gray>Importēt datu bāzi no
+          </gray><gray>faila, kas atrodas pievienojuma
+          </gray><gray>direktorijā.</gray>
+      wipe_user_data:
+        name: "<white><bold>Notīrīt Lietotāja Datu Bāzi</bold></white>"
+        description: |-
+          <gray>Notīrīt lietotāja datus par
+          </gray><gray>katru salu pašreizējā
+          </gray><gray>spēles režīmā.</gray>
+      wipe_generator_data:
+        name: "<white><bold>Notīrīt Ģeneratora Datu Bāzi</bold></white>"
+        description: |-
+          <gray>Notīrīt ģeneratora un komplekta
+          </gray><gray>datus pašreizējā spēles režīmā.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>Komplekta Nosaukums</bold></white>"
+        description: |-
+          <gray>Mainīt komplekta nosaukumu.</gray>
+        value: "<aqua>Nosaukums: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>Komplekta ID</bold></white>"
+        description: |-
+          <gray>Pašreizējais komplekta ID.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>Komplekta Ikona</bold></white>"
+        description: |-
+          <gray>Mainīt komplekta ikonu.</gray>
+      bundle_description:
+        name: "<white><bold>Komplekta Apraksts</bold></white>"
+      bundle_info:
+        name: "<white><bold>Vispārējā Informācija</bold></white>"
+        description: |-
+          <gray>Parādīt vispārējo informāciju
+          </gray><gray>par šo komplektu.</gray>
+      bundle_generators:
+        name: "<white><bold>Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parādīt ģeneratoru sarakstu,
+          </gray><gray>kas piešķirti šim komplektam.</gray>
+      add_generator:
+        name: "<white><bold>Pievienot Ģeneratoru</bold></white>"
+        description: |-
+          <gray>Piešķirt ģeneratoru
+          </gray><gray>šim komplektam.</gray>
+        list: "<aqua>Atlasītie Ģeneratori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>Noņemt Ģeneratoru</bold></white>"
+        description: |-
+          <gray>Noņemt ģeneratoru
+          </gray><gray>no šī komplekta.</gray>
+        list: "<aqua>Atlasītie Ģeneratori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>Izveidot Komplektu</bold></white>"
+        description: |-
+          <gray>Izveidot jaunu komplektu
+          </gray><gray>šim spēles režīmam.</gray>
+      delete_bundle:
+        name: "<white><bold>Noņemt Komplektu</bold></white>"
+        description: |-
+          <gray>Noņemt komplektu no
+          </gray><gray>šī spēles režīma pilnībā.</gray>
+        list: "<aqua>Atlasītie Komplekti:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>Ģeneratora Nosaukums</bold></white>"
+        description: |-
+          <gray>Virsraksts šim ģeneratoram.
+          </gray><gray>Atbalsta krāsu kodus.</gray>
+        value: "<aqua>Nosaukums: </aqua> [generator]"
+      id:
+        name: "<white><bold>Ģeneratora ID</bold></white>"
+        description: |-
+          <gray>Pašreizējais ģeneratora ID.</gray>
+        value: "<aqua>ID: </aqua> [id]"
+      icon:
+        name: "<white><bold>Ģeneratora Ikona</bold></white>"
+        description: |-
+          <gray>Priekšmets, kas tiek izmantots
+          </gray><gray>šī ģeneratora parādīšanai
+          </gray><gray>visās GUI.</gray>
+      locked_icon:
+        name: "<white><bold>Bloķētā Ikona</bold></white>"
+        description: |-
+          <gray>Priekšmets, kas tiek izmantots
+          </gray><gray>šī ģeneratora parādīšanai
+          </gray><gray>visās GUI, ja tas ir
+          </gray><gray>bloķēts.</gray>
+      description:
+        name: "<white><bold>Ģeneratora Apraksts</bold></white>"
+        description: |-
+          <gray>Teksts ģeneratoram, kas tiks
+          </gray><gray>rakstīts zem virsraksta.</gray>
+        value: "<aqua>Apraksts:</aqua>"
+      deployed:
+        name: "<white><bold>Izvietots</bold></white>"
+        description: |-
+          <gray>Izvietotie ģeneratori ir redzami
+          </gray><gray>un pieejami spēlētājiem.
+          </gray><gray>Nevietotie ģeneratori nē
+          </gray><gray>ģenerēs blokus.</gray>
+        enabled: |-
+          <aqua>Šis ģenerators ir </aqua><green>izvietots.</green>
+        disabled: |-
+          <aqua>Šis ģenerators </aqua><red>nav izvietots.</red>
+      add_material:
+        name: "<white><bold>Pievienot Materiālu</bold></white>"
+        description: |-
+          <gray>Pievienot jaunu materiālu
+          </gray><gray>pašreizējam materiālu sarakstam.</gray>
+      remove_material:
+        name: "<white><bold>Noņemt Materiālus</bold></white>"
+        description: |-
+          <gray>Noņemt atlasītos
+          </gray><gray>materiālus no saraksta.</gray>
+        selected-materials: "<gray>Atlasītie Materiāli:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>Izveidot Ģeneratoru</bold></white>"
+        description: |-
+          <gray>Izveidot jaunu
+          </gray><gray>ģeneratoru
+          </gray><gray>spēles režīmam.</gray>
+      delete_generator:
+        name: "<white><bold>Noņemt Ģeneratoru</bold></white>"
+        description: |-
+          <gray>Noņemt ģeneratoru
+          </gray><gray>no spēles režīma pilnībā.</gray>
+        list: "<aqua>Atlasītie Ģeneratori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>Salas ID: </aqua><gray>[id]</gray>
+        owner: "<aqua>Īpašnieks: [player]</aqua>"
+        list: "<aqua>Dalībnieki:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>Salas Darba Rādiuss</bold></white>"
+        description: |-
+          <gray>Darba rādiuss ģeneratoriem
+          </gray><gray>pašreizējā salā.
+          </gray><gray>0 vai mazāk nozīmē neierobežots
+          </gray><gray>rādiuss.</gray>
+        value: "<aqua>Rādiuss: [number]</aqua>"
+        overwritten: |-
+          <red>Īpašniekam ir atļauja, kas
+          </red><red>pārraksta darba rādiusu.</red>
+      owner_working_range:
+        name: "<white><bold>Īpašnieka Darba Rādiuss</bold></white>"
+        description: |-
+          <gray>Darba rādiuss ģeneratoriem
+          </gray><gray>pašreizējam īpašniekam.
+          </gray><gray>'0' nozīmē, ka īpašnieka
+          </gray><gray>rādiuss tiek ignorēts.
+          </gray><gray>'-1' nozīmē, ka īpašniekam
+          </gray><gray>ir neierobežots darba rādiuss.
+          "</gray><gray> Atļauja lietotājam piešķirt:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Rādiuss: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>Maksimālie Salas Ģeneratori</bold></white>"
+        description: |-
+          <gray>Maksimālais aktīvo
+          </gray><gray>ģeneratora līmeņu skaits
+          </gray><gray>vienlaicīgi, kas
+          </gray><gray>atļauts pašreizējai salai.
+          </gray><gray>0 vai mazāk nozīmē 
+          </gray><gray>neierobežots.</gray>
+        value: "<aqua>Maksimālie Ģeneratori: [number]</aqua>"
+        overwritten: |-
+          <red>Īpašniekam ir atļauja, kas
+          </red><red>pārraksta ģeneratoru skaitu.</red>
+      owner_max_generators:
+        name: "<white><bold>Maksimālie Īpašnieka Ģeneratori</bold></white>"
+        description: |-
+          <gray>Maksimālais vienlaicīgo
+          </gray><gray>ģeneratora līmeņu skaits, kas
+          </gray><gray>salas īpašniekam ir atļauts.
+          </gray><gray>'0' nozīmē, ka īpašnieka
+          </gray><gray>summa tiek ignorēta.
+          </gray><gray>'-1' nozīmē, ka īpašniekam
+          </gray><gray>ir neierobežots ģeneratoru skaits.
+          "</gray><gray> Atļauja lietotājam piešķirt:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Maksimālie Ģeneratori: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>Salas Komplekts</bold></white>"
+        description: |-
+          <gray>Komplekts, kas piešķirts
+          </gray><gray>pašreizējai salai.
+          </gray><gray>Tikai ģeneratori no šī 
+          </gray><gray>komplekta var tikt izmantoti
+          </gray><gray>salā.</gray>
+        value: "<aqua>Komplekts: [bundle]</aqua>"
+        overwritten: |-
+          <red>Īpašniekam ir atļauja, kas
+          </red><red>pārraksta komplektu.</red>
+      owner_bundle:
+        name: "<white><bold>Īpašnieka Komplekts</bold></white>"
+        description: |-
+          <gray>Komplekts, kas piešķirts
+          </gray><gray>pašreizējam salas īpašniekam.
+          </gray><gray>Tikai ģeneratori no šī 
+          </gray><gray>komplekta var tikt izmantoti
+          </gray><gray>salā.
+          "</gray><gray> Atļauja lietotājam piešķirt:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Komplekts: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>Vispārējā Informācija</bold></white>"
+        description: |-
+          <gray>Parāda vispārējo informāciju
+          </gray><gray>par šo salu.</gray>
+      island_generators:
+        name: "<white><bold>Salas Ģeneratori</bold></white>"
+        description: |-
+          <gray>Parāda visu ģeneratoru sarakstu,
+          </gray><gray>kas ir pieejami pašreizējai
+          </gray><gray>salai.</gray>
+      reset_to_default:
+        name: "<white><bold>Atiestatīt uz Noklusējumiem</bold></white>"
+        description: |-
+          <gray>Atiestatīt visas salas vērtības
+          </gray><gray>uz noklusējuma vērtībām no
+          </gray><gray>iestatījumiem.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>Tiešsaistes Spēlētāji</bold></white>"
+        description: |-
+          <gray>Saraksts tiešsaistes spēlētāju
+          </gray><gray>salu.</gray>
+      all_islands:
+        name: "<white><bold>Visas Salas</bold></white>"
+        description: |-
+          <gray>Saraksts visu salu.</gray>
+      search:
+        name: "<white><bold>Meklēt</bold></white>"
+        description: |-
+          <gray>Meklēt noteiktu
+          </gray><gray>salu.</gray>
+        search: "<aqua>Vērtība: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>Bezsaistes Ģenerēšana</bold></white>"
+        description: |-
+          <gray>Novērš bloku ģenerēšanu,
+          </gray><gray>ja visi salas dalībnieki
+          </gray><gray>ir bezsaistē.</gray>
+        enabled: |-
+          <aqua>Bezsaistes ģenerēšana ir </aqua><green>iespējota </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Bezsaistes ģenerēšana ir </aqua><red>atspējota </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>Izmantot Fiziku</bold></white>"
+        description: |-
+          <gray>Fizikas izmantošana pie bloku
+          </gray><gray>ģenerēšanas ļauj izmantot
+          </gray><gray>redstone mašīnas,
+          </gray><gray>taču tas nedaudz samazina
+          </gray><gray>servera sniegumu.</gray>
+        enabled: |-
+          <aqua>Fizika ir </aqua><green>iespējota </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Fizika ir </aqua><red>atspējota </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Izmantot Banku</bold></white>"
+        description: |-
+          <gray>Salas bankas konta izmantošana
+          </gray><gray>visiem pirkumiem un
+          </gray><gray>aktivizējumiem.
+          </gray><gray>Nepieciešams Bank Addon.</gray>
+        enabled: |-
+          <aqua>Bankas izmantošana ir </aqua><green>iespējota </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Bankas izmantošana ir </aqua><red>atspējota </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>Noklusējuma Darba Rādiuss</bold></white>"
+        description: |-
+          <gray>Attālums no spēlētājiem, līdz
+          </gray><gray>bloķu ģenerēšana apstāsies.
+          </gray><gray>0 vai mazāk nozīmē neierobežots.
+          </gray><gray>Iestatījums prasa servera
+          </gray><gray>pārstartēšanu, lai aktivizētu.</gray>
+        value: "<aqua>Rādiuss: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>Noklusējuma Aktīvie Ģeneratori</bold></white>"
+        description: |-
+          <gray>Noklusējuma maksimālais
+          </gray><gray>aktīvo ģeneratoru daudzums
+          </gray><gray>vienlaicīgi.
+          </gray><gray>0 vai mazāk nozīmē neierobežots.</gray>
+        value: "<aqua>Skaits: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>Parādīt Filtrus</bold></white>"
+        description: |-
+          <gray>Filtri ir augšējā rinda
+          </gray><gray>Spēlētāja GUI, kas ļauj
+          </gray><gray>parādīt tikai ģeneratorus
+          </gray><gray>pēc veida vai statusa.
+          </gray><gray>Šis iestatījums tos
+          </gray><gray>atspējo un slēpj.</gray>
+        enabled: |-
+          <aqua>Filtri ir </aqua><green>iespējoti </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Filtri ir </aqua><red>atspējoti </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>Robežu Bloks</bold></white>"
+        description: |-
+          <gray>Robežu bloks ir materiāls,
+          </gray><gray>kas apņem lietotāja GUI.
+          </gray><gray>Tā iestatīšana uz gaisu
+          </gray><gray>to atspējo.</gray>
+      border_block_name:
+        name: "<white><bold>Robežu Bloka Nosaukums</bold></white>"
+        description: |-
+          <gray>Displeja nosaukums robežu
+          </gray><gray>blokam.
+          </gray><gray>Ja tas ir iestatīts uz tukšu,
+          </gray><gray>tad tas izmantos bloka nosaukumu.
+          </gray><gray>Lai to iestatītu kā 1 tukšu
+          </gray><gray>vietu,
+          "</gray><gray> rakstiet 'empty'."</gray>
+        value: "<aqua>Nosaukums: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>Paziņot par Atbloķēšanu</bold></white>"
+        description: |-
+          <gray>Lietotājam tiks nosūtīts
+          </gray><gray>ziņojums, kad viņa atbloķē
+          </gray><gray>jaunu ģeneratoru.</gray>
+        enabled: |-
+          <aqua>Paziņošana par atbloķēšanu ir </aqua><green>iespējota </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Paziņošana par atbloķēšanu ir </aqua><red>atspējota </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>Atspējot Aktivizēšanas Laikā</bold></white>"
+        description: |-
+          <gray>Atspējot vecāko aktīvo ģeneratoru,
+          </gray><gray>ja lietotājs aktivizē jaunu
+          </gray><gray>ģeneratoru.
+          </gray><gray>Noderīgi situācijās, kur
+          </gray><gray>ir atļauts tikai viens ģenerators.</gray>
+        enabled: |-
+          <aqua>Atspējošana aktivizējuma laikā ir </aqua><green>iespējota </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Atspējošana aktivizējuma laikā ir </aqua><red>atspējota </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>Autors: [author]
+          </gray><gray>Izveidots [gamemode]
+          </gray><gray>Valoda: [lang]
+          </gray><gray>Versija: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>Pieņemt blokus</bold></white>"
+        description: |-
+          <gray>Pieņem atlasītos blokus
+          </gray><gray>un atgriežas.</gray>
+        selected-blocks: "<gray>Atlasītie Bloki:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>Bloka ID: [id]</gray>"
+      search_block:
+        name: "<white><bold>Meklēt</bold></white>"
+        description: |-
+          <gray>Meklēt noteiktu
+          </gray><gray>bloku.</gray>
+        search: "<aqua>Vērtība: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>Pieņemt bioumus</bold></white>"
+        description: |-
+          <gray>Pieņem atlasītos bioumus
+          </gray><gray>un atgriežas.</gray>
+        selected-biomes: "<gray>Atlasītie Biomi:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>Minimālais Augstums</bold></white>"
+        description: |-
+          <gray>Iestatiet minimālo augstumu
+          </gray><gray>šim materiālam.
+          </gray><gray>Pašreizējā vērtība: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>Maksimālais Augstums</bold></white>"
+        description: |-
+          <gray>Iestatiet maksimālo augstumu
+          </gray><gray>šim materiālam.
+          </gray><gray>Pašreizējā vērtība: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>Notīrīt Augstuma Diapazonu</bold></white>"
+        description: |-
+          <gray>Noņemt noteikto augstuma diapazona
+          </gray><gray>šim materiālam.
+          </gray><gray>Tas izmantos ģeneratora
+          </gray><gray>noklusējuma augstuma diapazona.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>Mērenā</bold></white>"
+          description: |-
+            <gray>Parāda tikai mērenos bioumus</gray>
+        warm:
+          name: "<white><bold>Silts</bold></white>"
+          description: |-
+            <gray>Parāda tikai siltus bioumus</gray>
+        cold:
+          name: "<white><bold>Auksts</bold></white>"
+          description: |-
+            <gray>Parāda tikai aukstus bioumus</gray>
+        snowy:
+          name: "<white><bold>Sniega</bold></white>"
+          description: |-
+            <gray>Parāda tikai sniega bioumus</gray>
+        ocean:
+          name: "<white><bold>Okeāns</bold></white>"
+          description: |-
+            <gray>Parāda tikai okeāna bioumus</gray>
+        nether:
+          name: "<white><bold>Nether</bold></white>"
+          description: |-
+            <gray>Parāda tikai nether bioumus</gray>
+        the_end:
+          name: "<white><bold>Gals</bold></white>"
+          description: |-
+            <gray>Parāda tikai gala bioumus</gray>
+        neutral:
+          name: "<white><bold>Neitrāls</bold></white>"
+          description: |-
+            <gray>Parāda tikai neitrālus bioumus</gray>
+        unused:
+          name: "<white><bold>Neizmantots</bold></white>"
+          description: |-
+            <gray>Parāda tikai neizmantotus bioumus</gray>
+        cave:
+          name: "<white><bold>Ala</bold></white>"
+          description: |-
+            <gray>Parāda tikai alu bioumus</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>Bruģakmens</bold></white>"
+          description: |-
+            <gray>Darbojas tikai ar bruģakmeņa
+            </gray><gray>ģeneratoriem.
+
+            </gray><gold><italic>Padoms:
+            </italic></gold><italic><gold><italic>Veidojas, kad lavas straumes 
+            </italic></gold></italic><italic><italic><gold><italic>nonāk kontaktā ar
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>ūdeni.</italic></gold></italic></italic></italic>
+        stone:
+          name: "<white><bold>Akmens</bold></white>"
+          description: |-
+            <gray>Darbojas tikai ar akmeņa
+            </gray><gray>ģeneratoriem.
+
+            </gray><gold><italic>Padoms:
+            </italic></gold><italic><gold><italic>Veidojas, kad lava plūst
+            </italic></gold></italic><italic><italic><gold><italic>uz ūdens blokiem.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>Bazalts</bold></white>"
+          description: |-
+            <gray>Darbojas tikai ar bazalta
+            </gray><gray>ģeneratoriem.
+
+            </gray><gold><italic>Padoms:
+            </italic></gold><italic><gold><italic>Veidojas, kad lava plūst
+            </italic></gold></italic><italic><italic><gold><italic>uz dvēseliskā augsne un
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>ir blakus zils ledus.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>Bruģakmens vai Akmens</bold></white>"
+          description: |-
+            <gray>Darbojas ar bruģakmeņa un
+            </gray><gray>akmeņa ģeneratoriem.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>Bazalts vai Bruģakmens</bold></white>"
+          description: |-
+            <gray>Darbojas ar bazalta un
+            </gray><gray>bruģakmeņa ģeneratoriem.</gray>
+        basalt_or_stone:
+          name: "<white><bold>Bazalts vai Akmens</bold></white>"
+          description: |-
+            <gray>Darbojas ar bazalta un
+            </gray><gray>akmeņa ģeneratoriem.</gray>
+        any:
+          name: "<white><bold>Jebkurš</bold></white>"
+          description: |-
+            <gray>Darbojas ar jebkuru ģeneratoru.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>Noklikšķiniet </yellow><gray>lai redzētu iepriekšējo lapu.</gray>"
+      click-to-next: "<yellow>Noklikšķiniet </yellow><gray>lai redzētu nākamo lapu.</gray>"
+      click-to-cancel: "<yellow>Noklikšķiniet </yellow><gray>lai atceltu.</gray>"
+      click-to-choose: "<yellow>Noklikšķiniet </yellow><gray>lai izvēlētos.</gray>"
+      click-to-select: "<yellow>Noklikšķiniet </yellow><gray>lai atlasītu.</gray>"
+      click-to-deselect: "<yellow>Noklikšķiniet </yellow><gray>lai atatlasītu.</gray>"
+      click-to-accept: "<yellow>Noklikšķiniet </yellow><gray>lai pieņemtu un atgrieztos.</gray>"
+      click-to-filter-enable: "<yellow>Noklikšķiniet </yellow><gray>lai iespējotu filtru.</gray>"
+      click-to-filter-disable: "<yellow>Noklikšķiniet </yellow><gray>lai atspējotu filtru.</gray>"
+      click-to-activate: "<yellow>Noklikšķiniet </yellow><gray>lai aktivizētu.</gray>"
+      click-to-deactivate: "<yellow>Noklikšķiniet </yellow><gray>lai deaktivizētu.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>Noklikšķiniet </yellow><gray>uz zelta bloka
+        </gray><gray>lai pirktu.</gray>
+      click-to-purchase: "<yellow>Noklikšķiniet </yellow><gray>lai pirktu.</gray>"
+      click-to-return: "<yellow>Noklikšķiniet </yellow><gray>lai atgrieztos.</gray>"
+      click-to-quit: "<yellow>Noklikšķiniet </yellow><gray>lai iziet.</gray>"
+      click-to-wipe: "<yellow>Noklikšķiniet </yellow><gray>lai notīrītu.</gray>"
+      click-to-open: "<yellow>Noklikšķiniet </yellow><gray>lai atvērtu.</gray>"
+      click-to-export: "<yellow>Noklikšķiniet </yellow><gray>lai sāktu eksportēt.</gray>"
+      click-to-change: "<yellow>Noklikšķiniet </yellow><gray>lai mainītu.</gray>"
+      click-on-item: |-
+        <yellow>Noklikšķiniet </yellow><gray>uz priekšmeta no jūsu
+        </gray><gray>inventāra.</gray>
+      click-to-view: "<yellow>Noklikšķiniet </yellow><gray>lai redzētu.</gray>"
+      click-to-add: "<yellow>Noklikšķiniet </yellow><gray>lai pievienotu.</gray>"
+      click-to-remove: "<yellow>Noklikšķiniet </yellow><gray>lai noņemtu.</gray>"
+      select-before: "<yellow>Atlasiet </yellow><gray>pirms turpināt.</gray>"
+      click-to-create: "<yellow>Noklikšķiniet </yellow><gray>lai izveidotu.</gray>"
+      right-click-to-select: "<yellow>Labais klikšķis </yellow><gray>lai atlasītu.</gray>"
+      right-click-to-deselect: "<yellow>Labais klikšķis </yellow><gray>lai atatlasītu.</gray>"
+      click-to-toggle: "<yellow>Noklikšķiniet </yellow><gray>lai pārslēgtu.</gray>"
+      left-click-to-edit: "<yellow>Kreisais klikšķis </yellow><gray>lai rediģētu.</gray>"
+      right-click-to-lock: "<yellow>Labais klikšķis </yellow><gray>lai bloķētu.</gray>"
+      right-click-to-unlock: "<yellow>Labais klikšķis </yellow><gray>lai atbloķētu.</gray>"
+      click-to-perform: "<yellow>Noklikšķiniet </yellow><gray>lai veiktu.</gray>"
+      click-to-edit: "<yellow>Noklikšķiniet </yellow><gray>lai rediģētu.</gray>"
+      right-click-to-clear: "<yellow>Labais klikšķis </yellow><gray>lai notīrītu.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>Kreisais klikšķis </yellow><gray>lai redzētu.</gray>"
+      left-click-to-purchase: "<yellow>Kreisais klikšķis </yellow><gray>lai pirktu.</gray>"
+      left-click-to-activate: "<yellow>Kreisais klikšķis </yellow><gray>lai aktivizētu.</gray>"
+      left-click-to-deactivate: "<yellow>Kreisais klikšķis </yellow><gray>lai deaktivizētu.</gray>"
+      right-click-to-view: "<yellow>Labais klikšķis </yellow><gray>lai redzētu.</gray>"
+      right-click-to-purchase: "<yellow>Labais klikšķis </yellow><gray>lai pirktu.</gray>"
+      right-click-to-activate: "<yellow>Labais klikšķis </yellow><gray>lai aktivizētu.</gray>"
+      right-click-to-deactivate: "<yellow>Labais klikšķis </yellow><gray>lai deaktivizētu.</gray>"
+      shift-click-to-view: "<yellow>Shift Klikšķis </yellow><gray>lai redzētu.</gray>"
+      shift-click-to-purchase: "<yellow>Shift Klikšķis </yellow><gray>lai pirktu.</gray>"
+      shift-click-to-activate: "<yellow>Shift Klikšķis </yellow><gray>lai aktivizētu.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift Klikšķis </yellow><gray>lai deaktivizētu.</gray>"
+      shift-click-to-reset: "<yellow>Shift Klikšķis </yellow><gray>lai atiestatītu.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Kreisais Klikšķis </yellow><gray>lai konfigurētu augstuma diapazonu.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Bloki:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Dārgumi:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>Nepieciešamais Līmenis: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>Trūkstošas Atļaujas:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>Darbojas:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>Darbojas </bold></gray><bold><yellow><italic>visos </italic></yellow></bold><gray><bold>bioumos</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>Bloķēts!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>Nav Izvietots!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>Aktīvs</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>Pirkšanas Cena: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>Aktivizēšanas Cena: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>Atbalsta:</bold></gray>"
+          cobblestone: "<dark_gray>Bruģakmeņa Ģeneratori</dark_gray>"
+          stone: "<dark_gray>Akmeņa Ģeneratori</dark_gray>"
+          basalt: "<dark_gray>Bazalta Ģeneratori</dark_gray>"
+          any: "<gray><bold>Atbalsta </bold></gray><bold><yellow><italic>visus </italic></yellow></bold><gray><bold>ģeneratorus</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>Darbojas augstumā: </gray><aqua>[min_height] </aqua><gray>līdz </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>Atļauja, kas ir
+        </gray><gray>jāpiešķir spēlētājam:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>Komplekta Ģeneratori: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>Atlasīts</yellow>"
+      # Used to refer to players island.
+      island-owner: "[player]'s sala"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>Izsūtīšanas sala</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "nezināms"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>Ģenerators </green> '[generator]' <green> ir ielādēts vietējā kešatmiņā.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>Komplekts </green> '[bundle]' <green> ir ielādēts vietējā kešatmiņā.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>Ģenerators </yellow> '[generator]' <yellow>ir deaktivizēts.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>Pārāk daudz ģeneratoru ir aktivizēti. Mēģiniet deaktivizēt dažus pirms jaunā aktivizēšanas.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>Ģenerators </red> '[generator]' <red>nevar tikt atbloķēts.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>Ģenerators </red> '[generator]' <red>nav atbloķēts.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>Ģenerators </red> '[generator]' <red>nav pirkts.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>Nepietiek kredītu ģeneratora aktivizēšanai. Aktivizēšana prasa [number] kredītus.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>Jūsu bankas konta kredīti ir nepietiekami ģeneratora aktivizēšanai. Aktivizēšana prasa [number] kredītus.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>Ģenerators </yellow> '[generator]' <yellow>ir aktivizēts.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>Ģenerators </red> '[generator]' <red>ir sasniegis savu ģenerēšanas limitu un tagad atjaunojas [number] vairāk minūtes.</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>Ģenerators </yellow> '[generator]' <yellow>ir pirkts.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>Ģenerators </red> '[generator]' <red>jau ir pirkts.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>Ģenerators </red> '[generator]' <red>prasa [number] salas līmeni.</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>Ģenerators </red> '[generator]' <red>prasa atļauju `[permission]`.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>Nepietiek kredītu ģeneratora pirkšanai. Šis ģenerators maksā [number] kredītus.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>Jūsu bankas konta kredīti ir nepietiekami. Šis ģenerators maksā [number] kredītus.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>Importēti [generator] jauni ģeneratori un [bundle] jauni komplekti.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>Sākt bibliotēkas lejupielādi.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>Nevarēja atrast spēkā esošus ģeneratora datus</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>Salas dati netika atrasti.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>Nevarēja atrast spēkā esošus komplekta datus</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>Nevarēja atrast nevienu bibliotēkas ierakstu!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>`[file]` fails netika atrasts. Nevar veikt importēšanu.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>Nevarēja ielādēt `[file]` failu. Kļūda lasīšanas laikā: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>Pasaule '[world]' nav Spēles režīma Addona pasaule.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>Fails `[file]` jau pastāv. Izvēlieties cits nosaukums.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>Ģenerators ar ID '[generator]' </red><red>netika atrasts [gamemode].</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>Jums nav pieejamu ģeneratoru [world]</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>Kaut kas notika nepareizi naudas izņemšanas laikā.</red>"
+    max-height-less-than-min: "<red>Maksimālais augstums ([MAX]) nevar būt mazāks par minimālo augstumu ([MIN])!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "true, on, yes, confirm, y, valid, correct"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "false, off, no, deny, n, invalid, incorrect"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "cancel"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "cancel, exit, quit"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>Saruna atcelta!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>Dotā [value] nav numurs!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>Dotais numurs [value] nav spēkā. Tam jābūt lielākam par [min] un mazākam par [max]!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>Jaunas apraksts:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>Lūdzu rakstiet meklēšanas vērtību. (rakstiet 'cancel' lai izietu)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>Meklēšanas vērtība atjaunināta.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>Apstipriniet, ka vēlaties dzēst visus lietotāja datus no datu bāzes [gamemode].</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>Panākumi, visi [gamemode] lietotāja dati tika noņemti!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>Apstipriniet, ka vēlaties dzēst visus ģeneratora datus no datu bāzes [gamemode].</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>Panākumi, visi ģeneratora dati [gamemode] tika noņemti!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>Lūdzu ievadiet faila nosaukumu eksportētajai datu bāzei. (rakstiet 'cancel' lai izietu)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>Panākumi, datu bāzes eksportēšana [world] ir pabeigta. Fails ģenerēts pievienojuma direktorijā.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>Fails ar nosaukumu '[id]' pastāv. Nevar pārrakstīt.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>Lūdzu ievadiet jaunu nosaukumu tērzēšanā.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>Panākumi, nosaukums tika atjaunināts.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>Lūdzu ievadiet jaunu aprakstu tērzēšanā un rakstiet 'quit' uz atsevišķas rindas lai pabeigtu.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>Panākumi, apraksts tika atjaunināts.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>Panākumi, jauns objekts tiek izveidots [world].</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>Objekts ar `[id]` jau ir definēts spēles režīmā. Izvēlieties citu.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>Apstipriniet, ka vēlaties dzēst [number] objektus: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>Panākumi, dati tika noņemti!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>Lūdzu ievadiet numuru tērzēšanā.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>Lūdzu ievadiet nepieciešamās atļaujas, pa vienai rindai tērzēšanā, un rakstiet 'quit' uz atsevišķas rindas lai pabeigtu.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>Panākumi, ģeneratora atļaujas tika atjaunintas.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>Lūdzu apstipriniet, ka vēlaties aizstāt jūsu pašreizējos ģeneratorus ar jauniem.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>Panākumi, jauni ģeneratori [gamemode] tika importēti.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>Jūs atbloķējāt </yellow> [generator]<yellow>! Noklikšķiniet šeit, lai to tagad pirktu par [number].</yellow>"
+    click-text-to-activate-vault: "<yellow>Jūs atbloķējāt </yellow> [generator]<yellow>! Noklikšķiniet šeit, lai to tagad aktivizētu par [number].</yellow>"
+    click-text-to-activate: "<yellow>Jūs atbloķējāt </yellow> [generator]<yellow>! Noklikšķiniet šeit, lai to tagad aktivizētu.</yellow>"
+    input-min-height: "<white>Ievadiet minimālo augstumu šim materiālam (starp -64 un 320):</white>"
+    input-max-height: "<white>Ievadiet maksimālo augstumu šim materiālam (starp -64 un 320):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "Bruģakmens"
+    # Also supports descriptions.
+    stone:
+      name: "Akmens"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "Tīrumi"
+    # Also supports descriptions.
+    flower_forest:
+      name: "Ziedu Mežs"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Burvju Ģenerators"
+      description: |-
+        <green>Pārslēgt, lai iespējotu vai atspējotu
+        </green><green>visus Burvju Ģeneratorus
+        </green><green>visā salā</green>
+      hint: "<yellow>Burvju Ģeneratori ir atspējoti salas iestatījumos</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Burvju Ģeneratora Atļaujas"
+      description: |-
+        <green>Atlasiet, kurš var aktivizēt
+        </green><green>un deaktivizēt ģeneratorus</green>

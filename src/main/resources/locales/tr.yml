@@ -1,4 +1,3 @@
----
 stone-generator:
   commands:
     admin:
@@ -6,8 +5,7 @@ stone-generator:
         description: Magic Cobblestone Generator Yönetici Komutu
       import:
         description: Sihir üreteçlerini içe aktarır
-        confirmation: Bu, mevcut oluşturucuları [gamemode]'ndan kaldıracak ve şablon
-          dosyasından yeni oluşturucuları içe aktaracak - lütfen onaylayın
+        confirmation: Bu, mevcut oluşturucuları [gamemode]'ndan kaldıracak ve şablon dosyasından yeni oluşturucuları içe aktaracak - lütfen onaylayın
       why:
         parameters: "<oyuncu>"
         description: Magic Cobblestone Generator hata ayıklama mesajlarını değiştirir
@@ -16,8 +14,7 @@ stone-generator:
       import-database:
         parameters: "<dosya>"
         description: sihirli jeneratörler veritabanı dosyasını içe aktarır
-        confirmation: Bu, mevcut oluşturucuları [generator]'ndan kaldıracak ve şablon
-          dosyasından yeni oluşturucuları içe aktaracak - lütfen onaylayın
+        confirmation: Bu, mevcut oluşturucuları [generator]'ndan kaldıracak ve şablon dosyasından yeni oluşturucuları içe aktaracak - lütfen onaylayın
       export:
         parameters: "<dosya>"
         description: Sihir üreteçleri veritabanını Oyun Modundan dosyaya aktarın
@@ -35,675 +32,710 @@ stone-generator:
         parameters: "<generator-id> <doğru/yanlış>"
   gui:
     titles:
-      player-panel: "&0&l Jeneratörler"
-      view-generator: "&0&l Oluşturucu: &r [generator]"
-      admin-panel: "&0&l Yönetici Paneli"
-      select-biome: "&0&l Biyomları Seçin"
-      select-block: "&0&l Blok Seç"
-      select-bundle: "&0&l Paket Seç"
-      select-type: "&0&l Oluşturucu Türünü Seçin"
-      view-bundle: "&0&l Paketi: &r [bundle]"
-      manage-bundles: "&0&l Paketleri Yönet"
-      manage-generators: "&0&l Oluşturucuları Yönet"
-      view-island: "&0&l Adası: [island]"
-      manage-islands: "&0&l Ada Verilerini Yönet"
-      library: "&0&l Kitaplık"
-      settings: "&0&l Ayarları"
+      player-panel: "<black><bold>Jeneratörler</bold></black>"
+      view-generator: "<black><bold>Oluşturucu: </bold></black> [generator]"
+      admin-panel: "<black><bold>Yönetici Paneli</bold></black>"
+      select-biome: "<black><bold>Biyomları Seçin</bold></black>"
+      select-block: "<black><bold>Blok Seç</bold></black>"
+      select-bundle: "<black><bold>Paket Seç</bold></black>"
+      select-type: "<black><bold>Oluşturucu Türünü Seçin</bold></black>"
+      view-bundle: "<black><bold>Paketi: </bold></black> [bundle]"
+      manage-bundles: "<black><bold>Paketleri Yönet</bold></black>"
+      manage-generators: "<black><bold>Oluşturucuları Yönet</bold></black>"
+      view-island: "<black><bold>Adası: [island]</bold></black>"
+      manage-islands: "<black><bold>Ada Verilerini Yönet</bold></black>"
+      library: "<black><bold>Kitaplık</bold></black>"
+      settings: "<black><bold>Ayarları</bold></black>"
+      configure-material-height: <black><bold>Materyal Yüksekliğini Yapılandır</bold></black>
+      height-range-config: '<black><bold>Yükseklik Aralığı: [material]</bold></black>'
     buttons:
       default:
-        name: "&f&l Varsayılan Oluşturucu"
+        name: "<white><bold>Varsayılan Oluşturucu</bold></white>"
         description: |-
-          &7 Varsayılan oluşturucular her zaman
-          &7 etkin.
-        enabled: "&b Bu, &a varsayılan &b oluşturucusudur."
-        disabled: "&b Bu, &c varsayılan &b üreteci değildir."
+          <gray>Varsayılan oluşturucular her zaman
+          </gray><gray>etkin.</gray>
+        enabled: "<aqua>Bu, </aqua><green>varsayılan </green><aqua>oluşturucusudur.</aqua>"
+        disabled: "<aqua>Bu, </aqua><red>varsayılan </red><aqua>üreteci değildir.</aqua>"
       priority:
-        name: "&f&l Jeneratör Önceliği"
+        name: "<white><bold>Jeneratör Önceliği</bold></white>"
         description: |-
-          &7 Daha büyük bir öncelik
-          &7 sayısı tercih edilirse
-          &7 birden fazla bir uygulanabilir
-          &7 aynı yere.
-        value: "&b Öncelik: &7 [bundle]"
+          <gray>Daha büyük bir öncelik
+          </gray><gray>sayısı tercih edilirse
+          </gray><gray>birden fazla bir uygulanabilir
+          </gray><gray>aynı yere.</gray>
+        value: "<aqua>Öncelik: </aqua><gray>[bundle]</gray>"
       type:
-        name: "&f&l Jeneratör Tipi"
+        name: "<white><bold>Jeneratör Tipi</bold></white>"
         description: |-
-          &7 Hangi jeneratör tipini tanımlar
-          &7 şu anki duruma uygulanacak
-          &7 jeneratör.
-        value: "&b Tür: &7 [bundle]"
+          <gray>Hangi jeneratör tipini tanımlar
+          </gray><gray>şu anki duruma uygulanacak
+          </gray><gray>jeneratör.</gray>
+        value: "<aqua>Tür: </aqua><gray>[bundle]</gray>"
       required_min_level:
-        name: "&f&l Minimum Ada Seviyesi"
+        name: "<white><bold>Minimum Ada Seviyesi</bold></white>"
         description: |-
-          &7 Minimum ada seviyesi
-          &7 bu jeneratörün kilidini aç.
-        value: "&b Gerekli Minimum Düzey: [number]"
+          <gray>Minimum ada seviyesi
+          </gray><gray>bu jeneratörün kilidini aç.</gray>
+        value: "<aqua>Gerekli Minimum Düzey: [number]</aqua>"
       required_permissions:
-        name: "&f&l Gerekli İzinler"
+        name: "<white><bold>Gerekli İzinler</bold></white>"
         description: |-
-          &7 İzinlerin listesi
-          Kilidi açmak için &7 gereklidir
-          &7 bu jeneratör.
-        list: "&b Gerekli İzinler:"
-        value: "&b - [permission]"
-        none: "&b - yok"
+          <gray>İzinlerin listesi
+          Kilidi açmak için </gray><gray>gereklidir
+          </gray><gray>bu jeneratör.</gray>
+        list: "<aqua>Gerekli İzinler:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- yok</aqua>"
       purchase_cost:
-        name: "&f&l Satın Alma Maliyeti"
+        name: "<white><bold>Satın Alma Maliyeti</bold></white>"
         description: |-
-          &7 Kredi gerekli
-          &7 bu jeneratörü satın alın.
-        value: "&b Maliyet: [number]"
+          <gray>Kredi gerekli
+          </gray><gray>bu jeneratörü satın alın.</gray>
+        value: "<aqua>Maliyet: [number]</aqua>"
       activation_cost:
-        name: "&f&l Aktivasyon Maliyeti"
+        name: "<white><bold>Aktivasyon Maliyeti</bold></white>"
         description: |-
-          &7 Kredi gerekli
-          &7 etkinleştir veya yeniden etkinleştir
-          &7 bu jeneratör.
-        value: "&b Maliyet: [number]"
+          <gray>Kredi gerekli
+          </gray><gray>etkinleştir veya yeniden etkinleştir
+          </gray><gray>bu jeneratör.</gray>
+        value: "<aqua>Maliyet: [number]</aqua>"
       biomes:
-        name: "&f&l Operasyonel Biyomlar"
+        name: "<white><bold>Operasyonel Biyomlar</bold></white>"
         description: |-
-          &7 Bunun olduğu biyomların listesi
-          &7 jeneratör çalışabilir.
-        list: "&b Biyomları:"
-        value: "&b - [biome]"
-        any: "&b - herhangi biri"
+          <gray>Bunun olduğu biyomların listesi
+          </gray><gray>jeneratör çalışabilir.</gray>
+        list: "<aqua>Biyomları:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- herhangi biri</aqua>"
       treasure_amount:
-        name: "&f&l Hazine Miktarı"
+        name: "<white><bold>Hazine Miktarı</bold></white>"
         description: |-
-          &7 Maksimum hazine miktarı
-          &7 bir kerede bırakılabilir.
-        value: "&b Miktarı: [number]"
+          <gray>Maksimum hazine miktarı
+          </gray><gray>bir kerede bırakılabilir.</gray>
+        value: "<aqua>Miktarı: [number]</aqua>"
       treasure_chance:
-        name: "&f&l Hazine Şansı"
+        name: "<white><bold>Hazine Şansı</bold></white>"
         description: |-
-          &7 Hazine olma şansı
-          &7 nesilden nesile düştü.
-        value: "&b Şans: [number]"
+          <gray>Hazine olma şansı
+          </gray><gray>nesilden nesile düştü.</gray>
+        value: "<aqua>Şans: [number]</aqua>"
       info:
-        name: "&f&l Genel Bilgiler"
+        name: "<white><bold>Genel Bilgiler</bold></white>"
         description: |-
-          &7 Genel bilgileri gösterir
-          &7 bu jeneratör hakkında.
+          <gray>Genel bilgileri gösterir
+          </gray><gray>bu jeneratör hakkında.</gray>
       blocks:
-        name: "&f&l Engelleme Listesi"
+        name: "<white><bold>Engelleme Listesi</bold></white>"
         description: |-
-          &7 Blokların listesini gösterir ve
-          &7 üretilme şansları.
+          <gray>Blokların listesini gösterir ve
+          </gray><gray>üretilme şansları.</gray>
       treasures:
-        name: "&f&l Hazine Listesi"
+        name: "<white><bold>Hazine Listesi</bold></white>"
         description: |-
-          &7 Hazine listesini gösterir ve
-          &7 düşme şansı.
-          &7 Hazine düşürüldü
-          &7 bloklar oluşturulduğunda.
+          <gray>Hazine listesini gösterir ve
+          </gray><gray>düşme şansı.
+          </gray><gray>Hazine düşürüldü
+          </gray><gray>bloklar oluşturulduğunda.</gray>
         drag-and-drop: |-
-          &7 Sürükle ve bırak özelliğini destekler
-          &7 öğe boşlukları boşaltın.
+          <gray>Sürükle ve bırak özelliğini destekler
+          </gray><gray>öğe boşlukları boşaltın.</gray>
       block-icon:
-        name: "&f&l [material]"
-        description: "&b Şans: [#.##]"
-        actual: "&b Veritabanı değeri: [number]"
+        name: "<white><bold>[material]</bold></white>"
+        description: "<aqua>Şans: [#.##]</aqua>"
+        actual: "<aqua>Veritabanı değeri: [number]</aqua>"
+        height-range: '<gray>Yükseklik aralığı: </gray><aqua>[min_height] </aqua><gray>ile </gray><aqua>[max_height]</aqua>'
+        no-height-range: <gray>Jeneratörün varsayılan yükseklik aralığını kullanır</gray>
       treasure-icon:
-        name: "&f&l [material]"
-        description: "&b Şans: [#.####]"
-        actual: "&b Veritabanı değeri: [number]"
+        name: "<white><bold>[material]</bold></white>"
+        description: "<aqua>Şans: [#.####]</aqua>"
+        actual: "<aqua>Veritabanı değeri: [number]</aqua>"
       show_cobblestone:
-        name: "&f&l Parke Taşı Jeneratörleri"
+        name: "<white><bold>Parke Taşı Jeneratörleri</bold></white>"
         description: |-
-          &7 Yalnızca parke taşı göster
-          &7 jeneratör
+          <gray>Yalnızca parke taşı göster
+          </gray><gray>jeneratör</gray>
       show_stone:
-        name: "&f&l Taş Jeneratörleri"
+        name: "<white><bold>Taş Jeneratörleri</bold></white>"
         description: |-
-          &7 Yalnızca taşı göster
-          &7 jeneratör
+          <gray>Yalnızca taşı göster
+          </gray><gray>jeneratör</gray>
       show_basalt:
-        name: "&f&l Bazalt Jeneratörleri"
+        name: "<white><bold>Bazalt Jeneratörleri</bold></white>"
         description: |-
-          &7 Yalnızca bazalt göster
-          &7 jeneratör
+          <gray>Yalnızca bazalt göster
+          </gray><gray>jeneratör</gray>
       toggle_visibility:
-        name: "&f&l Kilidi Açılmış Jeneratörler"
+        name: "<white><bold>Kilidi Açılmış Jeneratörler</bold></white>"
         description: |-
-          &7 Yalnızca kilidi açık göster
-          &7 jeneratör
+          <gray>Yalnızca kilidi açık göster
+          </gray><gray>jeneratör</gray>
       show_active:
-        name: "&f&l Aktif Üreteçler"
+        name: "<white><bold>Aktif Üreteçler</bold></white>"
         description: |-
-          &7 Yalnızca etkin olanı göster
-          &7 jeneratör
+          <gray>Yalnızca etkin olanı göster
+          </gray><gray>jeneratör</gray>
       return:
-        name: "&f&l İade"
-        description: "&7 Önceki menüye dön"
+        name: "<white><bold>İade</bold></white>"
+        description: "<gray>Önceki menüye dön</gray>"
       quit:
-        name: "&f&l Çık"
-        description: "&7 Geçerli menüden çık"
+        name: "<white><bold>Çık</bold></white>"
+        description: "<gray>Geçerli menüden çık</gray>"
       previous:
-        name: "&f&l Önceki Sayfa"
-        description: "&7 [number] sayfasına geç"
+        name: "<white><bold>Önceki Sayfa</bold></white>"
+        description: "<gray>[number] sayfasına geç</gray>"
       next:
-        name: "&f&l Sonraki Sayfa"
-        description: "&7 [sayı] sayfasına geç"
+        name: "<white><bold>Sonraki Sayfa</bold></white>"
+        description: "<gray>[sayı] sayfasına geç</gray>"
       manage_users:
-        name: "&f&l Ada Verilerini Yönet"
+        name: "<white><bold>Ada Verilerini Yönet</bold></white>"
         description: |-
-          &7 Ada verilerini yönet
-          &7 mevcut oyun modunda.
+          <gray>Ada verilerini yönet
+          </gray><gray>mevcut oyun modunda.</gray>
       manage_generator_tiers:
-        name: "&f&l Jeneratörleri Yönet"
+        name: "<white><bold>Jeneratörleri Yönet</bold></white>"
         description: |-
-          &7 Jeneratörleri yönet
-          &7 mevcut oyun modunda.
+          <gray>Jeneratörleri yönet
+          </gray><gray>mevcut oyun modunda.</gray>
       manage_generator_bundles:
-        name: "&f&l Paketleri Yönet"
+        name: "<white><bold>Paketleri Yönet</bold></white>"
         description: |-
-          &7 Paketleri yönet
-          &7 mevcut oyun modunda.
+          <gray>Paketleri yönet
+          </gray><gray>mevcut oyun modunda.</gray>
       settings:
-        name: "&f&l Ayarları"
+        name: "<white><bold>Ayarları</bold></white>"
         description: |-
-          &7 Kontrol et ve değiştir
-          &7 eklenti ayarları.
+          <gray>Kontrol et ve değiştir
+          </gray><gray>eklenti ayarları.</gray>
       import_template:
-        name: "&f&l Şablonu İçe Aktar"
+        name: "<white><bold>Şablonu İçe Aktar</bold></white>"
         description: |-
-          &7 Şablonu içe aktar
-          &7 dosyası içinde bulunur
-          &7 eklenti dizini.
+          <gray>Şablonu içe aktar
+          </gray><gray>dosyası içinde bulunur
+          </gray><gray>eklenti dizini.</gray>
       web_library:
-        name: "&f&l Web Kitaplığı"
+        name: "<white><bold>Web Kitaplığı</bold></white>"
         description: |-
-          &7 Web'e erişin
-          &7 içeren kitaplık
-          &7 paylaşılan oluşturucu.
+          <gray>Web'e erişin
+          </gray><gray>içeren kitaplık
+          </gray><gray>paylaşılan oluşturucu.</gray>
       export_from_database:
-        name: "&f&l Veritabanını Dışa Aktar"
+        name: "<white><bold>Veritabanını Dışa Aktar</bold></white>"
         description: |-
-          &7 Veritabanını dışa aktar
-          &7 içinde bulunan tek bir dosyaya
-          &7 eklenti dizini.
+          <gray>Veritabanını dışa aktar
+          </gray><gray>içinde bulunan tek bir dosyaya
+          </gray><gray>eklenti dizini.</gray>
       import_to_database:
-        name: "&f&l Veritabanını İçe Aktar"
+        name: "<white><bold>Veritabanını İçe Aktar</bold></white>"
         description: |-
-          &7 Şuradan bir veritabanını içe aktar:
-          &7 eklentide bulunan bir dosya
-          &7 dizini.
+          <gray>Şuradan bir veritabanını içe aktar:
+          </gray><gray>eklentide bulunan bir dosya
+          </gray><gray>dizini.</gray>
       wipe_user_data:
-        name: "&f&l Kullanıcı Veritabanını Temizle"
+        name: "<white><bold>Kullanıcı Veritabanını Temizle</bold></white>"
         description: |-
-          &7 Şunun için kullanıcı verilerini temizle:
-          &7 her adada
-          &7 mevcut oyun modu.
+          <gray>Şunun için kullanıcı verilerini temizle:
+          </gray><gray>her adada
+          </gray><gray>mevcut oyun modu.</gray>
       wipe_generator_data:
-        name: "&f&l Jeneratör Veritabanını Temizle"
+        name: "<white><bold>Jeneratör Veritabanını Temizle</bold></white>"
         description: |-
-          &7 Jeneratörü ve paketi temizle
-          Geçerli oyun modunda &7 verileri.
+          <gray>Jeneratörü ve paketi temizle
+          Geçerli oyun modunda </gray><gray>verileri.</gray>
       bundle_name:
-        name: "&f&l Paket Adı"
-        description: "&7 Paket adını değiştirin."
-        value: "&b İsim: &r [bundle]"
+        name: "<white><bold>Paket Adı</bold></white>"
+        description: "<gray>Paket adını değiştirin.</gray>"
+        value: "<aqua>İsim: </aqua> [bundle]"
       bundle_id:
-        name: "&f&l Paket Kimliği"
-        description: "&7 Geçerli paket kimliği."
-        value: "&b Kimliği: &r [kimlik]"
+        name: "<white><bold>Paket Kimliği</bold></white>"
+        description: "<gray>Geçerli paket kimliği.</gray>"
+        value: "<aqua>Kimliği: </aqua> [kimlik]"
       bundle_icon:
-        name: "&f&l Paket Simgesi"
-        description: "&7 Paket simgesini değiştirin."
+        name: "<white><bold>Paket Simgesi</bold></white>"
+        description: "<gray>Paket simgesini değiştirin.</gray>"
       bundle_description:
-        name: "&f&l Paket Açıklaması"
+        name: "<white><bold>Paket Açıklaması</bold></white>"
       bundle_info:
-        name: "&f&l Genel Bilgiler"
+        name: "<white><bold>Genel Bilgiler</bold></white>"
         description: |-
-          &7 Genel bilgileri göster
-          &7 bu paket hakkında.
+          <gray>Genel bilgileri göster
+          </gray><gray>bu paket hakkında.</gray>
       bundle_generators:
-        name: "&f&l Jeneratörler"
+        name: "<white><bold>Jeneratörler</bold></white>"
         description: |-
-          &7 Jeneratörlerin listesini göster
-          &7 bu pakete atandı.
+          <gray>Jeneratörlerin listesini göster
+          </gray><gray>bu pakete atandı.</gray>
       add_generator:
-        name: "&f&l Oluşturucu Ekle"
+        name: "<white><bold>Oluşturucu Ekle</bold></white>"
         description: |-
-          &7 Bir jeneratör atayın
-          &7 bu pakete.
-        list: "&b Seçilen Jeneratörler:"
-        value: "&b - [generator]"
+          <gray>Bir jeneratör atayın
+          </gray><gray>bu pakete.</gray>
+        list: "<aqua>Seçilen Jeneratörler:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       remove_generator:
-        name: "&f&l Jeneratörü Kaldır"
+        name: "<white><bold>Jeneratörü Kaldır</bold></white>"
         description: |-
-          &7 Jeneratörü kaldır
-          Bu paketten &7.
-        list: "&b Seçilen Jeneratörler:"
-        value: "&b - [generator]"
+          <gray>Jeneratörü kaldır
+          Bu paketten </gray><gray>.</gray>
+        list: "<aqua>Seçilen Jeneratörler:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       create_bundle:
-        name: "&f&l Paket Oluştur"
+        name: "<white><bold>Paket Oluştur</bold></white>"
         description: |-
-          &7 Yeni bir paket oluştur
-          Bu oyun modu için &7.
+          <gray>Yeni bir paket oluştur
+          Bu oyun modu için </gray><gray>.</gray>
       delete_bundle:
-        name: "&f&l Paketi Kaldır"
+        name: "<white><bold>Paketi Kaldır</bold></white>"
         description: |-
-          &7 Şuradan bir paketi kaldır:
-          &7 bu oyun modu tamamen.
-        list: "&b Seçilen Paketler:"
-        value: "&b - [bundle]"
+          <gray>Şuradan bir paketi kaldır:
+          </gray><gray>bu oyun modu tamamen.</gray>
+        list: "<aqua>Seçilen Paketler:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
       name:
-        name: "&f&l Oluşturucu Adı"
+        name: "<white><bold>Oluşturucu Adı</bold></white>"
         description: |-
-          &7 Bu oluşturucu için başlık.
-          &7 Renk kodlarını destekler.
-        value: "&b İsim: &r [generator]"
+          <gray>Bu oluşturucu için başlık.
+          </gray><gray>Renk kodlarını destekler.</gray>
+        value: "<aqua>İsim: </aqua> [generator]"
       id:
-        name: "&f&l Oluşturucu Kimliği"
-        description: "&7 Geçerli üretici kimliği."
-        value: "&b Kimliği: &r [id]"
+        name: "<white><bold>Oluşturucu Kimliği</bold></white>"
+        description: "<gray>Geçerli üretici kimliği.</gray>"
+        value: "<aqua>Kimliği: </aqua> [id]"
       icon:
-        name: "&f&l Oluşturucu Simgesi"
+        name: "<white><bold>Oluşturucu Simgesi</bold></white>"
         description: |-
-          &7 Bunu görüntülemek için kullanılan öğe
-          Tüm GUI'lerde &7 oluşturucu.
+          <gray>Bunu görüntülemek için kullanılan öğe
+          Tüm GUI'lerde </gray><gray>oluşturucu.</gray>
       locked_icon:
-        name: "&f&l Kilitli Simge"
+        name: "<white><bold>Kilitli Simge</bold></white>"
         description: |-
-          &7 Bunu görüntülemek için kullanılan öğe
-          Tüm GUI'lerde &7 üreteci varsa
-          &7 kilitli.
+          <gray>Bunu görüntülemek için kullanılan öğe
+          Tüm GUI'lerde </gray><gray>üreteci varsa
+          </gray><gray>kilitli.</gray>
       description:
-        name: "&f&l Jeneratör Açıklaması"
+        name: "<white><bold>Jeneratör Açıklaması</bold></white>"
         description: |-
-          &7 Yapacak oluşturucu için metin
-          &7 başlığı altına yazılmalıdır.
+          <gray>Yapacak oluşturucu için metin
+          </gray><gray>başlığı altına yazılmalıdır.</gray>
         value: 'Açıklama:'
       deployed:
-        name: "&f&l Dağıtıldı"
+        name: "<white><bold>Dağıtıldı</bold></white>"
         description: |-
-          &7 Dağıtılan oluşturucular görünür durumda
-          &7 için ve oyuncular tarafından erişilebilir.
-          &7 Dağıtılmamış oluşturucular
-          &7 blok oluşturur.
-        enabled: "&b Bu oluşturucu &a konuşlandırılmıştır."
-        disabled: "&b Bu oluşturucu &c konuşlandırılmadı."
+          <gray>Dağıtılan oluşturucular görünür durumda
+          </gray><gray>için ve oyuncular tarafından erişilebilir.
+          </gray><gray>Dağıtılmamış oluşturucular
+          </gray><gray>blok oluşturur.</gray>
+        enabled: "<aqua>Bu oluşturucu </aqua><green>konuşlandırılmıştır.</green>"
+        disabled: "<aqua>Bu oluşturucu </aqua><red>konuşlandırılmadı.</red>"
       add_material:
-        name: "&f&l Malzeme Ekle"
+        name: "<white><bold>Malzeme Ekle</bold></white>"
         description: |-
-          &7 Yeni malzeme ekle
-          &7 güncel malzeme listesi.
+          <gray>Yeni malzeme ekle
+          </gray><gray>güncel malzeme listesi.</gray>
       remove_material:
-        name: "&f&l Malzemeleri Kaldır"
+        name: "<white><bold>Malzemeleri Kaldır</bold></white>"
         description: |-
-          &7 Seçileni kaldır
-          Listeden &7 malzeme.
-        selected-materials: "&7 Seçilen Malzemeler:"
-        list-value: "&7 - [number] x [value]"
+          <gray>Seçileni kaldır
+          Listeden </gray><gray>malzeme.</gray>
+        selected-materials: "<gray>Seçilen Malzemeler:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
       create_generator:
-        name: "&f&l Jeneratör Oluştur"
+        name: "<white><bold>Jeneratör Oluştur</bold></white>"
         description: |-
-          &7 Yeni oluştur
-          &7 jeneratör için
-          &7 oyun modu.
+          <gray>Yeni oluştur
+          </gray><gray>jeneratör için
+          </gray><gray>oyun modu.</gray>
       delete_generator:
-        name: "&f&l Jeneratörü Kaldır"
+        name: "<white><bold>Jeneratörü Kaldır</bold></white>"
         description: |-
-          &7 Jeneratörü kaldır
-          &7 tamamen oyun modundan.
-        list: "&b Seçilen Jeneratörler:"
-        value: "&b - [generator]"
+          <gray>Jeneratörü kaldır
+          </gray><gray>tamamen oyun modundan.</gray>
+        list: "<aqua>Seçilen Jeneratörler:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
       island_name:
-        name: "&f&l [name]"
+        name: "<white><bold>[name]</bold></white>"
         description: |-
-          &7 [owner]
-          &b [members]
-          &b Ada Kimliği: &7 [id]
-        owner: "&b Sahip: [player]"
-        list: "&b Üyeleri:"
-        value: "&b - [player]"
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>Ada Kimliği: </aqua><gray>[id]</gray>
+        owner: "<aqua>Sahip: [player]</aqua>"
+        list: "<aqua>Üyeleri:</aqua>"
+        value: "<aqua>- [player]</aqua>"
       island_working_range:
-        name: "&f&l Ada Çalışma Alanı"
+        name: "<white><bold>Ada Çalışma Alanı</bold></white>"
         description: |-
-          &7 Jeneratörler için çalışma aralığı
-          &7 mevcut adada.
-          &7 0 ve altı sınırsız demektir
-          &7 aralığı.
-        value: "&b Aralık: [number]"
+          <gray>Jeneratörler için çalışma aralığı
+          </gray><gray>mevcut adada.
+          </gray><gray>0 ve altı sınırsız demektir
+          </gray><gray>aralığı.</gray>
+        value: "<aqua>Aralık: [number]</aqua>"
         overwritten: |-
-          &c Sahibin şu izni var:
-          &c çalışma aralığının üzerine yazar.
+          <red>Sahibin şu izni var:
+          </red><red>çalışma aralığının üzerine yazar.</red>
       owner_working_range:
-        name: "&f&l Sahip Çalışma Aralığı"
+        name: "<white><bold>Sahip Çalışma Aralığı</bold></white>"
         description: |-
-          &7 Jeneratörler için çalışma aralığı
-          Mevcut sahip için &7.
-          &7 '0', sahip aralığının şu anlama gelir:
-          &7 yok sayıldı.
-          &7 '-1', sahibin sahip olduğu anlamına gelir
-          &7 sınırsız çalışma aralığı.
-          "&7 Kullanıcının atama izni:"
-          "&7&o '[gamemode].taş oluşturucu."
-          "&7&o maksimum aralık.<sayı>'"
-        value: "&b Aralık: [number]"
+          <gray>Jeneratörler için çalışma aralığı
+          Mevcut sahip için </gray><gray>.
+          </gray><gray>'0', sahip aralığının şu anlama gelir:
+          </gray><gray>yok sayıldı.
+          </gray><gray>'-1', sahibin sahip olduğu anlamına gelir
+          </gray><gray>sınırsız çalışma aralığı.
+          "</gray><gray> Kullanıcının atama izni:"
+          "</gray><gray><italic>'[gamemode].taş oluşturucu."
+          "</italic></gray><italic><gray><italic>maksimum aralık.<sayı>'"</italic></gray></italic>
+        value: "<aqua>Aralık: [number]</aqua>"
       island_max_generators:
-        name: "&f&l Max Island Jeneratörleri"
+        name: "<white><bold>Max Island Jeneratörleri</bold></white>"
         description: |-
-          &7 Maksimum aktif
-          &7 jeneratör katmanına izin verilir
-          &7 aynı anda
-          Mevcut ada için &7.
-          &7 0 ve aşağısı şu anlama gelir:
-          &7 sınırsız.
-        value: "&b Maks Jeneratörler: [number]"
+          <gray>Maksimum aktif
+          </gray><gray>jeneratör katmanına izin verilir
+          </gray><gray>aynı anda
+          Mevcut ada için </gray><gray>.
+          </gray><gray>0 ve aşağısı şu anlama gelir:
+          </gray><gray>sınırsız.</gray>
+        value: "<aqua>Maks Jeneratörler: [number]</aqua>"
         overwritten: |-
-          &c Sahibin şu izni var:
-          &c, oluşturucu sayısının üzerine yazar.
+          <red>Sahibin şu izni var:
+          </red><red>, oluşturucu sayısının üzerine yazar.</red>
       owner_max_generators:
-        name: "&f&l Max Sahibi Oluşturucular"
+        name: "<white><bold>Max Sahibi Oluşturucular</bold></white>"
         description: |-
-          &7 Maksimum aktif eşzamanlı
-          &7 jeneratör katmanı
-          &7 ada sahibine izin verilir.
-          &7 '0', sahip tutarı anlamına gelir
-          &7 yoksayılır.
-          &7 '-1', sahibin sahip olduğu anlamına gelir
-          &7 sınırsız jeneratör sayısı.
-          "&7 Kullanıcının atama izni:"
-          "&7&o '[gamemode].taş oluşturucu."
-          "&7&o aktif oluşturucular.<sayı>'"
-        value: "&b Maks Jeneratörler: [number]"
+          <gray>Maksimum aktif eşzamanlı
+          </gray><gray>jeneratör katmanı
+          </gray><gray>ada sahibine izin verilir.
+          </gray><gray>'0', sahip tutarı anlamına gelir
+          </gray><gray>yoksayılır.
+          </gray><gray>'-1', sahibin sahip olduğu anlamına gelir
+          </gray><gray>sınırsız jeneratör sayısı.
+          "</gray><gray> Kullanıcının atama izni:"
+          "</gray><gray><italic>'[gamemode].taş oluşturucu."
+          "</italic></gray><italic><gray><italic>aktif oluşturucular.<sayı>'"</italic></gray></italic>
+        value: "<aqua>Maks Jeneratörler: [number]</aqua>"
       island_bundle:
-        name: "&f&l Ada Paketi"
+        name: "<white><bold>Ada Paketi</bold></white>"
         description: |-
-          &7 Atanan paket
-          &7 mevcut ada.
-          &7 Yalnızca bundan üreteçler
-          &7 paketi şu adreste kullanılabilir:
-          &7 adası.
-        value: "&b Paketi: [bundle]"
+          <gray>Atanan paket
+          </gray><gray>mevcut ada.
+          </gray><gray>Yalnızca bundan üreteçler
+          </gray><gray>paketi şu adreste kullanılabilir:
+          </gray><gray>adası.</gray>
+        value: "<aqua>Paketi: [bundle]</aqua>"
         overwritten: |-
-          &c Sahibin şu izni var:
-          &c paketin üzerine yazar.
+          <red>Sahibin şu izni var:
+          </red><red>paketin üzerine yazar.</red>
       owner_bundle:
-        name: "&f&l Sahip Paketi"
+        name: "<white><bold>Sahip Paketi</bold></white>"
         description: |-
-          &7 Atanan paket
-          &7 mevcut ada sahibi.
-          &7 Yalnızca bundan üreteçler
-          &7 paketi şu adreste kullanılabilir:
-          &7 adası.
-          "&7 Kullanıcının atama izni:"
-          "&7&o '[gamemode].taş oluşturucu."
-          "&7&o paketi.<paket kimliği>'"
-        value: "&b Paketi: [bundle]"
+          <gray>Atanan paket
+          </gray><gray>mevcut ada sahibi.
+          </gray><gray>Yalnızca bundan üreteçler
+          </gray><gray>paketi şu adreste kullanılabilir:
+          </gray><gray>adası.
+          "</gray><gray> Kullanıcının atama izni:"
+          "</gray><gray><italic>'[gamemode].taş oluşturucu."
+          "</italic></gray><italic><gray><italic>paketi.<paket kimliği>'"</italic></gray></italic>
+        value: "<aqua>Paketi: [bundle]</aqua>"
       island_info:
-        name: "&f&l Genel Bilgiler"
+        name: "<white><bold>Genel Bilgiler</bold></white>"
         description: |-
-          &7 Genel bilgileri gösterir
-          &7 bu ada hakkında.
+          <gray>Genel bilgileri gösterir
+          </gray><gray>bu ada hakkında.</gray>
       island_generators:
-        name: "&f&l Ada Jeneratörleri"
+        name: "<white><bold>Ada Jeneratörleri</bold></white>"
         description: |-
-          &7 Tüm oluşturucuların listesini gösterir
-          &7 için kullanılabilir
-          &7 mevcut ada.
+          <gray>Tüm oluşturucuların listesini gösterir
+          </gray><gray>için kullanılabilir
+          </gray><gray>mevcut ada.</gray>
       reset_to_default:
-        name: "&f&l Varsayılanlara Sıfırla"
+        name: "<white><bold>Varsayılanlara Sıfırla</bold></white>"
         description: |-
-          &7 Tüm ada değerlerini sıfırlar
-          &7'den varsayılan değerlere
-          &7 ayarlar.
+          <gray>Tüm ada değerlerini sıfırlar
+          </gray><gray>'den varsayılan değerlere
+          </gray><gray>ayarlar.</gray>
       is_online:
-        name: "&f&l Çevrimiçi Oyuncular"
+        name: "<white><bold>Çevrimiçi Oyuncular</bold></white>"
         description: |-
-          &7 Çevrimiçi oyuncu listesi
-          &7 adalar.
+          <gray>Çevrimiçi oyuncu listesi
+          </gray><gray>adalar.</gray>
       all_islands:
-        name: "&f&l Tüm Adalar"
-        description: "&7 Tüm adaların listesi."
+        name: "<white><bold>Tüm Adalar</bold></white>"
+        description: "<gray>Tüm adaların listesi.</gray>"
       search:
-        name: "&f&l Ara"
+        name: "<white><bold>Ara</bold></white>"
         description: |-
-          &7 Belirli bir arama
-          &7 adası.
-        search: "&b Değer: [value]"
+          <gray>Belirli bir arama
+          </gray><gray>adası.</gray>
+        search: "<aqua>Değer: [value]</aqua>"
       offline_generation:
-        name: "&f&l Çevrimdışı Oluşturma"
+        name: "<white><bold>Çevrimdışı Oluşturma</bold></white>"
         description: |-
-          &7 Blokların
-          &7, tüm ada ise oluşturulur
-          &7 üye çevrimdışı.
-        enabled: "&b Çevrimdışı oluşturma, &a etkin &b ."
-        disabled: "&b Çevrimdışı oluşturma &c devre dışı bırakıldı &b ."
+          <gray>Blokların
+          </gray><gray>, tüm ada ise oluşturulur
+          </gray><gray>üye çevrimdışı.</gray>
+        enabled: "<aqua>Çevrimdışı oluşturma, </aqua><green>etkin </green><aqua>.</aqua>"
+        disabled: "<aqua>Çevrimdışı oluşturma </aqua><red>devre dışı bırakıldı </red><aqua>.</aqua>"
       use_physic:
-        name: "&f&l Fizik Kullan"
+        name: "<white><bold>Fizik Kullan</bold></white>"
         description: |-
-          &7 Fiziğin blokta kullanılması
-          &7 nesli,
-          &7 redstone makinelerinin kullanımı,
-          &7 ancak sunucuyu azaltır
-          &7 performans biraz.
-        enabled: "&b Fizik, &a etkin &b ."
-        disabled: "&b Fizik &c devre dışı bırakıldı &b ."
+          <gray>Fiziğin blokta kullanılması
+          </gray><gray>nesli,
+          </gray><gray>redstone makinelerinin kullanımı,
+          </gray><gray>ancak sunucuyu azaltır
+          </gray><gray>performans biraz.</gray>
+        enabled: "<aqua>Fizik, </aqua><green>etkin </green><aqua>.</aqua>"
+        disabled: "<aqua>Fizik </aqua><red>devre dışı bırakıldı </red><aqua>.</aqua>"
       use_bank:
-        name: "&f&l Kullanım Bankası"
+        name: "<white><bold>Kullanım Bankası</bold></white>"
         description: |-
-          &7 Island banka hesabını kullanma
-          Tüm satın alma işlemleri için &7 ve
-          &7 aktivasyonları.
-          &7 Banka Eklentisi gerektirir.
-        enabled: "&b Bank kullanımı &a etkin &b ."
-        disabled: "&b Banka kullanımı &c devre dışı bırakıldı &b ."
+          <gray>Island banka hesabını kullanma
+          Tüm satın alma işlemleri için </gray><gray>ve
+          </gray><gray>aktivasyonları.
+          </gray><gray>Banka Eklentisi gerektirir.</gray>
+        enabled: "<aqua>Bank kullanımı </aqua><green>etkin </green><aqua>.</aqua>"
+        disabled: "<aqua>Banka kullanımı </aqua><red>devre dışı bırakıldı </red><aqua>.</aqua>"
       working_range:
-        name: "&f&l Varsayılan Çalışma Aralığı"
+        name: "<white><bold>Varsayılan Çalışma Aralığı</bold></white>"
         description: |-
-          &7 Şu ana kadar oyunculardan mesafe
-          &7 blok üretimi duracak.
-          &7 0 ve altı sınırsız demektir.
-          &7 Ayar, sunucu gerektirir
-          &7 etkinleştirmek için yeniden başlatın.
-        value: "&b Aralık: [number]"
+          <gray>Şu ana kadar oyunculardan mesafe
+          </gray><gray>blok üretimi duracak.
+          </gray><gray>0 ve altı sınırsız demektir.
+          </gray><gray>Ayar, sunucu gerektirir
+          </gray><gray>etkinleştirmek için yeniden başlatın.</gray>
+        value: "<aqua>Aralık: [number]</aqua>"
       active_generators:
-        name: "&f&l Varsayılan Etkin Oluşturucular"
+        name: "<white><bold>Varsayılan Etkin Oluşturucular</bold></white>"
         description: |-
-          &7 Varsayılan maksimum miktar
-          &7 aktif jeneratör
-          &7 aynı anda.
-          &7 0 ve altı sınırsız demektir.
-        value: "&b Sayısı: [number]"
+          <gray>Varsayılan maksimum miktar
+          </gray><gray>aktif jeneratör
+          </gray><gray>aynı anda.
+          </gray><gray>0 ve altı sınırsız demektir.</gray>
+        value: "<aqua>Sayısı: [number]</aqua>"
       show_filters:
-        name: "&f&l Filtreleri Göster"
+        name: "<white><bold>Filtreleri Göster</bold></white>"
         description: |-
-          &7 Filtreler, içinde en üst sıradır
-          &7 Oyuncu GUI'si
-          &7 yalnızca oluşturucuları göstermek için
-          &7 türe veya duruma göre.
-          &7 Bu ayar devre dışı bırakır
-          &7 ve onları gizler.
-        enabled: "&b Filtreler &a etkindir &b ."
-        disabled: "&b Filtreler &c devre dışı bırakıldı &b ."
+          <gray>Filtreler, içinde en üst sıradır
+          </gray><gray>Oyuncu GUI'si
+          </gray><gray>yalnızca oluşturucuları göstermek için
+          </gray><gray>türe veya duruma göre.
+          </gray><gray>Bu ayar devre dışı bırakır
+          </gray><gray>ve onları gizler.</gray>
+        enabled: "<aqua>Filtreler </aqua><green>etkindir </green><aqua>.</aqua>"
+        disabled: "<aqua>Filtreler </aqua><red>devre dışı bırakıldı </red><aqua>.</aqua>"
       border_block:
-        name: "&f&l Sınır Bloğu"
+        name: "<white><bold>Sınır Bloğu</bold></white>"
         description: |-
-          &7 Bordür bloğu bir malzemedir
-          Kullanıcı GUI'sini çevreleyen &7.
-          &7 Hava devre dışı bırakmaya ayarlamak
-          &7
+          <gray>Bordür bloğu bir malzemedir
+          Kullanıcı GUI'sini çevreleyen </gray><gray>.
+          </gray><gray>Hava devre dışı bırakmaya ayarlamak
+          </gray><gray></gray>
       border_block_name:
-        name: "&f&l Kenar Bloğu Adı"
+        name: "<white><bold>Kenar Bloğu Adı</bold></white>"
         description: |-
-          &7 Kenarlık için görünen ad
-          &7 blok.
-          &7 Boş olarak ayarlanmışsa, o zaman
-          &7 blok adını kullanacak.
-          &7 1 boşluk olarak ayarlamak için,
-          "&7 'boş' yaz."
-        value: "&b İsim: `&r[name]&r&b`"
+          <gray>Kenarlık için görünen ad
+          </gray><gray>blok.
+          </gray><gray>Boş olarak ayarlanmışsa, o zaman
+          </gray><gray>blok adını kullanacak.
+          </gray><gray>1 boşluk olarak ayarlamak için,
+          "</gray><gray> 'boş' yaz."</gray>
+        value: "<aqua>İsim: `</aqua>[name]<aqua>`</aqua>"
       unlock_notify:
-        name: "&f&l Kilit Açıldığında Bildir"
+        name: "<white><bold>Kilit Açıldığında Bildir</bold></white>"
         description: |-
-          &7 Bir mesaj gönderilecek
-          Kilidi açtığında bir kullanıcıya &7
-          &7 yeni bir jeneratör.
-        enabled: "&b Kilit açma bildirimi &a etkin &b."
-        disabled: "&b Kilit açma bildirimi &c devre dışı &b."
+          <gray>Bir mesaj gönderilecek
+          Kilidi açtığında bir kullanıcıya </gray><gray>
+          </gray><gray>yeni bir jeneratör.</gray>
+        enabled: "<aqua>Kilit açma bildirimi </aqua><green>etkin </green><aqua>.</aqua>"
+        disabled: "<aqua>Kilit açma bildirimi </aqua><red>devre dışı </red><aqua>.</aqua>"
       disable_on_activate:
-        name: "&f&l Etkinleştirildiğinde Devre Dışı Bırak"
+        name: "<white><bold>Etkinleştirildiğinde Devre Dışı Bırak</bold></white>"
         description: |-
-          &7 En eski etkin oluşturucuyu devre dışı bırak
-          &7 eğer kullanıcı yeni bir tane etkinleştirirse
-          &7 jeneratör.
-          &7 Aşağıdaki durumlar için kullanışlıdır:
-          &7 yalnızca tek bir jeneratöre izin verilir.
-        enabled: "&b Aktivasyonda devre dışı bırak &a etkin &b."
-        disabled: "&b Aktivasyonda Devre Dışı Bırak, &c devre dışıdır &b."
+          <gray>En eski etkin oluşturucuyu devre dışı bırak
+          </gray><gray>eğer kullanıcı yeni bir tane etkinleştirirse
+          </gray><gray>jeneratör.
+          </gray><gray>Aşağıdaki durumlar için kullanışlıdır:
+          </gray><gray>yalnızca tek bir jeneratöre izin verilir.</gray>
+        enabled: "<aqua>Aktivasyonda devre dışı bırak </aqua><green>etkin </green><aqua>.</aqua>"
+        disabled: "<aqua>Aktivasyonda Devre Dışı Bırak, </aqua><red>devre dışıdır </red><aqua>.</aqua>"
       library:
-        name: "&f&l [name]"
+        name: "<white><bold>[name]</bold></white>"
         description: |-
-          &7 [description]
-          &7 Yazar: [author]
-          &7 [gamemode] için düzenlendi
-          &7 Dil: [lang]
-          &7 Versiyon: [version]
+          <gray>[description]
+          </gray><gray>Yazar: [author]
+          </gray><gray>[gamemode] için düzenlendi
+          </gray><gray>Dil: [lang]
+          </gray><gray>Versiyon: [version]</gray>
       accept_blocks:
-        name: "&f&l Engellemeleri kabul et"
+        name: "<white><bold>Engellemeleri kabul et</bold></white>"
         description: |-
-          &7 Seçilen blokları kabul eder
-          &7 ve döner.
-        selected-blocks: "&7 Seçilen Bloklar:"
-        list-value: "&7 - [value]"
+          <gray>Seçilen blokları kabul eder
+          </gray><gray>ve döner.</gray>
+        selected-blocks: "<gray>Seçilen Bloklar:</gray>"
+        list-value: "<gray>- [value]</gray>"
       material-icon:
-        name: "&f&l [material]"
+        name: "<white><bold>[material]</bold></white>"
+        description: '<gray>Blok ID: [id]</gray>'
       search_block:
-        name: "&f&l Ara"
+        name: "<white><bold>Ara</bold></white>"
         description: |-
-          &7 Belirli bir arama
-          &7 blok.
-        search: "&b Değer: [value]"
+          <gray>Belirli bir arama
+          </gray><gray>blok.</gray>
+        search: "<aqua>Değer: [value]</aqua>"
       accept_biome:
-        name: "&f&l Biyomları kabul et"
+        name: "<white><bold>Biyomları kabul et</bold></white>"
         description: |-
-          &7 Seçilen biyomları kabul eder
-          &7 ve döner.
-        selected-biomes: "&7 Seçilen Biyomlar:"
-        list-value: "&7 - [value]"
+          <gray>Seçilen biyomları kabul eder
+          </gray><gray>ve döner.</gray>
+        selected-biomes: "<gray>Seçilen Biyomlar:</gray>"
+        list-value: "<gray>- [value]</gray>"
       biome-icon:
-        name: "&f&l [biome]"
+        name: "<white><bold>[biome]</bold></white>"
       biome-groups:
         temperate:
-          name: "&f&l Ilıman"
-          description: "&7 Yalnızca ılıman biyomları göster"
+          name: "<white><bold>Ilıman</bold></white>"
+          description: "<gray>Yalnızca ılıman biyomları göster</gray>"
         warm:
-          name: "&f&l Sıcak"
-          description: "&7 Yalnızca sıcak biyomları göster"
+          name: "<white><bold>Sıcak</bold></white>"
+          description: "<gray>Yalnızca sıcak biyomları göster</gray>"
         cold:
-          name: "&f&l Soğuk"
-          description: "&7 Yalnızca soğuk biyomları göster"
+          name: "<white><bold>Soğuk</bold></white>"
+          description: "<gray>Yalnızca soğuk biyomları göster</gray>"
         snowy:
-          name: "&f&l Karlı"
-          description: "&7 Yalnızca karlı canlıları göster"
+          name: "<white><bold>Karlı</bold></white>"
+          description: "<gray>Yalnızca karlı canlıları göster</gray>"
         ocean:
-          name: "&f&l Okyanus"
-          description: "&7 Yalnızca okyanus biyomlarını göster"
+          name: "<white><bold>Okyanus</bold></white>"
+          description: "<gray>Yalnızca okyanus biyomlarını göster</gray>"
         nether:
-          name: "&f&l Nether"
-          description: "&7 Yalnızca nether biyomlarını göster"
+          name: "<white><bold>Nether</bold></white>"
+          description: "<gray>Yalnızca nether biyomlarını göster</gray>"
         the_end:
-          name: "&f&l Son"
-          description: "&7 Yalnızca bitiş biyomlarını göster"
+          name: "<white><bold>Son</bold></white>"
+          description: "<gray>Yalnızca bitiş biyomlarını göster</gray>"
         neutral:
-          name: "&f&l Nötr"
-          description: "&7 Yalnızca nötr biyomları göster"
+          name: "<white><bold>Nötr</bold></white>"
+          description: "<gray>Yalnızca nötr biyomları göster</gray>"
         unused:
-          name: "&f&l Kullanılmıyor"
-          description: "&7 Yalnızca kullanılmayan biyomları göster"
+          name: "<white><bold>Kullanılmıyor</bold></white>"
+          description: "<gray>Yalnızca kullanılmayan biyomları göster</gray>"
         cave:
-          name: "&f&l Mağarası"
-          description: "&7 Yalnızca mağara biyomlarını göster"
+          name: "<white><bold>Mağarası</bold></white>"
+          description: "<gray>Yalnızca mağara biyomlarını göster</gray>"
       generator-types:
         cobblestone:
-          name: "&f&l Arnavut kaldırımı"
+          name: "<white><bold>Arnavut kaldırımı</bold></white>"
           description: |-
-            &7 Yalnızca kaldırım taşıyla çalışır
-            &7 jeneratörler.
+            <gray>Yalnızca kaldırım taşıyla çalışır
+            </gray><gray>jeneratörler.</gray>
         stone:
-          name: "&f&l Taş"
+          name: "<white><bold>Taş</bold></white>"
           description: |-
-            &7 Yalnızca taşla çalışır
-            &7 jeneratörler.
+            <gray>Yalnızca taşla çalışır
+            </gray><gray>jeneratörler.</gray>
         basalt:
-          name: "&f&l Bazalt"
+          name: "<white><bold>Bazalt</bold></white>"
           description: |-
-            &7 Yalnızca bazalt ile çalışır
-            &7 jeneratörler.
+            <gray>Yalnızca bazalt ile çalışır
+            </gray><gray>jeneratörler.</gray>
         cobblestone_or_stone:
-          name: "&f&l Parke Taşı veya Taş"
+          name: "<white><bold>Parke Taşı veya Taş</bold></white>"
           description: |-
-            &7 Parke taşı ile çalışır ve
-            &7 taş jeneratör.
+            <gray>Parke taşı ile çalışır ve
+            </gray><gray>taş jeneratör.</gray>
         basalt_or_cobblestone:
-          name: "&f&l Bazalt veya Parke Taşı"
+          name: "<white><bold>Bazalt veya Parke Taşı</bold></white>"
           description: |-
-            &7 Bazalt ile çalışır ve
-            &7 arnavut kaldırımı jeneratörü.
+            <gray>Bazalt ile çalışır ve
+            </gray><gray>arnavut kaldırımı jeneratörü.</gray>
         basalt_or_stone:
-          name: "&f&l Bazalt veya Taş"
+          name: "<white><bold>Bazalt veya Taş</bold></white>"
           description: |-
-            &7 Bazalt ile çalışır ve
-            &7 taş jeneratör.
+            <gray>Bazalt ile çalışır ve
+            </gray><gray>taş jeneratör.</gray>
         any:
-          name: "&f&l Herhangi"
-          description: "&7 Herhangi bir jeneratörle çalışır."
+          name: "<white><bold>Herhangi</bold></white>"
+          description: "<gray>Herhangi bir jeneratörle çalışır.</gray>"
+      clear-height-range:
+        description: "<gray>Bu materyal için belirli\n</gray><gray>yükseklik aralığını kaldır.\n</gray><gray>Bunun yerine jeneratörün varsayılan\n</gray><gray>yükseklik aralığını kullanacak.</gray>"
+        name: <white><bold>Yükseklik Aralığını Temizle</bold></white>
+      exhaustion_limit:
+        default: '<aqua>Genel varsayılanı kullanır: </aqua><white>[number]</white>'
+        description: "<gray>Bu jeneratörün bekleme süresine\n</gray><gray>geçmeden önce her periyotta\n</gray><gray>üretebileceği maksimum blok sayısı.</gray>"
+        name: <white><bold>Tükenme Limiti</bold></white>
+        unlimited: <aqua>Limit yok</aqua>
+        value: '<aqua>Limit: [number] </aqua><gray>periyot başına</gray>'
+      height_range:
+        description: "<gray>Bu jeneratörün çalıştığı\n</gray><gray>yükseklik aralığı.</gray>"
+        name: <white><bold>Yükseklik Aralığı</bold></white>
+        value: <aqua>Şuradan </aqua><white>[min_height] </white><aqua>şuraya </aqua><white>[max_height]</white>
+      max-height:
+        description: "<gray>Bu materyal için maksimum\n</gray><gray>yüksekliği ayarla.\n</gray><gray>Geçerli değer: </gray><aqua>[max_height]</aqua>"
+        name: <white><bold>Maksimum Yükseklik</bold></white>
+        value: <aqua>[max_height]</aqua>
+      max_height:
+        description: "<gray>Bu materyal için maksimum\n</gray><gray>yüksekliği ayarla.</gray>"
+        name: <white><bold>Maksimum Yükseklik</bold></white>
+        value: '<gray>Geçerli değer: </gray><aqua>[max_height]</aqua>'
+      min-height:
+        description: "<gray>Bu materyal için minimum\n</gray><gray>yüksekliği ayarla.\n</gray><gray>Geçerli değer: </gray><aqua>[min_height]</aqua>"
+        name: <white><bold>Minimum Yükseklik</bold></white>
+        value: <aqua>[min_height]</aqua>
+      min_height:
+        description: "<gray>Bu materyal için minimum\n</gray><gray>yüksekliği ayarla.</gray>"
+        name: <white><bold>Minimum Yükseklik</bold></white>
+        value: '<gray>Geçerli değer: </gray><aqua>[min_height]</aqua>'
     tips:
-      click-to-previous: "&e Önceki sayfayı görüntülemek için &7'ye tıklayın."
-      click-to-next: "&e Sonraki sayfayı görüntülemek için &7'ye tıklayın."
-      click-to-cancel: "&e İptal etmek için &7'ye tıklayın."
-      click-to-choose: "&e Seçmek için &7'ye tıklayın."
-      click-to-select: "&e Seçmek için &7'ye tıklayın."
-      click-to-deselect: "&e Seçimi kaldırmak için &7'ye tıklayın."
-      click-to-accept: "&e Kabul etmek ve geri dönmek için &7'ye tıklayın."
-      click-to-filter-enable: "&e Filtreyi etkinleştirmek için &7'ye tıklayın."
-      click-to-filter-disable: "&e Filtreyi devre dışı bırakmak için &7'ye tıklayın."
-      click-to-activate: "&e Etkinleştirmek için &7'ye tıklayın."
-      click-to-deactivate: "&e Devre dışı bırakmak için &7'ye tıklayın."
+      click-to-previous: "<yellow>Önceki sayfayı görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-next: "<yellow>Sonraki sayfayı görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-cancel: "<yellow>İptal etmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-choose: "<yellow>Seçmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-select: "<yellow>Seçmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-deselect: "<yellow>Seçimi kaldırmak için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-accept: "<yellow>Kabul etmek ve geri dönmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-filter-enable: "<yellow>Filtreyi etkinleştirmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-filter-disable: "<yellow>Filtreyi devre dışı bırakmak için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-activate: "<yellow>Etkinleştirmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-deactivate: "<yellow>Devre dışı bırakmak için </yellow><gray>'ye tıklayın.</gray>"
       click-gold-to-purchase: |-
-        &e Altın blokta &7'ye tıklayın
-        &7 satın almak için.
-      click-to-purchase: "&e Satın almak için &7'ye tıklayın."
-      click-to-return: "&e Geri dönmek için &7'ye tıklayın."
-      click-to-quit: "&e Çıkmak için &7'ye tıklayın."
-      click-to-wipe: "&e Silmek için &7'ye tıklayın."
-      click-to-open: "&e Açmak için &7'ye tıklayın."
-      click-to-export: "&e Dışa aktarmaya başlamak için &7'ye tıklayın."
-      click-to-change: "&e Değiştirmek için &7'ye tıklayın."
+        <yellow>Altın blokta </yellow><gray>'ye tıklayın
+        </gray><gray>satın almak için.</gray>
+      click-to-purchase: "<yellow>Satın almak için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-return: "<yellow>Geri dönmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-quit: "<yellow>Çıkmak için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-wipe: "<yellow>Silmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-open: "<yellow>Açmak için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-export: "<yellow>Dışa aktarmaya başlamak için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-change: "<yellow>Değiştirmek için </yellow><gray>'ye tıklayın.</gray>"
       click-on-item: |-
-        &e Sayfanızdaki öğede &7'ye tıklayın
-        &7 envanter.
-      click-to-view: "&e Görüntülemek için &7'ye tıklayın."
-      click-to-add: "&e Eklemek için &7'ye tıklayın."
-      click-to-remove: "&e Kaldırmak için &7'ye tıklayın."
-      select-before: "&e Devam etmeden önce &7'yi seçin."
-      click-to-create: "&e Oluşturmak için &7'ye tıklayın."
-      right-click-to-select: "&e Seçmek için &7'ye sağ tıklayın."
-      right-click-to-deselect: "&e Seçimi kaldırmak için &7'ye sağ tıklayın."
-      click-to-toggle: "&e Değiştirmek için &7'ye tıklayın."
-      left-click-to-edit: "&e Düzenlemek için &7'ye Sol Tıklayın."
-      right-click-to-lock: "&e Kilitlemek için &7'ye sağ tıklayın."
-      right-click-to-unlock: "&e Kilidi açmak için &7'ye sağ tıklayın."
-      click-to-perform: "&e Gerçekleştirmek için &7'ye tıklayın."
-      click-to-edit: "&e Düzenlemek için &7'ye tıklayın."
-      right-click-to-clear: "&e Temizlemek için &7'ye Sağ Tıklayın."
-      left-click-to-view: "&e Görüntülemek için &7'ye Sol Tıklayın."
-      left-click-to-purchase: "&e Satın almak için &7'ye sol tıklayın."
-      left-click-to-activate: "&e Etkinleştirmek için &7'ye Sol Tıklayın."
-      left-click-to-deactivate: "&e Devre dışı bırakmak için &7'ye Sol Tıklayın."
-      right-click-to-view: "&e Görüntülemek için &7'ye sağ tıklayın."
-      right-click-to-purchase: "&e Satın almak için &7'ye sağ tıklayın."
-      right-click-to-activate: "&e Etkinleştirmek için &7'ye Sağ Tıklayın."
-      right-click-to-deactivate: "&e Devre dışı bırakmak için &7'ye sağ tıklayın."
-      shift-click-to-view: "&e Shift Görüntülemek için &7'ye tıklayın."
-      shift-click-to-purchase: "&e Shift Satın almak için &7'ye tıklayın."
-      shift-click-to-activate: "&e Shift Etkinleştirmek için &7'ye tıklayın."
-      shift-click-to-deactivate: "&e Shift Devre dışı bırakmak için &7'ye tıklayın."
-      shift-click-to-reset: "&e Shift Sıfırlamak için &7'ye tıklayın."
+        <yellow>Sayfanızdaki öğede </yellow><gray>'ye tıklayın
+        </gray><gray>envanter.</gray>
+      click-to-view: "<yellow>Görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-add: "<yellow>Eklemek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-remove: "<yellow>Kaldırmak için </yellow><gray>'ye tıklayın.</gray>"
+      select-before: "<yellow>Devam etmeden önce </yellow><gray>'yi seçin.</gray>"
+      click-to-create: "<yellow>Oluşturmak için </yellow><gray>'ye tıklayın.</gray>"
+      right-click-to-select: "<yellow>Seçmek için </yellow><gray>'ye sağ tıklayın.</gray>"
+      right-click-to-deselect: "<yellow>Seçimi kaldırmak için </yellow><gray>'ye sağ tıklayın.</gray>"
+      click-to-toggle: "<yellow>Değiştirmek için </yellow><gray>'ye tıklayın.</gray>"
+      left-click-to-edit: "<yellow>Düzenlemek için </yellow><gray>'ye Sol Tıklayın.</gray>"
+      right-click-to-lock: "<yellow>Kilitlemek için </yellow><gray>'ye sağ tıklayın.</gray>"
+      right-click-to-unlock: "<yellow>Kilidi açmak için </yellow><gray>'ye sağ tıklayın.</gray>"
+      click-to-perform: "<yellow>Gerçekleştirmek için </yellow><gray>'ye tıklayın.</gray>"
+      click-to-edit: "<yellow>Düzenlemek için </yellow><gray>'ye tıklayın.</gray>"
+      right-click-to-clear: "<yellow>Temizlemek için </yellow><gray>'ye Sağ Tıklayın.</gray>"
+      left-click-to-view: "<yellow>Görüntülemek için </yellow><gray>'ye Sol Tıklayın.</gray>"
+      left-click-to-purchase: "<yellow>Satın almak için </yellow><gray>'ye sol tıklayın.</gray>"
+      left-click-to-activate: "<yellow>Etkinleştirmek için </yellow><gray>'ye Sol Tıklayın.</gray>"
+      left-click-to-deactivate: "<yellow>Devre dışı bırakmak için </yellow><gray>'ye Sol Tıklayın.</gray>"
+      right-click-to-view: "<yellow>Görüntülemek için </yellow><gray>'ye sağ tıklayın.</gray>"
+      right-click-to-purchase: "<yellow>Satın almak için </yellow><gray>'ye sağ tıklayın.</gray>"
+      right-click-to-activate: "<yellow>Etkinleştirmek için </yellow><gray>'ye Sağ Tıklayın.</gray>"
+      right-click-to-deactivate: "<yellow>Devre dışı bırakmak için </yellow><gray>'ye sağ tıklayın.</gray>"
+      shift-click-to-view: "<yellow>Shift Görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
+      shift-click-to-purchase: "<yellow>Shift Satın almak için </yellow><gray>'ye tıklayın.</gray>"
+      shift-click-to-activate: "<yellow>Shift Etkinleştirmek için </yellow><gray>'ye tıklayın.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift Devre dışı bırakmak için </yellow><gray>'ye tıklayın.</gray>"
+      shift-click-to-reset: "<yellow>Shift Sıfırlamak için </yellow><gray>'ye tıklayın.</gray>"
+      shift-left-click-to-set-height-range: <yellow>Shift+Sol Tık </yellow><gray>ile yükseklik aralığını yapılandır.</gray>
     descriptions:
       generator:
         lore: |-
@@ -714,153 +746,136 @@ stone-generator:
           [requirements]
           [status]
         blocks:
-          title: "&7&l Bloklar:"
-          value: "&8 [material] - %[#.##]"
+          title: "<gray><bold>Bloklar:</bold></gray>"
+          value: "<dark_gray>[material] - %[#.##]</dark_gray>"
         treasures:
-          title: "&7&l Hazine:"
-          value: "&8 [material] - %[#.##]"
+          title: "<gray><bold>Hazine:</bold></gray>"
+          value: "<dark_gray>[material] - %[#.##]</dark_gray>"
         requirements:
           description: |-
             [biomes]
             [level]
             [missing-permission]
-          level: "&c&l Gerekli Düzey: &r&c [number]"
-          permission-title: "&c&l Eksik İzinler:"
-          permission: "&c -[permission]"
-          biome-title: "&7&l Şurada çalışır:"
-          biome: "&8 [biome]"
-          any: "&7&l &e&o tüm &r&7&l biyomlarında çalışır"
+          level: "<red><bold>Gerekli Düzey: </bold></red><red>[number]</red>"
+          permission-title: "<red><bold>Eksik İzinler:</bold></red>"
+          permission: "<red>-[permission]</red>"
+          biome-title: "<gray><bold>Şurada çalışır:</bold></gray>"
+          biome: "<dark_gray>[biome]</dark_gray>"
+          any: "<gray><bold></bold></gray><bold><yellow><italic>tüm </italic></yellow></bold><gray><bold>biyomlarında çalışır</bold></gray>"
         status:
-          locked: "&c Kilitli!"
-          undeployed: "&c Dağıtılmadı!"
-          active: "&2 Aktif"
-          purchase-cost: "&e Satın Alma Maliyeti: $[number]"
-          activation-cost: "&e Etkinleştirme Maliyeti: $[number]"
+          locked: "<red>Kilitli!</red>"
+          undeployed: "<red>Dağıtılmadı!</red>"
+          active: "<dark_green>Aktif</dark_green>"
+          purchase-cost: "<yellow>Satın Alma Maliyeti: $[number]</yellow>"
+          activation-cost: "<yellow>Etkinleştirme Maliyeti: $[number]</yellow>"
         type:
-          title: "&7&l Destekler:"
-          cobblestone: "&8 Parke Taşı Jeneratörü"
-          stone: "&8 Taş Jeneratörü"
-          basalt: "&8 Bazalt Jeneratörü"
-          any: "&7&l &e&o'nun tüm &r&7&l jeneratörlerini destekler"
+          title: "<gray><bold>Destekler:</bold></gray>"
+          cobblestone: "<dark_gray>Parke Taşı Jeneratörü</dark_gray>"
+          stone: "<dark_gray>Taş Jeneratörü</dark_gray>"
+          basalt: "<dark_gray>Bazalt Jeneratörü</dark_gray>"
+          any: "<gray><bold></bold></gray><bold><yellow><italic>'nun tüm </italic></yellow></bold><gray><bold>jeneratörlerini destekler</bold></gray>"
+        height-range: '<gray>Şu yüksekliklerde çalışır: </gray><aqua>[min_height] </aqua><gray>ile </gray><aqua>[max_height]</aqua>'
       bundle-permission: |-
-        &7 Olması gereken izin
-        &7 oyuncuya atandı:
-        &7&o [gamemode].stone-generator.bundle.[id]
-      generators: "&7 Paket Üreticileri:"
-      generator-list: "&7 - [generator]"
-      selected: "&e Seçildi"
+        <gray>Olması gereken izin
+        </gray><gray>oyuncuya atandı:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      generators: "<gray>Paket Üreticileri:</gray>"
+      generator-list: "<gray>- [generator]</gray>"
+      selected: "<yellow>Seçildi</yellow>"
       island-owner: "[player] adası"
-      spawn-island: "&e&l Spawn adası"
+      spawn-island: "<yellow><bold>Spawn adası</bold></yellow>"
       unknown: Bilinmeyen
   messages:
-    generator-loaded: "&a Jeneratör &r '[generator]' &r&a yerel önbelleğe yüklendi."
-    bundle-loaded: "&a Paket &r '[bundle]' &r&a yerel önbelleğe yüklenir."
-    generator-deactivated: "&e Jeneratör &r '[generator]' &r&e devre dışı bırakıldı."
-    active-generators-reached: "&c Çok fazla jeneratör etkinleştirildi. Yenisini etkinleştirmeden
-      önce bazılarını devre dışı bırakmayı deneyin."
-    generator-cannot-be-unlocked: "&c Jeneratör &r '[generator]' &r&c kilidi açık
-      değil."
-    generator-not-unlocked: "&c Jeneratör &r '[generator]' &r&c kilidi açık değil."
-    generator-not-purchased: "&c Jeneratör &r '[generator]' &r&c satın alınmadı."
-    no-credits: "&c Jeneratörü etkinleştirmek için yeterli kredi yok. Etkinleştirme
-      [sayı] kredi gerektirir."
-    no-credits-bank: "&c Banka hesabınızda jeneratörü etkinleştirmek için yeterli
-      kredi yok. Etkinleştirme [number] kredi gerektirir."
-    generator-activated: "&e Jeneratör &r '[generator]' &r&e etkinleştirildi."
-    generator-purchased: "&e Generator &r '[generator]' &r&e satın alındı."
-    generator-already-purchased: "&c Jeneratör &r '[generator]' &r&c zaten satın alındı."
-    island-level-not-reached: "&c Jeneratör &r '[generator]' &r&c, [number] ada seviyesi
-      gerektirir."
-    missing-permission: "&c Jeneratör &r '[generator]' &r&c, ''[permission]' izni
-      gerektiriyor."
-    no-credits-buy: "&c Jeneratör satın almak için yeterli kredi yok. Bu jeneratör
-      [number] krediye mal oldu."
-    no-credits-buy-bank: "&c Banka hesabınızda yeterli kredi yok. Bu jeneratör [number]
-      krediye mal oldu."
-    import-count: "&e [generator] yeni oluşturucular ve [bundle] yeni paketler içe
-      aktarıldı."
-    start-downloading: "&e Kitaplığı indirmeye başla."
+    generator-loaded: "<green>Jeneratör </green> '[generator]' <green>yerel önbelleğe yüklendi.</green>"
+    bundle-loaded: "<green>Paket </green> '[bundle]' <green>yerel önbelleğe yüklenir.</green>"
+    generator-deactivated: "<yellow>Jeneratör </yellow> '[generator]' <yellow>devre dışı bırakıldı.</yellow>"
+    active-generators-reached: "<red>Çok fazla jeneratör etkinleştirildi. Yenisini etkinleştirmeden önce bazılarını devre dışı bırakmayı deneyin.</red>"
+    generator-cannot-be-unlocked: "<red>Jeneratör </red> '[generator]' <red>kilidi açık değil.</red>"
+    generator-not-unlocked: "<red>Jeneratör </red> '[generator]' <red>kilidi açık değil.</red>"
+    generator-not-purchased: "<red>Jeneratör </red> '[generator]' <red>satın alınmadı.</red>"
+    no-credits: "<red>Jeneratörü etkinleştirmek için yeterli kredi yok. Etkinleştirme [sayı] kredi gerektirir.</red>"
+    no-credits-bank: "<red>Banka hesabınızda jeneratörü etkinleştirmek için yeterli kredi yok. Etkinleştirme [number] kredi gerektirir.</red>"
+    generator-activated: "<yellow>Jeneratör </yellow> '[generator]' <yellow>etkinleştirildi.</yellow>"
+    generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>satın alındı.</yellow>"
+    generator-already-purchased: "<red>Jeneratör </red> '[generator]' <red>zaten satın alındı.</red>"
+    island-level-not-reached: "<red>Jeneratör </red> '[generator]' <red>, [number] ada seviyesi gerektirir.</red>"
+    missing-permission: "<red>Jeneratör </red> '[generator]' <red>, ''[permission]' izni gerektiriyor.</red>"
+    no-credits-buy: "<red>Jeneratör satın almak için yeterli kredi yok. Bu jeneratör [number] krediye mal oldu.</red>"
+    no-credits-buy-bank: "<red>Banka hesabınızda yeterli kredi yok. Bu jeneratör [number] krediye mal oldu.</red>"
+    import-count: "<yellow>[generator] yeni oluşturucular ve [bundle] yeni paketler içe aktarıldı.</yellow>"
+    start-downloading: "<yellow>Kitaplığı indirmeye başla.</yellow>"
+    generator-exhausted: <red>Jeneratör </red> '[generator]' <red>üretim limitine ulaştı ve şimdi [number] dakika daha bekleme süresinde.</red>
   errors:
-    no-generator-data: "&c Geçerli bir oluşturucu verisi bulunamadı"
-    no-island-data: "&c Ada Verisi bulunamadı."
-    no-bundle-data: "&c Geçerli bir paket verisi bulunamadı"
-    no-library-entries: "&c Herhangi bir kitaplık girişi bulunamadı!"
-    no-file: "&c `[dosya]` dosyası bulunamadı. İçe aktarma gerçekleştirilemiyor."
-    no-load: '&c "[file]" dosyası yüklenemedi. Okunurken hata oluştu: [description].'
-    not-a-gamemode-world: "&c World '[world]' bir Oyun Modu Eklentisi dünyası değildir."
-    file-exist: '&c "[file]" dosyası zaten var. Farklı bir isim seçin.'
-    generator-tier-not-found: "&c '[generator]' kimliğine sahip Jeneratör &r&c [gamemode]'da
-      bulunamadı."
-    no-generators-in-world: "&c [world] içinde sizin için uygun jeneratör yok"
-    could-not-remove-money: "&c Para çekerken bir şeyler ters gitti."
+    no-generator-data: "<red>Geçerli bir oluşturucu verisi bulunamadı</red>"
+    no-island-data: "<red>Ada Verisi bulunamadı.</red>"
+    no-bundle-data: "<red>Geçerli bir paket verisi bulunamadı</red>"
+    no-library-entries: "<red>Herhangi bir kitaplık girişi bulunamadı!</red>"
+    no-file: "<red>`[dosya]` dosyası bulunamadı. İçe aktarma gerçekleştirilemiyor.</red>"
+    no-load: '<red>"[file]" dosyası yüklenemedi. Okunurken hata oluştu: [description].</red>'
+    not-a-gamemode-world: "<red>World '[world]' bir Oyun Modu Eklentisi dünyası değildir.</red>"
+    file-exist: '<red>"[file]" dosyası zaten var. Farklı bir isim seçin.</red>'
+    generator-tier-not-found: "<red>'[generator]' kimliğine sahip Jeneratör </red><red>[gamemode]'da bulunamadı.</red>"
+    no-generators-in-world: "<red>[world] içinde sizin için uygun jeneratör yok</red>"
+    could-not-remove-money: "<red>Para çekerken bir şeyler ters gitti.</red>"
+    max-height-less-than-min: <red>Maksimum yükseklik ([MAX]), minimum yükseklikten ([MIN]) küçük olamaz!</red>
   conversations:
     confirm-string: doğru, açık, evet, onayla, y, geçerli, doğru
     deny-string: yanlış, kapalı, hayır, reddet, n, geçersiz, yanlış
     cancel-string: iptal etmek
     exit-string: iptal etmek, çıkmak, çıkmak
-    cancelled: "&c Görüşme iptal edildi!"
-    prefix: "&l&6 [BentoBox]: &r"
-    numeric-only: "&c Verilen [value] bir sayı değil!"
-    not-valid-value: "&c Verilen sayı [value] geçerli değil. [min] değerinden büyük
-      ve [max] değerinden küçük olmalıdır!"
-    new-description: "&a Yeni açıklama:"
-    write-search: "&e Lütfen bir arama değeri yazın. (çıkmak için 'iptal' yazın)"
-    search-updated: "&a Arama değeri güncellendi."
-    confirm-island-data-deletion: "&e [gamemode] için tüm kullanıcı verilerini veritabanından
-      silmek istediğinizi onaylayın."
-    user-data-removed: "&a Başarılı, [gamemode] için tüm kullanıcı verileri kaldırıldı!"
-    confirm-generator-data-deletion: "&e [gamemode] için tüm oluşturucu verilerini
-      veritabanından silmek istediğinizi onaylayın."
-    generator-data-removed: "&a Başarılı, [gamemode] için tüm oluşturucu verileri
-      kaldırıldı!"
-    exported-file-name: "&e Lütfen dışa aktarılan veritabanı dosyası için bir dosya
-      adı girin. (çıkmak için 'iptal' yazın)"
-    database-export-completed: "&a Başarılı, [world] için veri tabanı dışa aktarımı
-      tamamlandı. Dosya [file] oluşturuldu."
-    file-name-exist: "&c Adı '[id]' olan dosya var. Üzerine yazılamaz."
-    write-name: "&e Lütfen sohbette yeni bir ad girin."
-    name-changed: "&a Başarılı, ad güncellendi."
-    write-description: "&e Lütfen sohbete yeni bir açıklama girin ve bitirmek için
-      bir satırda tek başına 'çıkın'."
-    description-changed: "&a Başarılı, açıklama güncellendi."
-    new-object-created: "&a Başarılı, [world] içinde yeni nesne yaratıldı."
-    object-already-exists: "&c `[id]` nesnesi zaten oyun modunda tanımlanmış. Farklı
-      olanı seçin."
-    confirm-deletion: "&e [number] nesneyi silmek istediğinizi onaylayın: ([value])"
-    data-removed: "&a Başarılı, veriler kaldırıldı!"
-    input-number: "&e Lütfen sohbette bir numara girin."
-    write-permissions: "&e Lütfen sohbette her satıra bir tane olmak üzere gerekli
-      izinleri girin ve bitirmek için bir satırda tek başına 'çıkın'."
-    permissions-changed: "&a Başarılı, oluşturucu izinleri güncellendi."
-    confirm-data-replacement: "&e Lütfen mevcut jeneratörlerinizi yenisiyle değiştirmek
-      istediğinizi onaylayın."
-    new-generators-imported: "&a Başarılı, [gamemode] için yeni oluşturucular içe
-      aktarıldı."
-    click-text-to-purchase: "&e &r [generator]&r&e'nin kilidini açtınız! Şimdi [number]
-      için satın almak için buraya tıklayın."
-    click-text-to-activate-vault: "&e &r [generator]&r&e'nin kilidini açtınız! [number]
-      için şimdi etkinleştirmek üzere buraya tıklayın."
-    click-text-to-activate: "&e &r [generator]&r&e'nin kilidini açtınız! Şimdi etkinleştirmek
-      için buraya tıklayın."
+    cancelled: "<red>Görüşme iptal edildi!</red>"
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    numeric-only: "<red>Verilen [value] bir sayı değil!</red>"
+    not-valid-value: "<red>Verilen sayı [value] geçerli değil. [min] değerinden büyük ve [max] değerinden küçük olmalıdır!</red>"
+    new-description: "<green>Yeni açıklama:</green>"
+    write-search: "<yellow>Lütfen bir arama değeri yazın. (çıkmak için 'iptal' yazın)</yellow>"
+    search-updated: "<green>Arama değeri güncellendi.</green>"
+    confirm-island-data-deletion: "<yellow>[gamemode] için tüm kullanıcı verilerini veritabanından silmek istediğinizi onaylayın.</yellow>"
+    user-data-removed: "<green>Başarılı, [gamemode] için tüm kullanıcı verileri kaldırıldı!</green>"
+    confirm-generator-data-deletion: "<yellow>[gamemode] için tüm oluşturucu verilerini veritabanından silmek istediğinizi onaylayın.</yellow>"
+    generator-data-removed: "<green>Başarılı, [gamemode] için tüm oluşturucu verileri kaldırıldı!</green>"
+    exported-file-name: "<yellow>Lütfen dışa aktarılan veritabanı dosyası için bir dosya adı girin. (çıkmak için 'iptal' yazın)</yellow>"
+    database-export-completed: "<green>Başarılı, [world] için veri tabanı dışa aktarımı tamamlandı. Dosya [file] oluşturuldu.</green>"
+    file-name-exist: "<red>Adı '[id]' olan dosya var. Üzerine yazılamaz.</red>"
+    write-name: "<yellow>Lütfen sohbette yeni bir ad girin.</yellow>"
+    name-changed: "<green>Başarılı, ad güncellendi.</green>"
+    write-description: "<yellow>Lütfen sohbete yeni bir açıklama girin ve bitirmek için bir satırda tek başına 'çıkın'.</yellow>"
+    description-changed: "<green>Başarılı, açıklama güncellendi.</green>"
+    new-object-created: "<green>Başarılı, [world] içinde yeni nesne yaratıldı.</green>"
+    object-already-exists: "<red>`[id]` nesnesi zaten oyun modunda tanımlanmış. Farklı olanı seçin.</red>"
+    confirm-deletion: "<yellow>[number] nesneyi silmek istediğinizi onaylayın: ([value])</yellow>"
+    data-removed: "<green>Başarılı, veriler kaldırıldı!</green>"
+    input-number: "<yellow>Lütfen sohbette bir numara girin.</yellow>"
+    write-permissions: "<yellow>Lütfen sohbette her satıra bir tane olmak üzere gerekli izinleri girin ve bitirmek için bir satırda tek başına 'çıkın'.</yellow>"
+    permissions-changed: "<green>Başarılı, oluşturucu izinleri güncellendi.</green>"
+    confirm-data-replacement: "<yellow>Lütfen mevcut jeneratörlerinizi yenisiyle değiştirmek istediğinizi onaylayın.</yellow>"
+    new-generators-imported: "<green>Başarılı, [gamemode] için yeni oluşturucular içe aktarıldı.</green>"
+    click-text-to-purchase: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! Şimdi [number] için satın almak için buraya tıklayın.</yellow>"
+    click-text-to-activate-vault: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! [number] için şimdi etkinleştirmek üzere buraya tıklayın.</yellow>"
+    click-text-to-activate: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! Şimdi etkinleştirmek için buraya tıklayın.</yellow>"
+    input-max-height: <white>Bu materyal için maksimum yüksekliği girin (-64 ile 320 arasında):</white>
+    input-min-height: <white>Bu materyal için minimum yüksekliği girin (-64 ile 320 arasında):</white>
   materials:
     cobblestone: Kırıktaş
     stone:
       name: Taş
+      description: ''
   biomes:
     plains: Ovalar
     flower_forest:
       name: Çiçek Ormanı
+      description: ''
 protection:
   flags:
     MAGIC_COBBLESTONE_GENERATOR:
       name: Sihir Jeneratörü
       description: |-
-        &a Etkinleştirmek veya devre dışı bırakmak için geçiş yapın
-        &a tüm Sihir Jeneratörleri
-        &a tüm adada
-      hint: "&e Magic Generator'lar ada ayarlarında devre dışı bırakıldı"
+        <green>Etkinleştirmek veya devre dışı bırakmak için geçiş yapın
+        </green><green>tüm Sihir Jeneratörleri
+        </green><green>tüm adada</green>
+      hint: "<yellow>Magic Generator'lar ada ayarlarında devre dışı bırakıldı</yellow>"
     MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
       name: Magic Generator İzinleri
       description: |-
-        &a Kimlerin etkinleştirebileceğini seçin
-        &a ve jeneratörleri devre dışı bırakın
+        <green>Kimlerin etkinleştirebileceğini seçin
+        </green><green>ve jeneratörleri devre dışı bırakın</green>

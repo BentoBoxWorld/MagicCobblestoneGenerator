@@ -1,0 +1,1115 @@
+stone-generator:
+  # This section contains translations which are used in commands.
+  commands:
+    # This section contains only admin commands translations.
+    admin:
+      main:
+        description: "Magic Cobblestone Generator Admin parancs"
+      import:
+        description: "Magic generátorok importálása"
+        confirmation: "Ez eltávolítja a [gamemode] meglévő generátorait, és új generátorai importálja a sablon fájlból - kérjük erősítse meg"
+      why:
+        parameters: "<player>"
+        description: "Magic Cobblestone Generator hibakeresési üzeneteinek bekapcsolása"
+      database:
+        description: "Fő adatbázis parancs"
+      import-database:
+        parameters: "<file>"
+        description: "magic generátorok adatbázis fájljának importálása"
+        confirmation: "Ez eltávolítja a [gamemode] meglévő generátorait, és importálja az adatbázis fájlból - kérjük erősítse meg"
+      export:
+        parameters: "<file>"
+        description: "Magic generátorok adatbázisának exportálása játékmódból fájlba"
+    # This section contains only player commands translations.
+    player:
+      main:
+        description: "generátor kiválasztási GUI megnyitása"
+      view:
+        description: "generátor részletek GUI megnyitása"
+        parameters: "<generator-id>"
+      buy:
+        description: "A kért generátor megvásárlása"
+        parameters: "<generator-id>"
+      activate:
+        description: "A kért generátor aktiválása/deaktiválása"
+        parameters: "<generator-id> <true/false>"
+  # This section contains translations for items inside GUI interfaces.
+  gui:
+    # This section contains translations for all GUI titles.
+    titles:
+      # Title for listing all generators.
+      player-panel: "<black><bold>Generátorok</bold></black>"
+      # Title for detailed generator view.
+      view-generator: "<black><bold>Generátor: </bold></black> [generator]"
+      # Title for admin panel.
+      admin-panel: "<black><bold>Admin Panel</bold></black>"
+      # Title for GUI that allows to select biomes for generator.
+      select-biome: "<black><bold>Biom kiválasztása</bold></black>"
+      # Title for GUI that allows to select a block generator.
+      select-block: "<black><bold>Blokk kiválasztása</bold></black>"
+      # Title for GUI that allows to select a bundle for island.
+      select-bundle: "<black><bold>Csomag kiválasztása</bold></black>"
+      # Title for GUI that allows to choose generator type.
+      select-type: "<black><bold>Generátor típusának kiválasztása</bold></black>"
+      # Title for detailed bundle view.
+      view-bundle: "<black><bold>Csomag: </bold></black> [bundle]"
+      # Title for managing bundles GUI.
+      manage-bundles: "<black><bold>Csomagok kezelése</bold></black>"
+      # Title for managing generators GUI.
+      manage-generators: "<black><bold>Generátorok kezelése</bold></black>"
+      # Title for editing island data.
+      view-island: "<black><bold>Sziget: [island]</bold></black>"
+      # Title for managing all island data.
+      manage-islands: "<black><bold>Sziget adatok kezelése</bold></black>"
+      # Title for Library GUI
+      library: "<black><bold>Könyvtár</bold></black>"
+      # Title for Settings GUI
+      settings: "<black><bold>Beállítások</bold></black>"
+      # Title for Configure Material Height GUI
+      configure-material-height: "<black><bold>Anyag magasságának konfigurálása</bold></black>"
+      # Title for Height Range Configuration GUI
+      height-range-config: "<black><bold>Magasság tartomány: [material]</bold></black>"
+    # This section contains translations for all buttons inside GUI.
+    buttons:
+      # Section of buttons for Generator View GUI
+      min_height:
+        name: "<white><bold>Minimális magasság</bold></white>"
+        description: |-
+          <gray>Állítsa be az anyag
+          </gray><gray>minimális magasságát.</gray>
+        value: "<gray>Jelenlegi érték: </gray><aqua>[min_height]</aqua>"
+      max_height:
+        name: "<white><bold>Maximális magasság</bold></white>"
+        description: |-
+          <gray>Állítsa be az anyag
+          </gray><gray>maximális magasságát.</gray>
+        value: "<gray>Jelenlegi érték: </gray><aqua>[max_height]</aqua>"
+      height_range:
+        name: "<white><bold>Magasság tartomány</bold></white>"
+        description: |-
+          <gray>A magasság tartomány, ahol
+          </gray><gray>ez a generátor működik.</gray>
+        value: "<aqua>Ettől </aqua><white>[min_height] </white><aqua>eddig </aqua><white>[max_height]</white>"
+      default:
+        name: "<white><bold>Alapértelmezett generátor</bold></white>"
+        description: |-
+          <gray>Az alapértelmezett generátorok
+          </gray><gray>mindig aktívak.</gray>
+        enabled: |-
+          <aqua>Ez az </aqua><green>alapértelmezett </green><aqua>generátor.</aqua>
+        disabled: |-
+          <aqua>Ez </aqua><red>nem az alapértelmezett </red><aqua>generátor.</aqua>
+      priority:
+        name: "<white><bold>Generátor prioritása</bold></white>"
+        description: |-
+          <gray>A nagyobb prioritás szám
+          </gray><gray>előnyben részesítendő, ha
+          </gray><gray>több is alkalmazható az
+          </gray><gray>ugyanahhoz a helyhez.</gray>
+        value: "<aqua>Prioritás: </aqua><gray>[number]</gray>"
+      type:
+        name: "<white><bold>Generátor típusa</bold></white>"
+        description: |-
+          <gray>Meghatározza, hogy melyik
+          </gray><gray>generátor típus kerül
+          </gray><gray>alkalmazásra.</gray>
+        value: "<aqua>Típus: </aqua><gray>[type]</gray>"
+      required_min_level:
+        name: "<white><bold>Minimális sziget szint</bold></white>"
+        description: |-
+          <gray>Minimális sziget szint a
+          </gray><gray>generátor feloldásához.</gray>
+        value: "<aqua>Minimális szint szükséges: [number]</aqua>"
+      required_permissions:
+        name: "<white><bold>Szükséges engedélyek</bold></white>"
+        description: |-
+          <gray>Az engedélyek listája,
+          </gray><gray>amelyek szükségesek a
+          </gray><gray>generátor feloldásához.</gray>
+        list: "<aqua>Szükséges engedélyek:</aqua>"
+        value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- nincs</aqua>"
+      purchase_cost:
+        name: "<white><bold>Vásárlási költség</bold></white>"
+        description: |-
+          <gray>Szükséges kreditek a
+          </gray><gray>generátor vásárlásához.</gray>
+        value: "<aqua>Költség: [number]</aqua>"
+      activation_cost:
+        name: "<white><bold>Aktiválási költség</bold></white>"
+        description: |-
+          <gray>Szükséges kreditek a
+          </gray><gray>generátor aktiválásához
+          </gray><gray>vagy újraaktiválásához.</gray>
+        value: "<aqua>Költség: [number]</aqua>"
+      exhaustion_limit:
+        name: "<white><bold>Kimerítési korlát</bold></white>"
+        description: |-
+          <gray>Maximális blokkok, amelyeket
+          </gray><gray>ez a generátor előállíthat
+          </gray><gray>egy időszakonként mielőtt
+          </gray><gray>szüneteltetnék.</gray>
+        value: "<aqua>Korlát: [number] </aqua><gray>időszakonként</gray>"
+        default: "<aqua>Globális alapértelmezettséget használja: </aqua><white>[number]</white>"
+        unlimited: "<aqua>Nincs korlát</aqua>"
+      biomes:
+        name: "<white><bold>Működési biómok</bold></white>"
+        description: |-
+          <gray>Azoknak a biómoknak a listája,
+          </gray><gray>ahol ez a generátor működhet.</gray>
+        list: "<aqua>Biómok:</aqua>"
+        value: "<aqua>- [biome]</aqua>"
+        any: "<aqua>- bármelyik</aqua>"
+      treasure_amount:
+        name: "<white><bold>Kincs mennyisége</bold></white>"
+        description: |-
+          <gray>A kincs maximális mennyisége,
+          </gray><gray>amely egyszerre ledobható.</gray>
+        value: "<aqua>Mennyiség: [number]</aqua>"
+      treasure_chance:
+        name: "<white><bold>Kincs esélye</bold></white>"
+        description: |-
+          <gray>Az esély arra, hogy kincs
+          </gray><gray>csöppen a generálódás során.</gray>
+        value: "<aqua>Esély: [number]</aqua>"
+      # Section of buttons for Generator View GUI title.
+      info:
+        name: "<white><bold>Általános információ</bold></white>"
+        description: |-
+          <gray>Megjeleníti az általános
+          </gray><gray>információkat ebben a generátorban.</gray>
+      blocks:
+        name: "<white><bold>Blokk lista</bold></white>"
+        description: |-
+          <gray>Megjeleníti a blokkok listáját
+          </gray><gray>és azok generálódási esélyeit.</gray>
+      treasures:
+        name: "<white><bold>Kincs lista</bold></white>"
+        description: |-
+          <gray>Megjeleníti a kincset és
+          </gray><gray>ledobási esélyeket.
+          </gray><gray>A kincs lecsöppen
+          </gray><gray>a blokkok generálódásakor.</gray>
+        drag-and-drop: |-
+          <gray>Támogatja az elemek
+          </gray><gray>húzás-ejtés működését üres helyekre.</gray>
+      # Section for blocks and treasures icons in Generator View GUI.
+      block-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Esély: [#.##]</aqua>"
+        actual: "<aqua>Adatbázis érték: [number]</aqua>"
+        height-range: "<gray>Magasság tartomány: </gray><aqua>[min_height] </aqua><gray>hogy </gray><aqua>[max_height]</aqua>"
+        no-height-range: "<gray>Az alapértelmezett magasság tartományt használja</gray>"
+      treasure-icon:
+        name: "<white><bold>[material]</bold></white>"
+        # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+        description: "<aqua>Esély: [#.####]</aqua>"
+        actual: "<aqua>Adatbázis érték: [number]</aqua>"
+      # Section of buttons for User Generator List
+      show_cobblestone:
+        name: "<white><bold>Kőtörmelékkő generátorok</bold></white>"
+        description: |-
+          <gray>Csak kőtörmelékkő
+          </gray><gray>generátorok megjelenítése</gray>
+      show_stone:
+        name: "<white><bold>Kő generátorok</bold></white>"
+        description: |-
+          <gray>Csak kő
+          </gray><gray>generátorok megjelenítése</gray>
+      show_basalt:
+        name: "<white><bold>Bazalt generátorok</bold></white>"
+        description: |-
+          <gray>Csak bazalt
+          </gray><gray>generátorok megjelenítése</gray>
+      toggle_visibility:
+        name: "<white><bold>Feloldott generátorok</bold></white>"
+        description: |-
+          <gray>Csak feloldott
+          </gray><gray>generátorok megjelenítése</gray>
+      show_active:
+        name: "<white><bold>Aktív generátorok</bold></white>"
+        description: |-
+          <gray>Csak aktív
+          </gray><gray>generátorok megjelenítése</gray>
+      # Button that is used to return to previous GUI or exit it completely.
+      return:
+        name: "<white><bold>Vissza</bold></white>"
+        description: |-
+          <gray>Vissza az előző menübe</gray>
+      quit:
+        name: "<white><bold>Kilépés</bold></white>"
+        description: |-
+          <gray>Kilépés az aktuális menüből</gray>
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      # Button that is used in multi-page GUIs which allows to return to previous page.
+      previous:
+        name: "<white><bold>Előző oldal</bold></white>"
+        description: |-
+          <gray>Váltson a [number]. oldalra</gray>
+      # Button that is used in multi-page GUIs which allows to go to next page.
+      next:
+        name: "<white><bold>Következő oldal</bold></white>"
+        description: |-
+          <gray>Váltson a [number]. oldalra</gray>
+      # All buttons below here are used for Admin GUIs.
+      # Buttons in main Admin GUI
+      manage_users:
+        name: "<white><bold>Sziget adatok kezelése</bold></white>"
+        description: |-
+          <gray>Sziget adatok kezelése
+          </gray><gray>az aktuális játékmódban.</gray>
+      manage_generator_tiers:
+        name: "<white><bold>Generátorok kezelése</bold></white>"
+        description: |-
+          <gray>Generátorok kezelése
+          </gray><gray>az aktuális játékmódban.</gray>
+      manage_generator_bundles:
+        name: "<white><bold>Csomagok kezelése</bold></white>"
+        description: |-
+          <gray>Csomagok kezelése
+          </gray><gray>az aktuális játékmódban.</gray>
+      settings:
+        name: "<white><bold>Beállítások</bold></white>"
+        description: |-
+          <gray>Ellenőrizze és módosítsa
+          </gray><gray>a kiegészítő beállításait.</gray>
+      import_template:
+        name: "<white><bold>Sablon importálása</bold></white>"
+        description: |-
+          <gray>Sablon fájl importálása
+          </gray><gray>a kiegészítő
+          </gray><gray>könyvtárából.</gray>
+      web_library:
+        name: "<white><bold>Webes könyvtár</bold></white>"
+        description: |-
+          <gray>Hozzáférés a webes
+          </gray><gray>könyvtárhoz, amely
+          </gray><gray>megosztott generátorait tartalmaz.</gray>
+      export_from_database:
+        name: "<white><bold>Adatbázis exportálása</bold></white>"
+        description: |-
+          <gray>Exportálja az adatbázist
+          </gray><gray>egyetlen fájlba, amely a
+          </gray><gray>kiegészítő könyvtárában van.</gray>
+      import_to_database:
+        name: "<white><bold>Adatbázis importálása</bold></white>"
+        description: |-
+          <gray>Importálja az adatbázist
+          </gray><gray>egy olyan fájlból, amely a kiegészítő
+          </gray><gray>könyvtárában van.</gray>
+      wipe_user_data:
+        name: "<white><bold>Felhasználó adatbázis törlése</bold></white>"
+        description: |-
+          <gray>Törölje a felhasználó adatait
+          </gray><gray>az aktuális játékmódban
+          </gray><gray>szereplő minden szigetről.</gray>
+      wipe_generator_data:
+        name: "<white><bold>Generátor adatbázis törlése</bold></white>"
+        description: |-
+          <gray>Törölje a generátor és csomag
+          </gray><gray>adatait az aktuális játékmódban.</gray>
+      # Buttons in Bundle Edit GUI
+      bundle_name:
+        name: "<white><bold>Csomag neve</bold></white>"
+        description: |-
+          <gray>Módosítsa a csomag nevét.</gray>
+        value: "<aqua>Név: </aqua> [bundle]"
+      bundle_id:
+        name: "<white><bold>Csomag azonosítója</bold></white>"
+        description: |-
+          <gray>Az aktuális csomag azonosítója.</gray>
+        value: "<aqua>Azonosító: </aqua> [id]"
+      bundle_icon:
+        name: "<white><bold>Csomag ikon</bold></white>"
+        description: |-
+          <gray>Módosítsa a csomag ikont.</gray>
+      bundle_description:
+        name: "<white><bold>Csomag leírása</bold></white>"
+      bundle_info:
+        name: "<white><bold>Általános információ</bold></white>"
+        description: |-
+          <gray>Megjeleníti az általános
+          </gray><gray>információkat erről a csomagról.</gray>
+      bundle_generators:
+        name: "<white><bold>Generátorok</bold></white>"
+        description: |-
+          <gray>Megjeleníti az ehhez a csomaghoz
+          </gray><gray>rendelt generátorok listáját.</gray>
+      add_generator:
+        name: "<white><bold>Generátor hozzáadása</bold></white>"
+        description: |-
+          <gray>Egy generátor hozzárendelése
+          </gray><gray>ehhez a csomaghoz.</gray>
+        list: "<aqua>Kiválasztott generátorok:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      remove_generator:
+        name: "<white><bold>Generátor eltávolítása</bold></white>"
+        description: |-
+          <gray>Egy generátor eltávolítása
+          </gray><gray>ebből a csomagból.</gray>
+        list: "<aqua>Kiválasztott generátorok:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Bundle Management GUI
+      create_bundle:
+        name: "<white><bold>Csomag létrehozása</bold></white>"
+        description: |-
+          <gray>Új csomag létrehozása
+          </gray><gray>ehhez a játékmódhoz.</gray>
+      delete_bundle:
+        name: "<white><bold>Csomag eltávolítása</bold></white>"
+        description: |-
+          <gray>Csomag eltávolítása erről
+          </gray><gray>a játékmódból véglegesen.</gray>
+        list: "<aqua>Kiválasztott csomagok:</aqua>"
+        value: "<aqua>- [bundle]</aqua>"
+      # Buttons in Generator Edit Panel
+      name:
+        name: "<white><bold>Generátor neve</bold></white>"
+        description: |-
+          <gray>Cím ehhez a generátorhoz.
+          </gray><gray>Támogatja a szín kódokat.</gray>
+        value: "<aqua>Név: </aqua> [generator]"
+      id:
+        name: "<white><bold>Generátor azonosítója</bold></white>"
+        description: |-
+          <gray>Az aktuális generátor azonosítója.</gray>
+        value: "<aqua>Azonosító: </aqua> [id]"
+      icon:
+        name: "<white><bold>Generátor ikon</bold></white>"
+        description: |-
+          <gray>Az elem, amely ezt a
+          </gray><gray>generátort jeleníti meg az összes GUI-ban.</gray>
+      locked_icon:
+        name: "<white><bold>Zárolt ikon</bold></white>"
+        description: |-
+          <gray>Az elem, amely ezt a
+          </gray><gray>generátort jeleníti meg az összes GUI-ban, ha
+          </gray><gray>zárolva van.</gray>
+      description:
+        name: "<white><bold>Generátor leírása</bold></white>"
+        description: |-
+          <gray>Szöveg a generátor alatt,
+          </gray><gray>amely a cím alatt lesz írva.</gray>
+        value: "<aqua>Leírás:</aqua>"
+      deployed:
+        name: "<white><bold>Telepítve</bold></white>"
+        description: |-
+          <gray>A telepített generátorok láthatóak
+          </gray><gray>és elérhetőek a játékosok számára.
+          </gray><gray>A nem telepített generátorok nem
+          </gray><gray>generálnak blokkokat.</gray>
+        enabled: |-
+          <aqua>Ez a generátor </aqua><green>telepítve van.</green>
+        disabled: |-
+          <aqua>Ez a generátor </aqua><red>nincs telepítve.</red>
+      add_material:
+        name: "<white><bold>Anyag hozzáadása</bold></white>"
+        description: |-
+          <gray>Új anyag hozzáadása az
+          </gray><gray>aktuális anyag listához.</gray>
+      remove_material:
+        name: "<white><bold>Anyagok eltávolítása</bold></white>"
+        description: |-
+          <gray>Kiválasztott anyagok
+          </gray><gray>eltávolítása a listából.</gray>
+        selected-materials: "<gray>Kiválasztott anyagok:</gray>"
+        list-value: "<gray>- [number] x [value]</gray>"
+      # Buttons in Bundle Management GUI
+      create_generator:
+        name: "<white><bold>Generátor létrehozása</bold></white>"
+        description: |-
+          <gray>Új generátor
+          </gray><gray>létrehozása az
+          </gray><gray>játékmódhoz.</gray>
+      delete_generator:
+        name: "<white><bold>Generátor eltávolítása</bold></white>"
+        description: |-
+          <gray>Generátor eltávolítása
+          </gray><gray>a játékmódból véglegesen.</gray>
+        list: "<aqua>Kiválasztott generátorok:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+      # Buttons in Island Data Edit GUI
+      island_name:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[owner]
+          </gray><aqua>[members]
+          </aqua><aqua>Sziget azonosítója: </aqua><gray>[id]</gray>
+        owner: "<aqua>Tulajdonos: [player]</aqua>"
+        list: "<aqua>Tagok:</aqua>"
+        value: "<aqua>- [player]</aqua>"
+      island_working_range:
+        name: "<white><bold>Sziget munkahatálya</bold></white>"
+        description: |-
+          <gray>Munkahatály a generátoroknak
+          </gray><gray>az aktuális szigeten.
+          </gray><gray>0 és alatta korlátlan
+          </gray><gray>hatályt jelent.</gray>
+        value: "<aqua>Hatály: [number]</aqua>"
+        overwritten: |-
+          <red>A tulajdonosnak van egy engedélye, amely
+          </red><red>felülírja a munkahatályt.</red>
+      owner_working_range:
+        name: "<white><bold>Tulajdonos munkahatálya</bold></white>"
+        description: |-
+          <gray>Munkahatály az aktuális
+          </gray><gray>tulajdonos generátorahoz.
+          </gray><gray>'0' azt jelenti, hogy a tulajdonos
+          </gray><gray>hatálya figyelmen kívül hagyódik.
+          </gray><gray>'-1' azt jelenti, hogy a
+          </gray><gray>tulajdonosnak korlátlan munkahatálya van.
+          "</gray><gray> Engedély a felhasználó hozzárendeléséhez:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>max-range.<number>'"</italic></gray></italic>
+        value: "<aqua>Hatály: [number]</aqua>"
+      island_max_generators:
+        name: "<white><bold>Max sziget generátorok</bold></white>"
+        description: |-
+          <gray>Az aktív generátor
+          </gray><gray>szintek maximális száma,
+          </gray><gray>amely egyszerre engedélyezve
+          </gray><gray>az aktuális szigethez.
+          </gray><gray>0 és alatta
+          </gray><gray>korlátlant jelent.</gray>
+        value: "<aqua>Max generátorok: [number]</aqua>"
+        overwritten: |-
+          <red>A tulajdonosnak van egy engedélye, amely
+          </red><red>felülírja a generátor számát.</red>
+      owner_max_generators:
+        name: "<white><bold>Max tulajdonos generátorok</bold></white>"
+        description: |-
+          <gray>Az egyidejűleg aktív
+          </gray><gray>generátor szintekének maximális száma,
+          </gray><gray>amely a sziget tulajdonosnak
+          </gray><gray>megengedett.
+          </gray><gray>'0' azt jelenti, hogy a tulajdonos
+          </gray><gray>mennyisége figyelmen kívül hagyódik.
+          </gray><gray>'-1' azt jelenti, hogy a
+          </gray><gray>tulajdonosnak korlátlan generátor száma van.
+          "</gray><gray> Engedély a felhasználó hozzárendeléséhez:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>active-generators.<number>'"</italic></gray></italic>
+        value: "<aqua>Max generátorok: [number]</aqua>"
+      island_bundle:
+        name: "<white><bold>Sziget csomag</bold></white>"
+        description: |-
+          <gray>Az aktuális szigethez
+          </gray><gray>hozzárendelt csomag.
+          </gray><gray>Csak az ebből a csomagból
+          </gray><gray>származó generátorok használhatók
+          </gray><gray>a szigeten.</gray>
+        value: "<aqua>Csomag: [bundle]</aqua>"
+        overwritten: |-
+          <red>A tulajdonosnak van egy engedélye, amely
+          </red><red>felülírja a csomagot.</red>
+      owner_bundle:
+        name: "<white><bold>Tulajdonos csomag</bold></white>"
+        description: |-
+          <gray>Az aktuális sziget
+          </gray><gray>tulajdonosához hozzárendelt csomag.
+          </gray><gray>Csak az ebből a csomagból
+          </gray><gray>származó generátorok használhatók
+          </gray><gray>a szigeten.
+          "</gray><gray> Engedély a felhasználó hozzárendeléséhez:"
+          "</gray><gray><italic>'[gamemode].stone-generator."
+          "</italic></gray><italic><gray><italic>bundle.<bundle-id>'"</italic></gray></italic>
+        value: "<aqua>Csomag: [bundle]</aqua>"
+      island_info:
+        name: "<white><bold>Általános információ</bold></white>"
+        description: |-
+          <gray>Megjeleníti az általános
+          </gray><gray>információkat erről a szigetről.</gray>
+      island_generators:
+        name: "<white><bold>Sziget generátorok</bold></white>"
+        description: |-
+          <gray>Megjeleníti az összes
+          </gray><gray>generátor listáját, amelyek az aktuális
+          </gray><gray>szigethez elérhetőek.</gray>
+      reset_to_default:
+        name: "<white><bold>Visszaállítás alapértelmezettre</bold></white>"
+        description: |-
+          <gray>Az összes sziget érték
+          </gray><gray>visszaállítása az alapértelmezett
+          </gray><gray>értékekhez a beállításokból.</gray>
+      # Buttons in Island Management GUI
+      is_online:
+        name: "<white><bold>Online játékosok</bold></white>"
+        description: |-
+          <gray>Online játékos
+          </gray><gray>szigeteknek a listája.</gray>
+      all_islands:
+        name: "<white><bold>Összes sziget</bold></white>"
+        description: |-
+          <gray>Az összes sziget listája.</gray>
+      search:
+        name: "<white><bold>Keresés</bold></white>"
+        description: |-
+          <gray>Egy adott sziget keresése.
+          </gray><gray></gray>
+        search: "<aqua>Érték: [value]</aqua>"
+      # Buttons in Settings GUI
+      offline_generation:
+        name: "<white><bold>Offline generálás</bold></white>"
+        description: |-
+          <gray>Megakadályozza a blokkok
+          </gray><gray>generálódását, ha az összes sziget
+          </gray><gray>tag offline van.</gray>
+        enabled: |-
+          <aqua>Az offline generálás </aqua><green>engedélyezve van </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Az offline generálás </aqua><red>letiltva </red><aqua>.</aqua>
+      use_physic:
+        name: "<white><bold>Fizika használata</bold></white>"
+        description: |-
+          <gray>A fizika használata a blokk
+          </gray><gray>generálódáson lehetővé teszi a
+          </gray><gray>redstone gépek használatát,
+          </gray><gray>azonban kicsit csökkenti a szerver
+          </gray><gray>teljesítményét.</gray>
+        enabled: |-
+          <aqua>A fizika </aqua><green>engedélyezve van </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>A fizika </aqua><red>letiltva </red><aqua>.</aqua>
+      use_bank:
+        name: "<white><bold>Bank Addon használata</bold></white>"
+        description: |-
+          <gray>A sziget bankszámlájának
+          </gray><gray>használata az összes vásárláshoz
+          </gray><gray>és aktiváláshoz.
+          </gray><gray>Bank Addon szükséges.</gray>
+        enabled: |-
+          <aqua>A Bank Addon használata </aqua><green>engedélyezve van </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>A Bank Addon használata </aqua><red>letiltva </red><aqua>.</aqua>
+      working_range:
+        name: "<white><bold>Alapértelmezett munkahatály</bold></white>"
+        description: |-
+          <gray>Távolság a játékosoktól, amíg
+          </gray><gray>a blokk generálódása leáll.
+          </gray><gray>0 és alatta korlátlant jelent.
+          </gray><gray>A beállítás a szerver
+          </gray><gray>újraindításához szükséges az aktiváláshoz.</gray>
+        value: "<aqua>Hatály: [number]</aqua>"
+      active_generators:
+        name: "<white><bold>Alapértelmezett aktív generátorok</bold></white>"
+        description: |-
+          <gray>Alapértelmezett maximális
+          </gray><gray>aktív generátorok száma
+          </gray><gray>egyszerre.
+          </gray><gray>0 és alatta korlátlant jelent.</gray>
+        value: "<aqua>Szám: [number]</aqua>"
+      show_filters:
+        name: "<white><bold>Szűrők megjelenítése</bold></white>"
+        description: |-
+          <gray>A szűrők az a felső sor,
+          </gray><gray>amely lehetővé teszi a generátorok
+          </gray><gray>megjelenítését típus vagy állapot
+          </gray><gray>szerint.
+          </gray><gray>Ez a beállítás letiltja
+          </gray><gray>és elrejti őket.</gray>
+        enabled: |-
+          <aqua>A szűrők </aqua><green>engedélyezve vannak </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>A szűrők </aqua><red>letiltva vannak </red><aqua>.</aqua>
+      border_block:
+        name: "<white><bold>Szegély blokk</bold></white>"
+        description: |-
+          <gray>A szegély blokk az az anyag,
+          </gray><gray>amely a felhasználó GUI-t veszi körül.
+          </gray><gray>Ha levegővé állítja, letiltja
+          </gray><gray>azt.</gray>
+      border_block_name:
+        name: "<white><bold>Szegély blokk neve</bold></white>"
+        description: |-
+          <gray>A szegély blokk neve
+          </gray><gray>megjelenítéshez.
+          </gray><gray>Ha üresre állítjuk, akkor
+          </gray><gray>a blokk nevét fogja használni.
+          </gray><gray>Ha 1 üres helyre szeretné beállítani,
+          "</gray><gray> írja az 'empty'-t."</gray>
+        value: "<aqua>Név: `</aqua>[name]<aqua>`</aqua>"
+      unlock_notify:
+        name: "<white><bold>Értesítés a feloldáskor</bold></white>"
+        description: |-
+          <gray>Egy üzenet küldödik
+          </gray><gray>a felhasználónak, amikor
+          </gray><gray>felold egy új generátort.</gray>
+        enabled: |-
+          <aqua>Az értesítés a feloldáskor </aqua><green>engedélyezve van </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>Az értesítés a feloldáskor </aqua><red>letiltva van </red><aqua>.</aqua>
+      disable_on_activate:
+        name: "<white><bold>Letiltás aktiválásakor</bold></white>"
+        description: |-
+          <gray>A legrégebbi aktív generátor
+          </gray><gray>letiltása, ha a felhasználó
+          </gray><gray>egy új generátort aktivál.
+          </gray><gray>Hasznos olyan helyzetekben, ahol
+          </gray><gray>csak egyetlen generátor engedélyezett.</gray>
+        enabled: |-
+          <aqua>A letiltás aktiválásakor </aqua><green>engedélyezve van </green><aqua>.</aqua>
+        disabled: |-
+          <aqua>A letiltás aktiválásakor </aqua><red>letiltva van </red><aqua>.</aqua>
+      # Buttons in Library GUI
+      library:
+        name: "<white><bold>[name]</bold></white>"
+        description: |-
+          <gray>[description]
+          </gray><gray>Szerző: [author]
+          </gray><gray>Létrehozva a [gamemode] számára
+          </gray><gray>Nyelv: [lang]
+          </gray><gray>Verzió: [version]</gray>
+      # Button in GUI that allows to choose blocks for generators to be generated.
+      accept_blocks:
+        name: "<white><bold>A blokkok elfogadása</bold></white>"
+        description: |-
+          <gray>Az kiválasztott blokkok
+          </gray><gray>elfogadása és visszatérés.</gray>
+        selected-blocks: "<gray>Kiválasztott blokkok:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      material-icon:
+        name: "<white><bold>[material]</bold></white>"
+        description: "<gray>Blokk azonosítója: [id]</gray>"
+      search_block:
+        name: "<white><bold>Keresés</bold></white>"
+        description: |-
+          <gray>Egy adott blokk keresése.
+          </gray><gray></gray>
+        search: "<aqua>Érték: [value]</aqua>"
+      # Button in GUI that allows to choose biomes for generator.
+      accept_biome:
+        name: "<white><bold>A biómok elfogadása</bold></white>"
+        description: |-
+          <gray>Az kiválasztott biómok
+          </gray><gray>elfogadása és visszatérés.</gray>
+        selected-biomes: "<gray>Kiválasztott biómok:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      biome-icon:
+        name: "<white><bold>[biome]</bold></white>"
+      min-height:
+        name: "<white><bold>Minimális magasság</bold></white>"
+        description: |-
+          <gray>Állítsa be az anyag minimális
+          </gray><gray>magasságát.
+          </gray><gray>Jelenlegi érték: </gray><aqua>[min_height]</aqua>
+        value: "<aqua>[min_height]</aqua>"
+      max-height:
+        name: "<white><bold>Maximális magasság</bold></white>"
+        description: |-
+          <gray>Állítsa be az anyag maximális
+          </gray><gray>magasságát.
+          </gray><gray>Jelenlegi érték: </gray><aqua>[max_height]</aqua>
+        value: "<aqua>[max_height]</aqua>"
+      clear-height-range:
+        name: "<white><bold>Magasság tartomány törlése</bold></white>"
+        description: |-
+          <gray>Az anyag adott magasság
+          </gray><gray>tartományának eltávolítása.
+          </gray><gray>A generátor alapértelmezett
+          </gray><gray>magasság tartományát fogja használni helyette.</gray>
+      # This section contains names for filter biome groups.
+      biome-groups:
+        temperate:
+          name: "<white><bold>Mérsékelt</bold></white>"
+          description: |-
+            <gray>Csak mérsékelt biómok megjelenítése</gray>
+        warm:
+          name: "<white><bold>Meleg</bold></white>"
+          description: |-
+            <gray>Csak meleg biómok megjelenítése</gray>
+        cold:
+          name: "<white><bold>Hideg</bold></white>"
+          description: |-
+            <gray>Csak hideg biómok megjelenítése</gray>
+        snowy:
+          name: "<white><bold>Havas</bold></white>"
+          description: |-
+            <gray>Csak havas biómok megjelenítése</gray>
+        ocean:
+          name: "<white><bold>Óceán</bold></white>"
+          description: |-
+            <gray>Csak óceán biómok megjelenítése</gray>
+        nether:
+          name: "<white><bold>Alsóvilág</bold></white>"
+          description: |-
+            <gray>Csak alsóvilág biómok megjelenítése</gray>
+        the_end:
+          name: "<white><bold>Vég</bold></white>"
+          description: |-
+            <gray>Csak vég biómok megjelenítése</gray>
+        neutral:
+          name: "<white><bold>Semleges</bold></white>"
+          description: |-
+            <gray>Csak semleges biómok megjelenítése</gray>
+        unused:
+          name: "<white><bold>Használatlan</bold></white>"
+          description: |-
+            <gray>Csak használatlan biómok megjelenítése</gray>
+        cave:
+          name: "<white><bold>Barlang</bold></white>"
+          description: |-
+            <gray>Csak barlang biómok megjelenítése</gray>
+      # This section contains names and descriptions for generator type buttons.
+      generator-types:
+        cobblestone:
+          name: "<white><bold>Kőtörmelékkő</bold></white>"
+          description: |-
+            <gray>Csak kőtörmelékkő
+            </gray><gray>generátorokkal működik.
+
+            </gray><gold><italic>Tipp:
+            </italic></gold><italic><gold><italic>Akkor képződik, ha egy lávapotok
+            </italic></gold></italic><italic><italic><gold><italic>érintkezik a
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>vízzel.</italic></gold></italic></italic></italic>
+        stone:
+          name: "<white><bold>Kő</bold></white>"
+          description: |-
+            <gray>Csak kő
+            </gray><gray>generátorokkal működik.
+
+            </gray><gold><italic>Tipp:
+            </italic></gold><italic><gold><italic>Akkor képződik, ha a láva
+            </italic></gold></italic><italic><italic><gold><italic>a víz teteje felett folyik.</italic></gold></italic></italic>
+        basalt:
+          name: "<white><bold>Bazalt</bold></white>"
+          description: |-
+            <gray>Csak bazalt
+            </gray><gray>generátorokkal működik.
+
+            </gray><gold><italic>Tipp:
+            </italic></gold><italic><gold><italic>Akkor képződik, ha a láva
+            </italic></gold></italic><italic><italic><gold><italic>a szelíd talajnak folyik,
+            </italic></gold></italic></italic><italic><italic><italic><gold><italic>és szomszédos a kék jéggel.</italic></gold></italic></italic></italic>
+        cobblestone_or_stone:
+          name: "<white><bold>Kőtörmelékkő vagy kő</bold></white>"
+          description: |-
+            <gray>Kőtörmelékkő és kő generátorokkal működik.</gray>
+        basalt_or_cobblestone:
+          name: "<white><bold>Bazalt vagy kőtörmelékkő</bold></white>"
+          description: |-
+            <gray>Bazalt és kőtörmelékkő
+            </gray><gray>generátorokkal működik.</gray>
+        basalt_or_stone:
+          name: "<white><bold>Bazalt vagy kő</bold></white>"
+          description: |-
+            <gray>Bazalt és kő
+            </gray><gray>generátorokkal működik.</gray>
+        any:
+          name: "<white><bold>Bármelyik</bold></white>"
+          description: |-
+            <gray>Bármelyik generátorral működik.</gray>
+    # This section contains translations for GUI button tips.
+    tips:
+      click-to-previous: "<yellow>Kattintson </yellow><gray>az előző oldal megtekintéséhez.</gray>"
+      click-to-next: "<yellow>Kattintson </yellow><gray>a következő oldal megtekintéséhez.</gray>"
+      click-to-cancel: "<yellow>Kattintson </yellow><gray>a mégse gombra.</gray>"
+      click-to-choose: "<yellow>Kattintson </yellow><gray>a kiválasztáshoz.</gray>"
+      click-to-select: "<yellow>Kattintson </yellow><gray>a kiválasztáshoz.</gray>"
+      click-to-deselect: "<yellow>Kattintson </yellow><gray>a kijelölés feloldásához.</gray>"
+      click-to-accept: "<yellow>Kattintson </yellow><gray>az elfogadáshoz és visszatéréshez.</gray>"
+      click-to-filter-enable: "<yellow>Kattintson </yellow><gray>a szűrő engedélyezéséhez.</gray>"
+      click-to-filter-disable: "<yellow>Kattintson </yellow><gray>a szűrő letiltásához.</gray>"
+      click-to-activate: "<yellow>Kattintson </yellow><gray>az aktiváláshoz.</gray>"
+      click-to-deactivate: "<yellow>Kattintson </yellow><gray>a deaktiváláshoz.</gray>"
+      click-gold-to-purchase: |-
+        <yellow>Kattintson </yellow><gray>az arany blokkon
+        </gray><gray>a vásárláshoz.</gray>
+      click-to-purchase: "<yellow>Kattintson </yellow><gray>a vásárláshoz.</gray>"
+      click-to-return: "<yellow>Kattintson </yellow><gray>a visszatéréshez.</gray>"
+      click-to-quit: "<yellow>Kattintson </yellow><gray>a kilépéshez.</gray>"
+      click-to-wipe: "<yellow>Kattintson </yellow><gray>a törléshez.</gray>"
+      click-to-open: "<yellow>Kattintson </yellow><gray>a megnyitáshoz.</gray>"
+      click-to-export: "<yellow>Kattintson </yellow><gray>az exportálás elindításához.</gray>"
+      click-to-change: "<yellow>Kattintson </yellow><gray>a módosításhoz.</gray>"
+      click-on-item: |-
+        <yellow>Kattintson </yellow><gray>az items a
+        </gray><gray>leltárból.</gray>
+      click-to-view: "<yellow>Kattintson </yellow><gray>a megtekintéshez.</gray>"
+      click-to-add: "<yellow>Kattintson </yellow><gray>a hozzáadáshoz.</gray>"
+      click-to-remove: "<yellow>Kattintson </yellow><gray>az eltávolításhoz.</gray>"
+      select-before: "<yellow>Válasszon </yellow><gray>a folytatás előtt.</gray>"
+      click-to-create: "<yellow>Kattintson </yellow><gray>a létrehozáshoz.</gray>"
+      right-click-to-select: "<yellow>Jobb kattintson </yellow><gray>a kiválasztáshoz.</gray>"
+      right-click-to-deselect: "<yellow>Jobb kattintson </yellow><gray>a kijelölés feloldásához.</gray>"
+      click-to-toggle: "<yellow>Kattintson </yellow><gray>az átváltáshoz.</gray>"
+      left-click-to-edit: "<yellow>Bal kattintson </yellow><gray>a szerkesztéshez.</gray>"
+      right-click-to-lock: "<yellow>Jobb kattintson </yellow><gray>a záráshoz.</gray>"
+      right-click-to-unlock: "<yellow>Jobb kattintson </yellow><gray>a feloldáshoz.</gray>"
+      click-to-perform: "<yellow>Kattintson </yellow><gray>a végrehajtáshoz.</gray>"
+      click-to-edit: "<yellow>Kattintson </yellow><gray>a szerkesztéshez.</gray>"
+      right-click-to-clear: "<yellow>Jobb kattintson </yellow><gray>a törléshez.</gray>"
+      # These tooltips are showed in user gui.
+      left-click-to-view: "<yellow>Bal kattintson </yellow><gray>a megtekintéshez.</gray>"
+      left-click-to-purchase: "<yellow>Bal kattintson </yellow><gray>a vásárláshoz.</gray>"
+      left-click-to-activate: "<yellow>Bal kattintson </yellow><gray>az aktiváláshoz.</gray>"
+      left-click-to-deactivate: "<yellow>Bal kattintson </yellow><gray>a deaktiváláshoz.</gray>"
+      right-click-to-view: "<yellow>Jobb kattintson </yellow><gray>a megtekintéshez.</gray>"
+      right-click-to-purchase: "<yellow>Jobb kattintson </yellow><gray>a vásárláshoz.</gray>"
+      right-click-to-activate: "<yellow>Jobb kattintson </yellow><gray>az aktiváláshoz.</gray>"
+      right-click-to-deactivate: "<yellow>Jobb kattintson </yellow><gray>a deaktiváláshoz.</gray>"
+      shift-click-to-view: "<yellow>Shift kattintson </yellow><gray>a megtekintéshez.</gray>"
+      shift-click-to-purchase: "<yellow>Shift kattintson </yellow><gray>a vásárláshoz.</gray>"
+      shift-click-to-activate: "<yellow>Shift kattintson </yellow><gray>az aktiváláshoz.</gray>"
+      shift-click-to-deactivate: "<yellow>Shift kattintson </yellow><gray>a deaktiváláshoz.</gray>"
+      shift-click-to-reset: "<yellow>Shift kattintson </yellow><gray>az alaphelyzetbe állításhoz.</gray>"
+      shift-left-click-to-set-height-range: "<yellow>Shift+Bal kattintson </yellow><gray>a magasság tartomány konfigurálásához.</gray>"
+    # This section contains translations for some different GUI descriptions.
+    descriptions:
+      # Generator lore message generator. All elements in generator lore is generated
+      # based on section below.
+      generator:
+        # Main lore element content. If you do not want to display treasures at all,
+        # just remove them from [treasures] section.
+        # [description] comes from each generator tier.
+        # Lore does not supports colour codes. Each object separate supports.
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
+        # Generates [blocks] section
+        blocks:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Blokkok:</bold></gray>"
+          # Each block and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.##]%</dark_gray>"
+        # Generates [treasures] section
+        treasures:
+          # First line in blocks section. Empty line will not be displayed.
+          title: "<gray><bold>Kincs:</bold></gray>"
+          # Each treasure and its value under title. Cannot be empty.
+          # Supports [number], [#.#], [#.##], [#.###], [#.####], [#.#####]
+          value: "<dark_gray>[material] - [#.####]%</dark_gray>"
+        # Generates [requirements] section
+        requirements:
+          # Allows to change order and content of requirements message.
+          description: |-
+            [biomes]
+            [level]
+            [missing-permissions]
+          # Generates [level] message.
+          level: "<red><bold>Szükséges szint: </bold></red><red>[number]</red>"
+          # Generates [missing-permission] message title.
+          permission-title: "<red><bold>Hiányzó engedélyek:</bold></red>"
+          # Generates [missing-permission] message values.
+          permission: "<red> -[permission]</red>"
+          # Generates [biomes] message title.
+          biome-title: "<gray><bold>Működik a következőn:</bold></gray>"
+          # Generates [biomes] message values.
+          biome: "<dark_gray>[biome]</dark_gray>"
+          # Generates [biomes] message for All Biomes.
+          any: "<gray><bold>Működik a </bold></gray><bold><yellow><italic>minden </italic></yellow></bold><gray><bold>biómban</bold></gray>"
+        # Generates [status] section
+        status:
+          # Message that is showed for Locked generators.
+          locked: "<red>Zárolva!</red>"
+          # Message that is showed for generators that is not deployed.
+          undeployed: "<red>Nincs telepítve!</red>"
+          # Message that is showed for Active generators.
+          active: "<dark_green>Aktív</dark_green>"
+          # Message that is showed for generators that required purchasing.
+          purchase-cost: "<yellow>Vásárlási költség: $[number]</yellow>"
+          # Message that is showed for generators that has activation cost.
+          activation-cost: "<yellow>Aktiválási költség: $[number]</yellow>"
+        # Generates [type] section
+        type:
+          title: "<gray><bold>Támogatja:</bold></gray>"
+          cobblestone: "<dark_gray>Kőtörmelékkő generátorok</dark_gray>"
+          stone: "<dark_gray>Kő generátorok</dark_gray>"
+          basalt: "<dark_gray>Bazalt generátorok</dark_gray>"
+          any: "<gray><bold>Támogatja a </bold></gray><bold><yellow><italic>minden </italic></yellow></bold><gray><bold>generátorokat</bold></gray>"
+        # Generates [height-range] section
+        height-range: "<gray>Magasságban működik: </gray><aqua>[min_height] </aqua><gray>hogy </gray><aqua>[max_height]</aqua>"
+      # String that displays required permission that must be set for user to set bundle.
+      bundle-permission: |-
+        <gray>Engedély, amelyet
+        </gray><gray>a játékosnak hozzá kell
+        </gray><gray>rendelni:
+        </gray><gray><italic>[gamemode].stone-generator.bundle.[id]</italic></gray>
+      # String that are before listing all generators assigned to bundle.
+      generators: "<gray>Csomag generátorai: </gray>"
+      # Each generator name in listing
+      generator-list: "<gray>- [generator]</gray>"
+      # Indicates that element is selected.
+      selected: "<yellow>Kiválasztva</yellow>"
+      # Used to refer to players island.
+      island-owner: "[player] szigete"
+      # Used to refer to spawn island.
+      spawn-island: "<yellow><bold>Spawn sziget</bold></yellow>"
+      # Used to refer to unknown player.
+      unknown: "ismeretlen"
+  # This section contains translations for different informative messages.
+  messages:
+    # Message that appears after loading generator in local cache.
+    generator-loaded: "<green>Generátor </green> '[generator]' <green> helyi gyorsítótárba töltve.</green>"
+    # Message that appears after loading bundle in local cache.
+    bundle-loaded: "<green>Csomag </green> '[bundle]' <green> helyi gyorsítótárba töltve.</green>"
+    # Message that appears after deactivating generator.
+    generator-deactivated: "<yellow>Generátor </yellow> '[generator]' <yellow>deaktiválva.</yellow>"
+    # Message that appears when trying to activate too many generators.
+    active-generators-reached: "<red>Túl sok generátor van aktiválva. Próbáljon meg néhányat deaktiválni az új aktiválása előtt.</red>"
+    # Message that appears when trying to unlock default or undeployed generator.
+    generator-cannot-be-unlocked: "<red>Generátor </red> '[generator]' <red>nincs feloldva.</red>"
+    # Message that appears when trying to activate locked generator.
+    generator-not-unlocked: "<red>Generátor </red> '[generator]' <red>nincs feloldva.</red>"
+    # Message that appears when purchasing the generator.
+    generator-not-purchased: "<red>Generátor </red> '[generator]' <red>nincs megvásárolva.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits: "<red>Nincs elég kredit a generátor aktiválásához. Az aktiváláshoz [number] kredit szükséges.</red>"
+    # Message that appears when trying to activate generator that have an activation cost, but player do not have enough credits.
+    no-credits-bank: "<red>A bank számlájának nincs elég kredite a generátor aktiválásához. Az aktiváláshoz [number] kredit szükséges.</red>"
+    # Message that appears when activating the generator.
+    generator-activated: "<yellow>Generátor </yellow> '[generator]' <yellow>aktiválva.</yellow>"
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "<red>Generátor </red> '[generator]' <red>elérte a generálási korlátját, és most [number] percig szüneteltethető.</red>"
+    # Message that appears when purchasing the generator.
+    generator-purchased: "<yellow>Generátor </yellow> '[generator]' <yellow>megvásárolva.</yellow>"
+    # Message that appears when trying to buy already purchased generator.
+    generator-already-purchased: "<red>Generátor </red> '[generator]' <red>már meg van vásárolva.</red>"
+    # Message that appears when trying to buy generator without required island level
+    island-level-not-reached: "<red>Generátor </red> '[generator]' <red>[number] sziget szintet igényel.</red>"
+    # Message that appears when trying to buy generator without required permissions
+    missing-permission: "<red>Generátor </red> '[generator]' <red>`[permission]` engedélyt igényel.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy: "<red>Nincs elég kredit a generátor vásárlásához. Ez a generátor [number] kreditbe kerül.</red>"
+    # Message that appears when trying to purchase generator that have an purchase cost, but player do not have enough credits.
+    no-credits-buy-bank: "<red>A bank számlájának nincs elég kredite. Ez a generátor [number] kreditbe kerül.</red>"
+    # Message that appears after importing a file.
+    import-count: "<yellow>[generator] új generátor és [bundle] új csomag importálva.</yellow>"
+    # Message that appears after clicking on download button in web library.
+    start-downloading: "<yellow>Könyvtár letöltésének megkezdése.</yellow>"
+  # This section contains translations for different error messages.
+  errors:
+    # Error message that is displayed when generator tier data is not find.
+    no-generator-data: "<red>Nem található érvényes generátor adat</red>"
+    # Error message that is displayed when island data is not found for island in management panel.
+    no-island-data: "<red>Sziget adat nem található.</red>"
+    # Error message that is displayed when bundle data is not find.
+    no-bundle-data: "<red>Nem található érvényes csomag adat</red>"
+    # Error message that is displayed when library does not have any data.
+    no-library-entries: "<red>Nem található könyvtár bejegyzés!</red>"
+    # Error message that is displayed when trying to load file that does not exists.
+    no-file: "<red>`[file]` fájl nem található. Az importálás nem hajtható végre.</red>"
+    # Error message that is displayed when loading file lead to a crash.
+    no-load: "<red>Nem lehet betölteni a `[file]` fájlt. Hiba az olvasás közben: [description].</red>"
+    # Error message that is displayed when trying to import generators in non-gamemode-world.
+    not-a-gamemode-world: "<red>'[world]' világ nem egy játékmód kiegészítő világ.</red>"
+    # Error message that is displayed when saving file with the same name
+    file-exist: "<red>A `[file]` fájl már létezik. Válasszon másik nevet.</red>"
+    # Error message that is displayed when trying to view generator that does not exist.
+    generator-tier-not-found: "<red>Generátor a(z) '[generator]' azonosítóval </red><red>nem található a(z) [gamemode] folyamatban.</red>"
+    # Error message that is displayed when user uses generator command in world without generators.
+    no-generators-in-world: "<red>Nincsenek rendelkezésre álló generátorok számodra a(z) [world] világban</red>"
+    # Error message that is displayed when addon failed to withdraw money.
+    could-not-remove-money: "<red>Valami hiba történt a pénz kivonásakor.</red>"
+    max-height-less-than-min: "<red>A maximális magasság ([MAX]) nem lehet kisebb, mint a minimális magasság ([MIN])!</red>"
+  # Conversations are chat input between server and user.
+  # They are used to get some information that requires more than clicking on icon.
+  conversations:
+    # List of strings that are valid for confirming input. (separated with ,)
+    confirm-string: "igaz, be, igen, megerősítés, i, érvényes, helyes"
+    # List of strings that are valid for denying input. (separated with ,)
+    deny-string: "hamis, ki, nem, tagadás, n, érvénytelen, helytelen"
+    # String that allows to cancel conversation. (can be only one)
+    cancel-string: "mégse"
+    # List of strings that allows to exit conversation. (separated with ,)
+    exit-string: "mégse, kilépés, befejezés"
+    # Message that is send to user when conversation is cancelled.
+    cancelled: "<red>Beszélgetés visszavonva!</red>"
+    # Prefix for messages that are send from server.
+    prefix: "<bold></bold><bold><gold>[BentoBox]: </gold></bold>"
+    # Error message that is showed if user input a value that is not a number.
+    numeric-only: "<red>A(z) [value] nem egy szám!</red>"
+    # Error message that is showed if user input a number that is smaller or larger that allowed.
+    not-valid-value: "<red>A(z) [value] szám nem érvényes. Nagyobbnak kell lennie, mint [min] és kisebbnek, mint [max]!</red>"
+    # Message that displays new description by each line.
+    new-description: "<green>Új leírás:</green>"
+    # Below here starts messages and questions created by GUI.
+    # Message that asks for search value input.
+    write-search: "<yellow>Kérjük, írjon egy keresési értéket. (írja a 'mégse'-t a kilépéshez)</yellow>"
+    # Message that appears after updating search value.
+    search-updated: "<green>Keresési érték frissítve.</green>"
+    # Message that appears when admin clicks on island data deletion button.
+    confirm-island-data-deletion: "<yellow>Erősítse meg, hogy az összes felhasználói adatot törölni szeretné az adatbázisból a(z) [gamemode] számára.</yellow>"
+    # Message that appears after successful user data removing.
+    user-data-removed: "<green>Siker, az összes felhasználói adat a(z) [gamemode] számára törlődött!</green>"
+    # Message that appears when admin clicks on generator data deletion button.
+    confirm-generator-data-deletion: "<yellow>Erősítse meg, hogy az összes generátor adatot törölni szeretné az adatbázisból a(z) [gamemode] számára.</yellow>"
+    # Message that appears after successful generator data removing.
+    generator-data-removed: "<green>Siker, az összes generátor adat a(z) [gamemode] számára törlődött!</green>"
+    # Message that appears after admin clicks on database exporting button.
+    exported-file-name: "<yellow>Kérjük, adjon meg egy fájlnevet az exportált adatbázis fájlhoz. (írja a 'mégse'-t a kilépéshez)</yellow>"
+    # Message that appears after successful database exporting to file.
+    database-export-completed: "<green>Siker, az adatbázis exportálása a(z) [world] számára befejeződött. A fájl a kiegészítő könyvtárában jött létre.</green>"
+    # Message that appears if input file name is already taken.
+    file-name-exist: "<red>A '[id]' nevű fájl létezik. Nem lehet felülírni.</red>"
+    # Message that appears after admin clicks on editing bundle name button.
+    write-name: "<yellow>Kérjük, adjon meg egy új nevet a chatben.</yellow>"
+    # Message that appears after successful name change.
+    name-changed: "<green>Siker, a név frissítve lett.</green>"
+    # Message that appears after clicking
+    write-description: "<yellow>Kérjük, adjon meg egy új leírást a chatben, és írja a 'quit'-et egy saját soron a befejezéshez.</yellow>"
+    # Message that appears after successful description change.
+    description-changed: "<green>Siker, a leírás frissítve lett.</green>"
+    # Message that appears after successful bundle or generator creation.
+    new-object-created: "<green>Siker, új objektum jött létre a(z) [world] világban.</green>"
+    # Message that appears if object already exist in the database.
+    object-already-exists: "<red>Az objektum `[id]` azonosítóval már definiálva van a játékmódban. Válasszon másik azonosítót.</red>"
+    # Message that appears after admin tries to delete selected objects.
+    confirm-deletion: "<yellow>Erősítse meg, hogy [number] objektumot szeretne törölni: ([value])</yellow>"
+    # Message that appears after successful data removing.
+    data-removed: "<green>Siker, az adat törlődött!</green>"
+    # Message that appears when admin clicks on number editing button.
+    input-number: "<yellow>Kérjük, adjon meg egy számot a chatben.</yellow>"
+    # Message that appears when admin clicks on permission editing button.
+    write-permissions: "<yellow>Kérjük, adja meg a szükséges engedélyeket, soronként a chatben, és írja a 'quit'-et egy saját soron a befejezéshez.</yellow>"
+    # Message that appears after successful permission updating.
+    permissions-changed: "<green>Siker, a generátor engedélyei frissültek.</green>"
+    # Message that appears after importing library data into database.
+    confirm-data-replacement: "<yellow>Kérjük, erősítse meg, hogy az aktuális generátorait az új generátorokkal szeretné helyettesíteni.</yellow>"
+    # Message that appears after successful data importing
+    new-generators-imported: "<green>Siker, új generátorok a(z) [gamemode] számára importálva.</green>"
+    # Message that appears after unlocking a new generator.
+    click-text-to-purchase: "<yellow>Feloldottad </yellow> [generator]<yellow>! Kattints ide, hogy most vásárolhasd meg [number] értékért.</yellow>"
+    click-text-to-activate-vault: "<yellow>Feloldottad </yellow> [generator]<yellow>! Kattints ide, hogy most aktiválhasd [number] értékért.</yellow>"
+    click-text-to-activate: "<yellow>Feloldottad </yellow> [generator]<yellow>! Kattints ide, hogy most aktiválhasd.</yellow>"
+    input-min-height: "<white>Adja meg az anyag minimális magasságát (-64 és 320 között):</white>"
+    input-max-height: "<white>Adja meg az anyag maximális magasságát (-64 és 320 között):</white>"
+  # Showcase for manual material translation
+  materials:
+    # Names should be lowercase.
+    cobblestone: "Kőtörmelékkő"
+    # Also supports descriptions.
+    stone:
+      name: "Kő"
+      description: ""
+  # Showcase for manual biome translation
+  biomes:
+    # Names should be lowercase.
+    plains: "Síkság"
+    # Also supports descriptions.
+    flower_forest:
+      name: "Virágos erdő"
+      description: ""
+# Protection flags that are used in current addon.
+protection:
+  flags:
+    # This flag allows to enable or disable magic cobblestone generators on this island.
+    MAGIC_COBBLESTONE_GENERATOR:
+      name: "Magic generátor"
+      description: |-
+        <green>Kapcsolja be vagy ki az
+        </green><green>összes Magic generátort
+        </green><green>az egész szigeten</green>
+      hint: "<yellow>A Magic generátorok a sziget beállításaiban letiltva vannak</yellow>"
+    # This flag allows to switch which island member group can activate and deactivate generators.
+    MAGIC_COBBLESTONE_GENERATOR_PERMISSION:
+      name: "Magic generátor engedélyek"
+      description: |-
+        <green>Válassza ki, hogy ki aktiválhat
+        </green><green>és deaktiválhat generátorait</green>
