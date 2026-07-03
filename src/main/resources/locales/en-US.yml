@@ -954,6 +954,8 @@ stone-generator:
     no-credits-bank: "&c Your bank account has not enough credits to activate generator. Activation requires [number] credits."
     # Message that appears when activating the generator.
     generator-activated: "&e Generator &r '[generator]' &r&e is activated."
+    # Message that appears when a generator reaches its exhaustion limit and goes on cooldown.
+    generator-exhausted: "&c Generator &r '[generator]' &r&c has reached its generation limit and is now on cooldown for [number] more minute(s)."
     # Message that appears when purchasing the generator.
     generator-purchased: "&e Generator &r '[generator]' &r&e is purchased."
     # Message that appears when trying to buy already purchased generator.

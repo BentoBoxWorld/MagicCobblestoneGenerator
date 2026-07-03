@@ -21,6 +21,7 @@ import world.bentobox.magiccobblestonegenerator.commands.admin.GeneratorAdminCom
 import world.bentobox.magiccobblestonegenerator.commands.player.GeneratorPlayerCommand;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorExhaustionData;
 import world.bentobox.magiccobblestonegenerator.listeners.IslandLevelListener;
 import world.bentobox.magiccobblestonegenerator.listeners.JoinLeaveListener;
 import world.bentobox.magiccobblestonegenerator.listeners.VanillaGeneratorListener;
@@ -290,6 +291,81 @@ public class StoneGeneratorAddon extends Addon
                 {
                     return "";
                 }
+            });
+
+        // Placeholder returns exhaustion status (generated count / limit) for every active generator,
+        // separated with ','. F.e. "Cobblestone Generator:120/1000,Stone Generator:1000/1000"
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_generator_exhaustion_status",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object == null || object.getActiveGeneratorList().isEmpty())
+                {
+                    return "";
+                }
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                object.getActiveGeneratorList().stream().
+                    map(this.stoneGeneratorManager::getGeneratorByID).
+                    filter(Objects::nonNull).
+                    forEach(generatorTier -> {
+                        long limit = generatorTier.getExhaustionLimit() >= 0 ?
+                            generatorTier.getExhaustionLimit() :
+                            this.settings.getGeneratorExhaustionLimit();
+
+                        GeneratorExhaustionData exhaustionData =
+                            object.getExhaustionData().get(generatorTier.getUniqueId());
+
+                        long generatedCount = exhaustionData != null ? exhaustionData.getGeneratedCount() : 0;
+
+                        stringBuilder.append(generatorTier.getFriendlyName()).
+                            append(':').
+                            append(generatedCount).
+                            append('/').
+                            append(limit <= 0 ? "∞" : String.valueOf(limit)).
+                            append(',');
+                    });
+
+                if (stringBuilder.length() > 0)
+                {
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                }
+
+                return stringBuilder.toString();
+            });
+
+        // Placeholder returns names of active generators that are currently on cooldown, separated with ','
+        this.getPlugin().getPlaceholdersManager().registerPlaceholder(addon,
+            addonName + "_exhausted_generator_names",
+            user -> {
+                GeneratorDataObject object = this.getAddonManager().getGeneratorData(user, world);
+
+                if (object == null || object.getActiveGeneratorList().isEmpty())
+                {
+                    return "";
+                }
+
+                long now = System.currentTimeMillis();
+                StringBuilder stringBuilder = new StringBuilder();
+
+                object.getActiveGeneratorList().stream().
+                    map(this.stoneGeneratorManager::getGeneratorByID).
+                    filter(Objects::nonNull).
+                    filter(generatorTier -> {
+                        GeneratorExhaustionData exhaustionData =
+                            object.getExhaustionData().get(generatorTier.getUniqueId());
+                        return exhaustionData != null && exhaustionData.getCooldownUntil() > now;
+                    }).
+                    forEach(generatorTier -> stringBuilder.append(generatorTier.getFriendlyName()).append(","));
+
+                if (stringBuilder.length() > 0)
+                {
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                }
+
+                return stringBuilder.toString();
             });
     }
 
