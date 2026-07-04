@@ -170,7 +170,7 @@ public abstract class GeneratorListener implements Listener
             return null;
         }
 
-        return this.addon.getGenerator().processBlockReplacement(generatorTier, location);
+        return this.addon.getGenerator().processBlockReplacement(generatorTier, location, island);
     }
 
 
@@ -194,7 +194,7 @@ public abstract class GeneratorListener implements Listener
             return null;
         }
 
-        return this.addon.getGenerator().processBlockReplacement(generatorTier, location);
+        return this.addon.getGenerator().processBlockReplacement(generatorTier, location, island);
     }
 
 
@@ -218,7 +218,7 @@ public abstract class GeneratorListener implements Listener
             return null;
         }
 
-        return this.addon.getGenerator().processBlockReplacement(generatorTier, location);
+        return this.addon.getGenerator().processBlockReplacement(generatorTier, location, island);
     }
 
 
