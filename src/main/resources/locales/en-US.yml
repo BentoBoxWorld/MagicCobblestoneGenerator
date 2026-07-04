@@ -45,6 +45,7 @@ stone-generator:
       admin-panel: "<black><bold>Admin Panel</bold></black>"
       # Title for GUI that allows to select biomes for generator.
       select-biome: "<black><bold>Select Biomes</bold></black>"
+      select-generator: "<black><bold>Select Generators</bold></black>"
       # Title for GUI that allows to select a block generator.
       select-block: "<black><bold>Select Block</bold></black>"
       # Title for GUI that allows to select a bundle for island.
@@ -128,6 +129,15 @@ stone-generator:
           </gray><gray>this generator.</gray>
         list: "<aqua>Required Permissions:</aqua>"
         value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- none</aqua>"
+      required_generators:
+        name: "<white><bold>Required Generators</bold></white>"
+        description: |-
+          <gray>Generators that must be
+          </gray><gray>unlocked before this
+          </gray><gray>generator becomes available.</gray>
+        list: "<aqua>Required Generators:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
         none: "<aqua>- none</aqua>"
       purchase_cost:
         name: "<white><bold>Purchase Cost</bold></white>"
@@ -682,6 +692,13 @@ stone-generator:
           <gray>Accepts selected biomes
           </gray><gray>and returns.</gray>
         selected-biomes: "<gray>Selected Biomes:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      accept_generator:
+        name: "<white><bold>Accept the generators</bold></white>"
+        description: |-
+          <gray>Accepts selected generators
+          </gray><gray>and returns.</gray>
+        selected-generators: "<gray>Selected Generators:</gray>"
         list-value: "<gray>- [value]</gray>"
       biome-icon:
         name: "<white><bold>[biome]</bold></white>"

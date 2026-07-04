@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -29,6 +30,7 @@ import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.utils.GeneratorTypeSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.MultiBiomeSelector;
+import world.bentobox.magiccobblestonegenerator.panels.utils.MultiGeneratorSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Pair;
@@ -180,6 +182,9 @@ public class GeneratorEditPanel extends CommonPanel
 
             // Display only permissions if they are required.
             panelBuilder.item(23, this.createButton(Button.REQUIRED_PERMISSIONS, locale));
+
+            // Prerequisite generators that must be unlocked first.
+            panelBuilder.item(31, this.createButton(Button.REQUIRED_GENERATORS, locale));
 
             if (this.addon.isVaultProvided())
             {
@@ -629,6 +634,65 @@ public class GeneratorEditPanel extends CommonPanel
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
 
                 if (!this.generatorTier.getRequiredPermissions().isEmpty())
+                {
+                    description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                }
+            }
+            case REQUIRED_GENERATORS -> {
+                itemStack = new ItemStack(Material.CHISELED_BOOKSHELF);
+
+                description.add(this.user.getTranslation(reference + ".list"));
+
+                if (this.generatorTier.getRequiredGeneratorTiers().isEmpty())
+                {
+                    description.add(this.user.getTranslation(reference + ".none"));
+                }
+                else
+                {
+                    this.generatorTier.getRequiredGeneratorTiers().stream().
+                        map(this.manager::getGeneratorByID).
+                        filter(Objects::nonNull).
+                        map(GeneratorTierObject::getFriendlyName).
+                        sorted().
+                        forEach(generatorName -> description.add(this.user.getTranslation(reference + ".value",
+                            Constants.GENERATOR, generatorName)));
+                }
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    if (!this.generatorTier.getRequiredGeneratorTiers().isEmpty() && clickType.isShiftClick())
+                    {
+                        // Reset to the empty value.
+                        this.generatorTier.setRequiredGeneratorTiers(new HashSet<>());
+                        this.save();
+                        this.build();
+                    }
+                    else
+                    {
+                        MultiGeneratorSelector.open(user,
+                            this.addon,
+                            this.world,
+                            this.generatorTier,
+                            this.generatorTier.getRequiredGeneratorTiers(),
+                            value ->
+                            {
+                                if (value != null)
+                                {
+                                    this.generatorTier.setRequiredGeneratorTiers(new HashSet<>(value));
+                                    this.save();
+                                }
+
+                                this.build();
+                            });
+                    }
+
+                    return true;
+                };
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+
+                if (!this.generatorTier.getRequiredGeneratorTiers().isEmpty())
                 {
                     description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
                 }
@@ -1815,6 +1879,10 @@ public class GeneratorEditPanel extends CommonPanel
          * Holds Name type that allows to interact with generator required permissions.
          */
         REQUIRED_PERMISSIONS,
+        /**
+         * Holds Name type that allows to interact with generator prerequisite generators.
+         */
+        REQUIRED_GENERATORS,
         /**
          * Holds Name type that allows to interact with generator purchase cost.
          */
