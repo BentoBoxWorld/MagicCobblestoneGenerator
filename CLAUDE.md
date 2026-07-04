@@ -33,12 +33,13 @@ mvn verify
 
 ### Key Classes
 
-- **`StoneGeneratorAddon`** — entry point; registers commands, listeners, flags, placeholders, hooks into GameMode addons
+- **`StoneGeneratorAddon`** — main addon class; registers commands, listeners, flags, placeholders, hooks into GameMode addons
+- **`StoneGeneratorPladdon`** — Paper plugin loader (`extends Pladdon`) that instantiates the addon
 - **`StoneGeneratorManager`** — central singleton; all CRUD for generators/islands, economy integration, activation logic
 - **`MagicGenerator`** — performs actual block replacement (weighted random from active tiers)
 - **`Settings`** (`config/Settings.java`) — `@ConfigObject`-annotated YAML config
 
-### Data Model (3 database objects)
+### Data Model (3 `@Table` database objects)
 
 | Class | Purpose |
 |---|---|
@@ -46,20 +47,24 @@ mvn verify
 | `GeneratorDataObject` | Per-island state: which generators are active/unlocked/purchased |
 | `GeneratorBundleObject` | Named collections of generator tiers assigned to islands |
 
+`database/objects/` also holds `GeneratorExhaustionData` — a plain (non-`@Table`) data holder, not a persisted database object.
+
 ### Package Map
 
 ```
 commands/admin/     — Admin CLI commands
 commands/player/    — Player CLI commands
+config/             — Settings (@ConfigObject YAML config)
 panels/admin/       — Admin GUI panels (PanelUtils-based)
 panels/player/      — Player GUI panels
 listeners/          — Event listeners (block form, join/leave, island level)
 managers/           — StoneGeneratorManager, StoneGeneratorImportManager
 tasks/              — MagicGenerator (block replacement logic)
-database/objects/   — GeneratorTierObject, GeneratorDataObject, GeneratorBundleObject
-database/adapters/  — Custom DB adapters
+database/objects/   — GeneratorTierObject, GeneratorDataObject, GeneratorBundleObject, GeneratorExhaustionData
+database/adapters/  — Custom DB adapters (GeneratorTierAdapter)
 events/             — GeneratorActivationEvent, GeneratorUnlockEvent, GeneratorBuyEvent
 request/            — API request handlers for cross-addon data queries
+utils/              — Constants, Pair, Utils, Why helpers
 web/                — WebManager for online generator library
 ```
 
