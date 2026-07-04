@@ -872,6 +872,47 @@ public class StoneGeneratorManager {
 		.
 		// Now process each generator.
 		forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+
+	// Revoke permission based generators that the current owner no longer qualifies for.
+	// This handles ownership transfer to a player without the required permission (#133).
+	this.revokePermissionGenerators(island, dataObject, owner);
+    }
+
+    /**
+     * This method revokes access to permission based generators that the current island owner no longer holds the
+     * required permissions for. Only the unlocked and active status is revoked; any purchase record is preserved so the
+     * generator becomes available again if the permission is regained.
+     * <p>
+     * Permissions can only be checked reliably for an online owner, so nothing is revoked while the owner is offline.
+     *
+     * @param island     Island which is targeted for the check.
+     * @param dataObject Data object that stores island generators.
+     * @param owner      The island owner, or null (e.g. spawn islands).
+     */
+    private void revokePermissionGenerators(@NotNull Island island, @NotNull GeneratorDataObject dataObject,
+	    @Nullable User owner) {
+	if (owner == null || !owner.isOnline()) {
+	    // Cannot reliably check permissions of an offline owner. Do not revoke anything.
+	    return;
+	}
+
+	List<GeneratorTierObject> revokeList = this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream()
+		// Only permission gated generators can be revoked this way.
+		.filter(generator -> !generator.getRequiredPermissions().isEmpty())
+		// That are currently unlocked.
+		.filter(generator -> dataObject.getUnlockedTiers().contains(generator.getUniqueId()))
+		// But whose required permissions the current owner does not have.
+		.filter(generator -> !Utils.matchAllPermissions(owner, generator.getRequiredPermissions()))
+		.collect(Collectors.toList());
+
+	if (!revokeList.isEmpty()) {
+	    revokeList.forEach(generator -> {
+		dataObject.getUnlockedTiers().remove(generator.getUniqueId());
+		dataObject.getActiveGeneratorList().remove(generator.getUniqueId());
+	    });
+
+	    this.saveGeneratorData(dataObject);
+	}
     }
 
     /**
