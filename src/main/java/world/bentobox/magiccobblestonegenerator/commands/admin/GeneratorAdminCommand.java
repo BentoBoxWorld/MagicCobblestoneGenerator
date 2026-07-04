@@ -94,6 +94,54 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 
     // ---------------------------------------------------------------------
+    // Section: Shared helpers
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * Shared tab-completer for subcommands that take a single player name argument. Online player names are only
+     * suggested once at least one character has been typed.
+     *
+     * @param user the user completing the command.
+     * @param args the current command arguments.
+     * @return the list of matching online player names.
+     */
+    private static Optional<List<String>> playerTabComplete(User user, List<String> args)
+    {
+        if (args.isEmpty())
+        {
+            // Don't show every player on the server. Require at least the first letter
+            return Optional.empty();
+        }
+
+        return Optional.of(Util.tabLimit(
+            new ArrayList<>(Util.getOnlinePlayerList(user)),
+            args.get(args.size() - 1)));
+    }
+
+
+    /**
+     * Resolves the target player UUID from the given name and messages the user if it cannot be resolved.
+     *
+     * @param user the user running the command.
+     * @param name the player name argument.
+     * @return the resolved UUID, or null if it could not be resolved.
+     */
+    private static UUID resolveTargetUUID(User user, String name)
+    {
+        UUID targetUUID = Util.getUUID(name);
+
+        if (targetUUID == null)
+        {
+            Utils.sendMessage(user,
+                user.getTranslation("general.errors.unknown-player", TextVariables.NAME, name));
+        }
+
+        return targetUUID;
+    }
+
+
+    // ---------------------------------------------------------------------
     // Section: Subcommadns
     // ---------------------------------------------------------------------
 
@@ -221,13 +269,10 @@ public class GeneratorAdminCommand extends CompositeCommand
             }
 
             // Get target
-            UUID targetUUID = Util.getUUID(args.get(0));
+            UUID targetUUID = resolveTargetUUID(user, args.get(0));
 
             if (targetUUID == null)
             {
-                Utils.sendMessage(user,
-                    user.getTranslation("general.errors.unknown-player",
-                        TextVariables.NAME, args.get(0)));
                 return false;
             }
 
@@ -296,17 +341,7 @@ public class GeneratorAdminCommand extends CompositeCommand
         @Override
         public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
         {
-            if (args.isEmpty())
-            {
-                // Don't show every player on the server. Require at least the first letter
-                return Optional.empty();
-            }
-            else
-            {
-                return Optional.of(Util.tabLimit(
-                    new ArrayList<>(Util.getOnlinePlayerList(user)),
-                    args.get(args.size() - 1)));
-            }
+            return playerTabComplete(user, args);
         }
     }
 
@@ -351,13 +386,10 @@ public class GeneratorAdminCommand extends CompositeCommand
             }
 
             // Get target
-            UUID targetUUID = Util.getUUID(args.get(0));
+            UUID targetUUID = resolveTargetUUID(user, args.get(0));
 
             if (targetUUID == null)
             {
-                Utils.sendMessage(user,
-                    user.getTranslation("general.errors.unknown-player",
-                        TextVariables.NAME, args.get(0)));
                 return false;
             }
 
@@ -369,7 +401,9 @@ public class GeneratorAdminCommand extends CompositeCommand
                 return false;
             }
 
-            final String targetName = this.getPlayers().getName(targetUUID);
+            // Fall back to the typed argument if the server cannot resolve a name for the UUID.
+            final String resolvedName = this.getPlayers().getName(targetUUID);
+            final String targetName = resolvedName == null || resolvedName.isEmpty() ? args.get(0) : resolvedName;
 
             this.askConfirmation(user,
                 user.getTranslation(Constants.CONVERSATIONS + "prefix") +
@@ -390,17 +424,7 @@ public class GeneratorAdminCommand extends CompositeCommand
         @Override
         public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
         {
-            if (args.isEmpty())
-            {
-                // Don't show every player on the server. Require at least the first letter
-                return Optional.empty();
-            }
-            else
-            {
-                return Optional.of(Util.tabLimit(
-                    new ArrayList<>(Util.getOnlinePlayerList(user)),
-                    args.get(args.size() - 1)));
-            }
+            return playerTabComplete(user, args);
         }
     }
 }

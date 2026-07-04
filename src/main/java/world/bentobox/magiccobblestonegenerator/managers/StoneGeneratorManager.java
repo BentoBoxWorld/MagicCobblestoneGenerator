@@ -1456,8 +1456,14 @@ public class StoneGeneratorManager {
      */
     public void resetIslandData(@NotNull Island island) {
 	this.wipeGeneratorData(island.getUniqueId());
-	// Recreate a fresh, default data object so the island keeps working immediately.
-	this.validateIslandData(island);
+	// Recreate a fresh, default data object so the island keeps working immediately. addIslandData works even
+	// for ownerless islands (e.g. spawn), unlike validateIslandData which returns early when there is no owner.
+	this.addIslandData(island);
+
+	if (island.getOwner() != null) {
+	    // For owned islands, also re-apply owner bundles/limits and re-evaluate unlocks.
+	    this.validateIslandData(island);
+	}
     }
 
     // ---------------------------------------------------------------------
