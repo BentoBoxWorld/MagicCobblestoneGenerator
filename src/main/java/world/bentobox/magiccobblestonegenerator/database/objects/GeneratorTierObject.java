@@ -200,6 +200,29 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
+     * Method GeneratorTierObject#getRequiredGeneratorTiers returns the unique ids of generator tiers that must be
+     * unlocked before this generator becomes available.
+     *
+     * @return the requiredGeneratorTiers (type Set&lt;String&gt;) of this object.
+     */
+    public Set<String> getRequiredGeneratorTiers()
+    {
+        return requiredGeneratorTiers;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setRequiredGeneratorTiers sets new value for the requiredGeneratorTiers of this object.
+     *
+     * @param requiredGeneratorTiers new value for this object.
+     */
+    public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
+    {
+        this.requiredGeneratorTiers = requiredGeneratorTiers;
+    }
+
+
+    /**
      * Method GeneratorTierObject#getGeneratorTierCost returns the generatorTierCost of this object.
      *
      * @return the generatorTierCost (type double) of this object.
@@ -518,6 +541,7 @@ public class GeneratorTierObject implements DataObject
         clone.setRequiredMinIslandLevel(this.requiredMinIslandLevel);
         clone.setRequiredBiomes(new HashSet<>(this.requiredBiomes));
         clone.setRequiredPermissions(new HashSet<>(this.requiredPermissions));
+        clone.setRequiredGeneratorTiers(new HashSet<>(this.requiredGeneratorTiers));
         clone.setGeneratorTierCost(this.generatorTierCost);
         clone.setActivationCost(this.activationCost);
         clone.setDeployed(this.deployed);
@@ -663,6 +687,12 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private Set<String> requiredPermissions = Collections.emptySet();
+
+    /**
+     * Unique ids of generator tiers that must be unlocked before this generator becomes available.
+     */
+    @Expose
+    private Set<String> requiredGeneratorTiers = Collections.emptySet();
 
     /**
      * Cost to do buy current generator.

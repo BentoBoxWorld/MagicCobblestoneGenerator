@@ -430,6 +430,77 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         assertTrue(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
     }
 
+    /**
+     * Builds a deployed, non-default cobblestone generator tier mock with no permission/level requirements, for
+     * prerequisite-generator tests.
+     */
+    private GeneratorTierObject prerequisiteTier(String id, String name, int priority) {
+        GeneratorTierObject t = mock(GeneratorTierObject.class);
+        when(t.getUniqueId()).thenReturn(id);
+        when(t.getFriendlyName()).thenReturn(name);
+        when(t.getPriority()).thenReturn(priority);
+        when(t.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(t.isDeployed()).thenReturn(true);
+        when(t.isDefaultGenerator()).thenReturn(false);
+        when(t.getRequiredMinIslandLevel()).thenReturn(0L);
+        when(t.getRequiredPermissions()).thenReturn(java.util.Collections.emptySet());
+        when(t.getRequiredGeneratorTiers()).thenReturn(java.util.Collections.emptySet());
+        return t;
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusUnlocksDependentWhenPrerequisiteUnlocked() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-88");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        GeneratorTierObject gen1 = prerequisiteTier("magiccobblegenerator_gen1", "Gen1", 10);
+        GeneratorTierObject gen2 = prerequisiteTier("magiccobblegenerator_gen2", "Gen2", 20);
+        when(gen2.getRequiredGeneratorTiers())
+                .thenReturn(java.util.Set.of("magiccobblegenerator_gen1"));
+        sgm.loadGeneratorTier(gen1, true, null);
+        sgm.loadGeneratorTier(gen2, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        // Gen1 has no requirements, so it unlocks; Gen2's prerequisite is then satisfied in the same pass.
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_gen1"));
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_gen2"));
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusKeepsDependentLockedWhenPrerequisiteLocked() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-88");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        // Gen1 requires a permission the (offline) owner does not have, so it cannot unlock.
+        GeneratorTierObject gen1 = prerequisiteTier("magiccobblegenerator_gen1", "Gen1", 10);
+        when(gen1.getRequiredPermissions())
+                .thenReturn(java.util.Set.of("magiccobblegenerator.gen1"));
+        GeneratorTierObject gen2 = prerequisiteTier("magiccobblegenerator_gen2", "Gen2", 20);
+        when(gen2.getRequiredGeneratorTiers())
+                .thenReturn(java.util.Set.of("magiccobblegenerator_gen1"));
+        sgm.loadGeneratorTier(gen1, true, null);
+        sgm.loadGeneratorTier(gen2, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        // Gen1 stays locked, so Gen2's prerequisite is unmet and it stays locked too.
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_gen1"));
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_gen2"));
+    }
+
     @Test
     void testGetGeneratorDataIsland() {
         assertNotNull(sgm.getGeneratorData(island));

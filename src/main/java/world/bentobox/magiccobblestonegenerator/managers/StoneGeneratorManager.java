@@ -872,6 +872,11 @@ public class StoneGeneratorManager {
 		filter(generator -> generator.getRequiredPermissions().isEmpty() || owner != null && owner.isOnline()
 			&& Utils.matchAllPermissions(owner, generator.getRequiredPermissions()))
 		.
+		// Filter out generators whose prerequisite generators are not yet unlocked (#88).
+		// Generators are streamed in priority order, so a prerequisite with a lower priority
+		// is unlocked earlier in this same pass and is visible here.
+		filter(generator -> dataObject.getUnlockedTiers().containsAll(generator.getRequiredGeneratorTiers()))
+		.
 		// Now process each generator.
 		forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
 

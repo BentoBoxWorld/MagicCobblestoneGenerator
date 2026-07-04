@@ -577,10 +577,30 @@ public abstract class CommonPanel
             biomes.append(this.user.getTranslationOrNothing(reference + "any"));
         }
 
+        StringBuilder requiredGenerators = new StringBuilder();
+
+        if (!generator.getRequiredGeneratorTiers().isEmpty() && !isUnlocked)
+        {
+            requiredGenerators.append(this.user.getTranslationOrNothing(reference + "required-generators-title"));
+
+            generator.getRequiredGeneratorTiers().stream().
+                map(this.manager::getGeneratorByID).
+                filter(Objects::nonNull).
+                map(GeneratorTierObject::getFriendlyName).
+                sorted().
+                forEach(name ->
+                {
+                    requiredGenerators.append("\n");
+                    requiredGenerators.append(this.user.getTranslationOrNothing(reference + "required-generator",
+                        Constants.GENERATOR, name));
+                });
+        }
+
         return this.user.getTranslationOrNothing(reference + "description",
             "[biomes]", biomes.toString(),
             "[level]", level,
-            "[missing-permissions]", permissions.toString());
+            "[missing-permissions]", permissions.toString(),
+            "[required-generators]", requiredGenerators.toString());
     }
 
 

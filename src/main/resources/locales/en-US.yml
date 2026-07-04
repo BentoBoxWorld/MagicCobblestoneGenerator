@@ -890,9 +890,14 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Required Level: </bold></red><red>[number]</red>"
+          # Generates [required-generators] message title.
+          required-generators-title: "<red><bold>Required Generators:</bold></red>"
+          # Generates [required-generators] message values.
+          required-generator: "<red> -[generator]</red>"
           # Generates [missing-permission] message title.
           permission-title: "<red><bold>Missing Permissions:</bold></red>"
           # Generates [missing-permission] message values.
