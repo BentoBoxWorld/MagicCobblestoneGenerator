@@ -459,7 +459,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                     if (!this.generatorTier.getDescription().isEmpty())
                     {
-                        description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                        description.add(this.user.getTranslation(TIP_SHIFT_CLICK_TO_RESET));
                     }
 
                     return true;
@@ -587,7 +587,7 @@ public class GeneratorEditPanel extends CommonPanel
             case REQUIRED_PERMISSIONS -> {
                 itemStack = new ItemStack(Material.BOOK);
 
-                description.add(this.user.getTranslation(reference + ".list"));
+                description.add(this.user.getTranslation(reference + LIST_SUFFIX));
                 this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
                 description.add(this.user.getTranslation(reference + ".value",
                     Constants.PERMISSION, permission)));
@@ -634,13 +634,13 @@ public class GeneratorEditPanel extends CommonPanel
 
                 if (!this.generatorTier.getRequiredPermissions().isEmpty())
                 {
-                    description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                    description.add(this.user.getTranslation(TIP_SHIFT_CLICK_TO_RESET));
                 }
             }
             case REQUIRED_GENERATORS -> {
                 itemStack = new ItemStack(Material.CHISELED_BOOKSHELF);
 
-                description.add(this.user.getTranslation(reference + ".list"));
+                description.add(this.user.getTranslation(reference + LIST_SUFFIX));
 
                 if (this.generatorTier.getRequiredGeneratorTiers().isEmpty())
                 {
@@ -696,7 +696,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                 if (!this.generatorTier.getRequiredGeneratorTiers().isEmpty())
                 {
-                    description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                    description.add(this.user.getTranslation(TIP_SHIFT_CLICK_TO_RESET));
                 }
             }
             case PURCHASE_COST -> {
@@ -816,7 +816,7 @@ public class GeneratorEditPanel extends CommonPanel
             case BIOMES -> {
                 itemStack = new ItemStack(Material.FILLED_MAP);
 
-                description.add(this.user.getTranslation(reference + ".list"));
+                description.add(this.user.getTranslation(reference + LIST_SUFFIX));
 
                 if (this.generatorTier.getRequiredBiomes().isEmpty())
                 {
@@ -1931,6 +1931,16 @@ public class GeneratorEditPanel extends CommonPanel
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
+
+    /**
+     * Reference for the "shift-click to reset" tip, reused by several requirement buttons.
+     */
+    private static final String TIP_SHIFT_CLICK_TO_RESET = Constants.TIPS + "shift-click-to-reset";
+
+    /**
+     * Suffix for the requirement list translation key, reused by several requirement buttons.
+     */
+    private static final String LIST_SUFFIX = ".list";
 
     /**
      * This variable stores generator tier that is viewed.

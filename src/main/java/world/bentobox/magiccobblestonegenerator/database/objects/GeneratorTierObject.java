@@ -207,6 +207,13 @@ public class GeneratorTierObject implements DataObject
      */
     public Set<String> getRequiredGeneratorTiers()
     {
+        if (this.requiredGeneratorTiers == null)
+        {
+            // Guard against a null value from deserialization of user-edited JSON, so callers such as
+            // clone() and containsAll() never hit a NullPointerException.
+            this.requiredGeneratorTiers = new HashSet<>();
+        }
+
         return requiredGeneratorTiers;
     }
 
@@ -216,10 +223,10 @@ public class GeneratorTierObject implements DataObject
      *
      * @param requiredGeneratorTiers new value for this object.
      */
-public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
-{
-    this.requiredGeneratorTiers = requiredGeneratorTiers == null ? Collections.emptySet() : requiredGeneratorTiers;
-}
+    public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
+    {
+        this.requiredGeneratorTiers = requiredGeneratorTiers == null ? new HashSet<>() : requiredGeneratorTiers;
+    }
 
 
     /**
@@ -541,7 +548,7 @@ public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
         clone.setRequiredMinIslandLevel(this.requiredMinIslandLevel);
         clone.setRequiredBiomes(new HashSet<>(this.requiredBiomes));
         clone.setRequiredPermissions(new HashSet<>(this.requiredPermissions));
-        clone.setRequiredGeneratorTiers(new HashSet<>(this.requiredGeneratorTiers));
+        clone.setRequiredGeneratorTiers(new HashSet<>(this.getRequiredGeneratorTiers()));
         clone.setGeneratorTierCost(this.generatorTierCost);
         clone.setActivationCost(this.activationCost);
         clone.setDeployed(this.deployed);

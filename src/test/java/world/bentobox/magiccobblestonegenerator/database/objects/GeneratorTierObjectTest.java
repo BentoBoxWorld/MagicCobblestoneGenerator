@@ -30,6 +30,15 @@ class GeneratorTierObjectTest extends CommonTestSetup {
     }
 
     @Test
+    void testSetRequiredGeneratorTiersNullNormalizedToEmpty() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setRequiredGeneratorTiers(null);
+        assertTrue(tier.getRequiredGeneratorTiers().isEmpty());
+        // clone must not throw on a set that was normalized from null.
+        assertTrue(tier.clone().getRequiredGeneratorTiers().isEmpty());
+    }
+
+    @Test
     void testCloneCopiesRequiredGeneratorTiersIndependently() {
         GeneratorTierObject tier = new GeneratorTierObject();
         tier.setUniqueId("tier");

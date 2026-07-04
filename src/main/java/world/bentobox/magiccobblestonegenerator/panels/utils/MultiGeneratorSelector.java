@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -49,14 +48,16 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
         this.consumer = consumer;
         this.selectedIds = new LinkedHashSet<>(selectedIds);
 
-        // Show all deployed generators in the world, except default generators and the excluded one.
-        // Non-deployed generators can never be unlocked, so they must not be selectable as prerequisites.
+        // Show deployed, non-default generators (valid prerequisites), plus any generator that is already selected
+        // even if it would otherwise be filtered out (e.g. undeployed/default), so existing selections remain
+        // visible and can be deselected. The excluded generator (the one being edited) is never shown.
+        // Non-deployed generators can never be unlocked, so they must not be selectable as *new* prerequisites.
         this.elements = addon.getAddonManager().getAllGeneratorTiers(world).stream().
-            filter(GeneratorTierObject::isDeployed).
-            filter(generator -> !generator.isDefaultGenerator()).
             filter(generator -> excluded == null || !generator.getUniqueId().equals(excluded.getUniqueId())).
+            filter(generator -> (generator.isDeployed() && !generator.isDefaultGenerator())
+                || this.selectedIds.contains(generator.getUniqueId())).
             sorted(Comparator.comparing(GeneratorTierObject::getFriendlyName)).
-            collect(Collectors.toList());
+            toList();
 
         this.filterElements = this.elements;
     }
@@ -97,7 +98,7 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
             this.filterElements = this.elements.stream().
                 filter(element -> element.getFriendlyName().toLowerCase().contains(this.searchString.toLowerCase())).
                 distinct().
-                collect(Collectors.toList());
+                toList();
         }
     }
 
@@ -118,44 +119,43 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
         PanelItem.ClickHandler clickHandler;
         Material icon;
 
-        switch (button)
+        if (button == Action.ACCEPT_GENERATOR)
         {
-            case ACCEPT_GENERATOR -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
+            description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-                if (!this.selectedIds.isEmpty())
-                {
-                    description.add(this.user.getTranslation(reference + ".selected-generators"));
+            if (!this.selectedIds.isEmpty())
+            {
+                description.add(this.user.getTranslation(reference + ".selected-generators"));
 
-                    this.elements.stream().
-                        filter(generator -> this.selectedIds.contains(generator.getUniqueId())).
-                        forEach(generator -> description.add(this.user.getTranslation(reference + ".list-value",
-                            Constants.VALUE, generator.getFriendlyName())));
-                }
-
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-accept"));
-
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.consumer.accept(this.selectedIds);
-                    return true;
-                };
-
-                icon = Material.FILLED_MAP;
+                this.elements.stream().
+                    filter(generator -> this.selectedIds.contains(generator.getUniqueId())).
+                    forEach(generator -> description.add(this.user.getTranslation(reference + ".list-value",
+                        Constants.VALUE, generator.getFriendlyName())));
             }
-            default -> {
-                description.add(this.user.getTranslationOrNothing(reference + ".description"));
 
-                description.add("");
-                description.add(this.user.getTranslation(Constants.TIPS + "click-to-cancel"));
+            description.add("");
+            description.add(this.user.getTranslation(Constants.TIPS + "click-to-accept"));
 
-                clickHandler = (panel, user, clickType, i) -> {
-                    this.consumer.accept(null);
-                    return true;
-                };
+            clickHandler = (panel, user, clickType, i) -> {
+                this.consumer.accept(this.selectedIds);
+                return true;
+            };
 
-                icon = Material.OAK_DOOR;
-            }
+            icon = Material.FILLED_MAP;
+        }
+        else
+        {
+            description.add(this.user.getTranslationOrNothing(reference + ".description"));
+
+            description.add("");
+            description.add(this.user.getTranslation(Constants.TIPS + "click-to-cancel"));
+
+            clickHandler = (panel, user, clickType, i) -> {
+                this.consumer.accept(null);
+                return true;
+            };
+
+            icon = Material.OAK_DOOR;
         }
 
         return new PanelItemBuilder().
