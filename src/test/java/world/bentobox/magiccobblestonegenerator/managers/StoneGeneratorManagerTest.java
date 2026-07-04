@@ -619,6 +619,32 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testAutoActivateCancelledEventKeepsExistingActiveGenerator() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(true);
+
+        // Cancel any activation event.
+        Mockito.doAnswer(invocation -> {
+            Object event = invocation.getArgument(0);
+            if (event instanceof world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent activation) {
+                activation.setCancelled(true);
+            }
+            return null;
+        }).when(pim).callEvent(any(
+                world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent.class));
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // Activation was cancelled before mutating: the existing generator is preserved, the new one is not added.
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains("existing"));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
     void testDeactivateGenerator() {
         assertFalse(sgm.deactivateGenerator(user, generatorData, generatorTier));
     }

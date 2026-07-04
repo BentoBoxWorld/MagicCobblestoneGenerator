@@ -988,9 +988,8 @@ public class StoneGeneratorManager {
 	    this.saveGeneratorData(dataObject);
 
 	    // If configured, automatically activate the generator now that it is unlocked (#106).
-	    if (generator.isActivateOnUnlock()) {
-		this.autoActivateGenerator(dataObject, user, island, generator);
-		// Generator is active now; the click-to-activate notification is not relevant.
+	    // Only skip the click-to-activate notification if it actually activated.
+	    if (generator.isActivateOnUnlock() && this.autoActivateGenerator(dataObject, user, island, generator)) {
 		return;
 	    }
 
@@ -1023,33 +1022,53 @@ public class StoneGeneratorManager {
      * @param user       The user that triggered the unlock, or null.
      * @param island     The island the generator belongs to.
      * @param generator  The generator to activate.
+     * @return {@code true} if the generator was (or already is) active, {@code false} if it could not be activated
+     *         (active limit reached without overwrite, or the activation event was cancelled).
      */
-    private void autoActivateGenerator(@NotNull GeneratorDataObject dataObject, @Nullable User user,
+    private boolean autoActivateGenerator(@NotNull GeneratorDataObject dataObject, @Nullable User user,
 	    @NotNull Island island, @NotNull GeneratorTierObject generator) {
 	if (dataObject.getActiveGeneratorList().contains(generator.getUniqueId())) {
-	    // Already active.
-	    return;
+	    // Already active; no click-to-activate notification is needed.
+	    return true;
 	}
 
-	// Respect the active generator limit.
-	if (dataObject.getActiveGeneratorCount() > 0
-		&& dataObject.getActiveGeneratorList().size() >= dataObject.getActiveGeneratorCount()) {
-	    if (this.addon.getSettings().isOverwriteOnActive()) {
-		// Make room by removing the first active generator.
-		String oldId = dataObject.getActiveGeneratorList().iterator().next();
-		dataObject.getActiveGeneratorList().remove(oldId);
-	    } else {
-		// No room and overwrite disabled: leave the generator unlocked but inactive.
-		return;
-	    }
+	// Check the active generator limit up front. When it is reached and overwrite is disabled, we cannot
+	// activate, so report failure and let the caller send the normal unlock notification instead.
+	boolean atLimit = dataObject.getActiveGeneratorCount() > 0
+		&& dataObject.getActiveGeneratorList().size() >= dataObject.getActiveGeneratorCount();
+
+	if (atLimit && !this.addon.getSettings().isOverwriteOnActive()) {
+	    return false;
 	}
 
-	// Fire the activation event so other plugins can react or cancel.
+	// Fire the activation event before mutating anything, so a cancellation does not lose an already active
+	// generator.
 	GeneratorActivationEvent event = new GeneratorActivationEvent(generator, user, island.getUniqueId(), true);
 	Bukkit.getPluginManager().callEvent(event);
 
 	if (event.isCancelled()) {
-	    return;
+	    return false;
+	}
+
+	if (atLimit) {
+	    // Overwrite is enabled: free a slot by deactivating the first active generator. Prefer
+	    // deactivateGenerator so the deactivation event is fired, but that requires a user; otherwise remove
+	    // directly (system unlock).
+	    String oldId = dataObject.getActiveGeneratorList().iterator().next();
+	    GeneratorTierObject oldGenerator = this.getGeneratorByID(oldId);
+
+	    boolean freed;
+
+	    if (user != null && oldGenerator != null) {
+		freed = this.deactivateGenerator(user, dataObject, oldGenerator);
+	    } else {
+		freed = dataObject.getActiveGeneratorList().remove(oldId);
+	    }
+
+	    if (!freed) {
+		// Could not free a slot (e.g. the deactivation event was cancelled). Do not activate.
+		return false;
+	    }
 	}
 
 	dataObject.getActiveGeneratorList().add(generator.getUniqueId());
@@ -1058,7 +1077,15 @@ public class StoneGeneratorManager {
 	if (user != null) {
 	    Utils.sendMessage(user, user.getTranslation(Constants.MESSAGES + "generator-activated",
 		    Constants.GENERATOR, generator.getFriendlyName()));
+
+	    // Warn the user if the generator cannot actually operate because the addon is disabled on the island.
+	    if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)) {
+		Utils.sendMessage(user,
+			user.getTranslation(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
+	    }
 	}
+
+	return true;
     }
 
     /**
