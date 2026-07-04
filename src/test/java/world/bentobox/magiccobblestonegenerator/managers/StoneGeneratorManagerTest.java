@@ -38,6 +38,8 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundle
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject.GeneratorType;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorPreBuyEvent;
 
 /**
  * @author tastybento
@@ -408,6 +410,32 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     @Test
     void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
         assertDoesNotThrow(() -> sgm.purchaseGenerator(user, island, generatorData, generatorTier, true));
+    }
+
+    @Test
+    void testPurchaseGeneratorFiresPreBuyEvent() {
+        when(generatorData.getUniqueId()).thenReturn(uuid.toString());
+        sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
+        verify(pim).callEvent(any(GeneratorPreBuyEvent.class));
+    }
+
+    @Test
+    void testPurchaseGeneratorCancelledPreBuyEventStopsPurchase() {
+        when(generatorData.getUniqueId()).thenReturn(uuid.toString());
+        // Cancel any GeneratorPreBuyEvent that is fired.
+        Mockito.doAnswer(invocation -> {
+            Object event = invocation.getArgument(0);
+            if (event instanceof GeneratorPreBuyEvent preBuy) {
+                preBuy.setCancelled(true);
+            }
+            return null;
+        }).when(pim).callEvent(any(GeneratorPreBuyEvent.class));
+
+        sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
+
+        // Purchase must be aborted: the tier is never added and the post-purchase event never fires.
+        verify(generatorData, Mockito.never()).getPurchasedTiers();
+        verify(pim, Mockito.never()).callEvent(any(GeneratorBuyEvent.class));
     }
 
     @Test
