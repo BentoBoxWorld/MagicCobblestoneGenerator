@@ -502,11 +502,13 @@ public class StoneGeneratorManager {
 	// Filter generators that starts with name.
 		filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
 		// Sort in order: default generators are first, followed by lowest priority,
-		// generator type and then by generator name.
+		// generator type and then by the stable unique id.
 		sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed()
 			.thenComparing(GeneratorTierObject::getPriority)
 			.thenComparing(GeneratorTierObject::getGeneratorType)
-			.thenComparing(GeneratorTierObject::getFriendlyName))
+			// Final tiebreaker is the stable unique id, not the friendly name, so that
+			// renaming a generator does not change its position in the list (#123).
+			.thenComparing(GeneratorTierObject::getUniqueId))
 		.
 		// Return as list collection.
 		collect(Collectors.toList());

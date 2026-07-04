@@ -162,7 +162,8 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
             sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed().
                 thenComparing(GeneratorTierObject::getPriority).
                 thenComparing(GeneratorTierObject::getGeneratorType).
-                thenComparing(GeneratorTierObject::getFriendlyName)).
+                // Stable tiebreaker so renaming does not reorder generators (#123).
+                thenComparing(GeneratorTierObject::getUniqueId)).
             collect(Collectors.toList());
 
         if (this.mode == Mode.ADD)
