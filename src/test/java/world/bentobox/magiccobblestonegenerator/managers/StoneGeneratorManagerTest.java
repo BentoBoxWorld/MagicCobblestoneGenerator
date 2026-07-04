@@ -275,6 +275,45 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         assertTrue(sgm.getAllGeneratorTiers(world).isEmpty());
     }
 
+    /**
+     * Builds a deployed, non-default cobblestone generator tier mock for ordering tests.
+     */
+    private GeneratorTierObject orderableTier(String id, String name, int priority) {
+        GeneratorTierObject t = mock(GeneratorTierObject.class);
+        when(t.getUniqueId()).thenReturn(id);
+        when(t.getFriendlyName()).thenReturn(name);
+        when(t.getPriority()).thenReturn(priority);
+        when(t.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(t.isDeployed()).thenReturn(true);
+        when(t.isDefaultGenerator()).thenReturn(false);
+        return t;
+    }
+
+    @Test
+    void testGetAllGeneratorTiersEqualPrioritySortsByUniqueIdNotName() {
+        sgm.addWorld(world);
+        // Same priority + type. Names are reverse of id order to prove the tiebreaker is the id.
+        GeneratorTierObject a = orderableTier("magiccobblegenerator_aaa", "Zebra", 10);
+        GeneratorTierObject b = orderableTier("magiccobblegenerator_zzz", "Apple", 10);
+        sgm.loadGeneratorTier(b, true, null);
+        sgm.loadGeneratorTier(a, true, null);
+
+        // Ordered by unique id (aaa before zzz), independent of the friendly names.
+        assertEquals(java.util.List.of(a, b), sgm.getAllGeneratorTiers(world));
+    }
+
+    @Test
+    void testGetAllGeneratorTiersSortsByPriority() {
+        sgm.addWorld(world);
+        GeneratorTierObject low = orderableTier("magiccobblegenerator_x", "X", 5);
+        GeneratorTierObject high = orderableTier("magiccobblegenerator_a", "A", 20);
+        sgm.loadGeneratorTier(high, true, null);
+        sgm.loadGeneratorTier(low, true, null);
+
+        // Lower priority number comes first, regardless of unique id or name.
+        assertEquals(java.util.List.of(low, high), sgm.getAllGeneratorTiers(world));
+    }
+
     @Test
     void testGetIslandGeneratorTiersWorldUser() {
         assertTrue(sgm.getIslandGeneratorTiers(world, user).isEmpty());
