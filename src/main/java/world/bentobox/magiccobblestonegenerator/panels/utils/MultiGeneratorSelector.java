@@ -36,7 +36,7 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
      * @param world the world whose generators are shown
      * @param excluded a generator that must not be selectable (e.g. the one being edited), or null
      * @param selectedIds the currently selected generator ids
-     * @param consumer the consumer that receives the selected ids, or null if cancelled
+     * @param consumer the consumer that receives the selected ids, or receives null as the value if cancelled
      */
     private MultiGeneratorSelector(User user,
         StoneGeneratorAddon addon,
@@ -50,7 +50,9 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
         this.selectedIds = new LinkedHashSet<>(selectedIds);
 
         // Show all deployed generators in the world, except default generators and the excluded one.
+        // Non-deployed generators can never be unlocked, so they must not be selectable as prerequisites.
         this.elements = addon.getAddonManager().getAllGeneratorTiers(world).stream().
+            filter(GeneratorTierObject::isDeployed).
             filter(generator -> !generator.isDefaultGenerator()).
             filter(generator -> excluded == null || !generator.getUniqueId().equals(excluded.getUniqueId())).
             sorted(Comparator.comparing(GeneratorTierObject::getFriendlyName)).
@@ -216,7 +218,7 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
      * @param world the world whose generators are shown
      * @param excluded a generator that must not be selectable, or null
      * @param selectedIds the currently selected generator ids
-     * @param consumer the consumer that receives the selected ids, or null if cancelled
+     * @param consumer the consumer that receives the selected ids, or receives null as the value if cancelled
      */
     public static void open(User user,
         StoneGeneratorAddon addon,

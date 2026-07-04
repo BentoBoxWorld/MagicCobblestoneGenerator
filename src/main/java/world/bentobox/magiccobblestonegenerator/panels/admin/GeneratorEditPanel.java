@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -650,9 +649,12 @@ public class GeneratorEditPanel extends CommonPanel
                 else
                 {
                     this.generatorTier.getRequiredGeneratorTiers().stream().
-                        map(this.manager::getGeneratorByID).
-                        filter(Objects::nonNull).
-                        map(GeneratorTierObject::getFriendlyName).
+                        // Fall back to the raw id if the generator no longer exists, so the admin can
+                        // still see (and reset) which prerequisite is configured.
+                        map(id -> {
+                            GeneratorTierObject required = this.manager.getGeneratorByID(id);
+                            return required == null ? id : required.getFriendlyName();
+                        }).
                         sorted().
                         forEach(generatorName -> description.add(this.user.getTranslation(reference + ".value",
                             Constants.GENERATOR, generatorName)));

@@ -584,9 +584,12 @@ public abstract class CommonPanel
             requiredGenerators.append(this.user.getTranslationOrNothing(reference + "required-generators-title"));
 
             generator.getRequiredGeneratorTiers().stream().
-                map(this.manager::getGeneratorByID).
-                filter(Objects::nonNull).
-                map(GeneratorTierObject::getFriendlyName).
+                // Fall back to the raw id if the generator can no longer be resolved (deleted/renamed),
+                // so a locked generator always shows what is blocking it.
+                map(id -> {
+                    GeneratorTierObject required = this.manager.getGeneratorByID(id);
+                    return required == null ? id : required.getFriendlyName();
+                }).
                 sorted().
                 forEach(name ->
                 {
