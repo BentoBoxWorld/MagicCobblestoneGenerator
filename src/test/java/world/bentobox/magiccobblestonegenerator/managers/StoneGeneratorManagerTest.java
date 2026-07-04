@@ -326,6 +326,69 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         verify(island, times(2)).isSpawn();
     }
 
+    /**
+     * Seeds a deployed, permission-gated generator tier into the cache and returns the freshly created island data with
+     * that tier already unlocked and active, simulating a generator that a previous owner had unlocked.
+     */
+    private GeneratorDataObject seedPermissionGeneratorAndData() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-133");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+
+        when(generatorTier.getUniqueId()).thenReturn("magiccobblegenerator_perm");
+        when(generatorTier.isDeployed()).thenReturn(true);
+        when(generatorTier.isDefaultGenerator()).thenReturn(false);
+        when(generatorTier.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(generatorTier.getRequiredMinIslandLevel()).thenReturn(0L);
+        when(generatorTier.getRequiredPermissions())
+                .thenReturn(java.util.Set.of("magiccobblegenerator.gen.perm"));
+        sgm.loadGeneratorTier(generatorTier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        data.getUnlockedTiers().add("magiccobblegenerator_perm");
+        data.getActiveGeneratorList().add("magiccobblegenerator_perm");
+        return data;
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusRevokesPermissionGeneratorWhenOwnerLacksPermission() {
+        GeneratorDataObject data = seedPermissionGeneratorAndData();
+        // Owner is online but does not have the required permission (new owner scenario, #133).
+        when(mockPlayer.isOnline()).thenReturn(true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_perm"));
+        assertFalse(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusKeepsPermissionGeneratorWhenOwnerHasPermission() {
+        GeneratorDataObject data = seedPermissionGeneratorAndData();
+        when(mockPlayer.isOnline()).thenReturn(true);
+        // Owner still has the required permission.
+        when(mockPlayer.hasPermission(anyString())).thenReturn(true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_perm"));
+        assertTrue(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusDoesNotRevokeWhenOwnerOffline() {
+        GeneratorDataObject data = seedPermissionGeneratorAndData();
+        // Owner is offline, so permissions cannot be checked reliably and nothing is revoked.
+        when(mockPlayer.isOnline()).thenReturn(false);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_perm"));
+        assertTrue(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
+    }
+
     @Test
     void testGetGeneratorDataIsland() {
         assertNotNull(sgm.getGeneratorData(island));
