@@ -45,6 +45,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorExhaus
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorPreBuyEvent;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorUnlockEvent;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
@@ -1230,6 +1231,17 @@ public class StoneGeneratorManager {
     public void purchaseGenerator(@NotNull User user, @NotNull Island island,
 	    @NotNull GeneratorDataObject generatorData, @NotNull GeneratorTierObject generatorTier,
 	    boolean bypassCost) {
+	// Call cancellable event before purchasing. This allows other plugins to add their own
+	// requirements to the generator purchasing process.
+	GeneratorPreBuyEvent preBuyEvent =
+		new GeneratorPreBuyEvent(generatorTier, user, generatorData.getUniqueId());
+	Bukkit.getPluginManager().callEvent(preBuyEvent);
+
+	if (preBuyEvent.isCancelled()) {
+	    // Another plugin cancelled the purchase. Do not withdraw money or grant the generator.
+	    return;
+	}
+
 	CompletableFuture<Boolean> purchaseGenerator = new CompletableFuture<>();
 	purchaseGenerator.thenAccept(runActivationTask -> {
 	    if (runActivationTask) {
