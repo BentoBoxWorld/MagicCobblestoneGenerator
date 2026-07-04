@@ -1068,6 +1068,8 @@ stone-generator:
     write-permissions: "<yellow>Please enter the required permissions, one per line in chat, and 'quit' on a line by itself to finish.</yellow>"
     # Message that appears after successful permission updating.
     permissions-changed: "<green>Success, generator permissions were updated.</green>"
+    # Message that asks the player to confirm a generator purchase before money is taken.
+    confirm-generator-purchase: "<yellow>Please confirm that you want to buy </yellow>[generator]<yellow> for [number].</yellow>"
     # Message that appears after importing library data into database.
     confirm-data-replacement: "<yellow>Please confirm that you want to replace your current generators with new one.</yellow>"
     # Message that appears after successful data importing

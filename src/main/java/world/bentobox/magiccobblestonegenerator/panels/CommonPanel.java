@@ -24,6 +24,8 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
+import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -121,6 +123,55 @@ public abstract class CommonPanel
     public final void reopen()
     {
         this.build();
+    }
+
+
+    /**
+     * This method purchases the given generator for the user, optionally asking for confirmation first.
+     * <p>
+     * If the generator cannot be purchased, the relevant message is sent by
+     * {@link StoneGeneratorManager#canPurchaseGenerator} and the panel is simply rebuilt. When the
+     * {@code buy-confirmation} setting is enabled, a chat confirmation is requested before the purchase is made, to
+     * avoid accidental purchases (#109).
+     *
+     * @param island        Island on which the generator is purchased.
+     * @param generatorData Data that stores island generators.
+     * @param generatorTier Generator tier that should be purchased.
+     */
+    protected void purchaseGenerator(Island island, GeneratorDataObject generatorData, GeneratorTierObject generatorTier)
+    {
+        if (island == null || !this.manager.canPurchaseGenerator(this.user, island, generatorData, generatorTier))
+        {
+            // Cannot purchase. canPurchaseGenerator already sent the reason. Just refresh the panel.
+            this.build();
+            return;
+        }
+
+        if (!this.addon.getSettings().isBuyConfirmation())
+        {
+            // Confirmation disabled. Purchase directly.
+            this.manager.purchaseGenerator(this.user, island, generatorData, generatorTier);
+            this.build();
+            return;
+        }
+
+        // Ask the player to confirm the purchase.
+        ConversationUtils.createConfirmation(
+            confirm ->
+            {
+                if (confirm)
+                {
+                    this.manager.purchaseGenerator(this.user, island, generatorData, generatorTier);
+                }
+
+                // Rebuild the panel regardless of the answer.
+                this.build();
+            },
+            this.user,
+            this.user.getTranslation(Constants.CONVERSATIONS + "confirm-generator-purchase",
+                Constants.GENERATOR, generatorTier.getFriendlyName(),
+                TextVariables.NUMBER, this.hundredThousandsFormat.format(generatorTier.getGeneratorTierCost())),
+            null);
     }
 
 
