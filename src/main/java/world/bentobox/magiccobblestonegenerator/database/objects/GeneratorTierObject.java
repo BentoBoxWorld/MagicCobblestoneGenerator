@@ -216,10 +216,10 @@ public class GeneratorTierObject implements DataObject
      *
      * @param requiredGeneratorTiers new value for this object.
      */
-    public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
-    {
-        this.requiredGeneratorTiers = requiredGeneratorTiers;
-    }
+public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
+{
+    this.requiredGeneratorTiers = requiredGeneratorTiers == null ? Collections.emptySet() : requiredGeneratorTiers;
+}
 
 
     /**
