@@ -206,6 +206,9 @@ public class GeneratorEditPanel extends CommonPanel
         // deployed button.
         panelBuilder.item(33, this.createButton(Button.DEPLOYED, locale));
 
+        // Auto-activate on unlock toggle.
+        panelBuilder.item(29, this.createButton(Button.ACTIVATE_ON_UNLOCK, locale));
+
         // display treasures.
         panelBuilder.item(25, this.createButton(Button.TREASURE_CHANCE, locale));
         panelBuilder.item(34, this.createButton(Button.TREASURE_AMOUNT, locale));
@@ -872,6 +875,32 @@ public class GeneratorEditPanel extends CommonPanel
                 };
 
                 glow = this.generatorTier.isDeployed();
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
+            }
+            case ACTIVATE_ON_UNLOCK -> {
+                itemStack = new ItemStack(Material.REDSTONE_TORCH);
+
+                if (this.generatorTier.isActivateOnUnlock())
+                {
+                    description.add(this.user.getTranslation(reference + ".enabled"));
+                }
+                else
+                {
+                    description.add(this.user.getTranslation(reference + ".disabled"));
+                }
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    this.generatorTier.setActivateOnUnlock(!this.generatorTier.isActivateOnUnlock());
+                    this.save();
+                    this.build();
+
+                    return true;
+                };
+
+                glow = this.generatorTier.isActivateOnUnlock();
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
@@ -1901,6 +1930,10 @@ public class GeneratorEditPanel extends CommonPanel
          * Holds Name type that allows to interact with generator deployment status.
          */
         DEPLOYED,
+        /**
+         * Holds Name type that toggles whether the generator activates automatically on unlock.
+         */
+        ACTIVATE_ON_UNLOCK,
         /**
          * Holds Name type that allows to interact with generator treasure amount.
          */

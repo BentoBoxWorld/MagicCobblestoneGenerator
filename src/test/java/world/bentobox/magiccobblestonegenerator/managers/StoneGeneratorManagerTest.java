@@ -550,6 +550,100 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
                 "stone-generator.conversations.prefixstone-generator.messages.generator-cannot-be-unlocked");
     }
 
+    /**
+     * Prepares generatorTier and island for unlock/auto-activation tests and returns a fresh, real data object.
+     */
+    private GeneratorDataObject prepareUnlockableGenerator() {
+        when(generatorTier.isDeployed()).thenReturn(true);
+        when(generatorTier.isDefaultGenerator()).thenReturn(false);
+        when(island.getUniqueId()).thenReturn("island-106");
+        s.setNotifyUnlockedGenerators(false);
+
+        GeneratorDataObject data = new GeneratorDataObject();
+        data.setUniqueId("island-106");
+        return data;
+    }
+
+    @Test
+    void testUnlockGeneratorAutoActivatesWhenFlagSet() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
+    void testUnlockGeneratorDoesNotAutoActivateWhenFlagUnset() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(false);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
+    void testAutoActivateRespectsLimitWithoutOverwrite() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        // One active generator already, limit of one, overwrite disabled.
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(false);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // Unlocked, but not activated because the active limit is reached.
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains("existing"));
+    }
+
+    @Test
+    void testAutoActivateOverwritesWhenLimitReached() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(true);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // The old generator is replaced by the newly unlocked one.
+        assertFalse(data.getActiveGeneratorList().contains("existing"));
+        assertTrue(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
+    void testAutoActivateCancelledEventKeepsExistingActiveGenerator() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(true);
+
+        // Cancel any activation event.
+        Mockito.doAnswer(invocation -> {
+            Object event = invocation.getArgument(0);
+            if (event instanceof world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent activation) {
+                activation.setCancelled(true);
+            }
+            return null;
+        }).when(pim).callEvent(any(
+                world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent.class));
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // Activation was cancelled before mutating: the existing generator is preserved, the new one is not added.
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains("existing"));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
     @Test
     void testDeactivateGenerator() {
         assertFalse(sgm.deactivateGenerator(user, generatorData, generatorTier));
