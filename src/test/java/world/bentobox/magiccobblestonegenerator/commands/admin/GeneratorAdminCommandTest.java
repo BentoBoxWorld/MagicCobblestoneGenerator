@@ -41,6 +41,7 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
     private Settings settings;
     private CompositeCommand ic;
     private CompositeCommand why;
+    private CompositeCommand reset;
 
     @Override
     @BeforeEach
@@ -78,6 +79,7 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
         gac = new GeneratorAdminCommand(addon, ac);
         ic = gac.getSubCommand("import").get();
         why = gac.getSubCommand("why").get();
+        reset = gac.getSubCommand("reset").get();
     }
 
     @Test
@@ -130,7 +132,7 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
                 "stone-generator.commands.admin.main.parameters");
         verify(user).getTranslation(
                 "stone-generator.commands.admin.main.description");
-        verify(user, times(4)).isPlayer();
+        verify(user, times(5)).isPlayer();
         verify(user).sendMessage(
                 "commands.help.syntax-no-parameters",
                 "[usage]",
@@ -156,6 +158,12 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
                 "[description]",
                 "stone-generator.commands.admin.database.description");
         verify(user).sendMessage(
+                "commands.help.syntax-no-parameters",
+                "[usage]",
+                "/null generator reset",
+                "[description]",
+                "stone-generator.commands.admin.reset.description");
+        verify(user).sendMessage(
                 "commands.help.end");
     }
 
@@ -179,6 +187,37 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
         assertFalse(why.execute(user, "bskyblock", List.of("tastybento")));
         verify(user).sendMessage(
                 "stone-generator.conversations.prefixgeneral.errors.player-is-not-owner");
+    }
+
+    @Test
+    void testSetupReset() {
+        assertEquals("admin.stone-generator.reset", reset.getPermission());
+        assertEquals("stone-generator.commands.admin.reset.parameters", reset.getParameters());
+        assertEquals("stone-generator.commands.admin.reset.description", reset.getDescription());
+        assertFalse(reset.isOnlyPlayer());
+    }
+
+    @Test
+    void testExecuteResetNoArgs() {
+        assertFalse(reset.execute(user, "bskyblock", List.of()));
+        verify(user).sendMessage(
+                "commands.help.header",
+                "[label]",
+                "BSkyBlock World");
+        verify(user).getTranslationOrNothing(
+                "stone-generator.commands.admin.reset.parameters");
+        verify(user).getTranslation(
+                "stone-generator.commands.admin.reset.description");
+        verify(user).sendMessage(
+                "commands.help.end");
+    }
+
+    @Test
+    void testExecuteResetPlayerNoIsland() {
+        // Target resolves to a UUID but has no island in this world.
+        assertFalse(reset.execute(user, "bskyblock", List.of("tastybento")));
+        verify(user).sendMessage(
+                "stone-generator.conversations.prefixgeneral.errors.player-has-no-island");
     }
 
 }

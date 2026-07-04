@@ -64,6 +64,7 @@ public class GeneratorAdminCommand extends CompositeCommand
         new ImportCommand(this.getAddon(), this);
         new GeneratorWhyCommand(this.getAddon(), this);
         new GeneratorDatabaseCommand(this.getAddon(), this);
+        new ResetCommand(this.getAddon(), this);
     }
 
 
@@ -292,6 +293,100 @@ public class GeneratorAdminCommand extends CompositeCommand
          * @param args command arguments
          * @return List of strings that could be used to complete this command.
          */
+        @Override
+        public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
+        {
+            if (args.isEmpty())
+            {
+                // Don't show every player on the server. Require at least the first letter
+                return Optional.empty();
+            }
+            else
+            {
+                return Optional.of(Util.tabLimit(
+                    new ArrayList<>(Util.getOnlinePlayerList(user)),
+                    args.get(args.size() - 1)));
+            }
+        }
+    }
+
+
+    /**
+     * This command resets a single player's island generator data (unlocked, purchased and active generators) without
+     * touching the rest of the database. Requires confirmation as it is destructive.
+     */
+    private static class ResetCommand extends ConfirmableCommand
+    {
+        /**
+         * This is simple constructor for initializing /{admin_command} generator reset command.
+         *
+         * @param addon StoneGeneratorAddon addon.
+         * @param parentCommand Parent Command where we hook our command into.
+         */
+        public ResetCommand(StoneGeneratorAddon addon, CompositeCommand parentCommand)
+        {
+            super(addon, parentCommand, "reset");
+        }
+
+
+        @Override
+        public void setup()
+        {
+            this.setPermission("admin.stone-generator.reset");
+            this.setParametersHelp(Constants.ADMIN_COMMANDS + "reset.parameters");
+            this.setDescription(Constants.ADMIN_COMMANDS + "reset.description");
+
+            this.setOnlyPlayer(false);
+        }
+
+
+        @Override
+        public boolean execute(User user, String label, List<String> args)
+        {
+            // If args are not right, show help
+            if (args.size() != 1)
+            {
+                this.showHelp(this, user);
+                return false;
+            }
+
+            // Get target
+            UUID targetUUID = Util.getUUID(args.get(0));
+
+            if (targetUUID == null)
+            {
+                Utils.sendMessage(user,
+                    user.getTranslation("general.errors.unknown-player",
+                        TextVariables.NAME, args.get(0)));
+                return false;
+            }
+
+            Island island = this.getAddon().getIslands().getIsland(this.getWorld(), targetUUID);
+
+            if (island == null)
+            {
+                Utils.sendMessage(user, user.getTranslation("general.errors.player-has-no-island"));
+                return false;
+            }
+
+            final String targetName = this.getPlayers().getName(targetUUID);
+
+            this.askConfirmation(user,
+                user.getTranslation(Constants.CONVERSATIONS + "prefix") +
+                    user.getTranslation(Constants.ADMIN_COMMANDS + "reset.confirmation",
+                        Constants.PLAYER, targetName),
+                () ->
+                {
+                    this.<StoneGeneratorAddon>getAddon().getAddonManager().resetIslandData(island);
+                    Utils.sendMessage(user,
+                        user.getTranslation(Constants.MESSAGES + "generator-data-reset",
+                            Constants.PLAYER, targetName));
+                });
+
+            return true;
+        }
+
+
         @Override
         public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
         {

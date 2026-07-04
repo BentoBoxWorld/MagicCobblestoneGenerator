@@ -11,6 +11,10 @@ stone-generator:
       why:
         parameters: "<player>"
         description: "toggles Magic Cobblestone Generator debug messages"
+      reset:
+        parameters: "<player>"
+        description: "resets a player's island generator data"
+        confirmation: "This will reset [player]'s generator data (unlocked, purchased and active generators) - please confirm"
       database:
         description: "Main database command"
       import-database:
@@ -999,6 +1003,8 @@ stone-generator:
     generator-exhausted: "<red>Generator </red> '[generator]' <red>has reached its generation limit and is now on cooldown for [number] more minute(s).</red>"
     # Message that appears when purchasing the generator.
     generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>is purchased.</yellow>"
+    # Message that appears after an admin resets a player's generator data.
+    generator-data-reset: "<yellow>Generator data for </yellow>[player]<yellow> has been reset.</yellow>"
     # Message that appears when trying to buy already purchased generator.
     generator-already-purchased: "<red>Generator </red> '[generator]' <red>is already purchased.</red>"
     # Message that appears when trying to buy generator without required island level
