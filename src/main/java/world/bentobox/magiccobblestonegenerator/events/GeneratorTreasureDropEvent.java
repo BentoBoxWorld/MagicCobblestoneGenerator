@@ -12,7 +12,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-import world.bentobox.bentobox.api.events.BentoBoxEvent;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
@@ -24,7 +23,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierOb
  * block, so there is no player or broken block state associated with the drop. This dedicated event is therefore used
  * instead of Bukkit's {@code BlockDropItemEvent}, which requires both.
  */
-public class GeneratorTreasureDropEvent extends BentoBoxEvent implements Cancellable
+public class GeneratorTreasureDropEvent extends GeneratorEvent implements Cancellable
 {
     /**
      * Instantiates a new Generator treasure drop event.
@@ -39,78 +38,10 @@ public class GeneratorTreasureDropEvent extends BentoBoxEvent implements Cancell
         Location location,
         ItemStack itemStack)
     {
-        this.generator = generator.getFriendlyName();
-        this.generatorID = generator.getUniqueId();
-
-        this.islandUUID = islandUUID;
+        // Treasure drops originate from block formation, so there is no associated player.
+        super(generator, null, islandUUID);
         this.location = location;
         this.itemStack = itemStack;
-    }
-
-
-    /**
-     * Gets island uuid.
-     *
-     * @return the island uuid, or null if unknown
-     */
-    public String getIslandUUID()
-    {
-        return islandUUID;
-    }
-
-
-    /**
-     * Sets island uuid.
-     *
-     * @param islandUUID the island uuid
-     */
-    public void setIslandUUID(String islandUUID)
-    {
-        this.islandUUID = islandUUID;
-    }
-
-
-    /**
-     * Gets generator.
-     *
-     * @return the generator
-     */
-    public String getGenerator()
-    {
-        return generator;
-    }
-
-
-    /**
-     * Sets generator.
-     *
-     * @param generator the generator
-     */
-    public void setGenerator(String generator)
-    {
-        this.generator = generator;
-    }
-
-
-    /**
-     * Gets generator id.
-     *
-     * @return the generator id
-     */
-    public String getGeneratorID()
-    {
-        return generatorID;
-    }
-
-
-    /**
-     * Sets generator id.
-     *
-     * @param generatorID the generator id
-     */
-    public void setGeneratorID(String generatorID)
-    {
-        this.generatorID = generatorID;
     }
 
 
@@ -215,21 +146,6 @@ public class GeneratorTreasureDropEvent extends BentoBoxEvent implements Cancell
 // ---------------------------------------------------------------------
 // Section: Variables
 // ---------------------------------------------------------------------
-
-    /**
-     * Island Id.
-     */
-    private String islandUUID;
-
-    /**
-     * Friendly name for generator.
-     */
-    private String generator;
-
-    /**
-     * Generator ID.
-     */
-    private String generatorID;
 
     /**
      * Location where the treasure will be dropped.
