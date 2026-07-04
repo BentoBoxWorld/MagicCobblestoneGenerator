@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import world.bentobox.magiccobblestonegenerator.CommonTestSetup;
 
 /**
- * Tests for the requiredGeneratorTiers field of {@link GeneratorTierObject} (#88).
+ * Tests for the requiredGeneratorTiers (#88) and activateOnUnlock (#106) fields of {@link GeneratorTierObject}.
  */
 class GeneratorTierObjectTest extends CommonTestSetup {
 
@@ -50,5 +50,28 @@ class GeneratorTierObjectTest extends CommonTestSetup {
         // The clone must hold an independent copy.
         clone.getRequiredGeneratorTiers().add("gen2");
         assertFalse(tier.getRequiredGeneratorTiers().contains("gen2"));
+    }
+
+    @Test
+    void testActivateOnUnlockDefaultsToFalse() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        assertFalse(tier.isActivateOnUnlock());
+    }
+
+    @Test
+    void testSetAndGetActivateOnUnlock() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setActivateOnUnlock(true);
+        assertTrue(tier.isActivateOnUnlock());
+    }
+
+    @Test
+    void testCloneCopiesActivateOnUnlock() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setUniqueId("tier");
+        tier.setActivateOnUnlock(true);
+
+        GeneratorTierObject clone = tier.clone();
+        assertTrue(clone.isActivateOnUnlock());
     }
 }

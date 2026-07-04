@@ -274,6 +274,29 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
+     * Method GeneratorTierObject#isActivateOnUnlock returns whether this generator should be automatically activated as
+     * soon as it is unlocked.
+     *
+     * @return the activateOnUnlock (type boolean) of this object.
+     */
+    public boolean isActivateOnUnlock()
+    {
+        return activateOnUnlock;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setActivateOnUnlock sets new value for the activateOnUnlock of this object.
+     *
+     * @param activateOnUnlock new value for this object.
+     */
+    public void setActivateOnUnlock(boolean activateOnUnlock)
+    {
+        this.activateOnUnlock = activateOnUnlock;
+    }
+
+
+    /**
      * Returns the blockChanceMap of this object.
      *
      * @return a {@code TreeMap} where the keys are {@code Double} values representing chances,
@@ -552,6 +575,7 @@ public class GeneratorTierObject implements DataObject
         clone.setGeneratorTierCost(this.generatorTierCost);
         clone.setActivationCost(this.activationCost);
         clone.setDeployed(this.deployed);
+        clone.setActivateOnUnlock(this.activateOnUnlock);
         clone.setBlockChanceMap(new TreeMap<>(this.blockChanceMap));
 
         if (treasureChanceMap != null)
@@ -718,6 +742,12 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private boolean deployed = true;
+
+    /**
+     * Whether this generator is automatically activated as soon as it is unlocked.
+     */
+    @Expose
+    private boolean activateOnUnlock = false;
 
     // Rewards section
 

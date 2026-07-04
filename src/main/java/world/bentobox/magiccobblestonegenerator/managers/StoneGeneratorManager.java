@@ -987,6 +987,13 @@ public class StoneGeneratorManager {
 	    // save data.
 	    this.saveGeneratorData(dataObject);
 
+	    // If configured, automatically activate the generator now that it is unlocked (#106).
+	    if (generator.isActivateOnUnlock()) {
+		this.autoActivateGenerator(dataObject, user, island, generator);
+		// Generator is active now; the click-to-activate notification is not relevant.
+		return;
+	    }
+
 	    if (!this.addon.getSettings().isNotifyUnlockedGenerators()) {
 		// Not necessary to notify users.
 		return;
@@ -1004,6 +1011,53 @@ public class StoneGeneratorManager {
 		island.getMemberSet()
 			.forEach(uuid -> Utils.sendUnlockMessage(uuid, island, generator, this.addon, true));
 	    }
+	}
+    }
+
+    /**
+     * This method automatically activates the given generator for the island once it is unlocked, respecting the active
+     * generator limit and the overwrite-on-active setting. It works without a user (system unlocks), so no cost is
+     * charged.
+     *
+     * @param dataObject Data that stores island generators.
+     * @param user       The user that triggered the unlock, or null.
+     * @param island     The island the generator belongs to.
+     * @param generator  The generator to activate.
+     */
+    private void autoActivateGenerator(@NotNull GeneratorDataObject dataObject, @Nullable User user,
+	    @NotNull Island island, @NotNull GeneratorTierObject generator) {
+	if (dataObject.getActiveGeneratorList().contains(generator.getUniqueId())) {
+	    // Already active.
+	    return;
+	}
+
+	// Respect the active generator limit.
+	if (dataObject.getActiveGeneratorCount() > 0
+		&& dataObject.getActiveGeneratorList().size() >= dataObject.getActiveGeneratorCount()) {
+	    if (this.addon.getSettings().isOverwriteOnActive()) {
+		// Make room by removing the first active generator.
+		String oldId = dataObject.getActiveGeneratorList().iterator().next();
+		dataObject.getActiveGeneratorList().remove(oldId);
+	    } else {
+		// No room and overwrite disabled: leave the generator unlocked but inactive.
+		return;
+	    }
+	}
+
+	// Fire the activation event so other plugins can react or cancel.
+	GeneratorActivationEvent event = new GeneratorActivationEvent(generator, user, island.getUniqueId(), true);
+	Bukkit.getPluginManager().callEvent(event);
+
+	if (event.isCancelled()) {
+	    return;
+	}
+
+	dataObject.getActiveGeneratorList().add(generator.getUniqueId());
+	this.saveGeneratorData(dataObject);
+
+	if (user != null) {
+	    Utils.sendMessage(user, user.getTranslation(Constants.MESSAGES + "generator-activated",
+		    Constants.GENERATOR, generator.getFriendlyName()));
 	}
     }
 

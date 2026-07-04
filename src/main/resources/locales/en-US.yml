@@ -412,6 +412,16 @@ stone-generator:
           <aqua>This generator is </aqua><green>deployed.</green>
         disabled: |-
           <aqua>This generator is </aqua><red>not deployed.</red>
+      activate_on_unlock:
+        name: "<white><bold>Activate On Unlock</bold></white>"
+        description: |-
+          <gray>When enabled, this generator
+          </gray><gray>is activated automatically
+          </gray><gray>as soon as it is unlocked.</gray>
+        enabled: |-
+          <aqua>This generator </aqua><green>activates on unlock.</green>
+        disabled: |-
+          <aqua>This generator </aqua><red>does not activate on unlock.</red>
       add_material:
         name: "<white><bold>Add Material</bold></white>"
         description: |-
