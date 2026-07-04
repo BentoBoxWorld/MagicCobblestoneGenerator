@@ -800,15 +800,7 @@ public class GeneratorViewPanel extends CommonPanel
                         case "VIEW" -> {
                             GeneratorViewPanel.openPanel(this, this.generatorTier);
                         }
-                        case "BUY" -> {
-                            if (this.island != null && this.manager.canPurchaseGenerator(user, this.island, this.generatorData, this.generatorTier))
-                            {
-                                this.manager.purchaseGenerator(this.user, this.island, this.generatorData, this.generatorTier);
-                            }
-
-                            // Build whole gui.
-                            this.build();
-                        }
+                        case "BUY" -> this.purchaseGenerator(this.island, this.generatorData, this.generatorTier);
                         case "ACTIVATE" -> {
                             if (this.island != null && this.manager.canActivateGenerator(user, this.island, this.generatorData, this.generatorTier))
                             {
@@ -1139,15 +1131,7 @@ public class GeneratorViewPanel extends CommonPanel
                         case "VIEW" -> {
                             GeneratorViewPanel.openPanel(this, this.generatorTier);
                         }
-                        case "BUY" -> {
-                            if (this.island != null && this.manager.canPurchaseGenerator(user, this.island, this.generatorData, this.generatorTier))
-                            {
-                                this.manager.purchaseGenerator(this.user, this.island, this.generatorData, this.generatorTier);
-                            }
-
-                            // Build whole gui.
-                            this.build();
-                        }
+                        case "BUY" -> this.purchaseGenerator(this.island, this.generatorData, this.generatorTier);
                         case "ACTIVATE" -> {
                             if (this.island != null && this.manager.canActivateGenerator(user, this.island, this.generatorData, this.generatorTier))
                             {
