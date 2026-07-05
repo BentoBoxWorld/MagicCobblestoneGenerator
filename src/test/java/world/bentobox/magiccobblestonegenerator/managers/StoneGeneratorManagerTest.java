@@ -431,6 +431,76 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     /**
+     * Seeds a deployed, level-gated (required level 100) generator that is already unlocked and active, for
+     * lose-tiers-on-level-loss tests (#118).
+     */
+    private GeneratorDataObject seedLevelGeneratorAndData() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-118");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+
+        when(generatorTier.getUniqueId()).thenReturn("magiccobblegenerator_level");
+        when(generatorTier.isDeployed()).thenReturn(true);
+        when(generatorTier.isDefaultGenerator()).thenReturn(false);
+        when(generatorTier.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(generatorTier.getRequiredMinIslandLevel()).thenReturn(100L);
+        when(generatorTier.getRequiredPermissions()).thenReturn(java.util.Collections.emptySet());
+        sgm.loadGeneratorTier(generatorTier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        data.getUnlockedTiers().add("magiccobblegenerator_level");
+        data.getActiveGeneratorList().add("magiccobblegenerator_level");
+        return data;
+    }
+
+    @Test
+    void testRevokesLevelGeneratorWhenLevelDropped() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        s.setLoseTiersOnLevelLoss(true);
+
+        // Island level dropped to 10, below the generator's required level of 100.
+        sgm.checkGeneratorUnlockStatus(island, null, 10L);
+
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+        assertFalse(data.getActiveGeneratorList().contains("magiccobblegenerator_level"));
+    }
+
+    @Test
+    void testKeepsPurchasedLevelGeneratorWhenLevelDropped() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        data.getPurchasedTiers().add("magiccobblegenerator_level");
+        s.setLoseTiersOnLevelLoss(true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, 10L);
+
+        // Purchased tiers are kept even when the level drops.
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+    }
+
+    @Test
+    void testDoesNotRevokeLevelGeneratorWhenFeatureDisabled() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        // Feature is off by default.
+
+        sgm.checkGeneratorUnlockStatus(island, null, 10L);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+    }
+
+    @Test
+    void testKeepsLevelGeneratorWhenLevelSufficient() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        s.setLoseTiersOnLevelLoss(true);
+
+        // Island level is still at or above the requirement.
+        sgm.checkGeneratorUnlockStatus(island, null, 200L);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+    }
+
+    /**
      * Builds a deployed, non-default cobblestone generator tier mock with no permission/level requirements, for
      * prerequisite-generator tests.
      */
