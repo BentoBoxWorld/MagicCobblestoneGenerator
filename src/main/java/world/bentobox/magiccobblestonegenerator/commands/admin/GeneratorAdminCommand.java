@@ -112,6 +112,18 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 
         @Override
+        public void setup()
+        {
+            // Permission and locale references are derived from the subcommand label.
+            this.setPermission("admin.stone-generator." + this.getLabel());
+            this.setParametersHelp(Constants.ADMIN_COMMANDS + this.getLabel() + ".parameters");
+            this.setDescription(Constants.ADMIN_COMMANDS + this.getLabel() + ".description");
+
+            this.setOnlyPlayer(false);
+        }
+
+
+        @Override
         public boolean execute(User user, String label, List<String> args)
         {
             // If args are not right, show help
@@ -244,17 +256,6 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 
         @Override
-        public void setup()
-        {
-            this.setPermission("admin.stone-generator.why");
-            this.setParametersHelp(Constants.ADMIN_COMMANDS + "why.parameters");
-            this.setDescription(Constants.ADMIN_COMMANDS + "why.description");
-
-            this.setOnlyPlayer(false);
-        }
-
-
-        @Override
         protected boolean executeForTarget(User user, String targetName, UUID targetUUID)
         {
             // Set meta data on player
@@ -326,17 +327,6 @@ public class GeneratorAdminCommand extends CompositeCommand
         public ResetCommand(StoneGeneratorAddon addon, CompositeCommand parentCommand)
         {
             super(addon, parentCommand, "reset");
-        }
-
-
-        @Override
-        public void setup()
-        {
-            this.setPermission("admin.stone-generator.reset");
-            this.setParametersHelp(Constants.ADMIN_COMMANDS + "reset.parameters");
-            this.setDescription(Constants.ADMIN_COMMANDS + "reset.description");
-
-            this.setOnlyPlayer(false);
         }
 
 
