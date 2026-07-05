@@ -1448,6 +1448,24 @@ public class StoneGeneratorManager {
 	this.wipeGeneratorData(dataObject.getUniqueId());
     }
 
+    /**
+     * This method resets all generator data for the given island: its stored data is removed and a fresh default data
+     * object is recreated. Unlocked, purchased and active generators are cleared (#149).
+     *
+     * @param island Island whose generator data must be reset.
+     */
+    public void resetIslandData(@NotNull Island island) {
+	this.wipeGeneratorData(island.getUniqueId());
+	// Recreate a fresh, default data object so the island keeps working immediately. addIslandData works even
+	// for ownerless islands (e.g. spawn), unlike validateIslandData which returns early when there is no owner.
+	this.addIslandData(island);
+
+	if (island.getOwner() != null) {
+	    // For owned islands, also re-apply owner bundles/limits and re-evaluate unlocks.
+	    this.validateIslandData(island);
+	}
+    }
+
     // ---------------------------------------------------------------------
     // Section: Methods
     // ---------------------------------------------------------------------

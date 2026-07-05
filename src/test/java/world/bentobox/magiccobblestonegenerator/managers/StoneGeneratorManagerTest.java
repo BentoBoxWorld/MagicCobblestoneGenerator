@@ -711,6 +711,14 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testResetIslandData() {
+        when(island.getUniqueId()).thenReturn("island-149");
+        assertDoesNotThrow(() -> sgm.resetIslandData(island));
+        // The island's stored data is deleted as part of the reset.
+        verify(h).deleteID("island-149");
+    }
+
+    @Test
     void testWipeGeneratorDataGeneratorDataObject() {
         assertDoesNotThrow(() -> sgm.wipeGeneratorData(generatorData));
     }
