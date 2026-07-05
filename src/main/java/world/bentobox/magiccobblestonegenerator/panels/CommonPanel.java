@@ -547,6 +547,18 @@ public abstract class CommonPanel
             phase = "";
         }
 
+        String blockCount;
+
+        if (generator.getRequiredBlockCount() > 0 && !isUnlocked)
+        {
+            blockCount = this.user.getTranslationOrNothing(reference + "block-count",
+                Constants.NUMBER, String.valueOf(generator.getRequiredBlockCount()));
+        }
+        else
+        {
+            blockCount = "";
+        }
+
         StringBuilder permissions = new StringBuilder();
 
         if (!generator.getRequiredPermissions().isEmpty() && !isUnlocked)
@@ -615,6 +627,7 @@ public abstract class CommonPanel
             "[biomes]", biomes.toString(),
             "[level]", level,
             "[phase]", phase,
+            "[block-count]", blockCount,
             "[missing-permissions]", permissions.toString(),
             "[required-generators]", requiredGenerators.toString());
     }

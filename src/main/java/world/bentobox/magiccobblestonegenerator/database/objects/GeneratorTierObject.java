@@ -253,6 +253,29 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
+     * Method GeneratorTierObject#getRequiredBlockCount returns the number of OneBlock blocks that must be broken on the
+     * island before this generator becomes available.
+     *
+     * @return the requiredBlockCount (type int) of this object, or 0 if none.
+     */
+    public int getRequiredBlockCount()
+    {
+        return requiredBlockCount;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setRequiredBlockCount sets new value for the requiredBlockCount of this object.
+     *
+     * @param requiredBlockCount new value for this object.
+     */
+    public void setRequiredBlockCount(int requiredBlockCount)
+    {
+        this.requiredBlockCount = requiredBlockCount;
+    }
+
+
+    /**
      * Method GeneratorTierObject#getGeneratorTierCost returns the generatorTierCost of this object.
      *
      * @return the generatorTierCost (type double) of this object.
@@ -596,6 +619,7 @@ public class GeneratorTierObject implements DataObject
         clone.setRequiredPermissions(new HashSet<>(this.requiredPermissions));
         clone.setRequiredGeneratorTiers(new HashSet<>(this.getRequiredGeneratorTiers()));
         clone.setRequiredPhase(this.requiredPhase);
+        clone.setRequiredBlockCount(this.requiredBlockCount);
         clone.setGeneratorTierCost(this.generatorTierCost);
         clone.setActivationCost(this.activationCost);
         clone.setDeployed(this.deployed);
@@ -754,6 +778,13 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private String requiredPhase = "";
+
+    /**
+     * Number of OneBlock blocks that must be broken on the island before this generator becomes available. 0 means no
+     * block count requirement.
+     */
+    @Expose
+    private int requiredBlockCount = 0;
 
     /**
      * Cost to do buy current generator.

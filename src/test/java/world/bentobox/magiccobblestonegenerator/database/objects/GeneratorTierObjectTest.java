@@ -46,6 +46,27 @@ class GeneratorTierObjectTest extends CommonTestSetup {
     }
 
     @Test
+    void testRequiredBlockCountDefaultsToZero() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        assertEquals(0, tier.getRequiredBlockCount());
+    }
+
+    @Test
+    void testSetAndGetRequiredBlockCount() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setRequiredBlockCount(5000);
+        assertEquals(5000, tier.getRequiredBlockCount());
+    }
+
+    @Test
+    void testCloneCopiesRequiredBlockCount() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setUniqueId("tier");
+        tier.setRequiredBlockCount(5000);
+        assertEquals(5000, tier.clone().getRequiredBlockCount());
+    }
+
+    @Test
     void testRequiredGeneratorTiersDefaultsToEmpty() {
         GeneratorTierObject tier = new GeneratorTierObject();
         assertTrue(tier.getRequiredGeneratorTiers().isEmpty());

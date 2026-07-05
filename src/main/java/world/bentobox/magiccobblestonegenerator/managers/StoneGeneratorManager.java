@@ -881,6 +881,9 @@ public class StoneGeneratorManager {
 		// Filter out generators whose required AOneBlock phase has not been reached yet (#121).
 		filter(generator -> this.isPhaseRequirementMet(island, generator))
 		.
+		// Filter out generators whose required OneBlock block count has not been reached yet (#117).
+		filter(generator -> this.isBlockCountRequirementMet(island, generator))
+		.
 		// Now process each generator.
 		forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
 
@@ -1567,17 +1570,54 @@ public class StoneGeneratorManager {
 	    return true;
 	}
 
-	Optional<GameModeAddon> gameMode = this.addon.getPlugin().getIWM().getAddon(island.getWorld());
+	Optional<AOneBlock> aoneBlock = this.getAOneBlock(island.getWorld());
 
-	if (gameMode.isEmpty() || !(gameMode.get() instanceof AOneBlock aoneBlock)) {
+	if (aoneBlock.isEmpty()) {
 	    // Phase requirements only apply to AOneBlock worlds.
 	    return false;
 	}
 
+	AOneBlock addon = aoneBlock.get();
+
 	// The requirement is met once the island's block count has reached the required phase's starting block.
-	return aoneBlock.getOneBlockManager().getPhase(requiredPhase)
-		.map(phase -> aoneBlock.getOneBlocksIsland(island).getBlockNumber() >= phase.getBlockNumberValue())
+	return addon.getOneBlockManager().getPhase(requiredPhase)
+		.map(phase -> addon.getOneBlocksIsland(island).getBlockNumber() >= phase.getBlockNumberValue())
 		.orElse(false);
+    }
+
+    /**
+     * This method returns whether the given generator's OneBlock block count requirement is met for the given island. A
+     * generator with no required block count is always considered met. Otherwise the island's world must be an AOneBlock
+     * world and the island must have broken at least the required number of blocks (#117).
+     *
+     * @param island    the island.
+     * @param generator the generator tier to check.
+     * @return {@code true} if the block count requirement is met.
+     */
+    private boolean isBlockCountRequirementMet(@NotNull Island island, @NotNull GeneratorTierObject generator) {
+	final int requiredBlockCount = generator.getRequiredBlockCount();
+
+	if (requiredBlockCount <= 0) {
+	    // No block count requirement.
+	    return true;
+	}
+
+	// Block count requirements only apply to AOneBlock worlds.
+	return this.getAOneBlock(island.getWorld())
+		.map(addon -> addon.getOneBlocksIsland(island).getBlockNumber() >= requiredBlockCount)
+		.orElse(false);
+    }
+
+    /**
+     * This method returns the AOneBlock addon that manages the given world, if that world is an AOneBlock world.
+     *
+     * @param world the world to check.
+     * @return an optional AOneBlock addon.
+     */
+    private Optional<AOneBlock> getAOneBlock(World world) {
+	return this.addon.getPlugin().getIWM().getAddon(world)
+		.filter(AOneBlock.class::isInstance)
+		.map(AOneBlock.class::cast);
     }
 
     /**

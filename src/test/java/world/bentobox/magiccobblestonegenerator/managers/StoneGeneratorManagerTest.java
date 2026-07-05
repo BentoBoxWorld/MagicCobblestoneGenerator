@@ -642,6 +642,54 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_phasegen"));
     }
 
+    /**
+     * Sets up an AOneBlock world whose island has broken the given number of blocks, plus a generator that requires the
+     * given block count. Returns the island's data object (#117).
+     */
+    private GeneratorDataObject seedBlockCountGenerator(int islandBlockCount, int requiredBlockCount) {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-117");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        AOneBlock aoneBlock = mock(AOneBlock.class);
+        when(aoneBlock.getDescription()).thenReturn(
+                new AddonDescription.Builder("", "AOneBlock", "1.0").build());
+        OneBlockIslands obIsland = mock(OneBlockIslands.class);
+        when(obIsland.getBlockNumber()).thenReturn(islandBlockCount);
+        when(aoneBlock.getOneBlocksIsland(island)).thenReturn(obIsland);
+        when(iwm.getAddon(world)).thenReturn(Optional.of(aoneBlock));
+
+        GeneratorTierObject tier = prerequisiteTier("aoneblock_blockgen", "Block Gen", 10);
+        when(tier.getRequiredBlockCount()).thenReturn(requiredBlockCount);
+        sgm.loadGeneratorTier(tier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        return data;
+    }
+
+    @Test
+    void testUnlocksBlockCountGeneratorWhenReached() {
+        // Island has broken 1500 blocks, past the required 1000.
+        GeneratorDataObject data = seedBlockCountGenerator(1500, 1000);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("aoneblock_blockgen"));
+    }
+
+    @Test
+    void testKeepsBlockCountGeneratorLockedWhenNotReached() {
+        // Island has broken only 500 blocks, short of the required 1000.
+        GeneratorDataObject data = seedBlockCountGenerator(500, 1000);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("aoneblock_blockgen"));
+    }
+
     @Test
     void testGetGeneratorDataIsland() {
         assertNotNull(sgm.getGeneratorData(island));
