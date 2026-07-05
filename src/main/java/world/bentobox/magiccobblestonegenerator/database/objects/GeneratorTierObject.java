@@ -230,6 +230,29 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
+     * Method GeneratorTierObject#getRequiredPhase returns the AOneBlock phase that must be reached before this
+     * generator becomes available.
+     *
+     * @return the requiredPhase (type String) of this object, or an empty string if none.
+     */
+    public String getRequiredPhase()
+    {
+        return requiredPhase == null ? "" : requiredPhase;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setRequiredPhase sets new value for the requiredPhase of this object.
+     *
+     * @param requiredPhase new value for this object.
+     */
+    public void setRequiredPhase(String requiredPhase)
+    {
+        this.requiredPhase = requiredPhase == null ? "" : requiredPhase;
+    }
+
+
+    /**
      * Method GeneratorTierObject#getGeneratorTierCost returns the generatorTierCost of this object.
      *
      * @return the generatorTierCost (type double) of this object.
@@ -572,6 +595,7 @@ public class GeneratorTierObject implements DataObject
         clone.setRequiredBiomes(new HashSet<>(this.requiredBiomes));
         clone.setRequiredPermissions(new HashSet<>(this.requiredPermissions));
         clone.setRequiredGeneratorTiers(new HashSet<>(this.getRequiredGeneratorTiers()));
+        clone.setRequiredPhase(this.requiredPhase);
         clone.setGeneratorTierCost(this.generatorTierCost);
         clone.setActivationCost(this.activationCost);
         clone.setDeployed(this.deployed);
@@ -724,6 +748,12 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private Set<String> requiredGeneratorTiers = Collections.emptySet();
+
+    /**
+     * AOneBlock phase that must be reached before this generator becomes available. Empty means no phase requirement.
+     */
+    @Expose
+    private String requiredPhase = "";
 
     /**
      * Cost to do buy current generator.

@@ -38,6 +38,7 @@
         <bentobox.version>3.14.0-SNAPSHOT</bentobox.version>
         <level.version>2.5.0</level.version>
         <bank.version>1.4.0</bank.version>
+        <aoneblock.version>1.18.0</aoneblock.version>
         <!-- Test dependency versions -->
         <junit.version>5.10.2</junit.version>
         <mockito.version>5.11.0</mockito.version>
@@ -149,6 +150,12 @@
             <groupId>world.bentobox</groupId>
             <artifactId>bank</artifactId>
             <version>${bank.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>world.bentobox</groupId>
+            <artifactId>aoneblock</artifactId>
+            <version>${aoneblock.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -27,6 +27,10 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
+import world.bentobox.aoneblock.AOneBlock;
+import world.bentobox.aoneblock.dataobjects.OneBlockIslands;
+import world.bentobox.aoneblock.oneblocks.OneBlockPhase;
+import world.bentobox.aoneblock.oneblocks.OneBlocksManager;
 import world.bentobox.bentobox.api.addons.AddonDescription;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
@@ -569,6 +573,73 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         // Gen1 stays locked, so Gen2's prerequisite is unmet and it stays locked too.
         assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_gen1"));
         assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_gen2"));
+    }
+
+    /**
+     * Sets up an AOneBlock world whose island has reached the given block count, plus a phase "Underground" that starts
+     * at block 100, and a phase-gated generator. Returns the island's data object (#121).
+     */
+    private GeneratorDataObject seedPhaseGenerator(String tierId, int islandBlockCount, boolean aOneBlockWorld) {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-121");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        if (aOneBlockWorld) {
+            AOneBlock aoneBlock = mock(AOneBlock.class);
+            when(aoneBlock.getDescription()).thenReturn(
+                    new AddonDescription.Builder("", "AOneBlock", "1.0").build());
+            OneBlockPhase phase = mock(OneBlockPhase.class);
+            when(phase.getBlockNumberValue()).thenReturn(100);
+            OneBlocksManager obManager = mock(OneBlocksManager.class);
+            when(obManager.getPhase("Underground")).thenReturn(Optional.of(phase));
+            when(aoneBlock.getOneBlockManager()).thenReturn(obManager);
+            OneBlockIslands obIsland = mock(OneBlockIslands.class);
+            when(obIsland.getBlockNumber()).thenReturn(islandBlockCount);
+            when(aoneBlock.getOneBlocksIsland(island)).thenReturn(obIsland);
+            when(iwm.getAddon(world)).thenReturn(Optional.of(aoneBlock));
+        }
+        // Otherwise the default (non-AOneBlock) game mode from CommonTestSetup is used.
+
+        GeneratorTierObject tier = prerequisiteTier(tierId, "Phase Gen", 10);
+        when(tier.getRequiredPhase()).thenReturn("Underground");
+        sgm.loadGeneratorTier(tier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        return data;
+    }
+
+    @Test
+    void testUnlocksPhaseGeneratorWhenPhaseReached() {
+        // Island at block 150, past the phase's start block of 100.
+        GeneratorDataObject data = seedPhaseGenerator("aoneblock_phasegen", 150, true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("aoneblock_phasegen"));
+    }
+
+    @Test
+    void testKeepsPhaseGeneratorLockedWhenPhaseNotReached() {
+        // Island at block 50, before the phase's start block of 100.
+        GeneratorDataObject data = seedPhaseGenerator("aoneblock_phasegen", 50, true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("aoneblock_phasegen"));
+    }
+
+    @Test
+    void testKeepsPhaseGeneratorLockedInNonAOneBlockWorld() {
+        // Not an AOneBlock world: the phase requirement can never be satisfied. The tier id matches the default
+        // game mode so it is still evaluated.
+        GeneratorDataObject data = seedPhaseGenerator("magiccobblegenerator_phasegen", 150, false);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_phasegen"));
     }
 
     @Test

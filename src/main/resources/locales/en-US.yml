@@ -921,10 +921,13 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
             [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Required Level: </bold></red><red>[number]</red>"
+          # Generates [phase] message (AOneBlock only).
+          phase: "<red><bold>Required Phase: </bold></red><red>[name]</red>"
           # Generates [required-generators] message title.
           required-generators-title: "<red><bold>Required Generators:</bold></red>"
           # Generates [required-generators] message values.

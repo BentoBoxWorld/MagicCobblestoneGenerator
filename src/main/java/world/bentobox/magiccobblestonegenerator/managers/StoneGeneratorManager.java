@@ -32,6 +32,7 @@ import world.bentobox.bank.BankManager;
 import world.bentobox.bank.BankResponse;
 import world.bentobox.bank.data.Money;
 import world.bentobox.bank.data.TxType;
+import world.bentobox.aoneblock.AOneBlock;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
@@ -877,6 +878,9 @@ public class StoneGeneratorManager {
 		// is unlocked earlier in this same pass and is visible here.
 		filter(generator -> dataObject.getUnlockedTiers().containsAll(generator.getRequiredGeneratorTiers()))
 		.
+		// Filter out generators whose required AOneBlock phase has not been reached yet (#121).
+		filter(generator -> this.isPhaseRequirementMet(island, generator))
+		.
 		// Now process each generator.
 		forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
 
@@ -1544,6 +1548,36 @@ public class StoneGeneratorManager {
 	}
 
 	return false;
+    }
+
+    /**
+     * This method returns whether the given generator's AOneBlock phase requirement is met for the given island. A
+     * generator with no required phase is always considered met. Otherwise the island's world must be an AOneBlock world
+     * and the island must have reached (block count) the required phase's starting block (#121).
+     *
+     * @param island    the island.
+     * @param generator the generator tier to check.
+     * @return {@code true} if the phase requirement is met.
+     */
+    private boolean isPhaseRequirementMet(@NotNull Island island, @NotNull GeneratorTierObject generator) {
+	final String requiredPhase = generator.getRequiredPhase();
+
+	if (requiredPhase == null || requiredPhase.isEmpty()) {
+	    // No phase requirement.
+	    return true;
+	}
+
+	Optional<GameModeAddon> gameMode = this.addon.getPlugin().getIWM().getAddon(island.getWorld());
+
+	if (gameMode.isEmpty() || !(gameMode.get() instanceof AOneBlock aoneBlock)) {
+	    // Phase requirements only apply to AOneBlock worlds.
+	    return false;
+	}
+
+	// The requirement is met once the island's block count has reached the required phase's starting block.
+	return aoneBlock.getOneBlockManager().getPhase(requiredPhase)
+		.map(phase -> aoneBlock.getOneBlocksIsland(island).getBlockNumber() >= phase.getBlockNumberValue())
+		.orElse(false);
     }
 
     /**
