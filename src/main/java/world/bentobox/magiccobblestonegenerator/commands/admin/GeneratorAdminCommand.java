@@ -94,56 +94,72 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 
     // ---------------------------------------------------------------------
-    // Section: Shared helpers
+    // Section: Subcommands
     // ---------------------------------------------------------------------
 
 
     /**
-     * Shared tab-completer for subcommands that take a single player name argument. Online player names are only
-     * suggested once at least one character has been typed.
-     *
-     * @param user the user completing the command.
-     * @param args the current command arguments.
-     * @return the list of matching online player names.
+     * Base class for admin subcommands that take a single player name argument. It validates the argument, resolves the
+     * target player UUID and provides player name tab-completion, delegating the actual work to
+     * {@link #executeForTarget(User, String, UUID)}.
      */
-    private static Optional<List<String>> playerTabComplete(User user, List<String> args)
+    private abstract static class PlayerTargetCommand extends ConfirmableCommand
     {
-        if (args.isEmpty())
+        protected PlayerTargetCommand(StoneGeneratorAddon addon, CompositeCommand parentCommand, String label)
         {
-            // Don't show every player on the server. Require at least the first letter
-            return Optional.empty();
+            super(addon, parentCommand, label);
         }
 
-        return Optional.of(Util.tabLimit(
-            new ArrayList<>(Util.getOnlinePlayerList(user)),
-            args.get(args.size() - 1)));
-    }
 
-
-    /**
-     * Resolves the target player UUID from the given name and messages the user if it cannot be resolved.
-     *
-     * @param user the user running the command.
-     * @param name the player name argument.
-     * @return the resolved UUID, or null if it could not be resolved.
-     */
-    private static UUID resolveTargetUUID(User user, String name)
-    {
-        UUID targetUUID = Util.getUUID(name);
-
-        if (targetUUID == null)
+        @Override
+        public boolean execute(User user, String label, List<String> args)
         {
-            Utils.sendMessage(user,
-                user.getTranslation("general.errors.unknown-player", TextVariables.NAME, name));
+            // If args are not right, show help
+            if (args.size() != 1)
+            {
+                this.showHelp(this, user);
+                return false;
+            }
+
+            // Get target
+            UUID targetUUID = Util.getUUID(args.get(0));
+
+            if (targetUUID == null)
+            {
+                Utils.sendMessage(user,
+                    user.getTranslation("general.errors.unknown-player", TextVariables.NAME, args.get(0)));
+                return false;
+            }
+
+            return this.executeForTarget(user, args.get(0), targetUUID);
         }
 
-        return targetUUID;
+
+        /**
+         * Runs the subcommand for the resolved target player.
+         *
+         * @param user the user running the command.
+         * @param targetName the player name argument as typed.
+         * @param targetUUID the resolved target player UUID.
+         * @return {@code true} if the command executed successfully.
+         */
+        protected abstract boolean executeForTarget(User user, String targetName, UUID targetUUID);
+
+
+        @Override
+        public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
+        {
+            if (args.isEmpty())
+            {
+                // Don't show every player on the server. Require at least the first letter
+                return Optional.empty();
+            }
+
+            return Optional.of(Util.tabLimit(
+                new ArrayList<>(Util.getOnlinePlayerList(user)),
+                args.get(args.size() - 1)));
+        }
     }
-
-
-    // ---------------------------------------------------------------------
-    // Section: Subcommadns
-    // ---------------------------------------------------------------------
 
 
     /**
@@ -213,7 +229,7 @@ public class GeneratorAdminCommand extends CompositeCommand
      * This is a debug command for admins. Admins could use to check which generator user is using and could faster find
      * an issue.
      */
-    private static class GeneratorWhyCommand extends ConfirmableCommand
+    private static class GeneratorWhyCommand extends PlayerTargetCommand
     {
         /**
          * This is simple constructor for initializing /{admin_command} why generator command.
@@ -227,17 +243,6 @@ public class GeneratorAdminCommand extends CompositeCommand
         }
 
 
-        /**
-         * Setups anything that is needed for this command. <br/><br/> It is recommended you do the following in this
-         * method:
-         * <ul>
-         * <li>Register any of the sub-commands of this command;</li>
-         * <li>Define the permission required to use this command using {@link
-         * CompositeCommand#setPermission(String)};</li>
-         * <li>Define whether this command can only be run by players or not using {@link
-         * CompositeCommand#setOnlyPlayer(boolean)};</li>
-         * </ul>
-         */
         @Override
         public void setup()
         {
@@ -249,33 +254,9 @@ public class GeneratorAdminCommand extends CompositeCommand
         }
 
 
-        /**
-         * Defines what will be executed when this command is run.
-         *
-         * @param user the {@link User} who is executing this command.
-         * @param label the label which has been used to execute this command. It can be {@link
-         * CompositeCommand#getLabel()} or an alias.
-         * @param args the command arguments.
-         * @return {@code true} if the command executed successfully, {@code false} otherwise.
-         */
         @Override
-        public boolean execute(User user, String label, List<String> args)
+        protected boolean executeForTarget(User user, String targetName, UUID targetUUID)
         {
-            // If args are not right, show help
-            if (args.size() != 1)
-            {
-                this.showHelp(this, user);
-                return false;
-            }
-
-            // Get target
-            UUID targetUUID = resolveTargetUUID(user, args.get(0));
-
-            if (targetUUID == null)
-            {
-                return false;
-            }
-
             // Set meta data on player
             Island island = this.getAddon().getIslands().getIsland(this.getWorld(), targetUUID);
 
@@ -327,22 +308,6 @@ public class GeneratorAdminCommand extends CompositeCommand
 
             return true;
         }
-
-
-        /**
-         * Tab Completer for CompositeCommands. Note that any registered sub-commands will be automatically added to the
-         * list. Use this to add tab-complete for things like names.
-         *
-         * @param user the {@link User} who is executing this command.
-         * @param alias alias for command
-         * @param args command arguments
-         * @return List of strings that could be used to complete this command.
-         */
-        @Override
-        public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
-        {
-            return playerTabComplete(user, args);
-        }
     }
 
 
@@ -350,7 +315,7 @@ public class GeneratorAdminCommand extends CompositeCommand
      * This command resets a single player's island generator data (unlocked, purchased and active generators) without
      * touching the rest of the database. Requires confirmation as it is destructive.
      */
-    private static class ResetCommand extends ConfirmableCommand
+    private static class ResetCommand extends PlayerTargetCommand
     {
         /**
          * This is simple constructor for initializing /{admin_command} generator reset command.
@@ -376,23 +341,8 @@ public class GeneratorAdminCommand extends CompositeCommand
 
 
         @Override
-        public boolean execute(User user, String label, List<String> args)
+        protected boolean executeForTarget(User user, String targetName, UUID targetUUID)
         {
-            // If args are not right, show help
-            if (args.size() != 1)
-            {
-                this.showHelp(this, user);
-                return false;
-            }
-
-            // Get target
-            UUID targetUUID = resolveTargetUUID(user, args.get(0));
-
-            if (targetUUID == null)
-            {
-                return false;
-            }
-
             Island island = this.getAddon().getIslands().getIsland(this.getWorld(), targetUUID);
 
             if (island == null)
@@ -403,28 +353,21 @@ public class GeneratorAdminCommand extends CompositeCommand
 
             // Fall back to the typed argument if the server cannot resolve a name for the UUID.
             final String resolvedName = this.getPlayers().getName(targetUUID);
-            final String targetName = resolvedName == null || resolvedName.isEmpty() ? args.get(0) : resolvedName;
+            final String displayName = resolvedName == null || resolvedName.isEmpty() ? targetName : resolvedName;
 
             this.askConfirmation(user,
                 user.getTranslation(Constants.CONVERSATIONS + "prefix") +
                     user.getTranslation(Constants.ADMIN_COMMANDS + "reset.confirmation",
-                        Constants.PLAYER, targetName),
+                        Constants.PLAYER, displayName),
                 () ->
                 {
                     this.<StoneGeneratorAddon>getAddon().getAddonManager().resetIslandData(island);
                     Utils.sendMessage(user,
                         user.getTranslation(Constants.MESSAGES + "generator-data-reset",
-                            Constants.PLAYER, targetName));
+                            Constants.PLAYER, displayName));
                 });
 
             return true;
-        }
-
-
-        @Override
-        public Optional<List<String>> tabComplete(User user, String alias, List<String> args)
-        {
-            return playerTabComplete(user, args);
         }
     }
 }
