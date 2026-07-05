@@ -12,9 +12,38 @@ import org.junit.jupiter.api.Test;
 import world.bentobox.magiccobblestonegenerator.CommonTestSetup;
 
 /**
- * Tests for the requiredGeneratorTiers (#88) and activateOnUnlock (#106) fields of {@link GeneratorTierObject}.
+ * Tests for the requiredGeneratorTiers (#88), activateOnUnlock (#106) and requiredPhase (#121) fields of
+ * {@link GeneratorTierObject}.
  */
 class GeneratorTierObjectTest extends CommonTestSetup {
+
+    @Test
+    void testRequiredPhaseDefaultsToEmpty() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        assertTrue(tier.getRequiredPhase().isEmpty());
+    }
+
+    @Test
+    void testSetAndGetRequiredPhase() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setRequiredPhase("Underground");
+        assertEquals("Underground", tier.getRequiredPhase());
+    }
+
+    @Test
+    void testSetRequiredPhaseNullNormalizedToEmpty() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setRequiredPhase(null);
+        assertTrue(tier.getRequiredPhase().isEmpty());
+    }
+
+    @Test
+    void testCloneCopiesRequiredPhase() {
+        GeneratorTierObject tier = new GeneratorTierObject();
+        tier.setUniqueId("tier");
+        tier.setRequiredPhase("Underground");
+        assertEquals("Underground", tier.clone().getRequiredPhase());
+    }
 
     @Test
     void testRequiredGeneratorTiersDefaultsToEmpty() {

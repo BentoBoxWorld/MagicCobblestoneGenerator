@@ -535,6 +535,18 @@ public abstract class CommonPanel
             level = "";
         }
 
+        String phase;
+
+        if (!generator.getRequiredPhase().isEmpty() && !isUnlocked)
+        {
+            phase = this.user.getTranslationOrNothing(reference + "phase",
+                TextVariables.NAME, generator.getRequiredPhase());
+        }
+        else
+        {
+            phase = "";
+        }
+
         StringBuilder permissions = new StringBuilder();
 
         if (!generator.getRequiredPermissions().isEmpty() && !isUnlocked)
@@ -602,6 +614,7 @@ public abstract class CommonPanel
         return this.user.getTranslationOrNothing(reference + "description",
             "[biomes]", biomes.toString(),
             "[level]", level,
+            "[phase]", phase,
             "[missing-permissions]", permissions.toString(),
             "[required-generators]", requiredGenerators.toString());
     }
