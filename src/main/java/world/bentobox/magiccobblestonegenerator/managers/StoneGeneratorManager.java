@@ -883,6 +883,46 @@ public class StoneGeneratorManager {
 	// Revoke permission based generators that the current owner no longer qualifies for.
 	// This handles ownership transfer to a player without the required permission (#133).
 	this.revokePermissionGenerators(island, dataObject, owner);
+
+	// Revoke level based generators when the island level dropped below their requirement (#118).
+	this.revokeLevelLockedGenerators(island, dataObject, islandLevel);
+    }
+
+    /**
+     * This method locks level based generators again when the island level has dropped below their required level. It
+     * only runs when the {@code lose-tiers-on-level-loss} setting is enabled, and never revokes purchased generators, so
+     * paid tiers are kept even if the level drops (#118).
+     *
+     * @param island      Island which is targeted for the check.
+     * @param dataObject  Data object that stores island generators.
+     * @param islandLevel The current island level.
+     */
+    private void revokeLevelLockedGenerators(@NotNull Island island, @NotNull GeneratorDataObject dataObject,
+	    long islandLevel) {
+	if (!this.addon.getSettings().isLoseTiersOnLevelLoss()) {
+	    // Feature disabled: unlocked generators stay unlocked regardless of level.
+	    return;
+	}
+
+	List<GeneratorTierObject> revokeList = this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream()
+		// Only level gated generators can be revoked this way.
+		.filter(generator -> generator.getRequiredMinIslandLevel() > 0)
+		// Whose required level is now above the current island level.
+		.filter(generator -> generator.getRequiredMinIslandLevel() > islandLevel)
+		// That are currently unlocked.
+		.filter(generator -> dataObject.getUnlockedTiers().contains(generator.getUniqueId()))
+		// But that were not purchased. Paid tiers are kept even when the level drops.
+		.filter(generator -> !dataObject.getPurchasedTiers().contains(generator.getUniqueId()))
+		.collect(Collectors.toList());
+
+	if (!revokeList.isEmpty()) {
+	    revokeList.forEach(generator -> {
+		dataObject.getUnlockedTiers().remove(generator.getUniqueId());
+		dataObject.getActiveGeneratorList().remove(generator.getUniqueId());
+	    });
+
+	    this.saveGeneratorData(dataObject);
+	}
     }
 
     /**

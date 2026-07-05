@@ -329,6 +329,28 @@ public class Settings implements ConfigObject
 
 
     /**
+     * Is lose tiers on level loss boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isLoseTiersOnLevelLoss()
+    {
+        return loseTiersOnLevelLoss;
+    }
+
+
+    /**
+     * Sets lose tiers on level loss.
+     *
+     * @param loseTiersOnLevelLoss the lose tiers on level loss
+     */
+    public void setLoseTiersOnLevelLoss(boolean loseTiersOnLevelLoss)
+    {
+        this.loseTiersOnLevelLoss = loseTiersOnLevelLoss;
+    }
+
+
+    /**
      * Is use bank account boolean.
      *
      * @return the boolean
@@ -513,6 +535,13 @@ public class Settings implements ConfigObject
     @ConfigComment("The confirmation is requested via a chat prompt.")
     @ConfigEntry(path = "buy-confirmation")
     private boolean buyConfirmation = true;
+
+    @ConfigComment("")
+    @ConfigComment("If enabled, generators unlocked purely by reaching an island level are locked again")
+    @ConfigComment("when the island level drops back below their required level. Purchased generators are")
+    @ConfigComment("always kept. Requires the Level addon.")
+    @ConfigEntry(path = "lose-tiers-on-level-loss")
+    private boolean loseTiersOnLevelLoss = false;
 
     @ConfigComment("")
     @ConfigComment("Send a notification message when player unlocks a new generator.")
