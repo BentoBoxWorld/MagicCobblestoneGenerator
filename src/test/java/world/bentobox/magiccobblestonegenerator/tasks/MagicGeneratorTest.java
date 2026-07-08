@@ -96,6 +96,30 @@ class MagicGeneratorTest extends CommonTestSetup {
     }
 
     @Test
+    void testListenerNullingDropLocationIsGuarded() {
+        // A rogue listener nulls the drop location; generation must not throw and nothing is dropped.
+        Mockito.doAnswer(invocation -> {
+            Object event = invocation.getArgument(0);
+            if (event instanceof GeneratorTreasureDropEvent drop) {
+                drop.setLocation(null);
+            }
+            return null;
+        }).when(pim).callEvent(any(GeneratorTreasureDropEvent.class));
+
+        Material result = generator.processBlockReplacement(generatorTier, location, island);
+
+        assertEquals(Material.COBBLESTONE, result);
+        verify(world, never()).dropItemNaturally(any(Location.class), any(ItemStack.class));
+    }
+
+    @Test
+    void testProcessBlockReplacementWithoutIslandOverload() {
+        // The two-argument overload delegates with a null island and still generates the block.
+        Material result = generator.processBlockReplacement(generatorTier, location);
+        assertEquals(Material.COBBLESTONE, result);
+    }
+
+    @Test
     void testListenerReplacesTreasureItem() {
         ItemStack replacement = mock(ItemStack.class);
         Mockito.doAnswer(invocation -> {
