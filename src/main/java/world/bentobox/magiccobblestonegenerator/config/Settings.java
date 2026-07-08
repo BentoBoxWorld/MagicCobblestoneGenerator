@@ -307,6 +307,50 @@ public class Settings implements ConfigObject
 
 
     /**
+     * Is buy confirmation boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isBuyConfirmation()
+    {
+        return buyConfirmation;
+    }
+
+
+    /**
+     * Sets buy confirmation.
+     *
+     * @param buyConfirmation the buy confirmation
+     */
+    public void setBuyConfirmation(boolean buyConfirmation)
+    {
+        this.buyConfirmation = buyConfirmation;
+    }
+
+
+    /**
+     * Is lose tiers on level loss boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isLoseTiersOnLevelLoss()
+    {
+        return loseTiersOnLevelLoss;
+    }
+
+
+    /**
+     * Sets lose tiers on level loss.
+     *
+     * @param loseTiersOnLevelLoss the lose tiers on level loss
+     */
+    public void setLoseTiersOnLevelLoss(boolean loseTiersOnLevelLoss)
+    {
+        this.loseTiersOnLevelLoss = loseTiersOnLevelLoss;
+    }
+
+
+    /**
      * Is use bank account boolean.
      *
      * @return the boolean
@@ -485,6 +529,19 @@ public class Settings implements ConfigObject
     @ConfigComment("Useful for situations with one active generator, which will be changed upon activating next one.")
     @ConfigEntry(path = "overwrite-on-activate")
     private boolean overwriteOnActive = false;
+
+    @ConfigComment("")
+    @ConfigComment("Ask the player to confirm before buying a generator, to avoid accidental purchases.")
+    @ConfigComment("The confirmation is requested via a chat prompt.")
+    @ConfigEntry(path = "buy-confirmation")
+    private boolean buyConfirmation = true;
+
+    @ConfigComment("")
+    @ConfigComment("If enabled, generators unlocked purely by reaching an island level are locked again")
+    @ConfigComment("when the island level drops back below their required level. Purchased generators are")
+    @ConfigComment("always kept. Requires the Level addon.")
+    @ConfigEntry(path = "lose-tiers-on-level-loss")
+    private boolean loseTiersOnLevelLoss = false;
 
     @ConfigComment("")
     @ConfigComment("Send a notification message when player unlocks a new generator.")

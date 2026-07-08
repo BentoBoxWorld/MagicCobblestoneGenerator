@@ -604,15 +604,7 @@ public class GeneratorUserPanel extends CommonPanel
                         case "VIEW" -> {
                             GeneratorViewPanel.openPanel(this, generatorTier);
                         }
-                        case "BUY" -> {
-                            if (this.island != null && this.manager.canPurchaseGenerator(user, this.island, this.generatorData, generatorTier))
-                            {
-                                this.manager.purchaseGenerator(this.user, this.island, this.generatorData, generatorTier);
-                            }
-
-                            // Build whole gui.
-                            this.build();
-                        }
+                        case "BUY" -> this.purchaseGenerator(this.island, this.generatorData, generatorTier);
                         case "ACTIVATE" -> {
                             if (this.island != null && this.manager.canActivateGenerator(user, this.island, this.generatorData, generatorTier))
                             {

@@ -200,6 +200,82 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
+     * Method GeneratorTierObject#getRequiredGeneratorTiers returns the unique ids of generator tiers that must be
+     * unlocked before this generator becomes available.
+     *
+     * @return the requiredGeneratorTiers (type Set&lt;String&gt;) of this object.
+     */
+    public Set<String> getRequiredGeneratorTiers()
+    {
+        if (this.requiredGeneratorTiers == null)
+        {
+            // Guard against a null value from deserialization of user-edited JSON, so callers such as
+            // clone() and containsAll() never hit a NullPointerException.
+            this.requiredGeneratorTiers = new HashSet<>();
+        }
+
+        return requiredGeneratorTiers;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setRequiredGeneratorTiers sets new value for the requiredGeneratorTiers of this object.
+     *
+     * @param requiredGeneratorTiers new value for this object.
+     */
+    public void setRequiredGeneratorTiers(Set<String> requiredGeneratorTiers)
+    {
+        this.requiredGeneratorTiers = requiredGeneratorTiers == null ? new HashSet<>() : requiredGeneratorTiers;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#getRequiredPhase returns the AOneBlock phase that must be reached before this
+     * generator becomes available.
+     *
+     * @return the requiredPhase (type String) of this object, or an empty string if none.
+     */
+    public String getRequiredPhase()
+    {
+        return requiredPhase == null ? "" : requiredPhase;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setRequiredPhase sets new value for the requiredPhase of this object.
+     *
+     * @param requiredPhase new value for this object.
+     */
+    public void setRequiredPhase(String requiredPhase)
+    {
+        this.requiredPhase = requiredPhase == null ? "" : requiredPhase;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#getRequiredBlockCount returns the number of OneBlock blocks that must be broken on the
+     * island before this generator becomes available.
+     *
+     * @return the requiredBlockCount (type int) of this object, or 0 if none.
+     */
+    public int getRequiredBlockCount()
+    {
+        return requiredBlockCount;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setRequiredBlockCount sets new value for the requiredBlockCount of this object.
+     *
+     * @param requiredBlockCount new value for this object.
+     */
+    public void setRequiredBlockCount(int requiredBlockCount)
+    {
+        this.requiredBlockCount = requiredBlockCount;
+    }
+
+
+    /**
      * Method GeneratorTierObject#getGeneratorTierCost returns the generatorTierCost of this object.
      *
      * @return the generatorTierCost (type double) of this object.
@@ -240,6 +316,29 @@ public class GeneratorTierObject implements DataObject
     public void setDeployed(boolean deployed)
     {
         this.deployed = deployed;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#isActivateOnUnlock returns whether this generator should be automatically activated as
+     * soon as it is unlocked.
+     *
+     * @return the activateOnUnlock (type boolean) of this object.
+     */
+    public boolean isActivateOnUnlock()
+    {
+        return activateOnUnlock;
+    }
+
+
+    /**
+     * Method GeneratorTierObject#setActivateOnUnlock sets new value for the activateOnUnlock of this object.
+     *
+     * @param activateOnUnlock new value for this object.
+     */
+    public void setActivateOnUnlock(boolean activateOnUnlock)
+    {
+        this.activateOnUnlock = activateOnUnlock;
     }
 
 
@@ -518,9 +617,13 @@ public class GeneratorTierObject implements DataObject
         clone.setRequiredMinIslandLevel(this.requiredMinIslandLevel);
         clone.setRequiredBiomes(new HashSet<>(this.requiredBiomes));
         clone.setRequiredPermissions(new HashSet<>(this.requiredPermissions));
+        clone.setRequiredGeneratorTiers(new HashSet<>(this.getRequiredGeneratorTiers()));
+        clone.setRequiredPhase(this.requiredPhase);
+        clone.setRequiredBlockCount(this.requiredBlockCount);
         clone.setGeneratorTierCost(this.generatorTierCost);
         clone.setActivationCost(this.activationCost);
         clone.setDeployed(this.deployed);
+        clone.setActivateOnUnlock(this.activateOnUnlock);
         clone.setBlockChanceMap(new TreeMap<>(this.blockChanceMap));
 
         if (treasureChanceMap != null)
@@ -665,6 +768,25 @@ public class GeneratorTierObject implements DataObject
     private Set<String> requiredPermissions = Collections.emptySet();
 
     /**
+     * Unique ids of generator tiers that must be unlocked before this generator becomes available.
+     */
+    @Expose
+    private Set<String> requiredGeneratorTiers = Collections.emptySet();
+
+    /**
+     * AOneBlock phase that must be reached before this generator becomes available. Empty means no phase requirement.
+     */
+    @Expose
+    private String requiredPhase = "";
+
+    /**
+     * Number of OneBlock blocks that must be broken on the island before this generator becomes available. 0 means no
+     * block count requirement.
+     */
+    @Expose
+    private int requiredBlockCount = 0;
+
+    /**
      * Cost to do buy current generator.
      */
     @Expose
@@ -681,6 +803,12 @@ public class GeneratorTierObject implements DataObject
      */
     @Expose
     private boolean deployed = true;
+
+    /**
+     * Whether this generator is automatically activated as soon as it is unlocked.
+     */
+    @Expose
+    private boolean activateOnUnlock = false;
 
     // Rewards section
 

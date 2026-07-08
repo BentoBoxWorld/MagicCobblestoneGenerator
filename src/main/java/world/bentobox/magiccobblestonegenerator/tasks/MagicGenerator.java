@@ -4,13 +4,16 @@ package world.bentobox.magiccobblestonegenerator.tasks;
 import java.util.Random;
 import java.util.TreeMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorTreasureDropEvent;
 import world.bentobox.magiccobblestonegenerator.utils.Why;
 
 
@@ -38,6 +41,22 @@ public class MagicGenerator
      * @return the replaced material or null.
      */
     public @Nullable Material processBlockReplacement(@Nullable GeneratorTierObject generatorTier, Location location)
+    {
+        return this.processBlockReplacement(generatorTier, location, null);
+    }
+
+
+    /**
+     * This method tries to replace block from chance map and returns if it was successful.
+     *
+     * @param generatorTier Object that contains all possible chances.
+     * @param location Location of the block that need to be replaced.
+     * @param island Island on which the block is processed, or null if unknown. Used to provide context for the
+     *     {@link GeneratorTreasureDropEvent}.
+     * @return the replaced material or null.
+     */
+    public @Nullable Material processBlockReplacement(@Nullable GeneratorTierObject generatorTier, Location location,
+        @Nullable Island island)
     {
         if (generatorTier == null)
         {
@@ -121,10 +140,37 @@ public class MagicGenerator
                     ItemStack drop = itemStack.clone();
                     drop.setAmount(this.random.nextInt(generatorTier.getMaxTreasureAmount() + 1) + 1);
 
-                    Why.report(location, "Dropping treasure " + drop + " by " + generatorTier.getUniqueId());
+                    // Fire a cancellable event so other plugins can intercept, modify or veto the treasure drop.
+                    GeneratorTreasureDropEvent treasureEvent = new GeneratorTreasureDropEvent(generatorTier,
+                        island == null ? null : island.getUniqueId(),
+                        location,
+                        drop);
+                    Bukkit.getPluginManager().callEvent(treasureEvent);
 
-                    // drop item naturally in the location of the block
-                    location.getWorld().dropItemNaturally(location, drop);
+                    if (!treasureEvent.isCancelled() && treasureEvent.getItemStack() != null)
+                    {
+                        ItemStack finalDrop = treasureEvent.getItemStack();
+                        Location dropLocation = treasureEvent.getLocation();
+
+                        // A listener may have nulled the location (or its world); guard against it so we do
+                        // not throw and break block generation.
+                        if (dropLocation == null || dropLocation.getWorld() == null)
+                        {
+                            Why.report(location, "Treasure drop skipped: listener supplied an invalid drop location for " +
+                                generatorTier.getUniqueId());
+                        }
+                        else
+                        {
+                            Why.report(location, "Dropping treasure " + finalDrop + " by " + generatorTier.getUniqueId());
+
+                            // drop item naturally in the location of the block
+                            dropLocation.getWorld().dropItemNaturally(dropLocation, finalDrop);
+                        }
+                    }
+                    else
+                    {
+                        Why.report(location, "Treasure drop cancelled by " + generatorTier.getUniqueId());
+                    }
                 }
             }
         }

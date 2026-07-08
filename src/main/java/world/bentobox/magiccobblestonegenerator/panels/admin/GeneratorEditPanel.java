@@ -29,6 +29,7 @@ import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.panels.ConversationUtils;
 import world.bentobox.magiccobblestonegenerator.panels.utils.GeneratorTypeSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.MultiBiomeSelector;
+import world.bentobox.magiccobblestonegenerator.panels.utils.MultiGeneratorSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Pair;
@@ -181,6 +182,9 @@ public class GeneratorEditPanel extends CommonPanel
             // Display only permissions if they are required.
             panelBuilder.item(23, this.createButton(Button.REQUIRED_PERMISSIONS, locale));
 
+            // Prerequisite generators that must be unlocked first.
+            panelBuilder.item(31, this.createButton(Button.REQUIRED_GENERATORS, locale));
+
             if (this.addon.isVaultProvided())
             {
                 // Display cost only if there exist vault.
@@ -201,6 +205,9 @@ public class GeneratorEditPanel extends CommonPanel
 
         // deployed button.
         panelBuilder.item(33, this.createButton(Button.DEPLOYED, locale));
+
+        // Auto-activate on unlock toggle.
+        panelBuilder.item(29, this.createButton(Button.ACTIVATE_ON_UNLOCK, locale));
 
         // display treasures.
         panelBuilder.item(25, this.createButton(Button.TREASURE_CHANCE, locale));
@@ -455,7 +462,7 @@ public class GeneratorEditPanel extends CommonPanel
 
                     if (!this.generatorTier.getDescription().isEmpty())
                     {
-                        description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                        description.add(this.user.getTranslation(TIP_SHIFT_CLICK_TO_RESET));
                     }
 
                     return true;
@@ -583,7 +590,7 @@ public class GeneratorEditPanel extends CommonPanel
             case REQUIRED_PERMISSIONS -> {
                 itemStack = new ItemStack(Material.BOOK);
 
-                description.add(this.user.getTranslation(reference + ".list"));
+                description.add(this.user.getTranslation(reference + LIST_SUFFIX));
                 this.generatorTier.getRequiredPermissions().stream().sorted().forEach(permission ->
                 description.add(this.user.getTranslation(reference + ".value",
                     Constants.PERMISSION, permission)));
@@ -630,7 +637,69 @@ public class GeneratorEditPanel extends CommonPanel
 
                 if (!this.generatorTier.getRequiredPermissions().isEmpty())
                 {
-                    description.add(this.user.getTranslation(Constants.TIPS + "shift-click-to-reset"));
+                    description.add(this.user.getTranslation(TIP_SHIFT_CLICK_TO_RESET));
+                }
+            }
+            case REQUIRED_GENERATORS -> {
+                itemStack = new ItemStack(Material.CHISELED_BOOKSHELF);
+
+                description.add(this.user.getTranslation(reference + LIST_SUFFIX));
+
+                if (this.generatorTier.getRequiredGeneratorTiers().isEmpty())
+                {
+                    description.add(this.user.getTranslation(reference + ".none"));
+                }
+                else
+                {
+                    this.generatorTier.getRequiredGeneratorTiers().stream().
+                        // Fall back to the raw id if the generator no longer exists, so the admin can
+                        // still see (and reset) which prerequisite is configured.
+                        map(id -> {
+                            GeneratorTierObject required = this.manager.getGeneratorByID(id);
+                            return required == null ? id : required.getFriendlyName();
+                        }).
+                        sorted().
+                        forEach(generatorName -> description.add(this.user.getTranslation(reference + ".value",
+                            Constants.GENERATOR, generatorName)));
+                }
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    if (!this.generatorTier.getRequiredGeneratorTiers().isEmpty() && clickType.isShiftClick())
+                    {
+                        // Reset to the empty value.
+                        this.generatorTier.setRequiredGeneratorTiers(new HashSet<>());
+                        this.save();
+                        this.build();
+                    }
+                    else
+                    {
+                        MultiGeneratorSelector.open(user,
+                            this.addon,
+                            this.world,
+                            this.generatorTier,
+                            this.generatorTier.getRequiredGeneratorTiers(),
+                            value ->
+                            {
+                                if (value != null)
+                                {
+                                    this.generatorTier.setRequiredGeneratorTiers(new HashSet<>(value));
+                                    this.save();
+                                }
+
+                                this.build();
+                            });
+                    }
+
+                    return true;
+                };
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-change"));
+
+                if (!this.generatorTier.getRequiredGeneratorTiers().isEmpty())
+                {
+                    description.add(this.user.getTranslation(TIP_SHIFT_CLICK_TO_RESET));
                 }
             }
             case PURCHASE_COST -> {
@@ -750,7 +819,7 @@ public class GeneratorEditPanel extends CommonPanel
             case BIOMES -> {
                 itemStack = new ItemStack(Material.FILLED_MAP);
 
-                description.add(this.user.getTranslation(reference + ".list"));
+                description.add(this.user.getTranslation(reference + LIST_SUFFIX));
 
                 if (this.generatorTier.getRequiredBiomes().isEmpty())
                 {
@@ -806,6 +875,32 @@ public class GeneratorEditPanel extends CommonPanel
                 };
 
                 glow = this.generatorTier.isDeployed();
+
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
+            }
+            case ACTIVATE_ON_UNLOCK -> {
+                itemStack = new ItemStack(Material.REDSTONE_TORCH);
+
+                if (this.generatorTier.isActivateOnUnlock())
+                {
+                    description.add(this.user.getTranslation(reference + ".enabled"));
+                }
+                else
+                {
+                    description.add(this.user.getTranslation(reference + ".disabled"));
+                }
+
+                clickHandler = (panel, user, clickType, i) ->
+                {
+                    this.generatorTier.setActivateOnUnlock(!this.generatorTier.isActivateOnUnlock());
+                    this.save();
+                    this.build();
+
+                    return true;
+                };
+
+                glow = this.generatorTier.isActivateOnUnlock();
 
                 description.add("");
                 description.add(this.user.getTranslation(Constants.TIPS + "click-to-toggle"));
@@ -1816,6 +1911,10 @@ public class GeneratorEditPanel extends CommonPanel
          */
         REQUIRED_PERMISSIONS,
         /**
+         * Holds Name type that allows to interact with generator prerequisite generators.
+         */
+        REQUIRED_GENERATORS,
+        /**
          * Holds Name type that allows to interact with generator purchase cost.
          */
         PURCHASE_COST,
@@ -1831,6 +1930,10 @@ public class GeneratorEditPanel extends CommonPanel
          * Holds Name type that allows to interact with generator deployment status.
          */
         DEPLOYED,
+        /**
+         * Holds Name type that toggles whether the generator activates automatically on unlock.
+         */
+        ACTIVATE_ON_UNLOCK,
         /**
          * Holds Name type that allows to interact with generator treasure amount.
          */
@@ -1861,6 +1964,16 @@ public class GeneratorEditPanel extends CommonPanel
     // ---------------------------------------------------------------------
     // Section: Variables
     // ---------------------------------------------------------------------
+
+    /**
+     * Reference for the "shift-click to reset" tip, reused by several requirement buttons.
+     */
+    private static final String TIP_SHIFT_CLICK_TO_RESET = Constants.TIPS + "shift-click-to-reset";
+
+    /**
+     * Suffix for the requirement list translation key, reused by several requirement buttons.
+     */
+    private static final String LIST_SUFFIX = ".list";
 
     /**
      * This variable stores generator tier that is viewed.

@@ -11,6 +11,10 @@ stone-generator:
       why:
         parameters: "<player>"
         description: "toggles Magic Cobblestone Generator debug messages"
+      reset:
+        parameters: "<player>"
+        description: "resets a player's island generator data"
+        confirmation: "This will reset [player]'s generator data (unlocked, purchased and active generators) - please confirm"
       database:
         description: "Main database command"
       import-database:
@@ -45,6 +49,7 @@ stone-generator:
       admin-panel: "<black><bold>Admin Panel</bold></black>"
       # Title for GUI that allows to select biomes for generator.
       select-biome: "<black><bold>Select Biomes</bold></black>"
+      select-generator: "<black><bold>Select Generators</bold></black>"
       # Title for GUI that allows to select a block generator.
       select-block: "<black><bold>Select Block</bold></black>"
       # Title for GUI that allows to select a bundle for island.
@@ -128,6 +133,15 @@ stone-generator:
           </gray><gray>this generator.</gray>
         list: "<aqua>Required Permissions:</aqua>"
         value: "<aqua>- [permission]</aqua>"
+        none: "<aqua>- none</aqua>"
+      required_generators:
+        name: "<white><bold>Required Generators</bold></white>"
+        description: |-
+          <gray>Generators that must be
+          </gray><gray>unlocked before this
+          </gray><gray>generator becomes available.</gray>
+        list: "<aqua>Required Generators:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
         none: "<aqua>- none</aqua>"
       purchase_cost:
         name: "<white><bold>Purchase Cost</bold></white>"
@@ -402,6 +416,16 @@ stone-generator:
           <aqua>This generator is </aqua><green>deployed.</green>
         disabled: |-
           <aqua>This generator is </aqua><red>not deployed.</red>
+      activate_on_unlock:
+        name: "<white><bold>Activate On Unlock</bold></white>"
+        description: |-
+          <gray>When enabled, this generator
+          </gray><gray>is activated automatically
+          </gray><gray>as soon as it is unlocked.</gray>
+        enabled: |-
+          <aqua>This generator </aqua><green>activates on unlock.</green>
+        disabled: |-
+          <aqua>This generator </aqua><red>does not activate on unlock.</red>
       add_material:
         name: "<white><bold>Add Material</bold></white>"
         description: |-
@@ -683,6 +707,13 @@ stone-generator:
           </gray><gray>and returns.</gray>
         selected-biomes: "<gray>Selected Biomes:</gray>"
         list-value: "<gray>- [value]</gray>"
+      accept_generator:
+        name: "<white><bold>Accept the generators</bold></white>"
+        description: |-
+          <gray>Accepts selected generators
+          </gray><gray>and returns.</gray>
+        selected-generators: "<gray>Selected Generators:</gray>"
+        list-value: "<gray>- [value]</gray>"
       biome-icon:
         name: "<white><bold>[biome]</bold></white>"
       min-height:
@@ -890,9 +921,20 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Required Level: </bold></red><red>[number]</red>"
+          # Generates [phase] message (AOneBlock only).
+          phase: "<red><bold>Required Phase: </bold></red><red>[name]</red>"
+          # Generates [block-count] message (AOneBlock only).
+          block-count: "<red><bold>Required Blocks Broken: </bold></red><red>[number]</red>"
+          # Generates [required-generators] message title.
+          required-generators-title: "<red><bold>Required Generators:</bold></red>"
+          # Generates [required-generators] message values.
+          required-generator: "<red> -[generator]</red>"
           # Generates [missing-permission] message title.
           permission-title: "<red><bold>Missing Permissions:</bold></red>"
           # Generates [missing-permission] message values.
@@ -967,6 +1009,8 @@ stone-generator:
     generator-exhausted: "<red>Generator </red> '[generator]' <red>has reached its generation limit and is now on cooldown for [number] more minute(s).</red>"
     # Message that appears when purchasing the generator.
     generator-purchased: "<yellow>Generator </yellow> '[generator]' <yellow>is purchased.</yellow>"
+    # Message that appears after an admin resets a player's generator data.
+    generator-data-reset: "<yellow>Generator data for </yellow>[player]<yellow> has been reset.</yellow>"
     # Message that appears when trying to buy already purchased generator.
     generator-already-purchased: "<red>Generator </red> '[generator]' <red>is already purchased.</red>"
     # Message that appears when trying to buy generator without required island level
@@ -1068,6 +1112,8 @@ stone-generator:
     write-permissions: "<yellow>Please enter the required permissions, one per line in chat, and 'quit' on a line by itself to finish.</yellow>"
     # Message that appears after successful permission updating.
     permissions-changed: "<green>Success, generator permissions were updated.</green>"
+    # Message that asks the player to confirm a generator purchase before money is taken.
+    confirm-generator-purchase: "<yellow>Please confirm that you want to buy </yellow>[generator]<yellow> for [number].</yellow>"
     # Message that appears after importing library data into database.
     confirm-data-replacement: "<yellow>Please confirm that you want to replace your current generators with new one.</yellow>"
     # Message that appears after successful data importing

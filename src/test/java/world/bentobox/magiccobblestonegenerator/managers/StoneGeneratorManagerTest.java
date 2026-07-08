@@ -27,6 +27,10 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 
+import world.bentobox.aoneblock.AOneBlock;
+import world.bentobox.aoneblock.dataobjects.OneBlockIslands;
+import world.bentobox.aoneblock.oneblocks.OneBlockPhase;
+import world.bentobox.aoneblock.oneblocks.OneBlocksManager;
 import world.bentobox.bentobox.api.addons.AddonDescription;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.user.User;
@@ -38,6 +42,8 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundle
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject.GeneratorType;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorPreBuyEvent;
 
 /**
  * @author tastybento
@@ -273,6 +279,45 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         assertTrue(sgm.getAllGeneratorTiers(world).isEmpty());
     }
 
+    /**
+     * Builds a deployed, non-default cobblestone generator tier mock for ordering tests.
+     */
+    private GeneratorTierObject orderableTier(String id, String name, int priority) {
+        GeneratorTierObject t = mock(GeneratorTierObject.class);
+        when(t.getUniqueId()).thenReturn(id);
+        when(t.getFriendlyName()).thenReturn(name);
+        when(t.getPriority()).thenReturn(priority);
+        when(t.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(t.isDeployed()).thenReturn(true);
+        when(t.isDefaultGenerator()).thenReturn(false);
+        return t;
+    }
+
+    @Test
+    void testGetAllGeneratorTiersEqualPrioritySortsByUniqueIdNotName() {
+        sgm.addWorld(world);
+        // Same priority + type. Names are reverse of id order to prove the tiebreaker is the id.
+        GeneratorTierObject a = orderableTier("magiccobblegenerator_aaa", "Zebra", 10);
+        GeneratorTierObject b = orderableTier("magiccobblegenerator_zzz", "Apple", 10);
+        sgm.loadGeneratorTier(b, true, null);
+        sgm.loadGeneratorTier(a, true, null);
+
+        // Ordered by unique id (aaa before zzz), independent of the friendly names.
+        assertEquals(java.util.List.of(a, b), sgm.getAllGeneratorTiers(world));
+    }
+
+    @Test
+    void testGetAllGeneratorTiersSortsByPriority() {
+        sgm.addWorld(world);
+        GeneratorTierObject low = orderableTier("magiccobblegenerator_x", "X", 5);
+        GeneratorTierObject high = orderableTier("magiccobblegenerator_a", "A", 20);
+        sgm.loadGeneratorTier(high, true, null);
+        sgm.loadGeneratorTier(low, true, null);
+
+        // Lower priority number comes first, regardless of unique id or name.
+        assertEquals(java.util.List.of(low, high), sgm.getAllGeneratorTiers(world));
+    }
+
     @Test
     void testGetIslandGeneratorTiersWorldUser() {
         assertTrue(sgm.getIslandGeneratorTiers(world, user).isEmpty());
@@ -326,6 +371,325 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         verify(island, times(2)).isSpawn();
     }
 
+    /**
+     * Seeds a deployed, permission-gated generator tier into the cache and returns the freshly created island data with
+     * that tier already unlocked and active, simulating a generator that a previous owner had unlocked.
+     */
+    private GeneratorDataObject seedPermissionGeneratorAndData() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-133");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+
+        when(generatorTier.getUniqueId()).thenReturn("magiccobblegenerator_perm");
+        when(generatorTier.isDeployed()).thenReturn(true);
+        when(generatorTier.isDefaultGenerator()).thenReturn(false);
+        when(generatorTier.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(generatorTier.getRequiredMinIslandLevel()).thenReturn(0L);
+        when(generatorTier.getRequiredPermissions())
+                .thenReturn(java.util.Set.of("magiccobblegenerator.gen.perm"));
+        sgm.loadGeneratorTier(generatorTier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        data.getUnlockedTiers().add("magiccobblegenerator_perm");
+        data.getActiveGeneratorList().add("magiccobblegenerator_perm");
+        return data;
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusRevokesPermissionGeneratorWhenOwnerLacksPermission() {
+        GeneratorDataObject data = seedPermissionGeneratorAndData();
+        // Owner is online but does not have the required permission (new owner scenario, #133).
+        when(mockPlayer.isOnline()).thenReturn(true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_perm"));
+        assertFalse(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusKeepsPermissionGeneratorWhenOwnerHasPermission() {
+        GeneratorDataObject data = seedPermissionGeneratorAndData();
+        when(mockPlayer.isOnline()).thenReturn(true);
+        // Owner still has the required permission.
+        when(mockPlayer.hasPermission(anyString())).thenReturn(true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_perm"));
+        assertTrue(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusDoesNotRevokeWhenOwnerOffline() {
+        GeneratorDataObject data = seedPermissionGeneratorAndData();
+        // Owner is offline, so permissions cannot be checked reliably and nothing is revoked.
+        when(mockPlayer.isOnline()).thenReturn(false);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_perm"));
+        assertTrue(data.getActiveGeneratorList().contains("magiccobblegenerator_perm"));
+    }
+
+    /**
+     * Seeds a deployed, level-gated (required level 100) generator that is already unlocked and active, for
+     * lose-tiers-on-level-loss tests (#118).
+     */
+    private GeneratorDataObject seedLevelGeneratorAndData() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-118");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+
+        when(generatorTier.getUniqueId()).thenReturn("magiccobblegenerator_level");
+        when(generatorTier.isDeployed()).thenReturn(true);
+        when(generatorTier.isDefaultGenerator()).thenReturn(false);
+        when(generatorTier.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(generatorTier.getRequiredMinIslandLevel()).thenReturn(100L);
+        when(generatorTier.getRequiredPermissions()).thenReturn(java.util.Collections.emptySet());
+        sgm.loadGeneratorTier(generatorTier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        data.getUnlockedTiers().add("magiccobblegenerator_level");
+        data.getActiveGeneratorList().add("magiccobblegenerator_level");
+        return data;
+    }
+
+    @Test
+    void testRevokesLevelGeneratorWhenLevelDropped() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        s.setLoseTiersOnLevelLoss(true);
+
+        // Island level dropped to 10, below the generator's required level of 100.
+        sgm.checkGeneratorUnlockStatus(island, null, 10L);
+
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+        assertFalse(data.getActiveGeneratorList().contains("magiccobblegenerator_level"));
+    }
+
+    @Test
+    void testKeepsPurchasedLevelGeneratorWhenLevelDropped() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        data.getPurchasedTiers().add("magiccobblegenerator_level");
+        s.setLoseTiersOnLevelLoss(true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, 10L);
+
+        // Purchased tiers are kept even when the level drops.
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+    }
+
+    @Test
+    void testDoesNotRevokeLevelGeneratorWhenFeatureDisabled() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        // Feature is off by default.
+
+        sgm.checkGeneratorUnlockStatus(island, null, 10L);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+    }
+
+    @Test
+    void testKeepsLevelGeneratorWhenLevelSufficient() {
+        GeneratorDataObject data = seedLevelGeneratorAndData();
+        s.setLoseTiersOnLevelLoss(true);
+
+        // Island level is still at or above the requirement.
+        sgm.checkGeneratorUnlockStatus(island, null, 200L);
+
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_level"));
+    }
+
+    /**
+     * Builds a deployed, non-default cobblestone generator tier mock with no permission/level requirements, for
+     * prerequisite-generator tests.
+     */
+    private GeneratorTierObject prerequisiteTier(String id, String name, int priority) {
+        GeneratorTierObject t = mock(GeneratorTierObject.class);
+        when(t.getUniqueId()).thenReturn(id);
+        when(t.getFriendlyName()).thenReturn(name);
+        when(t.getPriority()).thenReturn(priority);
+        when(t.getGeneratorType()).thenReturn(GeneratorType.COBBLESTONE);
+        when(t.isDeployed()).thenReturn(true);
+        when(t.isDefaultGenerator()).thenReturn(false);
+        when(t.getRequiredMinIslandLevel()).thenReturn(0L);
+        when(t.getRequiredPermissions()).thenReturn(java.util.Collections.emptySet());
+        when(t.getRequiredGeneratorTiers()).thenReturn(java.util.Collections.emptySet());
+        return t;
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusUnlocksDependentWhenPrerequisiteUnlocked() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-88");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        GeneratorTierObject gen1 = prerequisiteTier("magiccobblegenerator_gen1", "Gen1", 10);
+        GeneratorTierObject gen2 = prerequisiteTier("magiccobblegenerator_gen2", "Gen2", 20);
+        when(gen2.getRequiredGeneratorTiers())
+                .thenReturn(java.util.Set.of("magiccobblegenerator_gen1"));
+        sgm.loadGeneratorTier(gen1, true, null);
+        sgm.loadGeneratorTier(gen2, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        // Gen1 has no requirements, so it unlocks; Gen2's prerequisite is then satisfied in the same pass.
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_gen1"));
+        assertTrue(data.getUnlockedTiers().contains("magiccobblegenerator_gen2"));
+    }
+
+    @Test
+    void testCheckGeneratorUnlockStatusKeepsDependentLockedWhenPrerequisiteLocked() {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-88");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        // Gen1 requires a permission the (offline) owner does not have, so it cannot unlock.
+        GeneratorTierObject gen1 = prerequisiteTier("magiccobblegenerator_gen1", "Gen1", 10);
+        when(gen1.getRequiredPermissions())
+                .thenReturn(java.util.Set.of("magiccobblegenerator.gen1"));
+        GeneratorTierObject gen2 = prerequisiteTier("magiccobblegenerator_gen2", "Gen2", 20);
+        when(gen2.getRequiredGeneratorTiers())
+                .thenReturn(java.util.Set.of("magiccobblegenerator_gen1"));
+        sgm.loadGeneratorTier(gen1, true, null);
+        sgm.loadGeneratorTier(gen2, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        // Gen1 stays locked, so Gen2's prerequisite is unmet and it stays locked too.
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_gen1"));
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_gen2"));
+    }
+
+    /**
+     * Sets up an AOneBlock world whose island has reached the given block count, plus a phase "Underground" that starts
+     * at block 100, and a phase-gated generator. Returns the island's data object (#121).
+     */
+    private GeneratorDataObject seedPhaseGenerator(String tierId, int islandBlockCount, boolean aOneBlockWorld) {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-121");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        if (aOneBlockWorld) {
+            AOneBlock aoneBlock = mock(AOneBlock.class);
+            when(aoneBlock.getDescription()).thenReturn(
+                    new AddonDescription.Builder("", "AOneBlock", "1.0").build());
+            OneBlockPhase phase = mock(OneBlockPhase.class);
+            when(phase.getBlockNumberValue()).thenReturn(100);
+            OneBlocksManager obManager = mock(OneBlocksManager.class);
+            when(obManager.getPhase("Underground")).thenReturn(Optional.of(phase));
+            when(aoneBlock.getOneBlockManager()).thenReturn(obManager);
+            OneBlockIslands obIsland = mock(OneBlockIslands.class);
+            when(obIsland.getBlockNumber()).thenReturn(islandBlockCount);
+            when(aoneBlock.getOneBlocksIsland(island)).thenReturn(obIsland);
+            when(iwm.getAddon(world)).thenReturn(Optional.of(aoneBlock));
+        }
+        // Otherwise the default (non-AOneBlock) game mode from CommonTestSetup is used.
+
+        GeneratorTierObject tier = prerequisiteTier(tierId, "Phase Gen", 10);
+        when(tier.getRequiredPhase()).thenReturn("Underground");
+        sgm.loadGeneratorTier(tier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        return data;
+    }
+
+    @Test
+    void testUnlocksPhaseGeneratorWhenPhaseReached() {
+        // Island at block 150, past the phase's start block of 100.
+        GeneratorDataObject data = seedPhaseGenerator("aoneblock_phasegen", 150, true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("aoneblock_phasegen"));
+    }
+
+    @Test
+    void testKeepsPhaseGeneratorLockedWhenPhaseNotReached() {
+        // Island at block 50, before the phase's start block of 100.
+        GeneratorDataObject data = seedPhaseGenerator("aoneblock_phasegen", 50, true);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("aoneblock_phasegen"));
+    }
+
+    @Test
+    void testKeepsPhaseGeneratorLockedInNonAOneBlockWorld() {
+        // Not an AOneBlock world: the phase requirement can never be satisfied. The tier id matches the default
+        // game mode so it is still evaluated.
+        GeneratorDataObject data = seedPhaseGenerator("magiccobblegenerator_phasegen", 150, false);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("magiccobblegenerator_phasegen"));
+    }
+
+    /**
+     * Sets up an AOneBlock world whose island has broken the given number of blocks, plus a generator that requires the
+     * given block count. Returns the island's data object (#117).
+     */
+    private GeneratorDataObject seedBlockCountGenerator(int islandBlockCount, int requiredBlockCount) {
+        sgm.addWorld(world);
+        when(island.getUniqueId()).thenReturn("island-117");
+        when(island.getWorld()).thenReturn(world);
+        when(island.isSpawn()).thenReturn(false);
+        s.setNotifyUnlockedGenerators(false);
+
+        AOneBlock aoneBlock = mock(AOneBlock.class);
+        when(aoneBlock.getDescription()).thenReturn(
+                new AddonDescription.Builder("", "AOneBlock", "1.0").build());
+        OneBlockIslands obIsland = mock(OneBlockIslands.class);
+        when(obIsland.getBlockNumber()).thenReturn(islandBlockCount);
+        when(aoneBlock.getOneBlocksIsland(island)).thenReturn(obIsland);
+        when(iwm.getAddon(world)).thenReturn(Optional.of(aoneBlock));
+
+        GeneratorTierObject tier = prerequisiteTier("aoneblock_blockgen", "Block Gen", 10);
+        when(tier.getRequiredBlockCount()).thenReturn(requiredBlockCount);
+        sgm.loadGeneratorTier(tier, true, null);
+
+        GeneratorDataObject data = sgm.getGeneratorData(island);
+        assertNotNull(data);
+        return data;
+    }
+
+    @Test
+    void testUnlocksBlockCountGeneratorWhenReached() {
+        // Island has broken 1500 blocks, past the required 1000.
+        GeneratorDataObject data = seedBlockCountGenerator(1500, 1000);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertTrue(data.getUnlockedTiers().contains("aoneblock_blockgen"));
+    }
+
+    @Test
+    void testKeepsBlockCountGeneratorLockedWhenNotReached() {
+        // Island has broken only 500 blocks, short of the required 1000.
+        GeneratorDataObject data = seedBlockCountGenerator(500, 1000);
+
+        sgm.checkGeneratorUnlockStatus(island, null, null);
+
+        assertFalse(data.getUnlockedTiers().contains("aoneblock_blockgen"));
+    }
+
     @Test
     void testGetGeneratorDataIsland() {
         assertNotNull(sgm.getGeneratorData(island));
@@ -375,6 +739,100 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
                 "stone-generator.conversations.prefixstone-generator.messages.generator-cannot-be-unlocked");
     }
 
+    /**
+     * Prepares generatorTier and island for unlock/auto-activation tests and returns a fresh, real data object.
+     */
+    private GeneratorDataObject prepareUnlockableGenerator() {
+        when(generatorTier.isDeployed()).thenReturn(true);
+        when(generatorTier.isDefaultGenerator()).thenReturn(false);
+        when(island.getUniqueId()).thenReturn("island-106");
+        s.setNotifyUnlockedGenerators(false);
+
+        GeneratorDataObject data = new GeneratorDataObject();
+        data.setUniqueId("island-106");
+        return data;
+    }
+
+    @Test
+    void testUnlockGeneratorAutoActivatesWhenFlagSet() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
+    void testUnlockGeneratorDoesNotAutoActivateWhenFlagUnset() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(false);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
+    void testAutoActivateRespectsLimitWithoutOverwrite() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        // One active generator already, limit of one, overwrite disabled.
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(false);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // Unlocked, but not activated because the active limit is reached.
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains("existing"));
+    }
+
+    @Test
+    void testAutoActivateOverwritesWhenLimitReached() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(true);
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // The old generator is replaced by the newly unlocked one.
+        assertFalse(data.getActiveGeneratorList().contains("existing"));
+        assertTrue(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
+    @Test
+    void testAutoActivateCancelledEventKeepsExistingActiveGenerator() {
+        GeneratorDataObject data = prepareUnlockableGenerator();
+        when(generatorTier.isActivateOnUnlock()).thenReturn(true);
+        data.setIslandActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("existing");
+        s.setOverwriteOnActive(true);
+
+        // Cancel any activation event.
+        Mockito.doAnswer(invocation -> {
+            Object event = invocation.getArgument(0);
+            if (event instanceof world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent activation) {
+                activation.setCancelled(true);
+            }
+            return null;
+        }).when(pim).callEvent(any(
+                world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent.class));
+
+        sgm.unlockGenerator(data, user, island, generatorTier);
+
+        // Activation was cancelled before mutating: the existing generator is preserved, the new one is not added.
+        assertTrue(data.getUnlockedTiers().contains(uuid.toString()));
+        assertTrue(data.getActiveGeneratorList().contains("existing"));
+        assertFalse(data.getActiveGeneratorList().contains(uuid.toString()));
+    }
+
     @Test
     void testDeactivateGenerator() {
         assertFalse(sgm.deactivateGenerator(user, generatorData, generatorTier));
@@ -411,8 +869,42 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testPurchaseGeneratorFiresPreBuyEvent() {
+        when(generatorData.getUniqueId()).thenReturn(uuid.toString());
+        sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
+        verify(pim).callEvent(any(GeneratorPreBuyEvent.class));
+    }
+
+    @Test
+    void testPurchaseGeneratorCancelledPreBuyEventStopsPurchase() {
+        when(generatorData.getUniqueId()).thenReturn(uuid.toString());
+        // Cancel any GeneratorPreBuyEvent that is fired.
+        Mockito.doAnswer(invocation -> {
+            Object event = invocation.getArgument(0);
+            if (event instanceof GeneratorPreBuyEvent preBuy) {
+                preBuy.setCancelled(true);
+            }
+            return null;
+        }).when(pim).callEvent(any(GeneratorPreBuyEvent.class));
+
+        sgm.purchaseGenerator(user, island, generatorData, generatorTier, true);
+
+        // Purchase must be aborted: the tier is never added and the post-purchase event never fires.
+        verify(generatorData, Mockito.never()).getPurchasedTiers();
+        verify(pim, Mockito.never()).callEvent(any(GeneratorBuyEvent.class));
+    }
+
+    @Test
     void testWipeGeneratorDataString() {
         assertDoesNotThrow(() -> sgm.wipeGeneratorData(uuid.toString()));
+    }
+
+    @Test
+    void testResetIslandData() {
+        when(island.getUniqueId()).thenReturn("island-149");
+        assertDoesNotThrow(() -> sgm.resetIslandData(island));
+        // The island's stored data is deleted as part of the reset.
+        verify(h).deleteID("island-149");
     }
 
     @Test

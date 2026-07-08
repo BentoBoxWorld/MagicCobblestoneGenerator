@@ -32,6 +32,7 @@ import world.bentobox.bank.BankManager;
 import world.bentobox.bank.BankResponse;
 import world.bentobox.bank.data.Money;
 import world.bentobox.bank.data.TxType;
+import world.bentobox.aoneblock.AOneBlock;
 import world.bentobox.bentobox.api.addons.GameModeAddon;
 import world.bentobox.bentobox.api.localization.TextVariables;
 import world.bentobox.bentobox.api.user.User;
@@ -45,6 +46,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorExhaus
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorActivationEvent;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
+import world.bentobox.magiccobblestonegenerator.events.GeneratorPreBuyEvent;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorUnlockEvent;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
@@ -502,11 +504,13 @@ public class StoneGeneratorManager {
 	// Filter generators that starts with name.
 		filter(generator -> generator.getUniqueId().startsWith(gameMode.toLowerCase())).
 		// Sort in order: default generators are first, followed by lowest priority,
-		// generator type and then by generator name.
+		// generator type and then by the stable unique id.
 		sorted(Comparator.comparing(GeneratorTierObject::isDefaultGenerator).reversed()
 			.thenComparing(GeneratorTierObject::getPriority)
 			.thenComparing(GeneratorTierObject::getGeneratorType)
-			.thenComparing(GeneratorTierObject::getFriendlyName))
+			// Final tiebreaker is the stable unique id, not the friendly name, so that
+			// renaming a generator does not change its position in the list (#123).
+			.thenComparing(GeneratorTierObject::getUniqueId))
 		.
 		// Return as list collection.
 		collect(Collectors.toList());
@@ -869,8 +873,100 @@ public class StoneGeneratorManager {
 		filter(generator -> generator.getRequiredPermissions().isEmpty() || owner != null && owner.isOnline()
 			&& Utils.matchAllPermissions(owner, generator.getRequiredPermissions()))
 		.
+		// Filter out generators whose prerequisite generators are not yet unlocked (#88).
+		// Generators are streamed in priority order, so a prerequisite with a lower priority
+		// is unlocked earlier in this same pass and is visible here.
+		filter(generator -> dataObject.getUnlockedTiers().containsAll(generator.getRequiredGeneratorTiers()))
+		.
+		// Filter out generators whose required AOneBlock phase has not been reached yet (#121).
+		filter(generator -> this.isPhaseRequirementMet(island, generator))
+		.
+		// Filter out generators whose required OneBlock block count has not been reached yet (#117).
+		filter(generator -> this.isBlockCountRequirementMet(island, generator))
+		.
 		// Now process each generator.
 		forEach(generator -> this.unlockGenerator(dataObject, user, island, generator));
+
+	// Revoke permission based generators that the current owner no longer qualifies for.
+	// This handles ownership transfer to a player without the required permission (#133).
+	this.revokePermissionGenerators(island, dataObject, owner);
+
+	// Revoke level based generators when the island level dropped below their requirement (#118).
+	this.revokeLevelLockedGenerators(island, dataObject, islandLevel);
+    }
+
+    /**
+     * This method locks level based generators again when the island level has dropped below their required level. It
+     * only runs when the {@code lose-tiers-on-level-loss} setting is enabled, and never revokes purchased generators, so
+     * paid tiers are kept even if the level drops (#118).
+     *
+     * @param island      Island which is targeted for the check.
+     * @param dataObject  Data object that stores island generators.
+     * @param islandLevel The current island level.
+     */
+    private void revokeLevelLockedGenerators(@NotNull Island island, @NotNull GeneratorDataObject dataObject,
+	    long islandLevel) {
+	if (!this.addon.getSettings().isLoseTiersOnLevelLoss()) {
+	    // Feature disabled: unlocked generators stay unlocked regardless of level.
+	    return;
+	}
+
+	List<GeneratorTierObject> revokeList = this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream()
+		// Only level gated generators can be revoked this way.
+		.filter(generator -> generator.getRequiredMinIslandLevel() > 0)
+		// Whose required level is now above the current island level.
+		.filter(generator -> generator.getRequiredMinIslandLevel() > islandLevel)
+		// That are currently unlocked.
+		.filter(generator -> dataObject.getUnlockedTiers().contains(generator.getUniqueId()))
+		// But that were not purchased. Paid tiers are kept even when the level drops.
+		.filter(generator -> !dataObject.getPurchasedTiers().contains(generator.getUniqueId()))
+		.collect(Collectors.toList());
+
+	if (!revokeList.isEmpty()) {
+	    revokeList.forEach(generator -> {
+		dataObject.getUnlockedTiers().remove(generator.getUniqueId());
+		dataObject.getActiveGeneratorList().remove(generator.getUniqueId());
+	    });
+
+	    this.saveGeneratorData(dataObject);
+	}
+    }
+
+    /**
+     * This method revokes access to permission based generators that the current island owner no longer holds the
+     * required permissions for. Only the unlocked and active status is revoked; any purchase record is preserved so the
+     * generator becomes available again if the permission is regained.
+     * <p>
+     * Permissions can only be checked reliably for an online owner, so nothing is revoked while the owner is offline.
+     *
+     * @param island     Island which is targeted for the check.
+     * @param dataObject Data object that stores island generators.
+     * @param owner      The island owner, or null (e.g. spawn islands).
+     */
+    private void revokePermissionGenerators(@NotNull Island island, @NotNull GeneratorDataObject dataObject,
+	    @Nullable User owner) {
+	if (owner == null || !owner.isOnline()) {
+	    // Cannot reliably check permissions of an offline owner. Do not revoke anything.
+	    return;
+	}
+
+	List<GeneratorTierObject> revokeList = this.getIslandGeneratorTiers(island.getWorld(), dataObject).stream()
+		// Only permission gated generators can be revoked this way.
+		.filter(generator -> !generator.getRequiredPermissions().isEmpty())
+		// That are currently unlocked.
+		.filter(generator -> dataObject.getUnlockedTiers().contains(generator.getUniqueId()))
+		// But whose required permissions the current owner does not have.
+		.filter(generator -> !Utils.matchAllPermissions(owner, generator.getRequiredPermissions()))
+		.collect(Collectors.toList());
+
+	if (!revokeList.isEmpty()) {
+	    revokeList.forEach(generator -> {
+		dataObject.getUnlockedTiers().remove(generator.getUniqueId());
+		dataObject.getActiveGeneratorList().remove(generator.getUniqueId());
+	    });
+
+	    this.saveGeneratorData(dataObject);
+	}
     }
 
     /**
@@ -938,6 +1034,12 @@ public class StoneGeneratorManager {
 	    // save data.
 	    this.saveGeneratorData(dataObject);
 
+	    // If configured, automatically activate the generator now that it is unlocked (#106).
+	    // Only skip the click-to-activate notification if it actually activated.
+	    if (generator.isActivateOnUnlock() && this.autoActivateGenerator(dataObject, user, island, generator)) {
+		return;
+	    }
+
 	    if (!this.addon.getSettings().isNotifyUnlockedGenerators()) {
 		// Not necessary to notify users.
 		return;
@@ -956,6 +1058,81 @@ public class StoneGeneratorManager {
 			.forEach(uuid -> Utils.sendUnlockMessage(uuid, island, generator, this.addon, true));
 	    }
 	}
+    }
+
+    /**
+     * This method automatically activates the given generator for the island once it is unlocked, respecting the active
+     * generator limit and the overwrite-on-active setting. It works without a user (system unlocks), so no cost is
+     * charged.
+     *
+     * @param dataObject Data that stores island generators.
+     * @param user       The user that triggered the unlock, or null.
+     * @param island     The island the generator belongs to.
+     * @param generator  The generator to activate.
+     * @return {@code true} if the generator was (or already is) active, {@code false} if it could not be activated
+     *         (active limit reached without overwrite, or the activation event was cancelled).
+     */
+    private boolean autoActivateGenerator(@NotNull GeneratorDataObject dataObject, @Nullable User user,
+	    @NotNull Island island, @NotNull GeneratorTierObject generator) {
+	if (dataObject.getActiveGeneratorList().contains(generator.getUniqueId())) {
+	    // Already active; no click-to-activate notification is needed.
+	    return true;
+	}
+
+	// Check the active generator limit up front. When it is reached and overwrite is disabled, we cannot
+	// activate, so report failure and let the caller send the normal unlock notification instead.
+	boolean atLimit = dataObject.getActiveGeneratorCount() > 0
+		&& dataObject.getActiveGeneratorList().size() >= dataObject.getActiveGeneratorCount();
+
+	if (atLimit && !this.addon.getSettings().isOverwriteOnActive()) {
+	    return false;
+	}
+
+	// Fire the activation event before mutating anything, so a cancellation does not lose an already active
+	// generator.
+	GeneratorActivationEvent event = new GeneratorActivationEvent(generator, user, island.getUniqueId(), true);
+	Bukkit.getPluginManager().callEvent(event);
+
+	if (event.isCancelled()) {
+	    return false;
+	}
+
+	if (atLimit) {
+	    // Overwrite is enabled: free a slot by deactivating the first active generator. Prefer
+	    // deactivateGenerator so the deactivation event is fired, but that requires a user; otherwise remove
+	    // directly (system unlock).
+	    String oldId = dataObject.getActiveGeneratorList().iterator().next();
+	    GeneratorTierObject oldGenerator = this.getGeneratorByID(oldId);
+
+	    boolean freed;
+
+	    if (user != null && oldGenerator != null) {
+		freed = this.deactivateGenerator(user, dataObject, oldGenerator);
+	    } else {
+		freed = dataObject.getActiveGeneratorList().remove(oldId);
+	    }
+
+	    if (!freed) {
+		// Could not free a slot (e.g. the deactivation event was cancelled). Do not activate.
+		return false;
+	    }
+	}
+
+	dataObject.getActiveGeneratorList().add(generator.getUniqueId());
+	this.saveGeneratorData(dataObject);
+
+	if (user != null) {
+	    Utils.sendMessage(user, user.getTranslation(Constants.MESSAGES + "generator-activated",
+		    Constants.GENERATOR, generator.getFriendlyName()));
+
+	    // Warn the user if the generator cannot actually operate because the addon is disabled on the island.
+	    if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR)) {
+		Utils.sendMessage(user,
+			user.getTranslation(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR.getHintReference()));
+	    }
+	}
+
+	return true;
     }
 
     /**
@@ -1230,6 +1407,17 @@ public class StoneGeneratorManager {
     public void purchaseGenerator(@NotNull User user, @NotNull Island island,
 	    @NotNull GeneratorDataObject generatorData, @NotNull GeneratorTierObject generatorTier,
 	    boolean bypassCost) {
+	// Call cancellable event before purchasing. This allows other plugins to add their own
+	// requirements to the generator purchasing process.
+	GeneratorPreBuyEvent preBuyEvent =
+		new GeneratorPreBuyEvent(generatorTier, user, generatorData.getUniqueId());
+	Bukkit.getPluginManager().callEvent(preBuyEvent);
+
+	if (preBuyEvent.isCancelled()) {
+	    // Another plugin cancelled the purchase. Do not withdraw money or grant the generator.
+	    return;
+	}
+
 	CompletableFuture<Boolean> purchaseGenerator = new CompletableFuture<>();
 	purchaseGenerator.thenAccept(runActivationTask -> {
 	    if (runActivationTask) {
@@ -1307,6 +1495,24 @@ public class StoneGeneratorManager {
 	this.wipeGeneratorData(dataObject.getUniqueId());
     }
 
+    /**
+     * This method resets all generator data for the given island: its stored data is removed and a fresh default data
+     * object is recreated. Unlocked, purchased and active generators are cleared (#149).
+     *
+     * @param island Island whose generator data must be reset.
+     */
+    public void resetIslandData(@NotNull Island island) {
+	this.wipeGeneratorData(island.getUniqueId());
+	// Recreate a fresh, default data object so the island keeps working immediately. addIslandData works even
+	// for ownerless islands (e.g. spawn), unlike validateIslandData which returns early when there is no owner.
+	this.addIslandData(island);
+
+	if (island.getOwner() != null) {
+	    // For owned islands, also re-apply owner bundles/limits and re-evaluate unlocks.
+	    this.validateIslandData(island);
+	}
+    }
+
     // ---------------------------------------------------------------------
     // Section: Methods
     // ---------------------------------------------------------------------
@@ -1345,6 +1551,73 @@ public class StoneGeneratorManager {
 	}
 
 	return false;
+    }
+
+    /**
+     * This method returns whether the given generator's AOneBlock phase requirement is met for the given island. A
+     * generator with no required phase is always considered met. Otherwise the island's world must be an AOneBlock world
+     * and the island must have reached (block count) the required phase's starting block (#121).
+     *
+     * @param island    the island.
+     * @param generator the generator tier to check.
+     * @return {@code true} if the phase requirement is met.
+     */
+    private boolean isPhaseRequirementMet(@NotNull Island island, @NotNull GeneratorTierObject generator) {
+	final String requiredPhase = generator.getRequiredPhase();
+
+	if (requiredPhase == null || requiredPhase.isEmpty()) {
+	    // No phase requirement.
+	    return true;
+	}
+
+	Optional<AOneBlock> aoneBlock = this.getAOneBlock(island.getWorld());
+
+	if (aoneBlock.isEmpty()) {
+	    // Phase requirements only apply to AOneBlock worlds.
+	    return false;
+	}
+
+	AOneBlock addon = aoneBlock.get();
+
+	// The requirement is met once the island's block count has reached the required phase's starting block.
+	return addon.getOneBlockManager().getPhase(requiredPhase)
+		.map(phase -> addon.getOneBlocksIsland(island).getBlockNumber() >= phase.getBlockNumberValue())
+		.orElse(false);
+    }
+
+    /**
+     * This method returns whether the given generator's OneBlock block count requirement is met for the given island. A
+     * generator with no required block count is always considered met. Otherwise the island's world must be an AOneBlock
+     * world and the island must have broken at least the required number of blocks (#117).
+     *
+     * @param island    the island.
+     * @param generator the generator tier to check.
+     * @return {@code true} if the block count requirement is met.
+     */
+    private boolean isBlockCountRequirementMet(@NotNull Island island, @NotNull GeneratorTierObject generator) {
+	final int requiredBlockCount = generator.getRequiredBlockCount();
+
+	if (requiredBlockCount <= 0) {
+	    // No block count requirement.
+	    return true;
+	}
+
+	// Block count requirements only apply to AOneBlock worlds.
+	return this.getAOneBlock(island.getWorld())
+		.map(addon -> addon.getOneBlocksIsland(island).getBlockNumber() >= requiredBlockCount)
+		.orElse(false);
+    }
+
+    /**
+     * This method returns the AOneBlock addon that manages the given world, if that world is an AOneBlock world.
+     *
+     * @param world the world to check.
+     * @return an optional AOneBlock addon.
+     */
+    private Optional<AOneBlock> getAOneBlock(World world) {
+	return this.addon.getPlugin().getIWM().getAddon(world)
+		.filter(AOneBlock.class::isInstance)
+		.map(AOneBlock.class::cast);
     }
 
     /**

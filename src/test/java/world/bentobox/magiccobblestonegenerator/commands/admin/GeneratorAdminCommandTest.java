@@ -4,8 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,6 +21,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,6 +31,7 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.magiccobblestonegenerator.CommonTestSetup;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.config.Settings;
+import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 
 class GeneratorAdminCommandTest extends CommonTestSetup {
 
@@ -36,11 +43,16 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
     private StoneGeneratorAddon addon;
     @Mock
     private ItemMeta itemMeta;
+    @Mock
+    private StoneGeneratorManager manager;
+
+    private UUID targetUUID;
 
     private GeneratorAdminCommand gac;
     private Settings settings;
     private CompositeCommand ic;
     private CompositeCommand why;
+    private CompositeCommand reset;
 
     @Override
     @BeforeEach
@@ -51,14 +63,18 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
         when(ac.getSubCommandAliases()).thenReturn(new HashMap<>());
         when(ac.getWorld()).thenReturn(world);
         when(ac.getAddon()).thenReturn(addon);
+        // Top label is inherited by subcommands and used by the confirmation tracker.
+        when(ac.getTopLabel()).thenReturn("bskyblock");
         // Addon
         settings = new Settings();
         when(addon.getSettings()).thenReturn(settings);
         when(addon.getIslands()).thenReturn(im);
+        lenient().when(addon.getAddonManager()).thenReturn(manager);
         // user
         when(user.getLocale()).thenReturn(Locale.ENGLISH);
         // Target bill - default target. Non Op, online, no ban prevention permission
         UUID uuid = UUID.randomUUID();
+        this.targetUUID = uuid;
         when(pm.getUUID(anyString())).thenReturn(uuid);
         when(mockPlayer.getName()).thenReturn("bill");
         when(mockPlayer.getDisplayName()).thenReturn("&Cbill");
@@ -72,12 +88,15 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
         when(itemFactory.getItemMeta(any())).thenReturn(itemMeta);
         // Locales
         when(user.getTranslation(anyString())).thenAnswer(invocation -> invocation.getArgument(0, String.class));
+        lenient().when(user.getTranslation(anyString(), any(), any()))
+                .thenAnswer(invocation -> invocation.getArgument(0, String.class));
         // IWM friendly name for this world
         when(iwm.getFriendlyName(world)).thenReturn("BSkyBlock World");
 
         gac = new GeneratorAdminCommand(addon, ac);
         ic = gac.getSubCommand("import").get();
         why = gac.getSubCommand("why").get();
+        reset = gac.getSubCommand("reset").get();
     }
 
     @Test
@@ -130,7 +149,7 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
                 "stone-generator.commands.admin.main.parameters");
         verify(user).getTranslation(
                 "stone-generator.commands.admin.main.description");
-        verify(user, times(4)).isPlayer();
+        verify(user, times(5)).isPlayer();
         verify(user).sendMessage(
                 "commands.help.syntax-no-parameters",
                 "[usage]",
@@ -156,6 +175,12 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
                 "[description]",
                 "stone-generator.commands.admin.database.description");
         verify(user).sendMessage(
+                "commands.help.syntax-no-parameters",
+                "[usage]",
+                "/null generator reset",
+                "[description]",
+                "stone-generator.commands.admin.reset.description");
+        verify(user).sendMessage(
                 "commands.help.end");
     }
 
@@ -179,6 +204,84 @@ class GeneratorAdminCommandTest extends CommonTestSetup {
         assertFalse(why.execute(user, "bskyblock", List.of("tastybento")));
         verify(user).sendMessage(
                 "stone-generator.conversations.prefixgeneral.errors.player-is-not-owner");
+    }
+
+    @Test
+    void testSetupReset() {
+        assertEquals("admin.stone-generator.reset", reset.getPermission());
+        assertEquals("stone-generator.commands.admin.reset.parameters", reset.getParameters());
+        assertEquals("stone-generator.commands.admin.reset.description", reset.getDescription());
+        assertFalse(reset.isOnlyPlayer());
+    }
+
+    @Test
+    void testExecuteResetNoArgs() {
+        assertFalse(reset.execute(user, "bskyblock", List.of()));
+        verify(user).sendMessage(
+                "commands.help.header",
+                "[label]",
+                "BSkyBlock World");
+        verify(user).getTranslationOrNothing(
+                "stone-generator.commands.admin.reset.parameters");
+        verify(user).getTranslation(
+                "stone-generator.commands.admin.reset.description");
+        verify(user).sendMessage(
+                "commands.help.end");
+    }
+
+    @Test
+    void testExecuteResetPlayerNoIsland() {
+        // Target resolves to a UUID but has no island in this world.
+        assertFalse(reset.execute(user, "bskyblock", List.of("tastybento")));
+        verify(user).sendMessage(
+                "stone-generator.conversations.prefixgeneral.errors.player-has-no-island");
+    }
+
+    @Test
+    void testExecuteResetUnknownPlayer() {
+        // Name cannot be resolved to a UUID.
+        when(pm.getUUID("ghost")).thenReturn(null);
+
+        assertFalse(reset.execute(user, "bskyblock", List.of("ghost")));
+        verify(user).sendMessage("stone-generator.conversations.prefixgeneral.errors.unknown-player");
+        verify(manager, never()).resetIslandData(any());
+    }
+
+    @Test
+    void testExecuteResetWithIslandAsksConfirmation() {
+        when(im.getIsland(world, targetUUID)).thenReturn(island);
+        when(pm.getName(targetUUID)).thenReturn("tastybento");
+
+        // First invocation only asks for confirmation - nothing is reset yet.
+        assertTrue(reset.execute(user, "bskyblock", List.of("tastybento")));
+        verify(manager, never()).resetIslandData(any());
+        // The confirmation prompt is shown.
+        verify(user).sendMessage("commands.confirmation.confirm", "[seconds]", "10");
+    }
+
+    @Test
+    void testExecuteResetConfirmedResetsIslandData() {
+        when(im.getIsland(world, targetUUID)).thenReturn(island);
+        when(pm.getName(targetUUID)).thenReturn("tastybento");
+        // Run the confirmation runnable immediately when the scheduler is asked.
+        when(sch.runTaskLater(any(), any(Runnable.class), anyLong())).thenReturn(mock(BukkitTask.class));
+        when(sch.runTask(any(), any(Runnable.class))).thenAnswer(invocation -> {
+            invocation.getArgument(1, Runnable.class).run();
+            return mock(BukkitTask.class);
+        });
+
+        // Ask, then confirm.
+        reset.execute(user, "bskyblock", List.of("tastybento"));
+        reset.execute(user, "bskyblock", List.of("tastybento"));
+
+        verify(manager).resetIslandData(island);
+        verify(user).sendMessage(
+                "stone-generator.conversations.prefixstone-generator.messages.generator-data-reset");
+    }
+
+    @Test
+    void testResetTabCompleteEmptyArgsReturnsEmpty() {
+        assertFalse(reset.tabComplete(user, "reset", List.of()).isPresent());
     }
 
 }

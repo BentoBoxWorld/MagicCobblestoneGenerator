@@ -9,28 +9,28 @@ package world.bentobox.magiccobblestonegenerator.events;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.Nullable;
 
 import world.bentobox.bentobox.api.user.User;
-import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 
 
 /**
- * This event is fired when generator is unlocked for the given island. It is cancellable.
+ * This event is fired before a player buys the given generator. It is cancellable, so other plugins can add their own
+ * requirements to the generator purchasing process. Cancelling this event stops the purchase before any money is
+ * withdrawn and before {@link GeneratorBuyEvent} is fired.
  */
-public class GeneratorUnlockEvent extends GeneratorEvent implements Cancellable
+public class GeneratorPreBuyEvent extends GeneratorEvent implements Cancellable
 {
     /**
-     * Instantiates a new Generator unlock event.
+     * Instantiates a new Generator pre buy event.
      *
      * @param generator the generator
-     * @param user the user, or null
+     * @param user the user
      * @param island the island
      */
-    public GeneratorUnlockEvent(GeneratorTierObject generator, @Nullable User user, Island island)
+    public GeneratorPreBuyEvent(GeneratorTierObject generator, User user, String island)
     {
-        super(generator, user, island.getUniqueId());
+        super(generator, user, island);
     }
 
 
@@ -73,7 +73,7 @@ public class GeneratorUnlockEvent extends GeneratorEvent implements Cancellable
     @Override
     public HandlerList getHandlers()
     {
-        return GeneratorUnlockEvent.handlers;
+        return GeneratorPreBuyEvent.handlers;
     }
 
 
@@ -84,7 +84,7 @@ public class GeneratorUnlockEvent extends GeneratorEvent implements Cancellable
      */
     public static HandlerList getHandlerList()
     {
-        return GeneratorUnlockEvent.handlers;
+        return GeneratorPreBuyEvent.handlers;
     }
 
 

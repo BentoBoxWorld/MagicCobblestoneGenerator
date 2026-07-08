@@ -24,6 +24,8 @@ import world.bentobox.bentobox.api.user.User;
 import world.bentobox.bentobox.util.Util;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
+import world.bentobox.bentobox.database.objects.Island;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
@@ -121,6 +123,55 @@ public abstract class CommonPanel
     public final void reopen()
     {
         this.build();
+    }
+
+
+    /**
+     * This method purchases the given generator for the user, optionally asking for confirmation first.
+     * <p>
+     * If the generator cannot be purchased, the relevant message is sent by
+     * {@link StoneGeneratorManager#canPurchaseGenerator} and the panel is simply rebuilt. When the
+     * {@code buy-confirmation} setting is enabled, a chat confirmation is requested before the purchase is made, to
+     * avoid accidental purchases (#109).
+     *
+     * @param island        Island on which the generator is purchased.
+     * @param generatorData Data that stores island generators.
+     * @param generatorTier Generator tier that should be purchased.
+     */
+    protected void purchaseGenerator(Island island, GeneratorDataObject generatorData, GeneratorTierObject generatorTier)
+    {
+        if (island == null || !this.manager.canPurchaseGenerator(this.user, island, generatorData, generatorTier))
+        {
+            // Cannot purchase. canPurchaseGenerator already sent the reason. Just refresh the panel.
+            this.build();
+            return;
+        }
+
+        if (!this.addon.getSettings().isBuyConfirmation())
+        {
+            // Confirmation disabled. Purchase directly.
+            this.manager.purchaseGenerator(this.user, island, generatorData, generatorTier);
+            this.build();
+            return;
+        }
+
+        // Ask the player to confirm the purchase.
+        ConversationUtils.createConfirmation(
+            confirm ->
+            {
+                if (confirm)
+                {
+                    this.manager.purchaseGenerator(this.user, island, generatorData, generatorTier);
+                }
+
+                // Rebuild the panel regardless of the answer.
+                this.build();
+            },
+            this.user,
+            this.user.getTranslation(Constants.CONVERSATIONS + "confirm-generator-purchase",
+                Constants.GENERATOR, generatorTier.getFriendlyName(),
+                TextVariables.NUMBER, this.hundredThousandsFormat.format(generatorTier.getGeneratorTierCost())),
+            null);
     }
 
 
@@ -484,6 +535,30 @@ public abstract class CommonPanel
             level = "";
         }
 
+        String phase;
+
+        if (!generator.getRequiredPhase().isEmpty() && !isUnlocked)
+        {
+            phase = this.user.getTranslationOrNothing(reference + "phase",
+                TextVariables.NAME, generator.getRequiredPhase());
+        }
+        else
+        {
+            phase = "";
+        }
+
+        String blockCount;
+
+        if (generator.getRequiredBlockCount() > 0 && !isUnlocked)
+        {
+            blockCount = this.user.getTranslationOrNothing(reference + "block-count",
+                Constants.NUMBER, String.valueOf(generator.getRequiredBlockCount()));
+        }
+        else
+        {
+            blockCount = "";
+        }
+
         StringBuilder permissions = new StringBuilder();
 
         if (!generator.getRequiredPermissions().isEmpty() && !isUnlocked)
@@ -526,10 +601,35 @@ public abstract class CommonPanel
             biomes.append(this.user.getTranslationOrNothing(reference + "any"));
         }
 
+        StringBuilder requiredGenerators = new StringBuilder();
+
+        if (!generator.getRequiredGeneratorTiers().isEmpty() && !isUnlocked)
+        {
+            requiredGenerators.append(this.user.getTranslationOrNothing(reference + "required-generators-title"));
+
+            generator.getRequiredGeneratorTiers().stream().
+                // Fall back to the raw id if the generator can no longer be resolved (deleted/renamed),
+                // so a locked generator always shows what is blocking it.
+                map(id -> {
+                    GeneratorTierObject required = this.manager.getGeneratorByID(id);
+                    return required == null ? id : required.getFriendlyName();
+                }).
+                sorted().
+                forEach(name ->
+                {
+                    requiredGenerators.append("\n");
+                    requiredGenerators.append(this.user.getTranslationOrNothing(reference + "required-generator",
+                        Constants.GENERATOR, name));
+                });
+        }
+
         return this.user.getTranslationOrNothing(reference + "description",
             "[biomes]", biomes.toString(),
             "[level]", level,
-            "[missing-permissions]", permissions.toString());
+            "[phase]", phase,
+            "[block-count]", blockCount,
+            "[missing-permissions]", permissions.toString(),
+            "[required-generators]", requiredGenerators.toString());
     }
 
 
