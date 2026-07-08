@@ -152,10 +152,20 @@ public class MagicGenerator
                         ItemStack finalDrop = treasureEvent.getItemStack();
                         Location dropLocation = treasureEvent.getLocation();
 
-                        Why.report(location, "Dropping treasure " + finalDrop + " by " + generatorTier.getUniqueId());
+                        // A listener may have nulled the location (or its world); guard against it so we do
+                        // not throw and break block generation.
+                        if (dropLocation == null || dropLocation.getWorld() == null)
+                        {
+                            Why.report(location, "Treasure drop skipped: listener supplied an invalid drop location for " +
+                                generatorTier.getUniqueId());
+                        }
+                        else
+                        {
+                            Why.report(location, "Dropping treasure " + finalDrop + " by " + generatorTier.getUniqueId());
 
-                        // drop item naturally in the location of the block
-                        dropLocation.getWorld().dropItemNaturally(dropLocation, finalDrop);
+                            // drop item naturally in the location of the block
+                            dropLocation.getWorld().dropItemNaturally(dropLocation, finalDrop);
+                        }
                     }
                     else
                     {

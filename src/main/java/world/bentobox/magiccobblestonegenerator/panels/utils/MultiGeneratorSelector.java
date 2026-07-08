@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -96,7 +97,8 @@ public class MultiGeneratorSelector extends PagedSelector<GeneratorTierObject>
         else
         {
             this.filterElements = this.elements.stream().
-                filter(element -> element.getFriendlyName().toLowerCase().contains(this.searchString.toLowerCase())).
+                filter(element -> element.getFriendlyName().toLowerCase(Locale.ROOT).
+                    contains(this.searchString.toLowerCase(Locale.ROOT))).
                 distinct().
                 toList();
         }

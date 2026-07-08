@@ -30,9 +30,9 @@ public abstract class GeneratorEvent extends BentoBoxEvent
      *
      * @param generator the generator
      * @param user the user, or null if there is no associated user
-     * @param islandUUID the island unique id
+     * @param islandUUID the island unique id, or null if the island context is unknown
      */
-    protected GeneratorEvent(GeneratorTierObject generator, @Nullable User user, String islandUUID)
+    protected GeneratorEvent(GeneratorTierObject generator, @Nullable User user, @Nullable String islandUUID)
     {
         this.generator = generator.getFriendlyName();
         this.generatorID = generator.getUniqueId();
@@ -45,8 +45,9 @@ public abstract class GeneratorEvent extends BentoBoxEvent
     /**
      * Gets target player.
      *
-     * @return the target player
+     * @return the target player, or null if there is no associated user
      */
+    @Nullable
     public UUID getTargetPlayer()
     {
         return targetPlayer;
@@ -56,9 +57,9 @@ public abstract class GeneratorEvent extends BentoBoxEvent
     /**
      * Sets target player.
      *
-     * @param targetPlayer the target player
+     * @param targetPlayer the target player, or null if there is no associated user
      */
-    public void setTargetPlayer(UUID targetPlayer)
+    public void setTargetPlayer(@Nullable UUID targetPlayer)
     {
         this.targetPlayer = targetPlayer;
     }
@@ -67,8 +68,9 @@ public abstract class GeneratorEvent extends BentoBoxEvent
     /**
      * Gets island uuid.
      *
-     * @return the island uuid
+     * @return the island uuid, or null if the island context is unknown
      */
+    @Nullable
     public String getIslandUUID()
     {
         return islandUUID;
@@ -78,9 +80,9 @@ public abstract class GeneratorEvent extends BentoBoxEvent
     /**
      * Sets island uuid.
      *
-     * @param islandUUID the island uuid
+     * @param islandUUID the island uuid, or null if the island context is unknown
      */
-    public void setIslandUUID(String islandUUID)
+    public void setIslandUUID(@Nullable String islandUUID)
     {
         this.islandUUID = islandUUID;
     }
