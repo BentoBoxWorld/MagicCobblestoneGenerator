@@ -48,6 +48,7 @@ import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 /**
@@ -315,38 +316,36 @@ public class StoneGeneratorImportManager {
      */
     private void populateMaterials(GeneratorTierObject generatorTier, ConfigurationSection materials) {
         if (materials != null) {
-            TreeMap<Double, Material> blockChances = new TreeMap<>();
-            TreeMap<Material, int[]> materialHeightMap = new TreeMap<>();
+            TreeMap<Double, String> blockChances = new TreeMap<>();
+            TreeMap<String, int[]> materialHeightMap = new TreeMap<>();
 
             for (String materialKey : materials.getKeys(false)) {
-                try {
-                    Material material = Material.valueOf(materialKey.toUpperCase());
-                    
-                    // Support for both formats
-                    if (materials.isConfigurationSection(materialKey)) {
-                        // New format with chance and height_range
-                        ConfigurationSection materialSection = materials.getConfigurationSection(materialKey);
-                        double chance = materialSection.getDouble("chance", 0);
-                        double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-                        blockChances.put(lastEntry + chance, material);
+                String blockId = this.parseBlockId(generatorTier, materialKey);
 
-                        // Get height range if specified
-                        ConfigurationSection heightRange = materialSection.getConfigurationSection("height_range");
-                        if (heightRange != null) {
-                            int minHeight = heightRange.getInt("min", 0);
-                            int maxHeight = heightRange.getInt("max", 256);
-                            materialHeightMap.put(material, new int[]{minHeight, maxHeight});
-                        }
-                    } else {
-                        // Old format where the value is directly the probability
-                        double chance = materials.getDouble(materialKey, 0);
-                        double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
-                        blockChances.put(lastEntry + chance, material);
+                if (blockId == null) {
+                    continue;
+                }
+
+                // Support for both formats
+                if (materials.isConfigurationSection(materialKey)) {
+                    // New format with chance and height_range
+                    ConfigurationSection materialSection = materials.getConfigurationSection(materialKey);
+                    double chance = materialSection.getDouble("chance", 0);
+                    double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                    blockChances.put(lastEntry + chance, blockId);
+
+                    // Get height range if specified
+                    ConfigurationSection heightRange = materialSection.getConfigurationSection("height_range");
+                    if (heightRange != null) {
+                        int minHeight = heightRange.getInt("min", 0);
+                        int maxHeight = heightRange.getInt("max", 256);
+                        materialHeightMap.put(blockId, new int[]{minHeight, maxHeight});
                     }
-                } catch (Exception e) {
-                    this.addon.logWarning(
-                        "Unknown material (" + materialKey + ") in generatorTemplate.yml blocks section for tier "
-                            + generatorTier.getUniqueId() + ". Skipping...");
+                } else {
+                    // Old format where the value is directly the probability
+                    double chance = materials.getDouble(materialKey, 0);
+                    double lastEntry = blockChances.isEmpty() ? 0D : blockChances.lastKey();
+                    blockChances.put(lastEntry + chance, blockId);
                 }
             }
 
@@ -355,6 +354,41 @@ public class StoneGeneratorImportManager {
                 generatorTier.setMaterialHeightMap(materialHeightMap);
             }
         }
+    }
+
+    /**
+     * This method parses a template block key into a block ID: either a vanilla material name or a
+     * provider-prefixed custom block ID (e.g. itemsadder:namespace:id). Unknown vanilla materials are
+     * rejected; custom blocks that are not currently registered are imported with a warning, so
+     * templates keep working when the provider plugin is installed later.
+     *
+     * @param generatorTier tier that is being populated, for log context.
+     * @param materialKey   raw key from the template file.
+     * @return normalized block ID or null if the key cannot be used.
+     */
+    private String parseBlockId(GeneratorTierObject generatorTier, String materialKey) {
+        if (CustomBlocks.isCustom(materialKey)) {
+            // Custom block IDs are case-sensitive; keep them as written.
+            if (!CustomBlocks.isRegistered(this.addon, materialKey)) {
+                this.addon.logWarning("Custom block (" + materialKey
+                        + ") in generatorTemplate.yml blocks section for tier " + generatorTier.getUniqueId()
+                        + " is not registered on this server. It will not generate until its plugin and"
+                        + " BentoBox hook are available.");
+            }
+
+            return materialKey;
+        }
+
+        Material material = Material.matchMaterial(materialKey);
+
+        if (material == null) {
+            this.addon.logWarning(
+                    "Unknown material (" + materialKey + ") in generatorTemplate.yml blocks section for tier "
+                            + generatorTier.getUniqueId() + ". Skipping...");
+            return null;
+        }
+
+        return material.name();
     }
 
     /**

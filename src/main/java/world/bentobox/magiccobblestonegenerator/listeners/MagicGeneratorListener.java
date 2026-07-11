@@ -123,11 +123,10 @@ public class MagicGeneratorListener extends GeneratorListener
         {
             // Return from here at any case. Even if could not manage to replace stone.
 
-            Material material = this.generateStoneReplacement(island, eventToBlock.getLocation());
+            String blockId = this.generateStoneReplacement(island, eventToBlock.getLocation());
 
-            if (material != null)
+            if (blockId != null && this.applyBlockId(blockId, eventToBlock, Material.STONE))
             {
-                eventToBlock.setType(material);
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
                 event.setCancelled(true);
@@ -146,12 +145,11 @@ public class MagicGeneratorListener extends GeneratorListener
 
         if (liquid.equals(Material.LAVA) && this.canLavaGenerateCobblestone(eventToBlock, event.getFace()))
         {
-            Material material = this.generateCobblestoneReplacement(island, eventToBlock.getLocation());
+            String blockId = this.generateCobblestoneReplacement(island, eventToBlock.getLocation());
 
             // Lava is generating cobblestone into eventToBlock place
-            if (material != null)
+            if (blockId != null && this.applyBlockId(blockId, eventToBlock, Material.COBBLESTONE))
             {
-                eventToBlock.setType(material);
                 // sound when lava transforms to cobble
                 this.playEffects(eventToBlock);
                 event.setCancelled(true);
@@ -168,11 +166,10 @@ public class MagicGeneratorListener extends GeneratorListener
 
             if (replacedBlock != null)
             {
-                Material material = this.generateStoneReplacement(island, replacedBlock.getLocation());
+                String blockId = this.generateStoneReplacement(island, replacedBlock.getLocation());
 
-                if (material != null)
+                if (blockId != null && this.applyBlockId(blockId, replacedBlock, Material.STONE))
                 {
-                    replacedBlock.setType(material);
                     // sound when lava transforms to cobble
                     this.playEffects(eventToBlock);
                 }

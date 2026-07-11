@@ -29,6 +29,13 @@ tiers:
     # Materials and their chances. Use actual blocks please.
     # Chance supports any positive number.
     # Everything in the end will be normalized.
+    # Custom blocks from ItemsAdder, CraftEngine, Oraxen or Nexo can be used by
+    # prefixing the block ID with the plugin name (quote keys that contain colons):
+    #   "itemsadder:iasurvival:ruby_ore": 1
+    #   "craftengine:default:topaz_ore": 1
+    # ItemsAdder and CraftEngine work out of the box (via BentoBox hooks);
+    # Oraxen and Nexo entries are accepted but generate only once BentoBox
+    # core hooks support placing their blocks.
     blocks:
       STONE: 10
       COBBLESTONE: 86
