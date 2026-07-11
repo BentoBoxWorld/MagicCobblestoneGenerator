@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -345,12 +346,12 @@ public class GeneratorTierObject implements DataObject
     /**
      * Returns the blockChanceMap of this object.
      *
-     * @return a {@code TreeMap} where the keys are {@code Double} values representing chances,
+     * @return a {@code SortedMap} where the keys are {@code Double} values representing chances,
      *         and the values are block IDs: vanilla {@code Material} names (e.g. {@code COBBLESTONE})
      *         or provider-prefixed custom block IDs (e.g. {@code itemsadder:namespace:id}) — see
      *         {@link world.bentobox.magiccobblestonegenerator.utils.CustomBlocks}.
      */
-    public TreeMap<Double, String> getBlockChanceMap()
+    public NavigableMap<Double, String> getBlockChanceMap()
     {
         return blockChanceMap;
     }
@@ -361,9 +362,9 @@ public class GeneratorTierObject implements DataObject
      *
      * @param blockChanceMap new value for this object.
      */
-    public void setBlockChanceMap(TreeMap<Double, String> blockChanceMap)
+    public void setBlockChanceMap(NavigableMap<Double, String> blockChanceMap)
     {
-        this.blockChanceMap = blockChanceMap;
+        this.blockChanceMap = new TreeMap<>(blockChanceMap);
     }
 
 
@@ -944,7 +945,7 @@ public class GeneratorTierObject implements DataObject
      *
      * @return the material height map
      */
-    public TreeMap<String, int[]> getMaterialHeightMap()
+    public NavigableMap<String, int[]> getMaterialHeightMap()
     {
         return this.materialHeightMap;
     }
@@ -955,9 +956,9 @@ public class GeneratorTierObject implements DataObject
      *
      * @param materialHeightMap the material height map
      */
-    public void setMaterialHeightMap(TreeMap<String, int[]> materialHeightMap)
+    public void setMaterialHeightMap(NavigableMap<String, int[]> materialHeightMap)
     {
-        this.materialHeightMap = materialHeightMap;
+        this.materialHeightMap = new TreeMap<>(materialHeightMap);
     }
 
 

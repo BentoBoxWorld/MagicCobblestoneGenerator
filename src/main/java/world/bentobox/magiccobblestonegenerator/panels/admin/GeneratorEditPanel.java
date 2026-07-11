@@ -1408,7 +1408,29 @@ public class GeneratorEditPanel extends CommonPanel
             description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-deselect"));
         }
 
-        PanelItem.ClickHandler clickHandler = (panel, user1, clickType, slot) -> {
+        return new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
+                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, blockChanceEntry.getKey()))).
+            description(description).
+            icon(CustomBlocks.getIcon(this.addon, blockChanceEntry.getKey())).
+            clickHandler(this.createMaterialButtonClickHandler(blockChanceEntry, material)).
+            glow(glow).
+            build();
+    }
+
+
+    /**
+     * Creates the click handler for a material button: right-click selects/deselects, shift-left-click
+     * configures the height range and left-click edits the chance value.
+     *
+     * @param blockChanceEntry blockChanceEntry that the button represents.
+     * @param material the block ID that the button represents.
+     * @return the click handler for the button.
+     */
+    private PanelItem.ClickHandler createMaterialButtonClickHandler(Pair<String, Double> blockChanceEntry,
+        String material)
+    {
+        return (panel, user1, clickType, slot) -> {
             if (clickType.isRightClick())
             {
                 if (!this.selectedMaterial.remove(blockChanceEntry))
@@ -1445,15 +1467,6 @@ public class GeneratorEditPanel extends CommonPanel
 
             return true;
         };
-
-        return new PanelItemBuilder().
-            name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
-                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, blockChanceEntry.getKey()))).
-            description(description).
-            icon(CustomBlocks.getIcon(this.addon, blockChanceEntry.getKey())).
-            clickHandler(clickHandler).
-            glow(glow).
-            build();
     }
 
 
@@ -1777,82 +1790,11 @@ public class GeneratorEditPanel extends CommonPanel
             size(27);
             PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
         // Add min height button
-        panelBuilder.item(20, new PanelItemBuilder().
-            name(this.user.getTranslation(Constants.BUTTON + "min-height.name")).
-            description(this.user.getTranslation(Constants.BUTTON + "min-height.description", 
-                Constants.MIN_HEIGHT, String.valueOf(currentMinHeight))).
-            icon(Material.BEDROCK).
-            clickHandler((panel, user, clickType, slot) -> {
-                Consumer<Number> numberConsumer = number -> {
-                    if (number != null) {
-                        int newMinHeight = number.intValue();
-                        
-                        // Ensure min height is not greater than max height
-                        if (newMinHeight > currentMaxHeight) {
-                            this.user.sendMessage("admin.errors.min-height-greater-than-max", 
-                                Constants.MIN, String.valueOf(newMinHeight),
-                                Constants.MAX, String.valueOf(currentMaxHeight));
-                            return;
-                            
-                        }
-                        
-                        // Set the new height range
-                        this.generatorTier.setMaterialHeightRange(material, newMinHeight, currentMaxHeight);
-                        this.save();
-                    }
-                    
-                    // Return to the main panel
-                    this.configureHeightRangeForMaterial(material);
-                };
-                
-                ConversationUtils.createNumericInput(numberConsumer,
-                    this.user,
-                    this.user.getTranslation(Constants.CONVERSATIONS + "input-min-height"),
-                    Integer.MIN_VALUE,
-                    320);
-                
-                return true;
-            }).
-            build());
-            
+        panelBuilder.item(20, this.createMinHeightButton(material, currentMinHeight, currentMaxHeight));
+
         // Add max height button
-        panelBuilder.item(24, new PanelItemBuilder().
-            name(this.user.getTranslation(Constants.BUTTON + "max-height.name")).
-            description(this.user.getTranslation(Constants.BUTTON + "max-height.description", 
-                Constants.MAX_HEIGHT, String.valueOf(currentMaxHeight))).
-            icon(Material.GRASS_BLOCK).
-            clickHandler((panel, user, clickType, slot) -> {
-                Consumer<Number> numberConsumer = number -> {
-                    if (number != null) {
-                        int newMaxHeight = number.intValue();
-                        
-                        // Ensure max height is not less than min height
-                        if (newMaxHeight < currentMinHeight) {
-                            this.user.sendMessage("admin.errors.max-height-less-than-min", 
-                                Constants.MIN, String.valueOf(currentMinHeight),
-                                Constants.MAX, String.valueOf(newMaxHeight));
-                            return;
-                        }
-                        
-                        // Set the new height range
-                        this.generatorTier.setMaterialHeightRange(material, currentMinHeight, newMaxHeight);
-                        this.save();
-                    }
-                    
-                    // Return to the main panel
-                    this.configureHeightRangeForMaterial(material);
-                };
-                
-                ConversationUtils.createNumericInput(numberConsumer,
-                    this.user,
-                    this.user.getTranslation(Constants.CONVERSATIONS + "input-max-height"),
-                    Integer.MIN_VALUE,
-                    320);
-                
-                return true;
-            }).
-            build());
-            
+        panelBuilder.item(24, this.createMaxHeightButton(material, currentMinHeight, currentMaxHeight));
+
         // Add clear height range button
         panelBuilder.item(22, new PanelItemBuilder().
             name(this.user.getTranslation(Constants.BUTTON + "clear-height-range.name")).
@@ -1882,6 +1824,105 @@ public class GeneratorEditPanel extends CommonPanel
             build());
             
         panelBuilder.build();
+    }
+
+
+    /**
+     * Creates the button that prompts for and stores the minimum height of a material's height range.
+     *
+     * @param material the block ID whose height range is being configured.
+     * @param currentMinHeight the currently configured minimum height, shown in the description.
+     * @param currentMaxHeight the currently configured maximum height, used to validate the new minimum.
+     * @return the configured min-height PanelItem.
+     */
+    private PanelItem createMinHeightButton(String material, int currentMinHeight, int currentMaxHeight)
+    {
+        return new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "min-height.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "min-height.description",
+                Constants.MIN_HEIGHT, String.valueOf(currentMinHeight))).
+            icon(Material.BEDROCK).
+            clickHandler((panel, user, clickType, slot) -> {
+                Consumer<Number> numberConsumer = number -> {
+                    if (number != null) {
+                        int newMinHeight = number.intValue();
+
+                        // Ensure min height is not greater than max height
+                        if (newMinHeight > currentMaxHeight) {
+                            this.user.sendMessage("admin.errors.min-height-greater-than-max",
+                                Constants.MIN, String.valueOf(newMinHeight),
+                                Constants.MAX, String.valueOf(currentMaxHeight));
+                            return;
+
+                        }
+
+                        // Set the new height range
+                        this.generatorTier.setMaterialHeightRange(material, newMinHeight, currentMaxHeight);
+                        this.save();
+                    }
+
+                    // Return to the main panel
+                    this.configureHeightRangeForMaterial(material);
+                };
+
+                ConversationUtils.createNumericInput(numberConsumer,
+                    this.user,
+                    this.user.getTranslation(Constants.CONVERSATIONS + "input-min-height"),
+                    Integer.MIN_VALUE,
+                    320);
+
+                return true;
+            }).
+            build();
+    }
+
+
+    /**
+     * Creates the button that prompts for and stores the maximum height of a material's height range.
+     *
+     * @param material the block ID whose height range is being configured.
+     * @param currentMinHeight the currently configured minimum height, used to validate the new maximum.
+     * @param currentMaxHeight the currently configured maximum height, shown in the description.
+     * @return the configured max-height PanelItem.
+     */
+    private PanelItem createMaxHeightButton(String material, int currentMinHeight, int currentMaxHeight)
+    {
+        return new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "max-height.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "max-height.description",
+                Constants.MAX_HEIGHT, String.valueOf(currentMaxHeight))).
+            icon(Material.GRASS_BLOCK).
+            clickHandler((panel, user, clickType, slot) -> {
+                Consumer<Number> numberConsumer = number -> {
+                    if (number != null) {
+                        int newMaxHeight = number.intValue();
+
+                        // Ensure max height is not less than min height
+                        if (newMaxHeight < currentMinHeight) {
+                            this.user.sendMessage("admin.errors.max-height-less-than-min",
+                                Constants.MIN, String.valueOf(currentMinHeight),
+                                Constants.MAX, String.valueOf(newMaxHeight));
+                            return;
+                        }
+
+                        // Set the new height range
+                        this.generatorTier.setMaterialHeightRange(material, currentMinHeight, newMaxHeight);
+                        this.save();
+                    }
+
+                    // Return to the main panel
+                    this.configureHeightRangeForMaterial(material);
+                };
+
+                ConversationUtils.createNumericInput(numberConsumer,
+                    this.user,
+                    this.user.getTranslation(Constants.CONVERSATIONS + "input-max-height"),
+                    Integer.MIN_VALUE,
+                    320);
+
+                return true;
+            }).
+            build();
     }
 
 

@@ -371,7 +371,7 @@ public class StoneGeneratorImportManager {
             // Custom block IDs are case-sensitive; keep them as written.
             if (!CustomBlocks.isRegistered(this.addon, materialKey)) {
                 this.addon.logWarning("Custom block (" + materialKey
-                        + ") in generatorTemplate.yml blocks section for tier " + generatorTier.getUniqueId()
+                        + TIER_TEMPLATE_CONTEXT + generatorTier.getUniqueId()
                         + " is not registered on this server. It will not generate until its plugin and"
                         + " BentoBox hook are available.");
             }
@@ -383,7 +383,7 @@ public class StoneGeneratorImportManager {
 
         if (material == null) {
             this.addon.logWarning(
-                    "Unknown material (" + materialKey + ") in generatorTemplate.yml blocks section for tier "
+                    "Unknown material (" + materialKey + TIER_TEMPLATE_CONTEXT
                             + generatorTier.getUniqueId() + ". Skipping...");
             return null;
         }
@@ -416,7 +416,7 @@ public class StoneGeneratorImportManager {
 			blockChances.put(lastEntry + materials.getDouble(materialKey, 0), new ItemStack(material));
 		    } catch (Exception e) {
 			this.addon.logWarning("Unknown material (" + materialKey
-				+ ") in generatorTemplate.yml blocks section for tier " + generatorTier.getUniqueId()
+				+ TIER_TEMPLATE_CONTEXT + generatorTier.getUniqueId()
 				+ ". Skipping...");
 		    }
 		}
@@ -855,5 +855,7 @@ public class StoneGeneratorImportManager {
     private final File generatorFile;
 
     private static final String DESCRIPTION = "description";
+
+    private static final String TIER_TEMPLATE_CONTEXT = ") in generatorTemplate.yml blocks section for tier ";
 
 }

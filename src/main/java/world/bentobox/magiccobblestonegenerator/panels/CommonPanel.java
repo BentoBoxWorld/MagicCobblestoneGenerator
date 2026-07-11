@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -388,7 +389,7 @@ public abstract class CommonPanel
      */
     private String generateBlockListDescription(GeneratorTierObject generator)
     {
-        TreeMap<Double, String> blockChanceMap = generator.getBlockChanceMap();
+        NavigableMap<Double, String> blockChanceMap = generator.getBlockChanceMap();
 
         if (blockChanceMap.isEmpty())
         {
