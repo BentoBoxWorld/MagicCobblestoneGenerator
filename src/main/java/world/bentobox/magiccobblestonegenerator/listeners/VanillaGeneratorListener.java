@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockFormEvent;
 
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
 import world.bentobox.magiccobblestonegenerator.utils.Why;
 
 
@@ -97,33 +98,47 @@ public class VanillaGeneratorListener extends GeneratorListener
 
         if (event.getNewState().getType() == Material.COBBLESTONE)
         {
-            Material material = this.generateCobblestoneReplacement(island, eventSourceBlock.getLocation());
-
-            if (material != null && material.isBlock())
-            {
-                // Replace new state with a proper material.
-                event.getNewState().setType(material);
-            }
+            this.applyToState(event, this.generateCobblestoneReplacement(island, eventSourceBlock.getLocation()));
         }
         else if (event.getNewState().getType() == Material.STONE)
         {
-            Material material = this.generateStoneReplacement(island, eventSourceBlock.getLocation());
+            this.applyToState(event, this.generateStoneReplacement(island, eventSourceBlock.getLocation()));
+        }
+        else if (event.getNewState().getType() == Material.BASALT)
+        {
+            this.applyToState(event, this.generateBasaltReplacement(island, eventSourceBlock.getLocation()));
+        }
+    }
 
-            if (material != null && material.isBlock())
+
+    /**
+     * This method applies a picked block ID to the forming block. Vanilla materials replace the new
+     * block state directly. Custom blocks let the vanilla block form as normal and are placed over it
+     * via their BentoBox hook one tick later, because hook APIs set blocks directly.
+     *
+     * @param event Block form event that is being processed.
+     * @param blockId Picked block ID or null if no replacement happens.
+     */
+    private void applyToState(BlockFormEvent event, String blockId)
+    {
+        if (blockId == null)
+        {
+            return;
+        }
+
+        Material material = CustomBlocks.matchVanilla(blockId);
+
+        if (material != null)
+        {
+            if (material.isBlock())
             {
                 // Replace new state with a proper material.
                 event.getNewState().setType(material);
             }
         }
-        else if (event.getNewState().getType() == Material.BASALT)
+        else if (CustomBlocks.isCustom(blockId))
         {
-            Material material = this.generateBasaltReplacement(island, eventSourceBlock.getLocation());
-
-            if (material != null && material.isBlock())
-            {
-                // Replace new state with a proper material.
-                event.getNewState().setType(material);
-            }
+            this.scheduleCustomBlockPlacement(blockId, event.getBlock().getLocation());
         }
     }
 }

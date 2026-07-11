@@ -32,6 +32,7 @@ import world.bentobox.magiccobblestonegenerator.panels.utils.MultiBiomeSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.MultiGeneratorSelector;
 import world.bentobox.magiccobblestonegenerator.panels.utils.SingleBlockSelector;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
 import world.bentobox.magiccobblestonegenerator.utils.Pair;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
@@ -103,6 +104,7 @@ public class GeneratorEditPanel extends CommonPanel
                     this.populateBlocks(panelBuilder);
                 }
                 panelBuilder.item(39, this.createButton(Action.ADD_MATERIAL));
+                panelBuilder.item(40, this.createButton(Action.ADD_CUSTOM_BLOCK));
                 panelBuilder.item(41, this.createButton(Action.REMOVE_MATERIAL));
             }
 
@@ -265,7 +267,7 @@ public class GeneratorEditPanel extends CommonPanel
             if (!panelBuilder.slotOccupied(index))
             {
                 // Get entry from list.
-                Pair<Material, Double> materialEntry = this.materialChanceList.get(materialIndex++);
+                Pair<String, Double> materialEntry = this.materialChanceList.get(materialIndex++);
                 // Add to panel
                 panelBuilder.item(index, this.createMaterialButton(materialEntry, maxValue));
             }
@@ -1182,7 +1184,7 @@ public class GeneratorEditPanel extends CommonPanel
                                         if (this.activeTab == Tab.BLOCKS)
                                         {
                                             this.materialChanceList.add(
-                                                new Pair<>(material,
+                                                new Pair<>(material.name(),
                                                     number.doubleValue()));
 
                                             this.generatorTier.setBlockChanceMap(
@@ -1215,6 +1217,69 @@ public class GeneratorEditPanel extends CommonPanel
                                 this.build();
                             }
                         });
+
+                    return true;
+                };
+            }
+            case ADD_CUSTOM_BLOCK -> {
+                description.add(this.user.getTranslationOrNothing(reference + ".description"));
+                description.add("");
+                description.add(this.user.getTranslation(Constants.TIPS + "click-to-add"));
+
+                icon = Material.COMMAND_BLOCK;
+                clickHandler = (panel, user1, clickType, slot) ->
+                {
+                    Consumer<String> blockIdConsumer = blockId ->
+                    {
+                        if (blockId == null || blockId.isBlank())
+                        {
+                            this.build();
+                            return;
+                        }
+
+                        String trimmedId = blockId.trim();
+
+                        if (!CustomBlocks.isCustom(trimmedId))
+                        {
+                            Utils.sendMessage(this.user,
+                                this.user.getTranslation(Constants.CONVERSATIONS + "custom-block-invalid-prefix",
+                                    Constants.BLOCK, trimmedId));
+                            this.build();
+                            return;
+                        }
+
+                        if (!CustomBlocks.isRegistered(this.addon, trimmedId))
+                        {
+                            Utils.sendMessage(this.user,
+                                this.user.getTranslation(Constants.CONVERSATIONS + "custom-block-not-found",
+                                    Constants.BLOCK, trimmedId));
+                            this.build();
+                            return;
+                        }
+
+                        Consumer<Number> numberConsumer = number ->
+                        {
+                            if (number != null)
+                            {
+                                this.materialChanceList.add(new Pair<>(trimmedId, number.doubleValue()));
+                                this.generatorTier.setBlockChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
+                                this.save();
+                            }
+
+                            this.build();
+                        };
+
+                        ConversationUtils.createNumericInput(numberConsumer,
+                            this.user,
+                            this.user.getTranslation(Constants.CONVERSATIONS + "input-number"),
+                            0.0,
+                            Long.MAX_VALUE);
+                    };
+
+                    ConversationUtils.createStringInput(blockIdConsumer,
+                        this.user,
+                        this.user.getTranslation(Constants.CONVERSATIONS + "input-custom-block"),
+                        null);
 
                     return true;
                 };
@@ -1256,7 +1321,7 @@ public class GeneratorEditPanel extends CommonPanel
                     if (!this.selectedMaterial.isEmpty()) {
                         this.selectedMaterial.forEach(pair ->
                                 description.add(this.user.getTranslation(reference + ".list-value",
-                                        Constants.VALUE, Utils.prettifyObject(this.user, pair.getKey()),
+                                        Constants.VALUE, CustomBlocks.getDisplayName(this.addon, this.user, pair.getKey()),
                                         Constants.NUMBER, String.valueOf(pair.getValue()))));
                     }
 
@@ -1294,11 +1359,11 @@ public class GeneratorEditPanel extends CommonPanel
      * @param maxValue Displays maximal value for map.
      * @return PanelItem for generator tier.
      */
-    private PanelItem createMaterialButton(Pair<Material, Double> blockChanceEntry, Double maxValue)
+    private PanelItem createMaterialButton(Pair<String, Double> blockChanceEntry, Double maxValue)
     {
         // Normalize value
         Double value = blockChanceEntry.getValue() / maxValue * 100.0;
-        Material material = blockChanceEntry.getKey();
+        String material = blockChanceEntry.getKey();
 
         List<String> description = new ArrayList<>();
         description.add(this.user.getTranslation(Constants.BUTTON + "block-icon.description",
@@ -1343,7 +1408,29 @@ public class GeneratorEditPanel extends CommonPanel
             description.add(this.user.getTranslation(Constants.TIPS + "right-click-to-deselect"));
         }
 
-        PanelItem.ClickHandler clickHandler = (panel, user1, clickType, slot) -> {
+        return new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
+                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, blockChanceEntry.getKey()))).
+            description(description).
+            icon(CustomBlocks.getIcon(this.addon, blockChanceEntry.getKey())).
+            clickHandler(this.createMaterialButtonClickHandler(blockChanceEntry, material)).
+            glow(glow).
+            build();
+    }
+
+
+    /**
+     * Creates the click handler for a material button: right-click selects/deselects, shift-left-click
+     * configures the height range and left-click edits the chance value.
+     *
+     * @param blockChanceEntry blockChanceEntry that the button represents.
+     * @param material the block ID that the button represents.
+     * @return the click handler for the button.
+     */
+    private PanelItem.ClickHandler createMaterialButtonClickHandler(Pair<String, Double> blockChanceEntry,
+        String material)
+    {
+        return (panel, user1, clickType, slot) -> {
             if (clickType.isRightClick())
             {
                 if (!this.selectedMaterial.remove(blockChanceEntry))
@@ -1380,15 +1467,6 @@ public class GeneratorEditPanel extends CommonPanel
 
             return true;
         };
-
-        return new PanelItemBuilder().
-            name(this.user.getTranslation(Constants.BUTTON + "block-icon.name",
-                Constants.BLOCK, Utils.prettifyObject(this.user, blockChanceEntry.getKey()))).
-            description(description).
-            icon(blockChanceEntry.getKey()).
-            clickHandler(clickHandler).
-            glow(glow).
-            build();
     }
 
 
@@ -1467,7 +1545,7 @@ public class GeneratorEditPanel extends CommonPanel
                     if (newValue != null)
                     {
                         treasureChanceEntry.setValue(newValue.doubleValue());
-                        this.generatorTier.setTreasureChanceMap(Utils.pairList2TreeMap(this.materialChanceList));
+                        this.generatorTier.setTreasureItemChanceMap(Utils.pairList2TreeMap(this.treasureChanceList));
                         this.save();
                     }
 
@@ -1693,11 +1771,11 @@ public class GeneratorEditPanel extends CommonPanel
 
 
     /**
-     * Configure height range for a specific material
-     * 
-     * @param material The material to configure height range for
+     * Configure height range for a specific block ID
+     *
+     * @param material The block ID to configure height range for
      */
-    private void configureHeightRangeForMaterial(Material material)
+    private void configureHeightRangeForMaterial(String material)
     {
         // Get current height range if it exists
         int[] currentRange = this.generatorTier.getMaterialHeightRange(material);
@@ -1707,87 +1785,16 @@ public class GeneratorEditPanel extends CommonPanel
         // Create a new panel to configure height range
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
-            name(this.user.getTranslation(Constants.TITLE + "height-range-config", 
-                Constants.BLOCK, Utils.prettifyObject(this.user, material))).
+            name(this.user.getTranslation(Constants.TITLE + "height-range-config",
+                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, material))).
             size(27);
             PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
         // Add min height button
-        panelBuilder.item(20, new PanelItemBuilder().
-            name(this.user.getTranslation(Constants.BUTTON + "min-height.name")).
-            description(this.user.getTranslation(Constants.BUTTON + "min-height.description", 
-                Constants.MIN_HEIGHT, String.valueOf(currentMinHeight))).
-            icon(Material.BEDROCK).
-            clickHandler((panel, user, clickType, slot) -> {
-                Consumer<Number> numberConsumer = number -> {
-                    if (number != null) {
-                        int newMinHeight = number.intValue();
-                        
-                        // Ensure min height is not greater than max height
-                        if (newMinHeight > currentMaxHeight) {
-                            this.user.sendMessage("admin.errors.min-height-greater-than-max", 
-                                Constants.MIN, String.valueOf(newMinHeight),
-                                Constants.MAX, String.valueOf(currentMaxHeight));
-                            return;
-                            
-                        }
-                        
-                        // Set the new height range
-                        this.generatorTier.setMaterialHeightRange(material, newMinHeight, currentMaxHeight);
-                        this.save();
-                    }
-                    
-                    // Return to the main panel
-                    this.configureHeightRangeForMaterial(material);
-                };
-                
-                ConversationUtils.createNumericInput(numberConsumer,
-                    this.user,
-                    this.user.getTranslation(Constants.CONVERSATIONS + "input-min-height"),
-                    Integer.MIN_VALUE,
-                    320);
-                
-                return true;
-            }).
-            build());
-            
+        panelBuilder.item(20, this.createMinHeightButton(material, currentMinHeight, currentMaxHeight));
+
         // Add max height button
-        panelBuilder.item(24, new PanelItemBuilder().
-            name(this.user.getTranslation(Constants.BUTTON + "max-height.name")).
-            description(this.user.getTranslation(Constants.BUTTON + "max-height.description", 
-                Constants.MAX_HEIGHT, String.valueOf(currentMaxHeight))).
-            icon(Material.GRASS_BLOCK).
-            clickHandler((panel, user, clickType, slot) -> {
-                Consumer<Number> numberConsumer = number -> {
-                    if (number != null) {
-                        int newMaxHeight = number.intValue();
-                        
-                        // Ensure max height is not less than min height
-                        if (newMaxHeight < currentMinHeight) {
-                            this.user.sendMessage("admin.errors.max-height-less-than-min", 
-                                Constants.MIN, String.valueOf(currentMinHeight),
-                                Constants.MAX, String.valueOf(newMaxHeight));
-                            return;
-                        }
-                        
-                        // Set the new height range
-                        this.generatorTier.setMaterialHeightRange(material, currentMinHeight, newMaxHeight);
-                        this.save();
-                    }
-                    
-                    // Return to the main panel
-                    this.configureHeightRangeForMaterial(material);
-                };
-                
-                ConversationUtils.createNumericInput(numberConsumer,
-                    this.user,
-                    this.user.getTranslation(Constants.CONVERSATIONS + "input-max-height"),
-                    Integer.MIN_VALUE,
-                    320);
-                
-                return true;
-            }).
-            build());
-            
+        panelBuilder.item(24, this.createMaxHeightButton(material, currentMinHeight, currentMaxHeight));
+
         // Add clear height range button
         panelBuilder.item(22, new PanelItemBuilder().
             name(this.user.getTranslation(Constants.BUTTON + "clear-height-range.name")).
@@ -1820,6 +1827,105 @@ public class GeneratorEditPanel extends CommonPanel
     }
 
 
+    /**
+     * Creates the button that prompts for and stores the minimum height of a material's height range.
+     *
+     * @param material the block ID whose height range is being configured.
+     * @param currentMinHeight the currently configured minimum height, shown in the description.
+     * @param currentMaxHeight the currently configured maximum height, used to validate the new minimum.
+     * @return the configured min-height PanelItem.
+     */
+    private PanelItem createMinHeightButton(String material, int currentMinHeight, int currentMaxHeight)
+    {
+        return new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "min-height.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "min-height.description",
+                Constants.MIN_HEIGHT, String.valueOf(currentMinHeight))).
+            icon(Material.BEDROCK).
+            clickHandler((panel, user, clickType, slot) -> {
+                Consumer<Number> numberConsumer = number -> {
+                    if (number != null) {
+                        int newMinHeight = number.intValue();
+
+                        // Ensure min height is not greater than max height
+                        if (newMinHeight > currentMaxHeight) {
+                            this.user.sendMessage("admin.errors.min-height-greater-than-max",
+                                Constants.MIN, String.valueOf(newMinHeight),
+                                Constants.MAX, String.valueOf(currentMaxHeight));
+                            return;
+
+                        }
+
+                        // Set the new height range
+                        this.generatorTier.setMaterialHeightRange(material, newMinHeight, currentMaxHeight);
+                        this.save();
+                    }
+
+                    // Return to the main panel
+                    this.configureHeightRangeForMaterial(material);
+                };
+
+                ConversationUtils.createNumericInput(numberConsumer,
+                    this.user,
+                    this.user.getTranslation(Constants.CONVERSATIONS + "input-min-height"),
+                    Integer.MIN_VALUE,
+                    320);
+
+                return true;
+            }).
+            build();
+    }
+
+
+    /**
+     * Creates the button that prompts for and stores the maximum height of a material's height range.
+     *
+     * @param material the block ID whose height range is being configured.
+     * @param currentMinHeight the currently configured minimum height, used to validate the new maximum.
+     * @param currentMaxHeight the currently configured maximum height, shown in the description.
+     * @return the configured max-height PanelItem.
+     */
+    private PanelItem createMaxHeightButton(String material, int currentMinHeight, int currentMaxHeight)
+    {
+        return new PanelItemBuilder().
+            name(this.user.getTranslation(Constants.BUTTON + "max-height.name")).
+            description(this.user.getTranslation(Constants.BUTTON + "max-height.description",
+                Constants.MAX_HEIGHT, String.valueOf(currentMaxHeight))).
+            icon(Material.GRASS_BLOCK).
+            clickHandler((panel, user, clickType, slot) -> {
+                Consumer<Number> numberConsumer = number -> {
+                    if (number != null) {
+                        int newMaxHeight = number.intValue();
+
+                        // Ensure max height is not less than min height
+                        if (newMaxHeight < currentMinHeight) {
+                            this.user.sendMessage("admin.errors.max-height-less-than-min",
+                                Constants.MIN, String.valueOf(currentMinHeight),
+                                Constants.MAX, String.valueOf(newMaxHeight));
+                            return;
+                        }
+
+                        // Set the new height range
+                        this.generatorTier.setMaterialHeightRange(material, currentMinHeight, newMaxHeight);
+                        this.save();
+                    }
+
+                    // Return to the main panel
+                    this.configureHeightRangeForMaterial(material);
+                };
+
+                ConversationUtils.createNumericInput(numberConsumer,
+                    this.user,
+                    this.user.getTranslation(Constants.CONVERSATIONS + "input-max-height"),
+                    Integer.MIN_VALUE,
+                    320);
+
+                return true;
+            }).
+            build();
+    }
+
+
     // ---------------------------------------------------------------------
     // Section: Enums
     // ---------------------------------------------------------------------
@@ -1842,6 +1948,10 @@ public class GeneratorEditPanel extends CommonPanel
          * Allows to add a new material to the block list.
          */
         ADD_MATERIAL,
+        /**
+         * Allows to add a custom block (ItemsAdder/CraftEngine/Oraxen/Nexo) to the block list by ID.
+         */
+        ADD_CUSTOM_BLOCK,
         /**
          * Allows to remove selected materials from block list
          */
@@ -1983,7 +2093,7 @@ public class GeneratorEditPanel extends CommonPanel
     /**
      * This set is used to detect and delete selected blocks.
      */
-    private final Set<Pair<Material, Double>> selectedMaterial;
+    private final Set<Pair<String, Double>> selectedMaterial;
 
     /**
      * This set is used to detect and delete selected blocks.
@@ -2013,7 +2123,7 @@ public class GeneratorEditPanel extends CommonPanel
     /**
      * This list contains elements of tree map that we can edit with a panel.
      */
-    private List<Pair<Material, Double>> materialChanceList;
+    private List<Pair<String, Double>> materialChanceList;
 
     /**
      * This list contains elements of tree map that we can edit with a panel.

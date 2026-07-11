@@ -31,6 +31,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataOb
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.panels.CommonPanel;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
@@ -530,7 +531,7 @@ public class GeneratorViewPanel extends CommonPanel
      * @return PanelItem for generator tier.
      */
     private PanelItem createMaterialButton(ItemTemplateRecord template,
-        Map.Entry<Double, Material> blockChanceEntry,
+        Map.Entry<Double, String> blockChanceEntry,
         Double previousValue,
         Double maxValue)
     {
@@ -542,13 +543,13 @@ public class GeneratorViewPanel extends CommonPanel
         }
         else
         {
-            builder.icon(blockChanceEntry.getValue());
+            builder.icon(CustomBlocks.getIcon(this.addon, blockChanceEntry.getValue()));
         }
 
         if (template.title() != null)
         {
             builder.name(this.user.getTranslation(this.world, template.title(),
-                Constants.BLOCK, Utils.prettifyObject(this.user, blockChanceEntry.getValue())));
+                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, blockChanceEntry.getValue())));
         }
 
         if (template.description() != null)
@@ -1363,7 +1364,7 @@ public class GeneratorViewPanel extends CommonPanel
     /**
      * This variable stores chance for every block to be spawned.
      */
-    private List<Map.Entry<Double, Material>> materialChanceList;
+    private List<Map.Entry<Double, String>> materialChanceList;
 
     /**
      * This variable stores chance for every treasure to be spawned.

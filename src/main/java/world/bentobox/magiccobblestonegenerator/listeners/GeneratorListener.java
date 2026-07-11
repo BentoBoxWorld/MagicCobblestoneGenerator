@@ -26,6 +26,8 @@ import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
+import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
+import world.bentobox.magiccobblestonegenerator.utils.Why;
 
 
 /**
@@ -151,13 +153,67 @@ public abstract class GeneratorListener implements Listener
 
 
     /**
-     * This method returns material of new block if generator manages to replace cobblestone to a new magic block.
+     * This method applies a block ID picked by the generator to the given block. Vanilla IDs are set
+     * immediately; custom (hook-provided) IDs first set a vanilla placeholder and are replaced by the
+     * hook placement one tick later, because hook APIs set blocks directly rather than through a state.
+     *
+     * @param blockId Block ID picked by the generator (vanilla material name or provider-prefixed custom ID).
+     * @param block Block that must be replaced.
+     * @param placeholder Vanilla material to leave in place while a custom placement is pending.
+     * @return {@code true} if a replacement was applied or scheduled.
+     */
+    protected boolean applyBlockId(String blockId, Block block, Material placeholder)
+    {
+        Material material = CustomBlocks.matchVanilla(blockId);
+
+        if (material != null)
+        {
+            if (!material.isBlock())
+            {
+                return false;
+            }
+
+            block.setType(material);
+            return true;
+        }
+
+        if (CustomBlocks.isCustom(blockId))
+        {
+            block.setType(placeholder);
+            this.scheduleCustomBlockPlacement(blockId, block.getLocation());
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * This method schedules placement of a custom block via its BentoBox hook on the next tick.
+     *
+     * @param blockId Provider-prefixed custom block ID.
+     * @param location Location where the block must be placed.
+     */
+    protected void scheduleCustomBlockPlacement(String blockId, Location location)
+    {
+        Bukkit.getScheduler().runTask(this.addon.getPlugin(), () ->
+        {
+            if (!CustomBlocks.place(this.addon, blockId, location))
+            {
+                Why.report(location, "Custom block " + blockId + " could not be placed.");
+            }
+        });
+    }
+
+
+    /**
+     * This method returns block ID of new block if generator manages to replace cobblestone to a new magic block.
      *
      * @param island Island on which block is processed.
      * @param location Block location that need to be replaced.
-     * @return Material of replaced block or null, if block was not replaced.
+     * @return Block ID of replaced block or null, if block was not replaced.
      */
-    protected @Nullable Material generateCobblestoneReplacement(@Nullable Island island, Location location)
+    protected @Nullable String generateCobblestoneReplacement(@Nullable Island island, Location location)
     {
         GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
             island,
@@ -175,13 +231,13 @@ public abstract class GeneratorListener implements Listener
 
 
     /**
-     * This method returns material of new block if generator manages to replace stone to a new magic block.
+     * This method returns block ID of new block if generator manages to replace stone to a new magic block.
      *
      * @param island Island on which block is processed.
      * @param location Block that need to be replaced.
-     * @return Material of replaced block or null, if block was not replaced.
+     * @return Block ID of replaced block or null, if block was not replaced.
      */
-    protected @Nullable Material generateStoneReplacement(@Nullable Island island, Location location)
+    protected @Nullable String generateStoneReplacement(@Nullable Island island, Location location)
     {
         GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
             island,
@@ -199,13 +255,13 @@ public abstract class GeneratorListener implements Listener
 
 
     /**
-     * This method returns material of new block if generator manages to replace basalt to a new magic block.
+     * This method returns block ID of new block if generator manages to replace basalt to a new magic block.
      *
      * @param island Island on which block is processed.
      * @param location Block that need to be replaced.
-     * @return Material of replaced block or null, if block was not replaced.
+     * @return Block ID of replaced block or null, if block was not replaced.
      */
-    protected @Nullable Material generateBasaltReplacement(@Nullable Island island, Location location)
+    protected @Nullable String generateBasaltReplacement(@Nullable Island island, Location location)
     {
         GeneratorTierObject generatorTier = this.addon.getAddonManager().getGeneratorTier(
             island,

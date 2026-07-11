@@ -431,6 +431,12 @@ stone-generator:
         description: |-
           <gray>Add new material to the
           </gray><gray>current material list.</gray>
+      add_custom_block:
+        name: "<white><bold>Add Custom Block</bold></white>"
+        description: |-
+          <gray>Add a custom block from
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen or Nexo by its ID.</gray>
       remove_material:
         name: "<white><bold>Remove Materials</bold></white>"
         description: |-
@@ -1124,6 +1130,12 @@ stone-generator:
     click-text-to-activate: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here to activate it now.</yellow>"
     input-min-height: "<white>Enter the minimum height for this material (between -64 and 320):</white>"
     input-max-height: "<white>Enter the maximum height for this material (between -64 and 320):</white>"
+    # Message that appears when admin clicks on the add custom block button.
+    input-custom-block: "<yellow>Please enter the custom block ID in chat, prefixed by its plugin: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' or 'nexo:id'.</yellow>"
+    # Message that appears when the entered custom block ID has no known plugin prefix.
+    custom-block-invalid-prefix: "<red>'[block]' is not a valid custom block ID. Use 'itemsadder:', 'craftengine:', 'oraxen:' or 'nexo:' followed by the block ID.</red>"
+    # Message that appears when the entered custom block ID is not registered on this server.
+    custom-block-not-found: "<red>Custom block '[block]' was not found. Check that the plugin is installed and the ID is correct.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

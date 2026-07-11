@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -345,10 +346,12 @@ public class GeneratorTierObject implements DataObject
     /**
      * Returns the blockChanceMap of this object.
      *
-     * @return a {@code TreeMap} where the keys are {@code Double} values representing chances,
-     *         and the values are {@code Material} objects.
+     * @return a {@code SortedMap} where the keys are {@code Double} values representing chances,
+     *         and the values are block IDs: vanilla {@code Material} names (e.g. {@code COBBLESTONE})
+     *         or provider-prefixed custom block IDs (e.g. {@code itemsadder:namespace:id}) — see
+     *         {@link world.bentobox.magiccobblestonegenerator.utils.CustomBlocks}.
      */
-    public TreeMap<Double, Material> getBlockChanceMap()
+    public NavigableMap<Double, String> getBlockChanceMap()
     {
         return blockChanceMap;
     }
@@ -359,9 +362,9 @@ public class GeneratorTierObject implements DataObject
      *
      * @param blockChanceMap new value for this object.
      */
-    public void setBlockChanceMap(TreeMap<Double, Material> blockChanceMap)
+    public void setBlockChanceMap(NavigableMap<Double, String> blockChanceMap)
     {
-        this.blockChanceMap = blockChanceMap;
+        this.blockChanceMap = new TreeMap<>(blockChanceMap);
     }
 
 
@@ -813,10 +816,11 @@ public class GeneratorTierObject implements DataObject
     // Rewards section
 
     /**
-     * Map that stores different blocks and their chance for generating.
+     * Map that stores different blocks and their chance for generating. Values are vanilla material
+     * names or provider-prefixed custom block IDs.
      */
     @Expose
-    private TreeMap<Double, Material> blockChanceMap = new TreeMap<>();
+    private TreeMap<Double, String> blockChanceMap = new TreeMap<>();
 
     /**
      * Map that stores different extra treasures and their change for being dropped.
@@ -856,10 +860,10 @@ public class GeneratorTierObject implements DataObject
     private int maxHeight = 320;
 
     /**
-     * Map that stores min and max heights for each material in the generator.
+     * Map that stores min and max heights for each block ID in the generator.
      */
     @Expose
-    private TreeMap<Material, int[]> materialHeightMap = new TreeMap<>();
+    private TreeMap<String, int[]> materialHeightMap = new TreeMap<>();
 
     /**
      * Maximum number of blocks this generator tier is allowed to generate during a single exhaustion period.
@@ -872,22 +876,22 @@ public class GeneratorTierObject implements DataObject
      * Field to store block height ranges
      */
     @Expose
-    private Map<Material, int[]> blockHeightRanges = new HashMap<>();
+    private Map<String, int[]> blockHeightRanges = new HashMap<>();
 
     /**
      * Gets the height ranges for each block type
-     * @return Map of Material to height range array [min, max]
+     * @return Map of block ID to height range array [min, max]
      */
-    public Map<Material, int[]> getBlockHeightRanges()
+    public Map<String, int[]> getBlockHeightRanges()
     {
         return blockHeightRanges;
     }
 
     /**
      * Sets the height ranges for each block type
-     * @param blockHeightRanges Map of Material to height range array [min, max]
+     * @param blockHeightRanges Map of block ID to height range array [min, max]
      */
-    public void setBlockHeightRanges(Map<Material, int[]> blockHeightRanges)
+    public void setBlockHeightRanges(Map<String, int[]> blockHeightRanges)
     {
         this.blockHeightRanges = blockHeightRanges;
     }
@@ -937,48 +941,48 @@ public class GeneratorTierObject implements DataObject
 
 
     /**
-     * Gets the map of material-specific height ranges.
+     * Gets the map of block-specific height ranges, keyed by block ID.
      *
      * @return the material height map
      */
-    public TreeMap<Material, int[]> getMaterialHeightMap()
+    public NavigableMap<String, int[]> getMaterialHeightMap()
     {
         return this.materialHeightMap;
     }
 
 
     /**
-     * Sets the map of material-specific height ranges.
+     * Sets the map of block-specific height ranges, keyed by block ID.
      *
      * @param materialHeightMap the material height map
      */
-    public void setMaterialHeightMap(TreeMap<Material, int[]> materialHeightMap)
+    public void setMaterialHeightMap(NavigableMap<String, int[]> materialHeightMap)
     {
-        this.materialHeightMap = materialHeightMap;
+        this.materialHeightMap = new TreeMap<>(materialHeightMap);
     }
 
 
     /**
-     * Gets the height range for a specific material.
+     * Gets the height range for a specific block ID.
      *
-     * @param material the material
+     * @param blockId the block ID
      * @return an array where index 0 is minHeight and index 1 is maxHeight, or null if not set
      */
-    public int[] getMaterialHeightRange(Material material)
+    public int[] getMaterialHeightRange(String blockId)
     {
-        return this.materialHeightMap.get(material);
+        return this.materialHeightMap.get(blockId);
     }
 
 
     /**
-     * Sets the height range for a specific material.
+     * Sets the height range for a specific block ID.
      *
-     * @param material the material
+     * @param blockId the block ID
      * @param minHeight the minimum height
      * @param maxHeight the maximum height
      */
-    public void setMaterialHeightRange(Material material, int minHeight, int maxHeight)
+    public void setMaterialHeightRange(String blockId, int minHeight, int maxHeight)
     {
-        this.materialHeightMap.put(material, new int[]{minHeight, maxHeight});
+        this.materialHeightMap.put(blockId, new int[]{minHeight, maxHeight});
     }
 }
