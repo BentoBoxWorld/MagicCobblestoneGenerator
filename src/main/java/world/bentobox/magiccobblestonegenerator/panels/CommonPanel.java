@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataOb
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.managers.StoneGeneratorManager;
 import world.bentobox.magiccobblestonegenerator.utils.Constants;
+import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
 import world.bentobox.magiccobblestonegenerator.utils.Utils;
 
 
@@ -387,7 +389,7 @@ public abstract class CommonPanel
      */
     private String generateBlockListDescription(GeneratorTierObject generator)
     {
-        TreeMap<Double, Material> blockChanceMap = generator.getBlockChanceMap();
+        NavigableMap<Double, String> blockChanceMap = generator.getBlockChanceMap();
 
         if (blockChanceMap.isEmpty())
         {
@@ -408,12 +410,12 @@ public abstract class CommonPanel
         Double maxValue = blockChanceMap.lastKey();
         Double previousValue = 0.0;
 
-        List<Map.Entry<Double, Material>> materialChanceList =
+        List<Map.Entry<Double, String>> materialChanceList =
             blockChanceMap.entrySet().stream().
                 sorted(Map.Entry.comparingByKey()).
                 collect(Collectors.toList());
 
-        for (Map.Entry<Double, Material> entry : materialChanceList)
+        for (Map.Entry<Double, String> entry : materialChanceList)
         {
             Double value = (entry.getKey() - previousValue) / maxValue * 100.0;
 
@@ -429,7 +431,7 @@ public abstract class CommonPanel
             }
 
             blocks.append(this.user.getTranslation(reference + "value",
-                Constants.BLOCK, Utils.prettifyObject(this.user, entry.getValue()),
+                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, entry.getValue()),
                 TextVariables.NUMBER, String.valueOf(value),
                 Constants.TENS, this.tensFormat.format(value),
                 Constants.HUNDREDS, this.hundredsFormat.format(value),
