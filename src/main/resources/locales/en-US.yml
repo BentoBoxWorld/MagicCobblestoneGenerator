@@ -115,9 +115,18 @@ stone-generator:
       type:
         name: "<white><bold>Generator Type</bold></white>"
         description: |-
-          <gray>Defines which generator type
-          </gray><gray>will be applied to the current
-          </gray><gray>generator.</gray>
+          <gray>Defines which vanilla lava
+          </gray><gray>mechanic activates this
+          </gray><gray>generator.
+
+          </gray><gold><italic>Cobblestone: </italic></gold><gray>a lava stream
+          </gray><gray>touches water at the same
+          </gray><gray>level.
+          </gray><gold><italic>Stone: </italic></gold><gray>lava flows down onto
+          </gray><gray>water. Works on any water,
+          </gray><gray>oceans included.
+          </gray><gold><italic>Basalt: </italic></gold><gray>lava flows onto soul
+          </gray><gray>soil next to blue ice.</gray>
         value: "<aqua>Type: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Minimum Island Level</bold></white>"
