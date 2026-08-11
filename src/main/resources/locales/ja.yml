@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "魔法生成機データベースをゲームモードからファイルにエクスポート"
+      reset:
+        parameters: "<player>"
+        description: "プレイヤーの島の生成機データをリセットします"
+        confirmation: "[player] の生成機データ（解除済み・購入済み・有効な生成機）をリセットします - 確認してください"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>マテリアルの高さを設定</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>高さの範囲: [material]</bold></black>"
+      select-generator: "<black><bold>生成機を選択</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>生成機タイプ</bold></white>"
         description: |-
-          <gray>現在の生成機に
-          </gray><gray>適用される生成機タイプを
-          </gray><gray>定義します。</gray>
+          <gray>どのバニラの溶岩の仕組みで
+          </gray><gray>この生成機が動作する
+          </gray><gray>かを指定します。
+
+          </gray><gold><italic>コブルストーン: </italic></gold><gray>溶岩の流れが同じ高さの
+          </gray><gray>水に触れたとき。
+
+          </gray><gold><italic>石: </italic></gold><gray>溶岩が水の上に流れ落ちた
+          </gray><gray>とき。海を含むあらゆる水で
+          </gray><gray>動作します。
+
+          </gray><gold><italic>玄武岩: </italic></gold><gray>溶岩がソウルソイルに流れ、
+          </gray><gray>隣に青氷があるとき。</gray>
         value: "<aqua>タイプ: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>最小島レベル</bold></white>"
@@ -786,6 +801,36 @@ stone-generator:
           name: "<white><bold>任意</bold></white>"
           description: |-
             <gray>すべての生成機で動作します。</gray>
+      accept_generator:
+        name: "<white><bold>生成機を確定</bold></white>"
+        description: |-
+          <gray>選択した生成機を
+          </gray><gray>確定して戻ります。</gray>
+        selected-generators: "<gray>選択中の生成機:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>解除時に有効化</bold></white>"
+        description: |-
+          <gray>有効にすると、この
+          </gray><gray>生成機は解除された
+          </gray><gray>時点で自動的に有効化されます。</gray>
+        enabled: "<aqua>この生成機は </aqua><green>解除時に有効化されます。</green>"
+        disabled: "<aqua>この生成機は </aqua><red>解除時に有効化されません。</red>"
+      add_custom_block:
+        name: "<white><bold>カスタムブロックを追加</bold></white>"
+        description: |-
+          <gray>ItemsAdder、CraftEngine、
+          </gray><gray>Oraxen、Nexo のブロックを
+          </gray><gray>IDで追加します。</gray>
+      required_generators:
+        name: "<white><bold>必要な生成機</bold></white>"
+        description: |-
+          <gray>この生成機が使えるよう
+          </gray><gray>になる前に解除しておく必要が
+          </gray><gray>ある生成機です。</gray>
+        list: "<aqua>必要な生成機:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- なし</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>クリック </yellow><gray>して前のページを表示。</gray>"
@@ -878,6 +923,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>必要なレベル: </bold></red><red>[number]</red>"
@@ -891,6 +939,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>すべての </bold></gray><bold><yellow><italic></italic></yellow></bold><gray><bold>バイオームで動作</bold></gray>"
+          phase: "<red><bold>必要なフェーズ: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>必要な破壊ブロック数: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>必要な生成機:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -969,6 +1021,7 @@ stone-generator:
     import-count: "<yellow>[generator] 個の新しい生成機と [bundle] 個の新しいバンドルをインポート。</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>ライブラリのダウンロードを開始。</yellow>"
+    generator-data-reset: "<yellow>プレイヤー </yellow>[player]<yellow> の生成機データをリセットしました。</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1066,6 +1119,10 @@ stone-generator:
     click-text-to-activate: "<yellow>アンロック済み </yellow> [generator]<yellow>! ここをクリックして今すぐアクティベート。</yellow>"
     input-min-height: "<white>このマテリアルの最小高さを入力してください (-64 から 320 の間):</white>"
     input-max-height: "<white>このマテリアルの最大高さを入力してください (-64 から 320 の間):</white>"
+    confirm-generator-purchase: "<yellow>次の生成機を購入しますか: </yellow>[generator]<yellow> 価格: [number]</yellow>"
+    input-custom-block: "<yellow>カスタムブロックのIDをチャットに入力してください。プラグインの接頭辞が必要です: 'itemsadder:namespace:id'、'craftengine:namespace:id'、'oraxen:id'、'nexo:id'。</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' は有効なカスタムブロックIDではありません。'itemsadder:'、'craftengine:'、'oraxen:'、'nexo:' のいずれかに続けてブロックIDを指定してください。</red>"
+    custom-block-not-found: "<red>カスタムブロック '[block]' が見つかりません。プラグインが導入されていること、IDが正しいことを確認してください。</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

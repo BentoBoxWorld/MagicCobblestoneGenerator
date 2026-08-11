@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "Exportă baza de date generatoare magic din modul joc în fișier"
+      reset:
+        parameters: "<player>"
+        description: "resetează datele generatoarelor de pe insula unui jucător"
+        confirmation: "Aceasta va reseta datele generatoarelor lui [player] (generatoare deblocate, cumpărate și active) - te rog confirmă"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>Configurați Înălțimea Materialului</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>Interval Înălțime: [material]</bold></black>"
+      select-generator: "<black><bold>Selectează generatoare</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>Tip Generator</bold></white>"
         description: |-
-          <gray>Defines which generator type
-          </gray><gray>will be applied la the current
-          </gray><gray>generator.</gray>
+          <gray>Stabilește ce mecanică a
+          </gray><gray>lavei activează acest
+          </gray><gray>generator.
+
+          </gray><gold><italic>Cobblestone: </italic></gold><gray>un curent de lavă atinge apa
+          </gray><gray>la același nivel.
+
+          </gray><gold><italic>Piatră: </italic></gold><gray>lava curge peste apă.
+          </gray><gray>Funcționează pe orice apă,
+          </gray><gray>inclusiv oceane.
+
+          </gray><gold><italic>Bazalt: </italic></gold><gray>lava curge pe sol al
+          </gray><gray>sufletelor lângă gheață albastră.</gray>
         value: "<aqua>Tip: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Nivel Insulă Minim</bold></white>"
@@ -798,6 +813,36 @@ stone-generator:
           name: "<white><bold>Orice</bold></white>"
           description: |-
             <gray>Funcționează cu orice generator.</gray>
+      accept_generator:
+        name: "<white><bold>Acceptă generatoarele</bold></white>"
+        description: |-
+          <gray>Acceptă generatoarele
+          </gray><gray>selectate și revine.</gray>
+        selected-generators: "<gray>Generatoare selectate:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Activare la deblocare</bold></white>"
+        description: |-
+          <gray>Când este pornit, acest
+          </gray><gray>generator este activat automat
+          </gray><gray>imediat ce este deblocat.</gray>
+        enabled: "<aqua>Acest generator </aqua><green>se activează la deblocare.</green>"
+        disabled: "<aqua>Acest generator </aqua><red>nu se activează la deblocare.</red>"
+      add_custom_block:
+        name: "<white><bold>Adaugă bloc personalizat</bold></white>"
+        description: |-
+          <gray>Adaugă un bloc din
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen sau Nexo după ID.</gray>
+      required_generators:
+        name: "<white><bold>Generatoare necesare</bold></white>"
+        description: |-
+          <gray>Generatoare care trebuie
+          </gray><gray>deblocate înainte ca acesta
+          </gray><gray>să devină disponibil.</gray>
+        list: "<aqua>Generatoare necesare:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- niciunul</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>Click </yellow><gray>to view previous page.</gray>"
@@ -890,6 +935,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Required Level: </bold></red><red>[number]</red>"
@@ -903,6 +951,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>Operates in </bold></gray><bold><yellow><italic>all </italic></yellow></bold><gray><bold>biomes</bold></gray>"
+          phase: "<red><bold>Fază necesară: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Blocuri sparte necesare: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Generatoare necesare:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -981,6 +1033,7 @@ stone-generator:
     import-count: "<yellow>Importat [generator] generatoare noi și [bundle] pachete noi.</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>Începeți descărcarea bibliotecii.</yellow>"
+    generator-data-reset: "<yellow>Datele generatoarelor lui </yellow>[player]<yellow> au fost resetate.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1078,6 +1131,10 @@ stone-generator:
     click-text-to-activate: "<yellow>You have unlocked </yellow> [generator]<yellow>! Click here la activate it now.</yellow>"
     input-min-height: "<white>Introduceți înălțimea minimă pentru acest material (între -64 și 320):</white>"
     input-max-height: "<white>Introduceți înălțimea maximă pentru acest material (între -64 și 320):</white>"
+    confirm-generator-purchase: "<yellow>Confirmă că vrei să cumperi </yellow>[generator]<yellow> pentru [number].</yellow>"
+    input-custom-block: "<yellow>Scrie în chat ID-ul blocului personalizat, precedat de pluginul său: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' sau 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' nu este un ID valid de bloc personalizat. Folosește 'itemsadder:', 'craftengine:', 'oraxen:' sau 'nexo:' urmat de ID-ul blocului.</red>"
+    custom-block-not-found: "<red>Blocul personalizat '[block]' nu a fost găsit. Verifică dacă pluginul este instalat și dacă ID-ul este corect.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

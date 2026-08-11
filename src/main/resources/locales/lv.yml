@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "Eksportē burvju ģeneratorus no Spēles režīma faila"
+      reset:
+        parameters: "<player>"
+        description: "atiestata spēlētāja salas ģeneratoru datus"
+        confirmation: "Tas atiestatīs [player] ģeneratoru datus (atslēgtos, nopirktos un aktīvos ģeneratorus) - lūdzu, apstipriniet"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>Konfigurēt Materiāla Augstumu</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>Augstuma Diapazons: [material]</bold></black>"
+      select-generator: "<black><bold>Izvēlieties ģeneratorus</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>Ģeneratora Veids</bold></white>"
         description: |-
-          <gray>Nosaka, kurš ģeneratora veids
-          </gray><gray>tiks pielietots pašreizējam
-          </gray><gray>ģeneratoram.</gray>
+          <gray>Nosaka, kurš lavas
+          </gray><gray>mehānisms aktivizē šo
+          </gray><gray>ģeneratoru.
+
+          </gray><gold><italic>Bruģakmens: </italic></gold><gray>lavas straume saskaras ar
+          </gray><gray>ūdeni vienā līmenī.
+
+          </gray><gold><italic>Akmens: </italic></gold><gray>lava plūst lejup uz ūdens.
+          </gray><gray>Darbojas jebkurā ūdenī,
+          </gray><gray>tostarp okeānos.
+
+          </gray><gold><italic>Bazalts: </italic></gold><gray>lava plūst uz dvēseļu augsnes
+          </gray><gray>blakus zilajam ledum.</gray>
         value: "<aqua>Veids: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Minimālais Salas Līmenis</bold></white>"
@@ -802,6 +817,36 @@ stone-generator:
           name: "<white><bold>Jebkurš</bold></white>"
           description: |-
             <gray>Darbojas ar jebkuru ģeneratoru.</gray>
+      accept_generator:
+        name: "<white><bold>Apstiprināt ģeneratorus</bold></white>"
+        description: |-
+          <gray>Apstiprina izvēlētos
+          </gray><gray>ģeneratorus un atgriežas.</gray>
+        selected-generators: "<gray>Izvēlētie ģeneratori:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Aktivizēt pēc atslēgšanas</bold></white>"
+        description: |-
+          <gray>Ja ieslēgts, šis ģenerators
+          </gray><gray>tiek aktivizēts automātiski,
+          </gray><gray>tiklīdz tas ir atslēgts.</gray>
+        enabled: "<aqua>Šis ģenerators </aqua><green>tiek aktivizēts pēc atslēgšanas.</green>"
+        disabled: "<aqua>Šis ģenerators </aqua><red>netiek aktivizēts pēc atslēgšanas.</red>"
+      add_custom_block:
+        name: "<white><bold>Pievienot pielāgotu bloku</bold></white>"
+        description: |-
+          <gray>Pievienojiet bloku no
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen vai Nexo pēc ID.</gray>
+      required_generators:
+        name: "<white><bold>Nepieciešamie ģeneratori</bold></white>"
+        description: |-
+          <gray>Ģeneratori, kas jāatslēdz,
+          </gray><gray>pirms šis ģenerators kļūst
+          </gray><gray>pieejams.</gray>
+        list: "<aqua>Nepieciešamie ģeneratori:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- nav</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>Noklikšķiniet </yellow><gray>lai redzētu iepriekšējo lapu.</gray>"
@@ -894,6 +939,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Nepieciešamais Līmenis: </bold></red><red>[number]</red>"
@@ -907,6 +955,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>Darbojas </bold></gray><bold><yellow><italic>visos </italic></yellow></bold><gray><bold>bioumos</bold></gray>"
+          phase: "<red><bold>Nepieciešamā fāze: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Nepieciešamie sasistie bloki: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Nepieciešamie ģeneratori:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -985,6 +1037,7 @@ stone-generator:
     import-count: "<yellow>Importēti [generator] jauni ģeneratori un [bundle] jauni komplekti.</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>Sākt bibliotēkas lejupielādi.</yellow>"
+    generator-data-reset: "<yellow>Spēlētāja </yellow>[player]<yellow> ģeneratoru dati ir atiestatīti.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1082,6 +1135,10 @@ stone-generator:
     click-text-to-activate: "<yellow>Jūs atbloķējāt </yellow> [generator]<yellow>! Noklikšķiniet šeit, lai to tagad aktivizētu.</yellow>"
     input-min-height: "<white>Ievadiet minimālo augstumu šim materiālam (starp -64 un 320):</white>"
     input-max-height: "<white>Ievadiet maksimālo augstumu šim materiālam (starp -64 un 320):</white>"
+    confirm-generator-purchase: "<yellow>Lūdzu, apstipriniet, ka vēlaties nopirkt </yellow>[generator]<yellow> par [number].</yellow>"
+    input-custom-block: "<yellow>Ievadiet čatā pielāgotā bloka ID ar tā spraudņa priedēkli: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' vai 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' nav derīgs pielāgotā bloka ID. Izmantojiet 'itemsadder:', 'craftengine:', 'oraxen:' vai 'nexo:', kam seko bloka ID.</red>"
+    custom-block-not-found: "<red>Pielāgotais bloks '[block]' netika atrasts. Pārbaudiet, vai spraudnis ir uzstādīts un ID ir pareizs.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

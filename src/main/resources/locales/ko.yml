@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "게임 모드에서 매직 생성기 데이터베이스 내보내기"
+      reset:
+        parameters: "<player>"
+        description: "플레이어 섬의 생성기 데이터를 초기화합니다"
+        confirmation: "[player] 님의 생성기 데이터(해금, 구매, 활성 생성기)를 초기화합니다 - 확인해 주세요"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>재료 높이 설정</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>높이 범위: [material]</bold></black>"
+      select-generator: "<black><bold>생성기 선택</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>생성기 유형</bold></white>"
         description: |-
-          <gray>현재 생성기에
-          </gray><gray>적용될 생성기 유형을
-          </gray><gray>정의합니다.</gray>
+          <gray>어떤 바닐라 용암 방식이
+          </gray><gray>이 생성기를 작동시키는지
+          </gray><gray>정합니다.
+
+          </gray><gold><italic>조약돌: </italic></gold><gray>용암 줄기가 같은 높이의
+          </gray><gray>물에 닿을 때.
+
+          </gray><gold><italic>돌: </italic></gold><gray>용암이 물 위로 흘러내릴 때.
+          </gray><gray>바다를 포함한 모든 물에서
+          </gray><gray>작동합니다.
+
+          </gray><gold><italic>현무암: </italic></gold><gray>용암이 영혼 흙 위로 흐르고
+          </gray><gray>옆에 푸른 얼음이 있을 때.</gray>
         value: "<aqua>유형: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>최소 섬 레벨</bold></white>"
@@ -781,6 +796,36 @@ stone-generator:
           name: "<white><bold>모두</bold></white>"
           description: |-
             <gray>모든 생성기에서 작동합니다.</gray>
+      accept_generator:
+        name: "<white><bold>생성기 확정</bold></white>"
+        description: |-
+          <gray>선택한 생성기를 확정하고
+          </gray><gray>돌아갑니다.</gray>
+        selected-generators: "<gray>선택한 생성기:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>해금 시 활성화</bold></white>"
+        description: |-
+          <gray>켜면 이 생성기는 해금되는
+          </gray><gray>즉시 자동으로
+          </gray><gray>활성화됩니다.</gray>
+        enabled: "<aqua>이 생성기는 </aqua><green>해금 시 활성화됩니다.</green>"
+        disabled: "<aqua>이 생성기는 </aqua><red>해금 시 활성화되지 않습니다.</red>"
+      add_custom_block:
+        name: "<white><bold>커스텀 블록 추가</bold></white>"
+        description: |-
+          <gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen 또는 Nexo 블록을
+          </gray><gray>ID로 추가합니다.</gray>
+      required_generators:
+        name: "<white><bold>필요한 생성기</bold></white>"
+        description: |-
+          <gray>이 생성기를 사용하려면
+          </gray><gray>먼저 해금해야 하는
+          </gray><gray>생성기입니다.</gray>
+        list: "<aqua>필요한 생성기:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- 없음</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>클릭 </yellow><gray>이전 페이지를 봅니다.</gray>"
@@ -874,6 +919,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>필수 레벨: </bold></red><red>[number]</red>"
@@ -887,6 +935,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>모든 </bold></gray><bold><yellow><italic></italic></yellow></bold><gray><bold>바이옴에서 작동</bold></gray>"
+          phase: "<red><bold>필요한 단계: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>필요한 파괴 블록 수: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>필요한 생성기:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -965,6 +1017,7 @@ stone-generator:
     import-count: "<yellow>[generator]개의 새로운 생성기와 [bundle]개의 새로운 번들을 가져왔습니다.</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>라이브러리 다운로드를 시작합니다.</yellow>"
+    generator-data-reset: "<yellow>플레이어 </yellow>[player]<yellow> 의 생성기 데이터가 초기화되었습니다.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1062,6 +1115,10 @@ stone-generator:
     click-text-to-activate: "<yellow>잠금이 해제되었습니다 </yellow> [generator]<yellow>! 지금 활성화하려면 여기를 클릭하세요.</yellow>"
     input-min-height: "<white>이 재료의 최소 높이를 입력하세요 (-64에서 320 사이):</white>"
     input-max-height: "<white>이 재료의 최대 높이를 입력하세요 (-64에서 320 사이):</white>"
+    confirm-generator-purchase: "<yellow>구매하시겠습니까: </yellow>[generator]<yellow> 가격: [number]</yellow>"
+    input-custom-block: "<yellow>커스텀 블록 ID를 채팅에 입력하세요. 플러그인 접두사가 필요합니다: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' 또는 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' 은(는) 올바른 커스텀 블록 ID가 아닙니다. 'itemsadder:', 'craftengine:', 'oraxen:' 또는 'nexo:' 뒤에 블록 ID를 입력하세요.</red>"
+    custom-block-not-found: "<red>커스텀 블록 '[block]' 을(를) 찾을 수 없습니다. 플러그인이 설치되어 있고 ID가 올바른지 확인하세요.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.
