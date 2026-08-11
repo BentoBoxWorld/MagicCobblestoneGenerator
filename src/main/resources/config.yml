@@ -37,6 +37,15 @@ notify-on-unlock: true
 # Requires Bank Addon
 use-bank: false
 #
+# This indicates if the addon should respect AcidIsland acid water.
+# AcidIsland turns stone, that is created when lava pours into its acid water, back
+# into water. If this option is enabled, the addon will not process such blocks, so
+# a single lava bucket cannot be used to convert an entire ocean into generator
+# blocks. Normal cobblestone generators are not affected by this option.
+# This option does nothing in worlds that are not managed by AcidIsland, or if acid
+# damage is disabled in the AcidIsland config.
+acid-island-aware: true
+#
 # This list stores GameModes in which the addon should not work.
 # To disable addon it is necessary to write its name in new line that starts with -. Example:
 # disabled-gamemodes:

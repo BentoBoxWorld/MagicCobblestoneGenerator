@@ -373,6 +373,30 @@ public class Settings implements ConfigObject
 
 
     /**
+     * Is acid island aware boolean.
+     *
+     * @return {@code true} if the addon must not replace blocks that AcidIsland reverts to water.
+     * @since 2.10.0
+     */
+    public boolean isAcidIslandAware()
+    {
+        return acidIslandAware;
+    }
+
+
+    /**
+     * Sets acid island aware.
+     *
+     * @param acidIslandAware new value for this object.
+     * @since 2.10.0
+     */
+    public void setAcidIslandAware(boolean acidIslandAware)
+    {
+        this.acidIslandAware = acidIslandAware;
+    }
+
+
+    /**
      * Gets the default number of blocks a generator is allowed to generate during a single exhaustion period.
      *
      * @return the default generator exhaustion limit. 0 or less disables the limitation.
@@ -557,6 +581,17 @@ public class Settings implements ConfigObject
     @ConfigComment("Requires Bank Addon.")
     @ConfigEntry(path = "use-bank-account")
     private boolean useBankAccount = false;
+
+    @ConfigComment("")
+    @ConfigComment("This indicates if the addon should respect AcidIsland acid water.")
+    @ConfigComment("AcidIsland turns stone, that is created when lava pours into its acid water, back")
+    @ConfigComment("into water. If this option is enabled, the addon will not process such blocks, so")
+    @ConfigComment("a single lava bucket cannot be used to convert an entire ocean into generator")
+    @ConfigComment("blocks. Normal cobblestone generators are not affected by this option.")
+    @ConfigComment("This option does nothing in worlds that are not managed by AcidIsland, or if acid")
+    @ConfigComment("damage is disabled in the AcidIsland config.")
+    @ConfigEntry(path = "acid-island-aware")
+    private boolean acidIslandAware = true;
 
     @ConfigComment("")
     @ConfigComment("This list stores GameModes in which the addon should not work.")

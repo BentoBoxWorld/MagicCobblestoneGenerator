@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockFormEvent;
 
 import world.bentobox.bentobox.database.objects.Island;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
+import world.bentobox.magiccobblestonegenerator.utils.AcidIslandHelper;
 import world.bentobox.magiccobblestonegenerator.utils.CustomBlocks;
 import world.bentobox.magiccobblestonegenerator.utils.Why;
 
@@ -69,6 +70,19 @@ public class VanillaGeneratorListener extends GeneratorListener
         }
 
         Island island = islandOptional.get();
+
+        if (this.addon.getSettings().isAcidIslandAware() &&
+            event.getNewState().getType() == Material.STONE &&
+            eventSourceBlock.getType() == Material.WATER &&
+            AcidIslandHelper.revertsStoneFormedInWater(this.addon, eventSourceBlock.getWorld()))
+        {
+            // Lava poured into acid water. AcidIsland turns this stone back into water on the next
+            // tick, but only if it is still stone. Replacing it would defeat that protection and
+            // allow whole oceans to be converted into generator blocks.
+            Why.report(island, eventSourceBlock.getLocation(),
+                "AcidIsland reverts stone that is formed in acid water!");
+            return;
+        }
 
         if (!island.isAllowed(StoneGeneratorAddon.MAGIC_COBBLESTONE_GENERATOR))
         {
