@@ -18,6 +18,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: 将刷石机数据导出到文件
+      reset:
+        parameters: "<player>"
+        description: "重置玩家岛屿的刷石机数据"
+        confirmation: "这将重置 [player] 的刷石机数据（已解锁、已购买和已启用的刷石机）- 请确认"
     player:
       main:
         description: 打开刷石机控制面板
@@ -48,6 +52,7 @@ stone-generator:
       settings: "<dark_gray><bold>插件设置</bold></dark_gray>"
       configure-material-height: <black><bold>配置材料高度</bold></black>
       height-range-config: <black><bold>高度范围：[material]</bold></black>
+      select-generator: "<black><bold>选择刷石机</bold></black>"
     buttons:
       default:
         name: "<white><bold>默认刷石机</bold></white>"
@@ -63,8 +68,18 @@ stone-generator:
       type:
         name: "<white><bold>刷石机类型</bold></white>"
         description: |-
-          <gray>指定应用于当前刷石机的类型，
-          </gray><gray>可指定多种类型。</gray>
+          <gray>定义哪种原版岩浆机制
+          </gray><gray>会触发该刷石机。
+
+          </gray><gold><italic>圆石: </italic></gold><gray>岩浆流接触到同一
+          </gray><gray>高度的水。
+
+          </gray><gold><italic>石头: </italic></gold><gray>岩浆向下流到水面上。
+          </gray><gray>对任何水域都有效，
+          </gray><gray>包括海洋。
+
+          </gray><gold><italic>玄武岩: </italic></gold><gray>岩浆流到灵魂土上，
+          </gray><gray>旁边有蓝冰。</gray>
         value: "<aqua>类型: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>最低岛屿等级</bold></white>"
@@ -524,6 +539,34 @@ stone-generator:
         disabled: <aqua>银行使用已</aqua><red>禁用 </red><aqua>。</aqua>
         enabled: <aqua>银行使用已</aqua><green>启用 </green><aqua>。</aqua>
         name: <white><bold>使用银行</bold></white>
+      accept_generator:
+        name: "<white><bold>确认刷石机</bold></white>"
+        description: |-
+          <gray>确认所选刷石机
+          </gray><gray>并返回。</gray>
+        selected-generators: "<gray>已选刷石机：</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>解锁时启用</bold></white>"
+        description: |-
+          <gray>启用后，该刷石机会在
+          </gray><gray>解锁的同时自动启用。</gray>
+        enabled: "<aqua>该刷石机 </aqua><green>解锁时会自动启用。</green>"
+        disabled: "<aqua>该刷石机 </aqua><red>解锁时不会自动启用。</red>"
+      add_custom_block:
+        name: "<white><bold>添加自定义方块</bold></white>"
+        description: |-
+          <gray>通过 ID 添加来自
+          </gray><gray>ItemsAdder、CraftEngine、
+          </gray><gray>Oraxen 或 Nexo 的方块。</gray>
+      required_generators:
+        name: "<white><bold>前置刷石机</bold></white>"
+        description: |-
+          <gray>在此刷石机可用之前
+          </gray><gray>必须先解锁的刷石机。</gray>
+        list: "<aqua>前置刷石机：</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- 无</aqua>"
     tips:
       click-to-previous: "<yellow>点击 </yellow><gray>浏览上一页</gray>"
       click-to-next: "<yellow>点击 </yellow><gray>浏览下一页</gray>"
@@ -580,6 +623,7 @@ stone-generator:
           [blocks]
           [treasures]
           [type]
+          [height-range]
           [requirements]
           [status]
         blocks:
@@ -590,15 +634,22 @@ stone-generator:
           value: "<dark_gray>[材料] - [#.####]%</dark_gray>"
         requirements:
           description: |-
-            [生物群系]
-            [等级]
-            [缺失权限]
+            [biomes]
+            [level]
+            [phase]
+            [block-count]
+            [required-generators]
+            [missing-permissions]
           level: "<red><bold>需要岛屿等级： </bold></red><red>[数量]</red>"
           permission-title: "<red><bold>缺少权限：</bold></red>"
           permission: "<red> -[权限]</red>"
           biome-title: "<gray><bold>适用生物群系:</bold></gray>"
           biome: "<dark_gray>[生物群系]</dark_gray>"
           any: "<gray><bold>适用于 </bold></gray><bold><yellow><italic>所有 </italic></yellow></bold><gray><bold>生物群系</bold></gray>"
+          phase: "<red><bold>所需阶段: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>所需破坏方块数: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>前置刷石机:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           locked: "<red>未解锁！</red>"
           undeployed: "<red>未部署！</red>"
@@ -641,6 +692,7 @@ stone-generator:
     generator-exhausted: <red>生成器 </red> '[generator]' <red>已达到生成上限，现在进入冷却，还需 [number] 分钟。</red>
     no-credits-bank: <red>你的银行账户没有足够的点数来激活生成器。激活需要 [number] 点数。</red>
     no-credits-buy-bank: <red>你的银行账户没有足够的点数。此生成器需要 [number] 点数。</red>
+    generator-data-reset: "<yellow>玩家 </yellow>[player]<yellow> 的刷石机数据已重置。</yellow>"
   errors:
     no-generator-data: "<red>找不到有效的刷石机数据。</red>"
     no-island-data: "<red>没有找到岛屿数据。</red>"
@@ -691,6 +743,10 @@ stone-generator:
     click-text-to-activate: "<yellow>您已解锁 </yellow>[generator]<yellow>！点击此处立即激活。</yellow>"
     input-max-height: <white>请输入此材料的最大高度（-64 到 320 之间）：</white>
     input-min-height: <white>请输入此材料的最小高度（-64 到 320 之间）：</white>
+    confirm-generator-purchase: "<yellow>请确认你要购买 </yellow>[generator]<yellow> 价格为 [number]。</yellow>"
+    input-custom-block: "<yellow>请在聊天栏输入自定义方块 ID，并带上插件前缀：'itemsadder:namespace:id'、'craftengine:namespace:id'、'oraxen:id' 或 'nexo:id'。</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' 不是有效的自定义方块 ID。请使用 'itemsadder:'、'craftengine:'、'oraxen:' 或 'nexo:' 加上方块 ID。</red>"
+    custom-block-not-found: "<red>未找到自定义方块 '[block]'。请检查该插件是否已安装以及 ID 是否正确。</red>"
   materials:
     cobblestone: 圆石
     stone:

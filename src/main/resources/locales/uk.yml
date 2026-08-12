@@ -18,6 +18,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: Експортуйте базу даних генераторів магії з ігрового режиму у файл
+      reset:
+        parameters: "<player>"
+        description: "скидає дані генераторів на острові гравця"
+        confirmation: "Це скине дані генераторів гравця [player] (розблоковані, куплені та активні генератори) - підтвердьте"
     player:
       main:
         description: відкриває GUI вибору генератора
@@ -48,6 +52,7 @@ stone-generator:
       settings: "<black><bold>Налаштування</bold></black>"
       configure-material-height: <black><bold>Налаштування висоти матеріалу</bold></black>
       height-range-config: '<black><bold>Діапазон висот: [material]</bold></black>'
+      select-generator: "<black><bold>Виберіть генератори</bold></black>"
     buttons:
       default:
         name: "<white><bold>Генератор за замовчуванням</bold></white>"
@@ -67,9 +72,19 @@ stone-generator:
       type:
         name: "<white><bold>Тип генератора</bold></white>"
         description: |-
-          <gray>Визначає тип генератора
-          </gray><gray>буде застосовано до поточного
-          </gray><gray>генератор.</gray>
+          <gray>Визначає, який ванільний
+          </gray><gray>механізм лави запускає
+          </gray><gray>цей генератор.
+
+          </gray><gold><italic>Кругляк: </italic></gold><gray>потік лави торкається води
+          </gray><gray>на тому ж рівні.
+
+          </gray><gold><italic>Камінь: </italic></gold><gray>лава стікає на воду.
+          </gray><gray>Працює на будь-якій воді,
+          </gray><gray>включно з океанами.
+
+          </gray><gold><italic>Базальт: </italic></gold><gray>лава стікає на ґрунт душ
+          </gray><gray>поруч із синім льодом.</gray>
         value: "<aqua>Тип: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Мінімальний рівень острова</bold></white>"
@@ -697,6 +712,36 @@ stone-generator:
         description: "<gray>Задати мінімальну висоту\n</gray><gray>для цього матеріалу.</gray>"
         name: <white><bold>Мінімальна висота</bold></white>
         value: '<gray>Поточне значення: </gray><aqua>[min_height]</aqua>'
+      accept_generator:
+        name: "<white><bold>Підтвердити генератори</bold></white>"
+        description: |-
+          <gray>Підтверджує вибрані
+          </gray><gray>генератори та повертає.</gray>
+        selected-generators: "<gray>Вибрані генератори:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Активувати при розблокуванні</bold></white>"
+        description: |-
+          <gray>Якщо увімкнено, цей генератор
+          </gray><gray>активується автоматично
+          </gray><gray>одразу після розблокування.</gray>
+        enabled: "<aqua>Цей генератор </aqua><green>активується при розблокуванні.</green>"
+        disabled: "<aqua>Цей генератор </aqua><red>не активується при розблокуванні.</red>"
+      add_custom_block:
+        name: "<white><bold>Додати власний блок</bold></white>"
+        description: |-
+          <gray>Додайте блок з
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen або Nexo за ID.</gray>
+      required_generators:
+        name: "<white><bold>Потрібні генератори</bold></white>"
+        description: |-
+          <gray>Генератори, які треба
+          </gray><gray>розблокувати, перш ніж
+          </gray><gray>стане доступним цей.</gray>
+        list: "<aqua>Потрібні генератори:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- немає</aqua>"
     tips:
       click-to-previous: "<yellow>Натисніть </yellow><gray>, щоб переглянути попередню сторінку.</gray>"
       click-to-next: "<yellow>Натисніть </yellow><gray>, щоб переглянути наступну сторінку.</gray>"
@@ -757,6 +802,7 @@ stone-generator:
           [blocks]
           [treasures]
           [type]
+          [height-range]
           [requirements]
           [status]
         blocks:
@@ -769,6 +815,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           level: "<red><bold>Необхідний рівень: </bold></red><red>[number]</red>"
           permission-title: "<red><bold>Відсутні дозволи:</bold></red>"
@@ -776,6 +825,10 @@ stone-generator:
           biome-title: "<gray><bold>Працює в:</bold></gray>"
           biome: "<dark_gray>[biome]</dark_gray>"
           any: "<gray><bold>Діє в </bold></gray><bold><yellow><italic>всіх </italic></yellow></bold><gray><bold>біомах</bold></gray>"
+          phase: "<red><bold>Потрібна фаза: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Потрібно зламано блоків: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Потрібні генератори:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           locked: "<red>Заблоковано!</red>"
           undeployed: "<red>Не розгорнуто!</red>"
@@ -819,6 +872,7 @@ stone-generator:
     import-count: "<yellow>Імпортовано [generator] нові генератори та [bundle] нові пакети.</yellow>"
     start-downloading: "<yellow>Розпочати завантаження бібліотеки.</yellow>"
     generator-exhausted: <red>Генератор </red> '[generator]' <red>досяг ліміту генерації і тепер на перезарядці ще [number] хвилин(и).</red>
+    generator-data-reset: "<yellow>Дані генераторів гравця </yellow>[player]<yellow> скинуто.</yellow>"
   errors:
     no-generator-data: "<red>Не вдалося знайти дійсні дані генератора</red>"
     no-island-data: "<red>Данні острова не знайдено.</red>"
@@ -869,6 +923,10 @@ stone-generator:
     click-text-to-activate: "<yellow>Ви розблокували </yellow> [generator]<yellow>! Натисніть тут, щоб активувати його зараз.</yellow>"
     input-max-height: <white>Введіть максимальну висоту для цього матеріалу (від -64 до 320):</white>
     input-min-height: <white>Введіть мінімальну висоту для цього матеріалу (від -64 до 320):</white>
+    confirm-generator-purchase: "<yellow>Підтвердьте, що хочете купити </yellow>[generator]<yellow> за [number].</yellow>"
+    input-custom-block: "<yellow>Введіть у чат ID власного блоку з префіксом його плагіна: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' або 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' не є коректним ID власного блоку. Використайте 'itemsadder:', 'craftengine:', 'oraxen:' або 'nexo:', а після нього ID блоку.</red>"
+    custom-block-not-found: "<red>Власний блок '[block]' не знайдено. Перевірте, чи встановлено плагін і чи правильний ID.</red>"
   materials:
     cobblestone: Кругляк
     stone:

@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "Exportovat databázi kouzelných generátorů z herního režimu do souboru"
+      reset:
+        parameters: "<player>"
+        description: "resetuje data generátorů na ostrově hráče"
+        confirmation: "Tímto se resetují data generátorů hráče [player] (odemčené, zakoupené a aktivní generátory) - prosím potvrďte"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>Konfigurovat výšku materiálu</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>Rozsah výšky: [material]</bold></black>"
+      select-generator: "<black><bold>Vyberte generátory</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>Typ generátoru</bold></white>"
         description: |-
-          <gray>Definuje, který typ generátoru
-          </gray><gray>bude aplikován na aktuální
-          </gray><gray>generátor.</gray>
+          <gray>Určuje, který vanilla
+          </gray><gray>mechanismus lávy aktivuje
+          </gray><gray>tento generátor.
+
+          </gray><gold><italic>Dlhý kámen: </italic></gold><gray>proud lávy se dotkne
+          </gray><gray>vody ve stejné úrovni.
+
+          </gray><gold><italic>Kámen: </italic></gold><gray>láva teče dolů na vodu.
+          </gray><gray>Funguje na jakékoli vodě,
+          </gray><gray>včetně oceánů.
+
+          </gray><gold><italic>Čedič: </italic></gold><gray>láva teče na půdu duší
+          </gray><gray>vedle modrého ledu.</gray>
         value: "<aqua>Typ: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Minimální úroveň ostrova</bold></white>"
@@ -797,6 +812,36 @@ stone-generator:
           name: "<white><bold>Jakýkoliv</bold></white>"
           description: |-
             <gray>Funguje s jakýmkoliv generátorem.</gray>
+      accept_generator:
+        name: "<white><bold>Potvrdit generátory</bold></white>"
+        description: |-
+          <gray>Potvrdí vybrané generátory
+          </gray><gray>a vrátí se zpět.</gray>
+        selected-generators: "<gray>Vybrané generátory:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Aktivovat při odemčení</bold></white>"
+        description: |-
+          <gray>Když je zapnuto, tento
+          </gray><gray>generátor se aktivuje
+          </gray><gray>ihned po odemčení.</gray>
+        enabled: "<aqua>Tento generátor </aqua><green>se aktivuje při odemčení.</green>"
+        disabled: "<aqua>Tento generátor </aqua><red>se neaktivuje při odemčení.</red>"
+      add_custom_block:
+        name: "<white><bold>Přidat vlastní blok</bold></white>"
+        description: |-
+          <gray>Přidejte vlastní blok z
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen nebo Nexo podle ID.</gray>
+      required_generators:
+        name: "<white><bold>Vyžadované generátory</bold></white>"
+        description: |-
+          <gray>Generátory, které musí být
+          </gray><gray>odemčeny, než bude tento
+          </gray><gray>generátor dostupný.</gray>
+        list: "<aqua>Vyžadované generátory:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- žádné</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>Klikněte </yellow><gray>pro zobrazení předchozí stránky.</gray>"
@@ -889,6 +934,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Požadovaná úroveň: </bold></red><red>[number]</red>"
@@ -902,6 +950,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>Funguje v </bold></gray><bold><yellow><italic>všechny </italic></yellow></bold><gray><bold>biomy</bold></gray>"
+          phase: "<red><bold>Vyžadovaná fáze: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Vyžadováno zničených bloků: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Vyžadované generátory:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -980,6 +1032,7 @@ stone-generator:
     import-count: "<yellow>Importováno [generator] nových generátorů a [bundle] nových balíčků.</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>Začněte stahovat knihovnu.</yellow>"
+    generator-data-reset: "<yellow>Data generátorů hráče </yellow>[player]<yellow> byla resetována.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1077,6 +1130,10 @@ stone-generator:
     click-text-to-activate: "<yellow>Odemkli jste </yellow> [generator]<yellow>! Klikněte zde a aktivujte to nyní.</yellow>"
     input-min-height: "<white>Zadejte minimální výšku pro tento materiál (mezi -64 a 320):</white>"
     input-max-height: "<white>Zadejte maximální výšku pro tento materiál (mezi -64 a 320):</white>"
+    confirm-generator-purchase: "<yellow>Potvrďte prosím, že chcete koupit </yellow>[generator]<yellow> za [number].</yellow>"
+    input-custom-block: "<yellow>Zadejte do chatu ID vlastního bloku s předponou jeho pluginu: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' nebo 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' není platné ID vlastního bloku. Použijte 'itemsadder:', 'craftengine:', 'oraxen:' nebo 'nexo:' následované ID bloku.</red>"
+    custom-block-not-found: "<red>Vlastní blok '[block]' nebyl nalezen. Zkontrolujte, zda je plugin nainstalován a ID je správné.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

@@ -18,6 +18,10 @@ stone-generator:
       export:
         parameters: "<dosya>"
         description: Sihir üreteçleri veritabanını Oyun Modundan dosyaya aktarın
+      reset:
+        parameters: "<player>"
+        description: "bir oyuncunun ada jeneratör verilerini sıfırlar"
+        confirmation: "Bu işlem [player] oyuncusunun jeneratör verilerini sıfırlar (açılmış, satın alınmış ve etkin jeneratörler) - lütfen onaylayın"
     player:
       main:
         description: jeneratör seçimi GUI'sini açar
@@ -48,6 +52,7 @@ stone-generator:
       settings: "<black><bold>Ayarları</bold></black>"
       configure-material-height: <black><bold>Materyal Yüksekliğini Yapılandır</bold></black>
       height-range-config: '<black><bold>Yükseklik Aralığı: [material]</bold></black>'
+      select-generator: "<black><bold>Jeneratörleri seç</bold></black>"
     buttons:
       default:
         name: "<white><bold>Varsayılan Oluşturucu</bold></white>"
@@ -67,9 +72,19 @@ stone-generator:
       type:
         name: "<white><bold>Jeneratör Tipi</bold></white>"
         description: |-
-          <gray>Hangi jeneratör tipini tanımlar
-          </gray><gray>şu anki duruma uygulanacak
-          </gray><gray>jeneratör.</gray>
+          <gray>Bu jeneratörü hangi lav
+          </gray><gray>mekaniğinin tetiklediğini
+          </gray><gray>belirler.
+
+          </gray><gold><italic>Arnavut kaldırımı: </italic></gold><gray>bir lav akıntısı aynı
+          </gray><gray>seviyedeki suya değer.
+
+          </gray><gold><italic>Taş: </italic></gold><gray>lav suyun üzerine akar.
+          </gray><gray>Okyanuslar dahil her suda
+          </gray><gray>çalışır.
+
+          </gray><gold><italic>Bazalt: </italic></gold><gray>lav, mavi buzun yanındaki
+          </gray><gray>ruh toprağına akar.</gray>
         value: "<aqua>Tür: </aqua><gray>[bundle]</gray>"
       required_min_level:
         name: "<white><bold>Minimum Ada Seviyesi</bold></white>"
@@ -683,6 +698,36 @@ stone-generator:
         description: "<gray>Bu materyal için minimum\n</gray><gray>yüksekliği ayarla.</gray>"
         name: <white><bold>Minimum Yükseklik</bold></white>
         value: '<gray>Geçerli değer: </gray><aqua>[min_height]</aqua>'
+      accept_generator:
+        name: "<white><bold>Jeneratörleri onayla</bold></white>"
+        description: |-
+          <gray>Seçilen jeneratörleri onaylar
+          </gray><gray>ve geri döner.</gray>
+        selected-generators: "<gray>Seçilen jeneratörler:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Açılınca etkinleştir</bold></white>"
+        description: |-
+          <gray>Etkinse bu jeneratör
+          </gray><gray>kilidi açılır açılmaz
+          </gray><gray>otomatik olarak etkinleşir.</gray>
+        enabled: "<aqua>Bu jeneratör </aqua><green>kilidi açılınca etkinleşir.</green>"
+        disabled: "<aqua>Bu jeneratör </aqua><red>kilidi açılınca etkinleşmez.</red>"
+      add_custom_block:
+        name: "<white><bold>Özel blok ekle</bold></white>"
+        description: |-
+          <gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen veya Nexo blokunu
+          </gray><gray>kimliğiyle ekleyin.</gray>
+      required_generators:
+        name: "<white><bold>Gerekli jeneratörler</bold></white>"
+        description: |-
+          <gray>Bu jeneratör kullanılabilir
+          </gray><gray>olmadan önce açılması gereken
+          </gray><gray>jeneratörler.</gray>
+        list: "<aqua>Gerekli jeneratörler:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- yok</aqua>"
     tips:
       click-to-previous: "<yellow>Önceki sayfayı görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
       click-to-next: "<yellow>Sonraki sayfayı görüntülemek için </yellow><gray>'ye tıklayın.</gray>"
@@ -743,6 +788,7 @@ stone-generator:
           [blocks]
           [treasures]
           [type]
+          [height-range]
           [requirements]
           [status]
         blocks:
@@ -755,13 +801,20 @@ stone-generator:
           description: |-
             [biomes]
             [level]
-            [missing-permission]
+            [phase]
+            [block-count]
+            [required-generators]
+            [missing-permissions]
           level: "<red><bold>Gerekli Düzey: </bold></red><red>[number]</red>"
           permission-title: "<red><bold>Eksik İzinler:</bold></red>"
           permission: "<red>-[permission]</red>"
           biome-title: "<gray><bold>Şurada çalışır:</bold></gray>"
           biome: "<dark_gray>[biome]</dark_gray>"
           any: "<gray><bold></bold></gray><bold><yellow><italic>tüm </italic></yellow></bold><gray><bold>biyomlarında çalışır</bold></gray>"
+          phase: "<red><bold>Gerekli aşama: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Gerekli kırılan blok: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Gerekli jeneratörler:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           locked: "<red>Kilitli!</red>"
           undeployed: "<red>Dağıtılmadı!</red>"
@@ -805,6 +858,7 @@ stone-generator:
     import-count: "<yellow>[generator] yeni oluşturucular ve [bundle] yeni paketler içe aktarıldı.</yellow>"
     start-downloading: "<yellow>Kitaplığı indirmeye başla.</yellow>"
     generator-exhausted: <red>Jeneratör </red> '[generator]' <red>üretim limitine ulaştı ve şimdi [number] dakika daha bekleme süresinde.</red>
+    generator-data-reset: "<yellow>Oyuncu </yellow>[player]<yellow> için jeneratör verileri sıfırlandı.</yellow>"
   errors:
     no-generator-data: "<red>Geçerli bir oluşturucu verisi bulunamadı</red>"
     no-island-data: "<red>Ada Verisi bulunamadı.</red>"
@@ -855,6 +909,10 @@ stone-generator:
     click-text-to-activate: "<yellow></yellow> [generator]<yellow>'nin kilidini açtınız! Şimdi etkinleştirmek için buraya tıklayın.</yellow>"
     input-max-height: <white>Bu materyal için maksimum yüksekliği girin (-64 ile 320 arasında):</white>
     input-min-height: <white>Bu materyal için minimum yüksekliği girin (-64 ile 320 arasında):</white>
+    confirm-generator-purchase: "<yellow>Satın almak istediğinizi onaylayın: </yellow>[generator]<yellow> fiyat: [number]</yellow>"
+    input-custom-block: "<yellow>Özel blok kimliğini sohbete yazın, eklenti önekiyle birlikte: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' veya 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' geçerli bir özel blok kimliği değil. 'itemsadder:', 'craftengine:', 'oraxen:' veya 'nexo:' önekinin ardından blok kimliğini yazın.</red>"
+    custom-block-not-found: "<red>Özel blok '[block]' bulunamadı. Eklentinin kurulu olduğundan ve kimliğin doğru olduğundan emin olun.</red>"
   materials:
     cobblestone: Kırıktaş
     stone:

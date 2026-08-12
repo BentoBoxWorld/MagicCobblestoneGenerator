@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "Magic generátorok adatbázisának exportálása játékmódból fájlba"
+      reset:
+        parameters: "<player>"
+        description: "visszaállítja egy játékos szigetének generátoradatait"
+        confirmation: "Ez visszaállítja [player] generátoradatait (feloldott, megvásárolt és aktív generátorok) - kérlek erősítsd meg"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>Anyag magasságának konfigurálása</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>Magasság tartomány: [material]</bold></black>"
+      select-generator: "<black><bold>Generátorok kiválasztása</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>Generátor típusa</bold></white>"
         description: |-
-          <gray>Meghatározza, hogy melyik
-          </gray><gray>generátor típus kerül
-          </gray><gray>alkalmazásra.</gray>
+          <gray>Meghatározza, melyik láva-
+          </gray><gray>mechanika aktiválja ezt a
+          </gray><gray>generátort.
+
+          </gray><gold><italic>Kőtörmelékkő: </italic></gold><gray>lávafolyam vizet ér
+          </gray><gray>azonos szinten.
+
+          </gray><gold><italic>Kő: </italic></gold><gray>a láva vízre folyik le.
+          </gray><gray>Bármilyen vízen működik,
+          </gray><gray>az óceánokat is beleértve.
+
+          </gray><gold><italic>Bazalt: </italic></gold><gray>a láva lélekföldre folyik
+          </gray><gray>kék jég mellett.</gray>
         value: "<aqua>Típus: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Minimális sziget szint</bold></white>"
@@ -799,6 +814,36 @@ stone-generator:
           name: "<white><bold>Bármelyik</bold></white>"
           description: |-
             <gray>Bármelyik generátorral működik.</gray>
+      accept_generator:
+        name: "<white><bold>Generátorok elfogadása</bold></white>"
+        description: |-
+          <gray>Elfogadja a kiválasztott
+          </gray><gray>generátorokat és visszatér.</gray>
+        selected-generators: "<gray>Kiválasztott generátorok:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Aktiválás feloldáskor</bold></white>"
+        description: |-
+          <gray>Ha be van kapcsolva, ez a
+          </gray><gray>generátor automatikusan
+          </gray><gray>aktiválódik feloldáskor.</gray>
+        enabled: "<aqua>Ez a generátor </aqua><green>feloldáskor aktiválódik.</green>"
+        disabled: "<aqua>Ez a generátor </aqua><red>nem aktiválódik feloldáskor.</red>"
+      add_custom_block:
+        name: "<white><bold>Egyedi blokk hozzáadása</bold></white>"
+        description: |-
+          <gray>Adj hozzá egyedi blokkot az
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen vagy Nexo pluginból.</gray>
+      required_generators:
+        name: "<white><bold>Szükséges generátorok</bold></white>"
+        description: |-
+          <gray>Generátorok, amelyeket fel
+          </gray><gray>kell oldani, mielőtt ez
+          </gray><gray>elérhetővé válik.</gray>
+        list: "<aqua>Szükséges generátorok:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- nincs</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>Kattintson </yellow><gray>az előző oldal megtekintéséhez.</gray>"
@@ -891,6 +936,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Szükséges szint: </bold></red><red>[number]</red>"
@@ -904,6 +952,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>Működik a </bold></gray><bold><yellow><italic>minden </italic></yellow></bold><gray><bold>biómban</bold></gray>"
+          phase: "<red><bold>Szükséges fázis: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Szükséges kibányászott blokkok: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Szükséges generátorok:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -983,6 +1035,7 @@ stone-generator:
     import-count: "<yellow>[generator] új generátor és [bundle] új csomag importálva.</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>Könyvtár letöltésének megkezdése.</yellow>"
+    generator-data-reset: "<yellow>A következő játékos generátoradatai visszaálltak: </yellow>[player]<yellow>.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1080,6 +1133,10 @@ stone-generator:
     click-text-to-activate: "<yellow>Feloldottad </yellow> [generator]<yellow>! Kattints ide, hogy most aktiválhasd.</yellow>"
     input-min-height: "<white>Adja meg az anyag minimális magasságát (-64 és 320 között):</white>"
     input-max-height: "<white>Adja meg az anyag maximális magasságát (-64 és 320 között):</white>"
+    confirm-generator-purchase: "<yellow>Erősítsd meg, hogy meg akarod venni: </yellow>[generator]<yellow> ennyiért: [number].</yellow>"
+    input-custom-block: "<yellow>Írd be a chatbe az egyedi blokk azonosítóját a plugin előtagjával: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' vagy 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' nem érvényes egyedi blokkazonosító. Használd az 'itemsadder:', 'craftengine:', 'oraxen:' vagy 'nexo:' előtagot, majd a blokk azonosítóját.</red>"
+    custom-block-not-found: "<red>A(z) '[block]' egyedi blokk nem található. Ellenőrizd, hogy a plugin telepítve van-e és az azonosító helyes-e.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

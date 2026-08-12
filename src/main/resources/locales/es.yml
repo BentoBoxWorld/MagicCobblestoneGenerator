@@ -18,6 +18,10 @@ stone-generator:
       export:
         parameters: "<archivo>"
         description: Exportar la base de datos de generadores mágicos desde el modo de juego a un archivo
+      reset:
+        parameters: "<player>"
+        description: "restablece los datos de generadores de la isla de un jugador"
+        confirmation: "Esto restablecerá los datos de generadores de [player] (generadores desbloqueados, comprados y activos) - por favor confirma"
     player:
       main:
         description: Comando del jugador principal que abre la GUI con la selección del generador
@@ -48,6 +52,7 @@ stone-generator:
       settings: "<black><bold>Configuración</bold></black>"
       configure-material-height: "<black><bold>Configurar Altura del Material</bold></black>"
       height-range-config: '<black><bold>Rango de altura: [material]</bold></black>'
+      select-generator: "<black><bold>Seleccionar generadores</bold></black>"
     buttons:
       default:
         name: Generador predeterminado
@@ -68,9 +73,19 @@ stone-generator:
       type:
         name: Tipo de generador
         description: |-
-          <gray>Define qué tipo de generador
-          </gray><gray>se aplicará a la corriente
-          </gray><gray>generador.</gray>
+          <gray>Define qué mecánica de lava
+          </gray><gray>de Minecraft activa este
+          </gray><gray>generador.
+
+          </gray><gold><italic>Adoquines: </italic></gold><gray>un chorro de lava toca
+          </gray><gray>agua al mismo nivel.
+
+          </gray><gold><italic>Piedra: </italic></gold><gray>la lava cae sobre el agua.
+          </gray><gray>Funciona en cualquier agua,
+          </gray><gray>incluidos los océanos.
+
+          </gray><gold><italic>Basalto: </italic></gold><gray>la lava cae sobre tierra de
+          </gray><gray>almas junto a hielo azul.</gray>
         value: "<aqua>Tipo: </aqua><gray>[tipo]</gray>"
       required_min_level:
         name: Nivel de isla requerido
@@ -709,6 +724,37 @@ stone-generator:
         disabled: <aqua>El uso del banco está </aqua><red>desactivado </red><aqua>.</aqua>
         enabled: <aqua>El uso del banco está </aqua><green>activado </green><aqua>.</aqua>
         name: <white><bold>Usar banco</bold></white>
+      accept_generator:
+        name: "<white><bold>Aceptar los generadores</bold></white>"
+        description: |-
+          <gray>Acepta los generadores
+          </gray><gray>seleccionados y vuelve.</gray>
+        selected-generators: "<gray>Generadores seleccionados:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Activar al desbloquear</bold></white>"
+        description: |-
+          <gray>Si está activado, este
+          </gray><gray>generador se activa
+          </gray><gray>automáticamente al
+          </gray><gray>desbloquearse.</gray>
+        enabled: "<aqua>Este generador </aqua><green>se activa al desbloquearse.</green>"
+        disabled: "<aqua>Este generador </aqua><red>no se activa al desbloquearse.</red>"
+      add_custom_block:
+        name: "<white><bold>Añadir bloque personalizado</bold></white>"
+        description: |-
+          <gray>Añade un bloque de
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen o Nexo por su ID.</gray>
+      required_generators:
+        name: "<white><bold>Generadores requeridos</bold></white>"
+        description: |-
+          <gray>Generadores que deben estar
+          </gray><gray>desbloqueados antes de que
+          </gray><gray>este esté disponible.</gray>
+        list: "<aqua>Generadores requeridos:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- ninguno</aqua>"
     tips:
       click-to-previous: "<yellow>Haga clic en </yellow><gray>para ver la página anterior.</gray>"
       click-to-next: "<yellow>Haga clic en </yellow><gray>para ver la página siguiente.</gray>"
@@ -765,12 +811,13 @@ stone-generator:
     descriptions:
       generator:
         lore: |-
-          [descripción]
-          [bloques]
-          [tesoros]
-          [escribe]
-          [requisitos]
-          [estado]
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
         blocks:
           title: "<aqua>loques </aqua><gray><bold>:</bold></gray>"
           value: "<dark_gray>[material] - [#. ##]%</dark_gray>"
@@ -779,15 +826,22 @@ stone-generator:
           value: "<dark_gray>[material] - [#. ####]%</dark_gray>"
         requirements:
           description: |-
-            [biomas]
-            [nivel]
-            [permisos faltantes]
+            [biomes]
+            [level]
+            [phase]
+            [block-count]
+            [required-generators]
+            [missing-permissions]
           level: "<red><bold>Nivel requerido: </bold></red> <red>[número]</red>"
           permission-title: "<red><bold>Permisos faltantes:</bold></red>"
           permission: "<red>- [permiso]</red>"
           biome-title: "<gray><bold>Opera en:</bold></gray>"
           biome: "<dark_gray>[bioma]</dark_gray>"
           any: "<gray><bold>Opera en </bold></gray><bold><yellow><italic>todos </italic></yellow></bold> <gray><bold>biomas</bold></gray>"
+          phase: "<red><bold>Fase requerida: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Bloques rotos requeridos: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Generadores requeridos:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           locked: "<red>Bloqueado!</red>"
           undeployed: "<red>¡No implementado!</red>"
@@ -831,6 +885,7 @@ stone-generator:
     generator-exhausted: <red>El generador </red> '[generator]' <red>ha alcanzado su límite de generación y ahora está en enfriamiento durante [number] minuto(s) más.</red>
     no-credits-bank: <red>Tu cuenta bancaria no tiene suficientes créditos para activar el generador. La activación requiere [number] créditos.</red>
     no-credits-buy-bank: <red>Tu cuenta bancaria no tiene suficientes créditos. Este generador cuesta [number] créditos.</red>
+    generator-data-reset: "<yellow>Los datos de generadores de </yellow>[player]<yellow> se han restablecido.</yellow>"
   errors:
     no-generator-data: "<red>No se pudieron encontrar datos de generador válidos</red>"
     no-island-data: "<red>No se encuentran los datos de la isla.</red>"
@@ -881,6 +936,10 @@ stone-generator:
     click-text-to-activate: "<yellow>¡Has desbloqueado </yellow> [generador]  <yellow>! Haga clic aquí para activarlo ahora.</yellow>"
     input-min-height: "<white>Introduce la altura mínima para este material (entre -64 y 320):</white>"
     input-max-height: "<white>Introduce la altura máxima para este material (entre -64 y 320):</white>"
+    confirm-generator-purchase: "<yellow>Confirma que quieres comprar </yellow>[generator]<yellow> por [number].</yellow>"
+    input-custom-block: "<yellow>Escribe en el chat el ID del bloque personalizado, con el prefijo de su plugin: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' o 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' no es un ID de bloque personalizado válido. Usa 'itemsadder:', 'craftengine:', 'oraxen:' o 'nexo:' seguido del ID del bloque.</red>"
+    custom-block-not-found: "<red>No se encontró el bloque personalizado '[block]'. Comprueba que el plugin esté instalado y que el ID sea correcto.</red>"
   materials:
     cobblestone: Guijarro
     stone:

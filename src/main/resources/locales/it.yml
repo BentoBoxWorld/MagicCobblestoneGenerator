@@ -20,6 +20,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: "Esporta generatori magici dal database della Game Mode in un file"
+      reset:
+        parameters: "<player>"
+        description: "reimposta i dati dei generatori dell'isola di un giocatore"
+        confirmation: "Questo reimposterà i dati dei generatori di [player] (generatori sbloccati, acquistati e attivi) - conferma per favore"
     # This section contains only player commands translations.
     player:
       main:
@@ -69,6 +73,7 @@ stone-generator:
       configure-material-height: "<black><bold>Configura Altezza Materiale</bold></black>"
       # Title for Height Range Configuration GUI
       height-range-config: "<black><bold>Intervallo di Altezza: [material]</bold></black>"
+      select-generator: "<black><bold>Seleziona generatori</bold></black>"
     # This section contains translations for all buttons inside GUI.
     buttons:
       # Section of buttons for Generator View GUI
@@ -110,9 +115,19 @@ stone-generator:
       type:
         name: "<white><bold>Tipo di Generatore</bold></white>"
         description: |-
-          <gray>Definisce quale tipo di generatore
-          </gray><gray>verrà applicato al generatore
-          </gray><gray>attuale.</gray>
+          <gray>Definisce quale meccanica
+          </gray><gray>della lava attiva questo
+          </gray><gray>generatore.
+
+          </gray><gold><italic>Pietrisco: </italic></gold><gray>un flusso di lava tocca
+          </gray><gray>acqua allo stesso livello.
+
+          </gray><gold><italic>Pietra: </italic></gold><gray>la lava scorre sull'acqua.
+          </gray><gray>Funziona su qualsiasi acqua,
+          </gray><gray>oceani compresi.
+
+          </gray><gold><italic>Basalto: </italic></gold><gray>la lava scorre su terra
+          </gray><gray>d'anime vicino a ghiaccio blu.</gray>
         value: "<aqua>Tipo: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Livello Isola Minimo</bold></white>"
@@ -794,6 +809,36 @@ stone-generator:
           name: "<white><bold>Qualsiasi</bold></white>"
           description: |-
             <gray>Funziona con qualsiasi generatore.</gray>
+      accept_generator:
+        name: "<white><bold>Accetta i generatori</bold></white>"
+        description: |-
+          <gray>Accetta i generatori
+          </gray><gray>selezionati e torna indietro.</gray>
+        selected-generators: "<gray>Generatori selezionati:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Attiva allo sblocco</bold></white>"
+        description: |-
+          <gray>Se attivo, questo generatore
+          </gray><gray>viene attivato automaticamente
+          </gray><gray>appena viene sbloccato.</gray>
+        enabled: "<aqua>Questo generatore </aqua><green>si attiva allo sblocco.</green>"
+        disabled: "<aqua>Questo generatore </aqua><red>non si attiva allo sblocco.</red>"
+      add_custom_block:
+        name: "<white><bold>Aggiungi blocco personalizzato</bold></white>"
+        description: |-
+          <gray>Aggiungi un blocco da
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen o Nexo tramite ID.</gray>
+      required_generators:
+        name: "<white><bold>Generatori richiesti</bold></white>"
+        description: |-
+          <gray>Generatori che devono essere
+          </gray><gray>sbloccati prima che questo
+          </gray><gray>diventi disponibile.</gray>
+        list: "<aqua>Generatori richiesti:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- nessuno</aqua>"
     # This section contains translations for GUI button tips.
     tips:
       click-to-previous: "<yellow>Fai clic </yellow><gray>per visualizzare la pagina precedente.</gray>"
@@ -886,6 +931,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           # Generates [level] message.
           level: "<red><bold>Livello Richiesto: </bold></red><red>[number]</red>"
@@ -899,6 +947,10 @@ stone-generator:
           biome: "<dark_gray>[biome]</dark_gray>"
           # Generates [biomes] message for All Biomes.
           any: "<gray><bold>Opera in </bold></gray><bold><yellow><italic>tutti </italic></yellow></bold><gray><bold>i biomi</bold></gray>"
+          phase: "<red><bold>Fase richiesta: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Blocchi rotti richiesti: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Generatori richiesti:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         # Generates [status] section
         status:
           # Message that is showed for Locked generators.
@@ -977,6 +1029,7 @@ stone-generator:
     import-count: "<yellow>Importati [generator] nuovi generatori e [bundle] nuovi bundle.</yellow>"
     # Message that appears after clicking on download button in web library.
     start-downloading: "<yellow>Inizio download della libreria.</yellow>"
+    generator-data-reset: "<yellow>I dati dei generatori di </yellow>[player]<yellow> sono stati reimpostati.</yellow>"
   # This section contains translations for different error messages.
   errors:
     # Error message that is displayed when generator tier data is not find.
@@ -1074,6 +1127,10 @@ stone-generator:
     click-text-to-activate: "<yellow>Hai sbloccato </yellow> [generator]<yellow>! Fai clic qui per attivarlo ora.</yellow>"
     input-min-height: "<white>Inserisci l'altezza minima per questo materiale (tra -64 e 320):</white>"
     input-max-height: "<white>Inserisci l'altezza massima per questo materiale (tra -64 e 320):</white>"
+    confirm-generator-purchase: "<yellow>Conferma che vuoi acquistare </yellow>[generator]<yellow> per [number].</yellow>"
+    input-custom-block: "<yellow>Scrivi in chat l'ID del blocco personalizzato, preceduto dal suo plugin: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' o 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' non è un ID di blocco personalizzato valido. Usa 'itemsadder:', 'craftengine:', 'oraxen:' o 'nexo:' seguito dall'ID del blocco.</red>"
+    custom-block-not-found: "<red>Blocco personalizzato '[block]' non trovato. Controlla che il plugin sia installato e che l'ID sia corretto.</red>"
   # Showcase for manual material translation
   materials:
     # Names should be lowercase.

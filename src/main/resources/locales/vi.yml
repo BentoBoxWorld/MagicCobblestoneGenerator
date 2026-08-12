@@ -18,6 +18,10 @@ stone-generator:
       export:
         parameters: "<tệp>"
         description: Xuất cơ sở dữ liệu trình Máy Tái Tạo Khối từ Chế độ trò chơi thành tệp
+      reset:
+        parameters: "<player>"
+        description: "đặt lại dữ liệu trình tạo của đảo người chơi"
+        confirmation: "Thao tác này sẽ đặt lại dữ liệu trình tạo của [player] (đã mở khóa, đã mua và đang bật) - vui lòng xác nhận"
     player:
       main:
         description: mở GUI lựa chọn trình tạo
@@ -48,6 +52,7 @@ stone-generator:
       settings: "<black><bold>Cài đặt</bold></black>"
       configure-material-height: <black><bold>Cấu Hình Độ Cao Vật Liệu</bold></black>
       height-range-config: '<black><bold>Khoảng Độ Cao: [material]</bold></black>'
+      select-generator: "<black><bold>Chọn trình tạo</bold></black>"
     buttons:
       default:
         name: "<white><bold>Trình tạo mặc định</bold></white>"
@@ -67,9 +72,19 @@ stone-generator:
       type:
         name: "<white><bold>Loại Trình tạo</bold></white>"
         description: |-
-          <gray>Xác định loại trình tạo nào
-          </gray><gray>sẽ được áp dụng cho hiện tại
-          </gray><gray>máy phát điện.</gray>
+          <gray>Xác định cơ chế dung nham
+          </gray><gray>nào kích hoạt trình tạo
+          </gray><gray>này.
+
+          </gray><gold><italic>Đá cuội: </italic></gold><gray>dòng dung nham chạm nước
+          </gray><gray>ở cùng độ cao.
+
+          </gray><gold><italic>Đá: </italic></gold><gray>dung nham chảy xuống nước.
+          </gray><gray>Hoạt động với mọi vùng nước,
+          </gray><gray>kể cả đại dương.
+
+          </gray><gold><italic>Bazan: </italic></gold><gray>dung nham chảy lên đất linh
+          </gray><gray>hồn cạnh băng xanh.</gray>
         value: "<aqua>Loại: </aqua><gray>[type]</gray>"
       required_min_level:
         name: "<white><bold>Cấp đảo tối thiểu</bold></white>"
@@ -697,6 +712,36 @@ stone-generator:
         description: "<gray>Đặt độ cao tối thiểu\n</gray><gray>cho vật liệu này.</gray>"
         name: <white><bold>Độ Cao Tối Thiểu</bold></white>
         value: '<gray>Giá trị hiện tại: </gray><aqua>[min_height]</aqua>'
+      accept_generator:
+        name: "<white><bold>Chấp nhận trình tạo</bold></white>"
+        description: |-
+          <gray>Chấp nhận các trình tạo
+          </gray><gray>đã chọn và quay lại.</gray>
+        selected-generators: "<gray>Trình tạo đã chọn:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Bật khi mở khóa</bold></white>"
+        description: |-
+          <gray>Khi bật, trình tạo này
+          </gray><gray>sẽ tự động được kích hoạt
+          </gray><gray>ngay khi mở khóa.</gray>
+        enabled: "<aqua>Trình tạo này </aqua><green>được bật khi mở khóa.</green>"
+        disabled: "<aqua>Trình tạo này </aqua><red>không được bật khi mở khóa.</red>"
+      add_custom_block:
+        name: "<white><bold>Thêm khối tùy chỉnh</bold></white>"
+        description: |-
+          <gray>Thêm khối từ ItemsAdder,
+          </gray><gray>CraftEngine, Oraxen
+          </gray><gray>hoặc Nexo bằng ID.</gray>
+      required_generators:
+        name: "<white><bold>Trình tạo bắt buộc</bold></white>"
+        description: |-
+          <gray>Các trình tạo phải được
+          </gray><gray>mở khóa trước khi trình tạo
+          </gray><gray>này khả dụng.</gray>
+        list: "<aqua>Trình tạo bắt buộc:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- không có</aqua>"
     tips:
       click-to-previous: "<yellow>Bấm </yellow><gray>để xem trang trước.</gray>"
       click-to-next: "<yellow>Nhấp vào </yellow><gray>để xem trang tiếp theo.</gray>"
@@ -757,6 +802,7 @@ stone-generator:
           [blocks]
           [treasures]
           [type]
+          [height-range]
           [requirements]
           [status]
         blocks:
@@ -769,6 +815,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           level: "<red><bold>Cấp độ Yêu cầu: </bold></red><red>[number]</red>"
           permission-title: "<red><bold>Thiếu quyền:</bold></red>"
@@ -776,6 +825,10 @@ stone-generator:
           biome-title: "<gray><bold>Hoạt động tại:</bold></gray>"
           biome: "<dark_gray>[biome]</dark_gray>"
           any: "<gray><bold>Hoạt động trong </bold></gray><bold><yellow><italic>tất cả </italic></yellow></bold><gray><bold>quần xã</bold></gray>"
+          phase: "<red><bold>Giai đoạn yêu cầu: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Số khối đã phá yêu cầu: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Trình tạo bắt buộc:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           locked: "<red>Đã khóa!</red>"
           undeployed: "<red>Không được triển khai!</red>"
@@ -819,6 +872,7 @@ stone-generator:
     import-count: "<yellow>Đã ​​nhập [generator] trình tạo mới và [bundle] gói mới.</yellow>"
     start-downloading: "<yellow>Bắt đầu tải xuống thư viện.</yellow>"
     generator-exhausted: <red>Máy tạo </red> '[generator]' <red>đã đạt giới hạn tạo và hiện đang trong thời gian hồi thêm [number] phút nữa.</red>
+    generator-data-reset: "<yellow>Dữ liệu trình tạo của </yellow>[player]<yellow> đã được đặt lại.</yellow>"
   errors:
     no-generator-data: "<red>Không thể tìm thấy dữ liệu trình tạo hợp lệ</red>"
     no-island-data: "<red>Dữ liệu Đảo không được tìm thấy.</red>"
@@ -869,6 +923,10 @@ stone-generator:
     click-text-to-activate: "<yellow>Bạn đã mở khóa </yellow> [generator]<yellow>! Nhấn vào đây để kích hoạt nó ngay bây giờ.</yellow>"
     input-max-height: <white>Nhập độ cao tối đa cho vật liệu này (từ -64 đến 320):</white>
     input-min-height: <white>Nhập độ cao tối thiểu cho vật liệu này (từ -64 đến 320):</white>
+    confirm-generator-purchase: "<yellow>Vui lòng xác nhận bạn muốn mua </yellow>[generator]<yellow> với giá [number].</yellow>"
+    input-custom-block: "<yellow>Nhập ID khối tùy chỉnh vào khung chat, kèm tiền tố plugin: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' hoặc 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' không phải ID khối tùy chỉnh hợp lệ. Dùng 'itemsadder:', 'craftengine:', 'oraxen:' hoặc 'nexo:' rồi tới ID khối.</red>"
+    custom-block-not-found: "<red>Không tìm thấy khối tùy chỉnh '[block]'. Hãy kiểm tra plugin đã được cài và ID có đúng không.</red>"
   materials:
     cobblestone: đá cuội
     stone:

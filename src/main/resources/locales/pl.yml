@@ -18,6 +18,10 @@ stone-generator:
         confirmation: Spowoduje to usunięcie istniejących generatorów dla [gamemode] i zaimportowanie generatorów z pliku bazy danych - proszę potwierdzić
         description: importuje plik bazy danych magicznych generatorów
         parameters: <file>
+      reset:
+        parameters: "<player>"
+        description: "resetuje dane generatorów na wyspie gracza"
+        confirmation: "To zresetuje dane generatorów gracza [player] (odblokowane, kupione i aktywne generatory) - potwierdź"
     player:
       main:
         description: Główna komenda gracza, która otwiera GUI z wyborem generatora
@@ -94,7 +98,20 @@ stone-generator:
         value: '<aqua>Priorytet: </aqua><gray>[number]</gray>'
       type:
         name: Typ generatora
-        description: "<gray>Określa, który typ generatora\n</gray><gray>zostanie zastosowany do obecnego\n</gray><gray>generatora.</gray>"
+        description: |-
+          <gray>Określa, który mechanizm
+          </gray><gray>lawy uruchamia ten
+          </gray><gray>generator.
+
+          </gray><gold><italic>Bruk: </italic></gold><gray>strumień lawy dotyka wody
+          </gray><gray>na tym samym poziomie.
+
+          </gray><gold><italic>Kamień: </italic></gold><gray>lawa spływa na wodę.
+          </gray><gray>Działa na każdej wodzie,
+          </gray><gray>łącznie z oceanami.
+
+          </gray><gold><italic>Bazalt: </italic></gold><gray>lawa spływa na glebę dusz
+          </gray><gray>obok błękitnego lodu.</gray>
         value: '<aqua>Typ: </aqua><gray>[type]</gray>'
       required_min_level:
         name: Wymagany poziom wyspy
@@ -442,6 +459,36 @@ stone-generator:
         description: "<gray>Odległość od graczy, do której\n</gray><gray>generowanie bloków się zatrzyma.\n</gray><gray>0 i mniej oznacza bez limitu.\n</gray><gray>Ustawienie wymaga ponownego\n</gray><gray>uruchomienia serwera, aby zadziałać.</gray>"
         name: <white><bold>Domyślny zasięg działania</bold></white>
         value: '<aqua>Zasięg: [number]</aqua>'
+      accept_generator:
+        name: "<white><bold>Zatwierdź generatory</bold></white>"
+        description: |-
+          <gray>Zatwierdza wybrane generatory
+          </gray><gray>i wraca.</gray>
+        selected-generators: "<gray>Wybrane generatory:</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>Aktywuj po odblokowaniu</bold></white>"
+        description: |-
+          <gray>Gdy włączone, ten generator
+          </gray><gray>jest aktywowany automatycznie
+          </gray><gray>zaraz po odblokowaniu.</gray>
+        enabled: "<aqua>Ten generator </aqua><green>aktywuje się po odblokowaniu.</green>"
+        disabled: "<aqua>Ten generator </aqua><red>nie aktywuje się po odblokowaniu.</red>"
+      add_custom_block:
+        name: "<white><bold>Dodaj własny blok</bold></white>"
+        description: |-
+          <gray>Dodaj własny blok z
+          </gray><gray>ItemsAdder, CraftEngine,
+          </gray><gray>Oraxen lub Nexo po ID.</gray>
+      required_generators:
+        name: "<white><bold>Wymagane generatory</bold></white>"
+        description: |-
+          <gray>Generatory, które muszą być
+          </gray><gray>odblokowane, zanim ten
+          </gray><gray>stanie się dostępny.</gray>
+        list: "<aqua>Wymagane generatory:</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- brak</aqua>"
     descriptions:
       generator-active: "<dark_green>Aktywuj</dark_green>"
       activation-cost: 'Koszt aktywacji: [number]'
@@ -463,15 +510,32 @@ stone-generator:
           title: <gray><bold>Bloki:</bold></gray>
           value: <dark_gray>[material] - [#.##]%</dark_gray>
         height-range: '<gray>Działa na wysokościach: </gray><aqua>[min_height] </aqua><gray>do </gray><aqua>[max_height]</aqua>'
-        lore: "[description]\n[blocks]\n[treasures]\n[type]\n[height-range]\n[requirements]\n[status]"
+        lore: |-
+          [description]
+          [blocks]
+          [treasures]
+          [type]
+          [height-range]
+          [requirements]
+          [status]
         requirements:
           any: <gray><bold>Działa we </bold></gray><bold><yellow><italic>wszystkich </italic></yellow></bold><gray><bold>biomach</bold></gray>
           biome: <dark_gray>[biome]</dark_gray>
           biome-title: <gray><bold>Działa w:</bold></gray>
-          description: "[biomes]\n[level]\n[missing-permissions]"
+          description: |-
+            [biomes]
+            [level]
+            [phase]
+            [block-count]
+            [required-generators]
+            [missing-permissions]
           level: '<red><bold>Wymagany poziom: </bold></red><red>[number]</red>'
           permission: <red> -[permission]</red>
           permission-title: <red><bold>Brakujące uprawnienia:</bold></red>
+          phase: "<red><bold>Wymagana faza: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>Wymagane zniszczone bloki: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>Wymagane generatory:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           activation-cost: '<yellow>Koszt aktywacji: $[number]</yellow>'
           active: <dark_green>Aktywny</dark_green>
@@ -511,6 +575,7 @@ stone-generator:
       view-bundle: '<black><bold>Zestaw: </bold></black> [bundle]'
       view-generator: '<black><bold>Generator: </bold></black> [generator]'
       view-island: '<black><bold>Wyspa: [island]</bold></black>'
+      select-generator: "<black><bold>Wybierz generatory</bold></black>"
     tips:
       click-gold-to-purchase: "<yellow>Kliknij </yellow><gray>na złoty blok,\n</gray><gray>aby kupić.</gray>"
       click-on-item: "<yellow>Kliknij </yellow><gray>na przedmiot ze swojego\n</gray><gray>ekwipunku.</gray>"
@@ -583,6 +648,7 @@ stone-generator:
     no-credits-buy: <red>Za mało kredytów, aby kupić generator. Ten generator kosztuje [number] kredytów.</red>
     no-credits-buy-bank: <red>Twoje konto bankowe nie ma wystarczającej liczby kredytów. Ten generator kosztuje [number] kredytów.</red>
     start-downloading: <yellow>Rozpoczęto pobieranie biblioteki.</yellow>
+    generator-data-reset: "<yellow>Dane generatorów gracza </yellow>[player]<yellow> zostały zresetowane.</yellow>"
   errors:
     generator-tier-not-found: "<red>Generator o id '[generator]' </red><red>nie został znaleziony w [gamemode].</red>"
     no-file: "<red>Brak pliku generatorTemplate.yml. Nie można zaimportować.</red>"
@@ -644,6 +710,10 @@ stone-generator:
     write-name: <yellow>Wprowadź nową nazwę na czacie.</yellow>
     write-permissions: <yellow>Wprowadź wymagane uprawnienia, po jednym w linii na czacie, a następnie 'quit' w osobnej linii, aby zakończyć.</yellow>
     write-search: <yellow>Wpisz wartość wyszukiwania. (wpisz 'cancel', aby wyjść)</yellow>
+    confirm-generator-purchase: "<yellow>Potwierdź, że chcesz kupić </yellow>[generator]<yellow> za [number].</yellow>"
+    input-custom-block: "<yellow>Wpisz na czacie ID własnego bloku z prefiksem jego pluginu: 'itemsadder:namespace:id', 'craftengine:namespace:id', 'oraxen:id' lub 'nexo:id'.</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' nie jest prawidłowym ID własnego bloku. Użyj 'itemsadder:', 'craftengine:', 'oraxen:' lub 'nexo:', a po nim ID bloku.</red>"
+    custom-block-not-found: "<red>Nie znaleziono własnego bloku '[block]'. Sprawdź, czy plugin jest zainstalowany i czy ID jest poprawne.</red>"
   materials:
     cobblestone: Bruk
     stone:

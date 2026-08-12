@@ -18,6 +18,10 @@ stone-generator:
       export:
         parameters: "<file>"
         description: 從該遊戲模式導出神奇的鵝卵石產生器資料庫檔案
+      reset:
+        parameters: "<player>"
+        description: "重置玩家島嶼的產生器資料"
+        confirmation: "這將重置 [player] 的產生器資料（已解鎖、已購買及已啟用的產生器）- 請確認"
     player:
       main:
         description: 打開目前套用的產生器介面
@@ -48,6 +52,7 @@ stone-generator:
       settings: "<black><bold>設定</bold></black>"
       configure-material-height: <black><bold>設定材料高度</bold></black>
       height-range-config: <black><bold>高度範圍：[material]</bold></black>
+      select-generator: "<black><bold>選擇產生器</bold></black>"
     buttons:
       default:
         name: "<white><bold>預設產生器</bold></white>"
@@ -64,8 +69,18 @@ stone-generator:
       type:
         name: "<white><bold>產生器類別</bold></white>"
         description: |-
-          <gray>決定要使用哪種產生器類型
-          </gray><gray>將會套用至島嶼上的產生器</gray>
+          <gray>定義哪種原版岩漿機制
+          </gray><gray>會觸發此產生器。
+
+          </gray><gold><italic>鵝卵石: </italic></gold><gray>岩漿流接觸到同一
+          </gray><gray>高度的水。
+
+          </gray><gold><italic>石頭: </italic></gold><gray>岩漿向下流到水面上。
+          </gray><gray>對任何水域都有效，
+          </gray><gray>包括海洋。
+
+          </gray><gold><italic>玄武岩: </italic></gold><gray>岩漿流到靈魂土上，
+          </gray><gray>旁邊有藍冰。</gray>
         value: "<aqua>類型：</aqua><gray> [type]</gray>"
       required_min_level:
         name: "<white><bold>最小所需島嶼等級</bold></white>"
@@ -529,6 +544,34 @@ stone-generator:
         disabled: <aqua>銀行使用已</aqua><red>停用 </red><aqua>。</aqua>
         enabled: <aqua>銀行使用已</aqua><green>啟用 </green><aqua>。</aqua>
         name: <white><bold>使用銀行</bold></white>
+      accept_generator:
+        name: "<white><bold>確認產生器</bold></white>"
+        description: |-
+          <gray>確認所選產生器
+          </gray><gray>並返回。</gray>
+        selected-generators: "<gray>已選產生器：</gray>"
+        list-value: "<gray>- [value]</gray>"
+      activate_on_unlock:
+        name: "<white><bold>解鎖時啟用</bold></white>"
+        description: |-
+          <gray>啟用後，此產生器會在
+          </gray><gray>解鎖的同時自動啟用。</gray>
+        enabled: "<aqua>此產生器 </aqua><green>解鎖時會自動啟用。</green>"
+        disabled: "<aqua>此產生器 </aqua><red>解鎖時不會自動啟用。</red>"
+      add_custom_block:
+        name: "<white><bold>新增自訂方塊</bold></white>"
+        description: |-
+          <gray>透過 ID 新增來自
+          </gray><gray>ItemsAdder、CraftEngine、
+          </gray><gray>Oraxen 或 Nexo 的方塊。</gray>
+      required_generators:
+        name: "<white><bold>前置產生器</bold></white>"
+        description: |-
+          <gray>在此產生器可用之前
+          </gray><gray>必須先解鎖的產生器。</gray>
+        list: "<aqua>前置產生器：</aqua>"
+        value: "<aqua>- [generator]</aqua>"
+        none: "<aqua>- 無</aqua>"
     tips:
       click-to-previous: "<yellow>點擊 </yellow><gray>顯示前一頁。</gray>"
       click-to-next: "<yellow>點擊 </yellow><gray>顯示下一頁。</gray>"
@@ -585,6 +628,7 @@ stone-generator:
           [blocks]
           [treasures]
           [type]
+          [height-range]
           [requirements]
           [status]
         blocks:
@@ -597,6 +641,9 @@ stone-generator:
           description: |-
             [biomes]
             [level]
+            [phase]
+            [block-count]
+            [required-generators]
             [missing-permissions]
           level: "<red><bold>所需等級：</bold></red><red>[number]</red>"
           permission-title: "<red><bold>缺少的權限：</bold></red>"
@@ -604,6 +651,10 @@ stone-generator:
           biome-title: "<gray><bold>可運作在：</bold></gray>"
           biome: "<dark_gray>[biome]</dark_gray>"
           any: "<gray><bold>可在 </bold></gray><bold><yellow><italic>所有的 </italic></yellow></bold><gray><bold>生態系 </bold></gray><bold><gray><bold>運作</bold></gray></bold>"
+          phase: "<red><bold>所需階段: </bold></red><red>[name]</red>"
+          block-count: "<red><bold>所需破壞方塊數: </bold></red><red>[number]</red>"
+          required-generators-title: "<red><bold>前置產生器:</bold></red>"
+          required-generator: "<red> -[generator]</red>"
         status:
           locked: "<red>尚未解鎖。</red>"
           undeployed: "<red>尚未部署！</red>"
@@ -646,6 +697,7 @@ stone-generator:
     generator-exhausted: <red>產生器 </red> '[generator]' <red>已達到產生上限，現在進入冷卻，還需 [number] 分鐘。</red>
     no-credits-bank: <red>你的銀行帳戶沒有足夠的點數來啟用產生器。啟用需要 [number] 點數。</red>
     no-credits-buy-bank: <red>你的銀行帳戶沒有足夠的點數。此產生器需要 [number] 點數。</red>
+    generator-data-reset: "<yellow>玩家 </yellow>[player]<yellow> 的產生器資料已重置。</yellow>"
   errors:
     no-generator-data: "<red>無法找到格式正確的產生器資料</red>"
     no-island-data: "<red>找不到島嶼資料。</red>"
@@ -696,6 +748,10 @@ stone-generator:
     click-text-to-activate: "<yellow>您已解鎖 </yellow> [generator]<yellow>! 點擊這裡啟動。</yellow>"
     input-max-height: <white>請輸入此材料的最大高度（-64 到 320 之間）：</white>
     input-min-height: <white>請輸入此材料的最小高度（-64 到 320 之間）：</white>
+    confirm-generator-purchase: "<yellow>請確認你要購買 </yellow>[generator]<yellow> 價格為 [number]。</yellow>"
+    input-custom-block: "<yellow>請在聊天欄輸入自訂方塊 ID，並加上插件前綴：'itemsadder:namespace:id'、'craftengine:namespace:id'、'oraxen:id' 或 'nexo:id'。</yellow>"
+    custom-block-invalid-prefix: "<red>'[block]' 不是有效的自訂方塊 ID。請使用 'itemsadder:'、'craftengine:'、'oraxen:' 或 'nexo:' 加上方塊 ID。</red>"
+    custom-block-not-found: "<red>找不到自訂方塊 '[block]'。請檢查該插件是否已安裝以及 ID 是否正確。</red>"
   materials:
     cobblestone: 鵝卵石
     stone:
