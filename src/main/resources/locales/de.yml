@@ -37,16 +37,16 @@ stone-generator:
   gui:
     titles:
       player-panel: "<black><bold>Generatoren</bold></black>"
-      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       admin-panel: "<black><bold>Admin-Panel</bold></black>"
       select-biome: "<black><bold>Biome auswählen</bold></black>"
       select-block: "<black><bold>Block auswählen</bold></black>"
       select-bundle: "<black><bold>Bundle auswählen</bold></black>"
       select-type: "<black><bold>Generatortyp auswählen</bold></black>"
-      view-bundle: "<black><bold>Bündel: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       manage-bundles: "<black><bold>Bundles verwalten</bold></black>"
       manage-generators: "<black><bold>Generatoren verwalten</bold></black>"
-      view-island: "<black><bold>Insel: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       manage-islands: "<black><bold>Inseldaten verwalten</bold></black>"
       library: "<black><bold>Bibliothek</bold></black>"
       settings: "<black><bold>Einstellungen</bold></black>"
@@ -888,7 +888,7 @@ stone-generator:
     generator-tier-not-found: "<red>Generator mit der ID '[generator]' </red><red>nicht in [gamemode] gefunden.</red>"
     no-generators-in-world: "<red>Es gibt keine verfügbaren Generatoren für Sie in [world]</red>"
     could-not-remove-money: "<red>Beim Geldabheben ist etwas schief gelaufen. Das kann mal passieren ;)</red>"
-    max-height-less-than-min: <red>Die maximale Höhe ([MAX]) darf nicht kleiner als die minimale Höhe ([MIN]) sein!</red>
+    max-height-less-than-min: <red>Die maximale Höhe ([max]) darf nicht kleiner als die minimale Höhe ([min]) sein!</red>
   conversations:
     confirm-string: wahr, an, ja, bestätigen, y, gültig, richtig
     deny-string: falsch, aus, nein, verweigern, n, ungültig, falsch

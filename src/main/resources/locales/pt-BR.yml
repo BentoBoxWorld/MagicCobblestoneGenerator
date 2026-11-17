@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Geradores</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Gerador: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Painel de Admin</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Selecionar Tipo de Gerador</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Pacote: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Gerenciar Pacotes</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Gerenciar Geradores</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Ilha: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Gerenciar Dados da Ilha</bold></black>"
       # Title for Library GUI
@@ -1056,7 +1056,7 @@ stone-generator:
     no-generators-in-world: "<red>Não há geradores disponíveis para você em [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Algo deu errado ao sacar dinheiro.</red>"
-    max-height-less-than-min: "<red>A altura máxima ([MAX]) não pode ser menor que a altura mínima ([MIN])!</red>"
+    max-height-less-than-min: "<red>A altura máxima ([max]) não pode ser menor que a altura mínima ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

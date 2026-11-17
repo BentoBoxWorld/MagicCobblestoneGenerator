@@ -37,16 +37,16 @@ stone-generator:
   gui:
     titles:
       player-panel: "<black><bold>Генератори</bold></black>"
-      view-generator: "<black><bold>Генератор: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       admin-panel: "<black><bold>Панель адміністратора</bold></black>"
       select-biome: "<black><bold>Виберіть біоми</bold></black>"
       select-block: "<black><bold>Виберіть Блок</bold></black>"
       select-bundle: "<black><bold>Виберіть пакет</bold></black>"
       select-type: "<black><bold>Виберіть тип генератора</bold></black>"
-      view-bundle: "<black><bold>Комплект: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       manage-bundles: "<black><bold>Керувати пакетами</bold></black>"
       manage-generators: "<black><bold>Керування генераторами</bold></black>"
-      view-island: "<black><bold>Острів: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       manage-islands: "<black><bold>Керування даними острова</bold></black>"
       library: "<black><bold>Бібліотека</bold></black>"
       settings: "<black><bold>Налаштування</bold></black>"
@@ -885,7 +885,7 @@ stone-generator:
     generator-tier-not-found: "<red>Генератор з ідентифікатором '[generator]' </red><red>не знайдено в [gamemode].</red>"
     no-generators-in-world: "<red>Для вас немає доступних генераторів у [world]</red>"
     could-not-remove-money: "<red>Щось пішло не так під час зняття грошей.</red>"
-    max-height-less-than-min: <red>Максимальна висота ([MAX]) не може бути меншою за мінімальну висоту ([MIN])!</red>
+    max-height-less-than-min: <red>Максимальна висота ([max]) не може бути меншою за мінімальну висоту ([min])!</red>
   conversations:
     confirm-string: true, on, yes, confirm, y, valid, correct
     deny-string: false, off, no, deny, n, invalid, incorrect

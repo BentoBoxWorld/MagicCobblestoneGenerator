@@ -858,4 +858,135 @@ public class Utils
             user.getPlayer().spigot().sendMessage(component);
         }
     }
+
+
+    // ---------------------------------------------------------------------
+    // Section: Panel titles
+    // ---------------------------------------------------------------------
+
+
+    /**
+     * Width, in pixels, of the title area of a chest inventory. The window is 176 px wide and the title starts
+     * 8 px in from the left; keeping the same margin on the right leaves 160 px.
+     */
+    static final int TITLE_WIDTH = 160;
+
+    /**
+     * Text appended to a name that had to be shortened to fit a title.
+     */
+    static final String ELLIPSIS = "\u2026";
+
+
+    /**
+     * Shortens a name so that a panel title built from it fits inside the inventory window. The Minecraft
+     * client does not cut long titles; it draws them past the edge of the window.
+     * <p>
+     * Formatting in the name (MiniMessage or legacy colour codes) is removed, because a title cannot be cut
+     * safely in the middle of a tag. Titles are drawn bold, so widths are measured as bold.
+     *
+     * @param user        user the title is for, used to translate the rest of the title.
+     * @param titleKey    locale key of the title.
+     * @param placeholder placeholder in the title that the name replaces.
+     * @param name        the name to insert.
+     * @return the name, shortened with an ellipsis if needed, as plain text.
+     */
+    public static String fitTitleName(User user, String titleKey, String placeholder, String name)
+    {
+        // Width of everything in the title except the name.
+        int labelWidth = Utils.getTextWidth(Utils.toPlainText(user.getTranslation(titleKey, placeholder, "")));
+        return Utils.truncateToWidth(Utils.toPlainText(name), TITLE_WIDTH - labelWidth);
+    }
+
+
+    /**
+     * Removes MiniMessage tags and legacy colour codes from the text.
+     *
+     * @param text formatted text.
+     * @return plain text.
+     */
+    static String toPlainText(String text)
+    {
+        if (text == null || text.isEmpty())
+        {
+            return "";
+        }
+
+        return Util.stripColor(Util.componentToPlainText(Util.parseMiniMessageOrLegacy(text)));
+    }
+
+
+    /**
+     * Cuts the text so its bold width fits in the given number of pixels, ending it with an ellipsis when it
+     * was cut. At least one character is always kept so the title never ends up as just an ellipsis.
+     *
+     * @param text     plain text.
+     * @param maxWidth available width in pixels.
+     * @return text that fits.
+     */
+    static String truncateToWidth(String text, int maxWidth)
+    {
+        if (Utils.getTextWidth(text) <= maxWidth)
+        {
+            return text;
+        }
+
+        int available = maxWidth - Utils.getTextWidth(ELLIPSIS);
+        int width = 0;
+        int end = 0;
+
+        while (end < text.length())
+        {
+            int next = text.offsetByCodePoints(end, 1);
+            int charWidth = Utils.getCharWidth(text.codePointAt(end));
+
+            if (width + charWidth > available && end > 0)
+            {
+                break;
+            }
+
+            width += charWidth;
+            end = next;
+        }
+
+        return text.substring(0, end).stripTrailing() + ELLIPSIS;
+    }
+
+
+    /**
+     * Returns the width of the text in pixels, drawn bold in the default Minecraft font.
+     *
+     * @param text plain text.
+     * @return width in pixels.
+     */
+    static int getTextWidth(String text)
+    {
+        return text.codePoints().map(Utils::getCharWidth).sum();
+    }
+
+
+    /**
+     * Returns how far one character moves the cursor, in pixels, when drawn bold in the default Minecraft font.
+     * This is the glyph width, plus 1 px spacing, plus 1 px for bold. Characters outside the ASCII font are
+     * estimated: wide (CJK) characters as 10 px and everything else as 7 px.
+     *
+     * @param codePoint character.
+     * @return width in pixels.
+     */
+    static int getCharWidth(int codePoint)
+    {
+        int width = switch (codePoint)
+        {
+            case '!', ',', '.', ':', ';', '|', 'i' -> 2;
+            case '\'', '`', 'l' -> 3;
+            case ' ', 'I', 't', '[', ']' -> 4;
+            case '"', '(', ')', '*', '<', '>', '{', '}', 'f', 'k' -> 5;
+            case '@', '~', '\u2026' -> 7;
+            default -> codePoint >= 0x1100 && Character.isIdeographic(codePoint)
+                || (codePoint >= 0xAC00 && codePoint <= 0xD7A3)
+                || (codePoint >= 0x3040 && codePoint <= 0x30FF) ? 9 : 6;
+        };
+
+        // Bold adds 1 px to every character.
+        return width + 1;
+    }
 }

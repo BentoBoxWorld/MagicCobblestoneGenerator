@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Generátorok</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Generátor: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Admin Panel</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Generátor típusának kiválasztása</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Csomag: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Csomagok kezelése</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Generátorok kezelése</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Sziget: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Sziget adatok kezelése</bold></black>"
       # Title for Library GUI
@@ -1060,7 +1060,7 @@ stone-generator:
     no-generators-in-world: "<red>Nincsenek rendelkezésre álló generátorok számodra a(z) [world] világban</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Valami hiba történt a pénz kivonásakor.</red>"
-    max-height-less-than-min: "<red>A maximális magasság ([MAX]) nem lehet kisebb, mint a minimális magasság ([MIN])!</red>"
+    max-height-less-than-min: "<red>A maximális magasság ([max]) nem lehet kisebb, mint a minimális magasság ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

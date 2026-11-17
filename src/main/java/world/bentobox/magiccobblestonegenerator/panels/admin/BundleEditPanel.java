@@ -84,7 +84,8 @@ public class BundleEditPanel extends CommonPagedPanel<GeneratorTierObject>
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "view-bundle",
-                Constants.BUNDLE, this.bundle.getFriendlyName()));
+                Constants.BUNDLE, Utils.fitTitleName(this.user, Constants.TITLE + "view-bundle",
+                    Constants.BUNDLE, this.bundle.getFriendlyName())));
 
         PanelUtils.fillBorder(panelBuilder, this.activeTab == Tab.BUNDLE_INFO ? 3 : 5, Material.MAGENTA_STAINED_GLASS_PANE);
         this.populateHeader(panelBuilder);

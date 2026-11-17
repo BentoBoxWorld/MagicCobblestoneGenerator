@@ -37,16 +37,16 @@ stone-generator:
   gui:
     titles:
       player-panel: "<black><bold>神奇的鵝卵石產生器</bold></black>"
-      view-generator: "<black><bold>產生器：</bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       admin-panel: "<black><bold>管理員面板</bold></black>"
       select-biome: "<black><bold>選擇生態系</bold></black>"
       select-block: "<black><bold>選擇方塊</bold></black>"
       select-bundle: "<black><bold>選擇組合</bold></black>"
       select-type: "<black><bold>選擇產生器的類型</bold></black>"
-      view-bundle: "<black><bold>組合：</bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       manage-bundles: "<black><bold>管理組合</bold></black>"
       manage-generators: "<black><bold>管理產生器</bold></black>"
-      view-island: "<black><bold>島嶼：[island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       manage-islands: "<black><bold>管理島嶼資料</bold></black>"
       library: "<black><bold>知識庫</bold></black>"
       settings: "<black><bold>設定</bold></black>"
@@ -710,7 +710,7 @@ stone-generator:
     generator-tier-not-found: " <red>在遊戲模式 [gamemode] </red><red>找不到名稱叫做 '[generator]' 的產生器.</red>"
     no-generators-in-world: "<red>你所在得世界 [world] 沒有神奇的鵝卵石產生器</red>"
     could-not-remove-money: <red>扣款時發生錯誤。</red>
-    max-height-less-than-min: <red>最大高度（[MAX]）不能小於最小高度（[MIN]）！</red>
+    max-height-less-than-min: <red>最大高度（[max]）不能小於最小高度（[min]）！</red>
   conversations:
     confirm-string: 是, true, on, yes, confirm, y, valid, correct
     deny-string: 否, false, off, no, deny, n, invalid, incorrect

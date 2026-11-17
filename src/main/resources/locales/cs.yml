@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Generátory</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Generátor: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Panel správce</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Vybrat typ generátoru</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Balíček: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Spravovat balíčky</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Spravovat generátory</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Ostrov: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Spravovat data ostrova</bold></black>"
       # Title for Library GUI
@@ -1057,7 +1057,7 @@ stone-generator:
     no-generators-in-world: "<red>V nejsou k dispozici žádné generátory pro vás[world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Při stahování peněz se něco pokazilo.</red>"
-    max-height-less-than-min: "<red>Maximální výška ([MAX]) nemůže být menší než minimální výška ([MIN])!</red>"
+    max-height-less-than-min: "<red>Maximální výška ([max]) nemůže být menší než minimální výška ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

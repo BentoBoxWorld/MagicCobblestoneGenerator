@@ -1288,10 +1288,15 @@ public class StoneGeneratorManager {
 	if (this.addon.getSettings().isOverwriteOnActive() && generatorData.getActiveGeneratorCount() > 0
 		&& generatorData.getActiveGeneratorList().size() >= generatorData.getActiveGeneratorCount()) {
 	    // Try to deactivate first generator, because overwrite is active.
-	    GeneratorTierObject oldGenerator = this
-		    .getGeneratorByID(generatorData.getActiveGeneratorList().iterator().next());
+	    String oldId = generatorData.getActiveGeneratorList().iterator().next();
+	    GeneratorTierObject oldGenerator = this.getGeneratorByID(oldId);
 
-	    if (!this.deactivateGenerator(user, generatorData, oldGenerator)) {
+	    // The old generator may have been deleted while still active. It cannot be deactivated through
+	    // deactivateGenerator (that needs the tier object), so just drop its id to free the slot.
+	    boolean freed = oldGenerator == null ? generatorData.getActiveGeneratorList().remove(oldId)
+		    : this.deactivateGenerator(user, generatorData, oldGenerator);
+
+	    if (!freed) {
 		// If deactivation was not successful, send message about reached limit.
 		Utils.sendMessage(user, user.getTranslation(Constants.MESSAGES + "active-generators-reached"));
 		activateGenerator.complete(false);

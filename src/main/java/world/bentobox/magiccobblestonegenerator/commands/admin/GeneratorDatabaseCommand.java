@@ -168,7 +168,7 @@ public class GeneratorDatabaseCommand extends CompositeCommand
             File[] files = localeDir.listFiles(pathname ->
                 pathname.getName().endsWith(".json") && pathname.isFile());
 
-            if (files.length == 0)
+            if (files == null || files.length == 0)
             {
                 // Don't show every player on the server. Require at least the first letter
                 return Optional.empty();

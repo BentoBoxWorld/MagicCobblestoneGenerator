@@ -37,16 +37,16 @@ stone-generator:
   gui:
     titles:
       player-panel: "<black><bold>Trình tạo</bold></black>"
-      view-generator: "<black><bold>Trình tạo: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       admin-panel: "<black><bold>Bảng điều khiển của quản trị viên</bold></black>"
       select-biome: "<black><bold>Chọn Quần xã sinh vật</bold></black>"
       select-block: "<black><bold>Chọn Khối</bold></black>"
       select-bundle: "<black><bold>Chọn gói</bold></black>"
       select-type: "<black><bold>Chọn loại Trình tạo</bold></black>"
-      view-bundle: "<black><bold>Gói: </bold></black> [gói]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       manage-bundles: "<black><bold>Quản lý gói</bold></black>"
       manage-generators: "<black><bold>Quản lý Trình tạo</bold></black>"
-      view-island: "<black><bold>Đảo: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       manage-islands: "<black><bold>Quản lý dữ liệu đảo</bold></black>"
       library: "<black><bold>Thư viện</bold></black>"
       settings: "<black><bold>Cài đặt</bold></black>"
@@ -885,7 +885,7 @@ stone-generator:
     generator-tier-not-found: "<red>Trình tạo có id '[generator]' </red><red>không tìm thấy trong [gamemode].</red>"
     no-generators-in-world: "<red>Không có máy phát điện nào cho bạn ở [world]</red>"
     could-not-remove-money: "<red>Đã xảy ra sự cố khi rút tiền.</red>"
-    max-height-less-than-min: <red>Độ cao tối đa ([MAX]) không thể nhỏ hơn độ cao tối thiểu ([MIN])!</red>
+    max-height-less-than-min: <red>Độ cao tối đa ([max]) không thể nhỏ hơn độ cao tối thiểu ([min])!</red>
   conversations:
     confirm-string: đúng, trên, có, xác nhận, y, hợp lệ, chính xác
     deny-string: sai, tắt, không, từ chối, n, không hợp lệ, không chính xác

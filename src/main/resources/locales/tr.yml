@@ -37,16 +37,16 @@ stone-generator:
   gui:
     titles:
       player-panel: "<black><bold>Jeneratörler</bold></black>"
-      view-generator: "<black><bold>Oluşturucu: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       admin-panel: "<black><bold>Yönetici Paneli</bold></black>"
       select-biome: "<black><bold>Biyomları Seçin</bold></black>"
       select-block: "<black><bold>Blok Seç</bold></black>"
       select-bundle: "<black><bold>Paket Seç</bold></black>"
       select-type: "<black><bold>Oluşturucu Türünü Seçin</bold></black>"
-      view-bundle: "<black><bold>Paketi: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       manage-bundles: "<black><bold>Paketleri Yönet</bold></black>"
       manage-generators: "<black><bold>Oluşturucuları Yönet</bold></black>"
-      view-island: "<black><bold>Adası: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       manage-islands: "<black><bold>Ada Verilerini Yönet</bold></black>"
       library: "<black><bold>Kitaplık</bold></black>"
       settings: "<black><bold>Ayarları</bold></black>"
@@ -871,7 +871,7 @@ stone-generator:
     generator-tier-not-found: "<red>'[generator]' kimliğine sahip Jeneratör </red><red>[gamemode]'da bulunamadı.</red>"
     no-generators-in-world: "<red>[world] içinde sizin için uygun jeneratör yok</red>"
     could-not-remove-money: "<red>Para çekerken bir şeyler ters gitti.</red>"
-    max-height-less-than-min: <red>Maksimum yükseklik ([MAX]), minimum yükseklikten ([MIN]) küçük olamaz!</red>
+    max-height-less-than-min: <red>Maksimum yükseklik ([max]), minimum yükseklikten ([min]) küçük olamaz!</red>
   conversations:
     confirm-string: doğru, açık, evet, onayla, y, geçerli, doğru
     deny-string: yanlış, kapalı, hayır, reddet, n, geçersiz, yanlış

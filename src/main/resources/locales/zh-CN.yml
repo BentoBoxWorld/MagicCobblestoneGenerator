@@ -37,16 +37,16 @@ stone-generator:
   gui:
     titles:
       player-panel: "<dark_gray><bold>刷石机</bold></dark_gray>"
-      view-generator: "[generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       admin-panel: "<dark_gray><bold>刷石机管理</bold></dark_gray>"
       select-biome: "<dark_gray><bold>选择生物群系</bold></dark_gray>"
       select-block: "<dark_gray><bold>选择方块</bold></dark_gray>"
       select-bundle: "<dark_gray><bold>选择捆绑包</bold></dark_gray>"
       select-type: "<dark_gray><bold>选择刷石机类型</bold></dark_gray>"
-      view-bundle: "<dark_gray><bold>捆绑包: </bold></dark_gray>[bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       manage-bundles: "<dark_gray><bold>管理捆绑包</bold></dark_gray>"
       manage-generators: "<dark_gray><bold>管理刷石机</bold></dark_gray>"
-      view-island: "<dark_gray><bold>岛屿: </bold></dark_gray>[island]"
+      view-island: "<black><bold>[island]</bold></black>"
       manage-islands: "<dark_gray><bold>管理岛屿刷石机</bold></dark_gray>"
       library: "<dark_gray><bold>刷石机库</bold></dark_gray>"
       settings: "<dark_gray><bold>插件设置</bold></dark_gray>"
@@ -705,7 +705,7 @@ stone-generator:
     generator-tier-not-found: "<red>刷石机ID '[generator]' </red><red>在游戏模式 [gamemode] 里不存在。</red>"
     no-generators-in-world: "<red>在世界 [world] 中没有适合您的刷石机。</red>"
     could-not-remove-money: <red>扣款时出现错误。</red>
-    max-height-less-than-min: <red>最大高度（[MAX]）不能小于最小高度（[MIN]）！</red>
+    max-height-less-than-min: <red>最大高度（[max]）不能小于最小高度（[min]）！</red>
   conversations:
     confirm-string: true, on, yes, confirm, y, valid, correct, ok, 同意, 接受, 确定, 是
     deny-string: false, off, no, deny, n, invalid, incorrect, 拒绝, 否定, 否, 不

@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Generatoare</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Panou Admin</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Selectați Tipul de Generator</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Pachet: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Administrare Pachete</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Administrare Generatoare</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Insulă: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Administrare Date Insulă</bold></black>"
       # Title for Library GUI
@@ -1058,7 +1058,7 @@ stone-generator:
     no-generators-in-world: "<red>Nu sunt generatoare disponibile pentru tine în [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Ceva s-a întâmplat în timp ce se retragea bani.</red>"
-    max-height-less-than-min: "<red>Înălțimea maximă ([MAX]) nu poate fi mai mică decât înălțimea minimă ([MIN])!</red>"
+    max-height-less-than-min: "<red>Înălțimea maximă ([max]) nu poate fi mai mică decât înălțimea minimă ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

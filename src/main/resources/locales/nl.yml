@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Generators</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Admin Panel</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Selecteer Generatortype</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Bundel: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Bundels Beheren</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Generators Beheren</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Eiland: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Eilandgegevens Beheren</bold></black>"
       # Title for Library GUI
@@ -1058,7 +1058,7 @@ stone-generator:
     no-generators-in-world: "<red>Er zijn geen beschikbare generators voor u in [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Er is iets misgegaan bij het storten van geld.</red>"
-    max-height-less-than-min: "<red>Maximale hoogte ([MAX]) kan niet minder zijn dan minimale hoogte ([MIN])!</red>"
+    max-height-less-than-min: "<red>Maximale hoogte ([max]) kan niet minder zijn dan minimale hoogte ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

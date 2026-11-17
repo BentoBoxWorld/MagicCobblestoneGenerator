@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>생성기</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>생성기: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>관리자 패널</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>생성기 유형 선택</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>번들: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>번들 관리</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>생성기 관리</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>섬: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>섬 데이터 관리</bold></black>"
       # Title for Library GUI
@@ -1042,7 +1042,7 @@ stone-generator:
     no-generators-in-world: "<red>[world]에서 사용 가능한 생성기가 없습니다</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>돈을 인출하는 중 문제가 발생했습니다.</red>"
-    max-height-less-than-min: "<red>최대 높이([MAX])는 최소 높이([MIN])보다 작을 수 없습니다!</red>"
+    max-height-less-than-min: "<red>최대 높이([max])는 최소 높이([min])보다 작을 수 없습니다!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

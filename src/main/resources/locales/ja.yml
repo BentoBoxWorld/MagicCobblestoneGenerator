@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>生成機</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>生成機: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>管理者パネル</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>生成機タイプを選択</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>バンドル: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>バンドルを管理</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>生成機を管理</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>島: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>島のデータを管理</bold></black>"
       # Title for Library GUI
@@ -1046,7 +1046,7 @@ stone-generator:
     no-generators-in-world: "<red> [world] に利用可能な生成機がありません</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>お金を引き出す際に問題が発生しました。</red>"
-    max-height-less-than-min: "<red>最大高さ ([MAX]) は最小高さ ([MIN]) より小さくすることはできません!</red>"
+    max-height-less-than-min: "<red>最大高さ ([max]) は最小高さ ([min]) より小さくすることはできません!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:
