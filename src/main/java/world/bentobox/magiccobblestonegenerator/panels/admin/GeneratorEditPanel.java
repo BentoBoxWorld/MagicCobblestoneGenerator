@@ -980,8 +980,21 @@ public class GeneratorEditPanel extends CommonPanel
                     {
                         if (number != null)
                         {
-                            this.generatorTier.setMinHeight(number.intValue());
-                            this.save();
+                            int newMinHeight = number.intValue();
+
+                            if (newMinHeight > this.generatorTier.getMaxHeight())
+                            {
+                                // Min above max would stop the generator working at any height.
+                                Utils.sendMessage(this.user, this.user.getTranslation(
+                                    Constants.ERRORS + "min-height-greater-than-max",
+                                    Constants.MIN, String.valueOf(newMinHeight),
+                                    Constants.MAX, String.valueOf(this.generatorTier.getMaxHeight())));
+                            }
+                            else
+                            {
+                                this.generatorTier.setMinHeight(newMinHeight);
+                                this.save();
+                            }
                         }
 
                         // reopen panel
@@ -1011,8 +1024,21 @@ public class GeneratorEditPanel extends CommonPanel
                     {
                         if (number != null)
                         {
-                            this.generatorTier.setMaxHeight(number.intValue());
-                            this.save();
+                            int newMaxHeight = number.intValue();
+
+                            if (newMaxHeight < this.generatorTier.getMinHeight())
+                            {
+                                // Max below min would stop the generator working at any height.
+                                Utils.sendMessage(this.user, this.user.getTranslation(
+                                    Constants.ERRORS + "max-height-less-than-min",
+                                    Constants.MIN, String.valueOf(this.generatorTier.getMinHeight()),
+                                    Constants.MAX, String.valueOf(newMaxHeight)));
+                            }
+                            else
+                            {
+                                this.generatorTier.setMaxHeight(newMaxHeight);
+                                this.save();
+                            }
                         }
 
                         // reopen panel

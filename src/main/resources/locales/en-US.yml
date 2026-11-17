@@ -81,13 +81,13 @@ stone-generator:
         name: "<white><bold>Minimum Height</bold></white>"
         description: |-
           <gray>Set the minimum height
-          </gray><gray>for this material.</gray>
+          </gray><gray>for this generator.</gray>
         value: "<gray>Current value: </gray><aqua>[min_height]</aqua>"
       max_height:
         name: "<white><bold>Maximum Height</bold></white>"
         description: |-
           <gray>Set the maximum height
-          </gray><gray>for this material.</gray>
+          </gray><gray>for this generator.</gray>
         value: "<gray>Current value: </gray><aqua>[max_height]</aqua>"
       height_range:
         name: "<white><bold>Height Range</bold></white>"
