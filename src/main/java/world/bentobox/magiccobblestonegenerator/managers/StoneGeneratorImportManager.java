@@ -85,7 +85,7 @@ public class StoneGeneratorImportManager {
     public boolean importFile(@Nullable User user, World world) {
 	if (!this.generatorFile.exists()) {
 	    if (user != null) {
-		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE,
+		Utils.sendMessage(user, user.getTranslation(NO_FILE, Constants.FILE,
 			this.generatorFile.getName()));
 	    }
 
@@ -123,11 +123,11 @@ public class StoneGeneratorImportManager {
      * @return true if successful
      */
     public boolean importFile(@Nullable User user, World world, String file) {
-	File generatorFile = resolveDataFile(this.addon.getDataFolder(), file.endsWith(".yml") ? file : file + ".yml");
+	File templateFile = resolveDataFile(this.addon.getDataFolder(), file.endsWith(".yml") ? file : file + ".yml");
 
-	if (generatorFile == null || !generatorFile.exists()) {
+	if (templateFile == null || !templateFile.exists()) {
 	    if (user != null) {
-		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE, file));
+		Utils.sendMessage(user, user.getTranslation(NO_FILE, Constants.FILE, file));
 	    }
 
 	    return false;
@@ -136,7 +136,7 @@ public class StoneGeneratorImportManager {
 	YamlConfiguration config = new YamlConfiguration();
 
 	try {
-	    config.load(generatorFile);
+	    config.load(templateFile);
 	} catch (IOException | InvalidConfigurationException e) {
 	    if (user != null) {
 		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-load", Constants.FILE, file,
@@ -450,6 +450,24 @@ public class StoneGeneratorImportManager {
     // ---------------------------------------------------------------------
 
     /**
+     * Tells the user (or the console, for a console command) why an export could not be written.
+     *
+     * @param user      user who ran the export.
+     * @param reference locale reference of the error.
+     * @param fileName  file name the user gave.
+     * @return always {@code false}, so callers can {@code return} it.
+     */
+    private boolean reportExportError(User user, String reference, String fileName) {
+	if (user.isPlayer()) {
+	    Utils.sendMessage(user, user.getTranslation(reference, Constants.FILE, fileName));
+	} else {
+	    this.addon.logWarning(reference + ": " + fileName);
+	}
+
+	return false;
+    }
+
+    /**
      * This method generates file with a given name that contains everything from
      * database for given world. It creates exact copy of data from database.
      *
@@ -464,23 +482,11 @@ public class StoneGeneratorImportManager {
 
 	if (defaultFile == null) {
 	    // File name points outside the addon folder (e.g. "../"). Refuse it.
-	    if (user.isPlayer()) {
-		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE, fileName));
-	    } else {
-		this.addon.logError("Export file must be inside the addon folder: " + fileName);
-	    }
-
-	    return false;
+	    return this.reportExportError(user, NO_FILE, fileName);
 	}
 
 	if (defaultFile.exists()) {
-	    if (user.isPlayer()) {
-		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "file-exist", Constants.FILE, fileName));
-	    } else {
-		this.addon.logWarning(Constants.ERRORS + "file-exist");
-	    }
-
-	    return false;
+	    return this.reportExportError(user, Constants.ERRORS + "file-exist", fileName);
 	}
 
 	try {
@@ -561,7 +567,7 @@ public class StoneGeneratorImportManager {
 
 	if (downloadedGenerators == null) {
 	    if (user != null && user.isPlayer()) {
-		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE, fileName));
+		Utils.sendMessage(user, user.getTranslation(NO_FILE, Constants.FILE, fileName));
 	    }
 
 	    return false;
@@ -698,7 +704,7 @@ public class StoneGeneratorImportManager {
 	    File defaultFile = resolveDataFile(this.addon.getDataFolder(), fileName);
 
 	    if (defaultFile == null) {
-		this.addon.logError("Could not load file '" + fileName + "': it must be inside the addon folder.");
+		this.addon.logError(COULD_NOT_LOAD_FILE + fileName + "': it must be inside the addon folder.");
 		return null;
 	    }
 
@@ -708,7 +714,7 @@ public class StoneGeneratorImportManager {
 
 		if (object == null) {
 		    // Empty file.
-		    this.addon.logError("Could not load file '" + defaultFile.getName() + "': File is empty.");
+		    this.addon.logError(COULD_NOT_LOAD_FILE + defaultFile.getName() + "': File is empty.");
 		    return null;
 		}
 
@@ -718,7 +724,7 @@ public class StoneGeneratorImportManager {
 
 		return object;
 	    } catch (FileNotFoundException e) {
-		this.addon.logError("Could not load file '" + defaultFile.getName() + "': File not found.");
+		this.addon.logError(COULD_NOT_LOAD_FILE + defaultFile.getName() + "': File not found.");
 	    } catch (Exception e) {
 		this.addon.logError("Could not load objects " + defaultFile.getName() + " " + e.getMessage());
 	    }
@@ -742,12 +748,12 @@ public class StoneGeneratorImportManager {
 	/**
 	 * Holds JSON builder object.
 	 */
-	private Gson gson;
+	private final Gson gson;
 
 	/**
 	 * Holds StoneGeneratorAddon object.
 	 */
-	private StoneGeneratorAddon addon;
+	private final StoneGeneratorAddon addon;
     }
 
     /**
@@ -901,6 +907,16 @@ public class StoneGeneratorImportManager {
      * Variable stores generatorTemplate.yml location
      */
     private final File generatorFile;
+
+    /**
+     * Locale reference for the "file not found" error.
+     */
+    private static final String NO_FILE = Constants.ERRORS + "no-file";
+
+    /**
+     * Start of console messages for files that could not be loaded.
+     */
+    private static final String COULD_NOT_LOAD_FILE = "Could not load file '";
 
     private static final String DESCRIPTION = "description";
 
