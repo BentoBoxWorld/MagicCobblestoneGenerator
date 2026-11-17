@@ -614,6 +614,8 @@ public class Settings implements ConfigObject
     @ConfigComment("")
     @ConfigComment("This indicates the length, in minutes, that a generator will remain on a cooldown, once it")
     @ConfigComment("reaches its exhaustion limit. While on cooldown, the generator will not generate any new blocks.")
+    @ConfigComment("When the cooldown ends, a new period starts with the block count reset to 0.")
+    @ConfigComment("0 means no extra cooldown: the generator stops until the current period ends.")
     @ConfigEntry(path = "exhaustion.cooldown")
     private long generatorExhaustionCooldown = 1440;
 

@@ -1322,7 +1322,8 @@ public class StoneGeneratorManager {
 	    @NotNull GeneratorDataObject generatorData, @NotNull GeneratorTierObject generatorTier) {
 
 	final User owner = island.isSpawn() || island.getOwner() == null ? null : User.getInstance(island.getOwner());
-    NumberFormat numberFormat = NumberFormat.getNumberInstance(owner.getLocale());
+	// Numbers are shown to the purchasing user, so format them in their locale. The owner may be null.
+	NumberFormat numberFormat = NumberFormat.getNumberInstance(user.getLocale());
 
 	if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId())) {
 	    // Generator is not unlocked. Return false.
@@ -1693,16 +1694,21 @@ public class StoneGeneratorManager {
 	    return false;
 	}
 
-	if (exhaustionData.getPeriodStart() == 0 || now - exhaustionData.getPeriodStart() >= periodMillis) {
-	    // Start a new exhaustion period.
+	if (exhaustionData.getPeriodStart() == 0 || now - exhaustionData.getPeriodStart() >= periodMillis
+		|| exhaustionData.getCooldownUntil() > 0) {
+	    // Start a new exhaustion period: first use, the previous period ended, or a cooldown just expired.
+	    // Without the last condition, a cooldown shorter than the period would end with the count still at
+	    // the limit and the generator would immediately go back on cooldown until the period ended.
 	    exhaustionData.setPeriodStart(now);
 	    exhaustionData.setGeneratedCount(0);
 	    exhaustionData.setCooldownUntil(0);
 	}
 
 	if (exhaustionData.getGeneratedCount() >= limit) {
-	    // Limit reached. Put the generator tier on a cooldown.
-	    exhaustionData.setCooldownUntil(now + cooldownMillis);
+	    // Limit reached. Put the generator tier on a cooldown. A cooldown of 0 means "no extra cooldown":
+	    // the generator waits until the current period ends.
+	    exhaustionData.setCooldownUntil(cooldownMillis > 0 ? now + cooldownMillis
+		    : exhaustionData.getPeriodStart() + periodMillis);
 	    this.notifyExhaustion(island, generatorTier, exhaustionData, now);
 	    return false;
 	}
