@@ -1060,7 +1060,7 @@ stone-generator:
     no-generators-in-world: "<red>Nincsenek rendelkezésre álló generátorok számodra a(z) [world] világban</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Valami hiba történt a pénz kivonásakor.</red>"
-    max-height-less-than-min: "<red>A maximális magasság ([MAX]) nem lehet kisebb, mint a minimális magasság ([MIN])!</red>"
+    max-height-less-than-min: "<red>A maximális magasság ([max]) nem lehet kisebb, mint a minimális magasság ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

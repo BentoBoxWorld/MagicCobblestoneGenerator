@@ -96,6 +96,25 @@ public class StoneGeneratorImportManager {
     }
 
     /**
+     * Resolves a file name given by an admin against the addon data folder, refusing names that point outside it
+     * (for example {@code ../../server.properties}).
+     *
+     * @param dataFolder addon data folder.
+     * @param fileName   file name from a command argument.
+     * @return the file inside the data folder, or {@code null} if the name escapes the folder.
+     */
+    @Nullable
+    static File resolveDataFile(File dataFolder, String fileName) {
+	try {
+	    File folder = dataFolder.getCanonicalFile();
+	    File file = new File(folder, fileName).getCanonicalFile();
+	    return folder.equals(file.getParentFile()) ? file : null;
+	} catch (IOException e) {
+	    return null;
+	}
+    }
+
+    /**
      * This method imports generator tiers from template
      *
      * @param user  - user
@@ -104,9 +123,9 @@ public class StoneGeneratorImportManager {
      * @return true if successful
      */
     public boolean importFile(@Nullable User user, World world, String file) {
-	File generatorFile = new File(this.addon.getDataFolder(), file.endsWith(".yml") ? file : file + ".yml");
+	File generatorFile = resolveDataFile(this.addon.getDataFolder(), file.endsWith(".yml") ? file : file + ".yml");
 
-	if (!generatorFile.exists()) {
+	if (generatorFile == null || !generatorFile.exists()) {
 	    if (user != null) {
 		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE, file));
 	    }
@@ -440,8 +459,19 @@ public class StoneGeneratorImportManager {
      * @return {@code true} if export was successful, {@code false} otherwise.
      */
     public boolean generateDatabaseFile(User user, World world, String fileName) {
-	File defaultFile = new File(this.addon.getDataFolder(),
+	File defaultFile = resolveDataFile(this.addon.getDataFolder(),
 		fileName.endsWith(".json") ? fileName : fileName + ".json");
+
+	if (defaultFile == null) {
+	    // File name points outside the addon folder (e.g. "../"). Refuse it.
+	    if (user.isPlayer()) {
+		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE, fileName));
+	    } else {
+		this.addon.logError("Export file must be inside the addon folder: " + fileName);
+	    }
+
+	    return false;
+	}
 
 	if (defaultFile.exists()) {
 	    if (user.isPlayer()) {
@@ -525,8 +555,19 @@ public class StoneGeneratorImportManager {
     public boolean importDatabaseFile(User user, World world, String fileName) {
 	StoneGeneratorManager manager = this.addon.getAddonManager();
 
-	// If exist any generator that is bound to current world, then do not load
-	// generators.
+	// Load the file before touching existing data, so a missing or broken file does not wipe the
+	// game mode's generators.
+	DefaultDataHolder downloadedGenerators = new DefaultJSONHandler(this.addon).loadObject(fileName);
+
+	if (downloadedGenerators == null) {
+	    if (user != null && user.isPlayer()) {
+		Utils.sendMessage(user, user.getTranslation(Constants.ERRORS + "no-file", Constants.FILE, fileName));
+	    }
+
+	    return false;
+	}
+
+	// If exist any generator that is bound to current world, then remove them before loading new ones.
 	if (!manager.getAllGeneratorTiers(world).isEmpty()) {
 	    addon.getPlugin().getIWM().getAddon(world).ifPresent(this.addon.getAddonManager()::wipeGameModeGenerators);
 	}
@@ -536,11 +577,6 @@ public class StoneGeneratorImportManager {
 	    // separate generators for
 	    // each game mode.
 	    String uniqueIDPrefix = Utils.getGameMode(world).toLowerCase() + "_";
-	    DefaultDataHolder downloadedGenerators = new DefaultJSONHandler(this.addon).loadObject(fileName);
-
-	    if (downloadedGenerators == null) {
-		return false;
-	    }
 
 	    // All new generators should get correct ID. So we need to map it to loaded
 	    // generators.
@@ -659,11 +695,23 @@ public class StoneGeneratorImportManager {
 		fileName = fileName + ".json";
 	    }
 
-	    File defaultFile = new File(this.addon.getDataFolder(), fileName);
+	    File defaultFile = resolveDataFile(this.addon.getDataFolder(), fileName);
+
+	    if (defaultFile == null) {
+		this.addon.logError("Could not load file '" + fileName + "': it must be inside the addon folder.");
+		return null;
+	    }
 
 	    try (InputStreamReader reader = new InputStreamReader(new FileInputStream(defaultFile),
 		    StandardCharsets.UTF_8)) {
 		DefaultDataHolder object = this.gson.fromJson(reader, DefaultDataHolder.class);
+
+		if (object == null) {
+		    // Empty file.
+		    this.addon.logError("Could not load file '" + defaultFile.getName() + "': File is empty.");
+		    return null;
+		}
+
 		object.setUniqueId(fileName);
 
 		reader.close(); // NOSONAR Required to keep OS file handlers low and not rely on GC

@@ -885,7 +885,7 @@ stone-generator:
     generator-tier-not-found: "<red>Генератор з ідентифікатором '[generator]' </red><red>не знайдено в [gamemode].</red>"
     no-generators-in-world: "<red>Для вас немає доступних генераторів у [world]</red>"
     could-not-remove-money: "<red>Щось пішло не так під час зняття грошей.</red>"
-    max-height-less-than-min: <red>Максимальна висота ([MAX]) не може бути меншою за мінімальну висоту ([MIN])!</red>
+    max-height-less-than-min: <red>Максимальна висота ([max]) не може бути меншою за мінімальну висоту ([min])!</red>
   conversations:
     confirm-string: true, on, yes, confirm, y, valid, correct
     deny-string: false, off, no, deny, n, invalid, incorrect

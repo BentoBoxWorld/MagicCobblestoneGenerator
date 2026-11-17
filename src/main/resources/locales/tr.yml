@@ -871,7 +871,7 @@ stone-generator:
     generator-tier-not-found: "<red>'[generator]' kimliğine sahip Jeneratör </red><red>[gamemode]'da bulunamadı.</red>"
     no-generators-in-world: "<red>[world] içinde sizin için uygun jeneratör yok</red>"
     could-not-remove-money: "<red>Para çekerken bir şeyler ters gitti.</red>"
-    max-height-less-than-min: <red>Maksimum yükseklik ([MAX]), minimum yükseklikten ([MIN]) küçük olamaz!</red>
+    max-height-less-than-min: <red>Maksimum yükseklik ([max]), minimum yükseklikten ([min]) küçük olamaz!</red>
   conversations:
     confirm-string: doğru, açık, evet, onayla, y, geçerli, doğru
     deny-string: yanlış, kapalı, hayır, reddet, n, geçersiz, yanlış

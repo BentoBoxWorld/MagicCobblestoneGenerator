@@ -1046,7 +1046,7 @@ stone-generator:
     no-generators-in-world: "<red> [world] に利用可能な生成機がありません</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>お金を引き出す際に問題が発生しました。</red>"
-    max-height-less-than-min: "<red>最大高さ ([MAX]) は最小高さ ([MIN]) より小さくすることはできません!</red>"
+    max-height-less-than-min: "<red>最大高さ ([max]) は最小高さ ([min]) より小さくすることはできません!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

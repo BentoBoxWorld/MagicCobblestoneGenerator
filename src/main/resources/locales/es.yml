@@ -897,7 +897,7 @@ stone-generator:
     file-exist: "<red>El archivo `[archivo]` ya existe. Elija un nombre diferente.</red>"
     generator-tier-not-found: "<red>Generador con id '[generador]' </red> <red>no encontrado en [modo de juego].</red>"
     no-generators-in-world: "<red>No se pudo encontrar ningún generador en [mundo]</red>"
-    max-height-less-than-min: "<red>¡La altura máxima ([MAX]) no puede ser menor que la altura mínima ([MIN])!</red>"
+    max-height-less-than-min: "<red>¡La altura máxima ([max]) no puede ser menor que la altura mínima ([min])!</red>"
     could-not-remove-money: <red>Algo salió mal al retirar el dinero.</red>
   conversations:
     confirm-string: verdadero, encendido, sí, confirmar, y, válido, correcto

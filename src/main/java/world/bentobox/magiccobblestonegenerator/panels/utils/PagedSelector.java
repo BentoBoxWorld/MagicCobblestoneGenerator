@@ -70,11 +70,15 @@ public abstract class PagedSelector<T>
         final int MAX_ELEMENTS = 21;
         final int size = objectList.size();
 
+        // Index of the last page that has elements. Using size / MAX_ELEMENTS would point one page past the
+        // end when size is an exact multiple of MAX_ELEMENTS, showing an empty page.
+        final int lastPage = Math.max(0, (size - 1) / MAX_ELEMENTS);
+
         if (this.pageIndex < 0)
         {
-            this.pageIndex = size / MAX_ELEMENTS;
+            this.pageIndex = lastPage;
         }
-        else if (this.pageIndex > (size / MAX_ELEMENTS))
+        else if (this.pageIndex > lastPage)
         {
             this.pageIndex = 0;
         }

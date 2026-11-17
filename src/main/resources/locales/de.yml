@@ -888,7 +888,7 @@ stone-generator:
     generator-tier-not-found: "<red>Generator mit der ID '[generator]' </red><red>nicht in [gamemode] gefunden.</red>"
     no-generators-in-world: "<red>Es gibt keine verfügbaren Generatoren für Sie in [world]</red>"
     could-not-remove-money: "<red>Beim Geldabheben ist etwas schief gelaufen. Das kann mal passieren ;)</red>"
-    max-height-less-than-min: <red>Die maximale Höhe ([MAX]) darf nicht kleiner als die minimale Höhe ([MIN]) sein!</red>
+    max-height-less-than-min: <red>Die maximale Höhe ([max]) darf nicht kleiner als die minimale Höhe ([min]) sein!</red>
   conversations:
     confirm-string: wahr, an, ja, bestätigen, y, gültig, richtig
     deny-string: falsch, aus, nein, verweigern, n, ungültig, falsch

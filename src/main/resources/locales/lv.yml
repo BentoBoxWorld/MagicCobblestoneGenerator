@@ -1062,7 +1062,7 @@ stone-generator:
     no-generators-in-world: "<red>Jums nav pieejamu ģeneratoru [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Kaut kas notika nepareizi naudas izņemšanas laikā.</red>"
-    max-height-less-than-min: "<red>Maksimālais augstums ([MAX]) nevar būt mazāks par minimālo augstumu ([MIN])!</red>"
+    max-height-less-than-min: "<red>Maksimālais augstums ([max]) nevar būt mazāks par minimālo augstumu ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

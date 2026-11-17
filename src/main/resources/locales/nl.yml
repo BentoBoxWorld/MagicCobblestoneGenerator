@@ -1058,7 +1058,7 @@ stone-generator:
     no-generators-in-world: "<red>Er zijn geen beschikbare generators voor u in [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Er is iets misgegaan bij het storten van geld.</red>"
-    max-height-less-than-min: "<red>Maximale hoogte ([MAX]) kan niet minder zijn dan minimale hoogte ([MIN])!</red>"
+    max-height-less-than-min: "<red>Maximale hoogte ([max]) kan niet minder zijn dan minimale hoogte ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

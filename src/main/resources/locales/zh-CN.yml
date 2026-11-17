@@ -705,7 +705,7 @@ stone-generator:
     generator-tier-not-found: "<red>刷石机ID '[generator]' </red><red>在游戏模式 [gamemode] 里不存在。</red>"
     no-generators-in-world: "<red>在世界 [world] 中没有适合您的刷石机。</red>"
     could-not-remove-money: <red>扣款时出现错误。</red>
-    max-height-less-than-min: <red>最大高度（[MAX]）不能小于最小高度（[MIN]）！</red>
+    max-height-less-than-min: <red>最大高度（[max]）不能小于最小高度（[min]）！</red>
   conversations:
     confirm-string: true, on, yes, confirm, y, valid, correct, ok, 同意, 接受, 确定, 是
     deny-string: false, off, no, deny, n, invalid, incorrect, 拒绝, 否定, 否, 不

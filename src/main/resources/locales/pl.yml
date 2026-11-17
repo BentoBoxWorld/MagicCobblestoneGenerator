@@ -664,7 +664,7 @@ stone-generator:
     no-generators-in-world: "<red>Nie można znaleźć żadnego generatora w świecie [world]</red>"
     could-not-remove-money: <red>Coś poszło nie tak podczas pobierania pieniędzy.</red>
     file-exist: <red>Plik `[file]` już istnieje. Wybierz inną nazwę.</red>
-    max-height-less-than-min: <red>Maksymalna wysokość ([MAX]) nie może być mniejsza niż minimalna wysokość ([MIN])!</red>
+    max-height-less-than-min: <red>Maksymalna wysokość ([max]) nie może być mniejsza niż minimalna wysokość ([min])!</red>
     no-bundle-data: <red>Nie znaleziono prawidłowych danych zestawu</red>
     no-island-data: <red>Nie znaleziono danych wyspy.</red>
     no-library-entries: <red>Nie znaleziono żadnego wpisu w bibliotece!</red>

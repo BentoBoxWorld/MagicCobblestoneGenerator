@@ -849,6 +849,22 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testActivateGeneratorOverwritesDeletedActiveGenerator() {
+        // Island is at its active-generator limit, and the active generator has since been deleted.
+        s.setOverwriteOnActive(true);
+        GeneratorDataObject data = new GeneratorDataObject();
+        data.setUniqueId("island-overwrite");
+        data.setOwnerActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("deleted_generator");
+
+        assertDoesNotThrow(() -> sgm.activateGenerator(user, island, data, generatorTier, true));
+
+        // The stale id is dropped to free the slot, and the new generator is activated.
+        assertFalse(data.getActiveGeneratorList().contains("deleted_generator"));
+        assertTrue(data.getActiveGeneratorList().contains(generatorTier.getUniqueId()));
+    }
+
+    @Test
     void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
         assertDoesNotThrow(() -> sgm.activateGenerator(user, island, generatorData, generatorTier, true));
     }

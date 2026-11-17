@@ -1064,7 +1064,10 @@ stone-generator:
     no-generators-in-world: "<red>There are no available generators for you in [world]</red>"
     # Error message that is displayed when addon failed to withdraw money.
     could-not-remove-money: "<red>Something went wrong while withdrawing money.</red>"
-    max-height-less-than-min: "<red>Maximum height ([MAX]) cannot be less than minimum height ([MIN])!</red>"
+    # Error message that is displayed when the new minimum height of a block is above its maximum height.
+    min-height-greater-than-max: "<red>Minimum height ([min]) cannot be greater than maximum height ([max])!</red>"
+    # Error message that is displayed when the new maximum height of a block is below its minimum height.
+    max-height-less-than-min: "<red>Maximum height ([max]) cannot be less than minimum height ([min])!</red>"
   # Conversations are chat input between server and user.
   # They are used to get some information that requires more than clicking on icon.
   conversations:

@@ -710,7 +710,7 @@ stone-generator:
     generator-tier-not-found: " <red>在遊戲模式 [gamemode] </red><red>找不到名稱叫做 '[generator]' 的產生器.</red>"
     no-generators-in-world: "<red>你所在得世界 [world] 沒有神奇的鵝卵石產生器</red>"
     could-not-remove-money: <red>扣款時發生錯誤。</red>
-    max-height-less-than-min: <red>最大高度（[MAX]）不能小於最小高度（[MIN]）！</red>
+    max-height-less-than-min: <red>最大高度（[max]）不能小於最小高度（[min]）！</red>
   conversations:
     confirm-string: 是, true, on, yes, confirm, y, valid, correct
     deny-string: 否, false, off, no, deny, n, invalid, incorrect

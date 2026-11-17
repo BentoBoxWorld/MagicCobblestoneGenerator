@@ -885,7 +885,7 @@ stone-generator:
     generator-tier-not-found: "<red>Trình tạo có id '[generator]' </red><red>không tìm thấy trong [gamemode].</red>"
     no-generators-in-world: "<red>Không có máy phát điện nào cho bạn ở [world]</red>"
     could-not-remove-money: "<red>Đã xảy ra sự cố khi rút tiền.</red>"
-    max-height-less-than-min: <red>Độ cao tối đa ([MAX]) không thể nhỏ hơn độ cao tối thiểu ([MIN])!</red>
+    max-height-less-than-min: <red>Độ cao tối đa ([max]) không thể nhỏ hơn độ cao tối thiểu ([min])!</red>
   conversations:
     confirm-string: đúng, trên, có, xác nhận, y, hợp lệ, chính xác
     deny-string: sai, tắt, không, từ chối, n, không hợp lệ, không chính xác
