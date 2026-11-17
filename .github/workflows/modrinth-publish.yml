@@ -3,6 +3,12 @@ name: Publish
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to publish (e.g. 2.10.1)'
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -11,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
 
       - name: Set up JDK 21
         uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
@@ -27,8 +35,8 @@ jobs:
         with:
           token: ${{ secrets.MODRINTH_TOKEN }}
           project: NnkaZPqQ
-          name: ${{ github.event.release.name }}
-          version: ${{ github.event.release.tag_name }}
+          name: ${{ github.event.release.name || inputs.tag }}
+          version: ${{ github.event.release.tag_name || inputs.tag }}
           changelog: ${{ github.event.release.body }}
           loaders: |-
             paper
@@ -45,4 +53,6 @@ jobs:
             26.1.1
             26.1.2
             26.2
-          files: ${{ github.workspace }}/target/MagicCobblestoneGenerator-${{ github.event.release.tag_name }}.jar
+          # Relative path: the action runs in a Docker container where the workspace is
+          # mounted at /github/workspace, so an absolute github.workspace path fails.
+          files: target/MagicCobblestoneGenerator-${{ github.event.release.tag_name || inputs.tag }}.jar
