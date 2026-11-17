@@ -3,6 +3,7 @@ package world.bentobox.magiccobblestonegenerator.panels.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -51,9 +52,7 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
         super(panel);
 
         this.island = island;
-        this.generatorData = this.addon.getAddonManager().getGeneratorData(island);
-
-        this.title = this.island.getName();
+        this.title = island.getName();
 
         if (this.title == null || this.title.equals(""))
         {
@@ -74,6 +73,9 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
                     Constants.PLAYER, this.user.getTranslation(Constants.DESCRIPTIONS + "unknown"));
             }
         }
+
+        // Read the island name above before this call: island is never null here.
+        this.generatorData = this.addon.getAddonManager().getGeneratorData(island);
 
         // Store generators in local list to avoid building it every time.
         this.elementList = this.manager.getIslandGeneratorTiers(this.world, this.generatorData);
@@ -103,7 +105,8 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "view-island",
-                Constants.ISLAND, this.title));
+                Constants.ISLAND, Utils.fitTitleName(this.user, Constants.TITLE + "view-island",
+                    Constants.ISLAND, this.title)));
 
         PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
         this.populateHeader(panelBuilder);
@@ -501,7 +504,7 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
             }
             case OWNER_WORKING_RANGE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+                    Constants.GAMEMODE, Objects.requireNonNullElse(Utils.getGameMode(this.world), "").toLowerCase()));
 
                 if (this.generatorData.getOwnerWorkingRange() != 0)
                 {
@@ -558,7 +561,7 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
             }
             case OWNER_MAX_GENERATORS -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+                    Constants.GAMEMODE, Objects.requireNonNullElse(Utils.getGameMode(this.world), "").toLowerCase()));
 
                 if (this.generatorData.getOwnerActiveGeneratorCount() != 0)
                 {
@@ -632,7 +635,7 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
             }
             case OWNER_BUNDLE -> {
                 description.add(this.user.getTranslationOrNothing(reference + ".description",
-                    Constants.GAMEMODE, Utils.getGameMode(this.world).toLowerCase()));
+                    Constants.GAMEMODE, Objects.requireNonNullElse(Utils.getGameMode(this.world), "").toLowerCase()));
 
                 GeneratorBundleObject bundle = this.generatorData.getOwnerBundle() != null ?
                     this.addon.getAddonManager().getBundleById(this.generatorData.getOwnerBundle()) : null;

@@ -1,11 +1,14 @@
 package world.bentobox.magiccobblestonegenerator.managers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -161,5 +164,55 @@ class StoneGeneratorImportManagerTest {
         assertEquals(500L, capped.getExhaustionLimit());
         // Absent key falls back to -1, meaning "use the global default".
         assertEquals(-1L, def.getExhaustionLimit());
+    }
+
+    /**
+     * A missing database file must not wipe the game mode's existing generators.
+     */
+    @Test
+    void testImportDatabaseFileMissingDoesNotWipeGenerators() {
+        when(manager.getAllGeneratorTiers(world)).thenReturn(List.of(mock(GeneratorTierObject.class)));
+
+        assertFalse(im.importDatabaseFile(null, world, "does-not-exist"));
+
+        verify(manager, never()).wipeGameModeGenerators(any());
+    }
+
+    /**
+     * An empty database file must not wipe the game mode's existing generators either.
+     */
+    @Test
+    void testImportDatabaseFileEmptyDoesNotWipeGenerators() throws IOException {
+        when(manager.getAllGeneratorTiers(world)).thenReturn(List.of(mock(GeneratorTierObject.class)));
+        Files.write(new File(dataFolder, "empty.json").toPath(), new byte[0]);
+
+        assertFalse(im.importDatabaseFile(null, world, "empty"));
+
+        verify(manager, never()).wipeGameModeGenerators(any());
+    }
+
+    @Test
+    void testResolveDataFileInsideFolder() throws IOException {
+        File file = StoneGeneratorImportManager.resolveDataFile(dataFolder, "backup.json");
+        assertEquals(new File(dataFolder, "backup.json").getCanonicalFile(), file);
+    }
+
+    @Test
+    void testResolveDataFileRejectsTraversal() {
+        assertNull(StoneGeneratorImportManager.resolveDataFile(dataFolder, "../outside.json"));
+        assertNull(StoneGeneratorImportManager.resolveDataFile(dataFolder, "../../etc/passwd"));
+        assertNull(StoneGeneratorImportManager.resolveDataFile(dataFolder, "sub/inner.json"));
+    }
+
+    @Test
+    void testImportFileRejectsTraversal() throws IOException {
+        // A valid template one level above the data folder must not be importable via "../".
+        File outside = new File(dataFolder.getParentFile(), "mcg-outside-" + System.nanoTime() + ".yml");
+        Files.write(outside.toPath(), "tiers: {}\n".getBytes(StandardCharsets.UTF_8));
+        try {
+            assertFalse(im.importFile(null, world, "../" + outside.getName()));
+        } finally {
+            Files.deleteIfExists(outside.toPath());
+        }
     }
 }

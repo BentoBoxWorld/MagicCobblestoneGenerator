@@ -40,6 +40,7 @@ import world.bentobox.magiccobblestonegenerator.CommonTestSetup;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorExhaustionData;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject.GeneratorType;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
@@ -725,6 +726,48 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testCanGenerateBlockCooldownShorterThanPeriodStartsNewPeriod() {
+        s.setGeneratorExhaustionLimit(1);
+        s.setGeneratorExhaustionPeriod(60);
+        s.setGeneratorExhaustionCooldown(10);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+
+        // Simulate the 10-minute cooldown expiring while the 60-minute period is still running.
+        GeneratorExhaustionData exhaustion =
+            sgm.getGeneratorData(island).getExhaustionData().get(generatorTier.getUniqueId());
+        long now = System.currentTimeMillis();
+        exhaustion.setPeriodStart(now - 11 * 60_000L);
+        exhaustion.setCooldownUntil(now - 60_000L);
+
+        // Generator must work again, with a fresh count.
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertEquals(1, exhaustion.getGeneratedCount());
+        assertEquals(0, exhaustion.getCooldownUntil());
+    }
+
+    @Test
+    void testCanGenerateBlockZeroCooldownWaitsForPeriodEnd() {
+        s.setGeneratorExhaustionLimit(1);
+        s.setGeneratorExhaustionPeriod(60);
+        s.setGeneratorExhaustionCooldown(0);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+
+        GeneratorExhaustionData exhaustion =
+            sgm.getGeneratorData(island).getExhaustionData().get(generatorTier.getUniqueId());
+        // Blocked until the period ends, not released immediately.
+        assertEquals(exhaustion.getPeriodStart() + 60 * 60_000L, exhaustion.getCooldownUntil());
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+
+        // Once the period is over, generation resumes.
+        long now = System.currentTimeMillis();
+        exhaustion.setPeriodStart(now - 61 * 60_000L);
+        exhaustion.setCooldownUntil(now - 60_000L);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+    }
+
+    @Test
     void testCanGenerateBlockTierOverridesLimit() {
         s.setGeneratorExhaustionLimit(1000);
         when(this.generatorTier.getExhaustionLimit()).thenReturn(1L);
@@ -849,6 +892,22 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testActivateGeneratorOverwritesDeletedActiveGenerator() {
+        // Island is at its active-generator limit, and the active generator has since been deleted.
+        s.setOverwriteOnActive(true);
+        GeneratorDataObject data = new GeneratorDataObject();
+        data.setUniqueId("island-overwrite");
+        data.setOwnerActiveGeneratorCount(1);
+        data.getActiveGeneratorList().add("deleted_generator");
+
+        assertDoesNotThrow(() -> sgm.activateGenerator(user, island, data, generatorTier, true));
+
+        // The stale id is dropped to free the slot, and the new generator is activated.
+        assertFalse(data.getActiveGeneratorList().contains("deleted_generator"));
+        assertTrue(data.getActiveGeneratorList().contains(generatorTier.getUniqueId()));
+    }
+
+    @Test
     void testActivateGeneratorUserIslandGeneratorDataObjectGeneratorTierObjectBoolean() {
         assertDoesNotThrow(() -> sgm.activateGenerator(user, island, generatorData, generatorTier, true));
     }
@@ -856,6 +915,19 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     @Test
     void testCanPurchaseGenerator() {
         assertFalse(sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
+    }
+
+    @Test
+    void testCanPurchaseGeneratorOnSpawnIslandDoesNotThrow() {
+        // Spawn islands (and unowned islands) have no owner; this used to throw a NullPointerException.
+        when(island.isSpawn()).thenReturn(true);
+        assertDoesNotThrow(() -> sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
+    }
+
+    @Test
+    void testCanPurchaseGeneratorNoOwnerDoesNotThrow() {
+        when(island.getOwner()).thenReturn(null);
+        assertDoesNotThrow(() -> sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
     }
 
     @Test

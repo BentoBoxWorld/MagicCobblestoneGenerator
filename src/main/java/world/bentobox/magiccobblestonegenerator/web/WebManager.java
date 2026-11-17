@@ -7,6 +7,7 @@ import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import com.google.gson.JsonObject;
@@ -163,9 +164,11 @@ public class WebManager
             // Process downloaded library data
             if (!stoneGeneratorLibrary.isEmpty())
             {
-                this.addon.getImportManager().processDownloadedFile(user,
-                    world,
-                    stoneGeneratorLibrary);
+                // This runs on an async thread. Importing touches the generator cache, database and players,
+                // so hand it back to the main server thread.
+                final String libraryData = stoneGeneratorLibrary;
+                Bukkit.getScheduler().runTask(this.plugin,
+                    () -> this.addon.getImportManager().processDownloadedFile(user, world, libraryData));
             }
         });
     }

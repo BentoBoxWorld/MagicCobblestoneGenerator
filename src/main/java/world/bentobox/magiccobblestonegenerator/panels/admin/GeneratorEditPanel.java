@@ -86,7 +86,8 @@ public class GeneratorEditPanel extends CommonPanel
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "view-generator",
-                Constants.GENERATOR, this.generatorTier.getFriendlyName()));
+                Constants.GENERATOR, Utils.fitTitleName(this.user, Constants.TITLE + "view-generator",
+                    Constants.GENERATOR, this.generatorTier.getFriendlyName())));
 
         PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
@@ -231,9 +232,9 @@ public class GeneratorEditPanel extends CommonPanel
 
         if (this.pageIndex < 0)
         {
-            correctPage = this.materialChanceList.size() / MAX_ELEMENTS;
+            correctPage = Math.max(0, this.maxPageIndex);
         }
-        else if (this.pageIndex > (this.materialChanceList.size() / MAX_ELEMENTS))
+        else if (this.pageIndex > this.maxPageIndex)
         {
             correctPage = 0;
         }
@@ -291,9 +292,9 @@ public class GeneratorEditPanel extends CommonPanel
 
         if (this.pageIndex < 0)
         {
-            correctPage = this.treasureChanceList.size() / MAX_ELEMENTS;
+            correctPage = Math.max(0, this.maxPageIndex);
         }
-        else if (this.pageIndex > (this.treasureChanceList.size() / MAX_ELEMENTS))
+        else if (this.pageIndex > this.maxPageIndex)
         {
             correctPage = 0;
         }
@@ -980,8 +981,21 @@ public class GeneratorEditPanel extends CommonPanel
                     {
                         if (number != null)
                         {
-                            this.generatorTier.setMinHeight(number.intValue());
-                            this.save();
+                            int newMinHeight = number.intValue();
+
+                            if (newMinHeight > this.generatorTier.getMaxHeight())
+                            {
+                                // Min above max would stop the generator working at any height.
+                                Utils.sendMessage(this.user, this.user.getTranslation(
+                                    Constants.ERRORS + "min-height-greater-than-max",
+                                    Constants.MIN, String.valueOf(newMinHeight),
+                                    Constants.MAX, String.valueOf(this.generatorTier.getMaxHeight())));
+                            }
+                            else
+                            {
+                                this.generatorTier.setMinHeight(newMinHeight);
+                                this.save();
+                            }
                         }
 
                         // reopen panel
@@ -1011,8 +1025,21 @@ public class GeneratorEditPanel extends CommonPanel
                     {
                         if (number != null)
                         {
-                            this.generatorTier.setMaxHeight(number.intValue());
-                            this.save();
+                            int newMaxHeight = number.intValue();
+
+                            if (newMaxHeight < this.generatorTier.getMinHeight())
+                            {
+                                // Max below min would stop the generator working at any height.
+                                Utils.sendMessage(this.user, this.user.getTranslation(
+                                    Constants.ERRORS + "max-height-less-than-min",
+                                    Constants.MIN, String.valueOf(this.generatorTier.getMinHeight()),
+                                    Constants.MAX, String.valueOf(newMaxHeight)));
+                            }
+                            else
+                            {
+                                this.generatorTier.setMaxHeight(newMaxHeight);
+                                this.save();
+                            }
                         }
 
                         // reopen panel
@@ -1786,7 +1813,8 @@ public class GeneratorEditPanel extends CommonPanel
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "height-range-config",
-                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, material))).
+                Constants.BLOCK, Utils.fitTitleName(this.user, Constants.TITLE + "height-range-config",
+                    Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, material)))).
             size(27);
             PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
         // Add min height button
@@ -1849,9 +1877,11 @@ public class GeneratorEditPanel extends CommonPanel
 
                         // Ensure min height is not greater than max height
                         if (newMinHeight > currentMaxHeight) {
-                            this.user.sendMessage("admin.errors.min-height-greater-than-max",
+                            Utils.sendMessage(this.user, this.user.getTranslation(Constants.ERRORS + "min-height-greater-than-max",
                                 Constants.MIN, String.valueOf(newMinHeight),
-                                Constants.MAX, String.valueOf(currentMaxHeight));
+                                Constants.MAX, String.valueOf(currentMaxHeight)));
+                            // Reopen the height panel so the admin can try again.
+                            this.configureHeightRangeForMaterial(material);
                             return;
 
                         }
@@ -1899,9 +1929,11 @@ public class GeneratorEditPanel extends CommonPanel
 
                         // Ensure max height is not less than min height
                         if (newMaxHeight < currentMinHeight) {
-                            this.user.sendMessage("admin.errors.max-height-less-than-min",
+                            Utils.sendMessage(this.user, this.user.getTranslation(Constants.ERRORS + "max-height-less-than-min",
                                 Constants.MIN, String.valueOf(currentMinHeight),
-                                Constants.MAX, String.valueOf(newMaxHeight));
+                                Constants.MAX, String.valueOf(newMaxHeight)));
+                            // Reopen the height panel so the admin can try again.
+                            this.configureHeightRangeForMaterial(material);
                             return;
                         }
 
