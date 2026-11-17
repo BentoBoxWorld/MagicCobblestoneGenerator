@@ -1327,7 +1327,8 @@ public class StoneGeneratorManager {
 	    @NotNull GeneratorDataObject generatorData, @NotNull GeneratorTierObject generatorTier) {
 
 	final User owner = island.isSpawn() || island.getOwner() == null ? null : User.getInstance(island.getOwner());
-    NumberFormat numberFormat = NumberFormat.getNumberInstance(owner.getLocale());
+	// Numbers are shown to the purchasing user, so format them in their locale. The owner may be null.
+	NumberFormat numberFormat = NumberFormat.getNumberInstance(user.getLocale());
 
 	if (generatorData.getPurchasedTiers().contains(generatorTier.getUniqueId())) {
 	    // Generator is not unlocked. Return false.

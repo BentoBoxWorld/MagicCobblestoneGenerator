@@ -875,6 +875,19 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
     }
 
     @Test
+    void testCanPurchaseGeneratorOnSpawnIslandDoesNotThrow() {
+        // Spawn islands (and unowned islands) have no owner; this used to throw a NullPointerException.
+        when(island.isSpawn()).thenReturn(true);
+        assertDoesNotThrow(() -> sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
+    }
+
+    @Test
+    void testCanPurchaseGeneratorNoOwnerDoesNotThrow() {
+        when(island.getOwner()).thenReturn(null);
+        assertDoesNotThrow(() -> sgm.canPurchaseGenerator(user, island, generatorData, generatorTier));
+    }
+
+    @Test
     void testPurchaseGeneratorUserIslandGeneratorDataObjectGeneratorTierObject() {
         assertDoesNotThrow(() -> sgm.purchaseGenerator(user, island, generatorData, generatorTier));
     }
