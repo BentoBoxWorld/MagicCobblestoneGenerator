@@ -572,9 +572,9 @@ stone-generator:
       select-bundle: <black><bold>Wybierz zestaw</bold></black>
       select-type: <black><bold>Wybierz typ generatora</bold></black>
       settings: <black><bold>Ustawienia</bold></black>
-      view-bundle: '<black><bold>Zestaw: </bold></black> [bundle]'
-      view-generator: '<black><bold>Generator: </bold></black> [generator]'
-      view-island: '<black><bold>Wyspa: [island]</bold></black>'
+      view-bundle: "<black><bold>[bundle]</bold></black>"
+      view-generator: "<black><bold>[generator]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       select-generator: "<black><bold>Wybierz generatory</bold></black>"
     tips:
       click-gold-to-purchase: "<yellow>Kliknij </yellow><gray>na złoty blok,\n</gray><gray>aby kupić.</gray>"

@@ -86,7 +86,8 @@ public class GeneratorEditPanel extends CommonPanel
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "view-generator",
-                Constants.GENERATOR, this.generatorTier.getFriendlyName()));
+                Constants.GENERATOR, Utils.fitTitleName(this.user, Constants.TITLE + "view-generator",
+                    Constants.GENERATOR, this.generatorTier.getFriendlyName())));
 
         PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
 
@@ -1812,7 +1813,8 @@ public class GeneratorEditPanel extends CommonPanel
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "height-range-config",
-                Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, material))).
+                Constants.BLOCK, Utils.fitTitleName(this.user, Constants.TITLE + "height-range-config",
+                    Constants.BLOCK, CustomBlocks.getDisplayName(this.addon, this.user, material)))).
             size(27);
             PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
         // Add min height button

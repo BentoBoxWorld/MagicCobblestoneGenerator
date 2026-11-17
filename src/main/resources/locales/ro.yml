@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Generatoare</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Panou Admin</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Selectați Tipul de Generator</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Pachet: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Administrare Pachete</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Administrare Generatoare</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Insulă: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Administrare Date Insulă</bold></black>"
       # Title for Library GUI

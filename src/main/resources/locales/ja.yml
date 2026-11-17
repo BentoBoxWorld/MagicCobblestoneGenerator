@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>生成機</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>生成機: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>管理者パネル</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>生成機タイプを選択</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>バンドル: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>バンドルを管理</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>生成機を管理</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>島: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>島のデータを管理</bold></black>"
       # Title for Library GUI

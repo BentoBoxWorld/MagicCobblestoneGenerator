@@ -103,7 +103,8 @@ public class IslandEditPanel extends CommonPagedPanel<GeneratorTierObject>
         PanelBuilder panelBuilder = new PanelBuilder().
             user(this.user).
             name(this.user.getTranslation(Constants.TITLE + "view-island",
-                Constants.ISLAND, this.title));
+                Constants.ISLAND, Utils.fitTitleName(this.user, Constants.TITLE + "view-island",
+                    Constants.ISLAND, this.title)));
 
         PanelUtils.fillBorder(panelBuilder, Material.MAGENTA_STAINED_GLASS_PANE);
         this.populateHeader(panelBuilder);

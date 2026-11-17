@@ -44,7 +44,7 @@ stone-generator:
       # Title for listing all generators.
       player-panel: "<black><bold>Generator</bold></black>"
       # Title for detailed generator view.
-      view-generator: "<black><bold>Generator: </bold></black> [generator]"
+      view-generator: "<black><bold>[generator]</bold></black>"
       # Title for admin panel.
       admin-panel: "<black><bold>Panel Admin</bold></black>"
       # Title for GUI that allows to select biomes for generator.
@@ -56,13 +56,13 @@ stone-generator:
       # Title for GUI that allows to choose generator type.
       select-type: "<black><bold>Pilih Tipe Generator</bold></black>"
       # Title for detailed bundle view.
-      view-bundle: "<black><bold>Paket: </bold></black> [bundle]"
+      view-bundle: "<black><bold>[bundle]</bold></black>"
       # Title for managing bundles GUI.
       manage-bundles: "<black><bold>Kelola Paket</bold></black>"
       # Title for managing generators GUI.
       manage-generators: "<black><bold>Kelola Generator</bold></black>"
       # Title for editing island data.
-      view-island: "<black><bold>Pulau: [island]</bold></black>"
+      view-island: "<black><bold>[island]</bold></black>"
       # Title for managing all island data.
       manage-islands: "<black><bold>Kelola Data Pulau</bold></black>"
       # Title for Library GUI
