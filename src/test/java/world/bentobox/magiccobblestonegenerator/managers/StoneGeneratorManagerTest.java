@@ -40,6 +40,7 @@ import world.bentobox.magiccobblestonegenerator.CommonTestSetup;
 import world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorBundleObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorDataObject;
+import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorExhaustionData;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject;
 import world.bentobox.magiccobblestonegenerator.database.objects.GeneratorTierObject.GeneratorType;
 import world.bentobox.magiccobblestonegenerator.events.GeneratorBuyEvent;
@@ -722,6 +723,48 @@ class StoneGeneratorManagerTest extends CommonTestSetup {
         // Limit is now reached, next call should be blocked and generator put on cooldown.
         assertFalse(sgm.canGenerateBlock(island, generatorTier));
         assertFalse(sgm.canGenerateBlock(island, generatorTier));
+    }
+
+    @Test
+    void testCanGenerateBlockCooldownShorterThanPeriodStartsNewPeriod() {
+        s.setGeneratorExhaustionLimit(1);
+        s.setGeneratorExhaustionPeriod(60);
+        s.setGeneratorExhaustionCooldown(10);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+
+        // Simulate the 10-minute cooldown expiring while the 60-minute period is still running.
+        GeneratorExhaustionData exhaustion =
+            sgm.getGeneratorData(island).getExhaustionData().get(generatorTier.getUniqueId());
+        long now = System.currentTimeMillis();
+        exhaustion.setPeriodStart(now - 11 * 60_000L);
+        exhaustion.setCooldownUntil(now - 60_000L);
+
+        // Generator must work again, with a fresh count.
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertEquals(1, exhaustion.getGeneratedCount());
+        assertEquals(0, exhaustion.getCooldownUntil());
+    }
+
+    @Test
+    void testCanGenerateBlockZeroCooldownWaitsForPeriodEnd() {
+        s.setGeneratorExhaustionLimit(1);
+        s.setGeneratorExhaustionPeriod(60);
+        s.setGeneratorExhaustionCooldown(0);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+
+        GeneratorExhaustionData exhaustion =
+            sgm.getGeneratorData(island).getExhaustionData().get(generatorTier.getUniqueId());
+        // Blocked until the period ends, not released immediately.
+        assertEquals(exhaustion.getPeriodStart() + 60 * 60_000L, exhaustion.getCooldownUntil());
+        assertFalse(sgm.canGenerateBlock(island, generatorTier));
+
+        // Once the period is over, generation resumes.
+        long now = System.currentTimeMillis();
+        exhaustion.setPeriodStart(now - 61 * 60_000L);
+        exhaustion.setCooldownUntil(now - 60_000L);
+        assertTrue(sgm.canGenerateBlock(island, generatorTier));
     }
 
     @Test
