@@ -1,7 +1,7 @@
 name: MagicCobblestoneGenerator
 main: world.bentobox.magiccobblestonegenerator.StoneGeneratorAddon
 version: ${version}${build.number}
-api-version: 3.19.1
+api-version: 3.25.0
 repository: 'BentoBoxWorld/MagicCobblestoneGenerator'
 metrics: true
 icon: COBBLESTONE
